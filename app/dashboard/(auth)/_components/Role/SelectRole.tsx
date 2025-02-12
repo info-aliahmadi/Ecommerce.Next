@@ -5,7 +5,7 @@ import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import RoleService from '../../_service/RoleService';
 import { useSession } from 'next-auth/react';
-import { OutlinedInput } from '@mui/material';
+import { TextField } from '@mui/material';
 
 export default function SelectRole({ defaultValues, id, setFieldValue, error, disabled }:
   { readonly defaultValues: number[], readonly disabled: boolean, readonly id?: string, readonly setFieldValue?: any, readonly error?: boolean }) {
@@ -18,7 +18,9 @@ export default function SelectRole({ defaultValues, id, setFieldValue, error, di
   const roleService = new RoleService(jwt ?? '');
 
   const loadRoles = () => {
+    setLoading(true);
     roleService.getAllRoles().then((result) => {
+      debugger
       const optionsData: Option[] = result.data?.map((x) => ({ id: x.id, name: x.name })) as Option[];
       setOptions(optionsData);
       setLoading(false);
@@ -28,6 +30,12 @@ export default function SelectRole({ defaultValues, id, setFieldValue, error, di
     loadRoles();
   }, []);
 
+  const selectedValues = React.useMemo(
+    () => {
+      return options.filter((x) => defaultValues?.find((c) => c === x.id)) ?? [];
+    },
+    [options, defaultValues],
+  );
   return (
     <Autocomplete
       disabled={disabled}
@@ -44,17 +52,18 @@ export default function SelectRole({ defaultValues, id, setFieldValue, error, di
           newValue.map(({ id }) => id)
         )
       }
-      defaultValue={options.filter((x) => defaultValues?.find((c) => c === x.id)) ?? []}
-      renderInput={(params) => (
-        <OutlinedInput
+      defaultValue={selectedValues}
+      value={selectedValues}
+      renderInput={(params: any) => (
+        <TextField
           {...params}
-          error={error}
-          placeholder={t('pages.roles')}
-          inputProps={{
+          variant="outlined"
+          size="small"
+          InputProps={{
             ...params.InputProps,
             endAdornment: (
               <React.Fragment>
-                {loading ? <CircularProgress color="inherit" size={20} /> : null}
+                {loading && <CircularProgress color="inherit" size={15} />}
                 {params.InputProps.endAdornment}
               </React.Fragment>
             )
