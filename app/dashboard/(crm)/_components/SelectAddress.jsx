@@ -13,13 +13,13 @@ import Notify from '@dashboard/_components/@extended/Notify';
 export default function SelectAddress({ defaultValues, id, name, label, setFieldValue, error, disabled }) {
   const [t] = useTranslation();
   const { data: session } = useSession();
-  const jwt = session?.user?.accessToken;
+  const jwt = session?.accessToken;
 
   const [loading, setLoading] = useState(true);
   const [options, setOptions] = useState([]);
   const [values, setValues] = useState(defaultValues);
-  const [notify, setNotify] = useState({ open: false });
-  const service = new EmailOutboxService(jwt);
+  const [notify, setNotify] = useState<NotifyProps>({ open: false });
+  const service = new EmailOutboxService(jwt ?? '');
 
   const loadData = () => {
     service.getAddressForSelect().then((result) => {

@@ -5,9 +5,9 @@ import { useSession } from 'next-auth/react';
 
 export default function SelectProductAttribute({ defaultValues, id, name, label, onChange, setFieldValue, error, disabled }) {
   const { data: session } = useSession();
-  const jwt = session?.user?.accessToken;
+  const jwt = session?.accessToken;
 
-  const productAttributeService = new ProductAttributeService(jwt);
+  const productAttributeService = new ProductAttributeService(jwt ?? '');
   
   return (
     <MultiSelect

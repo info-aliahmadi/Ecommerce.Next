@@ -13,12 +13,12 @@ import ProductTagService from '../../_service/ProductTagService';
 export default function SelectProductTag({ defaultValues, id, name, label, setFieldValue, error, disabled }) {
   const [t] = useTranslation();
   const { data: session } = useSession();
-  const jwt = session?.user?.accessToken;
+  const jwt = session?.accessToken;
 
   const [loading, setLoading] = useState(true);
   const [options, setOptions] = useState([]);
   const [values, setValues] = useState(defaultValues);
-  const tagService = new ProductTagService(jwt);
+  const tagService = new ProductTagService(jwt ?? '');
 
   const loadTags = () => {
     tagService.getProductTagListForSelect().then((result) => {

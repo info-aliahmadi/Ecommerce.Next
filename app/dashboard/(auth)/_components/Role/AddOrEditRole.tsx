@@ -96,7 +96,7 @@ const AddOrEditRole = ({ roleId, isNew, open, setOpen, refetch }: { roleId: numb
       updateRole(role, setErrors);
     }
   };
-  const CloseDialog = () => (
+  const CloseDialog = ({ onClose }: { onClose: () => void }) => (
     <IconButton
       aria-label="close"
       onClick={onClose}
@@ -148,7 +148,7 @@ const AddOrEditRole = ({ roleId, isNew, open, setOpen, refetch }: { roleId: numb
             <form noValidate onSubmit={handleSubmit}>
               <DialogTitle>
                 {t('dialog.' + (isNew ? 'add' : 'edit') + '.title', { item: 'Role' })}
-                <CloseDialog />
+                <CloseDialog onClose={onClose} />
               </DialogTitle>
               <DialogContent>
                 <Grid container spacing={3} direction="column">

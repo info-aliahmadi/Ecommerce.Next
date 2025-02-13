@@ -1,9 +1,9 @@
 import axios from 'axios';
-import { setDefaultHeader } from '/utils/axiosHeaders';
-import CONFIG from '/config.js';
+import { setDefaultHeader } from '@root/utils/axiosHeaders';
+import CONFIG from '@root/config';
 
 export default class ProductTagService {
-  constructor(jwt) {
+  constructor(jwt : string) {
     setDefaultHeader(jwt);
   }
   getProductTagList = async () => {
@@ -19,7 +19,7 @@ export default class ProductTagService {
     });
   };
 
-  getProductTagListForSelect = async () => {
+  getProductTagListForSelect = async (): Promise<Result<Permission[]>> => {
     return new Promise((resolve, reject) => {
       axios
         .post(CONFIG.API_BASEPATH + '/sale/GetProductTagListForSelect')
@@ -31,7 +31,7 @@ export default class ProductTagService {
         });
     });
   };
-  getProductTagItemList = async (productTagId) => {
+  getProductTagItemList = async (productTagId : number): Promise<Result<RoleModel>> => {
     return new Promise((resolve, reject) => {
       axios
         .get(CONFIG.API_BASEPATH + `/sale/GetProductTagItemList?productTagId=${productTagId}`)
@@ -55,7 +55,7 @@ export default class ProductTagService {
         });
     });
   };
-  getProductTagById = async (productTagId) => {
+  getProductTagById = async (productTagId : number): Promise<Result<RoleModel>> => {
     return new Promise((resolve, reject) => {
       axios
         .get(CONFIG.API_BASEPATH + '/sale/getProductTagById', { params: { productTagId: productTagId } })
@@ -91,7 +91,7 @@ export default class ProductTagService {
         });
     });
   };
-  deleteProductTag = async (productTagId) => {
+  deleteProductTag = async (productTagId : number): Promise<Result<RoleModel>> => {
     return new Promise((resolve, reject) => {
       axios
         .get(CONFIG.API_BASEPATH + '/sale/deleteProductTag', { params: { productTagId: productTagId } })

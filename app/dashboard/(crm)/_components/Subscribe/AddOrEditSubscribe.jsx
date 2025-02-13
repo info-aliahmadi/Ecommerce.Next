@@ -25,7 +25,7 @@ import AnimateButton from '@dashboard/_components/@extended/AnimateButton';
 // assets
 import { useTranslation } from 'react-i18next';
 import Notify from '@dashboard/_components/@extended/Notify';
-import setServerErrors from '/utils/setServerErrors';
+import setServerErrors from '@root/utils/setServerErrors';
 import AddIcon from '@mui/icons-material/Add';
 import SubscribeService from '@dashboard/(crm)/_service/SubscribeService';
 import SelectSubscribeLabel from './SelectSubscribeLabel';
@@ -34,10 +34,10 @@ const AddOrEditSubscribe = ({ subscribeId, isNew, open, setOpen, refetch }) => {
   const [t] = useTranslation();
   const [fieldsName, validation, buttonName] = ['fields.subscribe.', 'validation.subscribe.', 'buttons.subscribe.'];
   const [subscribe, setSubscribe] = useState();
-  const [notify, setNotify] = useState({ open: false });
+  const [notify, setNotify] = useState<NotifyProps>({ open: false });
   const { data: session } = useSession();
-  const jwt = session?.user?.accessToken;
-  let subscribeService = new SubscribeService(jwt);
+  const jwt = session?.accessToken;
+  let subscribeService = new SubscribeService(jwt ?? '');
 
   const loadSubscribe = () => {
     subscribeService.getSubscribeById(subscribeId).then((result) => {
@@ -53,30 +53,30 @@ const AddOrEditSubscribe = ({ subscribeId, isNew, open, setOpen, refetch }) => {
     if (isNew == false && subscribeId > 0) {
       loadSubscribe();
     } else {
-      setSubscribe({});
+      setSubscribe(undefined);
     }
   }, [subscribeId, isNew, open]);
 
   const onClose = () => {
     setOpen(false);
-    setSubscribe({});
+    setSubscribe(undefined);
   };
 
-  const handleSubmit = (subscribe, setErrors, setSubmitting) => {
+  const handleSubmit = (subscribe, setErrors: (errors: FormikErrors<LinkModel>) => void, setSubmitting: (open: boolean) => void) => {
     if (isNew == true) {
       subscribeService
         .addSubscribe(subscribe)
         .then(() => {
           onClose();
-          setSubscribe({});
+          setSubscribe(undefined);
           setNotify({ open: true });
           refetch();
         })
         .catch((error) => {
           setNotify({ open: true, type: 'error', description: error });
-          setServerErrors(error, setErrors);
+          setErrors(setServerErrors(error));
         })
-        .finally((x) => {
+        .finally(() => {
           setSubmitting(false);
         });
     } else {
@@ -84,20 +84,20 @@ const AddOrEditSubscribe = ({ subscribeId, isNew, open, setOpen, refetch }) => {
         .updateSubscribe(subscribe)
         .then(() => {
           onClose();
-          setSubscribe({});
+          setSubscribe(undefined);
           setNotify({ open: true });
           refetch();
         })
         .catch((error) => {
-          setServerErrors(error, setErrors);
+          setErrors(setServerErrors(error));
           setNotify({ open: true, type: 'error', description: error });
         })
-        .finally((x) => {
+        .finally(() => {
           setSubmitting(false);
         });
     }
   };
-  const CloseDialog = () => (
+  const CloseDialog = ({ onClose }: { onClose: () => void }) => (
     <IconButton
       aria-label="close"
       onClick={onClose}
@@ -133,7 +133,7 @@ const AddOrEditSubscribe = ({ subscribeId, isNew, open, setOpen, refetch }) => {
             } catch (err) {
               console.error(err);
               setStatus({ success: false });
-              setErrors({ submit: err.message });
+              
             }
           }}
         >
@@ -141,7 +141,7 @@ const AddOrEditSubscribe = ({ subscribeId, isNew, open, setOpen, refetch }) => {
             <form noValidate onSubmit={handleSubmit}>
               <DialogTitle>
                 {t('dialog.' + (isNew == true ? 'add' : 'edit') + '.title', { item: 'Subscribe' })}
-                <CloseDialog />
+                <CloseDialog onClose={onClose} />
               </DialogTitle>
               <DialogContent>
                 <Grid container spacing={3} direction="column">

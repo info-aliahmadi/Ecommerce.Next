@@ -1,9 +1,9 @@
 import axios from 'axios';
-import CONFIG from '/config.js';
-import { setDefaultHeader } from '/utils/axiosHeaders';
+import CONFIG from '@root/config';
+import { setDefaultHeader } from '@root/utils/axiosHeaders';
 
 export default class DiscountService {
-  constructor(jwt) {
+  constructor(jwt : string) {
     setDefaultHeader(jwt);
   }
   getDiscountList = async () => {
@@ -18,7 +18,7 @@ export default class DiscountService {
         });
     });
   };
-  getDiscountListForSelect = async () => {
+  getDiscountListForSelect = async (): Promise<Result<Permission[]>> => {
     return new Promise((resolve, reject) => {
       axios
         .post(CONFIG.API_BASEPATH + '/sale/GetDiscountListForSelect')
@@ -30,7 +30,7 @@ export default class DiscountService {
         });
     });
   };
-  getDiscountById = async (discountId) => {
+  getDiscountById = async (discountId : number): Promise<Result<RoleModel>> => {
     return new Promise((resolve, reject) => {
       axios
         .get(CONFIG.API_BASEPATH + '/sale/getDiscountById', { params: { discountId: discountId } })
@@ -66,7 +66,7 @@ export default class DiscountService {
         });
     });
   };
-  deleteDiscount = async (discountId) => {
+  deleteDiscount = async (discountId : number): Promise<Result<RoleModel>> => {
     return new Promise((resolve, reject) => {
       axios
         .get(CONFIG.API_BASEPATH + '/sale/deleteDiscount', { params: { discountId: discountId } })

@@ -20,8 +20,8 @@ import PaymentStatus from './PaymentStatus';
 export default function PaymentDetail({ orderId, open, setOpen, refetch }) {
   const [t] = useTranslation();
   const { data: session } = useSession();
-  const jwt = session?.user?.accessToken;
-  const orderService = new OrderService(jwt);
+  const jwt = session?.accessToken;
+  const orderService = new OrderService(jwt ?? '');
   const [payment, setPayment] = useState();
 
   const [fieldsName] = ['fields.order.', 'validation.order.', 'buttons.'];
@@ -36,11 +36,11 @@ export default function PaymentDetail({ orderId, open, setOpen, refetch }) {
     if (orderId > 0) {
       loadPayment();
     } else {
-      setPayment({});
+      setPayment(undefined);
     }
   }, [orderId, open]);
 
-  const CloseDialog = () => (
+  const CloseDialog = ({ onClose }: { onClose: () => void }) => (
     <IconButton
       aria-label="close"
       onClick={onClose}
@@ -57,7 +57,7 @@ export default function PaymentDetail({ orderId, open, setOpen, refetch }) {
 
   const onClose = () => {
     setOpen(false);
-    setPayment({});
+    setPayment(undefined);
   };
 
   return (
@@ -65,7 +65,7 @@ export default function PaymentDetail({ orderId, open, setOpen, refetch }) {
       <Dialog open={open} fullWidth={'xs'}>
         <DialogTitle>
           {t('dialog.payment.title')}
-          <CloseDialog />
+          <CloseDialog onClose={onClose} />
         </DialogTitle>
         <Grid container justifyContent="center" direction="row" alignItems="flex-start">
           <Grid container spacing={3} item xs={12} sm={12} md={12} lg={12} xl={12} direction="column">

@@ -20,17 +20,17 @@ import { useSession } from 'next-auth/react';
 function SubscribeDataGrid() {
   const [t] = useTranslation();
   const { data: session } = useSession();
-  const jwt = session?.user?.accessToken;
-  const service = new SubscribeService(jwt);
+  const jwt = session?.accessToken;
+  const service = new SubscribeService(jwt ?? '');
   const [isNew, setIsNew] = useState(true);
   const [rowId, setRowId] = useState(0);
   const [open, setOpen] = useState(false);
   const [openDelete, setOpenDelete] = useState(false);
-  const [row, setRow] = useState({});
-  const [refetch, setRefetch] = useState();
+  const [row, setRow] = useState<MRT_Row<RoleModel>>();
+  const [refetch, setRefetch] = useState<number | undefined>(undefined);
   const [fieldsName, buttonName] = ['fields.subscribe.', 'buttons.subscribe.'];
 
-  const columns = useMemo(
+  const columns = useMemo<MRT_Column<UserModel>[]>(
     () => [
       {
         accessorKey: 'subscribeLabelTitle',
@@ -59,13 +59,13 @@ function SubscribeDataGrid() {
     setRowId(0);
     setOpen(true);
   };
-  const handleEditRow = (row) => {
+  const handleEditRow = (row : MRT_Row<MenuModel>) => {
     let subscribeId = row.original.id;
     setIsNew(false);
     setRowId(subscribeId);
     setOpen(true);
   };
-  const handleDeleteRow = (row) => {
+  const handleDeleteRow = (row: MRT_Row<Permission>) => {
     setRow(row);
     setOpenDelete(true);
   };
@@ -86,7 +86,7 @@ function SubscribeDataGrid() {
   );
 
   const DeleteOrEdit = useCallback(
-    ({ row }) => (
+    ({ row }: { row: MRT_Row<RoleModel> }) => (
       <Box sx={{ display: 'flex', gap: '1rem' }}>
         <Tooltip arrow placement="top-start" title={t(buttonName + 'delete')}>
           <IconButton color="error" onClick={() => handleDeleteRow(row)}>

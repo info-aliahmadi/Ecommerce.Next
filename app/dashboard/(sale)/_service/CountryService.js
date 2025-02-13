@@ -1,12 +1,12 @@
 import axios from 'axios';
-import { setDefaultHeader } from '/utils/axiosHeaders';
-import CONFIG from '/config.js';
+import { setDefaultHeader } from '@root/utils/axiosHeaders';
+import CONFIG from '@root/config';
 
 export default class CountryService {
-  constructor(jwt) {
+  constructor(jwt : string) {
     setDefaultHeader(jwt);
   }
-  getCountryList = async (searchParams) => {
+  getCountryList = async (searchParams:  GridDataBound): Promise<Result<PaginatedList<RoleModel>>> => {
     return new Promise((resolve, reject) => {
       axios
         .post(CONFIG.API_BASEPATH + '/sale/GetCountryList', searchParams)
@@ -30,7 +30,7 @@ export default class CountryService {
         });
     });
   };
-  getCountryById = async (CountryId) => {
+  getCountryById = async (CountryId : number): Promise<Result<RoleModel>> => {
     return new Promise((resolve, reject) => {
       axios
         .get(CONFIG.API_BASEPATH + '/sale/getCountryById', { params: { CountryId: CountryId } })
@@ -66,7 +66,7 @@ export default class CountryService {
         });
     });
   };
-  deleteCountry = async (CountryId) => {
+  deleteCountry = async (CountryId : number): Promise<Result<RoleModel>> => {
     return new Promise((resolve, reject) => {
       axios
         .get(CONFIG.API_BASEPATH + '/sale/deleteCountry', { params: { CountryId: CountryId } })

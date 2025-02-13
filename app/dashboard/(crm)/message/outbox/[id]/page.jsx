@@ -11,9 +11,9 @@ export default function ViewOutboxMessage({params}) {
   const id = params.id;
 
   const { data: session } = useSession();
-  const jwt = session?.user?.accessToken;
+  const jwt = session?.accessToken;
 
-  let messageService = new MessageService(jwt);
+  let messageService = new MessageService(jwt ?? '');
   const [message, setMessage] = useState();
 
   const loadMessage = () => {

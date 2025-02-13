@@ -1,8 +1,8 @@
 import { ImageNotSupported } from "@mui/icons-material";
 import { Avatar, Box, Chip, FormControlLabel, Grid, InputLabel, MenuItem, OutlinedInput, Select, Stack, Switch, TextField } from "@mui/material";
 
-import CurrencyViewer from '/utils/CurrencyViewer';
-import { DateTimeViewer } from '/utils/DateViewer';
+import CurrencyViewer from '@root/utils/CurrencyViewer';
+import { DateTimeViewer } from '@root/utils/DateViewer';
 
 import Accordion from '@mui/material/Accordion';
 import AccordionSummary from '@mui/material/AccordionSummary';
@@ -10,7 +10,7 @@ import AccordionDetails from '@mui/material/AccordionDetails';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import SelectProductAttribute from "../ProductAttribute/SelectProductAttribute";
 import { useTranslation } from "react-i18next";
-import CONFIG from '/config';
+import CONFIG from '@root/config';
 
 export default function ProductDetail({ row }) {
 

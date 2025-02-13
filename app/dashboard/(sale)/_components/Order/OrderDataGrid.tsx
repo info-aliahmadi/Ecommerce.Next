@@ -23,14 +23,14 @@ import PaymentDetail from './PaymentDetail';
 function OrderDataGrid() {
   const [t] = useTranslation();
   const { data: session } = useSession();
-  const jwt = session?.user?.accessToken;
-  const service = new OrderService(jwt);
-  const [refetch, setRefetch] = useState();
+  const jwt = session?.accessToken;
+  const service = new OrderService(jwt ?? '');
+  const [refetch, setRefetch] = useState<number | undefined>(undefined);
   const [rowId, setRowId] = useState(0);
   const [open, setOpen] = useState(false);
   const [fieldsName, buttonName] = ['fields.order.', 'buttons.order.'];
 
-  const columns = useMemo(
+  const columns = useMemo<MRT_Column<UserModel>[]>(
     () => [
       {
         accessorKey: 'id',
@@ -44,7 +44,7 @@ function OrderDataGrid() {
         header: t(fieldsName + 'userName'),
         enableClickToCopy: true,
         type: 'string',
-        Cell: ({ renderedCellValue, row }) => (
+        Cell: ({ renderedCellValue, row }: { renderedCellValue: ReactNode; row: MRT_Row<ArticleModel> }) => (
           <Box
             sx={{
               display: 'flex',
@@ -61,7 +61,7 @@ function OrderDataGrid() {
         header: t(fieldsName + 'orderStatusId'),
         enableClickToCopy: true,
         type: 'string',
-        Cell: ({ renderedCellValue, row }) => (
+        Cell: ({ renderedCellValue, row }: { renderedCellValue: ReactNode; row: MRT_Row<ArticleModel> }) => (
           <Box
             sx={{
               display: 'flex',
@@ -98,7 +98,7 @@ function OrderDataGrid() {
         header: t(fieldsName + 'paymentTrackingCode'),
         enableClickToCopy: true,
         type: 'string',
-        Cell: ({ renderedCellValue, row }) => (
+        Cell: ({ renderedCellValue, row }: { renderedCellValue: ReactNode; row: MRT_Row<ArticleModel> }) => (
           <Box
             onClick={() => {
               handlePaymentDetail(row);
@@ -116,7 +116,7 @@ function OrderDataGrid() {
     setRefetch(Date.now());
   };
 
-  const handlePaymentDetail = (row) => {
+  const handlePaymentDetail = (row : MRT_Row<MenuModel>) => {
     let orderId = row.original.id;
     setRowId(orderId);
     setOpen(true);

@@ -1,9 +1,9 @@
 import axios from 'axios';
-import { setDefaultHeader } from '/utils/axiosHeaders';
-import CONFIG from '/config.js';
+import { setDefaultHeader } from '@root/utils/axiosHeaders';
+import CONFIG from '@root/config';
 
 export default class TaxCategoryService {
-  constructor(jwt) {
+  constructor(jwt : string) {
     setDefaultHeader(jwt);
   }
   getTaxCategoryList = async () => {
@@ -19,7 +19,7 @@ export default class TaxCategoryService {
     });
   };
 
-  getTaxCategoryItemList = async (taxCategoryId) => {
+  getTaxCategoryItemList = async (taxCategoryId : number): Promise<Result<RoleModel>> => {
     return new Promise((resolve, reject) => {
       axios
         .get(CONFIG.API_BASEPATH + `/sale/GetTaxCategoryItemList?taxCategoryId=${taxCategoryId}`)
@@ -43,7 +43,7 @@ export default class TaxCategoryService {
         });
     });
   };
-  getTaxCategoryById = async (taxCategoryId) => {
+  getTaxCategoryById = async (taxCategoryId : number): Promise<Result<RoleModel>> => {
     return new Promise((resolve, reject) => {
       axios
         .get(CONFIG.API_BASEPATH + '/sale/getTaxCategoryById', { params: { taxCategoryId: taxCategoryId } })
@@ -79,7 +79,7 @@ export default class TaxCategoryService {
         });
     });
   };
-  deleteTaxCategory = async (taxCategoryId) => {
+  deleteTaxCategory = async (taxCategoryId : number): Promise<Result<RoleModel>> => {
     return new Promise((resolve, reject) => {
       axios
         .get(CONFIG.API_BASEPATH + '/sale/deleteTaxCategory', { params: { taxCategoryId: taxCategoryId } })

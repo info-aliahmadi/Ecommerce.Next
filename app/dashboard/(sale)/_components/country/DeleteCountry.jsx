@@ -11,12 +11,12 @@ import Notify from '@dashboard/_components/@extended/Notify';
 import { useSession } from 'next-auth/react';
 import CountryService from '../../_service/CountryService';
 
-const DeleteCountry = ({ row, open, setOpen, refetch }) => {
+const DeleteCountry = ({ row, open, setOpen, refetch }: { row?: MRT_Row<Permission>; open: boolean; setOpen: (open: boolean) => void; refetch: () => void }) =>
   const [t] = useTranslation();
-  const [notify, setNotify] = useState({ open: false });
+  const [notify, setNotify] = useState<NotifyProps>({ open: false });
   const { data: session } = useSession();
-  const jwt = session?.user?.accessToken;
-  let countryService = new CountryService(jwt);
+  const jwt = session?.accessToken;
+  let countryService = new CountryService(jwt ?? '');
 
   const onClose = () => {
     setOpen(false);
@@ -35,7 +35,7 @@ const DeleteCountry = ({ row, open, setOpen, refetch }) => {
         setNotify({ open: true, type: 'error', description: error });
       });
   };
-  const CloseDialog = () => (
+  const CloseDialog = ({ onClose }: { onClose: () => void }) => (
     <IconButton
       aria-label="close"
       onClick={onClose}
@@ -58,7 +58,7 @@ const DeleteCountry = ({ row, open, setOpen, refetch }) => {
           <Typography variant="caption" fontSize={17} fontWeight={600}>
             {t('buttons.country.delete')}
           </Typography>
-          <CloseDialog />
+          <CloseDialog onClose={onClose} />
         </DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">

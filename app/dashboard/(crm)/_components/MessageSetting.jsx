@@ -23,11 +23,11 @@ import { useSession } from 'next-auth/react';
 const MessageSetting = () => {
   const [t] = useTranslation();
   const { data: session } = useSession();
-  const jwt = session?.user?.accessToken;
-  let settingsService = new MessageService(jwt);
+  const jwt = session?.accessToken;
+  let settingsService = new MessageService(jwt ?? '');
   const [fieldsName, validation, buttonName] = ['fields.message.messageSettings.', 'validation.message.messageSettings', 'buttons.'];
   const [settings, setSettings] = useState();
-  const [notify, setNotify] = useState({ open: false });
+  const [notify, setNotify] = useState<NotifyProps>({ open: false });
 
   const loadSettings = () => {
     settingsService.getSettings().then((result) => {
@@ -48,7 +48,7 @@ const MessageSetting = () => {
       .catch((error) => {
         setNotify({ open: true, type: 'error', description: error.message });
       })
-      .finally((x) => {
+      .finally(() => {
         setSubmitting(false);
       });
   };
@@ -74,7 +74,7 @@ const MessageSetting = () => {
             setStatus({ success: true });
           } catch (err) {
             setStatus({ success: false });
-            setErrors({ submit: err.message });
+            
           }
         }}
       >

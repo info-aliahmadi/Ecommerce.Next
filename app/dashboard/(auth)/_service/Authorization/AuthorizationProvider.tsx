@@ -10,7 +10,7 @@ export const AuthorizationContext = createContext<AuthorizationContextType | nul
 export default function AuthorizationProvider({ children }: { readonly children: ReactNode }) {
   const { data: session } = useSession();
   const jwt = (session as Session)?.accessToken;
-  const service = new AuthorizationService(jwt);
+  const service = new AuthorizationService(jwt ?? '');
   const [permissions, setPermissions] = useState<string[] | null>(null);
   const [loading, setLoading] = useState(true);
 

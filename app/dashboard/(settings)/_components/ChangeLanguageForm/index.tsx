@@ -26,7 +26,7 @@ const ChangeLanguageForm = () => {
 
   let currentLanguage = languageList.find((l) => l.key === i18n.language);
 
-  const [notify, setNotify] = useState({ open: false });
+  const [notify, setNotify] = useState<NotifyProps>({ open: false });
 
   const changeLanguage = (lng: Language) => {
     let locService = new LocalizationService(accessToken);
@@ -51,7 +51,7 @@ const ChangeLanguageForm = () => {
           } catch (err: any) {
             console.error(err);
             setStatus({ success: false });
-            setErrors({ submit: err.message });
+            
           }
         }}
       >

@@ -15,14 +15,14 @@ import { useSession } from 'next-auth/react';
 export default function EmailInboxDataGrid({ reloadCall }) {
   const [t] = useTranslation();
   const { data: session } = useSession();
-  const jwt = session?.user?.accessToken;
+  const jwt = session?.accessToken;
 
   const [openDelete, setOpenDelete] = useState(false);
-  const [row, setRow] = useState({});
-  const [refetch, setRefetch] = useState();
-  const [notify, setNotify] = useState({ open: false });
+  const [row, setRow] = useState<MRT_Row<RoleModel>>();
+  const [refetch, setRefetch] = useState<number | undefined>(undefined);
+  const [notify, setNotify] = useState<NotifyProps>({ open: false });
 
-  const emailInboxsService = new EmailInboxService(jwt);
+  const emailInboxsService = new EmailInboxService(jwt ?? '');
 
   const fieldsName = 'fields.email.emailInbox.';
 
@@ -30,7 +30,7 @@ export default function EmailInboxDataGrid({ reloadCall }) {
     handleRefetch()
   }, [reloadCall]);
 
-  const columns = useMemo(
+  const columns = useMemo<MRT_Column<UserModel>[]>(
     () => [
       {
         accessorKey: 'fromAddress',
@@ -40,7 +40,7 @@ export default function EmailInboxDataGrid({ reloadCall }) {
         enableResizing: true,
 
         maxSize: 60,
-        Cell: ({ renderedCellValue, row }) => {
+        Cell: (({ renderedCellValue, row } : { renderedCellValue: any, row : MRT_Row<LinkModel> }) => {
           renderedCellValue?.map((email, index) => {
             <Link
               key={index}
@@ -62,7 +62,7 @@ export default function EmailInboxDataGrid({ reloadCall }) {
         enableClickToCopy: false,
         type: 'string',
         enableResizing: true,
-        Cell: ({ renderedCellValue, row }) => (
+        Cell: ({ renderedCellValue, row }: { renderedCellValue: ReactNode; row: MRT_Row<ArticleModel> }) => (
           <Link
             href={'/dashboard/email/inbox/' + row.original.id}
             underline="none"
@@ -82,7 +82,7 @@ export default function EmailInboxDataGrid({ reloadCall }) {
     ],
     []
   );
-  const handleDeleteRow = (row) => {
+  const handleDeleteRow = (row: MRT_Row<Permission>) => {
     setRow(row);
     setOpenDelete(true);
   };
@@ -90,7 +90,7 @@ export default function EmailInboxDataGrid({ reloadCall }) {
     setRefetch(Date.now());
   };
 
-  const handlePinRow = (emailInboxId) => {
+  const handlePinRow = (emailInboxId : number): Promise<Result<RoleModel>> => {
     emailInboxsService
       .pinEmailInbox(emailInboxId)
       .then(() => {
@@ -100,12 +100,12 @@ export default function EmailInboxDataGrid({ reloadCall }) {
         setNotify({ open: true, type: 'error', description: error });
       });
   };
-  const handleEmailInboxList = useCallback(async (filters) => {
+  const handleEmailInboxList = useCallback(async (filters: GridDataBound) => {
     return await emailInboxsService.getAllEmailInbox(filters);
   }, []);
 
   const DeleteOrPin = useCallback(
-    ({ row }) => (
+    ({ row }: { row: MRT_Row<RoleModel> }) => (
       <Box sx={{ display: 'flex', gap: '1rem', flexWrap: 'nowrap' }}>
         <Tooltip arrow placement="top-start" title={t('buttons.delete')}>
           <IconButton color="error" onClick={() => handleDeleteRow(row)}>

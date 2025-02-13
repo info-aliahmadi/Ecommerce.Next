@@ -8,7 +8,13 @@ import { useSession } from 'next-auth/react';
 import { TextField } from '@mui/material';
 
 export default function SelectRole({ defaultValues, id, setFieldValue, error, disabled }:
-  { readonly defaultValues: number[], readonly disabled: boolean, readonly id?: string, readonly setFieldValue?: any, readonly error?: boolean }) {
+  Readonly<{
+    defaultValues: number[],
+    disabled: boolean,
+    id?: string,
+    setFieldValue?: any,
+    error?: boolean
+  }>) {
   const [t] = useTranslation();
   const [loading, setLoading] = useState(true);
   const [options, setOptions] = useState<Option[]>([]);
@@ -20,7 +26,6 @@ export default function SelectRole({ defaultValues, id, setFieldValue, error, di
   const loadRoles = () => {
     setLoading(true);
     roleService.getAllRoles().then((result) => {
-      debugger
       const optionsData: Option[] = result.data?.map((x) => ({ id: x.id, name: x.name })) as Option[];
       setOptions(optionsData);
       setLoading(false);

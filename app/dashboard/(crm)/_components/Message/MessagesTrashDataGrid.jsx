@@ -18,16 +18,16 @@ import { useSession } from 'next-auth/react';
 export default function MessagesTrashDataGrid() {
   const [t] = useTranslation();
   const { data: session } = useSession();
-  const jwt = session?.user?.accessToken;
+  const jwt = session?.accessToken;
 
-  const [refetch, setRefetch] = useState();
-  const [notify, setNotify] = useState({ open: false });
+  const [refetch, setRefetch] = useState<number | undefined>(undefined);
+  const [notify, setNotify] = useState<NotifyProps>({ open: false });
 
-  const messagesService = new MessageService(jwt);
+  const messagesService = new MessageService(jwt ?? '');
 
   const fieldsName = 'fields.message.messageInbox.';
 
-  const columns = useMemo(
+  const columns = useMemo<MRT_Column<UserModel>[]>(
     () => [
       {
         accessorKey: 'messageType',
@@ -48,7 +48,7 @@ export default function MessagesTrashDataGrid() {
         enableClickToCopy: false,
         type: 'string',
         enableResizing: true,
-        Cell: ({ renderedCellValue, row }) => (
+        Cell: ({ renderedCellValue, row }: { renderedCellValue: ReactNode; row: MRT_Row<ArticleModel> }) => (
           <Link
             href={'/message/inbox/view/' + row.original.id}
             underline="none"
@@ -102,7 +102,7 @@ export default function MessagesTrashDataGrid() {
   const handleRefetch = () => {
     setRefetch(Date.now());
   };
-  const handleRestoreRow = (row) => {
+  const handleRestoreRow = (row : MRT_Row<MenuModel>) => {
     let messageId = row.original.id;
     messagesService
       .restoreMessage(messageId)
@@ -114,12 +114,12 @@ export default function MessagesTrashDataGrid() {
         setNotify({ open: true, type: 'error', description: error });
       });
   };
-  const handleMessageList = useCallback(async (filters) => {
+  const handleMessageList = useCallback(async (filters: GridDataBound) => {
     return await messagesService.getDeletedInboxMessages(filters);
   }, []);
 
   const Restore = useCallback(
-    ({ row }) => (
+    ({ row }: { row: MRT_Row<RoleModel> }) => (
       <Box sx={{ display: 'flex', gap: '1rem', flexWrap: 'nowrap' }}>
         <Tooltip arrow placement="top-start" title={t('buttons.restore')}>
           <IconButton color="success" onClick={() => handleRestoreRow(row)}>

@@ -40,7 +40,7 @@ const DeletePermissionRole = ({ row, roleId, permissionRow, open, setOpen, data,
         setNotify({ open: true, type: 'error', description: error.message });
       });
   };
-  const CloseDialog = () => (
+  const CloseDialog = ({ onClose }: { onClose: () => void }) => (
     <IconButton
       aria-label="close"
       onClick={onClose}
@@ -61,7 +61,7 @@ const DeletePermissionRole = ({ row, roleId, permissionRow, open, setOpen, data,
       <Dialog open={open} onClose={onClose} aria-labelledby="alert-dialog-title" aria-describedby="alert-dialog-description">
         <DialogTitle id="alert-dialog-title" variant='h3'>
           {t('buttons.permission.delete')}
-          <CloseDialog />
+          <CloseDialog onClose={onClose} />
         </DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">

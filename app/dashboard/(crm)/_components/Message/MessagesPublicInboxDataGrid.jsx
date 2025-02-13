@@ -15,16 +15,16 @@ import { useSession } from 'next-auth/react';
 function MessagesPublicInboxDataGrid() {
   const [t] = useTranslation();
   const { data: session } = useSession();
-  const jwt = session?.user?.accessToken;
+  const jwt = session?.accessToken;
 
-  const [refetch, setRefetch] = useState();
-  const [notify, setNotify] = useState({ open: false });
+  const [refetch, setRefetch] = useState<number | undefined>(undefined);
+  const [notify, setNotify] = useState<NotifyProps>({ open: false });
 
-  const messagesService = new MessageService(jwt);
+  const messagesService = new MessageService(jwt ?? '');
 
   const fieldsName = 'fields.message.messageInbox.';
 
-  const columns = useMemo(
+  const columns = useMemo<MRT_Column<UserModel>[]>(
     () => [
       {
         accessorKey: 'messageType',
@@ -48,7 +48,7 @@ function MessagesPublicInboxDataGrid() {
         enableClickToCopy: false,
         type: 'string',
         enableResizing: true,
-        Cell: ({ renderedCellValue, row }) => (
+        Cell: ({ renderedCellValue, row }: { renderedCellValue: ReactNode; row: MRT_Row<ArticleModel> }) => (
           <Link href={'/dashboard/message/inbox/' + row.original.id} underline="none" variant="subtitle1" display="block">
             {renderedCellValue}
             {row.original.haveAttachment && <AttachFile fontSize="medium" sx={{ verticalAlign: 'middle' }} />}
@@ -62,7 +62,7 @@ function MessagesPublicInboxDataGrid() {
         type: 'string',
         enableResizing: true,
         maxSize: 100,
-        Cell: ({ renderedCellValue, row }) => (
+        Cell: ({ renderedCellValue, row }: { renderedCellValue: ReactNode; row: MRT_Row<ArticleModel> }) => (
           <Link
             href={'/dashboard/message/inbox/' + row.original.id}
             underline="none"
@@ -84,7 +84,7 @@ function MessagesPublicInboxDataGrid() {
     []
   );
 
-  const handleMessageList = useCallback(async (filters) => {
+  const handleMessageList = useCallback(async (filters: GridDataBound) => {
     return await messagesService.getPublicInboxMessages(filters);
   }, []);
 

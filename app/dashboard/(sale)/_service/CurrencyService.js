@@ -1,12 +1,12 @@
 import axios from 'axios';
-import { setDefaultHeader } from '/utils/axiosHeaders';
-import CONFIG from '/config.js';
+import { setDefaultHeader } from '@root/utils/axiosHeaders';
+import CONFIG from '@root/config';
 
 export default class CurrencyService {
-  constructor(jwt) {
+  constructor(jwt : string) {
     setDefaultHeader(jwt);
   }
-  getCurrencyList = async (searchParams) => {
+  getCurrencyList = async (searchParams:  GridDataBound): Promise<Result<PaginatedList<RoleModel>>> => {
     return new Promise((resolve, reject) => {
       axios
         .post(CONFIG.API_BASEPATH + '/sale/GetCurrencyList', searchParams)
@@ -30,7 +30,7 @@ export default class CurrencyService {
         });
     });
   };
-  getCurrencyById = async (currencyId) => {
+  getCurrencyById = async (currencyId : number): Promise<Result<RoleModel>> => {
     return new Promise((resolve, reject) => {
       axios
         .get(CONFIG.API_BASEPATH + '/sale/getCurrencyById', { params: { currencyId: currencyId } })
@@ -66,7 +66,7 @@ export default class CurrencyService {
         });
     });
   };
-  deleteCurrency = async (currencyId) => {
+  deleteCurrency = async (currencyId : number): Promise<Result<RoleModel>> => {
     return new Promise((resolve, reject) => {
       axios
         .get(CONFIG.API_BASEPATH + '/sale/deleteCurrency', { params: { currencyId: currencyId } })

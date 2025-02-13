@@ -17,18 +17,18 @@ import { useSession } from 'next-auth/react';
 function MessagesPrivateInboxDataGrid() {
   const [t] = useTranslation();
   const { data: session } = useSession();
-  const jwt = session?.user?.accessToken;
+  const jwt = session?.accessToken;
 
   const [openDelete, setOpenDelete] = useState(false);
-  const [row, setRow] = useState({});
-  const [refetch, setRefetch] = useState();
-  const [notify, setNotify] = useState({ open: false });
+  const [row, setRow] = useState<MRT_Row<RoleModel>>();
+  const [refetch, setRefetch] = useState<number | undefined>(undefined);
+  const [notify, setNotify] = useState<NotifyProps>({ open: false });
 
-  const messagesService = new MessageService(jwt);
+  const messagesService = new MessageService(jwt ?? '');
 
   const fieldsName = 'fields.message.messageInbox.';
 
-  const columns = useMemo(
+  const columns = useMemo<MRT_Column<UserModel>[]>(
     () => [
       {
         accessorKey: 'messageType',
@@ -49,7 +49,7 @@ function MessagesPrivateInboxDataGrid() {
         enableClickToCopy: false,
         type: 'string',
         enableResizing: true,
-        Cell: ({ renderedCellValue, row }) => (
+        Cell: ({ renderedCellValue, row }: { renderedCellValue: ReactNode; row: MRT_Row<ArticleModel> }) => (
           <Link
             href={'/dashboard/message/inbox/' + row.original.id}
             underline="none"
@@ -101,7 +101,7 @@ function MessagesPrivateInboxDataGrid() {
     ],
     []
   );
-  const handleDeleteRow = (row) => {
+  const handleDeleteRow = (row: MRT_Row<Permission>) => {
     setRow(row);
     setOpenDelete(true);
   };
@@ -109,7 +109,7 @@ function MessagesPrivateInboxDataGrid() {
     setRefetch(Date.now());
   };
 
-  const handlePinRow = (messageId) => {
+  const handlePinRow = (messageId : number): Promise<Result<RoleModel>> => {
     messagesService
       .pinMessage(messageId)
       .then(() => {
@@ -119,12 +119,12 @@ function MessagesPrivateInboxDataGrid() {
         setNotify({ open: true, type: 'error', description: error });
       });
   };
-  const handleMessageList = useCallback(async (filters) => {
+  const handleMessageList = useCallback(async (filters: GridDataBound) => {
     return await messagesService.getInboxMessages(filters);
   }, []);
 
   const DeleteOrPin = useCallback(
-    ({ row }) => (
+    ({ row }: { row: MRT_Row<RoleModel> }) => (
       <Box sx={{ display: 'flex', gap: '1rem', flexWrap: 'nowrap' }}>
         <Tooltip arrow placement="top-start" title={t('buttons.delete')}>
           <IconButton color="error" onClick={() => handleDeleteRow(row)}>

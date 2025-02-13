@@ -19,7 +19,7 @@ export default function SelectUser({ defaultValues, id, name, setFieldValue, err
   const [t] = useTranslation();
   const { data: session } = useSession();
   const jwt = session?.accessToken;
-  const usersService = new UsersService(jwt);
+  const usersService = new UsersService(jwt ?? '');
 
   return (
     <FormControl error={error} key={id}>

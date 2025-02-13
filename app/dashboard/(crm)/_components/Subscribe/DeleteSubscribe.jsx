@@ -11,12 +11,12 @@ import Notify from '@dashboard/_components/@extended/Notify';
 import SubscribeService from '@dashboard/(crm)/_service/SubscribeService';
 import { useSession } from 'next-auth/react';
 
-const DeleteSubscribe = ({ row, open, setOpen, refetch }) => {
+const DeleteSubscribe = ({ row, open, setOpen, refetch }: { row?: MRT_Row<Permission>; open: boolean; setOpen: (open: boolean) => void; refetch: () => void }) => {
   const [t] = useTranslation();
-  const [notify, setNotify] = useState({ open: false });
+  const [notify, setNotify] = useState<NotifyProps>({ open: false });
   const { data: session } = useSession();
-  const jwt = session?.user?.accessToken;
-  let subscribeService = new SubscribeService(jwt);
+  const jwt = session?.accessToken;
+  let subscribeService = new SubscribeService(jwt ?? '');
 
   const onClose = () => {
     setOpen(false);
@@ -35,7 +35,7 @@ const DeleteSubscribe = ({ row, open, setOpen, refetch }) => {
         setNotify({ open: true, type: 'error', description: error });
       });
   };
-  const CloseDialog = () => (
+  const CloseDialog = ({ onClose }: { onClose: () => void }) => (
     <IconButton
       aria-label="close"
       onClick={onClose}
@@ -58,7 +58,7 @@ const DeleteSubscribe = ({ row, open, setOpen, refetch }) => {
           <Typography variant="caption" fontSize={17} fontWeight={600}>
             {t('buttons.subscribe.delete')}
           </Typography>
-          <CloseDialog />
+          <CloseDialog onClose={onClose} />
         </DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">

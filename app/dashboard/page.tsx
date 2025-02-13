@@ -20,11 +20,11 @@ import {
 import Grid from '@mui/material/Grid2'
 
 // project import
-import OrdersTable from './_lib/OrdersTable';
-import IncomeAreaChart from './_lib/IncomeAreaChart';
-import MonthlyBarChart from './_lib/MonthlyBarChart';
-import ReportAreaChart from './_lib/ReportAreaChart';
-import SalesColumnChart from './_lib/SalesColumnChart';
+import OrdersTable from './_components/@extended/OrdersTable';
+import IncomeAreaChart from './_components/@extended/IncomeAreaChart';
+import MonthlyBarChart from './_components/@extended/MonthlyBarChart';
+import ReportAreaChart from './_components/@extended/ReportAreaChart';
+import SalesColumnChart from './_components/@extended/SalesColumnChart';
 import MainCard from './_components/MainCard';
 import AnalyticEcommerce from './_components/cards/statistics/AnalyticEcommerce';
 

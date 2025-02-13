@@ -124,7 +124,7 @@ const UserDetail = ({ row, t, fieldsName, language }: { row: MRT_Row<UserModel>,
               value={row.original.registerDate
                 ? new Intl.DateTimeFormat(language, {
                   dateStyle: 'long',
-                  timeStyle: CONFIG.TIME_STYLE as "short" | "full" | "long" | "medium" | undefined,
+                  timeStyle: CONFIG.TIME_STYLE,
                   hour12: false
                 }).format(moment(row.original.registerDate).toDate()) : ''}
               fullWidth
@@ -186,7 +186,7 @@ function UsersDataGrid() {
 
   const jwt = session?.accessToken;
 
-  const service = new UsersService(jwt || '');
+  const service = new UsersService(jwt ?? '');
   const router = useRouter();
 
   const [fieldsName, buttonName] = ['fields.user.', 'buttons.user.'];

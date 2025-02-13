@@ -13,9 +13,9 @@ import AnimateButton from '@dashboard/_components/@extended/AnimateButton';
 // assets
 import { useTranslation } from 'react-i18next';
 import Notify from '@dashboard/_components/@extended/Notify';
-import CONFIG from '/config';
+import CONFIG from '@root/config';
 import MainCard from '@dashboard/_components/MainCard';
-import setServerErrors from '/utils/setServerErrors';
+import setServerErrors from '@root/utils/setServerErrors';
 
 import moment from 'moment';
 import { useRouter } from 'next/navigation';
@@ -32,12 +32,12 @@ export default function AddOrEditArticle({ params }) {
   const id = params.id;
 
   const { data: session } = useSession();
-  const jwt = session?.user?.accessToken;
+  const jwt = session?.accessToken;
 
-  let articleService = new ArticlesService(jwt);
+  let articleService = new ArticlesService(jwt ?? '');
   const [fieldsName, validation, buttonName] = ['fields.article.', 'validation.article.', 'buttons.article.'];
   const [article, setArticle] = useState();
-  const [notify, setNotify] = useState({ open: false });
+  const [notify, setNotify] = useState<NotifyProps>({ open: false });
   const router = useRouter();
 
   const loadArticle = () => {
@@ -49,7 +49,7 @@ export default function AddOrEditArticle({ params }) {
     if (operation == 'edit' && id > 0) loadArticle();
   }, [operation, id]);
 
-  const handleSubmit = async (article, resetForm, setErrors, setSubmitting) => {
+  const handleSubmit = async (article, resetForm, setErrors: (errors: FormikErrors<LinkModel>) => void, setSubmitting: (open: boolean) => void) => {
     if (operation == 'add') {
       articleService
         .addArticle(article)
@@ -58,10 +58,10 @@ export default function AddOrEditArticle({ params }) {
           setNotify({ open: true });
         })
         .catch((error) => {
-          setServerErrors(error, setErrors);
+          setErrors(setServerErrors(error));
           setNotify({ open: true, type: 'error', description: error });
         })
-        .finally((x) => {
+        .finally(() => {
           setSubmitting(false);
         });
     } else {
@@ -72,10 +72,10 @@ export default function AddOrEditArticle({ params }) {
           setNotify({ open: true });
         })
         .catch((error) => {
-          setServerErrors(error, setErrors);
+          setErrors(setServerErrors(error));
           setNotify({ open: true, type: 'error', description: error });
         })
-        .finally((x) => {
+        .finally(() => {
           setSubmitting(false);
         });
     }
@@ -119,7 +119,7 @@ export default function AddOrEditArticle({ params }) {
           } catch (err) {
             console.error(err);
             setStatus({ success: false });
-            setErrors({ submit: err.message });
+            
           }
         }}
       >

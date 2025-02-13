@@ -1,12 +1,12 @@
 import axios from 'axios';
-import { setDefaultHeader } from '/utils/axiosHeaders';
-import CONFIG from '/config.js';
+import { setDefaultHeader } from '@root/utils/axiosHeaders';
+import CONFIG from '@root/config';
 
 export default class OrderService {
-  constructor(jwt) {
+  constructor(jwt : string) {
     setDefaultHeader(jwt);
   }
-  getOrderList = async (searchParams) => {
+  getOrderList = async (searchParams:  GridDataBound): Promise<Result<PaginatedList<RoleModel>>> => {
     return new Promise((resolve, reject) => {
       axios
         .post(CONFIG.API_BASEPATH + '/sale/GetOrderList', searchParams)
@@ -19,7 +19,7 @@ export default class OrderService {
     });
   };
 
-  getOrderItemList = async (orderId) => {
+  getOrderItemList = async (orderId : number): Promise<Result<RoleModel>> => {
     return new Promise((resolve, reject) => {
       axios
         .get(CONFIG.API_BASEPATH + `/sale/GetOrderItemList?orderId=${orderId}`)
@@ -43,7 +43,7 @@ export default class OrderService {
         });
     });
   };
-  getOrderById = async (orderId) => {
+  getOrderById = async (orderId : number): Promise<Result<RoleModel>> => {
     return new Promise((resolve, reject) => {
       axios
         .get(CONFIG.API_BASEPATH + '/sale/getOrderById', { params: { orderId: orderId } })
@@ -56,7 +56,7 @@ export default class OrderService {
     });
   };
 
-  getOrderPaymentById = async (orderId) => {
+  getOrderPaymentById = async (orderId : number): Promise<Result<RoleModel>> => {
     return new Promise((resolve, reject) => {
       axios
         .get(CONFIG.API_BASEPATH + '/sale/getOrderPaymentById', { params: { orderId: orderId } })
@@ -93,7 +93,7 @@ export default class OrderService {
         });
     });
   };
-  deleteOrder = async (orderId) => {
+  deleteOrder = async (orderId : number): Promise<Result<RoleModel>> => {
     return new Promise((resolve, reject) => {
       axios
         .get(CONFIG.API_BASEPATH + '/sale/deleteOrder', { params: { orderId: orderId } })

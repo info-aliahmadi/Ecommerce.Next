@@ -19,17 +19,17 @@ import DeleteCountry from './DeleteCountry';
 function CountryDataGrid() {
   const [t] = useTranslation();
   const { data: session } = useSession();
-  const jwt = session?.user?.accessToken;
-  const service = new CountryService(jwt);
+  const jwt = session?.accessToken;
+  const service = new CountryService(jwt ?? '');
   const [isNew, setIsNew] = useState(true);
   const [rowId, setRowId] = useState(0);
   const [open, setOpen] = useState(false);
   const [openDelete, setOpenDelete] = useState(false);
-  const [row, setRow] = useState({});
-  const [refetch, setRefetch] = useState();
+  const [row, setRow] = useState<MRT_Row<RoleModel>>();
+  const [refetch, setRefetch] = useState<number | undefined>(undefined);
   const [fieldsName, buttonName] = ['fields.country.', 'buttons.country.'];
 
-  const columns = useMemo(
+  const columns = useMemo<MRT_Column<UserModel>[]>(
     () => [
       {
         accessorKey: 'Name',
@@ -100,13 +100,13 @@ function CountryDataGrid() {
     setRowId(0);
     setOpen(true);
   };
-  const handleEditRow = (row) => {
+  const handleEditRow = (row : MRT_Row<MenuModel>) => {
     let CountryId = row.original.id;
     setIsNew(false);
     setRowId(CountryId);
     setOpen(true);
   };
-  const handleDeleteRow = (row) => {
+  const handleDeleteRow = (row: MRT_Row<Permission>) => {
     setRow(row);
     setOpenDelete(true);
   };
@@ -127,7 +127,7 @@ function CountryDataGrid() {
   );
 
   const DeleteOrEdit = useCallback(
-    ({ row }) => (
+    ({ row }: { row: MRT_Row<RoleModel> }) => (
       <Box sx={{ display: 'flex', gap: '1rem' }}>
         <Tooltip arrow placement="top-start" title={t(buttonName + 'delete')}>
           <IconButton color="error" onClick={() => handleDeleteRow(row)}>

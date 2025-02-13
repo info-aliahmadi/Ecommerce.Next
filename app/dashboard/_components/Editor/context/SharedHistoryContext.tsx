@@ -16,7 +16,7 @@ type ContextShape = {
   historyState?: HistoryState;
 };
 
-const Context: React.Context<ContextShape> = createContext({});
+const Context: React.Context<ContextShape> = createContext(undefined);
 
 export const SharedHistoryContext = ({
   children,

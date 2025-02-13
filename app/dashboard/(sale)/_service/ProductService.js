@@ -1,12 +1,12 @@
 import axios from 'axios';
-import { setDefaultHeader } from '/utils/axiosHeaders';
-import CONFIG from '/config.js';
+import { setDefaultHeader } from '@root/utils/axiosHeaders';
+import CONFIG from '@root/config';
 
 export default class ProductService {
-  constructor(jwt) {
+  constructor(jwt : string) {
     setDefaultHeader(jwt);
   }
-  getProductList = async (searchParams) => {
+  getProductList = async (searchParams:  GridDataBound): Promise<Result<PaginatedList<RoleModel>>> => {
     return new Promise((resolve, reject) => {
       axios
         .post(CONFIG.API_BASEPATH + '/sale/GetProductList', searchParams)
@@ -19,7 +19,7 @@ export default class ProductService {
     });
   };
 
-  getProductItemList = async (productId) => {
+  getProductItemList = async (productId : number): Promise<Result<RoleModel>> => {
     return new Promise((resolve, reject) => {
       axios
         .get(CONFIG.API_BASEPATH + `/sale/GetProductItemList?productId=${productId}`)
@@ -43,7 +43,7 @@ export default class ProductService {
         });
     });
   };
-  getProductById = async (productId) => {
+  getProductById = async (productId : number): Promise<Result<RoleModel>> => {
     return new Promise((resolve, reject) => {
       axios
         .get(CONFIG.API_BASEPATH + '/sale/getProductById', { params: { productId: productId } })
@@ -103,7 +103,7 @@ export default class ProductService {
         });
     });
   };
-  deleteProduct = async (productId) => {
+  deleteProduct = async (productId : number): Promise<Result<RoleModel>> => {
     return new Promise((resolve, reject) => {
       axios
         .get(CONFIG.API_BASEPATH + '/sale/deleteProduct', { params: { productId: productId } })
@@ -115,7 +115,7 @@ export default class ProductService {
         });
     });
   };
-  removeProduct = async (productId) => {
+  removeProduct = async (productId : number): Promise<Result<RoleModel>> => {
     return new Promise((resolve, reject) => {
       axios
         .get(CONFIG.API_BASEPATH + '/sale/removeProduct', { params: { productId: productId } })

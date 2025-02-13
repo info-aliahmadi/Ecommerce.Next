@@ -48,7 +48,7 @@ const DeleteRole = ({ row, open, setOpen, refetch }: DeleteRoleProps) => {
         setDisableBtn(false);
       });
   };
-  const CloseDialog = () => (
+  const CloseDialog = ({ onClose }: { onClose: () => void }) => (
     <IconButton
       aria-label="close"
       onClick={onClose}
@@ -71,7 +71,7 @@ const DeleteRole = ({ row, open, setOpen, refetch }: DeleteRoleProps) => {
           <Typography variant="caption" fontSize={17} fontWeight={600}>
             {t('buttons.role.delete')}
           </Typography>
-          <CloseDialog />
+          <CloseDialog onClose={onClose} />
         </DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">

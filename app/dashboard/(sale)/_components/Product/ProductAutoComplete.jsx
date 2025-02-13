@@ -6,8 +6,8 @@ import { useSession } from 'next-auth/react';
 export default function ProductsAutoComplete({ id, name, defaultValues, setFieldValue, label }) {
 
   const { data: session } = useSession();
-  const jwt = session?.user?.accessToken;
-  let service = new ProductService(jwt);
+  const jwt = session?.accessToken;
+  let service = new ProductService(jwt ?? '');
 
   return (
     <>

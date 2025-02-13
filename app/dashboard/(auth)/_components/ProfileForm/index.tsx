@@ -124,7 +124,7 @@ const ProfileForm = () => {
             handleUpdate(values, setSubmitting);
           } catch (err: any) {
             setStatus({ success: false });
-            setErrors({ submit: err.message });
+            
           }
         }}
       >

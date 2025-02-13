@@ -19,8 +19,8 @@ import { Divider } from '@mui/material';
 export default function OrderItemData({ orderId, currency }) {
   const [t] = useTranslation();
   const { data: session } = useSession();
-  const jwt = session?.user?.accessToken;
-  const service = new OrderService(jwt);
+  const jwt = session?.accessToken;
+  const service = new OrderService(jwt ?? '');
   const [values, setValues] = useState([]);
   const [valueAmounts, setValueSumAmounts] = useState('');
   const [fieldsName, buttonName] = ['fields.orderItem.', 'buttons.orderItem.'];

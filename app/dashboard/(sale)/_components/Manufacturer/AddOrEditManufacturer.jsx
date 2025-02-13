@@ -25,7 +25,7 @@ import AnimateButton from '@dashboard/_components/@extended/AnimateButton';
 // assets
 import { useTranslation } from 'react-i18next';
 import Notify from '@dashboard/_components/@extended/Notify';
-import setServerErrors from '/utils/setServerErrors';
+import setServerErrors from '@root/utils/setServerErrors';
 import AddIcon from '@mui/icons-material/Add';
 import ManufacturerService from '../../_service/ManufacturerService';
 
@@ -33,10 +33,10 @@ const AddOrEditManufacturer = ({ manufacturerId, isNew, open, setOpen, refetch }
   const [t] = useTranslation();
   const [fieldsName, validation, buttonName] = ['fields.manufacturer.', 'validation.manufacturer.', 'buttons.manufacturer.'];
   const [manufacturer, setManufacturer] = useState();
-  const [notify, setNotify] = useState({ open: false });
+  const [notify, setNotify] = useState<NotifyProps>({ open: false });
   const { data: session } = useSession();
-  const jwt = session?.user?.accessToken;
-  let manufacturerService = new ManufacturerService(jwt);
+  const jwt = session?.accessToken;
+  let manufacturerService = new ManufacturerService(jwt ?? '');
 
   const loadManufacturer = () => {
     manufacturerService.getManufacturerById(manufacturerId).then((result) => {
@@ -49,13 +49,13 @@ const AddOrEditManufacturer = ({ manufacturerId, isNew, open, setOpen, refetch }
     if (isNew == false && manufacturerId > 0) {
       loadManufacturer();
     } else {
-      setManufacturer({});
+      setManufacturer(undefined);
     }
   }, [manufacturerId, isNew, open]);
 
   const onClose = () => {
     setOpen(false);
-    setManufacturer({});
+    setManufacturer(undefined);
   };
 
   const handleSubmit = (Manufacturer, setErrors) => {
@@ -64,30 +64,30 @@ const AddOrEditManufacturer = ({ manufacturerId, isNew, open, setOpen, refetch }
         .addManufacturer(Manufacturer)
         .then(() => {
           onClose();
-          setManufacturer({});
+          setManufacturer(undefined);
           setNotify({ open: true });
           refetch();
         })
         .catch((error) => {
           setNotify({ open: true, type: 'error', description: error });
-          setServerErrors(error, setErrors);
+          setErrors(setServerErrors(error));
         });
     } else {
       manufacturerService
         .updateManufacturer(Manufacturer)
         .then(() => {
           onClose();
-          setManufacturer({});
+          setManufacturer(undefined);
           setNotify({ open: true });
           refetch();
         })
         .catch((error) => {
-          setServerErrors(error, setErrors);
+          setErrors(setServerErrors(error));
           setNotify({ open: true, type: 'error', description: error });
         });
     }
   };
-  const CloseDialog = () => (
+  const CloseDialog = ({ onClose }: { onClose: () => void }) => (
     <IconButton
       aria-label="close"
       onClick={onClose}
@@ -135,7 +135,7 @@ const AddOrEditManufacturer = ({ manufacturerId, isNew, open, setOpen, refetch }
             } catch (err) {
               console.error(err);
               setStatus({ success: false });
-              setErrors({ submit: err.message });
+              
               setSubmitting(false);
             }
           }}
@@ -144,7 +144,7 @@ const AddOrEditManufacturer = ({ manufacturerId, isNew, open, setOpen, refetch }
             <form noValidate onSubmit={handleSubmit}>
               <DialogTitle>
                 {t('dialog.' + (isNew == true ? 'add' : 'edit') + '.title', { item: 'Manufacturer' })}
-                <CloseDialog />
+                <CloseDialog onClose={onClose} />
               </DialogTitle>
               <DialogContent>
                 <Grid container spacing={3} direction="column">

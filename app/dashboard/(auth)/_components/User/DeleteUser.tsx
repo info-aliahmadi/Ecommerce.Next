@@ -23,7 +23,7 @@ const DeleteUser = ({ userId, open, setOpen }: DeleteUserProps) => {
   const { data: session } = useSession();
   const jwt = session?.accessToken;
 
-  let userService = new UsersService(jwt);
+  let userService = new UsersService(jwt ?? '');
   const [notify, setNotify] = useState<NotifyProps>({ open: false });
   const [disableBtn, setDisableBtn] = useState(false);
 
@@ -49,7 +49,7 @@ const DeleteUser = ({ userId, open, setOpen }: DeleteUserProps) => {
         setDisableBtn(false);
       });
   };
-  const CloseDialog = () => (
+  const CloseDialog = ({ onClose }: { onClose: () => void }) => (
     <IconButton
       aria-label="close"
       onClick={onClose}
@@ -72,7 +72,7 @@ const DeleteUser = ({ userId, open, setOpen }: DeleteUserProps) => {
           <Typography variant="caption" fontSize={17} fontWeight={600}>
             {t('buttons.user.delete')}
           </Typography>
-          <CloseDialog />
+          <CloseDialog onClose={onClose} />
         </DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">

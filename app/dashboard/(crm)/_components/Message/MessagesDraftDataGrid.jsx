@@ -22,19 +22,19 @@ import { useSession } from 'next-auth/react';
 export default function MessagesDraftDataGrid() {
   const [t] = useTranslation();
   const { data: session } = useSession();
-  const jwt = session?.user?.accessToken;
+  const jwt = session?.accessToken;
 
   const [openDelete, setOpenDelete] = useState(false);
-  const [row, setRow] = useState({});
-  const [refetch, setRefetch] = useState();
-  const [notify, setNotify] = useState({ open: false });
+  const [row, setRow] = useState<MRT_Row<RoleModel>>();
+  const [refetch, setRefetch] = useState<number | undefined>(undefined);
+  const [notify, setNotify] = useState<NotifyProps>({ open: false });
   const router = useRouter();
 
-  const messagesService = new MessageService(jwt);
+  const messagesService = new MessageService(jwt ?? '');
 
   const fieldsName = 'fields.message.messageInbox.';
 
-  const columns = useMemo(
+  const columns = useMemo<MRT_Column<UserModel>[]>(
     () => [
       {
         accessorKey: 'messageType',
@@ -55,7 +55,7 @@ export default function MessagesDraftDataGrid() {
         enableClickToCopy: false,
         type: 'string',
         enableResizing: true,
-        Cell: ({ renderedCellValue, row }) => (
+        Cell: ({ renderedCellValue, row }: { renderedCellValue: ReactNode; row: MRT_Row<ArticleModel> }) => (
           <Link
             href={'/dashboard/message/send/' + row.original.id}
             underline="none"
@@ -103,7 +103,7 @@ export default function MessagesDraftDataGrid() {
     ],
     []
   );
-  const handleRemoveRow = (row) => {
+  const handleRemoveRow = (row : MRT_Row<MenuModel>) => {
     setRow(row);
     setOpenDelete(true);
   };
@@ -111,12 +111,12 @@ export default function MessagesDraftDataGrid() {
     setRefetch(Date.now());
   };
 
-  const handleMessageList = useCallback(async (filters) => {
+  const handleMessageList = useCallback(async (filters: GridDataBound) => {
     return await messagesService.getDraftMessages(filters);
   }, []);
 
   const Remove = useCallback(
-    ({ row }) => (
+    ({ row }: { row: MRT_Row<RoleModel> }) => (
       <Box sx={{ display: 'flex', gap: '1rem', flexWrap: 'nowrap' }}>
         <Tooltip arrow placement="top-start" title={t('buttons.remove')}>
           <IconButton color="error" onClick={() => handleRemoveRow(row)}>

@@ -25,9 +25,9 @@ import AnimateButton from '@dashboard/_components/@extended/AnimateButton';
 // assets
 import { useTranslation } from 'react-i18next';
 import Notify from '@dashboard/_components/@extended/Notify';
-import CONFIG from '/config';
+import CONFIG from '@root/config';
 import MainCard from '@dashboard/_components/MainCard';
-import setServerErrors from '/utils/setServerErrors';
+import setServerErrors from '@root/utils/setServerErrors';
 
 import moment from 'moment';
 import PagesService from '@dashboard/(cms)/_service/PagesService';
@@ -42,12 +42,12 @@ export default function AddOrEditPage({ params }) {
   const id = params.id;
 
   const { data: session } = useSession();
-  const jwt = session?.user?.accessToken;
+  const jwt = session?.accessToken;
 
-  let pageService = new PagesService(jwt);
+  let pageService = new PagesService(jwt ?? '');
   const [fieldsName, validation, buttonName] = ['fields.page.', 'validation.page.', 'buttons.page.'];
   const [page, setPage] = useState();
-  const [notify, setNotify] = useState({ open: false });
+  const [notify, setNotify] = useState<NotifyProps>({ open: false });
   const router = useRouter();
 
   const loadPage = () => {
@@ -59,7 +59,7 @@ export default function AddOrEditPage({ params }) {
     if (operation == 'edit' && id > 0) loadPage();
   }, [operation, id]);
 
-  const handleSubmit = async (page, resetForm, setErrors, setSubmitting) => {
+  const handleSubmit = async (page, resetForm, setErrors: (errors: FormikErrors<LinkModel>) => void, setSubmitting: (open: boolean) => void) => {
     if (operation == 'add') {
       pageService
         .addPage(page)
@@ -68,10 +68,10 @@ export default function AddOrEditPage({ params }) {
           setNotify({ open: true });
         })
         .catch((error) => {
-          setServerErrors(error, setErrors);
+          setErrors(setServerErrors(error));
           setNotify({ open: true, type: 'error', description: error });
         })
-        .finally((x) => {
+        .finally(() => {
           setSubmitting(false);
         });
     } else {
@@ -82,10 +82,10 @@ export default function AddOrEditPage({ params }) {
           setNotify({ open: true });
         })
         .catch((error) => {
-          setServerErrors(error, setErrors);
+          setErrors(setServerErrors(error));
           setNotify({ open: true, type: 'error', description: error });
         })
-        .finally((x) => {
+        .finally(() => {
           setSubmitting(false);
         });
     }
@@ -124,7 +124,7 @@ export default function AddOrEditPage({ params }) {
           } catch (err) {
             console.error(err);
             setStatus({ success: false });
-            setErrors({ submit: err.message });
+            
           }
         }}
       >

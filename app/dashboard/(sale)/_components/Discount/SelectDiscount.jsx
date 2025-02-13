@@ -5,9 +5,9 @@ import { useSession } from 'next-auth/react';
 
 export default function SelectDiscount({ defaultValues, id, name,label, setFieldValue, error, disabled }){
   const { data: session } = useSession();
-  const jwt = session?.user?.accessToken;
+  const jwt = session?.accessToken;
 
-  const discountService = new DiscountService(jwt);
+  const discountService = new DiscountService(jwt ?? '');
 
   return (
     <MultiSelect

@@ -11,7 +11,7 @@ import AnimateButton from '@dashboard/_components/@extended/AnimateButton';
 import { useTranslation } from 'react-i18next';
 import Notify from '@dashboard/_components/@extended/Notify';
 import MainCard from '@dashboard/_components/MainCard';
-import setServerErrors from '/utils/setServerErrors';
+import setServerErrors from '@root/utils/setServerErrors';
 import { useRouter } from 'next/navigation';
 import MessagesService from '@dashboard/(crm)/_service/MessageService';
 import SelectUser from '@dashboard/(auth)/_components/User/SelectUser';
@@ -24,13 +24,13 @@ export default function SendMessage({ params }) {
   const [id, toUserId] = params.id;
 
   const { data: session } = useSession();
-  const jwt = session?.user?.accessToken;
+  const jwt = session?.accessToken;
 
-  let messageService = new MessagesService(jwt);
+  let messageService = new MessagesService(jwt ?? '');
   const [fieldsName, validation, buttonName] = ['fields.message.messageInbox.', 'validation.message.', 'buttons.message.messageInbox.'];
   const [message, setMessage] = useState();
   const [isPublicMessage, setIsPublicMessage] = useState(false);
-  const [notify, setNotify] = useState({ open: false });
+  const [notify, setNotify] = useState<NotifyProps>({ open: false });
   const router = useRouter();
 
   const loadMessage = () => {
@@ -42,7 +42,7 @@ export default function SendMessage({ params }) {
     if (id > 0) loadMessage();
   }, [id, toUserId]);
 
-  const handleSubmit = async (message, resetForm, setErrors, setSubmitting) => {
+  const handleSubmit = async (message, resetForm, setErrors: (errors: FormikErrors<LinkModel>) => void, setSubmitting: (open: boolean) => void) => {
     if (!message.isDraft) {
       if (isPublicMessage) {
         message.userIds = [];
@@ -56,7 +56,7 @@ export default function SendMessage({ params }) {
             setNotify({ open: true });
           })
           .catch((error) => {
-            setServerErrors(error, setErrors);
+            setErrors(setServerErrors(error));
             setNotify({ open: true, type: 'error', description: error });
           });
       } else {
@@ -70,7 +70,7 @@ export default function SendMessage({ params }) {
             setNotify({ open: true });
           })
           .catch((error) => {
-            setServerErrors(error, setErrors);
+            setErrors(setServerErrors(error));
             setNotify({ open: true, type: 'error', description: error });
           });
       }
@@ -82,7 +82,7 @@ export default function SendMessage({ params }) {
           setNotify({ open: true });
         })
         .catch((error) => {
-          setServerErrors(error, setErrors);
+          setErrors(setServerErrors(error));
           setNotify({ open: true, type: 'error', description: error });
         });
     }
@@ -120,7 +120,7 @@ export default function SendMessage({ params }) {
           } catch (err) {
             console.error(err);
             setStatus({ success: false });
-            setErrors({ submit: err.message });
+            
           }
         }}
       >

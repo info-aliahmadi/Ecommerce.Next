@@ -53,13 +53,13 @@ const AddOrEditPermission = ({ permissionId, isNew, open, setOpen, refetch }: {
   };
   const onClose = () => {
     setOpen(false);
-    setPermission({});
+    setPermission(undefined);
   };
   useEffect(() => {
     if (!isNew && permissionId > 0) {
       loadPermission();
     } else {
-      setPermission({});
+      setPermission(undefined);
     }
   }, [permissionId, isNew, open]);
 
@@ -76,7 +76,7 @@ const AddOrEditPermission = ({ permissionId, isNew, open, setOpen, refetch }: {
       permissionService
         .addPermission(permission)
         .then(() => {
-          setPermission({});
+          setPermission(undefined);
           onClose();
           setNotify((provious) => ({ ...provious, open: true }));
           refetch();
@@ -92,7 +92,7 @@ const AddOrEditPermission = ({ permissionId, isNew, open, setOpen, refetch }: {
       permissionService
         .updatePermission(permission)
         .then(() => {
-          setPermission({});
+          setPermission(undefined);
           onClose();
           setNotify((provious) => ({ ...provious, open: true }));
           refetch();
@@ -106,7 +106,7 @@ const AddOrEditPermission = ({ permissionId, isNew, open, setOpen, refetch }: {
         });
     }
   };
-  const CloseDialog = () => (
+  const CloseDialog = ({ onClose }: { onClose: () => void }) => (
     <IconButton
       aria-label="close"
       onClick={onClose}
@@ -145,7 +145,7 @@ const AddOrEditPermission = ({ permissionId, isNew, open, setOpen, refetch }: {
               handleSubmit(values, setErrors, setSubmitting);
             } catch (err) {
               setStatus({ success: false });
-              setErrors({});
+              setErrors(undefined);
             }
           }}
         >
@@ -153,7 +153,7 @@ const AddOrEditPermission = ({ permissionId, isNew, open, setOpen, refetch }: {
             <form noValidate onSubmit={handleSubmit}>
               <DialogTitle>
                 {t('dialog.' + (isNew ? 'add' : 'edit') + '.title', { item: 'Permission' })}
-                <CloseDialog />
+                <CloseDialog onClose={onClose} />
               </DialogTitle>
               <DialogContent>
                 <Grid container spacing={3} direction="column">

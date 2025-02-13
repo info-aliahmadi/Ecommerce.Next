@@ -15,32 +15,32 @@ import { useTranslation } from 'react-i18next';
 import ProductsService from '@dashboard/(sale)/_service/ProductService';
 import { ImageNotSupported, Delete, Edit } from '@mui/icons-material';
 import AddBusinessOutlinedIcon from '@mui/icons-material/AddBusinessOutlined';
-import CONFIG from '/config';
+import CONFIG from '@root/config';
 import MaterialTable from '@dashboard/_components/MaterialTable/MaterialTable';
 import TableCard from '@dashboard/_components/TableCard';
 import { useRouter } from 'next/navigation';
 import { useSession } from 'next-auth/react';
 import DeleteProduct from './DeleteProduct';
-import CurrencyViewer from '/utils/CurrencyViewer';
+import CurrencyViewer from '@root/utils/CurrencyViewer';
 import ProductDetail from './ProductDetail';
 // ===============================|| COLOR BOX ||=============================== //
 
 export default function ProductDataGrid() {
   const [t, i18n] = useTranslation();
 
-  const [refetch, setRefetch] = useState();
+  const [refetch, setRefetch] = useState<number | undefined>(undefined);
   const [openDelete, setOpenDelete] = useState(false);
-  const [row, setRow] = useState({});
+  const [row, setRow] = useState<MRT_Row<RoleModel>>();
   const { data: session } = useSession();
 
-  const jwt = session?.user?.accessToken;
+  const jwt = session?.accessToken;
 
-  const service = new ProductsService(jwt);
+  const service = new ProductsService(jwt ?? '');
   const router = useRouter();
 
   const [fieldsName, buttonName] = ['fields.product.', 'buttons.product.'];
 
-  const ImagePreviewRow = ({ renderedCellValue, row }) => {
+  const ImagePreviewRow = (({ renderedCellValue, row } : { renderedCellValue: any, row : MRT_Row<LinkModel> }) => {
     let src = renderedCellValue ? CONFIG.UPLOAD_BASEPATH + renderedCellValue.directory + renderedCellValue?.thumbnail : null;
 
     return (
@@ -61,7 +61,7 @@ export default function ProductDataGrid() {
       </Box>
     );
   };
-  const columns = useMemo(
+  const columns = useMemo<MRT_Column<UserModel>[]>(
     () => [
       {
         accessorKey: 'id',
@@ -101,7 +101,7 @@ export default function ProductDataGrid() {
         header: t(fieldsName + 'published'),
         type: 'boolean',
         enableResizing: true,
-        Cell: ({ renderedCellValue, row }) => (
+        Cell: ({ renderedCellValue, row }: { renderedCellValue: ReactNode; row: MRT_Row<ArticleModel> }) => (
           <Chip
             variant="combined"
             color={renderedCellValue == true ? 'primary' : 'warning'}
@@ -125,14 +125,14 @@ export default function ProductDataGrid() {
     ],
     []
   );
-  const handleDeleteRow = (row) => {
+  const handleDeleteRow = (row: MRT_Row<Permission>) => {
     setRow(row);
     setOpenDelete(true);
   };
   const handleRefetch = () => {
     setRefetch(Date.now());
   };
-  const handleProductList = useCallback(async (filters) => {
+  const handleProductList = useCallback(async (filters: GridDataBound) => {
     return await service.getProductList(filters);
   }, []);
   const AddRow = useCallback(
@@ -152,7 +152,7 @@ export default function ProductDataGrid() {
   );
 
   const DeleteOrEdit = useCallback(
-    ({ row }) => (
+    ({ row }: { row: MRT_Row<RoleModel> }) => (
       <Box sx={{ display: 'flex', gap: '1rem' }}>
         <Tooltip arrow placement="top-start" title={t(buttonName + 'delete')}>
           <IconButton color="error" onClick={() => handleDeleteRow(row)}>

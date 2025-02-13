@@ -18,15 +18,15 @@ import { useSession } from 'next-auth/react';
 export default function MessagesOutboxDataGrid() {
   const [t] = useTranslation();
   const { data: session } = useSession();
-  const jwt = session?.user?.accessToken;
-  const [refetch, setRefetch] = useState();
+  const jwt = session?.accessToken;
+  const [refetch, setRefetch] = useState<number | undefined>(undefined);
   const router = useRouter();
 
-  const messagesService = new MessageService(jwt);
+  const messagesService = new MessageService(jwt ?? '');
 
   const fieldsName = 'fields.message.messageInbox.';
 
-  const columns = useMemo(
+  const columns = useMemo<MRT_Column<UserModel>[]>(
     () => [
       {
         accessorKey: 'messageType',
@@ -47,7 +47,7 @@ export default function MessagesOutboxDataGrid() {
         enableClickToCopy: false,
         type: 'string',
         enableResizing: true,
-        Cell: ({ renderedCellValue, row }) => (
+        Cell: ({ renderedCellValue, row }: { renderedCellValue: ReactNode; row: MRT_Row<ArticleModel> }) => (
           <Link href={'/dashboard/message/outbox/' + row.original.id} underline="none" variant={'subtitle2'} display="block">
             {renderedCellValue}
             {row.original.haveAttachment && <AttachFile fontSize="medium" sx={{ verticalAlign: 'middle' }} />}
@@ -91,7 +91,7 @@ export default function MessagesOutboxDataGrid() {
     []
   );
 
-  const handleMessageList = useCallback(async (filters) => {
+  const handleMessageList = useCallback(async (filters: GridDataBound) => {
     return await messagesService.getSentMessages(filters);
   }, []);
 

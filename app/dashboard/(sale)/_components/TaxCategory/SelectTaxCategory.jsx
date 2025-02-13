@@ -5,9 +5,9 @@ import { useSession } from 'next-auth/react';
 
 export default function SelectTaxCategory({ defaultValue, id, name, label, setFieldValue, error, disabled }) {
   const { data: session } = useSession();
-  const jwt = session?.user?.accessToken;
+  const jwt = session?.accessToken;
 
-  const taxCategoryService = new TaxCategoryService(jwt);
+  const taxCategoryService = new TaxCategoryService(jwt ?? '');
 
   return (
     <MonoSelect

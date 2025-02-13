@@ -25,7 +25,7 @@ import AnimateButton from '@dashboard/_components/@extended/AnimateButton';
 // assets
 import { useTranslation } from 'react-i18next';
 import Notify from '@dashboard/_components/@extended/Notify';
-import setServerErrors from '/utils/setServerErrors';
+import setServerErrors from '@root/utils/setServerErrors';
 import AddIcon from '@mui/icons-material/Add';
 import ManufacturerService from '../../_service/ManufacturerService';
 
@@ -33,10 +33,10 @@ export default function AddOrEditProductAttribute({ manufacturerId, isNew, open,
   const [t] = useTranslation();
   const [fieldsName, validation, buttonName] = ['fields.manufacturer.', 'validation.manufacturer.', 'buttons.manufacturer.'];
   const [manufacturer, setManufacturer] = useState();
-  const [notify, setNotify] = useState({ open: false });
+  const [notify, setNotify] = useState<NotifyProps>({ open: false });
   const { data: session } = useSession();
-  const jwt = session?.user?.accessToken;
-  let manufacturerService = new ManufacturerService(jwt);
+  const jwt = session?.accessToken;
+  let manufacturerService = new ManufacturerService(jwt ?? '');
 
   const loadManufacturer = () => {
     manufacturerService.getManufacturerById(manufacturerId).then((result) => {
@@ -49,28 +49,28 @@ export default function AddOrEditProductAttribute({ manufacturerId, isNew, open,
     if (isNew == false && manufacturerId > 0) {
       loadManufacturer();
     } else {
-      setManufacturer({});
+      setManufacturer(undefined);
     }
   }, [manufacturerId, isNew, open]);
 
   const onClose = () => {
     setOpen(false);
-    setManufacturer({});
+    setManufacturer(undefined);
   };
 
-  const handleSubmit = (Manufacturer, setErrors, setSubmitting) => {
+  const handleSubmit = (Manufacturer, setErrors: (errors: FormikErrors<LinkModel>) => void, setSubmitting: (open: boolean) => void) => {
     if (isNew == true) {
       manufacturerService
         .addManufacturer(Manufacturer)
         .then(() => {
           onClose();
-          setManufacturer({});
+          setManufacturer(undefined);
           setNotify({ open: true });
           refetch();
         })
         .catch((error) => {
           setNotify({ open: true, type: 'error', description: error });
-          setServerErrors(error, setErrors);
+          setErrors(setServerErrors(error));
         })
         .finally(() => {
           setSubmitting(false);
@@ -80,12 +80,12 @@ export default function AddOrEditProductAttribute({ manufacturerId, isNew, open,
         .updateManufacturer(Manufacturer)
         .then(() => {
           onClose();
-          setManufacturer({});
+          setManufacturer(undefined);
           setNotify({ open: true });
           refetch();
         })
         .catch((error) => {
-          setServerErrors(error, setErrors);
+          setErrors(setServerErrors(error));
           setNotify({ open: true, type: 'error', description: error });
         })
         .finally(() => {
@@ -93,7 +93,7 @@ export default function AddOrEditProductAttribute({ manufacturerId, isNew, open,
         });
     }
   };
-  const CloseDialog = () => (
+  const CloseDialog = ({ onClose }: { onClose: () => void }) => (
     <IconButton
       aria-label="close"
       onClick={onClose}
@@ -142,7 +142,7 @@ export default function AddOrEditProductAttribute({ manufacturerId, isNew, open,
             } catch (err) {
               console.error(err);
               setStatus({ success: false });
-              setErrors({ submit: err.message });
+              
             }
           }}
         >
@@ -150,7 +150,7 @@ export default function AddOrEditProductAttribute({ manufacturerId, isNew, open,
             <form noValidate onSubmit={handleSubmit}>
               <DialogTitle>
                 {t('dialog.' + (isNew == true ? 'add' : 'edit') + '.title', { item: 'Manufacturer' })}
-                <CloseDialog />
+                <CloseDialog onClose={onClose} />
               </DialogTitle>
               <DialogContent>
                 <Grid container spacing={3} direction="column">

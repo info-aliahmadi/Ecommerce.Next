@@ -1,9 +1,9 @@
 import axios from 'axios';
-import CONFIG from '/config.js';
-import { setDefaultHeader } from '/utils/axiosHeaders';
+import CONFIG from '@root/config';
+import { setDefaultHeader } from '@root/utils/axiosHeaders';
 
 export default class CategoryService {
-  constructor(jwt) {
+  constructor(jwt : string) {
     setDefaultHeader(jwt);
   }
   getCategoryList = async () => {
@@ -18,7 +18,7 @@ export default class CategoryService {
         });
     });
   };
-  getCategoryListForSelect = async () => {
+  getCategoryListForSelect = async (): Promise<Result<Permission[]>> => {
     return new Promise((resolve, reject) => {
       axios
         .post(CONFIG.API_BASEPATH + '/sale/GetCategoryListForSelect')
@@ -30,7 +30,7 @@ export default class CategoryService {
         });
     });
   };
-  getCategoryById = async (categoryId) => {
+  getCategoryById = async (categoryId : number): Promise<Result<RoleModel>> => {
     return new Promise((resolve, reject) => {
       axios
         .get(CONFIG.API_BASEPATH + '/sale/getCategoryById', { params: { categoryId: categoryId } })
@@ -66,7 +66,7 @@ export default class CategoryService {
         });
     });
   };
-  deleteCategory = async (categoryId) => {
+  deleteCategory = async (categoryId : number): Promise<Result<RoleModel>> => {
     return new Promise((resolve, reject) => {
       axios
         .get(CONFIG.API_BASEPATH + '/sale/deleteCategory', { params: { categoryId: categoryId } })

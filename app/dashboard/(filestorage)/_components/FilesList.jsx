@@ -24,15 +24,15 @@ import { InfoOutlined, Download, Delete, UploadFile, InsertDriveFile } from '@mu
 
 import LinkIcon from '@mui/icons-material/Link';
 
-import { fileSizeViewer } from '/utils/fileSizeViewer';
+import { fileSizeViewer } from '@root/utils/fileSizeViewer';
 import upperCase from 'lodash/upperCase';
 import capitalize from 'lodash/capitalize';
 import lowerCase from 'lodash/lowerCase';
 import toLower from 'lodash/toLower';
 import truncate from 'lodash/truncate';
-import CONFIG from '/config';
+import CONFIG from '@root/config';
 import DeleteFile from './DeleteFile';
-import { DateViewer } from '/utils/DateViewer';
+import { DateViewer } from '@root/utils/DateViewer';
 import Notify from '@dashboard/_components/@extended/Notify';
 import MainCard from '@dashboard/_components/MainCard';
 import FileUpload from '@dashboard/_components/FileUpload/FileUpload';
@@ -43,7 +43,7 @@ import { useSession } from 'next-auth/react';
 function FilesList({ directory }) {
   const [t, i18n] = useTranslation();
   const { data: session } = useSession();
-  const jwt = session?.user?.accessToken;
+  const jwt = session?.accessToken;
   const theme = useTheme();
 
   const [files, setFiles] = useState([]);
@@ -57,9 +57,9 @@ function FilesList({ directory }) {
 
   const [copy, setCopy] = useState(false);
 
-  const [notify, setNotify] = useState({ open: false });
+  const [notify, setNotify] = useState<NotifyProps>({ open: false });
 
-  let fileStorageService = new FileStorageService(jwt);
+  let fileStorageService = new FileStorageService(jwt ?? '');
 
   const loadFiles = () => {
     fileStorageService

@@ -19,12 +19,12 @@ import { useState } from 'react';
 function EmailInboxsInbox() {
   const [t] = useTranslation();
   const { data: session } = useSession();
-  const jwt = session?.user?.accessToken;
+  const jwt = session?.accessToken;
   const [reload, setIsReload] = useState(false);
   const [reloadData, setReloadData] = useState();
 
 
-  const service = new EmailInboxService(jwt);
+  const service = new EmailInboxService(jwt ?? '');
 
 
   const buttonName = 'buttons.email.emailInbox.';

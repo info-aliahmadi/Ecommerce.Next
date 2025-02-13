@@ -102,7 +102,7 @@ export function InsertImageUploadedDialogBody({
   const { data: session } = useSession();
   const jwt = session?.accessToken;
 
-  var fileService = new FileStorageService(jwt);
+  var fileService = new FileStorageService(jwt ?? '');
 
   const isDisabled = src === '';
 

@@ -11,7 +11,7 @@ import AnimateButton from '@dashboard/_components/@extended/AnimateButton';
 import { useTranslation } from 'react-i18next';
 import Notify from '@dashboard/_components/@extended/Notify';
 import MainCard from '@dashboard/_components/MainCard';
-import setServerErrors from '/utils/setServerErrors';
+import setServerErrors from '@root/utils/setServerErrors';
 import { useRouter } from 'next/navigation';
 import EmailOutboxService from '@dashboard/(crm)/_service/EmailOutboxService';
 import SelectAddress from '@dashboard/(crm)/_components/SelectAddress';
@@ -23,30 +23,30 @@ export default function SendEmailInbox({ params }) {
   const [t] = useTranslation();
 
   const { data: session } = useSession();
-  const jwt = session?.user?.accessToken;
+  const jwt = session?.accessToken;
 
   const emails = params.emails;
 
   let toAdresses = emails ? decodeURIComponent(emails).split(',') : [];
 
-  let service = new EmailOutboxService(jwt);
+  let service = new EmailOutboxService(jwt ?? '');
   const [fieldsName, validation, buttonName] = ['fields.email.emailInbox.', 'validation.email.', 'buttons.email.emailInbox.'];
   const [emailInbox, setEmailInbox] = useState();
-  const [notify, setNotify] = useState({ open: false });
+  const [notify, setNotify] = useState<NotifyProps>({ open: false });
   const router = useRouter();
 
 
-  const handleSubmit = async (emailInbox, resetForm, setErrors, setSubmitting) => {
+  const handleSubmit = async (emailInbox, resetForm, setErrors: (errors: FormikErrors<LinkModel>) => void, setSubmitting: (open: boolean) => void) => {
     if (!emailInbox.isDraft) {
       service
         .sendEmailOutbox(emailInbox)
         .then(() => {
-          resetForm({});
-          setEmailInbox({});
+          resetForm(undefined);
+          setEmailInbox(undefined);
           setNotify({ open: true });
         })
         .catch((error) => {
-          setServerErrors(error, setErrors);
+          setErrors(setServerErrors(error));
           setNotify({ open: true, type: 'error', description: error });
         })
         .finally(() => {
@@ -58,12 +58,12 @@ export default function SendEmailInbox({ params }) {
         .saveDraftEmailOutbox(emailInbox)
         .then((result) => {
           debugger
-          resetForm({});
-          setEmailInbox({});
+          resetForm(undefined);
+          setEmailInbox(undefined);
           setNotify({ open: true });
         })
         .catch((error) => {
-          setServerErrors(error, setErrors);
+          setErrors(setServerErrors(error));
           setNotify({ open: true, type: 'error', description: error });
         })
         .finally(() => {

@@ -1,9 +1,9 @@
 import axios from 'axios';
-import { setDefaultHeader } from '/utils/axiosHeaders';
-import CONFIG from '/config.js';
+import { setDefaultHeader } from '@root/utils/axiosHeaders';
+import CONFIG from '@root/config';
 
 export default class MessageService {
-  constructor(jwt) {
+  constructor(jwt : string) {
     setDefaultHeader(jwt);
   }
   getSettings = async () => {
@@ -31,7 +31,7 @@ export default class MessageService {
     });
   };
 
-  getAllMessages = async (searchParams) => {
+  getAllMessages = async (searchParams:  GridDataBound): Promise<Result<PaginatedList<RoleModel>>> => {
     return new Promise((resolve, reject) => {
       axios
         .post(CONFIG.API_BASEPATH + '/crm/GetAllMessages', searchParams)
@@ -43,7 +43,7 @@ export default class MessageService {
         });
     });
   };
-  getInboxMessages = async (searchParams) => {
+  getInboxMessages = async (searchParams:  GridDataBound): Promise<Result<PaginatedList<RoleModel>>> => {
     return new Promise((resolve, reject) => {
       axios
         .post(CONFIG.API_BASEPATH + '/crm/GetInboxMessages', searchParams)
@@ -55,7 +55,7 @@ export default class MessageService {
         });
     });
   };
-  getSentMessages = async (searchParams) => {
+  getSentMessages = async (searchParams:  GridDataBound): Promise<Result<PaginatedList<RoleModel>>> => {
     return new Promise((resolve, reject) => {
       axios
         .post(CONFIG.API_BASEPATH + '/crm/GetSentMessages', searchParams)
@@ -67,7 +67,7 @@ export default class MessageService {
         });
     });
   };
-  getDraftMessages = async (searchParams) => {
+  getDraftMessages = async (searchParams:  GridDataBound): Promise<Result<PaginatedList<RoleModel>>> => {
     return new Promise((resolve, reject) => {
       axios
         .post(CONFIG.API_BASEPATH + '/crm/GetDraftMessages', searchParams)
@@ -79,7 +79,7 @@ export default class MessageService {
         });
     });
   };
-  getPublicInboxMessages = async (searchParams) => {
+  getPublicInboxMessages = async (searchParams:  GridDataBound): Promise<Result<PaginatedList<RoleModel>>> => {
     return new Promise((resolve, reject) => {
       axios
         .post(CONFIG.API_BASEPATH + '/crm/GetPublicInboxMessages', searchParams)
@@ -91,7 +91,7 @@ export default class MessageService {
         });
     });
   };
-  getDeletedInboxMessages = async (searchParams) => {
+  getDeletedInboxMessages = async (searchParams:  GridDataBound): Promise<Result<PaginatedList<RoleModel>>> => {
     return new Promise((resolve, reject) => {
       axios
         .post(CONFIG.API_BASEPATH + '/crm/GetDeletedInboxMessages', searchParams)
@@ -103,7 +103,7 @@ export default class MessageService {
         });
     });
   };
-  getDeletedSentMessages = async (searchParams) => {
+  getDeletedSentMessages = async (searchParams:  GridDataBound): Promise<Result<PaginatedList<RoleModel>>> => {
     return new Promise((resolve, reject) => {
       axios
         .post(CONFIG.API_BASEPATH + '/crm/GetDeletedSentMessages', searchParams)
@@ -116,7 +116,7 @@ export default class MessageService {
     });
   };
 
-  getMessageByIdForPublic = async (messageId) => {
+  getMessageByIdForPublic = async (messageId : number): Promise<Result<RoleModel>> => {
     return new Promise((resolve, reject) => {
       axios
         .get(CONFIG.API_BASEPATH + '/crm/GetMessageByIdForPublic', { params: { messageId: messageId } })
@@ -128,7 +128,7 @@ export default class MessageService {
         });
     });
   };
-  getMessageByIdForSender = async (messageId) => {
+  getMessageByIdForSender = async (messageId : number): Promise<Result<RoleModel>> => {
     return new Promise((resolve, reject) => {
       axios
         .get(CONFIG.API_BASEPATH + '/crm/GetMessageByIdForSender', { params: { messageId: messageId } })
@@ -140,7 +140,7 @@ export default class MessageService {
         });
     });
   };
-  getMessageByIdForReceiver = async (messageId) => {
+  getMessageByIdForReceiver = async (messageId : number): Promise<Result<RoleModel>> => {
     return new Promise((resolve, reject) => {
       axios
         .get(CONFIG.API_BASEPATH + '/crm/GetMessageByIdForReceiver', { params: { messageId: messageId } })
@@ -153,7 +153,7 @@ export default class MessageService {
     });
   };
 
-  deleteDraftMessage = async (messageId) => {
+  deleteDraftMessage = async (messageId : number): Promise<Result<RoleModel>> => {
     return new Promise((resolve, reject) => {
       axios
         .get(CONFIG.API_BASEPATH + '/crm/DeleteDraftMessage', { params: { messageId: messageId } })
@@ -165,7 +165,7 @@ export default class MessageService {
         });
     });
   };
-  deleteMessage = async (messageId) => {
+  deleteMessage = async (messageId : number): Promise<Result<RoleModel>> => {
     return new Promise((resolve, reject) => {
       axios
         .get(CONFIG.API_BASEPATH + '/crm/DeleteMessage', { params: { messageId: messageId } })
@@ -177,7 +177,7 @@ export default class MessageService {
         });
     });
   };
-  pinMessage = async (messageId) => {
+  pinMessage = async (messageId : number): Promise<Result<RoleModel>> => {
     return new Promise((resolve, reject) => {
       axios
         .get(CONFIG.API_BASEPATH + '/crm/PinMessage', { params: { messageId: messageId } })
@@ -189,7 +189,7 @@ export default class MessageService {
         });
     });
   };
-  readMessage = async (messageId) => {
+  readMessage = async (messageId : number): Promise<Result<RoleModel>> => {
     return new Promise((resolve, reject) => {
       axios
         .get(CONFIG.API_BASEPATH + '/crm/ReadMessage', { params: { messageId: messageId } })
@@ -201,7 +201,7 @@ export default class MessageService {
         });
     });
   };
-  restoreMessage = async (messageId) => {
+  restoreMessage = async (messageId : number): Promise<Result<RoleModel>> => {
     return new Promise((resolve, reject) => {
       axios
         .get(CONFIG.API_BASEPATH + '/crm/RestoreMessage', { params: { messageId: messageId } })
@@ -213,7 +213,7 @@ export default class MessageService {
         });
     });
   };
-  removeDraftMessage = async (messageId) => {
+  removeDraftMessage = async (messageId : number): Promise<Result<RoleModel>> => {
     return new Promise((resolve, reject) => {
       axios
         .get(CONFIG.API_BASEPATH + '/crm/RemoveDraftMessage', { params: { messageId: messageId } })

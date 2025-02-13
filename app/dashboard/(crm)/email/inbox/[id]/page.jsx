@@ -9,9 +9,9 @@ export default function ViewInboxEmail({params}) {
   const id = params.id;
 
   const { data: session } = useSession();
-  const jwt = session?.user?.accessToken;
+  const jwt = session?.accessToken;
 
-  let emailInboxService = new EmailInboxService(jwt);
+  let emailInboxService = new EmailInboxService(jwt ?? '');
   const [emailInbox, setEmailInbox] = useState();
 
   const loadEmailInbox = () => {

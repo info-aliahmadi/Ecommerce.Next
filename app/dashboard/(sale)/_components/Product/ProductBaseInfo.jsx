@@ -4,7 +4,7 @@ import { EventNote } from '@mui/icons-material';
 
 // assets
 import { useTranslation } from 'react-i18next';
-import CONFIG from '/config';
+import CONFIG from '@root/config';
 
 import moment from 'moment';
 // import Editor from '@dashboard/_components/Editor/Editor';

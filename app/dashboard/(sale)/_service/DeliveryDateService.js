@@ -1,9 +1,9 @@
 import axios from 'axios';
-import { setDefaultHeader } from '/utils/axiosHeaders';
-import CONFIG from '/config.js';
+import { setDefaultHeader } from '@root/utils/axiosHeaders';
+import CONFIG from '@root/config';
 
 export default class DeliveryDateService {
-  constructor(jwt) {
+  constructor(jwt : string) {
     setDefaultHeader(jwt);
   }
   getDeliveryDateList = async () => {
@@ -19,7 +19,7 @@ export default class DeliveryDateService {
     });
   };
 
-  getDeliveryDateItemList = async (deliveryDateId) => {
+  getDeliveryDateItemList = async (deliveryDateId : number): Promise<Result<RoleModel>> => {
     return new Promise((resolve, reject) => {
       axios
         .get(CONFIG.API_BASEPATH + `/sale/GetDeliveryDateItemList?deliveryDateId=${deliveryDateId}`)
@@ -43,7 +43,7 @@ export default class DeliveryDateService {
         });
     });
   };
-  getDeliveryDateById = async (deliveryDateId) => {
+  getDeliveryDateById = async (deliveryDateId : number): Promise<Result<RoleModel>> => {
     return new Promise((resolve, reject) => {
       axios
         .get(CONFIG.API_BASEPATH + '/sale/getDeliveryDateById', { params: { deliveryDateId: deliveryDateId } })
@@ -79,7 +79,7 @@ export default class DeliveryDateService {
         });
     });
   };
-  deleteDeliveryDate = async (deliveryDateId) => {
+  deleteDeliveryDate = async (deliveryDateId : number): Promise<Result<RoleModel>> => {
     return new Promise((resolve, reject) => {
       axios
         .get(CONFIG.API_BASEPATH + '/sale/deleteDeliveryDate', { params: { deliveryDateId: deliveryDateId } })

@@ -1,9 +1,9 @@
 import axios from 'axios';
-import { setDefaultHeader } from '/utils/axiosHeaders';
-import CONFIG from '/config.js';
+import { setDefaultHeader } from '@root/utils/axiosHeaders';
+import CONFIG from '@root/config';
 
 export default class EmailInboxService {
-  constructor(jwt) {
+  constructor(jwt : string) {
     setDefaultHeader(jwt);
   }
   loadEmailInbox = async () => {
@@ -21,7 +21,7 @@ export default class EmailInboxService {
     });
   };
 
-  getAllEmailInbox = async (searchParams) => {
+  getAllEmailInbox = async (searchParams:  GridDataBound): Promise<Result<PaginatedList<RoleModel>>> => {
     return new Promise((resolve, reject) => {
       axios
         .post(CONFIG.API_BASEPATH + '/crm/GetAllEmailInbox', searchParams)
@@ -33,7 +33,7 @@ export default class EmailInboxService {
         });
     });
   };
-  getEmailInboxOfCurrentUser = async (searchParams) => {
+  getEmailInboxOfCurrentUser = async (searchParams:  GridDataBound): Promise<Result<PaginatedList<RoleModel>>> => {
     return new Promise((resolve, reject) => {
       axios
         .post(CONFIG.API_BASEPATH + '/crm/GetEmailInbox', searchParams)
@@ -45,7 +45,7 @@ export default class EmailInboxService {
         });
     });
   };
-  getDeletedEmailInbox = async (searchParams) => {
+  getDeletedEmailInbox = async (searchParams:  GridDataBound): Promise<Result<PaginatedList<RoleModel>>> => {
     return new Promise((resolve, reject) => {
       axios
         .post(CONFIG.API_BASEPATH + '/crm/GetDeletedEmailInbox', searchParams)
@@ -58,7 +58,7 @@ export default class EmailInboxService {
     });
   };
 
-  getEmailInboxById = async (emailInboxId) => {
+  getEmailInboxById = async (emailInboxId : number): Promise<Result<RoleModel>> => {
     return new Promise((resolve, reject) => {
       axios
         .get(CONFIG.API_BASEPATH + '/crm/GetEmailInboxById', { params: { emailInboxId: emailInboxId } })
@@ -72,7 +72,7 @@ export default class EmailInboxService {
   };
 
 
-  getEmailInboxByIdForReceiver = async (emailInboxId) => {
+  getEmailInboxByIdForReceiver = async (emailInboxId : number): Promise<Result<RoleModel>> => {
     return new Promise((resolve, reject) => {
       axios
         .get(CONFIG.API_BASEPATH + '/crm/GetEmailInboxByIdForReceiver', { params: { emailInboxId: emailInboxId } })
@@ -84,7 +84,7 @@ export default class EmailInboxService {
         });
     });
   };
-  deleteEmailInbox = async (emailInboxId) => {
+  deleteEmailInbox = async (emailInboxId : number): Promise<Result<RoleModel>> => {
     return new Promise((resolve, reject) => {
       axios
         .get(CONFIG.API_BASEPATH + '/crm/DeleteEmailInbox', { params: { emailInboxId: emailInboxId } })
@@ -96,7 +96,7 @@ export default class EmailInboxService {
         });
     });
   };
-  pinEmailInbox = async (emailInboxId) => {
+  pinEmailInbox = async (emailInboxId : number): Promise<Result<RoleModel>> => {
     return new Promise((resolve, reject) => {
       axios
         .get(CONFIG.API_BASEPATH + '/crm/PinEmailInbox', { params: { emailInboxId: emailInboxId } })
@@ -108,7 +108,7 @@ export default class EmailInboxService {
         });
     });
   };
-  readEmailInbox = async (emailInboxId) => {
+  readEmailInbox = async (emailInboxId : number): Promise<Result<RoleModel>> => {
     return new Promise((resolve, reject) => {
       axios
         .get(CONFIG.API_BASEPATH + '/crm/ReadEmailInbox', { params: { emailInboxId: emailInboxId } })
@@ -120,7 +120,7 @@ export default class EmailInboxService {
         });
     });
   };
-  removeEmailInbox = async (emailInboxId) => {
+  removeEmailInbox = async (emailInboxId : number): Promise<Result<RoleModel>> => {
     return new Promise((resolve, reject) => {
       axios
         .get(CONFIG.API_BASEPATH + '/crm/RemoveEmailInbox', { params: { emailInboxId: emailInboxId } })

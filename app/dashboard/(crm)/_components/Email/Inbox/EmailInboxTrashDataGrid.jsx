@@ -16,16 +16,16 @@ import { useSession } from 'next-auth/react';
 export default function EmailInboxTrashDataGrid() {
   const [t] = useTranslation();
   const { data: session } = useSession();
-  const jwt = session?.user?.accessToken;
+  const jwt = session?.accessToken;
 
-  const [refetch, setRefetch] = useState();
-  const [notify, setNotify] = useState({ open: false });
+  const [refetch, setRefetch] = useState<number | undefined>(undefined);
+  const [notify, setNotify] = useState<NotifyProps>({ open: false });
 
-  const emailInboxsService = new EmailInboxService(jwt);
+  const emailInboxsService = new EmailInboxService(jwt ?? '');
 
   const fieldsName = 'fields.emailInbox.emailInboxInbox.';
 
-  const columns = useMemo(
+  const columns = useMemo<MRT_Column<UserModel>[]>(
     () => [
       {
         accessorKey: 'fromAddress',
@@ -35,7 +35,7 @@ export default function EmailInboxTrashDataGrid() {
         enableResizing: true,
 
         maxSize: 60,
-        Cell: ({ renderedCellValue, row }) => {
+        Cell: (({ renderedCellValue, row } : { renderedCellValue: any, row : MRT_Row<LinkModel> }) => {
           renderedCellValue?.map((email, index) => {
             <Link
               key={index}
@@ -57,7 +57,7 @@ export default function EmailInboxTrashDataGrid() {
         enableClickToCopy: false,
         type: 'string',
         enableResizing: true,
-        Cell: ({ renderedCellValue, row }) => (
+        Cell: ({ renderedCellValue, row }: { renderedCellValue: ReactNode; row: MRT_Row<ArticleModel> }) => (
           <Link
             href={'/dashboard/email/inbox/' + row.original.id}
             underline="none"
@@ -81,7 +81,7 @@ export default function EmailInboxTrashDataGrid() {
   const handleRefetch = () => {
     setRefetch(Date.now());
   };
-  const handleRestoreRow = (row) => {
+  const handleRestoreRow = (row : MRT_Row<MenuModel>) => {
     let emailInboxId = row.original.id;
     emailInboxsService
       .restoreEmailInbox(emailInboxId)
@@ -93,12 +93,12 @@ export default function EmailInboxTrashDataGrid() {
         setNotify({ open: true, type: 'error', description: error });
       });
   };
-  const handleEmailInboxList = useCallback(async (filters) => {
+  const handleEmailInboxList = useCallback(async (filters: GridDataBound) => {
     return await emailInboxsService.getDeletedEmailInbox(filters);
   }, []);
 
   const Restore = useCallback(
-    ({ row }) => (
+    ({ row }: { row: MRT_Row<RoleModel> }) => (
       <Box sx={{ display: 'flex', gap: '1rem', flexWrap: 'nowrap' }}>
         <Tooltip arrow placement="top-start" title={t('buttons.restore')}>
           <IconButton color="success" onClick={() => handleRestoreRow(row)}>

@@ -11,12 +11,12 @@ import Notify from '@dashboard/_components/@extended/Notify';
 import EmailInboxService from '@dashboard/(crm)/_service/EmailInboxService';
 import { useSession } from 'next-auth/react';
 
-const DeleteEmailInbox = ({ row, open, setOpen, refetch }) => {
+const DeleteEmailInbox = ({ row, open, setOpen, refetch }: { row?: MRT_Row<Permission>; open: boolean; setOpen: (open: boolean) => void; refetch: () => void }) =>
   const [t] = useTranslation();
   const { data: session } = useSession();
-  const jwt = session?.user?.accessToken;
-  let emailInboxService = new EmailInboxService(jwt);
-  const [notify, setNotify] = useState({ open: false });
+  const jwt = session?.accessToken;
+  let emailInboxService = new EmailInboxService(jwt ?? '');
+  const [notify, setNotify] = useState<NotifyProps>({ open: false });
   const [disableBtn, setDisableBtn] = useState(false);
 
   const onClose = () => {
@@ -36,11 +36,11 @@ const DeleteEmailInbox = ({ row, open, setOpen, refetch }) => {
       .catch((error) => {
         setNotify({ open: true, type: 'error', description: error });
       })
-      .finally((x) => {
+      .finally(() => {
         setDisableBtn(false);
       });
   };
-  const CloseDialog = () => (
+  const CloseDialog = ({ onClose }: { onClose: () => void }) => (
     <IconButton
       aria-label="close"
       onClick={onClose}
@@ -63,7 +63,7 @@ const DeleteEmailInbox = ({ row, open, setOpen, refetch }) => {
           <Typography variant="caption" fontSize={17} fontWeight={600}>
             {t('buttons.emailInbox.emailInboxInbox.delete')}
           </Typography>
-          <CloseDialog />
+          <CloseDialog onClose={onClose} />
         </DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">

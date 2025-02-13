@@ -20,7 +20,7 @@ import { useTranslation } from 'react-i18next';
 import { useSession } from 'next-auth/react';
 
 import MainCard from '@dashboard/_components/MainCard';
-import setServerErrors from '/utils/setServerErrors';
+import setServerErrors from '@root/utils/setServerErrors';
 import Notify from '@dashboard/_components/@extended/Notify';
 import OrderService from '../../_service/OrderService';
 import SelectPaymentStatus from './SelectPaymentStatus';
@@ -32,10 +32,10 @@ import OrderItemData from '../OrderItem/OrderItemData';
 export default function OrderDetail({ row, refetch }) {
   const [t] = useTranslation();
   const { data: session } = useSession();
-  const jwt = session?.user?.accessToken;
-  const orderService = new OrderService(jwt);
+  const jwt = session?.accessToken;
+  const orderService = new OrderService(jwt ?? '');
   const [fieldsName, validation, buttonName] = ['fields.order.', 'validation.order.', 'buttons.'];
-  const [notify, setNotify] = useState({ open: false });
+  const [notify, setNotify] = useState<NotifyProps>({ open: false });
   //const row = props.row;
 
   const getOrderStatusForSelect = () => {
@@ -62,7 +62,7 @@ export default function OrderDetail({ row, refetch }) {
         refetch();
       })
       .catch((error) => {
-        setServerErrors(error, setErrors);
+        setErrors(setServerErrors(error));
         setNotify({ open: true, type: 'error', description: error });
       });
   };
@@ -89,7 +89,7 @@ export default function OrderDetail({ row, refetch }) {
           } catch (err) {
             console.error(err);
             setStatus({ success: false });
-            setErrors({ submit: err.message });
+            
             setSubmitting(false);
           }
         }}

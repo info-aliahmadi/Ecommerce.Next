@@ -20,17 +20,17 @@ import ManufacturerService from '../../_service/ManufacturerService';
 function ManufacturerDataGrid() {
   const [t] = useTranslation();
   const { data: session } = useSession();
-  const jwt = session?.user?.accessToken;
-  const service = new ManufacturerService(jwt);
+  const jwt = session?.accessToken;
+  const service = new ManufacturerService(jwt ?? '');
   const [isNew, setIsNew] = useState(true);
   const [rowId, setRowId] = useState(0);
   const [open, setOpen] = useState(false);
   const [openDelete, setOpenDelete] = useState(false);
-  const [row, setRow] = useState({});
-  const [refetch, setRefetch] = useState();
+  const [row, setRow] = useState<MRT_Row<RoleModel>>();
+  const [refetch, setRefetch] = useState<number | undefined>(undefined);
   const [fieldsName, buttonName] = ['fields.manufacturer.', 'buttons.manufacturer.'];
 
-  const columns = useMemo(
+  const columns = useMemo<MRT_Column<UserModel>[]>(
     () => [
       {
         accessorKey: 'name',
@@ -65,13 +65,13 @@ function ManufacturerDataGrid() {
     setRowId(0);
     setOpen(true);
   };
-  const handleEditRow = (row) => {
+  const handleEditRow = (row : MRT_Row<MenuModel>) => {
     let manufacturerId = row.original.id;
     setIsNew(false);
     setRowId(manufacturerId);
     setOpen(true);
   };
-  const handleDeleteRow = (row) => {
+  const handleDeleteRow = (row: MRT_Row<Permission>) => {
     setRow(row);
     setOpenDelete(true);
   };
@@ -92,7 +92,7 @@ function ManufacturerDataGrid() {
   );
 
   const DeleteOrEdit = useCallback(
-    ({ row }) => (
+    ({ row }: { row: MRT_Row<RoleModel> }) => (
       <Box sx={{ display: 'flex', gap: '1rem' }}>
         <Tooltip arrow placement="top-start" title={t(buttonName + 'delete')}>
           <IconButton color="error" onClick={() => handleDeleteRow(row)}>

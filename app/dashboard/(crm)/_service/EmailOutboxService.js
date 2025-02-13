@@ -1,9 +1,9 @@
 import axios from 'axios';
-import { setDefaultHeader } from '/utils/axiosHeaders';
-import CONFIG from '/config.js';
+import { setDefaultHeader } from '@root/utils/axiosHeaders';
+import CONFIG from '@root/config';
 
 export default class EmailOutboxService {
-  constructor(jwt) {
+  constructor(jwt : string) {
     setDefaultHeader(jwt);
   }
 
@@ -32,7 +32,7 @@ export default class EmailOutboxService {
     });
   };
 
-  getAllEmailOutbox = async (searchParams) => {
+  getAllEmailOutbox = async (searchParams:  GridDataBound): Promise<Result<PaginatedList<RoleModel>>> => {
     return new Promise((resolve, reject) => {
       axios
         .post(CONFIG.API_BASEPATH + '/crm/GetAllEmailOutbox', searchParams)
@@ -44,7 +44,7 @@ export default class EmailOutboxService {
         });
     });
   };
-  getEmailOutboxOfCurrentUser = async (searchParams) => {
+  getEmailOutboxOfCurrentUser = async (searchParams:  GridDataBound): Promise<Result<PaginatedList<RoleModel>>> => {
     return new Promise((resolve, reject) => {
       axios
         .post(CONFIG.API_BASEPATH + '/crm/GetEmailOutbox', searchParams)
@@ -70,7 +70,7 @@ export default class EmailOutboxService {
     });
   };
 
-  getEmailOutboxByIdForSender = async (emailOutboxId) => {
+  getEmailOutboxByIdForSender = async (emailOutboxId : number): Promise<Result<RoleModel>> => {
     return new Promise((resolve, reject) => {
       axios
         .get(CONFIG.API_BASEPATH + '/crm/GetEmailOutboxByIdForSender', { params: { emailOutboxId: emailOutboxId } })
@@ -83,7 +83,7 @@ export default class EmailOutboxService {
     });
   };
 
-  removeEmailOutbox = async (emailOutboxId) => {
+  removeEmailOutbox = async (emailOutboxId : number): Promise<Result<RoleModel>> => {
     return new Promise((resolve, reject) => {
       axios
         .get(CONFIG.API_BASEPATH + '/crm/RemoveEmailOutbox', { params: { emailOutboxId: emailOutboxId } })

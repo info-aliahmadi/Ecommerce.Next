@@ -13,10 +13,10 @@ import ManufacturerService from '../../_service/ManufacturerService';
 
 export default function DeleteProductAttribute({ row, open, setOpen, refetch }) {
   const [t] = useTranslation();
-  const [notify, setNotify] = useState({ open: false });
+  const [notify, setNotify] = useState<NotifyProps>({ open: false });
   const { data: session } = useSession();
-  const jwt = session?.user?.accessToken;
-  let manufacturerService = new ManufacturerService(jwt);
+  const jwt = session?.accessToken;
+  let manufacturerService = new ManufacturerService(jwt ?? '');
 
   const onClose = () => {
     setOpen(false);
@@ -35,7 +35,7 @@ export default function DeleteProductAttribute({ row, open, setOpen, refetch }) 
         setNotify({ open: true, type: 'error', description: error });
       });
   };
-  const CloseDialog = () => (
+  const CloseDialog = ({ onClose }: { onClose: () => void }) => (
     <IconButton
       aria-label="close"
       onClick={onClose}
@@ -58,7 +58,7 @@ export default function DeleteProductAttribute({ row, open, setOpen, refetch }) 
           <Typography variant="caption" fontSize={17} fontWeight={600}>
             {t('buttons.manufacturer.delete')}
           </Typography>
-          <CloseDialog />
+          <CloseDialog onClose={onClose} />
         </DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">

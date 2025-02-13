@@ -5,9 +5,9 @@ import { useSession } from 'next-auth/react';
 
 export default function SelectCurrency({ defaultValue, id, name, label, setFieldValue, error, disabled }) {
   const { data: session } = useSession();
-  const jwt = session?.user?.accessToken;
+  const jwt = session?.accessToken;
 
-  const service = new CurrencyService(jwt);
+  const service = new CurrencyService(jwt ?? '');
 
   return (
     <MonoSelect

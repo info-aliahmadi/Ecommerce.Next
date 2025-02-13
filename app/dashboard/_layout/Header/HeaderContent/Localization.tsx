@@ -24,7 +24,7 @@ const Localization = () => {
   const open = Boolean(anchorEl);
 
   const changeLanguage = (lng :Language) => {
-    let locService = new LocalizationService(jwt);
+    let locService = new LocalizationService(jwt ?? '');
     locService.setCurrentLanguage(i18n, lng);
     setAnchorEl(null);
   };

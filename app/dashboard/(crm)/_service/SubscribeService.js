@@ -1,12 +1,12 @@
 import axios from 'axios';
-import { setDefaultHeader } from '/utils/axiosHeaders';
-import CONFIG from '/config.js';
+import { setDefaultHeader } from '@root/utils/axiosHeaders';
+import CONFIG from '@root/config';
 
 export default class SubscribeService {
-  constructor(jwt) {
+  constructor(jwt : string) {
     setDefaultHeader(jwt);
   }
-  getSubscribeList = async (searchParams) => {
+  getSubscribeList = async (searchParams:  GridDataBound): Promise<Result<PaginatedList<RoleModel>>> => {
     return new Promise((resolve, reject) => {
       axios
         .post(CONFIG.API_BASEPATH + '/crm/GetSubscribeList', searchParams)
@@ -30,7 +30,7 @@ export default class SubscribeService {
         });
     });
   };
-  getSubscribeById = async (subscribeId) => {
+  getSubscribeById = async (subscribeId : number): Promise<Result<RoleModel>> => {
     return new Promise((resolve, reject) => {
       axios
         .get(CONFIG.API_BASEPATH + '/crm/getSubscribeById', { params: { subscribeId: subscribeId } })
@@ -66,7 +66,7 @@ export default class SubscribeService {
         });
     });
   };
-  deleteSubscribe = async (subscribeId) => {
+  deleteSubscribe = async (subscribeId : number): Promise<Result<RoleModel>> => {
     return new Promise((resolve, reject) => {
       axios
         .get(CONFIG.API_BASEPATH + '/crm/deleteSubscribe', { params: { subscribeId: subscribeId } })

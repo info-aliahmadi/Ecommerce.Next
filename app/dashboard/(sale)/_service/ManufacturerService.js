@@ -1,12 +1,12 @@
 import axios from 'axios';
-import { setDefaultHeader } from '/utils/axiosHeaders';
-import CONFIG from '/config.js';
+import { setDefaultHeader } from '@root/utils/axiosHeaders';
+import CONFIG from '@root/config';
 
 export default class ManufacturerService {
-  constructor(jwt) {
+  constructor(jwt : string) {
     setDefaultHeader(jwt);
   }
-  getManufacturerList = async (searchParams) => {
+  getManufacturerList = async (searchParams:  GridDataBound): Promise<Result<PaginatedList<RoleModel>>> => {
     return new Promise((resolve, reject) => {
       axios
         .post(CONFIG.API_BASEPATH + '/sale/getManufacturerList', searchParams)
@@ -19,7 +19,7 @@ export default class ManufacturerService {
     });
   };
 
-  getManufacturerListForSelect = async () => {
+  getManufacturerListForSelect = async (): Promise<Result<Permission[]>> => {
     return new Promise((resolve, reject) => {
       axios
         .post(CONFIG.API_BASEPATH + '/sale/getManufacturersForSelect')
@@ -44,7 +44,7 @@ export default class ManufacturerService {
         });
     });
   };
-  getManufacturerById = async (manufacturerId) => {
+  getManufacturerById = async (manufacturerId : number): Promise<Result<RoleModel>> => {
     return new Promise((resolve, reject) => {
       axios
         .get(CONFIG.API_BASEPATH + '/sale/getManufacturerById', { params: { manufacturerId: manufacturerId } })
@@ -80,7 +80,7 @@ export default class ManufacturerService {
         });
     });
   };
-  deleteManufacturer = async (manufacturerId) => {
+  deleteManufacturer = async (manufacturerId : number): Promise<Result<RoleModel>> => {
     return new Promise((resolve, reject) => {
       axios
         .get(CONFIG.API_BASEPATH + '/sale/deleteManufacturer', { params: { manufacturerId: manufacturerId } })

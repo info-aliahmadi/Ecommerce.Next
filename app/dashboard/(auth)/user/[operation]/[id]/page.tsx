@@ -177,7 +177,7 @@ export default function AddOrEditUser({ params }: { readonly params: Promise<{ i
           } catch (err: any) {
             console.error(err);
             setStatus({ success: false });
-            setErrors({ submit: err.message });
+            
           }
         }}
       >

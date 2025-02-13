@@ -13,10 +13,10 @@ import ProductService from '../../_service/ProductService';
 
 export default function DeleteProduct({ row, open, setOpen, refetch }) {
   const [t] = useTranslation();
-  const [notify, setNotify] = useState({ open: false });
+  const [notify, setNotify] = useState<NotifyProps>({ open: false });
   const { data: session } = useSession();
-  const jwt = session?.user?.accessToken;
-  let service = new ProductService(jwt);
+  const jwt = session?.accessToken;
+  let service = new ProductService(jwt ?? '');
   const [disableBtn, setDisableBtn] = useState(false);
 
   const onClose = () => {
@@ -36,11 +36,11 @@ export default function DeleteProduct({ row, open, setOpen, refetch }) {
       .catch((error) => {
         setNotify({ open: true, type: 'error', description: error });
       })
-      .finally((x) => {
+      .finally(() => {
         setDisableBtn(false);
       });
   };
-  const CloseDialog = () => (
+  const CloseDialog = ({ onClose }: { onClose: () => void }) => (
     <IconButton
       aria-label="close"
       onClick={onClose}
@@ -63,7 +63,7 @@ export default function DeleteProduct({ row, open, setOpen, refetch }) {
           <Typography variant="caption" fontSize={17} fontWeight={600}>
             {t('buttons.product.delete')}
           </Typography>
-          <CloseDialog />
+          <CloseDialog onClose={onClose} />
         </DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">

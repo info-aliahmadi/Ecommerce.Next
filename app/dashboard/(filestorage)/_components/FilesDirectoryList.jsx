@@ -5,7 +5,7 @@ import { Avatar, List, ListItemAvatar, ListItemButton, ListItemText } from '@mui
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Folder } from '@mui/icons-material';
-import { fileSizeViewer } from '/utils/fileSizeViewer';
+import { fileSizeViewer } from '@root/utils/fileSizeViewer';
 import capitalize from 'lodash/capitalize';
 import Notify from '@dashboard/_components/@extended/Notify';
 import MainCard from '@dashboard/_components/MainCard';
@@ -16,13 +16,13 @@ import { useSession } from 'next-auth/react';
 function FilesCategoryList() {
   const [t, i18n] = useTranslation();
   const { data: session } = useSession();
-  const jwt = session?.user?.accessToken;
+  const jwt = session?.accessToken;
 
   const [directories, setDirectories] = useState([]);
 
-  const [notify, setNotify] = useState({ open: false });
+  const [notify, setNotify] = useState<NotifyProps>({ open: false });
 
-  let fileStorageService = new FileStorageService(jwt);
+  let fileStorageService = new FileStorageService(jwt ?? '');
 
   const loadDirectories = () => {
     fileStorageService

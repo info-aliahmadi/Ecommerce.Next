@@ -14,9 +14,9 @@ import { useSession } from 'next-auth/react';
 const DeleteFile = ({ fileId, open, setOpen, files, setFiles }) => {
   const [t] = useTranslation();
   const { data: session } = useSession();
-  const jwt = session?.user?.accessToken;
-  let fileStorageService = new FileStorageService(jwt);
-  const [notify, setNotify] = useState({ open: false });
+  const jwt = session?.accessToken;
+  let fileStorageService = new FileStorageService(jwt ?? '');
+  const [notify, setNotify] = useState<NotifyProps>({ open: false });
 
   const onClose = () => {
     setOpen(false);
@@ -37,7 +37,7 @@ const DeleteFile = ({ fileId, open, setOpen, files, setFiles }) => {
         setNotify({ open: true, type: 'error', description: error.message });
       });
   };
-  const CloseDialog = () => (
+  const CloseDialog = ({ onClose }: { onClose: () => void }) => (
     <IconButton
       aria-label="close"
       onClick={onClose}
@@ -60,7 +60,7 @@ const DeleteFile = ({ fileId, open, setOpen, files, setFiles }) => {
           <Typography variant="caption" fontSize={17} fontWeight={600}>
             {t('buttons.fileStorage.delete')}
           </Typography>
-          <CloseDialog />
+          <CloseDialog onClose={onClose} />
         </DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">

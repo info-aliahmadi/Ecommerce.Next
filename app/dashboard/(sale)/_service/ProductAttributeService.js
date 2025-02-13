@@ -1,12 +1,12 @@
 import axios from 'axios';
-import { setDefaultHeader } from '/utils/axiosHeaders';
-import CONFIG from '/config.js';
+import { setDefaultHeader } from '@root/utils/axiosHeaders';
+import CONFIG from '@root/config';
 
 export default class ProductAttributeService {
-  constructor(jwt) {
+  constructor(jwt : string) {
     setDefaultHeader(jwt);
   }
-  getProductAttributeList = async (searchParams) => {
+  getProductAttributeList = async (searchParams:  GridDataBound): Promise<Result<PaginatedList<RoleModel>>> => {
     return new Promise((resolve, reject) => {
       axios
         .post(CONFIG.API_BASEPATH + '/sale/getProductAttributeList', searchParams)
@@ -19,7 +19,7 @@ export default class ProductAttributeService {
     });
   };
 
-  getProductAttributeListForSelect = async () => {
+  getProductAttributeListForSelect = async (): Promise<Result<Permission[]>> => {
     return new Promise((resolve, reject) => {
       axios
         .post(CONFIG.API_BASEPATH + '/sale/getProductAttributesForSelect')
@@ -44,7 +44,7 @@ export default class ProductAttributeService {
         });
     });
   };
-  getProductAttributeById = async (productAttributeId) => {
+  getProductAttributeById = async (productAttributeId : number): Promise<Result<RoleModel>> => {
     return new Promise((resolve, reject) => {
       axios
         .get(CONFIG.API_BASEPATH + '/sale/getProductAttributeById', { params: { productAttributeId: productAttributeId } })
@@ -80,7 +80,7 @@ export default class ProductAttributeService {
         });
     });
   };
-  deleteProductAttribute = async (productAttributeId) => {
+  deleteProductAttribute = async (productAttributeId : number): Promise<Result<RoleModel>> => {
     return new Promise((resolve, reject) => {
       axios
         .get(CONFIG.API_BASEPATH + '/sale/deleteProductAttribute', { params: { productAttributeId: productAttributeId } })

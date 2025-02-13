@@ -25,7 +25,7 @@ import AnimateButton from '@dashboard/_components/@extended/AnimateButton';
 import { useTranslation } from 'react-i18next';
 import Notify from '@dashboard/_components/@extended/Notify';
 import MainCard from '@dashboard/_components/MainCard';
-import setServerErrors from '/utils/setServerErrors';
+import setServerErrors from '@root/utils/setServerErrors';
 
 import PropTypes from 'prop-types';
 import { useRouter } from 'next/navigation';
@@ -71,12 +71,12 @@ export default function AddOrEditProduct({ params }) {
 
   const { data: session } = useSession();
 
-  const jwt = session?.user?.accessToken;
-  let productService = new ProductsService(jwt);
+  const jwt = session?.accessToken;
+  let productService = new ProductsService(jwt ?? '');
 
   const [fieldsName, validation, buttonName] = ['fields.product.', 'validation.product.', 'buttons.product.'];
   const [product, setProduct] = useState();
-  const [notify, setNotify] = useState({ open: false });
+  const [notify, setNotify] = useState<NotifyProps>({ open: false });
   const router = useRouter();
 
   const loadProduct = () => {
@@ -91,17 +91,17 @@ export default function AddOrEditProduct({ params }) {
   const handleTabChange = (event, newValue) => {
     setTab(newValue);
   };
-  const handleSubmit = async (product, resetForm, setErrors, setSubmitting) => {
+  const handleSubmit = async (product, resetForm, setErrors: (errors: FormikErrors<LinkModel>) => void, setSubmitting: (open: boolean) => void) => {
     if (operation == 'add') {
       productService
         .addProduct(product)
         .then(() => {
-          resetForm({});
-          setProduct({});
+          resetForm(undefined);
+          setProduct(undefined);
           setNotify({ open: true });
         })
         .catch((error) => {
-          setServerErrors(error, setErrors);
+          setErrors(setServerErrors(error));
           setNotify({ open: true, type: 'error', description: error });
         });
     } else {
@@ -112,7 +112,7 @@ export default function AddOrEditProduct({ params }) {
           setNotify({ open: true });
         })
         .catch((error) => {
-          setServerErrors(error, setErrors);
+          setErrors(setServerErrors(error));
           setNotify({ open: true, type: 'error', description: error });
         });
     }
@@ -212,7 +212,7 @@ export default function AddOrEditProduct({ params }) {
                   } catch (err) {
                     console.error(err);
                     setStatus({ success: false });
-                    setErrors({ submit: err.message });
+                    
                   }finally{
                     setSubmitting(false);
                   }
