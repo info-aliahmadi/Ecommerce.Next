@@ -6,10 +6,10 @@ interface ArticleModel {
     previewImageId?: number;
     previewImage?: FileUploadModel;
     previewImageUrl?: string;
-    registerDate: Date;
-    publishDate: Date;
-    writer: AuthorModel;
-    writerId: number;
+    registerDate?: Date;
+    publishDate?: Date;
+    writer?: AuthorModel;
+    writerId?: number;
     editor?: AuthorModel;
     editorId?: number;
     editDate?: Date;
@@ -18,5 +18,5 @@ interface ArticleModel {
     isDeleted: boolean;
     topicsIds: number[];
     tags: string[];
-    topics: string[];
+    topics?: string[];
 }

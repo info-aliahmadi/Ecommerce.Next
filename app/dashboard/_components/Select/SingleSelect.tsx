@@ -1,33 +1,30 @@
 import * as React from 'react';
 import { useState, useEffect } from 'react';
-import { Chip, FormControl, MenuItem, OutlinedInput, Select, InputLabel ,Box, useTheme,Theme } from '@mui/material';
+import { Chip, FormControl, MenuItem, OutlinedInput, Select, InputLabel, Box, useTheme, Theme } from '@mui/material';
+import Result from '@root/app/types/Result';
 
 interface SingleSelectProps {
-  defaultValue: any,
+  defaultValue?: any,
   id: string,
   name: string,
   label: string,
-  titleName: string,
+  optionLabel: string,
   setFieldValue: (field: string, value: any) => void,
   error: boolean,
   disabled: boolean,
-  dataApi: Promise<{ data: any[] }>
-}
-interface StylesParams {
-  value: any,
-  defaultValue: any,
-  theme: Theme
+  dataApi:() => Promise<Result<any>>
 }
 
-export default function SingleSelect({ defaultValue, id, name, label, titleName, setFieldValue, error, disabled, dataApi }: Readonly<SingleSelectProps>) {
+export default function SingleSelect({ defaultValue, id, name, label, optionLabel, setFieldValue, error, disabled, dataApi }: Readonly<SingleSelectProps>) {
   const theme = useTheme();
   const [loading, setLoading] = useState(true);
-  const [options, setOptions] = useState([]);
-  const [value, setValue] = useState();
+  const [options, setOptions] = useState<Option[]>([]);
+  const [value, setValue] = useState<any>();
 
   const loadAllData = () => {
-    dataApi.then((result : any) => {
-      setOptions(result?.data);
+    dataApi().then((result) => {
+      const optionsData: Option[] = result.data?.map((x: any) => ({ id: x.id, name: x[optionLabel] })) as Option[];
+      setOptions(optionsData);
       setLoading(false);
     });
   };
@@ -51,13 +48,13 @@ export default function SingleSelect({ defaultValue, id, name, label, titleName,
   };
 
 
-  function getStyles({ value, defaultValue, theme }: StylesParams): React.CSSProperties {
+  function getStyles(value: string, defaultValue: string, theme: Theme): React.CSSProperties {
     return {
       fontWeight: defaultValue === value ? theme.typography.fontWeightMedium : theme.typography.fontWeightRegular
     };
   }
 
-  const handleChange = (event : any) => {
+  const handleChange = (event: any) => {
     setFieldValue(id, event.target.value);
     setValue(event.target.value);
   };
@@ -75,16 +72,16 @@ export default function SingleSelect({ defaultValue, id, name, label, titleName,
         onChange={handleChange}
         MenuProps={MenuProps}
         input={<OutlinedInput label={label} sx={{ minHeight: '41px' }} />}
-        defaultValue={options?.filter((x : any) => x.id == defaultValue) ?? ''}
+        defaultValue={defaultValue ? options?.filter((x: any) => x.id == defaultValue) : ''}
         renderValue={(selected: any) => (<Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
-          <Chip label={options?.find((x: any) => x.id == selected)?.[titleName]} sx={{ height: '23px' }} />
+          <Chip label={options?.find((x: any) => x.id == selected)?.name} sx={{ height: '23px' }} />
         </Box>
         )}
       >
-        {options?.map((item: any) => {
+        {options?.map((item: Option) => {
           return (
-            <MenuItem key={'menu-' + name + item.id} value={item.id} style={getStyles({ value: item.id, defaultValue: value, theme })}>
-              <span style={{ whiteSpace: 'pre-wrap' }}>{item?.[titleName]}</span>
+            <MenuItem key={'menu-' + name + item.id} value={item.id} style={value && getStyles(item.id.toString(), value, theme)}>
+              <span style={{ whiteSpace: 'pre-wrap' }}>{item?.name}</span>
             </MenuItem>
           );
         })}

@@ -24,7 +24,7 @@ export default class PagesService {
       axios
         .get(CONFIG.API_BASEPATH + '/cms/getPageById', { params: { pageId: pageId } })
         .then((response) => {
-          resolve(response.data.data);
+          resolve(response.data);
         })
         .catch((error) => {
           reject(error);
@@ -48,7 +48,7 @@ export default class PagesService {
       axios
         .post(CONFIG.API_BASEPATH + '/cms/updatePage', page)
         .then((response) => {
-          resolve(response.data.data);
+          resolve(response.data);
         })
         .catch((error) => {
           reject(error);

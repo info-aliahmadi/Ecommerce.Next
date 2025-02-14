@@ -9,13 +9,13 @@ import TagsService from '@dashboard/(cms)/_service/TagsService';
 import { useSession } from 'next-auth/react';
 
 
-export default function SelectTag({ defaultValues, id, setFieldValue, error, disabled }:
+export default function SelectTag({ defaultValues, id, setFieldValue, error, disabled = false }:
   Readonly<{
     defaultValues: string[],
     id?: string,
     setFieldValue?: any,
     error?: boolean,
-    disabled: boolean
+    disabled?: boolean
   }>) {
   const [t] = useTranslation();
   const { data: session } = useSession();

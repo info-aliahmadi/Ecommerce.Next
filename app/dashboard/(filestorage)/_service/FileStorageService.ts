@@ -49,7 +49,7 @@ export default class FileStorageService {
       axios
         .get(CONFIG.API_BASEPATH + '/FileStorage/GetFileInfo', { params: { fileId: fileId } })
         .then((response) => {
-          resolve(response.data.data);
+          resolve(response.data);
         })
         .catch((error) => {
           reject(error);
@@ -61,7 +61,7 @@ export default class FileStorageService {
       axios
         .post(CONFIG.API_BASEPATH + '/FileStorage/GetFilesInfo', fileIds)
         .then((response) => {
-          resolve(response.data.data);
+          resolve(response.data);
         })
         .catch((error) => {
           reject(error);
@@ -73,7 +73,7 @@ export default class FileStorageService {
       axios
         .get(CONFIG.API_BASEPATH + '/FileStorage/GetFileInfoByName', { params: { fileName: fileName } })
         .then((response) => {
-          resolve(response.data.data);
+          resolve(response.data);
         })
         .catch((error) => {
           reject(error);

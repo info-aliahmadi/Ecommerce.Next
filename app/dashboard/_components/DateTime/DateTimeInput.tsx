@@ -7,7 +7,7 @@ interface DateTimeInputProps {
   name: string;
   label: string;
   setFieldValue: (field: string, value: any) => void;
-  defaultValue?: string;
+  defaultValue?: Date;
   placeholder?: any;
   error?: boolean;
 }
@@ -20,7 +20,9 @@ export default function DateTimeInput({ id, name, label, setFieldValue, defaultV
   const [value, setValue] = useState<moment.Moment | null>(null);
   useEffect(() => {
     if (defaultValue) {
-      if (defaultValue.endsWith('Z')) {
+
+      //TODO: Check the Z
+      if (defaultValue) { // if (defaultValue.endsWith('Z')) {
         setValue(moment(defaultValue));
       } else {
         setValue(moment(defaultValue + 'Z'));

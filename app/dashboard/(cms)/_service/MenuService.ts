@@ -24,7 +24,7 @@ export default class MenuService {
       axios
         .get(CONFIG.API_BASEPATH + '/cms/getMenuById', { params: { menuId: menuId } })
         .then((response) => {
-          resolve(response.data.data);
+          resolve(response.data);
         })
         .catch((error) => {
           reject(error);
@@ -48,7 +48,7 @@ export default class MenuService {
       axios
         .post(CONFIG.API_BASEPATH + '/cms/updateMenu', menu)
         .then((response) => {
-          resolve(response.data.data);
+          resolve(response.data);
         })
         .catch((error) => {
           reject(error);
@@ -60,7 +60,7 @@ export default class MenuService {
       axios
         .post(CONFIG.API_BASEPATH + '/cms/updateMenuOrders', menuList)
         .then((response) => {
-          resolve(response.data.data);
+          resolve(response.data);
         })
         .catch((error) => {
           reject(error);

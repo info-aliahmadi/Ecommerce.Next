@@ -6,13 +6,13 @@ import { Box } from '@mui/system';
 import TopicsService from '@dashboard/(cms)/_service/TopicService';
 import { useSession } from 'next-auth/react';
 
-export default function SelectTopic({ defaultValues, id, setFieldValue, error, disabled }:
+export default function SelectTopic({ defaultValues, id, setFieldValue, error, disabled = false }:
   Readonly<{
     defaultValues: number[],
     id?: string,
     setFieldValue?: any,
     error?: boolean,
-    disabled: boolean
+    disabled?: boolean
   }>) {
   const [t] = useTranslation();
   const { data: session } = useSession();

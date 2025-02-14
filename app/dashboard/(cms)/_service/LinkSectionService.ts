@@ -24,7 +24,7 @@ export default class LinkSectionService {
       axios
         .get(CONFIG.API_BASEPATH + '/cms/getLinkSectionById', { params: { linkSectionId: linkSectionId } })
         .then((response) => {
-          resolve(response.data.data);
+          resolve(response.data);
         })
         .catch((error) => {
           reject(error);
@@ -48,7 +48,7 @@ export default class LinkSectionService {
       axios
         .post(CONFIG.API_BASEPATH + '/cms/updateLinkSection', linkSection)
         .then((response) => {
-          resolve(response.data.data);
+          resolve(response.data);
         })
         .catch((error) => {
           reject(error);

@@ -12,7 +12,7 @@ export default class SiteSettingsService {
       axios
         .get(CONFIG.API_BASEPATH + '/cms/getSettings')
         .then((response) => {
-          resolve(response.data.data);
+          resolve(response.data);
         })
         .catch((error) => {
           reject(error);
@@ -24,7 +24,7 @@ export default class SiteSettingsService {
       axios
         .post(CONFIG.API_BASEPATH + '/cms/addOrUpdateSettings', setting)
         .then((response) => {
-          resolve(response.data.data);
+          resolve(response.data);
         })
         .catch((error) => {
           reject(error);

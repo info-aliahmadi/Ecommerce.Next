@@ -11,12 +11,13 @@ interface MultiAutoCompleteProps {
   defaultValue?: number;
   setFieldValue: (field: string, value: any) => void;
   label: string;
-  inputDataApi: (input: string) => Promise<Result<UserModel[]>>;
-  loadDataApi: (ids: number[]) => Promise<Result<UserModel[]>>;
+  optionLabel: string;
+  inputDataApi: (input: string) => Promise<Result<any>>;
+  loadDataApi: (ids: number[]) => Promise<Result<any>>;
   disabled: boolean;
 }
 
-export default function SingleAutocomplete({ id, defaultValue, setFieldValue, label, inputDataApi, loadDataApi, disabled }: Readonly<MultiAutoCompleteProps>) {
+export default function SingleAutocomplete({ id, defaultValue, setFieldValue, label, optionLabel, inputDataApi, loadDataApi, disabled }: Readonly<MultiAutoCompleteProps>) {
 
   const [open, setOpen] = useState(false);
   const [options, setOptions] = useState<readonly Option[]>([]);
@@ -35,7 +36,7 @@ export default function SingleAutocomplete({ id, defaultValue, setFieldValue, la
     const defIds = [id];
     loadDataApi(defIds).then((result) => {
 
-      const optionsData: Option[] = result.data?.map((x) => ({ id: x.id, name: x.name })) as Option[];
+      const optionsData: Option[] = result.data?.map((x : any) => ({ id: x.id, name: x[optionLabel] })) as Option[];
       setOptions(optionsData);
       setValue(optionsData[0])
       setLoading(false);
@@ -60,7 +61,7 @@ export default function SingleAutocomplete({ id, defaultValue, setFieldValue, la
     if (newInputValue !== 'undefined' && newInputValue !== null && newInputValue !== '') {
       setLoading(true);
       inputDataApi(newInputValue).then((result) => {
-        const optionsData: Option[] = result.data?.map((x) => ({ id: x.id, name: x.name })) as Option[];
+        const optionsData: Option[] = result.data?.map((x : any) => ({ id: x.id, name: x[optionLabel] })) as Option[];
         setOptions(optionsData);
         setLoading(false);
       }).catch((error) => setLoading(false));

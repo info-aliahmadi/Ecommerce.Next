@@ -2,6 +2,7 @@ import * as React from 'react';
 import { useState, useEffect } from 'react';
 import { Chip, FormControl, MenuItem, OutlinedInput, Select, InputLabel, Box, useTheme ,Theme } from '@mui/material';
 import {} from '@mui/system';
+import Result from '@root/app/types/Result';
 
 interface MultiSelectProps {
   readonly defaultValues: any[];
@@ -13,19 +14,20 @@ interface MultiSelectProps {
   readonly onChange?: (event: React.ChangeEvent<{ value: unknown }>, options: any[]) => void;
   readonly error?: boolean;
   readonly disabled?: boolean;
-  readonly dataApi: Promise<{ data: any[] }>;
+  readonly dataApi:() => Promise<Result<any>>;
   readonly sx?: object;
 }
 
 export default function MultiSelect({ defaultValues, id, name, label, optionLabel, setFieldValue, onChange, error, disabled, dataApi, sx }: MultiSelectProps) {
   const theme = useTheme();
   const [loading, setLoading] = useState(true);
-  const [options, setOptions] = useState<any[]>([]);
+  const [options, setOptions] = useState<Option[]>([]);
   const [values, setValues] = useState<any[]>([]);
 
   const loadAllData = () => {
-    dataApi.then((result : any) => {
-      setOptions(result?.data);
+    dataApi().then((result : any) => {
+      const optionsData: Option[] = result.data?.map((x : any) => ({ id: x.id, name: x[optionLabel] })) as Option[];
+      setOptions(optionsData);
       setLoading(false);
     });
   };
@@ -80,7 +82,7 @@ export default function MultiSelect({ defaultValues, id, name, label, optionLabe
         renderValue={(selected) => (
           <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
             {selected.map((value, index) => {
-              return <Chip key={'chip-' + name + index} label={options?.find((x) => x.id == value)?.[optionLabel]} sx={{ height: '23px' }} />;
+              return <Chip key={'chip-' + name + index} label={options?.find((x) => x.id == value)?.name} sx={{ height: '23px' }} />;
             })}
           </Box>
         )}
@@ -88,8 +90,8 @@ export default function MultiSelect({ defaultValues, id, name, label, optionLabe
       >
         {options?.map((item) => {
           return (
-            <MenuItem key={'menu-' + name + item.id} value={item.id} style={getStyles(item.id, values, theme)}>
-              <span style={{ whiteSpace: 'pre-wrap' }}>{item?.[optionLabel]}</span>
+            <MenuItem key={'menu-' + name + item.id} value={item.id} style={getStyles(item.id.toString(), values, theme)}>
+              <span style={{ whiteSpace: 'pre-wrap' }}>{item?.name}</span>
             </MenuItem>
           );
         })}

@@ -36,7 +36,7 @@ export default class TagsService {
       axios
         .get(CONFIG.API_BASEPATH + '/cms/getTagById', { params: { tagId: tagId } })
         .then((response) => {
-          resolve(response.data.data);
+          resolve(response.data);
         })
         .catch((error) => {
           reject(error);
@@ -60,7 +60,7 @@ export default class TagsService {
       axios
         .post(CONFIG.API_BASEPATH + '/cms/updateTag', tag)
         .then((response) => {
-          resolve(response.data.data);
+          resolve(response.data);
         })
         .catch((error) => {
           reject(error);

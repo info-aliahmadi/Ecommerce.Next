@@ -24,7 +24,7 @@ export default class SlideshowService {
       axios
         .get(CONFIG.API_BASEPATH + '/cms/getSlideshowById', { params: { slideshowId: slideshowId } })
         .then((response) => {
-          resolve(response.data.data);
+          resolve(response.data);
         })
         .catch((error) => {
           reject(error);
@@ -48,7 +48,7 @@ export default class SlideshowService {
       axios
         .post(CONFIG.API_BASEPATH + '/cms/updateSlideshow', slideshow)
         .then((response) => {
-          resolve(response.data.data);
+          resolve(response.data);
         })
         .catch((error) => {
           reject(error);
@@ -61,7 +61,7 @@ export default class SlideshowService {
       axios
         .post(CONFIG.API_BASEPATH + '/cms/updateSlideshowOrders', slideshowList)
         .then((response) => {
-          resolve(response.data.data);
+          resolve(response.data);
         })
         .catch((error) => {
           reject(error);

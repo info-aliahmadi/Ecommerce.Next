@@ -36,7 +36,7 @@ export default class TopicsService {
       axios
         .get(CONFIG.API_BASEPATH + '/cms/getTopicById', { params: { topicId: topicId } })
         .then((response) => {
-          resolve(response.data.data);
+          resolve(response.data);
         })
         .catch((error) => {
           reject(error);
@@ -60,7 +60,7 @@ export default class TopicsService {
       axios
         .post(CONFIG.API_BASEPATH + '/cms/updateTopic', topic)
         .then((response) => {
-          resolve(response.data.data);
+          resolve(response.data);
         })
         .catch((error) => {
           reject(error);

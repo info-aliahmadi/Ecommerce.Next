@@ -36,7 +36,7 @@ export default class ArticlesService {
       axios
         .get(CONFIG.API_BASEPATH + '/cms/getArticleById', { params: { articleId: articleId } })
         .then((response) => {
-          resolve(response.data.data);
+          resolve(response.data);
         })
         .catch((error) => {
           reject(error);
@@ -60,7 +60,7 @@ export default class ArticlesService {
       axios
         .post(CONFIG.API_BASEPATH + '/cms/updateArticle', article)
         .then((response) => {
-          resolve(response.data.data);
+          resolve(response.data);
         })
         .catch((error) => {
           reject(error);

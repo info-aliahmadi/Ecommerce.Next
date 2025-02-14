@@ -24,7 +24,7 @@ export default class LinkService {
       axios
         .get(CONFIG.API_BASEPATH + '/cms/getLinkById', { params: { linkId: linkId } })
         .then((response) => {
-          resolve(response.data.data);
+          resolve(response.data);
         })
         .catch((error) => {
           reject(error);
@@ -48,7 +48,7 @@ export default class LinkService {
       axios
         .post(CONFIG.API_BASEPATH + '/cms/updateLink', link)
         .then((response) => {
-          resolve(response.data.data);
+          resolve(response.data);
         })
         .catch((error) => {
           reject(error);
@@ -61,7 +61,7 @@ export default class LinkService {
       axios
         .post(CONFIG.API_BASEPATH + '/cms/updateLinkOrders', linkList)
         .then((response) => {
-          resolve(response.data.data);
+          resolve(response.data);
         })
         .catch((error) => {
           reject(error);

@@ -28,10 +28,10 @@ import { useSession } from 'next-auth/react';
 import { FilePondFile, FilePondInitialFile } from 'filepond';
 
 interface FileUploadProps {
-  id: string;
-  name: string;
-  setFieldValue: (field: string, value: any) => void;
-  value: any;
+  id?: string;
+  name?: string;
+  setFieldValue?: (field: string, value: any) => void;
+  value?: any;
   minFileSize?: string;
   maxFileSize?: string;
   disabled?: boolean;
@@ -261,7 +261,7 @@ export default function FileUpload({
   return (
     <FilePond
       disabled={disabled}
-      id={id || 'fileId'}
+      id={id ?? 'fileId'}
       allowImagePreview={true}
       filePosterMaxHeight={filePosterMaxHeight ?? undefined}
       allowDownloadByUrl={true}
@@ -283,7 +283,7 @@ export default function FileUpload({
       instantUpload={true}
       allowMultiple={(allowMultiple && true) ?? false}
       credits={false}
-      name="file" /* sets the file input name, it's filepond by default */
+      name={name ?? 'filepond'} /* sets the file input name, it's filepond by default */
       labelIdle={t('validation.fileUpload.imagePreviewDescription')}
       files={files}
       onupdatefiles={onupdatefiles}
