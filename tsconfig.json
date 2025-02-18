@@ -42,7 +42,7 @@
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx",
-    ".next/types/**/*.ts", "themes/DashboardTheme/fonts/IranSans.tss", "app/dashboard/(auth)/_service/Authorization/Authorize.tsx", "app/dashboard/(crm)/_lib/menu-items.ts" ],
+    ".next/types/**/*.ts", "themes/DashboardTheme/fonts/IranSans.tss", "app/dashboard/_components/Authorization/Authorize.tsx", "app/dashboard/(crm)/_lib/menu-items.ts" ],
   "exclude": [
     "node_modules",
     "./public/**/*.ts"

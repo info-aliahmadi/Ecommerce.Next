@@ -7,7 +7,7 @@ import { store } from '@root/store';
 import { Suspense } from 'react';
 import Loader from './_components/Loader';
 import { SessionProvider } from 'next-auth/react'
-import AuthorizationProvider from './(auth)/_service/Authorization/AuthorizationProvider';
+import AuthorizationProvider from './_components/Authorization/AuthorizationProvider';
 import '@root/public/css/customStyle/dashboard.css'
 
 // ==============================|| MAIN LAYOUT ||============================== //

@@ -1,7 +1,7 @@
 import React, { createContext, useEffect, useState, ReactNode } from 'react';
 import { useSession } from 'next-auth/react';
 import { Session } from 'next-auth';
-import AuthorizationService from './AuthorizationService';
+import AuthorizationService from '../../(auth)/_service/AuthorizationService';
 
 
 

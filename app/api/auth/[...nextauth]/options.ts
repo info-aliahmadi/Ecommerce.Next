@@ -1,7 +1,7 @@
 import type { Account, NextAuthOptions, Profile, Session, User } from 'next-auth';
 import GitHubProvider from 'next-auth/providers/github';
 import CredentialsProvider from 'next-auth/providers/credentials';
-import AuthenticationService from '@dashboard/(auth)/_service/Authentication/AuthenticationService';
+import AuthenticationService from '@root/app/dashboard/(auth)/_service/AuthenticationService';
 import { JWT } from 'next-auth/jwt';
 import { AdapterUser } from 'next-auth/adapters';
 import AccountService from '@root/app/dashboard/(auth)/_service/AccountService';
