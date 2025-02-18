@@ -4,82 +4,80 @@ import Autocomplete, { AutocompleteChangeDetails, AutocompleteChangeReason } fro
 import CircularProgress from '@mui/material/CircularProgress';
 import { useState, useEffect } from 'react';
 import Result from '@root/app/types/Result';
-import { UserModel } from '../../(auth)/_types/User/UserModel';
 
-interface MultiAutoCompleteProps {
+interface SingleAutocompleteProps {
   id: string;
   defaultValue?: number;
   setFieldValue: (field: string, value: any) => void;
   label: string;
   optionLabel: string;
-  inputDataApi: (input: string) => Promise<Result<any>>;
-  loadDataApi: (ids: number[]) => Promise<Result<any>>;
+  inputDataApi?: (input: string) => Promise<Result<any>>;
+  loadDataApi: (id: number) => Promise<Result<any>>;
   disabled: boolean;
 }
 
-export default function SingleAutocomplete({ id, defaultValue, setFieldValue, label, optionLabel, inputDataApi, loadDataApi, disabled }: Readonly<MultiAutoCompleteProps>) {
+export default function SingleAutocomplete({ id, defaultValue, setFieldValue, label, optionLabel, inputDataApi, loadDataApi, disabled }: Readonly<SingleAutocompleteProps>) {
 
   const [open, setOpen] = useState(false);
   const [options, setOptions] = useState<readonly Option[]>([]);
-  const [value, setValue] = useState<Option | null>(null);
   const [loading, setLoading] = useState(false);
-
-  useEffect(() => {
-
-    if (!open) {
-      setOptions([]);
-    }
-  }, [open]);
+  const [value, setValue] = useState<Option | null>(null);
 
   const loadAllData = (id: number) => {
     setLoading(true);
-    const defIds = [id];
-    loadDataApi(defIds).then((result) => {
-
-      const optionsData: Option[] = result.data?.map((x : any) => ({ id: x.id, name: x[optionLabel] })) as Option[];
+    loadDataApi(id).then((result) => {
+      const optionsData: Option[] = result.data?.map((x: any) => ({ id: x.id, name: x[optionLabel] })) as Option[];
       setOptions(optionsData);
-      setValue(optionsData[0])
+      debugger
+      defaultValue && setValue(optionsData.find((x) => x.id == defaultValue) || null)
       setLoading(false);
     }).catch((error) => setLoading(false));
   };
 
   useEffect(() => {
-    if (defaultValue != undefined && defaultValue > 0) {
+
+    if ((defaultValue != undefined && defaultValue > 0)) {
       loadAllData(defaultValue);
+
+    } else if (inputDataApi == null) {
+      loadAllData(0);
     } else {
       setOptions([]);
     }
 
   }, [defaultValue]);
 
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      // Client-side only logic
+      setOpen(false);
+    }
+  }, []);
 
-  const onChange = (event: React.SyntheticEvent, value: Option | null, reason: AutocompleteChangeReason, details?: AutocompleteChangeDetails<Option> | undefined) => {
-    setFieldValue(id, value?.id);
-    setValue(value);
+  const onChange = (event: React.SyntheticEvent, newValue: Option | null, reason: AutocompleteChangeReason, details?: AutocompleteChangeDetails<Option> | undefined) => {
+    setFieldValue(id, newValue?.id);
+    setValue(newValue);
   };
   const onInputChange = (event: React.ChangeEvent<{}>, newInputValue: string) => {
-    if (newInputValue !== 'undefined' && newInputValue !== null && newInputValue !== '') {
-      setLoading(true);
-      inputDataApi(newInputValue).then((result) => {
-        const optionsData: Option[] = result.data?.map((x : any) => ({ id: x.id, name: x[optionLabel] })) as Option[];
-        setOptions(optionsData);
-        setLoading(false);
-      }).catch((error) => setLoading(false));
-    }
+    if (inputDataApi != undefined) {
+      if (newInputValue !== 'undefined' && newInputValue !== null && newInputValue !== '') {
+        setLoading(true);
+        inputDataApi(newInputValue).then((result) => {
+          const optionsData: Option[] = result.data?.map((x: any) => ({ id: x.id, name: x[optionLabel] })) as Option[];
+          setOptions(optionsData);
+          setLoading(false);
+        }).catch((error) => setLoading(false));
+      }
+    } 
   };
-  const selectedSingleValue = React.useMemo(
-    () => {
-      return options?.find((x) => x.id == defaultValue);
-    },
-    [defaultValue],
-  );
   return (
     <Autocomplete
       id={id}
       disabled={disabled}
       clearOnBlur={true}
+      selectOnFocus
       clearOnEscape={true}
-      autoSelect={true}
+      autoSelect={false}
       sx={{ minWidth: 300 }}
       open={open}
       multiple={false}
@@ -89,13 +87,13 @@ export default function SingleAutocomplete({ id, defaultValue, setFieldValue, la
       onClose={() => {
         setOpen(false);
       }}
-      onInputChange={onInputChange}
+      // Conditionally include onInputChange
+      {...(inputDataApi && { onInputChange })}
       onChange={onChange}
       options={options}
       getOptionLabel={(option) => option.name || ''}
       isOptionEqualToValue={(option: Option, value: any) => option.id === value.id}
       loading={loading}
-      defaultValue={selectedSingleValue}
       value={value}
       renderInput={(params: any) => (
         <TextField
