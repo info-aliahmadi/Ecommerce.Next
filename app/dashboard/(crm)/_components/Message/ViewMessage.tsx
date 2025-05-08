@@ -11,6 +11,7 @@ import moment from 'moment';
 import { useTranslation } from 'react-i18next';
 import { useRouter } from 'next/navigation';
 import FileUpload from '@dashboard/_components/FileUpload/FileUpload';
+import MessageModel from '../../_types/MessageModel';
 
 export default function ViewMessage({ message, fromPage }: Readonly<{ message: MessageModel, fromPage: 'inbox' | 'outbox' }>) {
   const [fieldsName, buttonName] = ['fields.message.messageInbox.', 'buttons.message.messageInbox.'];

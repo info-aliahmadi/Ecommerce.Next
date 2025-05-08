@@ -8,6 +8,7 @@ import SelectTopic from '../Topic/SelectTopic';
 import SelectTag from '../Tag/SelectTag';
 import { useTranslation } from 'react-i18next';
 import { MRT_Row } from 'material-react-table';
+import ArticleModel from '../../_types/Article/ArticleMode';
 
 // ===============================|| COLOR BOX ||=============================== //
 export default function ArticleDetail({ row }: Readonly<{ row: MRT_Row<ArticleModel> }>) {
@@ -15,7 +16,7 @@ export default function ArticleDetail({ row }: Readonly<{ row: MRT_Row<ArticleMo
   const fieldsName = 'fields.article.';
   return (
     <Grid container spacing={3} direction="row" justifyContent="flex-start" alignItems="flex-start">
-      <Grid container item spacing={3} xs={12} sm={6} md={3} lg={3} xd={3} direction="row" justifyContent="center" alignItems="center">
+      <Grid container item spacing={3} xs={12} sm={6} md={3} lg={3} direction="row" justifyContent="center" alignItems="center">
         <Grid item xs={12} md={12}>
           <Stack>
             {row.original.previewImageId && <ImageUpload value={row.original.previewImageId} id={"previewImageId"} disabled={true} filePosterMaxHeight={300} />}
@@ -41,7 +42,6 @@ export default function ArticleDetail({ row }: Readonly<{ row: MRT_Row<ArticleMo
         sm={6}
         md={6}
         lg={6}
-        xd={6}
         direction="row"
         justifyContent="flex-start"
         alignItems="flex-start"

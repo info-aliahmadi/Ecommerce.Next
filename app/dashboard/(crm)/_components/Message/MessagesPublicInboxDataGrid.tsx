@@ -10,8 +10,10 @@ import Notify from '@dashboard/_components/@extended/Notify';
 import MessageService from '@dashboard/(crm)/_service/MessageService';
 import { MessageTypes } from './MessageType';
 import { useSession } from 'next-auth/react';
-import { MRT_Column } from '@root/app/types/MRT_Column';
+import MRT_Column from '@root/app/types/MRT_Column';
 import { MRT_Row } from 'material-react-table';
+
+import MessageModel from '../../_types/MessageModel';
 
 function MessagesPublicInboxDataGrid() {
   const [t] = useTranslation();

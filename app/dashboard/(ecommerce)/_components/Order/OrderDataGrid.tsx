@@ -7,7 +7,7 @@ import ListItemIcon from '@mui/material/MenuItem';
 import MainCard from '@dashboard/_components/MainCard';
 import TableCard from '@dashboard/_components/TableCard';
 import Currency from '@dashboard/_components/Currency/Currency';
-import { useCallback, useMemo, useState } from 'react';
+import { ReactNode, useCallback, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import MaterialTable from '@dashboard/_components/MaterialTable/MaterialTable';
 import { useSession } from 'next-auth/react';
@@ -17,6 +17,10 @@ import OrderDetail from './OrderDetail';
 import OrderUserAvatar from './OrderUserAvatar';
 import PaymentStatus from './PaymentStatus';
 import PaymentDetail from './PaymentDetail';
+import OrderModel from '../../_types/Order/OrderModel';
+import MRT_Column from '@root/app/types/MRT_Column';
+import { MRT_Row } from 'material-react-table';
+
 
 // ===============================|| COLOR BOX ||=============================== //
 
@@ -30,7 +34,7 @@ function OrderDataGrid() {
   const [open, setOpen] = useState(false);
   const [fieldsName, buttonName] = ['fields.order.', 'buttons.order.'];
 
-  const columns = useMemo<MRT_Column<UserModel>[]>(
+  const columns = useMemo<MRT_Column<OrderModel>[]>(
     () => [
       {
         accessorKey: 'id',
@@ -44,7 +48,7 @@ function OrderDataGrid() {
         header: t(fieldsName + 'userName'),
         enableClickToCopy: true,
         type: 'string',
-        Cell: ({ renderedCellValue, row }: { renderedCellValue: ReactNode; row: MRT_Row<ArticleModel> }) => (
+        Cell: ({ renderedCellValue, row }: { renderedCellValue: ReactNode; row: MRT_Row<OrderModel> }) => (
           <Box
             sx={{
               display: 'flex',
@@ -52,7 +56,7 @@ function OrderDataGrid() {
               gap: '1rem'
             }}
           >
-            <OrderUserAvatar value={renderedCellValue} />
+            <OrderUserAvatar value={renderedCellValue as string} />
           </Box>
         )
       },
@@ -61,7 +65,7 @@ function OrderDataGrid() {
         header: t(fieldsName + 'orderStatusId'),
         enableClickToCopy: true,
         type: 'string',
-        Cell: ({ renderedCellValue, row }: { renderedCellValue: ReactNode; row: MRT_Row<ArticleModel> }) => (
+        Cell: ({ renderedCellValue, row }: { renderedCellValue: ReactNode; row: MRT_Row<OrderModel> }) => (
           <Box
             sx={{
               display: 'flex',
@@ -69,7 +73,7 @@ function OrderDataGrid() {
               gap: '1rem'
             }}
           >
-            <OrderStatus status={renderedCellValue} />
+            <OrderStatus status={renderedCellValue as number} />
           </Box>
         )
       },
@@ -78,14 +82,14 @@ function OrderDataGrid() {
         header: t(fieldsName + 'finalPrice'),
         enableClickToCopy: true,
         type: 'string',
-        Cell: ({ renderedCellValue, row }) => <Currency value={renderedCellValue} currency={row.original.userCurrency} />
+        Cell: ({ row }: { row: MRT_Row<OrderModel> }) => <Currency value={row.original.finalPrice} currency={row.original.userCurrency as 'USD' | 'EUR' | 'GBP' | 'Rial'} />
       },
       {
         accessorKey: 'paymentStatusTitle',
         header: t(fieldsName + 'paymentStatusTitle'),
         enableClickToCopy: true,
         type: 'string',
-        Cell: ({ renderedCellValue, row }) => <PaymentStatus status={renderedCellValue} id={row.original.paymentStatusId} />
+        Cell: ({ row }: { row: MRT_Row<OrderModel> }) => <PaymentStatus status={row.original.paymentStatusTitle} id={row.original.paymentStatusId} />
       },
       {
         accessorKey: 'paymentDateUtcToString',
@@ -98,7 +102,7 @@ function OrderDataGrid() {
         header: t(fieldsName + 'paymentTrackingCode'),
         enableClickToCopy: true,
         type: 'string',
-        Cell: ({ renderedCellValue, row }: { renderedCellValue: ReactNode; row: MRT_Row<ArticleModel> }) => (
+        Cell: ({ renderedCellValue, row }: { renderedCellValue: ReactNode; row: MRT_Row<OrderModel> }) => (
           <Box
             onClick={() => {
               handlePaymentDetail(row);
@@ -116,14 +120,14 @@ function OrderDataGrid() {
     setRefetch(Date.now());
   };
 
-  const handlePaymentDetail = (row : MRT_Row<MenuModel>) => {
+  const handlePaymentDetail = (row : MRT_Row<OrderModel>) => {
     let orderId = row.original.id;
     setRowId(orderId);
     setOpen(true);
   };
 
   const RowActionMenuItems = useCallback(
-    ({ closeMenu, row }) => [
+    ({ closeMenu, row }: { closeMenu: () => void; row: MRT_Row<OrderModel> }) => [
       <MenuItem key={0} sx={{ m: 0 }}>
         <ListItemIcon>{/* <AccountCircle /> */}</ListItemIcon>
         View Detail
@@ -143,7 +147,7 @@ function OrderDataGrid() {
   );
 
   const handleOrderList = useCallback(async (filters : GridDataBound ) => {
-    return await service.getOrderList(x);
+    return await service.getOrderList(filters);
   }, []);
 
   return (

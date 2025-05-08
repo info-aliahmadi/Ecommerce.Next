@@ -28,6 +28,8 @@ import setServerErrors from '@root/utils/setServerErrors';
 import LinkSectionService from '@dashboard/(cms)/_service/LinkSectionService';
 import { useSession } from 'next-auth/react';
 import { MRT_Row } from 'material-react-table';
+import LinkSectionModel from '../../_types/LinkSection/LinkSectionModel';
+
 
 const AddOrEditLinkSection = ({ row, isNew, open, setOpen, refetch }:
   {

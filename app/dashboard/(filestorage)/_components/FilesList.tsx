@@ -38,6 +38,8 @@ import MainCard from '@dashboard/_components/MainCard';
 import FileUpload from '@dashboard/_components/FileUpload/FileUpload';
 import FileStorageService from '@dashboard/(filestorage)/_service/FileStorageService';
 import { useSession } from 'next-auth/react';
+import FileUploadModel from '../_types/FileUploadModel';
+
 // ===============================|| COLOR BOX ||=============================== //
 
 function FilesList({ directory }: Readonly<{ directory: string }>) {
@@ -165,10 +167,10 @@ function FilesList({ directory }: Readonly<{ directory: string }>) {
             <FileUpload allowMultiple  />
           </Box>
         </Slide>
-        <Grid container spacing={3} direction="row" justify="flex-start" alignItems="flex-start">
+        <Grid container spacing={3} direction="row" justifyContent="flex-start" alignItems="flex-start">
           {files.map((file) => (
             <Grow in={true} key={'card-' + file.fileName}>
-              <Grid item xs={12} sm={6} md={3} lg={2} xd={2}>
+              <Grid item xs={12} sm={6} md={3} lg={2} xl={2}>
                 <Card>
                   {mediaExtensions.some((extension) => extension == toLower(file?.extension)) ? (
                     <CardMedia

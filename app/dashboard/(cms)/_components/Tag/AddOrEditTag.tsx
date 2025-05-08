@@ -28,7 +28,7 @@ import setServerErrors from '@root/utils/setServerErrors';
 import TagsService from '@dashboard/(cms)/_service/TagsService';
 import { useSession } from 'next-auth/react';
 import { MRT_Row } from 'material-react-table';
-
+import TagModel from '../../_types/Tag/TagModel';
 
 const AddOrEditTag = ({ row, isNew, open, setOpen, refetch }:
   {

@@ -11,6 +11,7 @@ import Notify from '@dashboard/_components/@extended/Notify';
 import SlideshowService from '@dashboard/(cms)/_service/SlideshowService';
 import { useSession } from 'next-auth/react';
 import { MRT_Row } from 'material-react-table';
+import SlideshowModel from '../../_types/Slideshow/SlideshowModel';
 
 export default function DeleteSlideshow({ row, open, setOpen, refetch }:
   Readonly<{

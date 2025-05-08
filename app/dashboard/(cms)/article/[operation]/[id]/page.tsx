@@ -26,6 +26,8 @@ import SelectTag from '@dashboard/(cms)/_components/Tag/SelectTag';
 import DateTimeInput from '@dashboard/_components/DateTime/DateTimeInput';
 import Editor from '@dashboard/_components/Editor/Editor';
 import { useSession } from 'next-auth/react';
+import ArticleModel from '../../../_types/Article/ArticleMode';
+
 
 
 export default function AddOrEditArticle({ params }: { readonly params: Promise<{ id: number, operation: 'edit' | 'add' }> }) {

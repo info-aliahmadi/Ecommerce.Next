@@ -14,18 +14,18 @@ interface MultiSelectProps {
   readonly onChange?: (event: React.ChangeEvent<{ value: unknown }>, options: any[]) => void;
   readonly error?: boolean;
   readonly disabled?: boolean;
-  readonly dataApi:() => Promise<Result<any>>;
+  readonly loadDataApi:() => Promise<Result<any>>;
   readonly sx?: object;
 }
 
-export default function MultiSelect({ defaultValues, id, name, label, optionLabel, setFieldValue, onChange, error, disabled, dataApi, sx }: MultiSelectProps) {
+export default function MultiSelect({ defaultValues, id, name, label, optionLabel, setFieldValue, onChange, error = false, disabled = false, loadDataApi, sx }: MultiSelectProps) {
   const theme = useTheme();
   const [loading, setLoading] = useState(true);
   const [options, setOptions] = useState<Option[]>([]);
   const [values, setValues] = useState<any[]>([]);
 
   const loadAllData = () => {
-    dataApi().then((result : any) => {
+    loadDataApi().then((result : any) => {
       const optionsData: Option[] = result.data?.map((x : any) => ({ id: x.id, name: x[optionLabel] })) as Option[];
       setOptions(optionsData);
       setLoading(false);

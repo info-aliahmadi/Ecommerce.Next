@@ -13,7 +13,7 @@ import PermissionRoleService from '../../_service/PermissionRoleService';
 import PermissionAutoComplete from '../Permission/PermissionAutoComplete';
 import { useSession } from 'next-auth/react';
 import { MRT_Row, MRT_RowData } from 'material-react-table';
-import { MRT_Column } from '@root/app/types/MRT_Column';
+import MRT_Column from '@root/app/types/MRT_Column';
 // ===============================|| COLOR BOX ||=============================== //
 
 function PermissionRoleDataGrid({ row }: { readonly row: MRT_Row<RoleModel> }) {

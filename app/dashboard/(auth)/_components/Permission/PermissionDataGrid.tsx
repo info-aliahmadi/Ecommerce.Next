@@ -14,7 +14,7 @@ import DeletePermission from './DeletePermission';
 import AddIcon from '@mui/icons-material/Add';
 import PermissionService from '@dashboard/(auth)/_service/PermissionService';
 import { useSession } from 'next-auth/react';
-import { MRT_Column } from '@root/app/types/MRT_Column';
+import MRT_Column from '@root/app/types/MRT_Column';
 import { MRT_Row } from 'material-react-table';
 // ===============================|| COLOR BOX ||=============================== //
 

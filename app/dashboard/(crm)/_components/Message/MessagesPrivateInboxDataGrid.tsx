@@ -13,7 +13,9 @@ import DeleteMessage from './DeleteMessage';
 import { MessageTypes } from './MessageType';
 import { useSession } from 'next-auth/react';
 import { MRT_Cell, MRT_Row } from 'material-react-table';
-import { MRT_Column } from '@root/app/types/MRT_Column';
+import MRT_Column from '@root/app/types/MRT_Column';
+
+import MessageModel, { MessageType } from '../../_types/MessageModel';
 // ===============================|| COLOR BOX ||=============================== //
 
 function MessagesPrivateInboxDataGrid() {
@@ -55,7 +57,7 @@ function MessagesPrivateInboxDataGrid() {
           <Link
             href={'/dashboard/message/inbox/' + row.original.id}
             underline="none"
-            variant={row.original.toUser.isRead ? 'subtitle2' : 'subtitle1'}
+            variant={row.original.toUser?.isRead ? 'subtitle2' : 'subtitle1'}
             display="block"
           >
             {renderedCellValue}
@@ -77,7 +79,7 @@ function MessagesPrivateInboxDataGrid() {
               href={'/dashboard/message/inbox/' + row.original.id}
               underline="none"
               title={row.original.fromUser?.email}
-              variant={row.original.toUser.isRead ? 'subtitle2' : 'subtitle1'}
+              variant={row.original.toUser?.isRead ? 'subtitle2' : 'subtitle1'}
               display="block"
             >
               {row.original.fromUser?.name}
@@ -86,7 +88,7 @@ function MessagesPrivateInboxDataGrid() {
             <Link
               href={'/sendEmail/' + row.original.email}
               title={row.original.email}
-              variant={row.original.toUser.isRead ? 'subtitle2' : 'subtitle1'}
+              variant={row.original.toUser?.isRead ? 'subtitle2' : 'subtitle1'}
               display="block"
             >
               {row.original.name ? row.original.name : row.original.email}
@@ -136,7 +138,7 @@ function MessagesPrivateInboxDataGrid() {
         </Tooltip>
 
         <Tooltip arrow placement="top-start" title={t('buttons.pin')}>
-          <IconButton onClick={() => handlePinRow(row.original.id)} color={row.original.toUser.isPin ? 'warning' : 'secondary'}>
+          <IconButton onClick={() => handlePinRow(row.original.id)} color={row.original.toUser?.isPin ? 'warning' : 'secondary'}>
             <PushPin />
           </IconButton>
         </Tooltip>

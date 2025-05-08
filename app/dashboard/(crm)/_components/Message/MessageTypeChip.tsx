@@ -2,6 +2,7 @@ import { Chip } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import { renderColor, renderTitle } from './MessageType';
 // ===============================|| COLOR BOX ||=============================== //
+import { MessageType } from '../../_types/MessageModel';
 
 export default function MessageTypeChip({ messageTypeId }:{ messageTypeId : MessageType }) {
   const [t] = useTranslation();

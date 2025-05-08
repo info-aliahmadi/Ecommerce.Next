@@ -11,7 +11,7 @@ import Notify from '@dashboard/_components/@extended/Notify';
 import TopicsService from '@dashboard/(cms)/_service/TopicService';
 import { useSession } from 'next-auth/react';
 import { MRT_Row } from 'material-react-table';
-
+import TopicModel from '../../_types/Topic/TopicModel';
 const DeleteTopic = ({ row, open, setOpen, refetch }: { row?: MRT_Row<TopicModel>; open: boolean; setOpen: (open: boolean) => void; refetch: () => void }) => {
   const [t] = useTranslation();
   const { data: session } = useSession();

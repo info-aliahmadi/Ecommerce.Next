@@ -13,8 +13,11 @@ import TableCard from '@dashboard/_components/TableCard';
 import { MessageTypes } from './MessageType';
 import MessageService from '@dashboard/(crm)/_service/MessageService';
 import { useSession } from 'next-auth/react';
-import { MRT_Column } from '@root/app/types/MRT_Column';
+import MRT_Column from '@root/app/types/MRT_Column';
 import { MRT_Row } from 'material-react-table';
+import { MessageType } from '../../_types/MessageModel';
+
+import MessageModel from '../../_types/MessageModel';
 // ===============================|| COLOR BOX ||=============================== //
 
 export default function MessagesTrashDataGrid() {
@@ -54,7 +57,7 @@ export default function MessagesTrashDataGrid() {
           <Link
             href={'/message/inbox/view/' + row.original.id}
             underline="none"
-            variant={row.original.toUser.isRead ? 'subtitle2' : 'subtitle1'}
+            variant={row.original.toUser?.isRead ? 'subtitle2' : 'subtitle1'}
             display="block"
           >
             {renderedCellValue}
@@ -75,7 +78,7 @@ export default function MessagesTrashDataGrid() {
               href={'/message/inbox/view/' + row.original.id}
               underline="none"
               title={row.original.fromUser?.email}
-              variant={row.original.toUser.isRead ? 'subtitle2' : 'subtitle1'}
+              variant={row.original.toUser?.isRead ? 'subtitle2' : 'subtitle1'}
               display="block"
             >
               {row.original.fromUser?.name}
@@ -84,7 +87,7 @@ export default function MessagesTrashDataGrid() {
             <Link
               href={'/sendEmail/' + row.original.email}
               title={row.original.email}
-              variant={row.original.toUser.isRead ? 'subtitle2' : 'subtitle1'}
+              variant={row.original.toUser?.isRead ? 'subtitle2' : 'subtitle1'}
               display="block"
             >
               {row.original.name ? row.original.name : row.original.email}

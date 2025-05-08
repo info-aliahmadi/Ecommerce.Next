@@ -27,7 +27,9 @@ import { useTranslation } from 'react-i18next';
 import Notify from '@dashboard/_components/@extended/Notify';
 import setServerErrors from '@root/utils/setServerErrors';
 import AddIcon from '@mui/icons-material/Add';
-import CountryService from '../../_service/CountryService';
+import CountryService from '@dashboard/(ecommerce)/_service/CountryService';
+
+import CountryModel from '../../_types/Common/CountryModel';
 
 const AddOrEditCountry = ({ countryId, isNew, open, setOpen, refetch }: 
   { countryId: number, isNew: boolean, open: boolean, setOpen: (open: boolean) => void, refetch: () => void }) => {
@@ -41,7 +43,7 @@ const [country, setCountry] = useState<CountryModel | undefined>();
 
   const loadCountry = () => {
     countryService.getCountryById(countryId).then((result) => {
-      setCountry(result);
+      setCountry(result.data);
     });
   };
 

@@ -11,6 +11,7 @@ import Notify from '@dashboard/_components/@extended/Notify';
 import EmailInboxService from '@dashboard/(crm)/_service/EmailInboxService';
 import { useSession } from 'next-auth/react';
 import { MRT_Row } from 'material-react-table';
+import EmailInboxModel from '@dashboard/(crm)/_types/EmailInboxModel';
 
 export default function DeleteEmailInbox({ row, open, setOpen, refetch }: Readonly<{ row?: MRT_Row<EmailInboxModel>; open: boolean; setOpen: (open: boolean) => void; refetch: () => void }>) {
   const [t] = useTranslation();

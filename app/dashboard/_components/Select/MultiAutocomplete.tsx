@@ -12,8 +12,8 @@ interface MultiAutoCompleteProps {
   setFieldValue: (field: string, value: any) => void;
   label: string;
   optionLabel: string;
-  inputDataApi: (input: string) => Promise<Result<UserModel[]>>;
-  loadDataApi: (ids: number[]) => Promise<Result<UserModel[]>>;
+  inputDataApi: (input: string) => Promise<Result<any[]>>;
+  loadDataApi: (ids: number[]) => Promise<Result<any[]>>;
   disabled: boolean;
 }
 
@@ -24,11 +24,11 @@ export default function MultiAutoComplete({ id, defaultValues, setFieldValue, la
   const [values, setValues] = useState<Option[]>([]);
   const [loading, setLoading] = useState(false);
 
-  useEffect(() => {
-    if (!open) {
-      setOptions([]);
-    }
-  }, [open]);
+  // useEffect(() => {
+  //   if (!open) {
+  //     setOptions([]);
+  //   }
+  // }, [open]);
 
   const loadAllData = (ids: number[]) => {
     setLoading(true);
@@ -41,7 +41,7 @@ export default function MultiAutoComplete({ id, defaultValues, setFieldValue, la
   };
 
   useEffect(() => {
-    debugger
+    
     if (defaultValues == null || defaultValues === undefined || (Array.isArray(defaultValues) && defaultValues.length === 0)) {
       setOptions([]);
     } else {
@@ -83,7 +83,7 @@ export default function MultiAutoComplete({ id, defaultValues, setFieldValue, la
       disabled={disabled}
       clearOnBlur={true}
       clearOnEscape={true}
-      autoSelect={true}
+      autoSelect={false}
       sx={{ minWidth: 300 }}
       open={open}
       multiple

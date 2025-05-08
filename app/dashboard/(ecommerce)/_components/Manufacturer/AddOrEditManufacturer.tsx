@@ -28,11 +28,13 @@ import Notify from '@dashboard/_components/@extended/Notify';
 import setServerErrors from '@root/utils/setServerErrors';
 import AddIcon from '@mui/icons-material/Add';
 import ManufacturerService from '../../_service/ManufacturerService';
+import ManufacturerModel from '../../_types/Product/ManufacturerModel';
 
-const AddOrEditManufacturer = ({ manufacturerId, isNew, open, setOpen, refetch }) => {
+
+const AddOrEditManufacturer = ({ manufacturerId, isNew, open, setOpen, refetch }: { manufacturerId: number, isNew: boolean, open: boolean, setOpen: (open: boolean) => void, refetch: () => void }) => {
   const [t] = useTranslation();
   const [fieldsName, validation, buttonName] = ['fields.manufacturer.', 'validation.manufacturer.', 'buttons.manufacturer.'];
-  const [manufacturer, setManufacturer] = useState();
+  const [manufacturer, setManufacturer] = useState<ManufacturerModel | undefined>(undefined);
   const [notify, setNotify] = useState<NotifyProps>({ open: false });
   const { data: session } = useSession();
   const jwt = session?.accessToken;
@@ -40,7 +42,7 @@ const AddOrEditManufacturer = ({ manufacturerId, isNew, open, setOpen, refetch }
 
   const loadManufacturer = () => {
     manufacturerService.getManufacturerById(manufacturerId).then((result) => {
-      setManufacturer(result);
+      setManufacturer(result.data);
     });
   };
 
@@ -58,7 +60,7 @@ const AddOrEditManufacturer = ({ manufacturerId, isNew, open, setOpen, refetch }
     setManufacturer(undefined);
   };
 
-  const handleSubmit = (Manufacturer, setErrors) => {
+  const handleSubmit = (Manufacturer: ManufacturerModel, setErrors: (errors: any) => void) => {
     if (isNew == true) {
       manufacturerService
         .addManufacturer(Manufacturer)
@@ -127,11 +129,11 @@ const AddOrEditManufacturer = ({ manufacturerId, isNew, open, setOpen, refetch }
             metaDescription: Yup.string().max(300).required('MetaDescription is required'),
             //published: Yup.bool().required('Published is required'),
             //pictureId: Yup.strin.max()g().required('PictureId is required'),
-            displayOrder: Yup.number('Must be a valid number').required('DisplayOrder is required')
+            displayOrder: Yup.number().required('DisplayOrder is required')
           })}
           onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
             try {
-              handleSubmit(values, setErrors);
+              handleSubmit(values as ManufacturerModel, setErrors);
             } catch (err) {
               console.error(err);
               setStatus({ success: false });
@@ -177,7 +179,6 @@ const AddOrEditManufacturer = ({ manufacturerId, isNew, open, setOpen, refetch }
                         id="metaKeywords"
                         type="text"
                         value={values?.metaKeywords || ''}
-                        metaKeywords="metaKeywords"
                         onBlur={handleBlur}
                         onChange={handleChange}
                         placeholder={t(fieldsName + 'metaKeywords')}
@@ -199,7 +200,6 @@ const AddOrEditManufacturer = ({ manufacturerId, isNew, open, setOpen, refetch }
                         id="metaTitle"
                         type="text"
                         value={values?.metaTitle || ''}
-                        metaTitle="metaTitle"
                         onBlur={handleBlur}
                         onChange={handleChange}
                         placeholder={t(fieldsName + 'metaTitle')}
@@ -221,7 +221,6 @@ const AddOrEditManufacturer = ({ manufacturerId, isNew, open, setOpen, refetch }
                         id="description"
                         type="text"
                         value={values?.description || ''}
-                        description="description"
                         onBlur={handleBlur}
                         onChange={handleChange}
                         placeholder={t(fieldsName + 'description')}
@@ -243,7 +242,6 @@ const AddOrEditManufacturer = ({ manufacturerId, isNew, open, setOpen, refetch }
                         id="metaDescription"
                         type="text"
                         value={values?.metaDescription || ''}
-                        metaDescription="metaDescription"
                         onBlur={handleBlur}
                         onChange={handleChange}
                         placeholder={t(fieldsName + 'metaDescription')}
@@ -265,7 +263,6 @@ const AddOrEditManufacturer = ({ manufacturerId, isNew, open, setOpen, refetch }
                         id="displayOrder"
                         type="text"
                         value={values?.displayOrder || ''}
-                        displayOrder="displayOrder"
                         onBlur={handleBlur}
                         onChange={handleChange}
                         placeholder={t(fieldsName + 'displayOrder')}

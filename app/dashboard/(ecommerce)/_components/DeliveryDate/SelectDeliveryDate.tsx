@@ -4,7 +4,7 @@ import SingleSelect from '@dashboard/_components/Select/SingleSelect';
 import { useSession } from 'next-auth/react';
 
 interface SelectDeliveryDateProps {
-  defaultValue?: number;
+  defaultValue?: number | null;
   id: string;
   name: string;
   label: string;
@@ -29,7 +29,7 @@ export default function SelectDeliveryDate({ defaultValue, id, name, label, setF
       setFieldValue={setFieldValue}
       error={error}
       disabled={disabled}
-      dataApi={() => deliveryDateService.getDeliveryDateList()}
+      loadDataApi={() => deliveryDateService.getDeliveryDateList()}
     />
   );
 }

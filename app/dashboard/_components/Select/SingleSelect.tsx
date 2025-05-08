@@ -6,23 +6,23 @@ import Result from '@root/app/types/Result';
 interface SingleSelectProps {
   defaultValue?: any,
   id: string,
-  name: string,
+  name?: string,
   label: string,
   optionLabel: string,
   setFieldValue: (field: string, value: any) => void,
-  error: boolean,
-  disabled: boolean,
-  dataApi:() => Promise<Result<any>>
+  error?: boolean,
+  disabled?: boolean,
+  loadDataApi:() => Promise<Result<any>>
 }
 
-export default function SingleSelect({ defaultValue, id, name, label, optionLabel, setFieldValue, error, disabled, dataApi }: Readonly<SingleSelectProps>) {
+export default function SingleSelect({ defaultValue, id, name, label, optionLabel, setFieldValue, error = false, disabled= false, loadDataApi }: Readonly<SingleSelectProps>) {
   const theme = useTheme();
   const [loading, setLoading] = useState(true);
   const [options, setOptions] = useState<Option[]>([]);
   const [value, setValue] = useState<any>();
 
   const loadAllData = () => {
-    dataApi().then((result) => {
+    loadDataApi().then((result) => {
       const optionsData: Option[] = result.data?.map((x: any) => ({ id: x.id, name: x[optionLabel] })) as Option[];
       setOptions(optionsData);
       setLoading(false);
@@ -64,7 +64,7 @@ export default function SingleSelect({ defaultValue, id, name, label, optionLabe
       <InputLabel htmlFor={id} sx={{ overflow: 'visible' }}>{label}</InputLabel>
       <Select
         id={id}
-        name={name}
+        name={name?? id}
         className="select-margin"
         value={value ?? ''}
         label={label}

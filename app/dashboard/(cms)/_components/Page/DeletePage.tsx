@@ -11,6 +11,7 @@ import Notify from '@dashboard/_components/@extended/Notify';
 import PagesService from '@dashboard/(cms)/_service/PagesService';
 import { useSession } from 'next-auth/react';
 import { MRT_Row } from 'material-react-table';
+import PageModel from '../../_types/Page/PageModel';
 
 export default function DeletePage({ row, open, setOpen, refetch }:
   Readonly<{

@@ -18,8 +18,10 @@ import Editor from '@dashboard/_components/Editor/Editor';
 import FileUpload from '@dashboard/_components/FileUpload/FileUpload';
 import { useSession } from 'next-auth/react';
 import SelectMultiUsers from '@root/app/dashboard/(auth)/_components/User/SelectMultiUsers';
+import MessageModel, { MessageType } from '@dashboard/(crm)/_types/MessageModel';
 
-export default function SendMessage({ params }: { readonly params: Promise<{ id: number, toUserId: number }> }) {
+
+export default function  SendMessage({ params }: { readonly params: Promise<{ id: number, toUserId: number }> }) {
   const [t] = useTranslation();
   const { id, toUserId } = React.use(params);
 
@@ -42,7 +44,7 @@ export default function SendMessage({ params }: { readonly params: Promise<{ id:
     if (id > 0) loadMessage();
   }, [id, toUserId]);
 
-  const handleSubmit = async (message : MessageModel, resetForm : any, setErrors: (errors: FormikErrors<LinkModel>) => void, setSubmitting: (open: boolean) => void) => {
+  const handleSubmit = async (message : MessageModel, resetForm : any, setErrors: (errors: FormikErrors<MessageModel>) => void, setSubmitting: (open: boolean) => void) => {
     if (!message.isDraft) {
       if (isPublicMessage) {
         message.toUserIds = [];

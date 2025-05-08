@@ -1,5 +1,7 @@
 // ===============================|| COLOR BOX ||=============================== //
 
+import { MessageType } from "../../_types/MessageModel";
+
 export const renderColor = (m : number) => {
   switch (m) {
     case MessageType.Private:

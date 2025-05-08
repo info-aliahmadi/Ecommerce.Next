@@ -11,7 +11,7 @@ import Notify from '@dashboard/_components/@extended/Notify';
 import TagsService from '@dashboard/(cms)/_service/TagsService';
 import { useSession } from 'next-auth/react';
 import { MRT_Row } from 'material-react-table';
-
+import TagModel from '../../_types/Tag/TagModel';
 
 export default function DeleteTag({ row, open, setOpen, refetch }:
   Readonly<{

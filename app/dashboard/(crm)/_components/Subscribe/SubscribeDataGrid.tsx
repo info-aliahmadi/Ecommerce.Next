@@ -14,8 +14,9 @@ import SubscribeService from '@dashboard/(crm)/_service/SubscribeService';
 import DeleteSubscribe from './DeleteSubscribe';
 import AddOrEditSubscribe from './AddOrEditSubscribe';
 import { useSession } from 'next-auth/react';
-import { MRT_Column } from '@root/app/types/MRT_Column';
+import MRT_Column from '@root/app/types/MRT_Column';
 import { MRT_Row } from 'material-react-table';
+import SubscribeModel from '../../_types/SubscribeModel';
 
 // ===============================|| COLOR BOX ||=============================== //
 

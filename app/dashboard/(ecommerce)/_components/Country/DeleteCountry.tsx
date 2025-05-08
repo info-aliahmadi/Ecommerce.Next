@@ -9,8 +9,10 @@ import CloseIcon from '@mui/icons-material/Close';
 import { useTranslation } from 'react-i18next';
 import Notify from '@dashboard/_components/@extended/Notify';
 import { useSession } from 'next-auth/react';
-import CountryService from '../../_service/CountryService';
+import CountryService from '@dashboard/(ecommerce)/_service/CountryService';
 import { MRT_Row } from 'material-react-table';
+
+import CountryModel from '../../_types/Common/CountryModel';
 
 export default function DeleteCountry({ row, open, setOpen, refetch }:
   Readonly<{ row?: MRT_Row<CountryModel>; open: boolean; setOpen: (open: boolean) => void; refetch: () => void }>) {

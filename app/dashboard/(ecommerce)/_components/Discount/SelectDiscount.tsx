@@ -29,7 +29,7 @@ export default function SelectDiscount({ defaultValues = [], id, name, label, se
       setFieldValue={setFieldValue}
       error={error}
       disabled={disabled}
-      dataApi={() => discountService.getDiscountListForSelect()}
+      loadDataApi={() => discountService.getDiscountListForSelect()}
     />
   );
 }

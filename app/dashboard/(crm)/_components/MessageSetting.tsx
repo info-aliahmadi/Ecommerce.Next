@@ -17,7 +17,8 @@ import Notify from '@dashboard/_components/@extended/Notify';
 import { useSession } from 'next-auth/react';
 import MessageSettingService from '../_service/MessageSettingService';
 import SelectMultiUsers from '../../(auth)/_components/User/SelectMultiUsers';
-import { error } from 'console';
+import MessageSettingModel from '../_types/MessageSettingModel';
+
 // ============================|| FIREBASE - REGISTER ||============================ //
 
 const MessageSetting = () => {

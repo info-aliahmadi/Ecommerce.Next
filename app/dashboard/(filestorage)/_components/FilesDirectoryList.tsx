@@ -11,6 +11,8 @@ import Notify from '@dashboard/_components/@extended/Notify';
 import MainCard from '@dashboard/_components/MainCard';
 import FileStorageService from '@dashboard/(filestorage)/_service/FileStorageService';
 import { useSession } from 'next-auth/react';
+
+import DirectoryModel from '../_types/DirectoryModel';
 // ===============================|| COLOR BOX ||=============================== //
 
 function FilesCategoryList() {

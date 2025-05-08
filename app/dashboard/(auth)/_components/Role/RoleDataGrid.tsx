@@ -15,7 +15,7 @@ import AddIcon from '@mui/icons-material/Add';
 import RoleService from '@dashboard/(auth)/_service/RoleService';
 import PermissionRoleDataGrid from '../PermissionRole/PermissionRoleDataGrid';
 import { useSession } from 'next-auth/react';
-import { MRT_Column } from '@root/app/types/MRT_Column';
+import MRT_Column from '@root/app/types/MRT_Column';
 import { MRT_Row } from 'material-react-table';
 // ===============================|| COLOR BOX ||=============================== //
 

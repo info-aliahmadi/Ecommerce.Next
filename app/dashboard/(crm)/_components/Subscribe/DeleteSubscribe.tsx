@@ -11,6 +11,8 @@ import Notify from '@dashboard/_components/@extended/Notify';
 import SubscribeService from '@dashboard/(crm)/_service/SubscribeService';
 import { useSession } from 'next-auth/react';
 import { MRT_Row } from 'material-react-table';
+import SubscribeModel from '../../_types/SubscribeModel';
+
 
 const DeleteSubscribe = ({ row, open, setOpen, refetch }: { row?: MRT_Row<SubscribeModel>; open: boolean; setOpen: (open: boolean) => void; refetch: () => void }) => {
   const [t] = useTranslation();

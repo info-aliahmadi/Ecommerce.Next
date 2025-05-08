@@ -11,10 +11,13 @@ import EmailInboxService from '@dashboard/(crm)/_service/EmailInboxService';
 import DeleteEmailInbox from './DeleteEmailInbox';
 import { useSession } from 'next-auth/react';
 import { MRT_Cell, MRT_Row } from 'material-react-table';
-import { MRT_Column } from '@root/app/types/MRT_Column';
+import EmailInboxModel from '../../../_types/EmailInboxModel';
+
+import MRT_Column from '@root/app/types/MRT_Column';
 // ===============================|| COLOR BOX ||=============================== //
 
 export default function EmailInboxDataGrid({ reloadCall }: { reloadCall: any }) {
+  debugger
   const [t] = useTranslation();
   const { data: session } = useSession();
   const jwt = session?.accessToken;

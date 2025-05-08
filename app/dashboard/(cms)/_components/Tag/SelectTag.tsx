@@ -7,7 +7,7 @@ import { useTranslation } from 'react-i18next';
 import { Chip, FormControl } from '@mui/material';
 import TagsService from '@dashboard/(cms)/_service/TagsService';
 import { useSession } from 'next-auth/react';
-
+import TagModel from '../../_types/Tag/TagModel';
 
 export default function SelectTag({ defaultValues, id, setFieldValue, error, disabled = false }:
   Readonly<{

@@ -5,7 +5,7 @@ import { useSession } from 'next-auth/react';
 
 export default function SelectCategory({ defaultValues, id, name, label, setFieldValue, error, disabled = false }:
   Readonly<{
-    defaultValues: string[],
+    defaultValues: number[],
     id: string,
     name: string,
     label: string,
@@ -28,7 +28,7 @@ export default function SelectCategory({ defaultValues, id, name, label, setFiel
       setFieldValue={setFieldValue}
       error={error}
       disabled={disabled}
-      dataApi={() => categoryService.getCategoryListForSelect()}
+      loadDataApi={() => categoryService.getCategoryListForSelect()}
     />
   );
 }

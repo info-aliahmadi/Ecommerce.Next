@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { setDefaultHeader } from '@root/utils/axiosHeaders';
 import CONFIG from '@root/config';
+import EmailInboxModel from '../_types/EmailInboxModel';
 import Result from '@root/app/types/Result';
 
 export default class EmailInboxService {
@@ -133,6 +134,18 @@ export default class EmailInboxService {
         });
     });
   };
-
+  restoreEmailInbox = async (emailInboxId: number): Promise<Result<null>> => {
+    return new Promise((resolve, reject) => {
+      axios
+        .get(CONFIG.API_BASEPATH + '/crm/RestoreEmailInbox', { params: { emailInboxId: emailInboxId } })
+        .then((response) => {
+          resolve(response.data); 
+        })
+        .catch((error) => {
+          reject(error);
+        });
+    });
+  };
+ 
 
 }

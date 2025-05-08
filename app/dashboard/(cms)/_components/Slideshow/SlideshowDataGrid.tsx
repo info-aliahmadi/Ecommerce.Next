@@ -22,7 +22,9 @@ import AddOrEditSlideshow from './AddOrEditSlideshow';
 import DeleteSlideshow from './DeleteSlideshow';
 import { useSession } from 'next-auth/react';
 import { MRT_Row } from 'material-react-table';
-import { MRT_Column } from '@root/app/types/MRT_Column';
+import MRT_Column from '@root/app/types/MRT_Column';
+import SlideshowModel from '../../_types/Slideshow/SlideshowModel';
+import _ from 'lodash';
 
 function SlideshowDataGrid() {
   const [t] = useTranslation();

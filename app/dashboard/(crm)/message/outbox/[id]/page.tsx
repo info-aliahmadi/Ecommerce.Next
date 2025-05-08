@@ -6,6 +6,7 @@ import React, { useEffect, useState } from 'react';
 import MessageService from '@dashboard/(crm)/_service/MessageService';
 import ViewMessage from '@dashboard/(crm)/_components/Message/ViewMessage';
 import { useSession } from 'next-auth/react';
+import MessageModel from '../../../_types/MessageModel';
 
 export default function ViewOutboxMessage({ params }: { readonly params: Promise<{ id: number }> }) {
   const { id } = React.use(params);

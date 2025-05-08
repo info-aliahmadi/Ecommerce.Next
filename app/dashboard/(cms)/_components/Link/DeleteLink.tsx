@@ -11,6 +11,9 @@ import Notify from '@dashboard/_components/@extended/Notify';
 import LinkService from '@dashboard/(cms)/_service/LinkService';
 import { useSession } from 'next-auth/react';
 import { MRT_Row } from 'material-react-table';
+import LinkSectionModel from '../../_types/LinkSection/LinkSectionModel';
+import LinkModel from '../../_types/Link/LinkModel';
+
 
 interface DeleteLinkProps {
   row?: MRT_Row<LinkModel>;

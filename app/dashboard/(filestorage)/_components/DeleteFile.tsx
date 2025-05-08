@@ -10,6 +10,8 @@ import { useTranslation } from 'react-i18next';
 import Notify from '@dashboard/_components/@extended/Notify';
 import FileStorageService from '@dashboard/(filestorage)/_service/FileStorageService';
 import { useSession } from 'next-auth/react';
+import FileUploadModel from '@dashboard/(filestorage)/_types/FileUploadModel';
+
 interface DeleteFileProps {
   fileId?: number;
   open: boolean;

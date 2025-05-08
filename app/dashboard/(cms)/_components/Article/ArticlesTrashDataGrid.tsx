@@ -12,9 +12,10 @@ import RemoveArticle from './RemoveArticle';
 import ArticlesService from '@dashboard/(cms)/_service/ArticlesService';
 import ArticleDetail from './ArticleDetail';
 import { useSession } from 'next-auth/react';
-import { MRT_Column } from '@root/app/types/MRT_Column';
+import MRT_Column from '@root/app/types/MRT_Column';
 import { MRT_Row } from 'material-react-table';
 import Notify from '@root/app/dashboard/_components/@extended/Notify';
+import ArticleModel from '../../_types/Article/ArticleMode';
 // ===============================|| COLOR BOX ||=============================== //
 
 export default function ArticlesTrashDataGrid() {
@@ -23,7 +24,7 @@ export default function ArticlesTrashDataGrid() {
   const jwt = session?.accessToken;
 
   const [openDelete, setOpenDelete] = useState(false);
-  const [row, setRow] = useState<MRT_Row<RoleModel>>();
+  const [row, setRow] = useState<MRT_Row<ArticleModel>>();
   const [refetch, setRefetch] = useState<number | undefined>(undefined);
   const [notify, setNotify] = useState<NotifyProps>({ open: false });
 
@@ -54,7 +55,7 @@ export default function ArticlesTrashDataGrid() {
               gap: '1rem'
             }}
           >
-            {row.original.writer.name}
+            {row.original.writer?.name}
           </Box>
         )
       },

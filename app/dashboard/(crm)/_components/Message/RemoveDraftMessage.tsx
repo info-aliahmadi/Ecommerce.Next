@@ -12,6 +12,8 @@ import MessageService from '@dashboard/(crm)/_service/MessageService';
 import { useSession } from 'next-auth/react';
 import { MRT_Row } from 'material-react-table';
 
+import MessageModel from '../../_types/MessageModel';
+
 export default function RemoveDraftMessage({ row, open, setOpen, refetch }: Readonly<{ row?: MRT_Row<MessageModel>; open: boolean; setOpen: (open: boolean) => void; refetch: () => void }>) {
   const [t] = useTranslation();
   const { data: session } = useSession();

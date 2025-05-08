@@ -2,6 +2,7 @@ import axios from 'axios';
 import { setDefaultHeader } from '@root/utils/axiosHeaders';
 import CONFIG from '@root/config';
 import Result from '@root/app/types/Result';
+import EmailOutboxModel from '../_types/EmailOutboxModel';
 
 export default class EmailOutboxService {
   constructor(jwt : string) {

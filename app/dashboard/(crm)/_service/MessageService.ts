@@ -2,6 +2,7 @@ import axios from 'axios';
 import { setDefaultHeader } from '@root/utils/axiosHeaders';
 import CONFIG from '@root/config';
 import Result from '@root/app/types/Result';
+import MessageModel from '../_types/MessageModel';
 
 export default class MessageService {
   constructor(jwt : string) {

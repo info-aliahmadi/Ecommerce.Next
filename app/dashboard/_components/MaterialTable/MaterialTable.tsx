@@ -7,8 +7,9 @@ import { DatePicker } from '@mui/x-date-pickers';
 import moment from 'moment-jalaali';
 import { DateTimeViewer, DateViewer } from '@root//utils/DateViewer';
 import find from 'lodash/find';
-import { MRT_Column } from '@root/app/types/MRT_Column';
+import MRT_Column from '@root/app/types/MRT_Column';
 import i18next from 'i18next';
+
 
 const dateFilter = ({ header, rangeFilterIndex }: { header: any, rangeFilterIndex: any }) => {
   let filterFn = header.column.getFilterFn().name;

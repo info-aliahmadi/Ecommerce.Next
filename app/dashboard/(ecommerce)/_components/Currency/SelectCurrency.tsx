@@ -4,7 +4,7 @@ import SingleSelect from '@dashboard/_components/Select/SingleSelect';
 import { useSession } from 'next-auth/react';
 
 interface SelectCurrencyProps {
-  defaultValue?: number;
+  defaultValue?: number | null;
   id: string;
   name: string;
   label: string;
@@ -29,7 +29,7 @@ export default function SelectCurrency({ defaultValue, id, name, label, setField
       setFieldValue={setFieldValue}
       error={error}
       disabled={disabled}
-      dataApi={() => service.getAllCurrencies()}
+      loadDataApi={() => service.getAllCurrencies()}
     />
   );
 }

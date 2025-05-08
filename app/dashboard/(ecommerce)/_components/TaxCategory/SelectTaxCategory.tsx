@@ -5,7 +5,7 @@ import { useSession } from 'next-auth/react';
 
 
 interface SelectTaxCategoryProps {
-  defaultValue?: number;
+  defaultValue?: number | null;
   id: string;
   name: string;
   label: string;
@@ -30,7 +30,7 @@ export default function SelectTaxCategory({ defaultValue, id, name, label, setFi
       setFieldValue={setFieldValue}
       error={error}
       disabled={disabled}
-      dataApi={() => taxCategoryService.getTaxCategoryList()}
+      loadDataApi={() => taxCategoryService.getTaxCategoryList()}
     />
   );
 }

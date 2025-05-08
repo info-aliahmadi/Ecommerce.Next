@@ -13,7 +13,10 @@ import ArticleDetail from './ArticleDetail';
 import { useSession } from 'next-auth/react';
 import CONFIG from '@root/config';
 import { MRT_Cell, MRT_Row } from 'material-react-table';
-import { MRT_Column } from '@root/app/types/MRT_Column';
+import MRT_Column from '@root/app/types/MRT_Column';
+
+import ArticleModel from '../../_types/Article/ArticleMode';
+
 
 // ===============================|| COLOR BOX ||=============================== //
 export function ArticlesDataGrid() {
@@ -47,7 +50,7 @@ export function ArticlesDataGrid() {
         enableClickToCopy: true,
         type: 'string',
         enableResizing: true,
-        Cell: ({ cell, renderedCellValue, row }: { cell: MRT_Cell<ArticleModel, unknown>; renderedCellValue: ReactNode; row: MRT_Row<ArticleModel> }) => (
+        Cell: ({ row }: { row: MRT_Row<ArticleModel> }) => (
           <Box
             sx={{
               display: 'flex',
@@ -55,7 +58,7 @@ export function ArticlesDataGrid() {
               gap: '1rem'
             }}
           >
-            {row.original.writer.name}
+            {row.original.writer?.name}
           </Box>
         )
       },
@@ -65,7 +68,7 @@ export function ArticlesDataGrid() {
         enableClickToCopy: true,
         type: 'string',
         enableResizing: true,
-        Cell: ({ cell, renderedCellValue, row }: { cell: MRT_Cell<ArticleModel, unknown>; renderedCellValue: ReactNode; row: MRT_Row<ArticleModel> }) => (
+        Cell: ({ row }: { row: MRT_Row<ArticleModel> }) => (
           <Box
             sx={{
               display: 'flex',
@@ -93,12 +96,12 @@ export function ArticlesDataGrid() {
         type: 'boolean',
         enableResizing: true,
         maxSize: 100,
-        Cell: ({ cell, renderedCellValue, row }: { cell: MRT_Cell<ArticleModel, unknown>; renderedCellValue: ReactNode; row: MRT_Row<ArticleModel> }) => (
+        Cell: ({ row }: { row: MRT_Row<ArticleModel> }) => (
           <Chip
             variant="outlined"
-            color={renderedCellValue ? 'warning' : 'primary'}
+            color={row.original.isDraft ? 'warning' : 'primary'}
             // icon={<>{renderedCellValue == true ? 'Published' : 'Draft'}</>}
-            label={renderedCellValue ? t(fieldsName + 'draft') : t(fieldsName + 'published')}
+            label={row.original.isDraft ? t(fieldsName + 'draft') : t(fieldsName + 'published')}
             // sx={{ ml: 1.25, pl: 1 }}
             size="small" />
         )

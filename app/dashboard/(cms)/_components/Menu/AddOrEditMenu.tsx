@@ -29,6 +29,7 @@ import MenuService from '@dashboard/(cms)/_service/MenuService';
 import ImageUpload from '@dashboard/_components/FileUpload/ImageUpload';
 import { useSession } from 'next-auth/react';
 import { MRT_Row } from 'material-react-table';
+import MenuModel from '../../_types/Menu/MenuModel';
 
 const AddOrEditMenu = ({ row, isNew, open, setOpen, refetch }:
   {
@@ -64,7 +65,7 @@ const AddOrEditMenu = ({ row, isNew, open, setOpen, refetch }:
     }
   }, [row, isNew, open]);
 
-  const handleSubmit = (menu: MenuModel, setErrors: (errors: FormikErrors<LinkModel>) => void, setSubmitting: (open: boolean) => void) => {
+  const handleSubmit = (menu: MenuModel, setErrors: (errors: FormikErrors<MenuModel>) => void, setSubmitting: (open: boolean) => void) => {
     if (isNew == true) {
       menuService
         .addMenu(menu)

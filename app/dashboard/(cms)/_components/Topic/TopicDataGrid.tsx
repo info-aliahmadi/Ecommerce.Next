@@ -12,8 +12,8 @@ import TopicsService from '@dashboard/(cms)/_service/TopicService';
 import { useSession } from 'next-auth/react';
 import CONFIG from '@root/config';
 import { MRT_Row } from 'material-react-table';
-import { MRT_Column } from '@root/app/types/MRT_Column';
-
+import MRT_Column from '@root/app/types/MRT_Column';
+import TopicModel from '../../_types/Topic/TopicModel';
 function TopicDataGrid() {
   const [t] = useTranslation();
   const { data: session } = useSession();

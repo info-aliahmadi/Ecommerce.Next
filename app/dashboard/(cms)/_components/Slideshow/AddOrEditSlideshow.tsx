@@ -29,6 +29,7 @@ import SlideshowService from '@dashboard/(cms)/_service/SlideshowService';
 import ImageUpload from '@dashboard/_components/FileUpload/ImageUpload';
 import { useSession } from 'next-auth/react';
 import { MRT_Row } from 'material-react-table';
+import SlideshowModel from '../../_types/Slideshow/SlideshowModel';
 
 export default function AddOrEditSlideshow({ row, isNew, open, setOpen, refetch }:
   Readonly<{

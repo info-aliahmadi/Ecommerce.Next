@@ -13,8 +13,10 @@ import { MessageTypes } from './MessageType';
 import { useRouter } from 'next/navigation';
 import MessageService from '@dashboard/(crm)/_service/MessageService';
 import { useSession } from 'next-auth/react';
-import { MRT_Column } from '@root/app/types/MRT_Column';
+import MRT_Column from '@root/app/types/MRT_Column';
 import { MRT_Cell, MRT_Row } from 'material-react-table';
+import { MessageType } from '../../_types/MessageModel';
+import MessageModel from '../../_types/MessageModel';
 // ===============================|| COLOR BOX ||=============================== //
 
 export default function MessagesOutboxDataGrid() {
@@ -41,7 +43,7 @@ export default function MessagesOutboxDataGrid() {
         size: 60,
         filterVariant: 'select',
         filterSelectOptions: MessageTypes.map((a) => ({ value: a.id, text: t('fields.message.messageInbox.messageType.' + a.title) })),
-        Cell: ({ renderedCellValue }) => <MessageTypeChip messageTypeId={renderedCellValue as MessageType} />
+        Cell: ({ renderedCellValue }: { renderedCellValue: any }) => <MessageTypeChip messageTypeId={renderedCellValue as MessageType} />
       },
       {
         accessorKey: 'subject',

@@ -11,6 +11,7 @@ import Notify from '@dashboard/_components/@extended/Notify';
 import MenuService from '@dashboard/(cms)/_service/MenuService';
 import { useSession } from 'next-auth/react';
 import { MRT_Row } from 'material-react-table';
+import MenuModel from '../../_types/Menu/MenuModel';
 
 export default function DeleteMenu({ row, open, setOpen, refetch }:
   Readonly<{

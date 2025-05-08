@@ -1,5 +1,5 @@
 
-interface LinkModel {
+export default interface LinkModel {
     id: number;
     title: string;
     url: string;

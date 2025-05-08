@@ -36,8 +36,8 @@ export default function SelectSingleUser({
         label={label} 
         optionLabel={"userName"}
         inputDataApi={(input) => usersService.getUserListForSelect(input)}
-        loadDataApi={(ids: number[]) =>
-          usersService.getUserListForSelectByIds(ids)
+        loadDataApi={(id: number) =>
+          usersService.getUserListForSelectByIds([id])
         }
         disabled={disabled}
       />

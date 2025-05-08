@@ -33,15 +33,15 @@ const crmMenu = {
       breadcrumbs: false,
       permission: CRM_ALL_EMAIL_INBOX_MANAGMENT
     },
-    {
-      id: 'emailOutbox',
-      title: 'Email Outbox',
-      type: 'item',
-      url: '/dashboard/email/outbox',
-      icon: icons.Email,
-      breadcrumbs: false,
-      permission: CRM_ALL_EMAIL_OUTBOX_MANAGMENT
-    },
+    // {
+    //   id: 'emailOutbox',
+    //   title: 'Email Outbox',
+    //   type: 'item',
+    //   url: '/dashboard/email/outbox',
+    //   icon: icons.Email,
+    //   breadcrumbs: false,
+    //   permission: CRM_ALL_EMAIL_OUTBOX_MANAGMENT
+    // },
     {
       id: 'subscribe',
       title: 'Subscribes',

@@ -14,9 +14,12 @@ import AddOrEditLink from './AddOrEditLink';
 import CONFIG from '@root/config';
 import LinkService from '@dashboard/(cms)/_service/LinkService';
 import { useSession } from 'next-auth/react';
-import { MRT_Column } from '@root/app/types/MRT_Column';
-import { MRT_Row } from 'material-react-table';
 import _ from 'lodash';
+
+import {  MRT_Row } from 'material-react-table';
+import LinkModel from '@dashboard/(cms)/_types/Link/LinkModel';
+import LinkSectionModel from '../../_types/LinkSection/LinkSectionModel';
+import MRT_Column from '@root/app/types/MRT_Column';
 
 let mediaExtensions = CONFIG.IMAGES_EXTENSIONS.concat(CONFIG.VIDEOS_EXTENSIONS);
 // ===============================|| COLOR BOX ||=============================== //
@@ -166,7 +169,7 @@ function LinkDataGrid({ linkSection }: { linkSection: MRT_Row<LinkSectionModel> 
     <>
       <Notify notify={notify} setNotify={setNotify}></Notify>
       <Grid container spacing={3} direction="row">
-        <Grid item xd={12} sm={12} md={12}>
+        <Grid item xs={12} sm={12} md={12}>
           <MaterialTable
             refetch={refetch}
             columns={columns}

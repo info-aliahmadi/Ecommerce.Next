@@ -10,6 +10,7 @@ import moment from 'moment';
 import { useTranslation } from 'react-i18next';
 import { useRouter } from 'next/navigation';
 import FileUpload from '@dashboard/_components/FileUpload/FileUpload';
+import EmailInboxModel from '../../../_types/EmailInboxModel';
 
 export default function ViewEmailInbox({ emailInbox }: Readonly<{ emailInbox: EmailInboxModel }>) {
   const [fieldsName, buttonName] = ['fields.email.emailInbox.', 'buttons.email.emailInbox.'];

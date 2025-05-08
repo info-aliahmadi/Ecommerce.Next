@@ -11,6 +11,8 @@ import Notify from '@dashboard/_components/@extended/Notify';
 import MessageService from '@dashboard/(crm)/_service/MessageService';
 import { useSession } from 'next-auth/react';
 import { MRT_Row } from 'material-react-table';
+import MessageModel from '@dashboard/(crm)/_types/MessageModel';
+
 
 export default function DeleteMessage({ row, open, setOpen, refetch }: Readonly<{ row?: MRT_Row<MessageModel>; open: boolean; setOpen: (open: boolean) => void; refetch: () => void }>) {
   const [t] = useTranslation();

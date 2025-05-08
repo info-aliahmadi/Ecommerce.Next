@@ -17,6 +17,7 @@ import { useTranslation } from 'react-i18next';
 import Notify from '@dashboard/_components/@extended/Notify';
 import SiteSettingsService from '../_service/SiteSettingsService';
 import { useSession } from 'next-auth/react';
+import SiteSettingsModel from '../_types/SiteSetting/SiteSettingsModel';
 // ============================|| FIREBASE - REGISTER ||============================ //
 
 const SiteSetting = () => {

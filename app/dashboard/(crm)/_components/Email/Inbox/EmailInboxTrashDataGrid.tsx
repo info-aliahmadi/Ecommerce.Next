@@ -11,8 +11,10 @@ import MainCard from '@dashboard/_components/MainCard';
 import TableCard from '@dashboard/_components/TableCard';
 import EmailInboxService from '@dashboard/(crm)/_service/EmailInboxService';
 import { useSession } from 'next-auth/react';
-import { MRT_Column } from '@root/app/types/MRT_Column';
+import MRT_Column from '@root/app/types/MRT_Column';
 import { MRT_Cell, MRT_Row } from 'material-react-table';
+import EmailInboxModel from '../../../_types/EmailInboxModel';
+
 // ===============================|| COLOR BOX ||=============================== //
 
 export default function EmailInboxTrashDataGrid() {
@@ -82,7 +84,7 @@ export default function EmailInboxTrashDataGrid() {
   const handleRefetch = () => {
     setRefetch(Date.now());
   };
-  const handleRestoreRow = (row: MRT_Row<MenuModel>) => {
+  const handleRestoreRow = (row: MRT_Row<EmailInboxModel>) => {
     let emailInboxId = row.original.id;
     emailInboxsService
       .restoreEmailInbox(emailInboxId)
@@ -99,7 +101,7 @@ export default function EmailInboxTrashDataGrid() {
   }, []);
 
   const Restore = useCallback(
-    ({ row }: { row: MRT_Row<RoleModel> }) => (
+    ({ row }: { row: MRT_Row<EmailInboxModel> }) => (
       <Box sx={{ display: 'flex', gap: '1rem', flexWrap: 'nowrap' }}>
         <Tooltip arrow placement="top-start" title={t('buttons.restore')}>
           <IconButton color="success" onClick={() => handleRestoreRow(row)}>

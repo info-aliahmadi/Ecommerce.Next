@@ -17,8 +17,9 @@ import SelectTag from '../Tag/SelectTag';
 import { useRouter } from 'next/navigation';
 import DeletePage from './DeletePage';
 import { useSession } from 'next-auth/react';
-import { MRT_Column } from '@root/app/types/MRT_Column';
+import MRT_Column from '@root/app/types/MRT_Column';
 import { MRT_Row } from 'material-react-table';
+import PageModel from '../../_types/Page/PageModel';
 // ===============================|| COLOR BOX ||=============================== //
 
 function PagesDataGrid() {
@@ -68,7 +69,7 @@ function PagesDataGrid() {
               gap: '1rem'
             }}
           >
-            {row.original.writer.name}
+            {row.original.writer?.name}
           </Box>
         )
       },
@@ -164,7 +165,6 @@ function PagesDataGrid() {
           sm={6}
           md={6}
           lg={6}
-          xd={6}
           direction="row"
           justifyContent="flex-start"
           alignItems="flex-start"

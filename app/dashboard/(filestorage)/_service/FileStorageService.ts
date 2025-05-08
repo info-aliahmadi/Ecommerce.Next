@@ -2,6 +2,8 @@ import axios from 'axios';
 import { setDefaultHeader } from '@root/utils/axiosHeaders';
 import CONFIG from '@root/config';
 import Result from '@root/app/types/Result';
+import DirectoryModel from '../_types/DirectoryModel';
+import FileUploadModel from '../_types/FileUploadModel';
 
 export default class FileStorageService {
   constructor(jwt: string) {

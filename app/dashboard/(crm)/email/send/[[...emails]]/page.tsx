@@ -18,6 +18,8 @@ import SelectEmailAddress from '@dashboard/(crm)/_components/Email/SelectEmailAd
 import Editor from '@dashboard/_components/Editor/Editor';
 import FileUpload from '@dashboard/_components/FileUpload/FileUpload';
 import { useSession } from 'next-auth/react';
+import EmailOutboxModel from '../../../_types/EmailOutboxModel';
+
 
 export default function SendEmailOutbox({ params }: { readonly params: Promise<{ emails: string }> }) {
   const [t] = useTranslation();

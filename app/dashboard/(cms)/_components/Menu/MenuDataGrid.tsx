@@ -13,7 +13,8 @@ import AddOrEditMenu from './AddOrEditMenu';
 import DeleteMenu from './DeleteMenu';
 import { useSession } from 'next-auth/react';
 import { MRT_Row } from 'material-react-table';
-import { MRT_Column } from '@root/app/types/MRT_Column';
+import MRT_Column from '@root/app/types/MRT_Column';
+import MenuModel from '../../_types/Menu/MenuModel';
 
 function MenuDataGrid() {
   const [t] = useTranslation();

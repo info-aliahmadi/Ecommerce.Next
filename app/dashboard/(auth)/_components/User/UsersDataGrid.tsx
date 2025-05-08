@@ -27,7 +27,8 @@ import { useRouter } from 'next/navigation';
 import { useSession } from 'next-auth/react';
 import { MRT_Cell, MRT_Row, MRT_RowData, MRT_TableInstance } from 'material-react-table';
 import { UserModel } from '../../_types/User/UserModel';
-import { MRT_Column } from '@root/app/types/MRT_Column';
+import MRT_Column from '@root/app/types/MRT_Column';
+
 // ===============================|| COLOR BOX ||=============================== //
 
 const UserDetail = ({ row, t, fieldsName, language }: { row: MRT_Row<UserModel>, t: any, fieldsName: string, language: string }) => {

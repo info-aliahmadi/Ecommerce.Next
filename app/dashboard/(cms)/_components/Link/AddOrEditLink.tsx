@@ -29,6 +29,9 @@ import LinkService from '@dashboard/(cms)/_service/LinkService';
 import ImageUpload from '@dashboard/_components/FileUpload/ImageUpload';
 import { useSession } from 'next-auth/react';
 import { MRT_Row } from 'material-react-table';
+import LinkSectionModel from '../../_types/LinkSection/LinkSectionModel';
+import LinkModel from '../../_types/Link/LinkModel';
+
 
 interface AddOrEditLinkProps {
   row?: MRT_Row<LinkModel>;

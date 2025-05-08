@@ -2,6 +2,7 @@ import axios from 'axios';
 import { setDefaultHeader } from '@root/utils/axiosHeaders';
 import CONFIG from '@root/config';
 import Result from '@root/app/types/Result';
+import SubscribeModel from '../_types/SubscribeModel';
 
 export default class SubscribeService {
   constructor(jwt : string) {

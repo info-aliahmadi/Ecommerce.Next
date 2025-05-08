@@ -18,7 +18,7 @@ export default function SelectSubscribeLabel({ defaultValue, id, name, label, se
       name={name}
       defaultValue={defaultValue}
       setFieldValue={setFieldValue}
-      dataApi={dataApi}
+      loadDataApi={dataApi}
       disabled={disabled}
       error={error}
       optionLabel={'name'}

@@ -29,6 +29,7 @@ import setServerErrors from '@root/utils/setServerErrors';
 import TopicsService from '@dashboard/(cms)/_service/TopicService';
 import { useSession } from 'next-auth/react';
 import { MRT_Row } from 'material-react-table';
+import TopicModel from '../../_types/Topic/TopicModel';
 
 const AddOrEditTopic = ({ row, isNew, open, setOpen, refetch }:
   {

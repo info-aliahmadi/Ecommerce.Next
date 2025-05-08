@@ -29,6 +29,8 @@ import setServerErrors from '@root/utils/setServerErrors';
 import AddIcon from '@mui/icons-material/Add';
 import SubscribeService from '@dashboard/(crm)/_service/SubscribeService';
 import SelectSubscribeLabel from './SelectSubscribeLabel';
+import SubscribeModel from '../../_types/SubscribeModel';
+
 
 interface AddOrEditSubscribeProps {
   subscribeId?: number;

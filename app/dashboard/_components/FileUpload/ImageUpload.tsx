@@ -26,6 +26,7 @@ import CONFIG from '@root/config';
 import FileStorageService from '@dashboard/(filestorage)/_service/FileStorageService';
 import { useSession } from 'next-auth/react';
 import { FilePondFile, FilePondInitialFile } from 'filepond';
+import FileUploadModel from '../../(filestorage)/_types/FileUploadModel';
 
 interface ImageUploadProps {
   id: string;

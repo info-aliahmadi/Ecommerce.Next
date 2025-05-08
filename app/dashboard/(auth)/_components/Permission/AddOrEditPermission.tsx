@@ -17,7 +17,7 @@ import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
 // third party
 import * as Yup from 'yup';
-import { Formik } from 'formik';
+import { Formik, FormikErrors } from 'formik';
 import AddIcon from '@mui/icons-material/Add';
 import AnimateButton from '@dashboard/_components/@extended/AnimateButton';
 
@@ -143,9 +143,9 @@ const AddOrEditPermission = ({ permissionId, isNew, open, setOpen, refetch }: {
             try {
               setSubmitting(true);
               handleSubmit(values, setErrors, setSubmitting);
-            } catch (err) {
+            } catch (err: any) {
               setStatus({ success: false });
-              setErrors(undefined);
+              setErrors({ id: err.message } as FormikErrors<Permission>);
             }
           }}
         >
