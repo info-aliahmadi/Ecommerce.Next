@@ -8,37 +8,33 @@ import CloseIcon from '@mui/icons-material/Close';
 // assets
 import { useTranslation } from 'react-i18next';
 import Notify from '@dashboard/_components/@extended/Notify';
-import TopicsService from '@dashboard/(cms)/_service/TopicService';
 import { useSession } from 'next-auth/react';
+import ProductTagService from '../../_service/ProductTagService';
 import { MRT_Row } from 'material-react-table';
-import TopicModel from '../../_types/Topic/TopicModel';
-const DeleteTopic = ({ row, open, setOpen, refetch }: { row?: MRT_Row<TopicModel>; open: boolean; setOpen: (open: boolean) => void; refetch: () => void }) => {
+import ProductTagModel from '../../_types/Product/ProductTagModel';
+
+const DeleteProductTag = ({ row, open, setOpen, refetch }: { row?: MRT_Row<ProductTagModel>; open: boolean; setOpen: (open: boolean) => void; refetch: () => void }) => {
   const [t] = useTranslation();
+  const [notify, setNotify] = useState<NotifyProps>({ open: false });
   const { data: session } = useSession();
   const jwt = session?.accessToken;
-
-  let topicService = new TopicsService(jwt ?? '');
-  const [notify, setNotify] = useState<NotifyProps>({ open: false });
-  const [isSubmitting, setSubmitting] = useState(false);
+  let productTagService = new ProductTagService(jwt ?? '');
 
   const onClose = () => {
     setOpen(false);
   };
 
   const handleSubmit = () => {
-    setSubmitting(true);
-    let topicId = row?.original.id;
-    topicId && topicService
-      .deleteTopic(topicId)
+    let productTagId = row?.original.id;
+    productTagId && productTagService
+      .deleteProductTag(productTagId)
       .then(() => {
         onClose();
         setNotify({ open: true });
         refetch();
       })
-      .catch((error) => {
+      .catch((error: any) => {
         setNotify({ open: true, type: 'error', description: error });
-      }).finally(() => {
-        setSubmitting(false);
       });
   };
   const CloseDialog = ({ onClose }: { onClose: () => void }) => (
@@ -62,7 +58,7 @@ const DeleteTopic = ({ row, open, setOpen, refetch }: { row?: MRT_Row<TopicModel
       <Dialog open={open} onClose={onClose} aria-labelledby="alert-dialog-title" aria-describedby="alert-dialog-description">
         <DialogTitle id="alert-dialog-title">
           <Typography variant="caption" fontSize={17} fontWeight={600}>
-            {t('buttons.topic.delete')}
+            {t('buttons.productTag.delete')}
           </Typography>
           <CloseDialog onClose={onClose} />
         </DialogTitle>
@@ -72,11 +68,10 @@ const DeleteTopic = ({ row, open, setOpen, refetch }: { row?: MRT_Row<TopicModel
               {t('dialog.delete.description')}
             </Typography>
           </DialogContentText>
-          {/* <Typography variant="h3">{t('alert.delete.item')}</Typography> */}
         </DialogContent>
         <DialogActions sx={{ p: '1.25rem' }}>
-          <Button onClick={onClose}>{t('buttons.cancel')}</Button>
-          <Button disableElevation disabled={isSubmitting} onClick={handleSubmit} size="large" variant="contained" color="error">
+          <Button onClick={onClose}>Cancel</Button>
+          <Button disableElevation onClick={handleSubmit} size="large" variant="contained" color="error">
             {t('buttons.delete')}
           </Button>
         </DialogActions>
@@ -85,4 +80,4 @@ const DeleteTopic = ({ row, open, setOpen, refetch }: { row?: MRT_Row<TopicModel
   );
 };
 
-export default DeleteTopic;
+export default DeleteProductTag; 

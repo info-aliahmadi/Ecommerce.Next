@@ -1,3 +1,5 @@
+import FileUploadModel from "@root/app/dashboard/(filestorage)/_types/FileUploadModel";
+
 /**
  * Represents a product category.
  */
@@ -41,6 +43,10 @@ export default interface CategoryModel {
      * The ID of the associated picture (nullable).
      */
     pictureId: number | null;
+    /**
+     * The ID of the associated picture (nullable).
+     */
+    pictureInfo: FileUploadModel | null;
   
     /**
      * Indicates whether the category is shown on the homepage.
@@ -82,6 +88,10 @@ export default interface CategoryModel {
      */
     discounts: number;
   
+    /**
+     * Indicates whether the category is edited.
+     */
+    isEdited: boolean;
     /**
      * Child categories.
      */

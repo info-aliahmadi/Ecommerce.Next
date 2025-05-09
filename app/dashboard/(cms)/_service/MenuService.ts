@@ -2,6 +2,7 @@ import axios from 'axios';
 import CONFIG from '@root/config';
 import { setDefaultHeader } from '@root/utils/axiosHeaders';
 import Result from '@root/app/types/Result';
+import MenuModel from '../_types/Menu/MenuModel';
 
 export default class MenuService {
   constructor(jwt : string) {

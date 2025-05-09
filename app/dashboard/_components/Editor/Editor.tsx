@@ -37,7 +37,7 @@ import DragDropPaste from './plugins/DragDropPastePlugin';
 import DraggableBlockPlugin from './plugins/DraggableBlockPlugin';
 import EmojiPickerPlugin from './plugins/EmojiPickerPlugin';
 import EmojisPlugin from './plugins/EmojisPlugin';
-import ExcalidrawPlugin from './plugins/ExcalidrawPlugin';
+// import ExcalidrawPlugin from './plugins/ExcalidrawPlugin';
 import FigmaPlugin from './plugins/FigmaPlugin';
 import FloatingLinkEditorPlugin from './plugins/FloatingLinkEditorPlugin';
 import FloatingTextFormatToolbarPlugin from './plugins/FloatingTextFormatToolbarPlugin';
@@ -181,7 +181,7 @@ export default function Editor({ id, name, defaultValue, setFieldValue }: { id: 
           <FigmaPlugin />
           <LexicalClickableLinkPlugin />
           <HorizontalRulePlugin />
-          <ExcalidrawPlugin />
+          {/* <ExcalidrawPlugin /> */}
           <TabFocusPlugin />
           <TabIndentationPlugin />
           <CollapsiblePlugin />

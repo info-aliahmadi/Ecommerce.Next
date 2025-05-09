@@ -8,10 +8,10 @@ export default class ProductTagService {
   constructor(jwt : string) {
     setDefaultHeader(jwt);
   }
-  getProductTagList = async (): Promise<Result<ProductTagModel[]>> => {
+  getProductTagList = async (filter: GridDataBound): Promise<Result<ProductTagModel[]>> => {
     return new Promise((resolve, reject) => {
       axios
-        .post(CONFIG.API_BASEPATH + '/Product/GetProductTagList')
+        .post(CONFIG.API_BASEPATH + '/Product/GetProductTagList', filter)
         .then((response) => {
           resolve(response.data);
         })

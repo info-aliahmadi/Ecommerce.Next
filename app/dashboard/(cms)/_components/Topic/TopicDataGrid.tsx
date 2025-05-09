@@ -2,7 +2,7 @@ import { Box, Button, IconButton, Tooltip } from '@mui/material';
 
 import MainCard from '@dashboard/_components/MainCard';
 import TableCard from '@dashboard/_components/TableCard';
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import MaterialTable from '@dashboard/_components/MaterialTable/MaterialTable';
 import { Edit, Topic, Add, Delete, Link } from '@mui/icons-material';
@@ -24,6 +24,7 @@ function TopicDataGrid() {
   const [open, setOpen] = useState(false);
   const [openDelete, setOpenDelete] = useState(false);
   const [row, setRow] = useState<MRT_Row<TopicModel>>();
+  const [data, setData] = useState<TopicModel[]>([]);
   const [refetch, setRefetch] = useState<number | undefined>(undefined);
 
   const columns = useMemo<MRT_Column<TopicModel>[]>(
@@ -56,10 +57,16 @@ function TopicDataGrid() {
   const handleRefetch = () => {
     setRefetch(Date.now());
   };
+  useEffect(() => {
+    async function fetchData() {
+      let data = await service.getTopicList();
+      setData(data.data ?? []);
+      handleRefetch();
+    }
 
-  const handleTopicList = useCallback(() => {
-    return service.getTopicList();
+    fetchData();
   }, []);
+  
   const AddRow = useCallback(
     () => (
       <Button color="primary" onClick={() => handleNewRow()} variant="contained" startIcon={<Topic />}>
@@ -104,7 +111,7 @@ function TopicDataGrid() {
           <MaterialTable
             refetch={refetch}
             columns={columns}
-            dataApi={handleTopicList}
+            dataSet={data}
             enableExpanding={true}
             enableExpandAll={true}
             getSubRows={(originalRow) => originalRow.childs}

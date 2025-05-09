@@ -84,7 +84,7 @@ import {getSelectedNode} from '../../utils/getSelectedNode';
 import {sanitizeUrl} from '../../utils/url';
 import {EmbedConfigs} from '../AutoEmbedPlugin';
 import {INSERT_COLLAPSIBLE_COMMAND} from '../CollapsiblePlugin';
-import {INSERT_EXCALIDRAW_COMMAND} from '../ExcalidrawPlugin';
+// import {INSERT_EXCALIDRAW_COMMAND} from '../ExcalidrawPlugin';
 import {
   INSERT_IMAGE_COMMAND,
   InsertImageDialog,
@@ -1101,7 +1101,7 @@ export default function ToolbarPlugin({
               <i className="icon gif" />
               <span className="text">GIF</span>
             </DropDownItem> */}
-            <DropDownItem
+            {/* <DropDownItem
               onClick={() => {
                 activeEditor.dispatchCommand(
                   INSERT_EXCALIDRAW_COMMAND,
@@ -1111,7 +1111,7 @@ export default function ToolbarPlugin({
               className="item">
               <i className="icon diagram-2" />
               <span className="text">Excalidraw</span>
-            </DropDownItem>
+            </DropDownItem> */}
             <DropDownItem
               onClick={() => {
                 showModal('Insert Table', (onClose) => (

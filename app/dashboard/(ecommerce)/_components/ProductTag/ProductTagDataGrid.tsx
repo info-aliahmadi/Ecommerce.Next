@@ -1,41 +1,40 @@
 // material-ui
-import { Box, Button, IconButton, Tooltip, Typography } from '@mui/material';
+import { Box, Button, IconButton, Tooltip } from '@mui/material';
 
 // project import
 import MainCard from '@dashboard/_components/MainCard';
 import TableCard from '@dashboard/_components/TableCard';
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import MaterialTable from '@dashboard/_components/MaterialTable/MaterialTable';
 import { Delete } from '@mui/icons-material';
 import { Edit } from '@mui/icons-material';
 import AddIcon from '@mui/icons-material/Add';
-import DeleteManufacturer from './DeleteManufacturer';
-import AddOrEditManufacturer from './AddOrEditManufacturer';
+import LocalOfferIcon from '@mui/icons-material/LocalOffer';
+import DeleteProductTag from './DeleteProductTag';
+import AddOrEditProductTag from './AddOrEditProductTag';
 import { useSession } from 'next-auth/react';
-import ManufacturerService from '../../_service/ManufacturerService';
-import ManufacturerModel from '../../_types/Product/ManufacturerModel';
+import ProductTagService from '../../_service/ProductTagService';
+import ProductTagModel from '../../_types/Product/ProductTagModel';
 import { MRT_Row } from 'material-react-table';
 import MRT_Column from '@root/app/types/MRT_Column';
 
+// ===============================|| PRODUCT TAG DATA GRID ||=============================== //
 
-// ===============================|| COLOR BOX ||=============================== //
-
-function ManufacturerDataGrid() {
+function ProductTagDataGrid() {
   const [t] = useTranslation();
   const { data: session } = useSession();
   const jwt = session?.accessToken;
-  const service = new ManufacturerService(jwt ?? '');
+  const service = new ProductTagService(jwt ?? '');
   const [isNew, setIsNew] = useState(true);
   const [rowId, setRowId] = useState(0);
   const [open, setOpen] = useState(false);
   const [openDelete, setOpenDelete] = useState(false);
-  const [data, setData] = useState<ManufacturerModel[]>([]);
-  const [row, setRow] = useState<MRT_Row<ManufacturerModel>>();
+  const [row, setRow] = useState<MRT_Row<ProductTagModel>>();
   const [refetch, setRefetch] = useState<number | undefined>(undefined);
-  const [fieldsName, buttonName] = ['fields.manufacturer.', 'buttons.manufacturer.'];
+  const [fieldsName, buttonName] = ['fields.productTag.', 'buttons.productTag.'];
 
-  const columns = useMemo<MRT_Column<ManufacturerModel>[]>(
+  const columns = useMemo<MRT_Column<ProductTagModel>[]>(
     () => [
       {
         accessorKey: 'name',
@@ -44,20 +43,8 @@ function ManufacturerDataGrid() {
         type: 'string'
       },
       {
-        accessorKey: 'metaKeywords',
-        header: t(fieldsName + 'metaKeywords'),
-        enableClickToCopy: true,
-        type: 'string'
-      },
-      {
-        accessorKey: 'metaTitle',
-        header: t(fieldsName + 'metaTitle'),
-        enableClickToCopy: true,
-        type: 'string'
-      },
-      {
-        accessorKey: 'displayOrder',
-        header: t(fieldsName + 'displayOrder'),
+        accessorKey: 'products',
+        header: t(fieldsName + 'products'),
         enableClickToCopy: true,
         type: 'number'
       }
@@ -65,27 +52,19 @@ function ManufacturerDataGrid() {
     []
   );
 
-  useEffect(() => {
-    service.getManufacturerList().then((data) => {
-      if (data.succeeded) {
-        setData(data.data ?? []);
-        handleRefetch();
-      }
-    });
-  }, []);
-
   const handleNewRow = () => {
     setIsNew(true);
     setRowId(0);
     setOpen(true);
   };
-  const handleEditRow = (row : MRT_Row<ManufacturerModel>) => {
-    let manufacturerId = row.original.id;
+  const handleEditRow = (row : MRT_Row<ProductTagModel>) => {
+    let productTagId = row.original.id;
     setIsNew(false);
-    setRowId(manufacturerId);
+    setRowId(productTagId);
+    setRow(row);
     setOpen(true);
   };
-  const handleDeleteRow = (row: MRT_Row<ManufacturerModel>) => {
+  const handleDeleteRow = (row: MRT_Row<ProductTagModel>) => {
     setRow(row);
     setOpenDelete(true);
   };
@@ -93,9 +72,13 @@ function ManufacturerDataGrid() {
     setRefetch(Date.now());
   };
 
+  const handleProductTagList = useCallback(async (filters: GridDataBound) => {
+    return await service.getProductTagList(filters);
+  }, []);
+
   const AddRow = useCallback(
     () => (
-      <Button color="primary" onClick={handleNewRow} variant="contained" startIcon={<AddIcon />}>
+      <Button color="primary" onClick={handleNewRow} variant="contained" startIcon={<LocalOfferIcon />}>
         {t(buttonName + 'add')}
       </Button>
     ),
@@ -103,7 +86,7 @@ function ManufacturerDataGrid() {
   );
 
   const DeleteOrEdit = useCallback(
-    ({ row }: { row: MRT_Row<ManufacturerModel> }) => (
+    ({ row }: { row: MRT_Row<ProductTagModel> }) => (
       <Box sx={{ display: 'flex', gap: '1rem' }}>
         <Tooltip arrow placement="top-start" title={t(buttonName + 'delete')}>
           <IconButton color="error" onClick={() => handleDeleteRow(row)}>
@@ -126,16 +109,16 @@ function ManufacturerDataGrid() {
           <MaterialTable
             refetch={refetch}
             columns={columns}
-            dataSet={data}
+            dataApi={handleProductTagList}
             enableRowActions
             renderRowActions={DeleteOrEdit}
           />
         </TableCard>
       </MainCard>
-      <AddOrEditManufacturer isNew={isNew} manufacturerId={rowId} open={open} setOpen={setOpen} refetch={handleRefetch} />
-      <DeleteManufacturer row={row} open={openDelete} setOpen={setOpenDelete} refetch={handleRefetch} />
+      <AddOrEditProductTag isNew={isNew} row={row} open={open} setOpen={setOpen} refetch={handleRefetch} />
+      <DeleteProductTag row={row} open={openDelete} setOpen={setOpenDelete} refetch={handleRefetch} />
     </>
   );
 }
 
-export default ManufacturerDataGrid;
+export default ProductTagDataGrid; 

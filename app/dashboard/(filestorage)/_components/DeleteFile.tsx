@@ -80,7 +80,7 @@ const DeleteFile = ({ fileId, open, setOpen, files, setFiles }: DeleteFileProps)
           </DialogContentText>
         </DialogContent>
         <DialogActions sx={{ p: '1.25rem' }}>
-          <Button onClick={onClose}>Cancel</Button>
+          <Button onClick={onClose}>{t('buttons.cancel')}</Button>
           <Button disableElevation onClick={handleSubmit} size="large" variant="contained" color="error">
             {t('buttons.delete')}
           </Button>

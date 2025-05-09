@@ -35,46 +35,40 @@ import AddIcon from '@mui/icons-material/Add';
 import CategoryService from '../../_service/CategoryService';
 import CategoryModel from '../../_types/Product/CategoryModel';
 import ImageUpload from '@dashboard/_components/FileUpload/ImageUpload';
+import { MRT_Row } from 'material-react-table';
+import MenuModel from '@root/app/dashboard/(cms)/_types/Menu/MenuModel';
 
 interface AddOrEditCategoryProps {
-  categoryId: number;
+  row?: MRT_Row<CategoryModel>;
   isNew: boolean;
   open: boolean;
   setOpen: (open: boolean) => void;
   refetch: () => void;
-  parentCategory?: CategoryModel;
 }
 
-const AddOrEditCategory = ({ categoryId, isNew, open, setOpen, refetch, parentCategory }: AddOrEditCategoryProps) => {
+const AddOrEditCategory = ({ row, isNew, open, setOpen, refetch }: AddOrEditCategoryProps) => {
   const [t] = useTranslation();
   const [fieldsName, validation, buttonName] = ['fields.category.', 'validation.category.', 'buttons.category.'];
   const [category, setCategory] = useState<CategoryModel | undefined>(undefined);
-  const [categories, setCategories] = useState<CategoryModel[]>([]);
   const [notify, setNotify] = useState<NotifyProps>({ open: false });
   const { data: session } = useSession();
   const jwt = session?.accessToken;
   let categoryService = new CategoryService(jwt ?? '');
 
   const loadCategory = () => {
-    categoryService.getCategoryById(categoryId).then((result) => {
+    row && categoryService.getCategoryById(row?.original?.id).then((result) => {
       setCategory(result.data);
     });
   };
 
-  const loadCategories = () => {
-    categoryService.getCategoryListForSelect().then((result) => {
-      setCategories(result.data || []);
-    });
-  };
 
   useEffect(() => {
-    loadCategories();
-    if (isNew == false && categoryId > 0) {
+    if (isNew == false && row) {
       loadCategory();
     } else {
       setCategory(undefined);
     }
-  }, [categoryId, isNew, open]);
+  }, [row, isNew, open]);
 
   const onClose = () => {
     setOpen(false);
@@ -86,10 +80,9 @@ const AddOrEditCategory = ({ categoryId, isNew, open, setOpen, refetch, parentCa
       categoryService
         .addCategory(category)
         .then(() => {
-          onClose();
-          setCategory(undefined);
-          setNotify({ open: true });
           refetch();
+          onClose();
+          setNotify({ open: true });
         })
         .catch((error) => {
           setNotify({ open: true, type: 'error', description: error });
@@ -99,10 +92,9 @@ const AddOrEditCategory = ({ categoryId, isNew, open, setOpen, refetch, parentCa
       categoryService
         .updateCategory(category)
         .then(() => {
-          onClose();
-          setCategory(undefined);
-          setNotify({ open: true });
           refetch();
+          onClose();
+          setNotify({ open: true });
         })
         .catch((error) => {
           setErrors(setServerErrors(error));
@@ -124,25 +116,33 @@ const AddOrEditCategory = ({ categoryId, isNew, open, setOpen, refetch, parentCa
       <CloseIcon />
     </IconButton>
   );
-
+  const initialValues: CategoryModel = {
+    id: category?.id ?? 0,
+    name: category?.name ?? '',
+    metaKeywords: category?.metaKeywords ?? '',
+    metaTitle: category?.metaTitle ?? '',
+    description: category?.description ?? '',
+    metaDescription: category?.metaDescription ?? '',
+    parentCategoryId: row && isNew == true ? row?.original?.id : category?.parentCategoryId ?? null,
+    pictureId: category?.pictureId ?? null,
+    pictureInfo: category?.pictureInfo ?? null,
+    showOnHomepage: category?.showOnHomepage ?? false,
+    published: category?.published ?? true,
+    displayOrder: category?.displayOrder ?? 0,
+    deleted: category?.deleted ?? false,
+    createdOnUtc: category?.createdOnUtc ?? new Date(),
+    updatedOnUtc: category?.updatedOnUtc ?? new Date(),
+    productCategories: 0,
+    discounts: 0,
+    isEdited: false,
+    childs: [],
+  }
   return (
     <>
       <Notify notify={notify} setNotify={setNotify}></Notify>
       <Dialog open={open} fullWidth>
         <Formik
-          initialValues={{
-            id: category?.id ?? 0,
-            name: category?.name ?? '',
-            metaKeywords: category?.metaKeywords ?? '',
-            metaTitle: category?.metaTitle ?? '',
-            description: category?.description ?? '',
-            metaDescription: category?.metaDescription ?? '',
-            parentCategoryId: parentCategory?.id ?? category?.parentCategoryId ?? null,
-            pictureId: category?.pictureId ?? null,
-            showOnHomepage: category?.showOnHomepage ?? false,
-            published: category?.published ?? true,
-            displayOrder: category?.displayOrder ?? 0
-          }}
+          initialValues={initialValues}
           enableReinitialize={true}
           validationSchema={Yup.object().shape({
             name: Yup.string().max(70).required('Name is required'),
@@ -154,11 +154,11 @@ const AddOrEditCategory = ({ categoryId, isNew, open, setOpen, refetch, parentCa
           })}
           onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
             try {
-              handleSubmit(values as CategoryModel, setErrors);
+              handleSubmit(values, setErrors);
             } catch (err) {
               console.error(err);
               setStatus({ success: false });
-              
+
               setSubmitting(false);
             }
           }}
@@ -166,9 +166,11 @@ const AddOrEditCategory = ({ categoryId, isNew, open, setOpen, refetch, parentCa
           {({ errors, handleBlur, handleChange, setFieldValue, handleSubmit, isSubmitting, touched, values }) => (
             <form noValidate onSubmit={handleSubmit}>
               <DialogTitle>
-                {parentCategory
-                  ? t('dialog.add.title', { item: 'Sub-Category for ' + parentCategory.name })
-                  : t('dialog.' + (isNew == true ? 'add' : 'edit') + '.title', { item: 'Category' })}
+                {isNew == true
+                  ? row
+                    ? t('dialog.category.addSub', { parentTitle: '"' + row?.original?.name + '"' })
+                    : t('dialog.category.addMain')
+                  : t('dialog.edit.title', { item: values.name })}
                 <CloseDialog onClose={onClose} />
               </DialogTitle>
               <DialogContent>
@@ -194,33 +196,6 @@ const AddOrEditCategory = ({ categoryId, isNew, open, setOpen, refetch, parentCa
                       )}
                     </Stack>
                   </Grid>
-
-                  {!parentCategory && (
-                    <Grid item>
-                      <Stack spacing={1}>
-                        <InputLabel htmlFor="parentCategoryId">{t(fieldsName + 'parentCategoryId')}</InputLabel>
-                        <FormControl fullWidth>
-                          <Select
-                            id="parentCategoryId"
-                            value={values?.parentCategoryId || ''}
-                            name="parentCategoryId"
-                            onBlur={handleBlur}
-                            onChange={handleChange}
-                            displayEmpty
-                          >
-                            <MenuItem value="">
-                              <em>None</em>
-                            </MenuItem>
-                            {categories.map((category) => (
-                              <MenuItem key={category.id} value={category.id}>
-                                {category.name}
-                              </MenuItem>
-                            ))}
-                          </Select>
-                        </FormControl>
-                      </Stack>
-                    </Grid>
-                  )}
 
                   <Grid item>
                     <Stack spacing={1}>
@@ -378,7 +353,7 @@ const AddOrEditCategory = ({ categoryId, isNew, open, setOpen, refetch, parentCa
                 </Grid>
               </DialogContent>
               <DialogActions sx={{ p: '1.25rem' }}>
-                <Button onClick={onClose}>Cancel</Button>
+                <Button onClick={onClose}>{t('buttons.cancel')}</Button>
                 <AnimateButton>
                   <Button
                     disableElevation

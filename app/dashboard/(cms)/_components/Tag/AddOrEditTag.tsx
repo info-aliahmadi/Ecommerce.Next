@@ -171,7 +171,7 @@ const AddOrEditTag = ({ row, isNew, open, setOpen, refetch }:
               </DialogContent>
               <DialogActions sx={{ p: '1.25rem' }}>
                 <AnimateButton>
-                  <Button onClick={onClose}>Cancel</Button>
+                  <Button onClick={onClose}>{t('buttons.cancel')}</Button>
                 </AnimateButton>
                 <AnimateButton>
                   <Button

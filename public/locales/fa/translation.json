@@ -40,10 +40,14 @@
     "emailOutbox": "Email Outbox",
     "subscribe": "Subscribes",
     "fileStorage": "Storage",
-    "sale": "Sale",
-    "product": "Products",
-    "order": "Orders",
-    "manufacturer": "Manufacturers"
+    "sale": "فروشگاه",
+    "product": "محصولات",
+    "order": "سفارشات",
+    "manufacturer": "تولیدکنندگان",
+    "category": "دسته‌بندی‌ها",
+    "product-tag": "برچسب‌ها",
+    "product-attribute": "خصوصیات محصول"
+    
   },
   "pages": {
     "edit-profile": "ویرایش پروفایل",
@@ -76,6 +80,10 @@
     "orders": "سفارش‌ها",
     "deliveryDates": "تاریخ‌های تحویل",
     "manufacturers": "تولیدکنندگان",
+    "product-attributes": "خصوصیات محصول",
+    "product-tags": "برچسب‌ها",
+    "categories": "دسته‌بندی‌ها",
+
     "cards": {
       "users-list": "لیست کاربران",
       "user-add": "افزودن کاربر جدید",
@@ -120,7 +128,13 @@
       "country-add": "افزودن کشور جدید",
       "country-edit": "ویرایش کشور",
       "product-add": "افزودن محصول جدید",
-      "product-edit": "ویرایش محصول"
+      "product-edit": "ویرایش محصول",
+      "product-attribute-add": "افزودن خصوصیات محصول جدید",
+      "product-attribute-edit": "ویرایش خصوصیات محصول",
+      "product-tag-add": "افزودن برچسب محصول جدید",
+      "product-tag-edit": "ویرایش برچسب محصول",
+      "product-category-add": "افزودن دسته‌بندی محصول جدید",
+      "product-category-edit": "ویرایش دسته‌بندی محصول"
     }
   },
   "fields": {
@@ -341,6 +355,21 @@
       "published": "منتشر شده",
       "displayOrder": "ترتیب نمایش"
     },
+    "category": {
+      "id": "شناسه",
+      "name": "نام",
+      "metaKeywords": "کلمات کلیدی متا",
+      "metaTitle": "عنوان متا",
+      "description": "توضیحات",
+      "metaDescription": "توضیحات متا",
+      "pictureId": "شناسه تصویر",
+      "parentCategoryId": "شناسه دسته‌بندی والد",
+      "parentCategory": "دسته‌بندی والد",
+      "displayOrder": "ترتیب نمایش",
+      "published": "منتشر شده",
+      "deleted": "حذف شده",
+      "showOnHomepage": "نمایش در صفحه اصلی"
+    },
     "product": {
       "id": "شناسه",
       "name": "نام",
@@ -417,12 +446,6 @@
       "add": "کاربر جدید",
       "edit": "ویرایش کاربر",
       "delete": "حذف کاربر"
-    },
-    "manufacturer": {
-      "add": "تولیدکننده جدید",
-      "edit": "ویرایش تولیدکننده",
-      "delete": "حذف تولیدکننده",
-      "saveManufacturer": "ذخیره تولیدکننده"
     },
     "role": {
       "add": "افزودن نقش جدید",
@@ -527,7 +550,8 @@
         "draft": "ذخیره به عنوان پیش‌نویس",
         "delete": "حذف ایمیل",
         "pin": "پین کردن ایمیل",
-        "trash": "زباله‌دان ایمیل‌ها"
+        "trash": "زباله‌دان ایمیل‌ها",
+      "cancel": "لغو"
       },
       "emailOutbox": {
         "outbox": "ایمیل‌های ارسال شده",
@@ -540,7 +564,8 @@
       "uploadedInfo": "بارگذاری شده توسط {{user}} در {{date}}",
       "edit": "ویرایش فایل",
       "download": "دانلود",
-      "delete": "حذف فایل"
+      "delete": "حذف فایل",
+      "cancel": "لغو"
     },
     "product": {
       "publish": "انتشار",
@@ -549,7 +574,41 @@
       "edit": "ویرایش محصول",
       "draft": "ذخیره به عنوان پیش‌نویس",
       "delete": "حذف محصول",
-      "saveOrder": "ذخیره ترتیب"
+      "saveOrder": "ذخیره ترتیب",
+      "cancel": "لغو"
+    },
+    "manufacturer": {
+      "add": "تولیدکننده جدید",
+      "edit": "ویرایش تولیدکننده",
+      "delete": "حذف تولیدکننده",
+      "saveManufacturer": "ذخیره تولیدکننده",
+      "cancel": "لغو"
+    },
+    "product-attribute": {
+      "save": "ذخیره",
+      "add": "خصوصیات محصول جدید",
+      "edit": "ویرایش خصوصیات محصول",
+      "delete": "حذف خصوصیات محصول",
+      "saveOrder": "ذخیره ترتیب",
+      "cancel": "لغو"
+    },
+    "product-tag": {
+      "save": "ذخیره",
+      "add": "برچسب محصول جدید",
+      "edit": "ویرایش برچسب محصول",
+      "delete": "حذف برچسب محصول",
+      "saveOrder": "ذخیره ترتیب",
+      "cancel": "لغو"
+    },
+    "category": {
+      "save": "ذخیره",
+      "add": "دسته‌بندی جدید",
+      "addMainCategory": "دسته‌بندی اصلی جدید",
+      "addSubCategory": "دسته‌بندی فرعی جدید",
+      "edit": "ویرایش دسته‌بندی",
+      "delete": "حذف دسته‌بندی",
+      "saveOrder": "ذخیره ترتیب",
+      "cancel": "لغو"
     }
   },
   "validation": {
@@ -686,6 +745,10 @@
     },
     "payment": {
       "title": "جزئیات پرداخت"
+    },
+    "category": {
+      "addMain": "افزودن دسته‌بندی اصلی",
+      "addSub": "افزودن دسته‌بندی فرعی در {{parentTitle}}"
     }
   }
 }

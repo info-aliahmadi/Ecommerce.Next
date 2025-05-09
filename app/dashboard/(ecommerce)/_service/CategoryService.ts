@@ -68,6 +68,20 @@ export default class CategoryService {
         });
     });
   };
+  // create function to order categories
+  updateOrderCategories = async (categories: CategoryModel[]): Promise<Result<CategoryModel[]>> => {
+    return new Promise((resolve, reject) => {
+      axios
+        .post(CONFIG.API_BASEPATH + '/Product/UpdateCategoryOrders', categories)
+        .then((response) => {
+          resolve(response.data);
+        })
+        .catch((error) => {
+          reject(error);
+        });
+    });
+  };
+  
   deleteCategory = async (categoryId : number): Promise<Result<CategoryModel>> => {
     return new Promise((resolve, reject) => {
       axios

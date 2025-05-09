@@ -10,7 +10,6 @@ import find from 'lodash/find';
 import MRT_Column from '@root/app/types/MRT_Column';
 import i18next from 'i18next';
 
-
 const dateFilter = ({ header, rangeFilterIndex }: { header: any, rangeFilterIndex: any }) => {
   let filterFn = header.column.getFilterFn().name;
   let doubleActive = filterFn == 'between' || filterFn == 'betweenInclusive';
@@ -227,7 +226,9 @@ function MaterialTable({
         setIsRefetching(true);
       }
 
-      let searchParams: GridDataBound = {};
+      let searchParams: GridDataBound = {
+        addFilter: () => {}
+      };
       searchParams.pageIndex = pagination.pageIndex;
       searchParams.pageSize = pagination.pageSize;
       setOperationFields(columnFilterFns, columnFilters);

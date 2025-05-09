@@ -83,6 +83,20 @@ export default class ManufacturerService {
         });
     });
   };
+  // create function to order manufacturers
+  orderManufacturers = async (manufacturers: ManufacturerModel[]): Promise<Result<ManufacturerModel[]>> => {
+    return new Promise((resolve, reject) => {
+      axios
+        .post(CONFIG.API_BASEPATH + '/Product/UpdateManufacturerOrders', manufacturers)
+        .then((response) => {
+          resolve(response.data);
+        })
+        .catch((error) => {
+          reject(error);
+        });
+    });
+  };
+  
   deleteManufacturer = async (manufacturerId : number): Promise<Result<ManufacturerModel>> => {
     return new Promise((resolve, reject) => {
       axios

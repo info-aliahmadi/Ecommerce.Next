@@ -71,7 +71,7 @@ const DeleteManufacturer = ({ row, open, setOpen, refetch }: { row?: MRT_Row<Man
           </DialogContentText>
         </DialogContent>
         <DialogActions sx={{ p: '1.25rem' }}>
-          <Button onClick={onClose}>Cancel</Button>
+          <Button onClick={onClose}>{t('buttons.cancel')}</Button>
           <Button disableElevation onClick={handleSubmit} size="large" variant="contained" color="error">
             {t('buttons.delete')}
           </Button>

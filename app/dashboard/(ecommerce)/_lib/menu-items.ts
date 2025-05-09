@@ -1,11 +1,13 @@
 // assets
 import   ShoppingCart  from '@mui/icons-material/ShoppingCart';
 import CategoryIcon from '@mui/icons-material/Category';
-import {  SALE_ORDER_MANAGEMENT, SALE_PRODUCT_MANAGEMENT } from '../../_lib/Permissions';
+import LocalOfferIcon from '@mui/icons-material/LocalOffer';
+import {  SALE_CATEGORY_MANAGEMENT, SALE_MANUFACTURER_MANAGEMENT, SALE_ORDER_MANAGEMENT, SALE_PRODUCT_ATTRIBUTE_MANAGEMENT, SALE_PRODUCT_MANAGEMENT, SALE_PRODUCT_TAG_MANAGEMENT } from '../../_lib/Permissions';
 // icons
 const icons = {
   CategoryIcon,
-  ShoppingCart
+  ShoppingCart,
+  LocalOfferIcon
 };
 
 // ==============================|| MENU ITEMS - EXTRA PAGES ||============================== //
@@ -32,8 +34,39 @@ const pages = {
       icon: icons.ShoppingCart,
       breadcrumbs: false,
       permission: SALE_ORDER_MANAGEMENT
+    },{
+      id: 'manufacturer',
+      title: 'Manufacturers',
+      type: 'item',
+      url: '/dashboard/manufacturer/list',
+      icon: icons.ShoppingCart,
+      breadcrumbs: false,
+      permission: SALE_MANUFACTURER_MANAGEMENT
+    },{
+      id: 'category',
+      title: 'Categories',
+      type: 'item',
+      url: '/dashboard/category/list',
+      icon: icons.ShoppingCart,
+      breadcrumbs: false,
+      permission: SALE_CATEGORY_MANAGEMENT
+    },{
+      id: 'product-attribute',
+      title: 'Product Attributes',
+      type: 'item',
+      url: '/dashboard/product-attribute/list',
+      icon: icons.ShoppingCart,
+      breadcrumbs: false,
+      permission: SALE_PRODUCT_ATTRIBUTE_MANAGEMENT
+    },{
+      id: 'product-tag',
+      title: 'Product Tags',
+      type: 'item',
+      url: '/dashboard/productTag/list',
+      icon: icons.LocalOfferIcon,
+      breadcrumbs: false,
+      permission: SALE_PRODUCT_TAG_MANAGEMENT
     }
-    
   ]
 };
 

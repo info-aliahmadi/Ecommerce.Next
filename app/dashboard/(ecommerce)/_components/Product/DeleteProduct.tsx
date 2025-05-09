@@ -76,7 +76,7 @@ export default function DeleteProduct({ row, open, setOpen, refetch }: { row: MR
           </DialogContentText>
         </DialogContent>
         <DialogActions sx={{ p: '1.25rem' }}>
-          <Button onClick={onClose}>Cancel</Button>
+          <Button onClick={onClose}>{t('buttons.cancel')}</Button>
           <Button disableElevation disabled={disableBtn} onClick={handleSubmit} size="large" variant="contained" color="error">
             {t('buttons.delete')}
           </Button>

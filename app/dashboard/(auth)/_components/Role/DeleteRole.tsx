@@ -82,7 +82,7 @@ const DeleteRole = ({ row, open, setOpen, refetch }: DeleteRoleProps) => {
           {/* <Typography variant="h3">{t('alert.delete.item')}</Typography> */}
         </DialogContent>
         <DialogActions sx={{ p: '1.25rem' }}>
-          <Button onClick={onClose}>Cancel</Button>
+          <Button onClick={onClose}>{t('buttons.cancel')}</Button>
           <Button disableElevation disabled={disableBtn} onClick={handleSubmit} size="large" variant="contained" color="error">
             {t('buttons.delete')}
           </Button>
