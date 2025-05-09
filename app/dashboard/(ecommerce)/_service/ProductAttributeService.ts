@@ -12,7 +12,7 @@ export default class ProductAttributeService {
   getProductAttributeList = async (searchParams: GridDataBound): Promise<Result<PaginatedList<ProductAttributeModel>>> => {
     return new Promise((resolve, reject) => {
       axios
-        .post(CONFIG.API_BASEPATH + '/sale/getProductAttributeList', searchParams)
+        .post(CONFIG.API_BASEPATH + '/Product/getProductAttributeList', searchParams)
         .then((response) => {
           resolve(response.data);
         })
@@ -25,7 +25,7 @@ export default class ProductAttributeService {
   getProductAttributeListForSelect = async (): Promise<Result<ProductAttributeModel[]>> => {
     return new Promise((resolve, reject) => {
       axios
-        .post(CONFIG.API_BASEPATH + '/sale/getProductAttributesForSelect')
+        .post(CONFIG.API_BASEPATH + '/Product/getProductAttributesForSelect')
         .then((response) => {
           resolve(response.data);
         })
@@ -38,7 +38,7 @@ export default class ProductAttributeService {
   getAllProductAttributes = async (): Promise<Result<ProductAttributeModel[]>> => {
     return new Promise((resolve, reject) => {
       axios
-        .get(CONFIG.API_BASEPATH + '/sale/getAllProductAttributes')
+        .get(CONFIG.API_BASEPATH + '/Product/getAllProductAttributes')
         .then((response) => {
           resolve(response.data);
         })
@@ -50,7 +50,7 @@ export default class ProductAttributeService {
   getProductAttributeById = async (productAttributeId : number): Promise<Result<ProductAttributeModel>> => {
     return new Promise((resolve, reject) => {
       axios
-        .get(CONFIG.API_BASEPATH + '/sale/getProductAttributeById', { params: { productAttributeId: productAttributeId } })
+        .get(CONFIG.API_BASEPATH + '/Product/getProductAttributeById', { params: { productAttributeId: productAttributeId } })
         .then((response) => {
           resolve(response.data);
         })
@@ -62,7 +62,7 @@ export default class ProductAttributeService {
   addProductAttribute = async (productAttribute: ProductAttributeModel): Promise<Result<ProductAttributeModel>> => {
     return new Promise((resolve, reject) => {
       axios
-        .post(CONFIG.API_BASEPATH + '/sale/addProductAttribute', productAttribute)
+        .post(CONFIG.API_BASEPATH + '/Product/addProductAttribute', productAttribute)
         .then((response) => {
           resolve(response.data);
         })
@@ -74,7 +74,7 @@ export default class ProductAttributeService {
   updateProductAttribute = async (productAttribute: ProductAttributeModel): Promise<Result<ProductAttributeModel>> => {
     return new Promise((resolve, reject) => {
       axios
-        .post(CONFIG.API_BASEPATH + '/sale/updateProductAttribute', productAttribute)
+        .post(CONFIG.API_BASEPATH + '/Product/updateProductAttribute', productAttribute)
         .then((response) => {
           resolve(response.data);
         })
@@ -86,7 +86,7 @@ export default class ProductAttributeService {
   deleteProductAttribute = async (productAttributeId : number): Promise<Result<ProductAttributeModel>> => {
     return new Promise((resolve, reject) => {
       axios
-        .get(CONFIG.API_BASEPATH + '/sale/deleteProductAttribute', { params: { productAttributeId: productAttributeId } })
+        .get(CONFIG.API_BASEPATH + '/Product/deleteProductAttribute', { params: { productAttributeId: productAttributeId } })
         .then((response) => {
           resolve(response.data);
         })

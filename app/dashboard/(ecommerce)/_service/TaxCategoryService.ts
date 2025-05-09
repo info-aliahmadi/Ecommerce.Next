@@ -11,7 +11,7 @@ export default class TaxCategoryService {
   getTaxCategoryList = async (): Promise<Result<TaxCategoryModel[]>> => {
     return new Promise((resolve, reject) => {
       axios
-        .post(CONFIG.API_BASEPATH + '/sale/GetTaxCategoryList')
+        .post(CONFIG.API_BASEPATH + '/Common/GetTaxCategoryList')
         .then((response) => {
           resolve(response.data);
         })
@@ -24,7 +24,7 @@ export default class TaxCategoryService {
   getTaxCategoryItemList = async (taxCategoryId : number): Promise<Result<TaxCategoryModel[]>> => {
     return new Promise((resolve, reject) => {
       axios
-        .get(CONFIG.API_BASEPATH + `/sale/GetTaxCategoryItemList?taxCategoryId=${taxCategoryId}`)
+        .get(CONFIG.API_BASEPATH + `/Common/GetTaxCategoryItemList?taxCategoryId=${taxCategoryId}`)
         .then((response) => {
           resolve(response.data);
         })
@@ -36,7 +36,7 @@ export default class TaxCategoryService {
   getAllTaxCategorys = async (): Promise<Result<TaxCategoryModel[]>> => {
     return new Promise((resolve, reject) => {
       axios
-        .get(CONFIG.API_BASEPATH + '/sale/getAllTaxCategorys')
+        .get(CONFIG.API_BASEPATH + '/Common/getAllTaxCategorys')
         .then((response) => {
           resolve(response.data);
         })
@@ -48,7 +48,7 @@ export default class TaxCategoryService {
   getTaxCategoryById = async (taxCategoryId : number): Promise<Result<TaxCategoryModel>> => {
     return new Promise((resolve, reject) => {
       axios
-        .get(CONFIG.API_BASEPATH + '/sale/getTaxCategoryById', { params: { taxCategoryId: taxCategoryId } })
+        .get(CONFIG.API_BASEPATH + '/Common/getTaxCategoryById', { params: { taxCategoryId: taxCategoryId } })
         .then((response) => {
           resolve(response.data);
         })
@@ -60,7 +60,7 @@ export default class TaxCategoryService {
   addTaxCategory = async (taxCategory: TaxCategoryModel): Promise<Result<TaxCategoryModel>> => {
     return new Promise((resolve, reject) => {
       axios
-        .post(CONFIG.API_BASEPATH + '/sale/addTaxCategory', taxCategory)
+        .post(CONFIG.API_BASEPATH + '/Common/addTaxCategory', taxCategory)
         .then((response) => {
           resolve(response.data);
         })
@@ -72,7 +72,7 @@ export default class TaxCategoryService {
   updateTaxCategory = async (taxCategory: TaxCategoryModel): Promise<Result<TaxCategoryModel>> => {
     return new Promise((resolve, reject) => {
       axios
-        .post(CONFIG.API_BASEPATH + '/sale/updateTaxCategory', taxCategory)
+        .post(CONFIG.API_BASEPATH + '/Common/updateTaxCategory', taxCategory)
         .then((response) => {
           resolve(response.data);
         })
@@ -84,7 +84,7 @@ export default class TaxCategoryService {
   deleteTaxCategory = async (taxCategoryId : number): Promise<Result<TaxCategoryModel>> => {
     return new Promise((resolve, reject) => {
       axios
-        .get(CONFIG.API_BASEPATH + '/sale/deleteTaxCategory', { params: { taxCategoryId: taxCategoryId } })
+        .get(CONFIG.API_BASEPATH + '/Common/deleteTaxCategory', { params: { taxCategoryId: taxCategoryId } })
         .then((response) => {
           resolve(response.data);
         })

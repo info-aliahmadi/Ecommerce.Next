@@ -11,7 +11,7 @@ export default class DeliveryDateService {
   getDeliveryDateList = async (): Promise<Result<DeliveryDateModel[]>> => {
     return new Promise((resolve, reject) => {
       axios
-        .post(CONFIG.API_BASEPATH + '/sale/GetDeliveryDateList')
+        .post(CONFIG.API_BASEPATH + '/Common/GetDeliveryDateList')
         .then((response) => {
           resolve(response.data);
         })
@@ -24,7 +24,7 @@ export default class DeliveryDateService {
   getDeliveryDateItemList = async (deliveryDateId : number): Promise<Result<DeliveryDateModel[]>> => {
     return new Promise((resolve, reject) => {
       axios
-        .get(CONFIG.API_BASEPATH + `/sale/GetDeliveryDateItemList?deliveryDateId=${deliveryDateId}`)
+        .get(CONFIG.API_BASEPATH + `/Common/GetDeliveryDateItemList?deliveryDateId=${deliveryDateId}`)
         .then((response) => {
           resolve(response.data);
         })
@@ -36,7 +36,7 @@ export default class DeliveryDateService {
   getAllDeliveryDates = async (): Promise<Result<DeliveryDateModel[]>> => {
     return new Promise((resolve, reject) => {
       axios
-        .get(CONFIG.API_BASEPATH + '/sale/getAllDeliveryDates')
+        .get(CONFIG.API_BASEPATH + '/Common/getAllDeliveryDates')
         .then((response) => {
           resolve(response.data);
         })
@@ -48,7 +48,7 @@ export default class DeliveryDateService {
   getDeliveryDateById = async (deliveryDateId : number): Promise<Result<DeliveryDateModel>> => {
     return new Promise((resolve, reject) => {
       axios
-        .get(CONFIG.API_BASEPATH + '/sale/getDeliveryDateById', { params: { deliveryDateId: deliveryDateId } })
+        .get(CONFIG.API_BASEPATH + '/Common/getDeliveryDateById', { params: { deliveryDateId: deliveryDateId } })
         .then((response) => {
           resolve(response.data);
         })
@@ -60,7 +60,7 @@ export default class DeliveryDateService {
   addDeliveryDate = async (deliveryDate: DeliveryDateModel): Promise<Result<DeliveryDateModel>> => {
     return new Promise((resolve, reject) => {
       axios
-        .post(CONFIG.API_BASEPATH + '/sale/addDeliveryDate', deliveryDate)
+        .post(CONFIG.API_BASEPATH + '/Common/addDeliveryDate', deliveryDate)
         .then((response) => {
           resolve(response.data);
         })
@@ -72,7 +72,7 @@ export default class DeliveryDateService {
   updateDeliveryDate = async (deliveryDate: DeliveryDateModel): Promise<Result<DeliveryDateModel>> => {
     return new Promise((resolve, reject) => {
       axios
-        .post(CONFIG.API_BASEPATH + '/sale/updateDeliveryDate', deliveryDate)
+        .post(CONFIG.API_BASEPATH + '/Common/updateDeliveryDate', deliveryDate)
         .then((response) => {
           resolve(response.data);
         })
@@ -84,7 +84,7 @@ export default class DeliveryDateService {
   deleteDeliveryDate = async (deliveryDateId : number): Promise<Result<DeliveryDateModel>> => {
     return new Promise((resolve, reject) => {
       axios
-        .get(CONFIG.API_BASEPATH + '/sale/deleteDeliveryDate', { params: { deliveryDateId: deliveryDateId } })
+        .get(CONFIG.API_BASEPATH + '/Common/deleteDeliveryDate', { params: { deliveryDateId: deliveryDateId } })
         .then((response) => {
           resolve(response.data);
         })

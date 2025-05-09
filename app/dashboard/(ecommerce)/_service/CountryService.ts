@@ -12,7 +12,7 @@ export default class CountryService {
   getCountryList = async (searchParams: GridDataBound): Promise<Result<PaginatedList<CountryModel>>> => {
     return new Promise((resolve, reject) => {
       axios
-        .post(CONFIG.API_BASEPATH + '/sale/GetCountryList', searchParams)
+        .post(CONFIG.API_BASEPATH + '/Common/GetCountryList', searchParams)
         .then((response) => {
           resolve(response.data);
         })
@@ -24,7 +24,7 @@ export default class CountryService {
   getAllCountries = async (): Promise<Result<CountryModel[]>> => {
     return new Promise((resolve, reject) => {
       axios
-        .get(CONFIG.API_BASEPATH + '/sale/getAllCountries')
+        .get(CONFIG.API_BASEPATH + '/Common/getAllCountries')
         .then((response) => {
           resolve(response.data);
         })
@@ -36,7 +36,7 @@ export default class CountryService {
   getCountryById = async (countryId : number): Promise<Result<CountryModel>> => {
     return new Promise((resolve, reject) => {
       axios
-        .get(CONFIG.API_BASEPATH + '/sale/getCountryById', { params: { CountryId: countryId } })
+        .get(CONFIG.API_BASEPATH + '/Common/getCountryById', { params: { CountryId: countryId } })
         .then((response) => {
           resolve(response.data);
         })
@@ -48,7 +48,7 @@ export default class CountryService {
   addCountry = async (country: CountryModel): Promise<Result<CountryModel>> => {
     return new Promise((resolve, reject) => {
       axios
-        .post(CONFIG.API_BASEPATH + '/sale/addCountry', country)
+        .post(CONFIG.API_BASEPATH + '/Common/addCountry', country)
         .then((response) => {
           resolve(response.data);
         })
@@ -60,7 +60,7 @@ export default class CountryService {
   updateCountry = async (country: CountryModel): Promise<Result<CountryModel>> => {
     return new Promise((resolve, reject) => {
       axios
-        .post(CONFIG.API_BASEPATH + '/sale/updateCountry', country)
+        .post(CONFIG.API_BASEPATH + '/Common/updateCountry', country)
         .then((response) => {
           resolve(response.data);
         })
@@ -72,7 +72,7 @@ export default class CountryService {
   deleteCountry = async (countryId : number): Promise<Result<CountryModel>> => {
     return new Promise((resolve, reject) => {
       axios
-        .get(CONFIG.API_BASEPATH + '/sale/deleteCountry', { params: { CountryId: countryId } })
+        .get(CONFIG.API_BASEPATH + '/Common/deleteCountry', { params: { CountryId: countryId } })
         .then((response) => {
           resolve(response.data);
         })

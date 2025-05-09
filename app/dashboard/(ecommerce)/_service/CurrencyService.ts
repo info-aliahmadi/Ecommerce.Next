@@ -12,7 +12,7 @@ export default class CurrencyService {
   getCurrencyList = async (searchParams: GridDataBound): Promise<Result<PaginatedList<CurrencyModel>>> => {
     return new Promise((resolve, reject) => {
       axios
-        .post(CONFIG.API_BASEPATH + '/sale/GetCurrencyList', searchParams)
+        .post(CONFIG.API_BASEPATH + '/Common/GetCurrencyList', searchParams)
         .then((response) => {
           resolve(response.data);
         })
@@ -24,7 +24,7 @@ export default class CurrencyService {
   getAllCurrencies = async (): Promise<Result<CurrencyModel[]>> => {
     return new Promise((resolve, reject) => {
       axios
-        .get(CONFIG.API_BASEPATH + '/sale/getAllCurrencies')
+        .get(CONFIG.API_BASEPATH + '/Common/getAllCurrencies')
         .then((response) => {
           resolve(response.data);
         })
@@ -36,7 +36,7 @@ export default class CurrencyService {
   getCurrencyById = async (currencyId : number): Promise<Result<CurrencyModel>> => {
     return new Promise((resolve, reject) => {
       axios
-        .get(CONFIG.API_BASEPATH + '/sale/getCurrencyById', { params: { currencyId: currencyId } })
+        .get(CONFIG.API_BASEPATH + '/Common/getCurrencyById', { params: { currencyId: currencyId } })
         .then((response) => {
           resolve(response.data);
         })
@@ -48,7 +48,7 @@ export default class CurrencyService {
   addCurrency = async (currency: CurrencyModel): Promise<Result<CurrencyModel>> => {
     return new Promise((resolve, reject) => {
       axios
-        .post(CONFIG.API_BASEPATH + '/sale/addCurrency', currency)
+        .post(CONFIG.API_BASEPATH + '/Common/addCurrency', currency)
         .then((response) => {
           resolve(response.data);
         })
@@ -60,7 +60,7 @@ export default class CurrencyService {
   updateCurrency = async (currency: CurrencyModel): Promise<Result<CurrencyModel>> => {
     return new Promise((resolve, reject) => {
       axios
-        .post(CONFIG.API_BASEPATH + '/sale/updateCurrency', currency)
+        .post(CONFIG.API_BASEPATH + '/Common/updateCurrency', currency)
         .then((response) => {
           resolve(response.data);
         })
@@ -72,7 +72,7 @@ export default class CurrencyService {
   deleteCurrency = async (currencyId : number): Promise<Result<CurrencyModel>> => {
     return new Promise((resolve, reject) => {
       axios
-        .get(CONFIG.API_BASEPATH + '/sale/deleteCurrency', { params: { currencyId: currencyId } })
+        .get(CONFIG.API_BASEPATH + '/Common/deleteCurrency', { params: { currencyId: currencyId } })
         .then((response) => {
           resolve(response.data);
         })

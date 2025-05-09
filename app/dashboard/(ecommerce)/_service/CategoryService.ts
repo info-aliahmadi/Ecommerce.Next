@@ -11,7 +11,7 @@ export default class CategoryService {
   getCategoryList = async (): Promise<Result<CategoryModel[]>> => {
     return new Promise((resolve, reject) => {
       axios
-        .get(CONFIG.API_BASEPATH + '/sale/GetCategoryHierarchy')
+        .get(CONFIG.API_BASEPATH + '/Product/GetCategoryHierarchy')
         .then((response) => {
           resolve(response.data);
         })
@@ -23,7 +23,7 @@ export default class CategoryService {
   getCategoryListForSelect = async (): Promise<Result<CategoryModel[]>> => {
     return new Promise((resolve, reject) => {
       axios
-        .post(CONFIG.API_BASEPATH + '/sale/GetCategoryListForSelect')
+        .post(CONFIG.API_BASEPATH + '/Product/GetCategoryListForSelect')
         .then((response) => {
           resolve(response.data);
         })
@@ -35,7 +35,7 @@ export default class CategoryService {
   getCategoryById = async (categoryId : number): Promise<Result<CategoryModel>> => {
     return new Promise((resolve, reject) => {
       axios
-        .get(CONFIG.API_BASEPATH + '/sale/getCategoryById', { params: { categoryId: categoryId } })
+        .get(CONFIG.API_BASEPATH + '/Product/getCategoryById', { params: { categoryId: categoryId } })
         .then((response) => {
           resolve(response.data);
         })
@@ -47,7 +47,7 @@ export default class CategoryService {
   addCategory = async (category: CategoryModel): Promise<Result<CategoryModel>> => {
     return new Promise((resolve, reject) => {
       axios
-        .post(CONFIG.API_BASEPATH + '/sale/addCategory', category)
+        .post(CONFIG.API_BASEPATH + '/Product/addCategory', category)
         .then((response) => {
           resolve(response.data);
         })
@@ -59,7 +59,7 @@ export default class CategoryService {
   updateCategory = async (category: CategoryModel): Promise<Result<CategoryModel>> => {
     return new Promise((resolve, reject) => {
       axios
-        .post(CONFIG.API_BASEPATH + '/sale/updateCategory', category)
+        .post(CONFIG.API_BASEPATH + '/Product/updateCategory', category)
         .then((response) => {
           resolve(response.data);
         })
@@ -71,7 +71,7 @@ export default class CategoryService {
   deleteCategory = async (categoryId : number): Promise<Result<CategoryModel>> => {
     return new Promise((resolve, reject) => {
       axios
-        .get(CONFIG.API_BASEPATH + '/sale/deleteCategory', { params: { categoryId: categoryId } })
+        .get(CONFIG.API_BASEPATH + '/Product/deleteCategory', { params: { categoryId: categoryId } })
         .then((response) => {
           resolve(response.data);
         })

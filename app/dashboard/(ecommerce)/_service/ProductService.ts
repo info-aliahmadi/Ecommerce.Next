@@ -12,7 +12,7 @@ export default class ProductService {
   getProductList = async (searchParams: GridDataBound): Promise<Result<PaginatedList<ProductModel>>> => {
     return new Promise((resolve, reject) => {
       axios
-        .post(CONFIG.API_BASEPATH + '/sale/GetProductList', searchParams)
+        .post(CONFIG.API_BASEPATH + '/Product/GetProductList', searchParams)
         .then((response) => {
           resolve(response.data);
         })
@@ -25,7 +25,7 @@ export default class ProductService {
   getProductItemList = async (productId : number): Promise<Result<ProductModel[]>> => {
     return new Promise((resolve, reject) => {
       axios
-        .get(CONFIG.API_BASEPATH + `/sale/GetProductItemList?productId=${productId}`)
+        .get(CONFIG.API_BASEPATH + `/Product/GetProductItemList?productId=${productId}`)
         .then((response) => {
           resolve(response.data);
         })
@@ -37,7 +37,7 @@ export default class ProductService {
   getAllProducts = async (): Promise<Result<ProductModel[]>> => {
     return new Promise((resolve, reject) => {
       axios
-        .get(CONFIG.API_BASEPATH + '/sale/getAllProducts')
+        .get(CONFIG.API_BASEPATH + '/Product/getAllProducts')
         .then((response) => {
           resolve(response.data);
         })
@@ -49,7 +49,7 @@ export default class ProductService {
   getProductById = async (productId : number): Promise<Result<ProductModel>> => {
     return new Promise((resolve, reject) => {
       axios
-        .get(CONFIG.API_BASEPATH + '/sale/getProductById', { params: { productId: productId } })
+        .get(CONFIG.API_BASEPATH + '/Product/getProductById', { params: { productId: productId } })
         .then((response) => {
           resolve(response.data);
         })
@@ -61,7 +61,7 @@ export default class ProductService {
   getProductsByIds = async (productIds: number[]): Promise<Result<ProductModel[]>> => {
     return new Promise((resolve, reject) => {
       axios
-        .get(CONFIG.API_BASEPATH + '/sale/getProductsByIds', { params: { productIds: productIds } })
+        .get(CONFIG.API_BASEPATH + '/Product/getProductsByIds', { params: { productIds: productIds } })
         .then((response) => {
           resolve(response.data);
         })
@@ -73,7 +73,7 @@ export default class ProductService {
   getProductsByInput = async (input: string): Promise<Result<ProductModel[]>> => {
     return new Promise((resolve, reject) => {
       axios
-        .get(CONFIG.API_BASEPATH + '/sale/getProductsByInput', { params: { input: input } })
+        .get(CONFIG.API_BASEPATH + '/Product/getProductsByInput', { params: { input: input } })
         .then((response) => {
           resolve(response.data);
         })
@@ -85,7 +85,7 @@ export default class ProductService {
   addProduct = async (product: ProductModel): Promise<Result<ProductModel>> => {
     return new Promise((resolve, reject) => {
       axios
-        .post(CONFIG.API_BASEPATH + '/sale/addProduct', product)
+        .post(CONFIG.API_BASEPATH + '/Product/addProduct', product)
         .then((response) => {
           resolve(response.data);
         })
@@ -97,7 +97,7 @@ export default class ProductService {
   updateProduct = async (product: ProductModel): Promise<Result<ProductModel>> => {
     return new Promise((resolve, reject) => {
       axios
-        .post(CONFIG.API_BASEPATH + '/sale/updateProduct', product)
+        .post(CONFIG.API_BASEPATH + '/Product/updateProduct', product)
         .then((response) => {
           resolve(response.data);
         })
@@ -109,7 +109,7 @@ export default class ProductService {
   deleteProduct = async (productId : number): Promise<Result<ProductModel>> => {
     return new Promise((resolve, reject) => {
       axios
-        .get(CONFIG.API_BASEPATH + '/sale/deleteProduct', { params: { productId: productId } })
+        .get(CONFIG.API_BASEPATH + '/Product/deleteProduct', { params: { productId: productId } })
         .then((response) => {
           resolve(response.data);
         })
@@ -121,7 +121,7 @@ export default class ProductService {
   removeProduct = async (productId : number): Promise<Result<ProductModel>> => {
     return new Promise((resolve, reject) => {
       axios
-        .get(CONFIG.API_BASEPATH + '/sale/removeProduct', { params: { productId: productId } })
+        .get(CONFIG.API_BASEPATH + '/Product/removeProduct', { params: { productId: productId } })
         .then((response) => {
           resolve(response.data);
         })

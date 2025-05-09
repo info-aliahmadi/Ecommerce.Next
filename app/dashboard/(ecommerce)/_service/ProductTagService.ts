@@ -11,7 +11,7 @@ export default class ProductTagService {
   getProductTagList = async (): Promise<Result<ProductTagModel[]>> => {
     return new Promise((resolve, reject) => {
       axios
-        .post(CONFIG.API_BASEPATH + '/sale/GetProductTagList')
+        .post(CONFIG.API_BASEPATH + '/Product/GetProductTagList')
         .then((response) => {
           resolve(response.data);
         })
@@ -24,7 +24,7 @@ export default class ProductTagService {
   getProductTagListForSelect = async (): Promise<Result<ProductTagModel[]>> => {
     return new Promise((resolve, reject) => {
       axios
-        .post(CONFIG.API_BASEPATH + '/sale/GetProductTagListForSelect')
+        .post(CONFIG.API_BASEPATH + '/Product/GetProductTagListForSelect')
         .then((response) => {
           resolve(response.data);
         })
@@ -36,7 +36,7 @@ export default class ProductTagService {
   getProductTagItemList = async (productTagId : number): Promise<Result<ProductTagModel[]>> => {
     return new Promise((resolve, reject) => {
       axios
-        .get(CONFIG.API_BASEPATH + `/sale/GetProductTagItemList?productTagId=${productTagId}`)
+        .get(CONFIG.API_BASEPATH + `/Product/GetProductTagItemList?productTagId=${productTagId}`)
         .then((response) => {
           resolve(response.data);
         })
@@ -48,7 +48,7 @@ export default class ProductTagService {
   getAllProductTags = async (): Promise<Result<ProductTagModel[]>> => {
     return new Promise((resolve, reject) => {
       axios
-        .get(CONFIG.API_BASEPATH + '/sale/getAllProductTags')
+        .get(CONFIG.API_BASEPATH + '/Product/getAllProductTags')
         .then((response) => {
           resolve(response.data);
         })
@@ -60,7 +60,7 @@ export default class ProductTagService {
   getProductTagById = async (productTagId : number): Promise<Result<ProductTagModel>> => {
     return new Promise((resolve, reject) => {
       axios
-        .get(CONFIG.API_BASEPATH + '/sale/getProductTagById', { params: { productTagId: productTagId } })
+        .get(CONFIG.API_BASEPATH + '/Product/getProductTagById', { params: { productTagId: productTagId } })
         .then((response) => {
           resolve(response.data);
         })
@@ -72,7 +72,7 @@ export default class ProductTagService {
   addProductTag = async (productTag: ProductTagModel): Promise<Result<ProductTagModel>> => {
     return new Promise((resolve, reject) => {
       axios
-        .post(CONFIG.API_BASEPATH + '/sale/addProductTag', productTag)
+        .post(CONFIG.API_BASEPATH + '/Product/addProductTag', productTag)
         .then((response) => {
           resolve(response.data);
         })
@@ -84,7 +84,7 @@ export default class ProductTagService {
   updateProductTag = async (productTag: ProductTagModel): Promise<Result<ProductTagModel>> => {
     return new Promise((resolve, reject) => {
       axios
-        .post(CONFIG.API_BASEPATH + '/sale/updateProductTag', productTag)
+        .post(CONFIG.API_BASEPATH + '/Product/updateProductTag', productTag)
         .then((response) => {
           resolve(response.data);
         })
@@ -96,7 +96,7 @@ export default class ProductTagService {
   deleteProductTag = async (productTagId : number): Promise<Result<ProductTagModel>> => {
     return new Promise((resolve, reject) => {
       axios
-        .get(CONFIG.API_BASEPATH + '/sale/deleteProductTag', { params: { productTagId: productTagId } })
+        .get(CONFIG.API_BASEPATH + '/Product/deleteProductTag', { params: { productTagId: productTagId } })
         .then((response) => {
           resolve(response.data);
         })

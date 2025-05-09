@@ -12,7 +12,7 @@ export default class ManufacturerService {
   getManufacturerList = async (): Promise<Result<ManufacturerModel[]>> => {
     return new Promise((resolve, reject) => {
       axios
-        .post(CONFIG.API_BASEPATH + '/sale/getManufacturerList')
+        .post(CONFIG.API_BASEPATH + '/Product/getManufacturerList')
         .then((response) => {
           resolve(response.data);
         })
@@ -25,7 +25,7 @@ export default class ManufacturerService {
   getManufacturerListForSelect = async (): Promise<Result<ManufacturerModel[]>> => {
     return new Promise((resolve, reject) => {
       axios
-        .post(CONFIG.API_BASEPATH + '/sale/getManufacturersForSelect')
+        .post(CONFIG.API_BASEPATH + '/Product/getManufacturersForSelect')
         .then((response) => {
           resolve(response.data);
         })
@@ -38,7 +38,7 @@ export default class ManufacturerService {
   getAllManufacturers = async (): Promise<Result<ManufacturerModel[]>> => {
     return new Promise((resolve, reject) => {
       axios
-        .get(CONFIG.API_BASEPATH + '/sale/getAllManufacturers')
+        .get(CONFIG.API_BASEPATH + '/Product/getAllManufacturers')
         .then((response) => {
           resolve(response.data);
         })
@@ -50,7 +50,7 @@ export default class ManufacturerService {
   getManufacturerById = async (manufacturerId : number): Promise<Result<ManufacturerModel>> => {
     return new Promise((resolve, reject) => {
       axios
-        .get(CONFIG.API_BASEPATH + '/sale/getManufacturerById', { params: { manufacturerId: manufacturerId } })
+        .get(CONFIG.API_BASEPATH + '/Product/getManufacturerById', { params: { manufacturerId: manufacturerId } })
         .then((response) => {
           resolve(response.data);
         })
@@ -62,7 +62,7 @@ export default class ManufacturerService {
   addManufacturer = async (manufacturer: ManufacturerModel): Promise<Result<ManufacturerModel>> => {
     return new Promise((resolve, reject) => {
       axios
-        .post(CONFIG.API_BASEPATH + '/sale/addManufacturer', manufacturer)
+        .post(CONFIG.API_BASEPATH + '/Product/addManufacturer', manufacturer)
         .then((response) => {
           resolve(response.data);
         })
@@ -74,7 +74,7 @@ export default class ManufacturerService {
   updateManufacturer = async (manufacturer: ManufacturerModel): Promise<Result<ManufacturerModel>> => {
     return new Promise((resolve, reject) => {
       axios
-        .post(CONFIG.API_BASEPATH + '/sale/updateManufacturer', manufacturer)
+        .post(CONFIG.API_BASEPATH + '/Product/updateManufacturer', manufacturer)
         .then((response) => {
           resolve(response.data);
         })
@@ -86,7 +86,7 @@ export default class ManufacturerService {
   deleteManufacturer = async (manufacturerId : number): Promise<Result<ManufacturerModel>> => {
     return new Promise((resolve, reject) => {
       axios
-        .get(CONFIG.API_BASEPATH + '/sale/deleteManufacturer', { params: { manufacturerId: manufacturerId } })
+        .get(CONFIG.API_BASEPATH + '/Product/deleteManufacturer', { params: { manufacturerId: manufacturerId } })
         .then((response) => {
           resolve(response.data);
         })

@@ -16,7 +16,7 @@ export default class OrderService {
   getOrderList = async (searchParams: GridDataBound): Promise<Result<PaginatedList<OrderModel>>> => {
     return new Promise((resolve, reject) => {
       axios
-        .post(CONFIG.API_BASEPATH + '/sale/GetOrderList', searchParams)
+        .post(CONFIG.API_BASEPATH + '/Order/GetOrderList', searchParams)
         .then((response) => {
           resolve(response.data);
         })
@@ -29,7 +29,7 @@ export default class OrderService {
   getOrderItemList = async (orderId : number): Promise<Result<OrderItemsResponse>> => {
     return new Promise((resolve, reject) => {
       axios
-        .get(CONFIG.API_BASEPATH + `/sale/GetOrderItemList?orderId=${orderId}`)
+        .get(CONFIG.API_BASEPATH + `/Order/GetOrderItemList?orderId=${orderId}`)
         .then((response) => {
           resolve(response.data);
         })
@@ -41,7 +41,7 @@ export default class OrderService {
   getAllOrders = async (): Promise<Result<OrderModel[]>> => {
     return new Promise((resolve, reject) => {
       axios
-        .get(CONFIG.API_BASEPATH + '/sale/getAllOrders')
+        .get(CONFIG.API_BASEPATH + '/Order/getAllOrders')
         .then((response) => {
           resolve(response.data);
         })
@@ -53,7 +53,7 @@ export default class OrderService {
   getOrderById = async (orderId : number): Promise<Result<OrderModel>> => {
     return new Promise((resolve, reject) => {
       axios
-        .get(CONFIG.API_BASEPATH + '/sale/getOrderById', { params: { orderId: orderId } })
+        .get(CONFIG.API_BASEPATH + '/Order/getOrderById', { params: { orderId: orderId } })
         .then((response) => {
           resolve(response.data);
         })
@@ -66,7 +66,7 @@ export default class OrderService {
   getOrderPaymentById = async (orderId : number): Promise<Result<OrderModel>> => {
     return new Promise((resolve, reject) => {
       axios
-        .get(CONFIG.API_BASEPATH + '/sale/getOrderPaymentById', { params: { orderId: orderId } })
+        .get(CONFIG.API_BASEPATH + '/Order/getOrderPaymentById', { params: { orderId: orderId } })
         .then((response) => {
           resolve(response.data);
         })
@@ -79,7 +79,7 @@ export default class OrderService {
   addOrder = async (order: OrderModel): Promise<Result<OrderModel>> => {
     return new Promise((resolve, reject) => {
       axios
-        .post(CONFIG.API_BASEPATH + '/sale/addOrder', order)
+        .post(CONFIG.API_BASEPATH + '/Order/addOrder', order)
         .then((response) => {
           resolve(response.data);
         })
@@ -91,7 +91,7 @@ export default class OrderService {
   updateOrder = async (order: OrderModel): Promise<Result<OrderModel>> => {
     return new Promise((resolve, reject) => {
       axios
-        .post(CONFIG.API_BASEPATH + '/sale/UpdateOrderState', order)
+        .post(CONFIG.API_BASEPATH + '/Order/UpdateOrderState', order)
         .then((response) => {
           resolve(response.data);
         })
@@ -103,7 +103,7 @@ export default class OrderService {
   deleteOrder = async (orderId : number): Promise<Result<OrderModel>> => {
     return new Promise((resolve, reject) => {
       axios
-        .get(CONFIG.API_BASEPATH + '/sale/deleteOrder', { params: { orderId: orderId } })
+        .get(CONFIG.API_BASEPATH + '/Order/deleteOrder', { params: { orderId: orderId } })
         .then((response) => {
           resolve(response.data);
         })

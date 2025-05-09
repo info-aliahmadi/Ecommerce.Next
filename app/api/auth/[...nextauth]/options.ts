@@ -5,9 +5,11 @@ import AuthenticationService from '@root/app/dashboard/(auth)/_service/Authentic
 import { JWT } from 'next-auth/jwt';
 import { AdapterUser } from 'next-auth/adapters';
 import AccountService from '@root/app/dashboard/(auth)/_service/AccountService';
-import { UserModel } from '@root/app/dashboard/(auth)/_types/User/UserModel';
 
 export const options: NextAuthOptions = {
+  pages: {
+    signIn: '/login',
+  },
   callbacks: {
     async jwt({ token, user, trigger, session }: {
       token: JWT;
@@ -84,31 +86,21 @@ export const options: NextAuthOptions = {
       clientId: process.env.GITHUB_ID as string,
       clientSecret: process.env.GITHUB_SECRET as string
     }),
-    CredentialsProvider({
+     CredentialsProvider({
       name: 'Credentials',
       credentials: {
-        username: {
-          label: 'Username',
-          type: 'text',
-          placeholder: 'Username'
-        },
-        password: {
-          label: 'Password',
-          type: 'password',
-          placeholder: 'Password'
-        }
+        username: { label: 'Username', type: 'text' },
+        password: { label: 'Password', type: 'password' }
       },
       async authorize(credentials): Promise<User | null> {
-        debugger
         const authenticationService = new AuthenticationService();
-        let result = await authenticationService.login(credentials?.username as string, credentials?.password as string, true);
-        console.log(result);
-        console.log(JSON.stringify(result));
-        if (result.succeeded) {
-          return result.data ?? null;
-        } else {
-          return null;
-        }
+        const result = await authenticationService.login(
+          credentials?.username as string,
+          credentials?.password as string,
+          true
+        );
+        
+        return result.succeeded ? result.data ?? null : null;
       }
     })
   ]

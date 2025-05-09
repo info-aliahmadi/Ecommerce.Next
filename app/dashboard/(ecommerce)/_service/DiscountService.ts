@@ -11,7 +11,7 @@ export default class DiscountService {
   getDiscountList = async (): Promise<Result<DiscountModel[]>> => {
     return new Promise((resolve, reject) => {
       axios
-        .get(CONFIG.API_BASEPATH + '/sale/GetDiscountHierarchy')
+        .get(CONFIG.API_BASEPATH + '/Common/GetDiscountHierarchy')
         .then((response) => {
           resolve(response.data);
         })
@@ -23,7 +23,7 @@ export default class DiscountService {
   getDiscountListForSelect = async (): Promise<Result<DiscountModel[]>> => {
     return new Promise((resolve, reject) => {
       axios
-        .post(CONFIG.API_BASEPATH + '/sale/GetDiscountListForSelect')
+        .post(CONFIG.API_BASEPATH + '/Common/GetDiscountListForSelect')
         .then((response) => {
           resolve(response.data);
         })
@@ -35,7 +35,7 @@ export default class DiscountService {
   getDiscountById = async (discountId : number): Promise<Result<DiscountModel>> => {
     return new Promise((resolve, reject) => {
       axios
-        .get(CONFIG.API_BASEPATH + '/sale/getDiscountById', { params: { discountId: discountId } })
+        .get(CONFIG.API_BASEPATH + '/Common/getDiscountById', { params: { discountId: discountId } })
         .then((response) => {
           resolve(response.data);
         })
@@ -47,7 +47,7 @@ export default class DiscountService {
   addDiscount = async (discount: DiscountModel): Promise<Result<DiscountModel>> => {
     return new Promise((resolve, reject) => {
       axios
-        .post(CONFIG.API_BASEPATH + '/sale/addDiscount', discount)
+        .post(CONFIG.API_BASEPATH + '/Common/addDiscount', discount)
         .then((response) => {
           resolve(response.data);
         })
@@ -59,7 +59,7 @@ export default class DiscountService {
   updateDiscount = async (discount: DiscountModel): Promise<Result<DiscountModel>> => {
     return new Promise((resolve, reject) => {
       axios
-        .post(CONFIG.API_BASEPATH + '/sale/updateDiscount', discount)
+        .post(CONFIG.API_BASEPATH + '/Common/updateDiscount', discount)
         .then((response) => {
           resolve(response.data);
         })
