@@ -54,7 +54,7 @@ const pages = {
       id: 'product-attribute',
       title: 'Product Attributes',
       type: 'item',
-      url: '/dashboard/product-attribute/list',
+      url: '/dashboard/productAttribute/list',
       icon: icons.ShoppingCart,
       breadcrumbs: false,
       permission: SALE_PRODUCT_ATTRIBUTE_MANAGEMENT

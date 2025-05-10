@@ -9,9 +9,11 @@ import DateTimeInput from '@dashboard/_components/DateTime/DateTimeInput';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Switch from '@mui/material/Switch';
 
-export default function ProductSettings({ values, setFieldValue, handleBlur, handleChange, errors, touched }: 
-  { values: any, setFieldValue: (field: string, value: any) => void, handleBlur: (event: React.FocusEvent<HTMLInputElement>) => void, 
-    handleChange: (event: React.ChangeEvent<HTMLInputElement>) => void, errors: any, touched: any }) {
+export default function ProductSettings({ operation, values, setFieldValue, handleBlur, handleChange, errors, touched }:
+  {
+    operation: 'add' | 'edit', values: any, setFieldValue: (field: string, value: any) => void, handleBlur: (event: React.FocusEvent<HTMLInputElement>) => void,
+    handleChange: (event: React.ChangeEvent<HTMLInputElement>) => void, errors: any, touched: any
+  }) {
   const [t, i18n] = useTranslation();
   const fieldsName = 'fields.product.';
   const handleCheckedChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -26,7 +28,7 @@ export default function ProductSettings({ values, setFieldValue, handleBlur, han
               control={
                 <Switch
                   id="hasDiscountsApplied"
-                          name="hasDiscountsApplied"
+                  name="hasDiscountsApplied"
                   checked={values?.hasDiscountsApplied != undefined ? values?.hasDiscountsApplied : false}
                   onChange={handleCheckedChange}
                 />
@@ -35,7 +37,7 @@ export default function ProductSettings({ values, setFieldValue, handleBlur, han
             />
           </Stack>
         </Grid>
-     
+
         <Grid item xs={12} sm={12} md={4} lg={4} xl={3}>
           <Stack>
             <FormControlLabel
@@ -186,44 +188,44 @@ export default function ProductSettings({ values, setFieldValue, handleBlur, han
             />
           </Stack>
         </Grid>
-        {values?.markAsNew &&<>
+        {values?.markAsNew && <>
           <Grid item xs={12} sm={12} md={6} lg={6} xl={4}>
-          <Stack>
-            <DateTimeInput
-              id="markAsNewStartDateTimeUtc"
-              name="markAsNewStartDateTimeUtc"
-              label={t(fieldsName + 'markAsNewStartDateTimeUtc')}
-              setFieldValue={setFieldValue}
-              placeholder={t(fieldsName + 'markAsNewStartDateTimeUtc')}
-                  defaultValue={values?.markAsNewStartDateTimeUtc || ''}
-              error={Boolean(touched.markAsNewStartDateTimeUtc && errors.markAsNewStartDateTimeUtc)}
-            />
-            {touched.markAsNewStartDateTimeUtc && errors.markAsNewStartDateTimeUtc && (
-              <FormHelperText error id="helper-text">
-                {errors.markAsNewStartDateTimeUtc}
-              </FormHelperText>
-            )}
-          </Stack>
-        </Grid>
-        <Grid item xs={12} sm={12} md={6} lg={6} xl={4}>
-          <Stack>
-            <DateTimeInput
-              id="markAsNewEndDateTimeUtc"
-              name="markAsNewEndDateTimeUtc"
-              label={t(fieldsName + 'markAsNewEndDateTimeUtc')}
-              setFieldValue={setFieldValue}
-              placeholder={t(fieldsName + 'markAsNewEndDateTimeUtc')}
-              defaultValue={values?.markAsNewEndDateTimeUtc || ''}
-              error={Boolean(touched.markAsNewEndDateTimeUtc && errors.markAsNewEndDateTimeUtc)}
-            />
-            {touched.markAsNewEndDateTimeUtc && errors.markAsNewEndDateTimeUtc && (
-              <FormHelperText error id="helper-text">
-                {errors.markAsNewEndDateTimeUtc}
-              </FormHelperText>
-            )}
-          </Stack>
-        </Grid>
-        </> }
+            <Stack>
+              <DateTimeInput
+                id="markAsNewStartDateTimeUtc"
+                name="markAsNewStartDateTimeUtc"
+                label={t(fieldsName + 'markAsNewStartDateTimeUtc')}
+                setFieldValue={setFieldValue}
+                placeholder={t(fieldsName + 'markAsNewStartDateTimeUtc')}
+                defaultValue={values?.markAsNewStartDateTimeUtc || ''}
+                error={Boolean(touched.markAsNewStartDateTimeUtc && errors.markAsNewStartDateTimeUtc)}
+              />
+              {touched.markAsNewStartDateTimeUtc && errors.markAsNewStartDateTimeUtc && (
+                <FormHelperText error id="helper-text">
+                  {errors.markAsNewStartDateTimeUtc}
+                </FormHelperText>
+              )}
+            </Stack>
+          </Grid>
+          <Grid item xs={12} sm={12} md={6} lg={6} xl={4}>
+            <Stack>
+              <DateTimeInput
+                id="markAsNewEndDateTimeUtc"
+                name="markAsNewEndDateTimeUtc"
+                label={t(fieldsName + 'markAsNewEndDateTimeUtc')}
+                setFieldValue={setFieldValue}
+                placeholder={t(fieldsName + 'markAsNewEndDateTimeUtc')}
+                defaultValue={values?.markAsNewEndDateTimeUtc || ''}
+                error={Boolean(touched.markAsNewEndDateTimeUtc && errors.markAsNewEndDateTimeUtc)}
+              />
+              {touched.markAsNewEndDateTimeUtc && errors.markAsNewEndDateTimeUtc && (
+                <FormHelperText error id="helper-text">
+                  {errors.markAsNewEndDateTimeUtc}
+                </FormHelperText>
+              )}
+            </Stack>
+          </Grid>
+        </>}
       </Grid>
     </Grid>
   );

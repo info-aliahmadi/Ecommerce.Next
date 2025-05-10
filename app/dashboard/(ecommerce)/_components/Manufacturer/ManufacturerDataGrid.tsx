@@ -66,13 +66,16 @@ function ManufacturerDataGrid() {
   );
 
   useEffect(() => {
-    service.getManufacturerList().then((data) => {
-      if (data.succeeded) {
-        setData(data.data ?? []);
-        handleRefetch();
-      }
-    });
+    handleManufacturerList();
   }, []);
+
+  const handleManufacturerList = async () => {
+    const result = await service.getManufacturerList();
+    if (result.succeeded) {
+      setData(result.data ?? []);
+    }
+    return result;
+  };  
 
   const handleNewRow = () => {
     setIsNew(true);
@@ -132,8 +135,8 @@ function ManufacturerDataGrid() {
           />
         </TableCard>
       </MainCard>
-      <AddOrEditManufacturer isNew={isNew} manufacturerId={rowId} open={open} setOpen={setOpen} refetch={handleRefetch} />
-      <DeleteManufacturer row={row} open={openDelete} setOpen={setOpenDelete} refetch={handleRefetch} />
+      <AddOrEditManufacturer isNew={isNew} manufacturerId={rowId} open={open} setOpen={setOpen} refetch={handleManufacturerList} />
+      <DeleteManufacturer row={row} open={openDelete} setOpen={setOpenDelete} refetch={handleManufacturerList} />
     </>
   );
 }

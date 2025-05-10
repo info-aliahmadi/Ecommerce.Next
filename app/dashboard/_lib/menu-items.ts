@@ -9,6 +9,6 @@ import filestorageMenu from '@dashboard/(filestorage)/_lib/menu-items';
 // ==============================|| MENU ITEMS ||============================== //
 
 const menuItems = {
-  items: [dashboard, authMenu, cmsMenu, crmMenu, ecommerceMenu, filestorageMenu]
+  items: [dashboard, authMenu, ecommerceMenu, cmsMenu, crmMenu, filestorageMenu]
 };
 export default menuItems;

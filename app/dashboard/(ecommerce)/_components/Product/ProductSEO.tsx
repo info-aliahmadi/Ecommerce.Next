@@ -7,7 +7,7 @@ import { useTranslation } from 'react-i18next';
 import SelectProductTag from '../ProductTag/SelectProductTag';
 
 export default function ProductSEO({  values, setFieldValue, handleBlur, handleChange, errors, touched }: 
-  { operation: string, values: any, setFieldValue: (field: string, value: any) => void, handleBlur: (event: React.FocusEvent<HTMLInputElement>) => void, 
+  { operation: 'add' | 'edit', values: any, setFieldValue: (field: string, value: any) => void, handleBlur: (event: React.FocusEvent<HTMLInputElement>) => void, 
     handleChange: (event: React.ChangeEvent<HTMLInputElement>) => void, errors: any, touched: any }) {
   const [t, i18n] = useTranslation();
   const fieldsName = 'fields.product.';

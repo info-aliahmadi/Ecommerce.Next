@@ -63,12 +63,11 @@ const RemoveArticle = ({ row, open, setOpen, refetch }: { row?: MRT_Row<ArticleM
           <CloseDialog onClose={onClose} />
         </DialogTitle>
         <DialogContent>
-          <DialogContentText id="alert-dialog-description">
+        <div id="alert-dialog-description">
             <Typography variant="caption" fontSize={15}>
               {t('dialog.delete.description')}
             </Typography>
-          </DialogContentText>
-          {/* <Typography variant="h3">{t('alert.delete.item')}</Typography> */}
+          </div>
         </DialogContent>
         <DialogActions sx={{ p: '1.25rem' }}>
           <Button onClick={onClose}>{t('buttons.cancel')}</Button>

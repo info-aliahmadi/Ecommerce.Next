@@ -32,19 +32,19 @@ function ProductTagDataGrid() {
   const [openDelete, setOpenDelete] = useState(false);
   const [row, setRow] = useState<MRT_Row<ProductTagModel>>();
   const [refetch, setRefetch] = useState<number | undefined>(undefined);
-  const [fieldsName, buttonName] = ['fields.productTag.', 'buttons.productTag.'];
-
+  const [fieldsName, buttonName] = ['fields.product-tag.', 'buttons.product-tag.'];
+  
   const columns = useMemo<MRT_Column<ProductTagModel>[]>(
     () => [
       {
         accessorKey: 'name',
-        header: t(fieldsName + 'name'),
+        header: t('fields.product-tag.name'),
         enableClickToCopy: true,
         type: 'string'
       },
       {
         accessorKey: 'products',
-        header: t(fieldsName + 'products'),
+        header: t('fields.product-tag.products'),
         enableClickToCopy: true,
         type: 'number'
       }
@@ -79,7 +79,7 @@ function ProductTagDataGrid() {
   const AddRow = useCallback(
     () => (
       <Button color="primary" onClick={handleNewRow} variant="contained" startIcon={<LocalOfferIcon />}>
-        {t(buttonName + 'add')}
+        {t('buttons.product-tag.add')}
       </Button>
     ),
     []
@@ -88,12 +88,12 @@ function ProductTagDataGrid() {
   const DeleteOrEdit = useCallback(
     ({ row }: { row: MRT_Row<ProductTagModel> }) => (
       <Box sx={{ display: 'flex', gap: '1rem' }}>
-        <Tooltip arrow placement="top-start" title={t(buttonName + 'delete')}>
+        <Tooltip arrow placement="top-start" title={t('buttons.product-tag.delete')}>
           <IconButton color="error" onClick={() => handleDeleteRow(row)}>
             <Delete />
           </IconButton>
         </Tooltip>
-        <Tooltip arrow placement="top-start" title={t(buttonName + 'edit')}>
+        <Tooltip arrow placement="top-start" title={t('buttons.product-tag.edit')}>
           <IconButton onClick={() => handleEditRow(row)}>
             <Edit />
           </IconButton>

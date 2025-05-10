@@ -53,7 +53,7 @@ const attributeTypeOptions = [
 export default function AddOrEditProductAttribute({ productAttributeId, isNew, open, setOpen, refetch }:
   { productAttributeId: number, isNew: boolean, open: boolean, setOpen: (open: boolean) => void, refetch: () => void }) {
   const [t] = useTranslation();
-  const [fieldsName, validation, buttonName] = ['fields.productAttribute.', 'validation.productAttribute.', 'buttons.productAttribute.'];
+  const [fieldsName, validation, buttonName] = ['fields.product-attribute.', 'validation.product-attribute.', 'buttons.product-attribute.'];
   const [productAttribute, setProductAttribute] = useState<ProductAttributeModel>();
   const [notify, setNotify] = useState<NotifyProps>({ open: false });
   const { data: session } = useSession();
@@ -149,16 +149,12 @@ export default function AddOrEditProductAttribute({ productAttributeId, isNew, o
           enableReinitialize={true}
           validationSchema={Yup.object().shape({
             name: Yup.string().max(70).required('Name is required'),
-            metaKeywords: Yup.string().max(250).required('MetaKeywords is required'),
-            metaTitle: Yup.string().max(250).required('MetaTitle is required'),
-            description: Yup.string().max(300).required('Description is required'),
-            metaDescription: Yup.string().max(300).required('MetaDescription is required'),
-            //published: Yup.bool().required('Published is required'),
-            //pictureId: Yup.strin.max()g().required('PictureId is required'),
-            displayOrder: Yup.number().required('DisplayOrder is required')
+            attributeType: Yup.string().required('AttributeType is required'),
+            value: Yup.string().required('Value is required'),
           })}
           onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
             try {
+              debugger
               setSubmitting(true);
               handleSubmit(values as ProductAttributeModel, setErrors, setSubmitting);
             } catch (err) {
@@ -226,7 +222,7 @@ export default function AddOrEditProductAttribute({ productAttributeId, isNew, o
                       <FormControl fullWidth error={Boolean(touched.attributeType && errors.attributeType)}>
                         <Select
                           id="attributeType"
-                          value={values?.attributeType ?? AttributeType.Weight}
+                          value={values?.attributeType ?? AttributeType.Color}
                           name="attributeType"
                           onBlur={handleBlur}
                           onChange={handleChange}
@@ -278,43 +274,9 @@ export default function AddOrEditProductAttribute({ productAttributeId, isNew, o
                         value={values?.pictureId ?? ''}
                         filePosterMaxHeight={400}
                       />
-                      {(values?.pictureId == null || values?.pictureId == undefined) && (
-                        <OutlinedInput
-                          id="pictureUrl"
-                          type="text"
-                          value={values?.pictureId || ''}
-                          name="pictureUrl"
-                          onBlur={handleBlur}
-                          onChange={handleChange}
-                          placeholder={t(fieldsName + 'pictureUrl')}
-                          fullWidth
-                          error={Boolean(touched.pictureId && errors.pictureId)}
-                        />
-                      )}
                     </Stack>
                   </Grid>
 
-                  <Grid item>
-                    <Stack spacing={1}>
-                      <InputLabel htmlFor="displayOrder">{t(fieldsName + 'displayOrder')}</InputLabel>
-                      <OutlinedInput
-                        id="displayOrder"
-                        type="number"
-                        value={values?.displayOrder || ''}
-                        name="displayOrder"
-                        onBlur={handleBlur}
-                        onChange={handleChange}
-                        placeholder={t(fieldsName + 'displayOrder')}
-                        fullWidth
-                        error={Boolean(touched.displayOrder && errors.displayOrder)}
-                      />
-                      {touched.displayOrder && errors.displayOrder && (
-                        <FormHelperText error id="helper-text-displayOrder">
-                          {errors.displayOrder}
-                        </FormHelperText>
-                      )}
-                    </Stack>
-                  </Grid>
                 </Grid>
               </DialogContent>
               <DialogActions sx={{ p: '1.25rem' }}>

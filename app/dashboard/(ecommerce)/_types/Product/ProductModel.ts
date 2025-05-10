@@ -18,17 +18,17 @@ export default interface ProductModel {
   /**
    * The user who created the product.
    */
-  createUser: AuthorModel;
+  createUser?: AuthorModel | null;
 
   /**
    * The ID of the user who last updated the product (nullable).
    */
-  updateUserId: number | null;
+  updateUserId?: number | null;
 
   /**
    * The user who last updated the product (nullable).
    */
-  updateUser: AuthorModel | null;
+  updateUser?: AuthorModel | null;
 
   /**
    * The name of the product.
@@ -328,7 +328,7 @@ export default interface ProductModel {
   /**
    * The product inventories.
    */
-  inventories: InventoryModel[]; 
+  inventories: InventoryModel[];
 
   /**
    * The IDs of the pictures associated with the product.

@@ -1,7 +1,7 @@
 import { useState } from 'react';
 
 // material-ui
-import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Typography } from '@mui/material';
+import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Typography } from '@mui/material';
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
 
@@ -58,19 +58,19 @@ const DeleteProductTag = ({ row, open, setOpen, refetch }: { row?: MRT_Row<Produ
       <Dialog open={open} onClose={onClose} aria-labelledby="alert-dialog-title" aria-describedby="alert-dialog-description">
         <DialogTitle id="alert-dialog-title">
           <Typography variant="caption" fontSize={17} fontWeight={600}>
-            {t('buttons.productTag.delete')}
+            {t('buttons.product-tag.delete')}
           </Typography>
           <CloseDialog onClose={onClose} />
         </DialogTitle>
         <DialogContent>
-          <DialogContentText id="alert-dialog-description">
+          <div id="alert-dialog-description">
             <Typography variant="caption" fontSize={15}>
               {t('dialog.delete.description')}
             </Typography>
-          </DialogContentText>
+          </div>
         </DialogContent>
         <DialogActions sx={{ p: '1.25rem' }}>
-          <Button onClick={onClose}>Cancel</Button>
+          <Button onClick={onClose}>{t('buttons.cancel')}</Button>
           <Button disableElevation onClick={handleSubmit} size="large" variant="contained" color="error">
             {t('buttons.delete')}
           </Button>

@@ -20,11 +20,11 @@ const saleRoutes = [
     permission: SALE_MANUFACTURER_MANAGEMENT
   },
   {
-    path: '/dashboard/product-attribute/list',
+    path: '/dashboard/productAttribute/list',
     permission: SALE_PRODUCT_ATTRIBUTE_MANAGEMENT
   },
   {
-    path: '/dashboard/product-tag/list',
+    path: '/dashboard/productTag/list',
     permission: SALE_PRODUCT_TAG_MANAGEMENT
   },
   {

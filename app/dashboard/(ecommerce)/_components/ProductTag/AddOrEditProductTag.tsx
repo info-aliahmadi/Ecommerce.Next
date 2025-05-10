@@ -16,7 +16,6 @@ import {
     InputLabel,
     FormControl,
     FormHelperText,
-    DialogContentText,
     Typography
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
@@ -52,15 +51,14 @@ const AddOrEditProductTag = ({
     const { data: session } = useSession();
     const jwt = session?.accessToken;
     let productTagService = new ProductTagService(jwt ?? '');
-    const productTag = row?.original;
-
+    
     const formik = useFormik({
         initialValues: {
-            id: productTag?.id ?? 0,
-            name: productTag?.name ?? '',
-            products: productTag?.products ?? 0
+            id: 0,
+            name: '',
+            products: 0
         },
-        validationSchema,
+        validationSchema: validationSchema,
         onSubmit: (values) => {
             if (isNew) {
                 productTagService
@@ -87,6 +85,25 @@ const AddOrEditProductTag = ({
             }
         }
     });
+
+    // Update form values when row or isNew changes
+    useEffect(() => {
+        if (open) {
+            if (!isNew && row?.original) {
+                formik.setValues({
+                    id: row.original.id,
+                    name: row.original.name,
+                    products: row.original.products
+                });
+            } else {
+                formik.setValues({
+                    id: 0,
+                    name: '',
+                    products: 0
+                });
+            }
+        }
+    }, [row, isNew, open]);
 
     const handleClose = () => {
         formik.resetForm();
@@ -115,40 +132,38 @@ const AddOrEditProductTag = ({
             <Dialog open={open} onClose={handleClose} aria-labelledby="scroll-dialog-title" aria-describedby="scroll-dialog-description" maxWidth="md">
                 <form onSubmit={formik.handleSubmit}>
                     <DialogTitle id="scroll-dialog-title">
-                        <Typography variant="h4">{isNew ? t('titles.new_product_tag') : t('titles.edit_product_tag')}</Typography>
+                        <Typography component="div" variant="h4">{isNew ? t('dialog.product-tag.add') : t('dialog.product-tag.edit')}</Typography>
                         <CloseDialog onClose={handleClose} />
                     </DialogTitle>
                     <DialogContent>
-                        <DialogContentText id="scroll-dialog-description" tabIndex={-1}>
-                            <Grid container spacing={3} sx={{ mt: 0.25 }}>
-                                <Grid item xs={12}>
-                                    <Stack spacing={1}>
-                                        <InputLabel htmlFor="name">{t('form.name')}</InputLabel>
-                                        <OutlinedInput
-                                            id="name"
-                                            type="text"
-                                            value={formik.values.name}
-                                            name="name"
-                                            onBlur={formik.handleBlur}
-                                            onChange={formik.handleChange}
-                                            placeholder={t('form.name')}
-                                            fullWidth
-                                            error={Boolean(formik.touched.name && formik.errors.name)}
-                                        />
-                                        {formik.touched.name && formik.errors.name && (
-                                            <FormHelperText error id="standard-weight-helper-text-name">
-                                                {formik.errors.name}
-                                            </FormHelperText>
-                                        )}
-                                    </Stack>
-                                </Grid>
+                        <Grid container spacing={3} sx={{ mt: 0.25 }}>
+                            <Grid item xs={12}>
+                                <Stack spacing={1}>
+                                    <InputLabel htmlFor="name">{t('fields.product-tag.name')}</InputLabel>
+                                    <OutlinedInput
+                                        id="name"
+                                        type="text"
+                                        value={formik.values.name}
+                                        name="name"
+                                        onBlur={formik.handleBlur}
+                                        onChange={formik.handleChange}
+                                        placeholder={t('fields.product-tag.name')}
+                                        fullWidth
+                                        error={Boolean(formik.touched.name && formik.errors.name)}
+                                    />
+                                    {formik.touched.name && formik.errors.name && (
+                                        <FormHelperText error id="standard-weight-helper-text-name">
+                                            {formik.errors.name}
+                                        </FormHelperText>
+                                    )}
+                                </Stack>
                             </Grid>
-                        </DialogContentText>
+                        </Grid>
                     </DialogContent>
                     <DialogActions sx={{ p: '1.25rem' }}>
-                        <Button onClick={handleClose}>Cancel</Button>
+                        <Button onClick={handleClose}>{t('buttons.cancel')}</Button>
                         <Button disableElevation disabled={formik.isSubmitting} fullWidth size="large" type="submit" variant="contained" color="primary">
-                            {isNew ? t('buttons.add') : t('buttons.save')}
+                            {isNew ? t('buttons.product-tag.add') : t('buttons.product-tag.save')}
                         </Button>
                     </DialogActions>
                 </form>

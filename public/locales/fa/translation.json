@@ -423,6 +423,18 @@
       "productTags": "برچسب‌های محصول",
       "createdBy": "ایجاد شده توسط",
       "editedBy": "ویرایش شده توسط"
+    },
+    "product-tag": {
+      "name": "عنوان برچسب",
+      "products": "تعداد محصولات"
+    },
+    "product-attribute": {
+      "name": "عنوان خصوصیات",
+      "value": "مقدار",
+      "attributeType": "نوع خصوصیات",
+      "description": "توضیحات",
+      "displayOrder": "ترتیب نمایش",
+      "pictureId": " تصویر"
     }
   },
   "buttons": {
@@ -584,22 +596,6 @@
       "saveManufacturer": "ذخیره تولیدکننده",
       "cancel": "لغو"
     },
-    "product-attribute": {
-      "save": "ذخیره",
-      "add": "خصوصیات محصول جدید",
-      "edit": "ویرایش خصوصیات محصول",
-      "delete": "حذف خصوصیات محصول",
-      "saveOrder": "ذخیره ترتیب",
-      "cancel": "لغو"
-    },
-    "product-tag": {
-      "save": "ذخیره",
-      "add": "برچسب محصول جدید",
-      "edit": "ویرایش برچسب محصول",
-      "delete": "حذف برچسب محصول",
-      "saveOrder": "ذخیره ترتیب",
-      "cancel": "لغو"
-    },
     "category": {
       "save": "ذخیره",
       "add": "دسته‌بندی جدید",
@@ -608,6 +604,21 @@
       "edit": "ویرایش دسته‌بندی",
       "delete": "حذف دسته‌بندی",
       "saveOrder": "ذخیره ترتیب",
+      "cancel": "لغو"
+    },
+    "product-attribute": {
+      "save": "ذخیره",
+      "add": "خصوصیت جدید",
+      "edit": "ویرایش",
+      "delete": "حذف خصوصیت",
+      "saveOrder": "ذخیره ترتیب",
+      "cancel": "لغو"
+    },
+    "product-tag": {
+      "save": "ذخیره",
+      "add": "برچسب جدید",
+      "edit": "ویرایش برچسب",
+      "delete": "حذف برچسب",
       "cancel": "لغو"
     }
   },
@@ -749,6 +760,14 @@
     "category": {
       "addMain": "افزودن دسته‌بندی اصلی",
       "addSub": "افزودن دسته‌بندی فرعی در {{parentTitle}}"
+    },
+    "product-tag" : {
+      "add" :"افزودن برچسب جدید",
+      "edit" : "ویرایش برچسب"
+    },
+    "product-attribute" : {
+      "add" : "افزودن خصوصیات محصول جدید",
+      "edit" : "ویرایش خصوصیات محصول"
     }
   }
 }

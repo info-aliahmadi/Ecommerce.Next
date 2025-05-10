@@ -143,28 +143,43 @@ export default function AutocompletePlugin(): JSX.Element | null {
       }
     }
     function handleUpdate() {
+      // Make sure we're not trying to access editor state outside of the update callback
+      // The error happens because we're trying to do editor state operations outside of
+      // an appropriate lifecycle method
+      if (editor._editorState === null) {
+        // If editor state is null, don't proceed
+        return;
+      }
+      
       editor.update(() => {
-        const selection = $getSelection();
-        const [hasMatch, match] = $search(selection);
-        if (!hasMatch) {
+        try {
+          const selection = $getSelection();
+          if (selection === null) return;
+          
+          const [hasMatch, match] = $search(selection);
+          if (!hasMatch) {
+            $clearSuggestion();
+            return;
+          }
+          if (match === lastMatch) {
+            return;
+          }
           $clearSuggestion();
-          return;
+          searchPromise = query(match);
+          searchPromise.promise
+            .then((newSuggestion) => {
+              if (searchPromise !== null) {
+                updateAsyncSuggestion(searchPromise, newSuggestion);
+              }
+            })
+            .catch((e) => {
+              console.error(e);
+            });
+          lastMatch = match;
+        } catch (error) {
+          console.error('Error in AutocompletePlugin handleUpdate:', error);
+          // Don't let the error propagate and crash the application
         }
-        if (match === lastMatch) {
-          return;
-        }
-        $clearSuggestion();
-        searchPromise = query(match);
-        searchPromise.promise
-          .then((newSuggestion) => {
-            if (searchPromise !== null) {
-              updateAsyncSuggestion(searchPromise, newSuggestion);
-            }
-          })
-          .catch((e) => {
-            console.error(e);
-          });
-        lastMatch = match;
       });
     }
     function $handleAutocompleteIntent(): boolean {

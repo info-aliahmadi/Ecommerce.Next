@@ -1,4 +1,5 @@
 'use client';
+import React from 'react';
 import { useEffect, useState } from 'react';
 
 // material-ui
@@ -41,7 +42,7 @@ import ProductSEO from '@dashboard/(ecommerce)/_components/Product/ProductSEO';
 import { useSession } from 'next-auth/react';
 
 import ProductModel from '@dashboard/(ecommerce)/_types/Product/ProductModel';
-function TabPanel(props : any) {
+function TabPanel(props: any) {
   const { children, value, index, ...other } = props;
 
   return (
@@ -57,18 +58,18 @@ TabPanel.propTypes = {
   value: PropTypes.number.isRequired
 };
 
-function a11yProps(index : any) {
+function a11yProps(index: any) {
   return {
     id: `vertical-tab-${index}`,
     'aria-controls': `vertical-tabpanel-${index}`
   };
 }
 
-export default function AddOrEditProduct({ params } : any ) {
+export default function AddOrEditProduct({ params }: { params: Promise<{ operation: 'edit' | 'add'; id: number }> }) {
   const [t, i18n] = useTranslation();
   const [tab, setTab] = useState(0);
-  const operation = params.operation;
-  const id = params.id;
+
+  const { id, operation } = React.use(params);
 
   const { data: session } = useSession();
 
@@ -118,7 +119,76 @@ export default function AddOrEditProduct({ params } : any ) {
         });
     }
   };
-
+  const initialValues : ProductModel = {
+    id: product?.id ?? 0,
+    name: product?.name ?? '',
+    metaTitle: product?.metaTitle ?? '',
+    metaKeywords: product?.metaKeywords ?? '',
+    metaDescription: product?.metaDescription ?? '',
+    shortDescription: product?.shortDescription ?? '',
+    fullDescription: product?.fullDescription ?? '',
+    adminComment: product?.adminComment ?? '',
+    deliveryDateId: product?.deliveryDateId ?? 0,
+    taxCategoryId: product?.taxCategoryId ?? 0,
+    stockQuantity: product?.stockQuantity ?? 0,
+    minStockQuantity: product?.minStockQuantity ?? 0,
+    notifyAdminForQuantityBelow: product?.notifyAdminForQuantityBelow ?? false,
+    orderMinimumQuantity: product?.orderMinimumQuantity ?? 0,
+    orderMaximumQuantity: product?.orderMaximumQuantity ?? 0,
+    price: product?.price ?? 0,
+    oldPrice: product?.oldPrice ?? 0,
+    currencyId: product?.currencyId ?? 0,
+    availableStartDateTimeUtc: product?.availableStartDateTimeUtc ?? null,
+    availableEndDateTimeUtc: product?.availableEndDateTimeUtc ?? null,
+    hasDiscountsApplied: product?.hasDiscountsApplied ?? false,
+    markAsNew: product?.markAsNew ?? false,
+    markAsNewStartDateTimeUtc: product?.markAsNewStartDateTimeUtc ?? null,
+    markAsNewEndDateTimeUtc: product?.markAsNewEndDateTimeUtc ?? null,
+    notReturnable: product?.notReturnable ?? false,
+    allowedQuantities: product?.allowedQuantities ?? false,
+    isTaxExempt: product?.isTaxExempt ?? false,
+    showOnHomepage: product?.showOnHomepage ?? false,
+    isFreeShipping: product?.isFreeShipping ?? false,
+    allowCustomerReviews: product?.allowCustomerReviews ?? false,
+    displayStockQuantity: product?.displayStockQuantity ?? false,
+    disableBuyButton: product?.disableBuyButton ?? false,
+    disableWishlistButton: product?.disableWishlistButton ?? false,
+    availableForPreOrder: product?.availableForPreOrder ?? false,
+    callForPrice: product?.callForPrice ?? false,
+    published: product?.published ?? false,
+    createdOnUtc: product?.createdOnUtc ?? new Date(),
+    updatedOnUtc: product?.updatedOnUtc ?? new Date(),
+    createUser: product?.createUser ?? null,
+    updateUser: product?.updateUser ?? null,
+    categoryIds: product?.categoryIds ?? [],
+    manufacturerIds: product?.manufacturerIds ?? [],
+    pictureIds: product?.pictureIds ?? [],
+    relatedProductIds: product?.relatedProductIds ?? [],
+    attributeIds: product?.attributeIds ?? [],
+    inventories: product?.inventories ?? [],
+    productTags: product?.productTags ?? [],
+    createUserId: product?.createUserId ?? 0,
+    previewImageId: product?.previewImageId ?? 0,
+    previewImage: product?.previewImage ?? null,
+    deliveryDateName: product?.deliveryDateName ?? '',
+    taxCategoryName: product?.taxCategoryName ?? '',
+    currencyCode: product?.currencyCode ?? '',
+    weight: product?.weight ?? 0,
+    length: product?.length ?? 0,
+    width: product?.width ?? 0,
+    height: product?.height ?? 0,
+    inventoryStockQuantity: product?.inventoryStockQuantity ?? 0,
+    displayOrder: product?.displayOrder ?? 0,
+    approvedRatingSum: product?.approvedRatingSum ?? 0,
+    notApprovedRatingSum: product?.notApprovedRatingSum ?? 0,
+    approvedTotalReviews: product?.approvedTotalReviews ?? 0,
+    notApprovedTotalReviews: product?.notApprovedTotalReviews ?? 0,
+    deleted: product?.deleted ?? false,
+    categoryNames: product?.categoryNames ?? [],
+    manufacturerNames: product?.manufacturerNames ?? [],
+    attributeNames: product?.attributeNames ?? [],
+    reviewIds: product?.reviewIds ?? [],
+  }
   return (
     <>
       <Notify notify={notify} setNotify={setNotify}></Notify>
@@ -128,58 +198,10 @@ export default function AddOrEditProduct({ params } : any ) {
           <Grid item>
             <Typography variant="h5">{t('pages.cards.product-' + operation)}</Typography>
           </Grid>
-          <Grid item key={'product-'+product?.id}>
+          <Grid item key={'product-' + product?.id}>
             <MainCard>
               <Formik
-                initialValues={{
-                  id: product?.id,
-                  name: product?.name,
-                  metaTitle: product?.metaTitle,
-                  metaKeywords: product?.metaKeywords,
-                  metaDescription: product?.metaDescription,
-                  shortDescription: product?.shortDescription,
-                  fullDescription: product?.fullDescription,
-                  adminComment: product?.adminComment,
-                  deliveryDateId: product?.deliveryDateId,
-                  taxCategoryId: product?.taxCategoryId,
-                  stockQuantity: product?.stockQuantity,
-                  minStockQuantity: product?.minStockQuantity,
-                  notifyAdminForQuantityBelow: product?.notifyAdminForQuantityBelow,
-                  orderMinimumQuantity: product?.orderMinimumQuantity,
-                  orderMaximumQuantity: product?.orderMaximumQuantity,
-                  price: product?.price,
-                  oldPrice: product?.oldPrice,
-                  currencyId: product?.currencyId,
-                  availableStartDateTimeUtc: product?.availableStartDateTimeUtc,
-                  availableEndDateTimeUtc: product?.availableEndDateTimeUtc,
-                  hasDiscountsApplied: product?.hasDiscountsApplied,
-                  markAsNew: product?.markAsNew,
-                  markAsNewStartDateTimeUtc: product?.markAsNewStartDateTimeUtc,
-                  markAsNewEndDateTimeUtc: product?.markAsNewEndDateTimeUtc,
-                  notReturnable: product?.notReturnable,
-                  allowedQuantities: product?.allowedQuantities,
-                  isTaxExempt: product?.isTaxExempt,
-                  showOnHomepage: product?.showOnHomepage,
-                  isFreeShipping: product?.isFreeShipping,
-                  allowCustomerReviews: product?.allowCustomerReviews,
-                  displayStockQuantity: product?.displayStockQuantity,
-                  disableBuyButton: product?.disableBuyButton,
-                  disableWishlistButton: product?.disableWishlistButton,
-                  availableForPreOrder: product?.availableForPreOrder,
-                  callForPrice: product?.callForPrice,
-                  published: product?.published,
-                  createdOnUtc: product?.createdOnUtc,
-                  updatedOnUtc: product?.updatedOnUtc,
-                  createUser: product?.createUser,
-                  updateUser: product?.updateUser,
-                  categoryIds: product?.categoryIds,
-                  manufacturerIds: product?.manufacturerIds,
-                  pictureIds: product?.pictureIds,
-                  relatedProductIds: product?.relatedProductIds,
-                  attributeIds: product?.attributeIds,
-                  inventories: product?.inventories,
-                  productTags: product?.productTags
-                }}
+                initialValues={initialValues}
                 enableReinitialize={true}
                 validationSchema={Yup.object().shape({
                   name: Yup.string()
@@ -213,8 +235,8 @@ export default function AddOrEditProduct({ params } : any ) {
                   } catch (err) {
                     console.error(err);
                     setStatus({ success: false });
-                    
-                  }finally{
+
+                  } finally {
                     setSubmitting(false);
                   }
                 }}
@@ -237,7 +259,7 @@ export default function AddOrEditProduct({ params } : any ) {
                     <TabPanel component="div" value={tab} index={0}>
                       <ProductBaseInfo
                         operation={operation}
-                        values={values}
+                        values={values as ProductModel}
                         handleChange={handleChange}
                         setFieldValue={setFieldValue}
                         handleBlur={handleBlur}
@@ -285,7 +307,7 @@ export default function AddOrEditProduct({ params } : any ) {
                           <AlertTitle>Error</AlertTitle>
                           {Object.values(errors)?.map((error, index) =>
                             <FormHelperText key={index} error id="helper-text">
-                              {error}
+                              {typeof error === 'object' ? JSON.stringify(error) : String(error)}
                             </FormHelperText>
                           )}
                         </Alert>}

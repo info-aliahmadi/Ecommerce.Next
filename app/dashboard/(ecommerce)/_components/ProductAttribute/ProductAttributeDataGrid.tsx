@@ -1,10 +1,10 @@
 // material-ui
-import { Box, Button, IconButton, Tooltip, Typography } from '@mui/material';
+import { Box, Button, IconButton, Tooltip, Typography, Chip } from '@mui/material';
 
 // project import
 import MainCard from '@dashboard/_components/MainCard';
 import TableCard from '@dashboard/_components/TableCard';
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import MaterialTable from '@dashboard/_components/MaterialTable/MaterialTable';
 import { Delete } from '@mui/icons-material';
@@ -14,11 +14,62 @@ import DeleteProductAttribute from './DeleteProductAttribute';
 import AddOrEditProductAttribute from './AddOrEditProductAttribute';
 import { useSession } from 'next-auth/react';
 import ProductAttributeService from '../../_service/ProductAttributeService';
-import ProductAttributeModel from '../../_types/Product/ProductAttributeModel';
+import ProductAttributeModel, { AttributeType } from '../../_types/Product/ProductAttributeModel';
 import MRT_Column from '@root/app/types/MRT_Column';
 
 import { MRT_Row } from 'material-react-table';
 
+// Mapping function for AttributeType to get descriptive names and colors
+const getAttributeTypeConfig = (type: AttributeType): { label: string; color: 'primary' | 'secondary' | 'error' | 'info' | 'success' | 'warning' | 'default' } => {
+  const attributeTypeMap = {
+    [AttributeType.Color]: { 
+      label: 'Color', 
+      color: 'primary' as const 
+    },
+    [AttributeType.Size]: { 
+      label: 'Size', 
+      color: 'secondary' as const 
+    },
+    [AttributeType.Weight]: { 
+      label: 'Weight', 
+      color: 'info' as const 
+    },
+    [AttributeType.Length]: { 
+      label: 'Length', 
+      color: 'success' as const 
+    },
+    [AttributeType.Width]: { 
+      label: 'Width', 
+      color: 'warning' as const 
+    },
+    [AttributeType.Height]: { 
+      label: 'Height', 
+      color: 'error' as const 
+    },
+    [AttributeType.Material]: { 
+      label: 'Material', 
+      color: 'primary' as const 
+    },
+    [AttributeType.Style]: { 
+      label: 'Style', 
+      color: 'secondary' as const 
+    },
+    [AttributeType.Pattern]: { 
+      label: 'Pattern', 
+      color: 'info' as const 
+    },
+    [AttributeType.Brand]: { 
+      label: 'Brand', 
+      color: 'success' as const 
+    },
+    [AttributeType.Model]: { 
+      label: 'Model', 
+      color: 'warning' as const 
+    }
+  };
+  
+  return attributeTypeMap[type] || { label: `Unknown Type (${type})`, color: 'default' as const };
+};
 
 // ===============================|| COLOR BOX ||=============================== //
 
@@ -32,8 +83,9 @@ export default function ProductAttributeDataGrid() {
   const [open, setOpen] = useState(false);
   const [openDelete, setOpenDelete] = useState(false);
   const [row, setRow] = useState<MRT_Row<ProductAttributeModel>>();
+  const [productAttributeList, setProductAttributeList] = useState<ProductAttributeModel[]>([]);
   const [refetch, setRefetch] = useState<number | undefined>(undefined);
-  const [fieldsName, buttonName] = ['fields.productAttribute.', 'buttons.productAttribute.'];
+  const [fieldsName, buttonName] = ['fields.product-attribute.', 'buttons.product-attribute.'];
 
   const columns = useMemo<MRT_Column<ProductAttributeModel>[]>(
     () => [
@@ -44,49 +96,76 @@ export default function ProductAttributeDataGrid() {
         type: 'string'
       },
       {
-        accessorKey: 'metaKeywords',
-        header: t(fieldsName + 'metaKeywords'),
+        accessorKey: 'value',
+        header: t(fieldsName + 'value'),
         enableClickToCopy: true,
         type: 'string'
       },
       {
-        accessorKey: 'metaTitle',
-        header: t(fieldsName + 'metaTitle'),
+        accessorKey: 'attributeType',
+        header: t(fieldsName + 'attributeType'),
         enableClickToCopy: true,
-        type: 'string'
+        type: 'string',
+        Cell: ({ row }) => {
+          const config = getAttributeTypeConfig(row.original.attributeType);
+          return (
+            <Chip
+              label={config.label}
+              color={config.color}
+              size="small"
+              variant="outlined"
+              sx={{ 
+                fontWeight: 'medium',
+                minWidth: '80px'
+              }}
+            />
+          );
+        }
       },
       {
-        accessorKey: 'displayOrder',
-        header: t(fieldsName + 'displayOrder'),
+        accessorKey: 'description',
+        header: t(fieldsName + 'description'),
         enableClickToCopy: true,
-        type: 'number'
+        type: 'string'
       }
     ],
     []
   );
-
+  
+  useEffect(() => {
+    handleProductAttributeList();
+  }, []);
+  
   const handleNewRow = () => {
     setIsNew(true);
     setRowId(0);
     setOpen(true);
   };
-  const handleEditRow = (row : MRT_Row<ProductAttributeModel>) => {
+  
+  const handleEditRow = (row: MRT_Row<ProductAttributeModel>) => {
     let productAttributeId = row.original.id;
     setIsNew(false);
     setRowId(productAttributeId);
     setOpen(true);
   };
+  
   const handleDeleteRow = (row: MRT_Row<ProductAttributeModel>) => {
     setRow(row);
     setOpenDelete(true);
   };
+  
   const handleRefetch = () => {
     setRefetch(Date.now());
   };
 
-  const handleProductAttributeList = useCallback(async (filters : GridDataBound ) => {
-    return await service.getProductAttributeList(filters);
-  }, []);
+  const handleProductAttributeList = async () => {
+    const result = await service.getProductAttributeList();
+    if (result.succeeded) {
+      setProductAttributeList(result.data ?? []);
+    }
+    return result;
+  };
+  
   const AddRow = useCallback(
     () => (
       <Button color="primary" onClick={handleNewRow} variant="contained" startIcon={<AddIcon />}>
@@ -113,6 +192,7 @@ export default function ProductAttributeDataGrid() {
     ),
     []
   );
+  
   return (
     <>
       <MainCard title={<AddRow />}>
@@ -120,14 +200,14 @@ export default function ProductAttributeDataGrid() {
           <MaterialTable
             refetch={refetch}
             columns={columns}
-            dataApi={handleProductAttributeList}
+            dataSet={productAttributeList}
             enableRowActions
             renderRowActions={DeleteOrEdit}
           />
         </TableCard>
       </MainCard>
-      <AddOrEditProductAttribute isNew={isNew} productAttributeId={rowId} open={open} setOpen={setOpen} refetch={handleRefetch} />
-      <DeleteProductAttribute row={row} open={openDelete} setOpen={setOpenDelete} refetch={handleRefetch} />
+      <AddOrEditProductAttribute isNew={isNew} productAttributeId={rowId} open={open} setOpen={setOpen} refetch={handleProductAttributeList} />
+      <DeleteProductAttribute row={row} open={openDelete} setOpen={setOpenDelete} refetch={handleProductAttributeList} />
     </>
   );
 }

@@ -11,7 +11,7 @@ import { useState } from 'react';
 
 export default function ProductInventory({ operation, values, setFieldValue, handleBlur, handleChange, errors, touched }: 
   {
-     operation: string, 
+     operation: 'add' | 'edit', 
      values: any, 
      setFieldValue: (field: string, value: any) => void, 
      handleBlur: (event: React.FocusEvent<HTMLInputElement>) => void, 

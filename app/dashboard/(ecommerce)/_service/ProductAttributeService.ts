@@ -9,10 +9,10 @@ export default class ProductAttributeService {
   constructor(jwt : string) {
     setDefaultHeader(jwt);
   }
-  getProductAttributeList = async (searchParams: GridDataBound): Promise<Result<PaginatedList<ProductAttributeModel>>> => {
+  getProductAttributeList = async (): Promise<Result<ProductAttributeModel[]>> => {
     return new Promise((resolve, reject) => {
       axios
-        .post(CONFIG.API_BASEPATH + '/Product/getProductAttributeList', searchParams)
+        .post(CONFIG.API_BASEPATH + '/Product/getProductAttributeList')
         .then((response) => {
           resolve(response.data);
         })
