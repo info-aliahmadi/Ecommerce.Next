@@ -4,7 +4,7 @@ import MultiAutocomplete from '@dashboard/_components/Select/MultiAutocomplete';
 import { useSession } from 'next-auth/react';
 
   export default function ProductsAutoComplete({ id, name, defaultValues, setFieldValue, label }: 
-  { id: string; name: string; defaultValues: any; setFieldValue: (field: string, value: any) => void; label: string }) {
+  { id: string; name: string; defaultValues: any; setFieldValue?: (field: string, value: any) => void; label: string }) {
 
   const { data: session } = useSession();
   const jwt = session?.accessToken;

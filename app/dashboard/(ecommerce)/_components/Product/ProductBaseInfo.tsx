@@ -20,8 +20,8 @@ import Editor from '@dashboard/_components/Editor/Editor';
 import ProductsAutoComplete from './ProductAutoComplete';
 import ProductModel from '../../_types/Product/ProductModel';
 
-export default function ProductBaseInfo({ operation, values, setFieldValue, handleBlur, handleChange, errors, touched }: 
-  { operation: string, values: ProductModel, setFieldValue: (field: string, value: any) => void, handleBlur: (event: React.FocusEvent<HTMLInputElement>) => void, handleChange: (event: React.ChangeEvent<HTMLInputElement>) => void, errors: any, touched: any }) {
+export default function ProductBaseInfo({ operation, values, handleBlur, handleChange, errors }: 
+  { operation: string, values: ProductModel, handleBlur: (event: React.FocusEvent<HTMLInputElement>) => void, handleChange: (event: React.ChangeEvent<HTMLInputElement>) => void, errors: any }) {
   const [t, i18n] = useTranslation();
 
   const fieldsName = 'fields.product.';
@@ -40,9 +40,9 @@ export default function ProductBaseInfo({ operation, values, setFieldValue, hand
               onBlur={handleBlur}
               onChange={handleChange}
               fullWidth
-              error={Boolean(touched.name && errors.name)}
+              error={Boolean(errors.name)}
             />
-            {touched.name && errors.name && (
+            {errors.name && (
               <FormHelperText error id="helper-text">
                 {errors.name}
               </FormHelperText>
@@ -60,9 +60,9 @@ export default function ProductBaseInfo({ operation, values, setFieldValue, hand
               onBlur={handleBlur}
               onChange={handleChange}
               fullWidth
-              error={Boolean(touched.shortDescription && errors.shortDescription)}
+              error={Boolean(errors.shortDescription)}
             />
-            {touched.shortDescription && errors.shortDescription && (
+            {errors.shortDescription && (
               <FormHelperText error id="helper-text">
                 {errors.shortDescription}
               </FormHelperText>
@@ -75,7 +75,7 @@ export default function ProductBaseInfo({ operation, values, setFieldValue, hand
               id={'fullDescription'}
               name={'fullDescription'}
               defaultValue={values?.fullDescription || ''}
-              setFieldValue={setFieldValue}
+              onChange={handleChange}
             />
             {operation == 'edit' && (
               <Grid>
@@ -127,7 +127,7 @@ export default function ProductBaseInfo({ operation, values, setFieldValue, hand
                 )}
               </Grid>
             )}
-            {touched.fullDescription && errors.fullDescription && (
+            {errors.fullDescription && (
               <FormHelperText error id="helper-text">
                 {errors.fullDescription}
               </FormHelperText>
@@ -141,10 +141,10 @@ export default function ProductBaseInfo({ operation, values, setFieldValue, hand
               id="deliveryDateId"
               label={t(fieldsName + 'deliveryDateId')}
               name="deliveryDateId"
-              setFieldValue={setFieldValue}
-              error={Boolean(touched.deliveryDateId && errors.deliveryDateId)}
+              // onChange={handleChange}
+              error={Boolean(errors.deliveryDateId)}
             />
-            {touched.deliveryDateId && errors.deliveryDateId && (
+            {errors.deliveryDateId && (
               <FormHelperText error id="helper-text">
                 {errors.deliveryDateId}
               </FormHelperText>
@@ -158,10 +158,10 @@ export default function ProductBaseInfo({ operation, values, setFieldValue, hand
               id="taxCategoryId"
               name="taxCategoryId"
               label={t(fieldsName + 'taxCategoryId')}
-              setFieldValue={setFieldValue}
-              error={Boolean(touched.taxCategoryId && errors.taxCategoryId)}
+              // setFieldValue={setFieldValue}
+              error={Boolean(errors.taxCategoryId)}
             />
-            {touched.taxCategoryId && errors.taxCategoryId && (
+            {errors.taxCategoryId && (
               <FormHelperText error id="helper-text">
                 {errors.taxCategoryId}
               </FormHelperText>
@@ -180,9 +180,9 @@ export default function ProductBaseInfo({ operation, values, setFieldValue, hand
                 onBlur={handleBlur}
                 onChange={handleChange}
                 fullWidth
-                error={Boolean(touched.price && errors.price)}
+                error={Boolean(errors.price)}
               />
-              {touched.price && errors.price && (
+              {errors.price && (
                 <FormHelperText error id="helper-text">
                   {errors.price}
                 </FormHelperText>
@@ -196,8 +196,8 @@ export default function ProductBaseInfo({ operation, values, setFieldValue, hand
                 id="currencyId"
                 name="currencyId"
                 label={''}
-                setFieldValue={setFieldValue}
-                error={Boolean(touched.currencyId && errors.currencyId)}
+                // setFieldValue={setFieldValue}
+                error={Boolean(errors.currencyId)}
                 // sx={{
                 //   '& .MuiInputBase-root': {
                 //     borderBottomLeftRadius: 0,
@@ -205,7 +205,7 @@ export default function ProductBaseInfo({ operation, values, setFieldValue, hand
                 //   }
                 // }}
               />
-              {touched.currencyId && errors.currencyId && (
+              {errors.currencyId && (
                 <FormHelperText error id="helper-text">
                   {errors.currencyId}
                 </FormHelperText>
@@ -225,9 +225,9 @@ export default function ProductBaseInfo({ operation, values, setFieldValue, hand
               onBlur={handleBlur}
               onChange={handleChange}
               fullWidth
-              error={Boolean(touched.oldPrice && errors.oldPrice)}
+              error={Boolean(errors.oldPrice)}
             />
-            {touched.oldPrice && errors.oldPrice && (
+            {errors.oldPrice && (
               <FormHelperText error id="helper-text">
                 {errors.oldPrice}
               </FormHelperText>
@@ -242,10 +242,10 @@ export default function ProductBaseInfo({ operation, values, setFieldValue, hand
               id="categoryIds"
               name="categoryIds"
               label={t(fieldsName + 'categoryIds')}
-              setFieldValue={setFieldValue}
-              error={Boolean(touched.categoryIds && errors.categoryIds)}
+              // setFieldValue={setFieldValue}
+              error={Boolean(errors.categoryIds)}
             />
-            {touched.categoryIds && errors.categoryIds && (
+            {errors.categoryIds && (
               <FormHelperText error id="helper-text">
                 {errors.categoryIds}
               </FormHelperText>
@@ -260,10 +260,10 @@ export default function ProductBaseInfo({ operation, values, setFieldValue, hand
               id="manufacturerIds"
               name="manufacturerIds"
               label={t(fieldsName + 'manufacturerIds')}
-              setFieldValue={setFieldValue}
-              error={Boolean(touched.manufacturerIds && errors.manufacturerIds)}
+              // setFieldValue={setFieldValue}
+              error={Boolean(errors.manufacturerIds)}
             />
-            {touched.manufacturerIds && errors.manufacturerIds && (
+            {errors.manufacturerIds && (
               <FormHelperText error id="helper-text">
                 {errors.manufacturerIds}
               </FormHelperText>
@@ -276,12 +276,12 @@ export default function ProductBaseInfo({ operation, values, setFieldValue, hand
               id="availableStartDateTimeUtc"
               name="availableStartDateTimeUtc"
               label={t(fieldsName + 'availableStartDateTimeUtc')}
-              setFieldValue={setFieldValue}
+              // setFieldValue={setFieldValue}
               placeholder={t(fieldsName + 'availableStartDateTimeUtc')}
               defaultValue={values?.availableStartDateTimeUtc || null}
-              error={Boolean(touched.availableStartDateTimeUtc && errors.availableStartDateTimeUtc)}
+              error={Boolean(errors.availableStartDateTimeUtc)}
             />
-            {touched.availableStartDateTimeUtc && errors.availableStartDateTimeUtc && (
+            {errors.availableStartDateTimeUtc && (
               <FormHelperText error id="helper-text">
                 {errors.availableStartDateTimeUtc}
               </FormHelperText>
@@ -294,12 +294,12 @@ export default function ProductBaseInfo({ operation, values, setFieldValue, hand
               id="availableEndDateTimeUtc"
               name="availableEndDateTimeUtc"
               label={t(fieldsName + 'availableEndDateTimeUtc')}
-              setFieldValue={setFieldValue}
+              // setFieldValue={setFieldValue}
               placeholder={t(fieldsName + 'availableEndDateTimeUtc')}
               defaultValue={values?.availableEndDateTimeUtc || null}
-              error={Boolean(touched.availableEndDateTimeUtc && errors.availableEndDateTimeUtc)}
+              error={Boolean(errors.availableEndDateTimeUtc)}
             />
-            {touched.availableEndDateTimeUtc && errors.availableEndDateTimeUtc && (
+            {errors.availableEndDateTimeUtc && (
               <FormHelperText error id="helper-text">
                 {errors.availableEndDateTimeUtc}
               </FormHelperText>
@@ -313,12 +313,12 @@ export default function ProductBaseInfo({ operation, values, setFieldValue, hand
               id="attributeIds"
               name="attributeIds"
               label={t(fieldsName + 'attributeIds')}
-              setFieldValue={setFieldValue}
-              error={Boolean(touched.attributeIds && errors.attributeIds)}
+              // setFieldValue={setFieldValue}
+              error={Boolean(errors.attributeIds)}
               onChange={() => {}}
               disabled={false}
             />
-            {touched.attributeIds && errors.attributeIds && (
+            {errors.attributeIds && (
               <FormHelperText error id="helper-text">
                 {errors.attributeIds}
               </FormHelperText>
@@ -332,9 +332,9 @@ export default function ProductBaseInfo({ operation, values, setFieldValue, hand
               name="relatedProductIds"
               defaultValues={values?.relatedProductIds || []}
               label={t(fieldsName + 'relatedProductIds')}
-              setFieldValue={setFieldValue}
+              // setFieldValue={setFieldValue}
             />
-            {touched.relatedProductIds && errors.relatedProductIds && (
+            {errors.relatedProductIds && (
               <FormHelperText error id="helper-text">
                 {errors.relatedProductIds}
               </FormHelperText>
@@ -347,7 +347,7 @@ export default function ProductBaseInfo({ operation, values, setFieldValue, hand
           <InputLabel htmlFor="pictureIds" sx={{ textAlign: 'center', mb: '5px' }}>{t(fieldsName + 'pictureIds')}</InputLabel>
           <ImageUpload
             id="pictureIds"
-            setFieldValue={setFieldValue}
+            //  setFieldValue={setFieldValue}
             value={values?.pictureIds || []}
             filePosterMaxHeight={200}
             allowMultiple={true}

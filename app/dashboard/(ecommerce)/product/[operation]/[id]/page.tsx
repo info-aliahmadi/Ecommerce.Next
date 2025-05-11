@@ -77,13 +77,17 @@ export default function AddOrEditProduct({ params }: { params: Promise<{ operati
   let productService = new ProductsService(jwt ?? '');
 
   const [fieldsName, validation, buttonName] = ['fields.product.', 'validation.product.', 'buttons.product.'];
-  const [product, setProduct] = useState<ProductModel>();
+
   const [notify, setNotify] = useState<NotifyProps>({ open: false });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [errors, setErrors] = useState({});
+
+
   const router = useRouter();
 
   const loadProduct = () => {
     productService.getProductById(id).then((result) => {
-      setProduct(result.data);
+      setProduct(result.data ?? product);
     });
   };
   useEffect(() => {
@@ -93,102 +97,187 @@ export default function AddOrEditProduct({ params }: { params: Promise<{ operati
   const handleTabChange = (event: any, newValue: any) => {
     setTab(newValue);
   };
-  const handleSubmit = async (product: ProductModel, resetForm: any, setErrors: (errors: FormikErrors<ProductModel>) => void, setSubmitting: (open: boolean) => void) => {
-    if (operation == 'add') {
-      productService
-        .addProduct(product)
-        .then(() => {
-          resetForm(undefined);
-          setProduct(undefined);
-          setNotify({ open: true });
-        })
-        .catch((error) => {
-          setErrors(setServerErrors(error));
-          setNotify({ open: true, type: 'error', description: error });
-        });
-    } else {
-      productService
-        .updateProduct(product)
-        .then((result) => {
-          setProduct(result.data);
-          setNotify({ open: true });
-        })
-        .catch((error) => {
-          setErrors(setServerErrors(error));
-          setNotify({ open: true, type: 'error', description: error });
-        });
+  const initProduct: ProductModel = {
+    id: 0,
+    name: '',
+    metaTitle: '',
+    metaKeywords: '',
+    metaDescription: '',
+    shortDescription: '',
+    fullDescription: '',
+    adminComment: '',
+    deliveryDateId: 0,
+    taxCategoryId: 0,
+    stockQuantity: 0,
+    minStockQuantity: 0,
+    notifyAdminForQuantityBelow: false,
+    orderMinimumQuantity: 0,
+    orderMaximumQuantity: 0,
+    price: 0,
+    oldPrice: 0,
+    currencyId: 0,
+    availableStartDateTimeUtc: null,
+    availableEndDateTimeUtc: null,
+    hasDiscountsApplied: false,
+    markAsNew: false,
+    markAsNewStartDateTimeUtc: null,
+    markAsNewEndDateTimeUtc: null,
+    notReturnable: false,
+    allowedQuantities: false,
+    isTaxExempt: false,
+    showOnHomepage: false,
+    isFreeShipping: false,
+    allowCustomerReviews: false,
+    displayStockQuantity: false,
+    disableBuyButton: false,
+    disableWishlistButton: false,
+    availableForPreOrder: false,
+    callForPrice: false,
+    published: false,
+    createdOnUtc: new Date(),
+    updatedOnUtc: new Date(),
+    createUser: null,
+    updateUser: null,
+    categoryIds: [],
+    manufacturerIds: [],
+    pictureIds: [],
+    relatedProductIds: [],
+    attributeIds: [],
+    inventories: [],
+    productTags: [],
+    createUserId: 0,
+    previewImageId: 0,
+    previewImage: null,
+    deliveryDateName: '',
+    taxCategoryName: '',
+    currencyCode: '',
+    weight: 0,
+    length: 0,
+    width: 0,
+    height: 0,
+    inventoryStockQuantity: 0,
+    displayOrder: 0,
+    approvedRatingSum: 0,
+    notApprovedRatingSum: 0,
+    approvedTotalReviews: 0,
+    notApprovedTotalReviews: 0,
+    deleted: false,
+    categoryNames: [],
+    manufacturerNames: [],
+    attributeNames: [],
+    reviewIds: [],
+  };
+  const [product, setProduct] = useState<ProductModel>(initProduct);
+
+
+  // Define your validation schema with Yup
+  const validationSchema = Yup.object().shape({
+    name: Yup.string()
+      .max(250)
+      .required(t(validation + 'requiredName')),
+    fullDescription: Yup.string().required(t(validation + 'requiredFullDescription')),
+    categoryIds: Yup.array()
+      .min(1, t(validation + 'requiredCategoryIds'))
+      .required(t(validation + 'requiredCategoryIds')),
+    deliveryDateId: Yup.number()
+      .required(t(validation + 'requiredDeliveryDateId')),
+    taxCategoryId: Yup.number()
+      .required(t(validation + 'requiredTaxCategoryId')),
+    stockQuantity: Yup.number()
+      .required(t(validation + 'requiredStockQuantity')),
+    minStockQuantity: Yup.number()
+      .required(t(validation + 'requiredMinStockQuantity')),
+    orderMinimumQuantity: Yup.number()
+      .required(t(validation + 'requiredOrderMinimumQuantity')),
+    orderMaximumQuantity: Yup.number()
+      .required(t(validation + 'requiredOrderMaximumQuantity')),
+    price: Yup.number()
+      .required(t(validation + 'requiredPrice')),
+    currencyId: Yup.number()
+      .required(t(validation + 'requiredCurrencyId'))
+  });
+
+  const handleChange = (e: any) => {
+    const { name, value } = e.target;
+    // fill the field in product
+    const updatedProduct: ProductModel = {
+      ...product,       // Override with existing product data
+      [name]: value     // Add the new field value
+    };
+
+    setProduct(updatedProduct);
+
+    // Clear error when field is edited
+    if (errors && (errors as any)[name]) {
+      setErrors({
+        ...errors,
+        [name]: undefined
+      });
     }
   };
-  const initialValues : ProductModel = {
-    id: product?.id ?? 0,
-    name: product?.name ?? '',
-    metaTitle: product?.metaTitle ?? '',
-    metaKeywords: product?.metaKeywords ?? '',
-    metaDescription: product?.metaDescription ?? '',
-    shortDescription: product?.shortDescription ?? '',
-    fullDescription: product?.fullDescription ?? '',
-    adminComment: product?.adminComment ?? '',
-    deliveryDateId: product?.deliveryDateId ?? 0,
-    taxCategoryId: product?.taxCategoryId ?? 0,
-    stockQuantity: product?.stockQuantity ?? 0,
-    minStockQuantity: product?.minStockQuantity ?? 0,
-    notifyAdminForQuantityBelow: product?.notifyAdminForQuantityBelow ?? false,
-    orderMinimumQuantity: product?.orderMinimumQuantity ?? 0,
-    orderMaximumQuantity: product?.orderMaximumQuantity ?? 0,
-    price: product?.price ?? 0,
-    oldPrice: product?.oldPrice ?? 0,
-    currencyId: product?.currencyId ?? 0,
-    availableStartDateTimeUtc: product?.availableStartDateTimeUtc ?? null,
-    availableEndDateTimeUtc: product?.availableEndDateTimeUtc ?? null,
-    hasDiscountsApplied: product?.hasDiscountsApplied ?? false,
-    markAsNew: product?.markAsNew ?? false,
-    markAsNewStartDateTimeUtc: product?.markAsNewStartDateTimeUtc ?? null,
-    markAsNewEndDateTimeUtc: product?.markAsNewEndDateTimeUtc ?? null,
-    notReturnable: product?.notReturnable ?? false,
-    allowedQuantities: product?.allowedQuantities ?? false,
-    isTaxExempt: product?.isTaxExempt ?? false,
-    showOnHomepage: product?.showOnHomepage ?? false,
-    isFreeShipping: product?.isFreeShipping ?? false,
-    allowCustomerReviews: product?.allowCustomerReviews ?? false,
-    displayStockQuantity: product?.displayStockQuantity ?? false,
-    disableBuyButton: product?.disableBuyButton ?? false,
-    disableWishlistButton: product?.disableWishlistButton ?? false,
-    availableForPreOrder: product?.availableForPreOrder ?? false,
-    callForPrice: product?.callForPrice ?? false,
-    published: product?.published ?? false,
-    createdOnUtc: product?.createdOnUtc ?? new Date(),
-    updatedOnUtc: product?.updatedOnUtc ?? new Date(),
-    createUser: product?.createUser ?? null,
-    updateUser: product?.updateUser ?? null,
-    categoryIds: product?.categoryIds ?? [],
-    manufacturerIds: product?.manufacturerIds ?? [],
-    pictureIds: product?.pictureIds ?? [],
-    relatedProductIds: product?.relatedProductIds ?? [],
-    attributeIds: product?.attributeIds ?? [],
-    inventories: product?.inventories ?? [],
-    productTags: product?.productTags ?? [],
-    createUserId: product?.createUserId ?? 0,
-    previewImageId: product?.previewImageId ?? 0,
-    previewImage: product?.previewImage ?? null,
-    deliveryDateName: product?.deliveryDateName ?? '',
-    taxCategoryName: product?.taxCategoryName ?? '',
-    currencyCode: product?.currencyCode ?? '',
-    weight: product?.weight ?? 0,
-    length: product?.length ?? 0,
-    width: product?.width ?? 0,
-    height: product?.height ?? 0,
-    inventoryStockQuantity: product?.inventoryStockQuantity ?? 0,
-    displayOrder: product?.displayOrder ?? 0,
-    approvedRatingSum: product?.approvedRatingSum ?? 0,
-    notApprovedRatingSum: product?.notApprovedRatingSum ?? 0,
-    approvedTotalReviews: product?.approvedTotalReviews ?? 0,
-    notApprovedTotalReviews: product?.notApprovedTotalReviews ?? 0,
-    deleted: product?.deleted ?? false,
-    categoryNames: product?.categoryNames ?? [],
-    manufacturerNames: product?.manufacturerNames ?? [],
-    attributeNames: product?.attributeNames ?? [],
-    reviewIds: product?.reviewIds ?? [],
-  }
+
+  const handleBlur = async (e: any) => {
+    const { name, value } = e.target;
+
+    try {
+      await validationSchema.validateAt(name, product);
+      setErrors({
+        ...errors,
+        [name]: undefined
+      });
+    } catch (error) {
+      setErrors({
+        ...errors,
+        [name]: (error as any).message
+      });
+    }
+  };
+
+  const handleSubmit = async (e: any) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+
+    try {
+      const isValid = await validationSchema.validate(product, { abortEarly: false });
+
+      if (operation == 'add') {
+        productService
+          .addProduct(product)
+          .then(() => {
+            setProduct(product);
+            setNotify({ open: true });
+          })
+          .catch((error) => {
+            // setErrors(setServerErrors(error));
+            setNotify({ open: true, type: 'error', description: error });
+          });
+      } else {
+        productService
+          .updateProduct(product)
+          .then((result) => {
+            setProduct(result.data ?? product);
+            setNotify({ open: true });
+          })
+          .catch((error) => {
+            //setErrors(setServerErrors(error));
+            setNotify({ open: true, type: 'error', description: error });
+          });
+      }
+
+    } catch (error) {
+      const validationErrors = {};
+
+      // if (error.inner) {
+      //   error.inner.forEach(err => {
+      //     validationErrors[err.path] = err.message;
+      //   });
+      // }
+
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   return (
     <>
       <Notify notify={notify} setNotify={setNotify}></Notify>
@@ -200,167 +289,113 @@ export default function AddOrEditProduct({ params }: { params: Promise<{ operati
           </Grid>
           <Grid item key={'product-' + product?.id}>
             <MainCard>
-              <Formik
-                initialValues={initialValues}
-                enableReinitialize={true}
-                validationSchema={Yup.object().shape({
-                  name: Yup.string()
-                    .max(250)
-                    .required(t(validation + 'requiredName')),
-                  fullDescription: Yup.string().required(t(validation + 'requiredFullDescription')),
-                  categoryIds: Yup.array()
-                    .min(1, t(validation + 'requiredCategoryIds'))
-                    .required(t(validation + 'requiredCategoryIds')),
-                  deliveryDateId: Yup.number()
-                    .required(t(validation + 'requiredDeliveryDateId')),
-                  taxCategoryId: Yup.number()
-                    .required(t(validation + 'requiredTaxCategoryId')),
-                  stockQuantity: Yup.number()
-                    .required(t(validation + 'requiredStockQuantity')),
-                  minStockQuantity: Yup.number()
-                    .required(t(validation + 'requiredMinStockQuantity')),
-                  orderMinimumQuantity: Yup.number()
-                    .required(t(validation + 'requiredOrderMinimumQuantity')),
-                  orderMaximumQuantity: Yup.number()
-                    .required(t(validation + 'requiredOrderMaximumQuantity')),
-                  price: Yup.number()
-                    .required(t(validation + 'requiredPrice')),
-                  currencyId: Yup.number()
-                    .required(t(validation + 'requiredCurrencyId'))
-                })}
-                onSubmit={(values, { setErrors, setStatus, setSubmitting, resetForm }) => {
-                  try {
-                    setSubmitting(true);
-                    handleSubmit(values as ProductModel, resetForm, setErrors, setSubmitting);
-                  } catch (err) {
-                    console.error(err);
-                    setStatus({ success: false });
-
-                  } finally {
-                    setSubmitting(false);
-                  }
-                }}
+              <Tabs
+                value={tab}
+                onChange={handleTabChange}
+                aria-label="Vertical tabs example"
+                // sx={{ ml: '25px' }}
+                variant="scrollable"
+                scrollButtons="auto"
               >
-                {({ errors, touched, handleBlur, handleChange, setFieldValue, handleSubmit, isSubmitting, values }) => (
-                  <form noValidate onSubmit={handleSubmit}>
-                    <Tabs
-                      value={tab}
-                      onChange={handleTabChange}
-                      aria-label="Vertical tabs example"
-                      // sx={{ ml: '25px' }}
-                      variant="scrollable"
-                      scrollButtons="auto"
-                    >
-                      <Tab label="Base Info" icon={<StoreIcon />} iconPosition="start" {...a11yProps(0)} />
-                      <Tab label="Settings" icon={<SettingsSuggestIcon />} iconPosition="start" {...a11yProps(1)} />
-                      <Tab label="Inventory" icon={<InventoryIcon />} iconPosition="start" {...a11yProps(2)} />
-                      <Tab label="SEO" icon={<BookmarksIcon />} iconPosition="start" {...a11yProps(3)} />
-                    </Tabs>
-                    <TabPanel component="div" value={tab} index={0}>
-                      <ProductBaseInfo
-                        operation={operation}
-                        values={values as ProductModel}
-                        handleChange={handleChange}
-                        setFieldValue={setFieldValue}
-                        handleBlur={handleBlur}
-                        errors={errors}
-                        touched={touched}
-                      />
-                    </TabPanel>
-                    <TabPanel component="div" value={tab} index={1}>
-                      <ProductSettings
-                        operation={operation}
-                        values={values}
-                        handleChange={handleChange}
-                        setFieldValue={setFieldValue}
-                        handleBlur={handleBlur}
-                        errors={errors}
-                        touched={touched}
-                      />
+                <Tab label="Base Info" icon={<StoreIcon />} iconPosition="start" {...a11yProps(0)} />
+                <Tab label="Settings" icon={<SettingsSuggestIcon />} iconPosition="start" {...a11yProps(1)} />
+                <Tab label="Inventory" icon={<InventoryIcon />} iconPosition="start" {...a11yProps(2)} />
+                <Tab label="SEO" icon={<BookmarksIcon />} iconPosition="start" {...a11yProps(3)} />
+              </Tabs>
+              <TabPanel component="div" value={tab} index={0}>
+                <ProductBaseInfo
+                  operation={operation}
+                  values={product}
+                  handleChange={handleChange}
+                  handleBlur={handleBlur}
+                  errors={errors}
+                />
+              </TabPanel>
+              <TabPanel component="div" value={tab} index={1}>
+                <ProductSettings
+                  operation={operation}
+                  values={product}
+                  handleChange={handleChange}
+                  handleBlur={handleBlur}
+                  errors={errors}
+                />
 
-                    </TabPanel>
-                    <TabPanel component="div" value={tab} index={2}>
-                      <ProductInventory
-                        operation={operation}
-                        values={values}
-                        handleChange={handleChange}
-                        setFieldValue={setFieldValue}
-                        handleBlur={handleBlur}
-                        errors={errors}
-                        touched={touched}
-                      />
-                    </TabPanel>
-                    <TabPanel component="div" value={tab} index={3}>
-                      <ProductSEO
-                        operation={operation}
-                        values={values}
-                        handleChange={handleChange}
-                        setFieldValue={setFieldValue}
-                        handleBlur={handleBlur}
-                        errors={errors}
-                        touched={touched}
-                      />
-                    </TabPanel>
-                    <Grid container pt={2} pb={3}>
-                      <Grid item xl={7}>
-                        {(values.published || values.published == false) && Object.values(errors).length > 0 && <Alert severity="error">
-                          <AlertTitle>Error</AlertTitle>
-                          {Object.values(errors)?.map((error, index) =>
-                            <FormHelperText key={index} error id="helper-text">
-                              {typeof error === 'object' ? JSON.stringify(error) : String(error)}
-                            </FormHelperText>
-                          )}
-                        </Alert>}
-                      </Grid>
-                    </Grid>
-                    <Grid container item spacing={3} direction="row" justifyContent="space-between" alignItems="center">
-                      <Grid item>
-                        <Stack direction="row" spacing={2}>
-                          <AnimateButton>
-                            <Button
-                              size="large"
-                              onClick={() => {
-                                router.back();
-                              }}
-                              variant="outlined"
-                              color="secondary"
-                              startIcon={<ArrowBack />}
-                            >
-                              {t('buttons.cancel')}
-                            </Button>
-                          </AnimateButton>
-                          <AnimateButton>
-                            <Button
-                              disabled={isSubmitting}
-                              size="large"
-                              type="submit"
-                              variant="contained"
-                              color="primary"
-                              onClick={() => setFieldValue('published', true)}
-                              startIcon={<Send />}
-                            >
-                              {operation == 'edit' ? t(buttonName + 'save') : t(buttonName + 'publish')}
-                            </Button>
-                          </AnimateButton>
-                          <AnimateButton>
-                            <Button
-                              disabled={isSubmitting}
-                              size="large"
-                              type="submit"
-                              variant="contained"
-                              color="warning"
-                              onClick={() => setFieldValue('published', false)}
-                              startIcon={<Save />}
-                            >
-                              {t(buttonName + 'draft')}
-                            </Button>
-                          </AnimateButton>
-                        </Stack>
-                      </Grid>
-                    </Grid>
-                  </form>
-                )}
-              </Formik>
+              </TabPanel>
+              <TabPanel component="div" value={tab} index={2}>
+                <ProductInventory
+                  operation={operation}
+                  values={product}
+                  handleChange={handleChange}
+                  handleBlur={handleBlur}
+                  errors={errors}
+                />
+              </TabPanel>
+              <TabPanel component="div" value={tab} index={3}>
+                <ProductSEO
+                  operation={operation}
+                  values={product}
+                  handleChange={handleChange}
+                  handleBlur={handleBlur}
+                  errors={errors}
+                />
+              </TabPanel>
+              <Grid container pt={2} pb={3}>
+                <Grid item xl={7}>
+                  {(product.published || product.published == false) && Object.values(errors).length > 0 && <Alert severity="error">
+                    <AlertTitle>Error</AlertTitle>
+                    {Object.values(errors)?.map((error, index) =>
+                      <FormHelperText key={index} error id="helper-text">
+                        {typeof error === 'object' ? JSON.stringify(error) : String(error)}
+                      </FormHelperText>
+                    )}
+                  </Alert>}
+                </Grid>
+              </Grid>
+              <Grid container item spacing={3} direction="row" justifyContent="space-between" alignItems="center">
+                <Grid item>
+                  <Stack direction="row" spacing={2}>
+                    <AnimateButton>
+                      <Button
+                        size="large"
+                        onClick={() => {
+                          router.back();
+                        }}
+                        variant="outlined"
+                        color="secondary"
+                        startIcon={<ArrowBack />}
+                      >
+                        {t('buttons.cancel')}
+                      </Button>
+                    </AnimateButton>
+                    <AnimateButton>
+                      <Button
+                        disabled={isSubmitting}
+                        size="large"
+                        type="submit"
+                        variant="contained"
+                        color="primary"
+                        onClick={handleSubmit}
+                        startIcon={<Send />}
+                      >
+                        {operation == 'edit' ? t(buttonName + 'save') : t(buttonName + 'publish')}
+                      </Button>
+                    </AnimateButton>
+                    <AnimateButton>
+                      <Button
+                        disabled={isSubmitting}
+                        size="large"
+                        type="submit"
+                        variant="contained"
+                        color="warning"
+                        onClick={handleSubmit}
+                        startIcon={<Save />}
+                      >
+                        {t(buttonName + 'draft')}
+                      </Button>
+                    </AnimateButton>
+                  </Stack>
+                </Grid>
+              </Grid>
             </MainCard>
           </Grid>
         </Grid>
