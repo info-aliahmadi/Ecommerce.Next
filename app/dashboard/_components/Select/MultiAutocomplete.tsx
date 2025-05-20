@@ -9,7 +9,7 @@ import { UserModel } from '../../(auth)/_types/User/UserModel';
 interface MultiAutoCompleteProps {
   id: string;
   defaultValues: number[];
-  setFieldValue: (field: string, value: any) => void;
+  setFieldValue?: (field: string, value: any) => void;
   label: string;
   optionLabel: string;
   inputDataApi: (input: string) => Promise<Result<any[]>>;
@@ -54,7 +54,9 @@ export default function MultiAutoComplete({ id, defaultValues, setFieldValue, la
   const onChange = (event: React.SyntheticEvent, value: Option[], reason: AutocompleteChangeReason, details?: AutocompleteChangeDetails<Option> | undefined) => {
     if (reason == "selectOption" || reason == "removeOption") {
       let ids = value?.map(a => a.id);
-      setFieldValue(id, ids);
+      if (setFieldValue) {
+        setFieldValue(id, ids);
+      }
       setOptions(value);
       setValues(value);
     }

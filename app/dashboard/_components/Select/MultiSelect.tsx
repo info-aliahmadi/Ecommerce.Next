@@ -10,7 +10,7 @@ interface MultiSelectProps {
   readonly name: string;
   readonly label: string;
   readonly optionLabel: string;
-  readonly setFieldValue: (field: string, value: any) => void;
+  readonly setFieldValue? : (field: string, value: any) => void;
   readonly onChange?: (event: React.ChangeEvent<{ value: unknown }>, options: any[]) => void;
   readonly error?: boolean;
   readonly disabled?: boolean;
@@ -59,7 +59,9 @@ export default function MultiSelect({ defaultValues, id, name, label, optionLabe
     if (onChange) {
       onChange(event, options);
     } else {
-      setFieldValue(id, event.target.value);
+      if (setFieldValue) {
+        setFieldValue(id, event.target.value);
+      }
       setValues(event.target.value);
     }
   };

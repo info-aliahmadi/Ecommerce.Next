@@ -8,7 +8,7 @@ interface SelectCurrencyProps {
   id: string;
   name: string;
   label: string;
-  setFieldValue: (field: string, value: any, shouldValidate?: boolean) => void;
+  setFieldValue?: (field: string, value: any, shouldValidate?: boolean) => void;
   error?: boolean;
   disabled?: boolean;
 }

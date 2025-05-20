@@ -8,7 +8,8 @@ export default function DialogContent(theme : Theme) {
       styleOverrides: {
         paper: {
           // backgroundColor: theme.palette.grey[100],
-          backgroundImage: 'none !important'
+          backgroundImage: 'none !important',
+          borderRadius: "0.75rem"
           // paddingTop: '20px !important',
         }
       }

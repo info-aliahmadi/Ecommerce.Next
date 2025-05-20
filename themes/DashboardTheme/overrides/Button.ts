@@ -16,7 +16,8 @@ export default function Button(theme : Theme) {
       },
       styleOverrides: {
         root: {
-          fontWeight: 400
+          fontWeight: 400,
+          borderRadius: "0.5rem"
         },
         contained: {
           ...disabledStyle

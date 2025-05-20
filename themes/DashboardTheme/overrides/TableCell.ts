@@ -9,12 +9,12 @@ export default function TableCell(theme: Theme) {
         root: {
           fontSize: '0.875rem',
           padding: 12,
-          borderColor: theme.palette.divider
+          borderColor: "#e5e7eb"
         },
         head: {
           fontWeight: 600,
-          paddingTop: 20,
-          paddingBottom: 20
+          paddingTop: 10,
+          paddingBottom: 10
         }
       }
     }

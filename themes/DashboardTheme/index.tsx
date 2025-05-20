@@ -14,12 +14,13 @@ import { prefixer } from 'stylis';
 import stylisRTLPlugin from 'stylis-plugin-rtl';
 import CONFIG from '@root/config';
 
-import i18n from '@root/Localization/i18n';
+import i18n from '@root/locales/i18n';
 
 import IranSans from './fonts/IranSans';
 
 import { LocalizationProvider } from '@mui/x-date-pickers';
-import { AdapterDateFnsJalali } from '@mui/x-date-pickers/AdapterDateFnsJalaliV3';
+import { AdapterMomentJalaali } from '@mui/x-date-pickers/AdapterMomentJalaali';
+// import { AdapterDateFnsJalali } from '@mui/x-date-pickers/AdapterDateFnsJalaliV3';
 import '@root/public/css/customStyle/dashboard.css';
 import NextAppDirEmotionCacheProvider from './EmotionCache';
 import { AdapterMoment } from '@mui/x-date-pickers/AdapterMoment';
@@ -36,7 +37,6 @@ export default function DashboardThemeCustomization({ children }: { children: an
   if (session != undefined && themeMode == undefined) {
     themeMode = CONFIG.DASHBOARD_DEFAULT_THEME_MODE as 'light' | 'dark';
   }
-
   const dir = i18n.dir(session?.user?.defaultLanguage);
 
   const [direction, setDirection] = useState<'ltr' | 'rtl'>(dir);
@@ -47,7 +47,7 @@ export default function DashboardThemeCustomization({ children }: { children: an
     setDirection(dir)
     document.dir = dir;
     i18n.changeLanguage(session?.user?.defaultLanguage);
-  }, [dir]);
+  }, [dir, session]);
 
   useLayoutEffect(() => {
     document.dir = direction;
@@ -103,7 +103,7 @@ export default function DashboardThemeCustomization({ children }: { children: an
 
     <StyledEngineProvider injectFirst>
       {direction === 'rtl' && (
-        <LocalizationProvider dateAdapter={AdapterDateFnsJalali}>
+        <LocalizationProvider dateAdapter={AdapterMomentJalaali}>
           <NextAppDirEmotionCacheProvider options={cacheRtl}>
             <ThemeProvider theme={themes}>
               <CssBaseline />

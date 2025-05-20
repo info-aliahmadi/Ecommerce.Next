@@ -32,13 +32,13 @@ const Palette = (mode : 'light' | 'dark' | undefined) : any => {
             // palette values for light mode
 
             common: {
-              black: '#000',
+              black: '#1F2937',
               white: '#fff'
             },
             ...paletteColor,
             text: {
-              primary: paletteColor.grey[700],
-              secondary: paletteColor.grey[500],
+              primary: "#1F2937",
+              secondary: "#6b7280",
               disabled: paletteColor.grey[400]
             },
             action: {
@@ -46,8 +46,8 @@ const Palette = (mode : 'light' | 'dark' | undefined) : any => {
             },
             divider: paletteColor.grey[400],
             background: {
-              paper: paletteColor.grey[0],
-              default: paletteColor.grey.A50
+              paper: '#fff',
+              default: '#F9FAFB'
             }
           }
         : {

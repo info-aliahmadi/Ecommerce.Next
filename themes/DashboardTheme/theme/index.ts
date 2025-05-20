@@ -32,7 +32,7 @@ const Theme = (colors : PalettesProps) => {
       200: blue[2],
       light: blue[3],
       400: blue[4],
-      main: blue[5],
+      main: "#4F46E5",
       dark: blue[6],
       700: blue[7],
       darker: blue[8],
@@ -45,7 +45,7 @@ const Theme = (colors : PalettesProps) => {
       200: greyColors[200],
       light: greyColors[300],
       400: greyColors[400],
-      main: greyColors[500],
+      main: "#F9FAFB",
       600: greyColors[600],
       dark: greyColors[700],
       800: greyColors[800],
@@ -53,7 +53,7 @@ const Theme = (colors : PalettesProps) => {
       A100: greyColors[0],
       A200: greyColors.A400,
       A300: greyColors.A700,
-      contrastText: greyColors[0]
+      contrastText: "#1F2937"
     },
     error: {
       lighter: red[0],
@@ -66,10 +66,10 @@ const Theme = (colors : PalettesProps) => {
     warning: {
       lighter: gold[0],
       light: gold[3],
-      main: gold[5],
+      main: "#FBBF24",
       dark: gold[7],
       darker: gold[9],
-      contrastText: greyColors[100]
+      contrastText: "#1F2937"
     },
     info: {
       lighter: cyan[0],
@@ -82,7 +82,7 @@ const Theme = (colors : PalettesProps) => {
     success: {
       lighter: green[0],
       light: green[3],
-      main: green[5],
+      main: "#14B8A6",
       dark: green[7],
       darker: green[9],
       contrastText

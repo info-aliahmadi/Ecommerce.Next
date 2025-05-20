@@ -13,7 +13,7 @@ import { MenuFoldOutlined, MenuUnfoldOutlined } from '@ant-design/icons';
 
 // ==============================|| MAIN LAYOUT - HEADER ||============================== //
 
-const Header = ({ open, handleDrawerToggle }:{ open : any, handleDrawerToggle : any}) => {
+const Header = ({ open, handleDrawerToggle }: { open: any, handleDrawerToggle: any }) => {
   const theme = useTheme();
   const matchDownMD = useMediaQuery(theme.breakpoints.down('lg'));
 
@@ -40,13 +40,13 @@ const Header = ({ open, handleDrawerToggle }:{ open : any, handleDrawerToggle : 
   );
 
   // app-bar params
-  const appBar :any = {
+  const appBar: any = {
     position: 'fixed',
     color: 'default',
     elevation: 0,
     sx: {
-      borderBottom: `1px solid ${theme.palette.divider}`,
-      // boxShadow: theme.customShadows.z1
+      boxShadow: `0 4px 24px rgba(0, 0, 0, 0.08)`,
+      background: "#F9FAFB"
     }
   };
 

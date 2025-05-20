@@ -8,13 +8,14 @@ import { drawerWidth, drawerMinimizeWidth } from '@root/config';
 
 const openedMixin = (theme: any): React.CSSProperties => ({
   width: drawerWidth,
-  borderRight: `1px solid ${theme.palette.divider}`,
+  border: `none`,
   transition: theme.transitions.create('width', {
     easing: theme.transitions.easing.sharp,
     duration: theme.transitions.duration.enteringScreen
   }),
   overflowX: 'hidden',
-  boxShadow: 'none'
+  boxShadow: theme.customShadows.z1,
+  background : "#f9fafb"
 });
 
 const closedMixin = (theme: any): React.CSSProperties => ({
@@ -25,7 +26,8 @@ const closedMixin = (theme: any): React.CSSProperties => ({
   overflowX: 'hidden',
   width: drawerMinimizeWidth,
   borderRight: 'none',
-  boxShadow: theme.customShadows.z1
+  boxShadow: theme.customShadows.z1,
+  background : "#f9fafb"
 });
 
 // ==============================|| DRAWER - MINI STYLED ||============================== //

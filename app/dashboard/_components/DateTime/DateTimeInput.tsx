@@ -6,7 +6,7 @@ interface DateTimeInputProps {
   id: string;
   name: string;
   label: string;
-  setFieldValue: (field: string, value: any) => void;
+  setFieldValue?: (field: string, value: any) => void;
   defaultValue?: Date | null;
   placeholder?: any;
   error?: boolean;
@@ -15,7 +15,9 @@ interface DateTimeInputProps {
 export default function DateTimeInput({ id, name, label, setFieldValue, defaultValue, placeholder, error }: Readonly<DateTimeInputProps>) {
   const onChange = (value: moment.Moment | null) => {
     let newValue = moment.utc(value).format();
-    setFieldValue(id, newValue);
+    if (setFieldValue) {
+      setFieldValue(id, newValue);
+    }
   };
   const [value, setValue] = useState<moment.Moment | null>(null);
   useEffect(() => {

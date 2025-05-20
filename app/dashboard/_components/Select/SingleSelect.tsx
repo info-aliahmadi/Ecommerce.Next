@@ -9,7 +9,7 @@ interface SingleSelectProps {
   name?: string,
   label: string,
   optionLabel: string,
-  setFieldValue: (field: string, value: any) => void,
+  setFieldValue?: (field: string, value: any) => void,
   error?: boolean,
   disabled?: boolean,
   loadDataApi:() => Promise<Result<any>>
@@ -55,7 +55,9 @@ export default function SingleSelect({ defaultValue, id, name, label, optionLabe
   }
 
   const handleChange = (event: any) => {
-    setFieldValue(id, event.target.value);
+    if (setFieldValue) {
+      setFieldValue(id, event.target.value);
+    }
     setValue(event.target.value);
   };
 

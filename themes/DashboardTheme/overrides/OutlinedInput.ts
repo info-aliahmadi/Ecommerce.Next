@@ -14,6 +14,7 @@ export default function OutlinedInput(theme: Theme) {
           borderColor: theme.palette.grey[300]
         },
         root: {
+          borderRadius: "0.5rem",
           '&:hover .MuiOutlinedInput-notchedOutline': {
             borderColor: theme.palette.primary.light
           },
