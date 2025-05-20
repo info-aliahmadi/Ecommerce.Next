@@ -22,7 +22,7 @@ const NavItem = ({ item, level }: { item: MenuItem, level: number }) => {
   const keyName = nsTranslation + item.id;
   const theme = useTheme();
   const dispatch = useDispatch();
-  const primaryColors : PaletteColor = theme.palette.primary;
+  const primaryColors: PaletteColor = theme.palette.primary;
   const { drawerOpen, openItem } = useSelector((state: any) => state.menu);
 
   let itemTarget = '_self';
@@ -62,13 +62,14 @@ const NavItem = ({ item, level }: { item: MenuItem, level: number }) => {
 
   return (
     <ListItemButton
+      key={"nav-item-" + item.id}
       {...listItemProps}
       disabled={item.disabled}
       onClick={() => itemHandler(item.id)}
       selected={isSelected}
       sx={{
         zIndex: 1201,
-        pl: drawerOpen ? `${level * 28}px` : 1.5,
+        pl: drawerOpen ? `${level * 40}px` : 1.5,
         py: !drawerOpen && level === 1 ? 1.25 : 1,
         ...(drawerOpen && {
           '&:hover': {
@@ -76,7 +77,7 @@ const NavItem = ({ item, level }: { item: MenuItem, level: number }) => {
           },
           '&.Mui-selected': {
             bgcolor: primaryColors.lighter,
-            borderRight: `4px solid ${theme.palette.primary.main}`,
+            borderRight: `3px solid ${theme.palette.primary.main}`,
             color: iconSelectedColor,
             '&:hover': {
               color: iconSelectedColor,
@@ -99,6 +100,7 @@ const NavItem = ({ item, level }: { item: MenuItem, level: number }) => {
     >
       {itemIcon && (
         <ListItemIcon
+          key={"nav-item-icon-" + item.id}
           sx={{
             minWidth: 28,
             color: isSelected ? iconSelectedColor : textColor,
@@ -126,6 +128,7 @@ const NavItem = ({ item, level }: { item: MenuItem, level: number }) => {
       )}
       {(drawerOpen || (!drawerOpen && level !== 1)) && (
         <ListItemText
+          key={"nav-item-text-" + item.id}
           primary={
             <Typography variant="h6" sx={{ color: isSelected ? iconSelectedColor : textColor }}>
               {t(keyName)}
@@ -135,6 +138,7 @@ const NavItem = ({ item, level }: { item: MenuItem, level: number }) => {
       )}
       {(drawerOpen || (!drawerOpen && level !== 1)) && item.chip && (
         <Chip
+          key={"nav-item-chip-" + item.id}
           color={item.chip.color as 'default' | 'primary' | 'secondary' | 'error' | 'info' | 'success' | 'warning'}
           variant={item.chip.variant as 'filled' | 'outlined'}
           size={item.chip.size as 'small' | 'medium'}
