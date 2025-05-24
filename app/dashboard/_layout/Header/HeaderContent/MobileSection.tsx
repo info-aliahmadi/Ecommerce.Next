@@ -81,8 +81,8 @@ const MobileSection = () => {
         }}
       >
         {({ TransitionProps }) => (
-          <Transitions type="fade" in={open} {...TransitionProps}>
-            <Paper sx={{ boxShadow: theme.customShadows.z1 }}>
+          <Transitions type="fade" in={open} position="top" others={{}} {...TransitionProps}>
+            <Paper sx={{ boxShadow: theme.shadows[1] }}>
               <ClickAwayListener onClickAway={handleClose}>
                 <AppBar color="inherit">
                   <Toolbar>

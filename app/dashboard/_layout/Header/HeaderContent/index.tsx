@@ -39,7 +39,6 @@ const HeaderContent = () => {
       {theme.palette.mode == 'light' ? (
         <Tooltip title={t('tooltips.switch-to-darkmode')}>
           <IconButton
-            disableRipple
             aria-label="open drawer"
             onClick={() => handleThemeMode('dark')}
             edge="start"
@@ -52,7 +51,6 @@ const HeaderContent = () => {
       ) : (
         <Tooltip title={t('tooltips.switch-to-lightmode')}>
           <IconButton
-            disableRipple
             aria-label="open drawer"
             onClick={() => handleThemeMode('light')}
             edge="start"

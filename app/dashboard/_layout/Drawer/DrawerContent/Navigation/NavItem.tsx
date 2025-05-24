@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 
 // material-ui
 import { useTheme } from '@mui/material/styles';
-import { Avatar, Chip, ListItemButton, ListItemIcon, ListItemText, Typography } from '@mui/material';
+import { Avatar, Chip, ListItemButton, ListItemIcon, ListItemText, Tooltip, Typography } from '@mui/material';
 
 // project import
 import { activeItem } from '@root//store/reducers/menu';
@@ -71,21 +71,21 @@ const NavItem = ({ item, level }: { item: MenuItem, level: number }) => {
         zIndex: 1201,
         pl: drawerOpen ? `${level * 40}px` : 1.5,
         py: !drawerOpen && level === 1 ? 1.25 : 1,
-        ...(drawerOpen && {
+        ...(drawerOpen ? {
           '&:hover': {
-            bgcolor: primaryColors.lighter
+            bgcolor: theme.palette.mode == "dark" ? "primary.darker" : "primary.lighter",
           },
           '&.Mui-selected': {
-            bgcolor: primaryColors.lighter,
-            borderRight: `3px solid ${theme.palette.primary.main}`,
+            bgcolor: theme.palette.mode == "dark" ? "primary.darker" : "primary.lighter",
+            borderRight: `5px solid ${theme.palette.primary.main}`,
             color: iconSelectedColor,
             '&:hover': {
               color: iconSelectedColor,
-              bgcolor: primaryColors.lighter
+              bgcolor: theme.palette.mode == "dark" ? "primary.darker" : "primary.lighter"
             }
           }
-        }),
-        ...(!drawerOpen && {
+        } : {}),
+        ...(!drawerOpen ? {
           '&:hover': {
             bgcolor: 'transparent'
           },
@@ -95,16 +95,16 @@ const NavItem = ({ item, level }: { item: MenuItem, level: number }) => {
             },
             bgcolor: 'transparent'
           }
-        })
+        } : {})
       }}
     >
-      {itemIcon && (
-        <ListItemIcon
+      {itemIcon &&
+        drawerOpen ? (<ListItemIcon
           key={"nav-item-icon-" + item.id}
           sx={{
             minWidth: 28,
             color: isSelected ? iconSelectedColor : textColor,
-            ...(!drawerOpen && {
+            ...(!drawerOpen ? {
               borderRadius: 1.5,
               width: 36,
               height: 36,
@@ -113,40 +113,72 @@ const NavItem = ({ item, level }: { item: MenuItem, level: number }) => {
               '&:hover': {
                 bgcolor: 'secondary.lighter'
               }
-            }),
-            ...(!drawerOpen &&
-              isSelected && {
-              bgcolor: 'primary.lighter',
+            } : {}),
+            ...(!drawerOpen && isSelected ? {
+              bgcolor: theme.palette.mode == "dark" ? "primary.darker" : "primary.lighter",
               '&:hover': {
-                bgcolor: 'primary.lighter'
+                bgcolor: theme.palette.mode == "dark" ? "primary.darker" : "primary.lighter"
               }
-            })
+            } : {})
           }}
         >
           {itemIcon}
         </ListItemIcon>
-      )}
-      {(drawerOpen || (!drawerOpen && level !== 1)) && (
-        <ListItemText
-          key={"nav-item-text-" + item.id}
-          primary={
-            <Typography variant="h6" sx={{ color: isSelected ? iconSelectedColor : textColor }}>
-              {t(keyName)}
-            </Typography>
-          }
-        />
-      )}
-      {(drawerOpen || (!drawerOpen && level !== 1)) && item.chip && (
-        <Chip
-          key={"nav-item-chip-" + item.id}
-          color={item.chip.color as 'default' | 'primary' | 'secondary' | 'error' | 'info' | 'success' | 'warning'}
-          variant={item.chip.variant as 'filled' | 'outlined'}
-          size={item.chip.size as 'small' | 'medium'}
-          label={item.chip.label}
-          avatar={item.chip.avatar ? <Avatar>{item.chip.avatar}</Avatar> : undefined}
-        />
-      )}
-    </ListItemButton>
+      ) : (
+        <Tooltip title={t(keyName)} arrow placement="left">
+          <ListItemIcon
+            key={"nav-item-icon-" + item.id}
+            sx={{
+              minWidth: 28,
+              color: isSelected ? iconSelectedColor : textColor,
+              ...(!drawerOpen ? {
+                borderRadius: 1.5,
+                width: 36,
+                height: 36,
+                alignItems: 'center',
+                justifyContent: 'center',
+                '&:hover': {
+                  bgcolor: 'secondary.lighter'
+                }
+              } : {}),
+              ...(!drawerOpen && isSelected ? {
+                bgcolor: theme.palette.mode == "dark" ? "primary.darker" : "primary.lighter",
+                '&:hover': {
+                  bgcolor: theme.palette.mode == "dark" ? "primary.darker" : "primary.lighter"
+                }
+              } : {})
+            }}
+          >
+            {itemIcon}
+          </ListItemIcon>
+        </Tooltip>
+      )
+      }
+      {
+        (drawerOpen || (!drawerOpen && level !== 1)) && (
+          <ListItemText
+            key={"nav-item-text-" + item.id}
+            primary={
+              <Typography variant="h6" sx={{ color: isSelected ? iconSelectedColor : textColor }}>
+                {t(keyName)}
+              </Typography>
+            }
+          />
+        )
+      }
+      {
+        (drawerOpen || (!drawerOpen && level !== 1)) && item.chip && (
+          <Chip
+            key={"nav-item-chip-" + item.id}
+            color={item.chip.color as 'default' | 'primary' | 'secondary' | 'error' | 'info' | 'success' | 'warning'}
+            variant={item.chip.variant as 'filled' | 'outlined'}
+            size={item.chip.size as 'small' | 'medium'}
+            label={item.chip.label}
+            avatar={item.chip.avatar ? <Avatar>{item.chip.avatar}</Avatar> : undefined}
+          />
+        )
+      }
+    </ListItemButton >
   );
 };
 

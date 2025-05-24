@@ -14,8 +14,8 @@ const openedMixin = (theme: any): React.CSSProperties => ({
     duration: theme.transitions.duration.enteringScreen
   }),
   overflowX: 'hidden',
-  boxShadow: theme.customShadows.z1,
-  background : "#f9fafb"
+  boxShadow: theme.shadows[1],
+  background : theme.palette.background.default
 });
 
 const closedMixin = (theme: any): React.CSSProperties => ({
@@ -26,8 +26,8 @@ const closedMixin = (theme: any): React.CSSProperties => ({
   overflowX: 'hidden',
   width: drawerMinimizeWidth,
   borderRight: 'none',
-  boxShadow: theme.customShadows.z1,
-  background : "#f9fafb"
+  boxShadow: theme.shadows[1],
+  background : theme.palette.background.default
 });
 
 // ==============================|| DRAWER - MINI STYLED ||============================== //

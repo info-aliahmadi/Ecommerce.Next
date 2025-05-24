@@ -1,6 +1,5 @@
 'use client';
-import { useEffect, useState, ReactNode } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useEffect } from 'react';
 
 // material-ui
 import { useTheme } from '@mui/material/styles';
@@ -12,59 +11,40 @@ import useMediaQuery from '@mui/material/useMediaQuery';
 import navigation from '@dashboard/_lib/menu-items';
 
 // types
-import { openDrawer } from '@root/store/reducers/menu';
 import Header from './Header';
 import MainDrawer from './Drawer';
 import Breadcrumbs from '@dashboard/_components/@extended/Breadcrumbs';
+import useDrawerState from '../_hooks/useDrawerState';
 
 // ==============================|| MAIN LAYOUT ||============================== //
-
 
 export default function DashboardLayout({ children }: { children: any }) {
   const theme = useTheme();
   const matchDownLG = useMediaQuery(theme.breakpoints.down('lg'));
-  const dispatch = useDispatch();
+  
+  // Use custom hook for drawer state persistence
+  const { drawerOpen, toggleDrawer, openDrawerState, closeDrawerState } = useDrawerState();
 
-  const { drawerOpen } = useSelector((state : any) => state.menu);
-
-  // drawer toggler
-  const [open, setOpen] = useState(drawerOpen);
-  const [minimize, setMinimize] = useState(false);
-
-  const handleDrawerToggle = () => {
-    setMinimize(open === true);
-    setOpen(!open);
-    dispatch(openDrawer({ drawerOpen: !open }));
-  };
-  const handleDrawerOpen = () => {
-    setOpen(true);
-    dispatch(openDrawer({ drawerOpen: true }));
-  };
-  const handleDrawerClose = () => {
-    setOpen(false);
-    dispatch(openDrawer({ drawerOpen: false }));
-  };
-
-  // set media wise responsive drawer
+  // Only handle responsive drawer on first load if no preference saved yet
   useEffect(() => {
-    setOpen(!matchDownLG);
-    dispatch(openDrawer({ drawerOpen: !matchDownLG }));
+    if (typeof window !== 'undefined') {
+      // Only apply default mobile behavior if no preference exists
+      const storedValue = localStorage.getItem('drawer_open_state');
+      if (storedValue === null && matchDownLG) {
+        closeDrawerState();
+      }
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [matchDownLG]);
 
-  useEffect(() => {
-    if (open !== drawerOpen) setOpen(drawerOpen);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [drawerOpen]);
-
   return (
     <Box sx={{ display: 'flex', width: '100%' }}>
-      <Header open={open} handleDrawerToggle={handleDrawerToggle} />
+      <Header open={drawerOpen} handleDrawerToggle={toggleDrawer} />
       <MainDrawer
-        open={open}
-        handleDrawerToggle={handleDrawerToggle}
-        handleDrawerOpen={minimize ? handleDrawerOpen : null}
-        handleDrawerClose={minimize ? handleDrawerClose : null}
+        open={drawerOpen}
+        handleDrawerToggle={toggleDrawer}
+        handleDrawerOpen={openDrawerState}
+        handleDrawerClose={closeDrawerState}
       />
       <Box component="main" sx={{ width: '100%', flexGrow: 1, p: { xs: 2, sm: 3 } }}>
         <Toolbar />

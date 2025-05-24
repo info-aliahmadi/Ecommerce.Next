@@ -7,10 +7,11 @@ import { DatePicker } from '@mui/x-date-pickers';
 import moment from 'moment-jalaali';
 import { DateTimeViewer, DateViewer } from '@root//utils/DateViewer';
 import find from 'lodash/find';
-import MRT_Column from '@root/app/types/MRT_Column';
+import { MRT_Column } from '@root/app/types/MRT_Column';
 import i18next from 'i18next';
-
+import { useTheme } from '@mui/material/styles';
 const dateFilter = ({ header, rangeFilterIndex }: { header: any, rangeFilterIndex: any }) => {
+  
   let filterFn = header.column.getFilterFn().name;
   let doubleActive = filterFn == 'between' || filterFn == 'betweenInclusive';
   const setFilterValue = (old: any, rangeFilterIndex: any, value?: any) => {
@@ -74,6 +75,7 @@ function MaterialTable({
   renderDetailPanel,
   defaultDensity = 'comfortable'
 }: Readonly<MaterialTableProps>) {
+  const theme = useTheme();
   const [t, i18n] = useTranslation();
   const [tableLocale, setTableLocale] = useState(null);
   let currentLanguage = i18n.language;
@@ -316,7 +318,7 @@ function MaterialTable({
     setIsRefetching(true);
   };
   return (
-    <div className={'material-grid-container ' + i18next.dir()}>
+    <div className={'material-grid-container ' + i18next.dir() + ' ' + (theme.palette.mode == "dark" ? "dark" : " ight")}>
       <MaterialReactTable
         columns={columns}
         data={dataApi ? data?.items ?? [] : dataSet || []} //data is always an array
