@@ -6,9 +6,9 @@ import { Box, IconButton, Menu, MenuItem, Tooltip } from '@mui/material';
 // project import
 
 // assets
-import languageList from '@root/Localization/languageList';
+import languageList from '@root/locales/languageList';
 import { useTranslation } from 'react-i18next';
-import LocalizationService from '@root/Localization/LocalizationService';
+import LocalizationService from '@root/locales/LocalizationService';
 import { useSession } from 'next-auth/react';
 
 // ==============================|| HEADER CONTENT - NOTIFICATION ||============================== //

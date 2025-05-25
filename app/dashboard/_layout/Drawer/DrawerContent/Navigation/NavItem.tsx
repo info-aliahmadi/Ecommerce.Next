@@ -57,9 +57,10 @@ const NavItem = ({ item, level }: { item: MenuItem, level: number }) => {
     // eslint-disable-next-line
   }, [path]);
 
+  const themeMode = theme.palette.mode;
   const textColor = 'text.primary';
-  const iconSelectedColor = 'primary.main';
-
+  const iconSelectedColor = themeMode == "dark" ? "#818cf8" : 'primary.main';
+  const bgColor = themeMode == "dark" ? "#312e814d" : "primary.lighter";
   return (
     <ListItemButton
       key={"nav-item-" + item.id}
@@ -73,15 +74,15 @@ const NavItem = ({ item, level }: { item: MenuItem, level: number }) => {
         py: !drawerOpen && level === 1 ? 1.25 : 1,
         ...(drawerOpen ? {
           '&:hover': {
-            bgcolor: theme.palette.mode == "dark" ? "primary.darker" : "primary.lighter",
+            bgcolor: bgColor,
           },
           '&.Mui-selected': {
-            bgcolor: theme.palette.mode == "dark" ? "primary.darker" : "primary.lighter",
+            bgcolor: bgColor,
             borderRight: `5px solid ${theme.palette.primary.main}`,
-            color: iconSelectedColor,
+            color: textColor,
             '&:hover': {
               color: iconSelectedColor,
-              bgcolor: theme.palette.mode == "dark" ? "primary.darker" : "primary.lighter"
+              bgcolor: bgColor
             }
           }
         } : {}),
@@ -115,9 +116,9 @@ const NavItem = ({ item, level }: { item: MenuItem, level: number }) => {
               }
             } : {}),
             ...(!drawerOpen && isSelected ? {
-              bgcolor: theme.palette.mode == "dark" ? "primary.darker" : "primary.lighter",
+              bgcolor: themeMode == "dark" ? "primary.darker" : "primary.lighter",
               '&:hover': {
-                bgcolor: theme.palette.mode == "dark" ? "primary.darker" : "primary.lighter"
+                bgcolor: themeMode == "dark" ? "primary.darker" : "primary.lighter"
               }
             } : {})
           }}
@@ -142,9 +143,9 @@ const NavItem = ({ item, level }: { item: MenuItem, level: number }) => {
                 }
               } : {}),
               ...(!drawerOpen && isSelected ? {
-                bgcolor: theme.palette.mode == "dark" ? "primary.darker" : "primary.lighter",
+                bgcolor: themeMode == "dark" ? "primary.darker" : "primary.lighter",
                 '&:hover': {
-                  bgcolor: theme.palette.mode == "dark" ? "primary.darker" : "primary.lighter"
+                  bgcolor: themeMode == "dark" ? "primary.darker" : "primary.lighter"
                 }
               } : {})
             }}

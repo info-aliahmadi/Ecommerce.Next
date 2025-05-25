@@ -17,20 +17,16 @@ const Header = ({ open, handleDrawerToggle }: { open: any, handleDrawerToggle: a
   const theme = useTheme();
   const matchDownMD = useMediaQuery(theme.breakpoints.down('lg'));
 
-  const iconBackColor = 'grey.100';
-  const iconBackColorOpen = 'grey.200';
-
   // common header
   const mainHeader = (
     <Toolbar>
       <IconButton
         title="Minimize the Sidebar"
-        disableRipple
         aria-label="open drawer"
         onClick={handleDrawerToggle}
         edge="start"
         color="secondary"
-        sx={{ color: 'text.primary', bgcolor: open ? iconBackColorOpen : iconBackColor, ml: { xs: 0, lg: -2 } }}
+        sx={{ color: 'text.primary', ml: { xs: 0, lg: -2 } }}
       >
         {!open ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
       </IconButton>
@@ -45,8 +41,8 @@ const Header = ({ open, handleDrawerToggle }: { open: any, handleDrawerToggle: a
     color: 'default',
     elevation: 0,
     sx: {
-      boxShadow: `0 4px 24px rgba(0, 0, 0, 0.08)`,
-      background: "#F9FAFB"
+      boxShadow: theme.shadows[1],
+      background: theme.palette.background.default
     }
   };
 

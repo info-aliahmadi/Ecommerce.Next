@@ -82,9 +82,8 @@ const Notification = () => {
   return (
     <Box sx={{ flexShrink: 0, ml: 0.75 }}>
       <IconButton
-        disableRipple
         color="secondary"
-        sx={{ color: 'text.primary', bgcolor: openEmail ? iconBackColorOpen : iconBackColor, mr: 1, ml: 1 }}
+        sx={{ color: 'text.primary', mr: 1, ml: 1 }}
         aria-label="Message profile"
         ref={anchorRefEmail}
         aria-controls={openEmail ? 'profile-grow' : undefined}
@@ -96,9 +95,8 @@ const Notification = () => {
         </Badge>
       </IconButton>
       <IconButton
-        disableRipple
         color="secondary"
-        sx={{ color: 'text.primary', bgcolor: openMessage ? iconBackColorOpen : iconBackColor }}
+        sx={{ color: 'text.primary' }}
         aria-label="open profile"
         ref={anchorRefMessaage}
         aria-controls={openMessage ? 'profile-grow' : undefined}
@@ -128,10 +126,10 @@ const Notification = () => {
         }}
       >
         {({ TransitionProps }) => (
-          <Transitions type="fade" in={openMessage} {...TransitionProps}>
+          <Transitions type="fade" position="top" others={{}} in={openMessage} {...TransitionProps}>
             <Paper
               sx={{
-                boxShadow: theme.customShadows.z1,
+                boxShadow: theme.shadows[1],
                 width: '100%',
                 minWidth: 285,
                 maxWidth: 420,
@@ -315,10 +313,10 @@ const Notification = () => {
         }}
       >
         {({ TransitionProps }) => (
-          <Transitions type="fade" in={openEmail} {...TransitionProps}>
+          <Transitions type="fade" position="top" others={{}} in={openEmail} {...TransitionProps}>
             <Paper
               sx={{
-                boxShadow: theme.customShadows.z1,
+                boxShadow: theme.shadows[1],
                 width: '100%',
                 minWidth: 285,
                 maxWidth: 420,
