@@ -312,32 +312,31 @@ export default function AddOrEditProduct({ params }: { params: Promise<{ operati
                 />
               </TabPanel>
               <TabPanel component="div" value={tab} index={1}>
-                <ProductSettings
+                {/* <ProductSettings
                   operation={operation}
                   values={product}
                   handleChange={handleChange}
                   handleBlur={handleBlur}
                   errors={errors}
-                />
-
+                /> */}
               </TabPanel>
               <TabPanel component="div" value={tab} index={2}>
-                <ProductInventory
+                {/* <ProductInventory
                   operation={operation}
                   values={product}
                   handleChange={handleChange}
                   handleBlur={handleBlur}
                   errors={errors}
-                />
+                /> */}
               </TabPanel>
               <TabPanel component="div" value={tab} index={3}>
-                <ProductSEO
+                {/* <ProductSEO
                   operation={operation}
                   values={product}
                   handleChange={handleChange}
                   handleBlur={handleBlur}
                   errors={errors}
-                />
+                /> */}
               </TabPanel>
               <Grid container pt={2} pb={3}>
                 <Grid item xl={7}>

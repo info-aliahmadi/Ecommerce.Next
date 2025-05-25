@@ -31,8 +31,6 @@ import AnalyticEcommerce from './_components/cards/statistics/AnalyticEcommerce'
 // // assets
 import { GiftOutlined, MessageOutlined, SettingOutlined } from '@ant-design/icons';
 import { useTranslation } from 'react-i18next';
-import LocalizationService from '@root/Localization/LocalizationService';
-import { useSession } from 'next-auth/react';
 
 // avatar style
 const avatarSX = {

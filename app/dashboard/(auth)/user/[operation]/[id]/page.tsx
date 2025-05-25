@@ -41,7 +41,7 @@ import AnimateButton from '@dashboard/_components/@extended/AnimateButton';
 import { useTranslation } from 'react-i18next';
 import CONFIG from '@root/config';
 import MainCard from '@dashboard/_components/MainCard';
-import languageList from '@root/Localization/languageList';
+import languageList from '@root/locales/languageList';
 import DeleteUser from '../../../_components/User/DeleteUser';
 import setServerErrors from '@root/utils/setServerErrors';
 import Notify from '@dashboard/_components/@extended/Notify';

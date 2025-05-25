@@ -11,7 +11,8 @@ import {
   ListItemIcon,
   ListItemText,
   Collapse,
-  IconButton
+  IconButton,
+  useTheme
 } from '@mui/material';
 import { ExpandMore, ChevronRight } from '@mui/icons-material';
 
@@ -19,33 +20,7 @@ import { ExpandMore, ChevronRight } from '@mui/icons-material';
 import NavItem from './NavItem';
 import { useTranslation } from 'react-i18next';
 import Authorize from '@root/app/dashboard/_components/Authorization/Authorize';
-
-// Local storage key for expanded navigation groups
-const STORAGE_KEY = 'nav_expanded_groups';
-
-// Function to get expanded groups from localStorage
-const getExpandedGroups = (): string[] => {
-  if (typeof window === 'undefined') return [];
-
-  try {
-    const storedValue = localStorage.getItem(STORAGE_KEY);
-    return storedValue ? JSON.parse(storedValue) : [];
-  } catch (error) {
-    console.error('Error reading from localStorage:', error);
-    return [];
-  }
-};
-
-// Function to save expanded groups to localStorage
-const saveExpandedGroups = (groups: string[]): void => {
-  if (typeof window === 'undefined') return;
-
-  try {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(groups));
-  } catch (error) {
-    console.error('Error saving to localStorage:', error);
-  }
-};
+import useDrawerState from '@root/app/dashboard/_hooks/useDrawerState';
 
 // ==============================|| NAVIGATION - LIST GROUP ||============================== //
 
@@ -56,9 +31,11 @@ interface NavGroupProps {
 }
 
 const NavGroup = ({ item, isExpanded, onToggle }: NavGroupProps) => {
-  const menu = useSelector((state: any) => state.menu);
-  const { drawerOpen } = menu;
-
+  // const menu = useSelector((state: any) => state.menu);
+  // const { drawerOpen } = menu;
+  // Use custom hook for drawer state persistence
+  const { drawerOpen } = useDrawerState();
+  
   const navCollapse = item.children?.map((menuItem) => {
     return menuItem.permission ? (
       <Authorize key={menuItem.id + '_auth'} permission={menuItem.permission} accessDeniedElement={<></>}>
@@ -89,6 +66,9 @@ interface NavListProps {
 const NavList = ({ item, navCollapse, drawerOpen, open, handleClick }: NavListProps) => {
   const { t } = useTranslation();
   const nsTranslation = 'navigation.';
+  const theme = useTheme();
+  const themeMode = theme.palette.mode;
+  const selectedTextColor = themeMode == "dark" ? "#818cf8" : 'primary.main';
 
   // Only render group header if drawer is open or if it's the first render
   const groupHeader = item.id && drawerOpen && (
@@ -97,25 +77,26 @@ const NavList = ({ item, navCollapse, drawerOpen, open, handleClick }: NavListPr
       onClick={handleClick}
       sx={{
         borderRadius: 0,
+        pt: 1.7,
+        pb: 1.7,
         // backgroundColor: open ? 'primary.lighter' : 'transparent',
         // '&:hover': {
         //   bgcolor: 'primary.lighter'
         // },
         transition: 'background-color 0.3s ease',
-        borderLeft: open ? '5px solid' : '0px solid',
+        //borderLeft: open ? '5px solid' : '0px solid',
         borderColor: 'primary.main',
         paddingLeft: open ? 2.6 : 3
       }}
-      title={t(open ? 'navigation.collapse-group' : 'navigation.expand-group')}
     >
       {/* Add icon if available */}
       {item.icon && (
         <ListItemIcon
           sx={{
             minWidth: 36,
-            color: open ? 'primary.main' : 'text.primary',
+            color: open ? selectedTextColor : 'text.primary',
             '&:hover': {
-              color: 'primary.main'
+              color: selectedTextColor
             }
           }}
         >
@@ -130,7 +111,7 @@ const NavList = ({ item, navCollapse, drawerOpen, open, handleClick }: NavListPr
         primary={
           <Typography
             variant="subtitle2"
-            color={open ? 'primary.main' : 'text.primary'}
+            color={open ? selectedTextColor : 'text.primary'}
             fontWeight={open ? 600 : 400}
           >
             {t(nsTranslation + item.id)}

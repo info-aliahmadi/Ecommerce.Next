@@ -11,8 +11,8 @@ import { Formik } from 'formik';
 
 // assets
 import { useTranslation } from 'react-i18next';
-import languageList from '@root/Localization/languageList';
-import LocalizationService from '@root/Localization/LocalizationService';
+import languageList from '@root/locales/languageList';
+import LocalizationService from '@root/locales/LocalizationService';
 import Notify from '@dashboard/_components/@extended/Notify';
 import { useSession } from 'next-auth/react';
 

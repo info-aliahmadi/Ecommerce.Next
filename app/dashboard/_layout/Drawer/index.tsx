@@ -22,7 +22,7 @@ interface MainDrawerProps {
 }
 const MainDrawer = ({ open, handleDrawerToggle, handleDrawerOpen, handleDrawerClose, window }: MainDrawerProps ) => {
   const theme = useTheme();
-  const matchDownMD = useMediaQuery(theme.breakpoints.down('lg'));
+  const matchDownMD = useMediaQuery(theme.breakpoints.down('md'));
   
   // responsive drawer container
   const container = window !== undefined ? () => window().document.body : undefined;
@@ -35,9 +35,9 @@ const MainDrawer = ({ open, handleDrawerToggle, handleDrawerOpen, handleDrawerCl
     <Box
       component="nav"
       sx={{ flexShrink: { md: 0 }, zIndex: 1300 }}
-      aria-label="mailbox folders"
-      onMouseEnter={handleDrawerOpen}
-      onMouseLeave={handleDrawerClose}
+      aria-label="Drawer"
+      // onMouseEnter={handleDrawerOpen}
+      // onMouseLeave={handleDrawerClose}
     >
       {!matchDownMD ? (
         <MiniDrawerStyled variant="permanent" open={open}>
