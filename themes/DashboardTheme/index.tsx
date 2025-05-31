@@ -3,7 +3,7 @@ import { useLayoutEffect, useMemo, useState } from 'react';
 
 // material-ui
 import { CssBaseline, StyledEngineProvider, ThemeOptions } from '@mui/material';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { createTheme, Shadows, ThemeProvider } from '@mui/material/styles';
 
 // project import
 import Palette from './palette';
@@ -59,6 +59,9 @@ export default function DashboardThemeCustomization({ children }: { children: an
   }
 
   const theme = Palette(themeMode);
+  // create custom shadows
+  theme.shadows[1] = themeMode == "light" ? "0 4px 24px rgba(0, 0, 0, 0.08)" : "0 4px 24px rgba(0, 0, 0, 0.3)";
+
 
   const themeTypography = Typography(fonts);
   const themeCustomShadows = useMemo(() => CustomShadows(theme), [theme]);
@@ -83,6 +86,7 @@ export default function DashboardThemeCustomization({ children }: { children: an
       },
       palette: theme.palette,
       customShadows: themeCustomShadows,
+      shadows: theme.shadows,
       typography: themeTypography,
       setDirection: changeDirection,
     }),

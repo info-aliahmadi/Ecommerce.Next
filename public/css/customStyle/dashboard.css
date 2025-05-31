@@ -1,17 +1,21 @@
 .date-error fieldset {
   border-color: #a61d24 !important;
 }
+
 .select-error fieldset {
   border-color: #a61d24 !important;
 }
+
 .MuiOutlinedvid-notchedOutline {
   border: solid 1px #72727245 !important;
   border-radius: 5px !important;
   padding: 15px 15px !important;
 }
+
 .select-margin fieldset {
   top: 0 !important;
 }
+
 .select-margin fieldset legend {
   display: none !important;
 }
@@ -34,6 +38,7 @@ html::-webkit-scrollbar-thumb {
   border: 2px solid transparent;
   transition: all 0.8s;
 }
+
 html::-webkit-scrollbar-thumb:hover {
   border-radius: 8px;
   background-color: #545454;
@@ -59,6 +64,7 @@ html::-webkit-scrollbar-thumb:hover {
   background-clip: content-box;
   border: 2px solid transparent;
 }
+
 .scroll::-webkit-scrollbar {
   width: 8px;
 }
@@ -76,28 +82,65 @@ html::-webkit-scrollbar-thumb:hover {
   background-clip: content-box;
   border: 2px solid transparent;
 }
-.MuiAutocomplete-root .MuiInputBase-root{
+
+.MuiAutocomplete-root .MuiInputBase-root {
   min-height: 41px;
 }
-.MuiFormLabel-root{
-  overflow : visible !important
+
+.MuiFormLabel-root {
+  overflow: visible !important
 }
+
 .material-grid-container table td {
   flex-direction: row;
 }
-.material-grid-container.rtl .Mui-TableHeadCell-ResizeHandle-Wrapper{
+
+.material-grid-container.rtl .Mui-TableHeadCell-ResizeHandle-Wrapper {
   right: auto;
   left: 0;
 }
-.MuiCollapse-root{
+
+.MuiCollapse-root {
   width: 100%;
 }
-.MuiTableBody-root tr{
+
+.light.material-grid-container .MuiTableBody-root tr {
   background-color: #fff !important;
 }
-.MuiTableBody-root tbody tr{
+
+.light.material-grid-container .MuiTableBody-root tbody tr {
   color: #111827 !important;
 }
-.MuiTableHead-root *{
+
+.light.material-grid-container .MuiTableHead-root * {
   color: #6b7280 !important
+}
+
+.dark.material-grid-container .MuiTableBody-root tbody tr {
+  color: #f3f4f6 !important;
+}
+.dark.material-grid-container .MuiTableHead-root * {
+  color: #d1d5db !important
+}
+.dark.material-grid-container>.MuiPaper-root>div:last-child{
+outline: 1px solid #374151;
+}
+.dark.material-grid-container>.MuiPaper-root>div,
+.dark.material-grid-container>.MuiPaper-root>.MuiTableContainer-root>table>thead>tr {
+  background-color: #374151 !important;
+}
+.dark.material-grid-container>.MuiPaper-root>.MuiTableContainer-root>table>tbody tr {
+  outline: 1px solid #374151 !important;
+}
+
+.dark.material-grid-container>.MuiPaper-root>.MuiTableContainer-root table tbody td,
+.dark.material-grid-container>.MuiPaper-root>.MuiTableContainer-root table tbody th {
+border-color: #374151 !important;
+}
+
+.dark.material-grid-container .MuiDivider-root{
+  border-color: #d1d5db36 !important;
+}
+.dark.material-grid-container .MuiDivider-root:hover{
+  border-color: #d1d5dbf3 !important;
 }

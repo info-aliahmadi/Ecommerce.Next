@@ -7,7 +7,14 @@ export default function IconButton(theme : Theme) {
     MuiIconButton: {
       styleOverrides: {
         root: {
-          borderRadius: 4
+          borderRadius: 4,
+          '&.MuiIconButton-colorSecondary': {
+            color: "secondary.darker",
+            backgroundColor: "secondary.lighe",
+            '&:hover': {
+              backgroundColor: "secondary.light",
+            }
+          }
         },
         sizeLarge: {
           width: theme.spacing(5.5),

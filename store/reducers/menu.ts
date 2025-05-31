@@ -2,12 +2,28 @@
 'use client';
 import { createSlice } from '@reduxjs/toolkit';
 
+// Function to get initial drawer state from localStorage if available
+const getInitialDrawerState = (): boolean => {
+  if (typeof window !== 'undefined') {
+    try {
+      const stored = localStorage.getItem('drawer_open_state');
+      if (stored !== null) {
+        return JSON.parse(stored);
+      }
+    } catch (e) {
+      console.error('Error loading drawer state from localStorage:', e);
+    }
+  }
+  // Default to false if no stored value or not in browser
+  return false; 
+};
+
 // initial state
 const initialState = {
   openItem: ['dashboard'],
   defaultId: 'dashboard',
   openComponent: 'buttons',
-  drawerOpen: false,
+  drawerOpen: getInitialDrawerState(),
   componentDrawerOpen: true
 };
 
