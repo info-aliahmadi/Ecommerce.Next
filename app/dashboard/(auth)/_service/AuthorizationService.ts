@@ -1,15 +1,10 @@
-import axios from 'axios';
-import { setDefaultHeader } from '@root/utils/axiosHeaders';
 import CONFIG from '@root/config';
+import Fetch from '@root/utils/Fetch';
 
 export default class AuthorizationService {
-
-  storageService: any;
-  jwt: any;
-
-  constructor(jwt: any) {
-    setDefaultHeader(jwt);
-    this.jwt = jwt;
+  config?: RequestInit;
+  constructor(jwt: string) {
+    if (jwt) this.config = Fetch.SetDefaultHeader(jwt);
   }
 
   isAuthorized = async (permission: any) => {
@@ -22,24 +17,13 @@ export default class AuthorizationService {
           resolve(result >= 0);
         })
         .catch((error) => {
+
           reject(new Error('Permission check failed'));
         });
     });
   };
   getUserPermissions() {
-    return new Promise((resolve, reject) => {
-      fetch(CONFIG.API_BASEPATH + '/Auth/GetPermissionsOfCurrentUser', {
-        headers: {
-          Authorization: `Bearer ${this.jwt}`,
-        },
-        // cache: 'force-cache',
-        // next: { revalidate: 20000 }
-      })
-      .then(response =>  response.json())
-      .then(data => resolve(data))
-        .catch(error => reject(new Error(error.message)));
-
-    });
+    return Fetch.Get<string[]>(CONFIG.API_BASEPATH + `/auth/GetPermissionsOfCurrentUser`, this.config);
   }
   getJwtSecretKey() {
     const secret = process.env.NEXT_PUBLIC_JWT_SECRET_KEY;
@@ -48,15 +32,4 @@ export default class AuthorizationService {
     }
     return new TextEncoder().encode(secret);
   }
-  refreshUserPermissions = async () => {
-    axios
-      .get(CONFIG.API_BASEPATH + '/Auth/GetPermissionsOfCurrentUser')
-      .then((response) => {
-        this.storageService.addItem(response.data);
-        return true;
-      })
-      .catch((error) => {
-        return error.message;
-      });
-  };
 }

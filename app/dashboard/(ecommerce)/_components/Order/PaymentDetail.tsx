@@ -1,7 +1,7 @@
 'use client';
 
 // assets
-import { useTranslation } from 'react-i18next';
+import { useTranslations } from 'next-intl';
 import { useSession } from 'next-auth/react';
 import OrderService from '../../_service/OrderService';
 
@@ -19,7 +19,7 @@ import PaymentStatus from './PaymentStatus';
 import OrderModel from '../../_types/Order/OrderModel';
 
 export default function PaymentDetail({ orderId, open, setOpen, refetch }: { orderId: number; open: boolean; setOpen: (open: boolean) => void; refetch: () => void }) {
-  const [t] = useTranslation();
+  const t = useTranslations("");
   const { data: session } = useSession();
   const jwt = session?.accessToken;
   const orderService = new OrderService(jwt ?? '');
@@ -68,11 +68,11 @@ export default function PaymentDetail({ orderId, open, setOpen, refetch }: { ord
           {t('dialog.payment.title')}
           <CloseDialog onClose={onClose} />
         </DialogTitle>
-        <Grid container justifyContent="center" direction="row" alignItems="flex-start">
-          <Grid container spacing={3} item xs={12} sm={12} md={12} lg={12} xl={12} direction="column">
+        <Grid container direction="row" sx={{ justifyContent: "center", alignItems: "flex-start" }}>
+          <Grid container spacing={3} item xs={12} sm={12} md={12} lg={12} xl={12} >
             <Grid item>
               <MainCard>
-                <Grid container spacing={3} direction="column">
+                <Grid container spacing={3} >
                   <Grid container item spacing={3}>
                     <Grid item xs={12} md={4} lg={4} xl={4}>
                       <Stack spacing={1}>

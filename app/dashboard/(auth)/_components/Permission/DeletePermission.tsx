@@ -6,14 +6,14 @@ import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
 
 // assets
-import { useTranslation } from 'react-i18next';
+import { useTranslations } from 'next-intl';
 import Notify from '@dashboard/_components/@extended/Notify';
 import PermissionService from '@dashboard/(auth)/_service/PermissionService';
 import { useSession } from 'next-auth/react';
 import { MRT_Row } from 'material-react-table';
 
 const DeletePermission = ({ row, open, setOpen, refetch }: { row?: MRT_Row<Permission>; open: boolean; setOpen: (open: boolean) => void; refetch: () => void }) => {
-  const [t] = useTranslation();
+  const t = useTranslations("");
   const { data: session } = useSession();
   const jwt = session?.accessToken;
   let service = new PermissionService(jwt ?? "");
@@ -36,7 +36,7 @@ const DeletePermission = ({ row, open, setOpen, refetch }: { row?: MRT_Row<Permi
         setNotify({ open: true, type: 'error', description: error });
       });
   };
-  const CloseDialog = ({ onClose }: { onClose: () => void }) => (
+  const CloseDialog = () => (
     <IconButton
       aria-label="close"
       onClick={onClose}
@@ -57,17 +57,18 @@ const DeletePermission = ({ row, open, setOpen, refetch }: { row?: MRT_Row<Permi
       <Dialog open={open} onClose={onClose} aria-labelledby="alert-dialog-title" aria-describedby="alert-dialog-description">
         <DialogTitle id="alert-dialog-title" variant='h3'>
           {t('buttons.permission.delete')}
-          <CloseDialog onClose={onClose} />
+          <CloseDialog />
         </DialogTitle>
         <DialogContent>
-          <div id="alert-dialog-description">
-            <Typography variant="caption" fontSize={15}>
+          <DialogContentText id="alert-dialog-description">
+            <Typography variant="caption" sx={{fontSize : 15}}>
               {t('dialog.delete.description')}
             </Typography>
-          </div>
+          </DialogContentText>
+          {/* <Typography variant="h3">{t('alert.delete.item')}</Typography> */}
         </DialogContent>
         <DialogActions sx={{ p: '1.25rem' }}>
-          <Button onClick={onClose}>{t('buttons.cancel')}</Button>
+          <Button onClick={onClose}>Cancel</Button>
           <Button disableElevation onClick={handleSubmit} size="large" variant="contained" color="error">
             {t('buttons.delete')}
           </Button>

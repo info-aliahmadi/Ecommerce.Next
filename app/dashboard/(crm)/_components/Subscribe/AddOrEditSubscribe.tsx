@@ -23,7 +23,7 @@ import { useSession } from 'next-auth/react';
 import AnimateButton from '@dashboard/_components/@extended/AnimateButton';
 
 // assets
-import { useTranslation } from 'react-i18next';
+import { useTranslations } from 'next-intl';
 import Notify from '@dashboard/_components/@extended/Notify';
 import setServerErrors from '@root/utils/setServerErrors';
 import AddIcon from '@mui/icons-material/Add';
@@ -41,7 +41,7 @@ interface AddOrEditSubscribeProps {
 }
 
 const AddOrEditSubscribe = ({ subscribeId, isNew, open, setOpen, refetch }: AddOrEditSubscribeProps) => {
-  const [t] = useTranslation();
+  const t = useTranslations("");
   const [fieldsName, validation, buttonName] = ['fields.subscribe.', 'validation.subscribe.', 'buttons.subscribe.'];
   const [subscribe, setSubscribe] = useState<SubscribeModel>();
   const [notify, setNotify] = useState<NotifyProps>({ open: false });
@@ -154,7 +154,7 @@ const AddOrEditSubscribe = ({ subscribeId, isNew, open, setOpen, refetch }: AddO
                 <CloseDialog onClose={onClose} />
               </DialogTitle>
               <DialogContent>
-                <Grid container spacing={3} direction="column">
+                <Grid container spacing={3} >
                   <Grid item>
                     <Stack spacing={1}>
                       <SelectSubscribeLabel

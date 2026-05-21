@@ -28,7 +28,7 @@ import { useSession } from 'next-auth/react';
 import AnimateButton from '@dashboard/_components/@extended/AnimateButton';
 
 // assets
-import { useTranslation } from 'react-i18next';
+import { useTranslations } from 'next-intl';
 import Notify from '@dashboard/_components/@extended/Notify';
 import setServerErrors from '@root/utils/setServerErrors';
 import AddIcon from '@mui/icons-material/Add';
@@ -47,7 +47,7 @@ interface AddOrEditCategoryProps {
 }
 
 const AddOrEditCategory = ({ row, isNew, open, setOpen, refetch }: AddOrEditCategoryProps) => {
-  const [t] = useTranslation();
+  const t = useTranslations("");
   const [fieldsName, validation, buttonName] = ['fields.category.', 'validation.category.', 'buttons.category.'];
   const [category, setCategory] = useState<CategoryModel | undefined>(undefined);
   const [notify, setNotify] = useState<NotifyProps>({ open: false });
@@ -174,7 +174,7 @@ const AddOrEditCategory = ({ row, isNew, open, setOpen, refetch }: AddOrEditCate
                 <CloseDialog onClose={onClose} />
               </DialogTitle>
               <DialogContent>
-                <Grid container spacing={3} direction="column">
+                <Grid container spacing={3} >
                   <Grid item>
                     <Stack spacing={1}>
                       <InputLabel htmlFor="name">{t(fieldsName + 'name')}</InputLabel>

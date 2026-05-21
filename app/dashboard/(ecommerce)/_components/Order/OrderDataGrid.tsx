@@ -8,7 +8,7 @@ import MainCard from '@dashboard/_components/MainCard';
 import TableCard from '@dashboard/_components/TableCard';
 import Currency from '@dashboard/_components/Currency/Currency';
 import { ReactNode, useCallback, useMemo, useState } from 'react';
-import { useTranslation } from 'react-i18next';
+import { useTranslations } from 'next-intl';
 import MaterialTable from '@dashboard/_components/MaterialTable/MaterialTable';
 import { useSession } from 'next-auth/react';
 import OrderService from '../../_service/OrderService';
@@ -18,14 +18,14 @@ import OrderUserAvatar from './OrderUserAvatar';
 import PaymentStatus from './PaymentStatus';
 import PaymentDetail from './PaymentDetail';
 import OrderModel from '../../_types/Order/OrderModel';
-import MRT_Column from '@root/app/types/MRT_Column';
+import { MRT_Column } from '@root/app/types/MRT_Column';
 import { MRT_Row } from 'material-react-table';
 
 
 // ===============================|| COLOR BOX ||=============================== //
 
 function OrderDataGrid() {
-  const [t] = useTranslation();
+  const t = useTranslations("");
   const { data: session } = useSession();
   const jwt = session?.accessToken;
   const service = new OrderService(jwt ?? '');

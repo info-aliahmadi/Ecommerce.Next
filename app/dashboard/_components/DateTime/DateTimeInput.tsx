@@ -1,48 +1,80 @@
-import { DateTimePicker } from '@mui/x-date-pickers';
-import moment from 'moment';
-import { useEffect, useState } from 'react';
+import { DateTimePicker, DatePicker, PickersActionBarAction } from '@mui/x-date-pickers';
+import moment from 'moment-jalaali';
+import nextIntlService from '@root/locales/nextIntlService';
 
 interface DateTimeInputProps {
-  id: string;
   name: string;
   label: string;
-  setFieldValue?: (field: string, value: any) => void;
-  defaultValue?: Date | null;
-  placeholder?: any;
+  setFieldValue: (field: string, value: any) => void;
+  defaultValue?: string;
   error?: boolean;
+  showTime?: boolean;
 }
 
-export default function DateTimeInput({ id, name, label, setFieldValue, defaultValue, placeholder, error }: Readonly<DateTimeInputProps>) {
-  const onChange = (value: moment.Moment | null) => {
-    let newValue = moment.utc(value).format();
-    if (setFieldValue) {
-      setFieldValue(id, newValue);
-    }
-  };
-  const [value, setValue] = useState<moment.Moment | null>(null);
-  useEffect(() => {
-    if (defaultValue) {
+export default function DateTimeInput({
+  name,
+  label,
+  setFieldValue,
+  defaultValue,
+  error,
+  showTime = true,
+}: Readonly<DateTimeInputProps>) {
 
-      //TODO: Check the Z
-      if (defaultValue) { // if (defaultValue.endsWith('Z')) {
-        setValue(moment(defaultValue));
-      } else {
-        setValue(moment(defaultValue + 'Z'));
-      }
-    } else {
-      setValue(null);
-    }
-  }, [defaultValue]);
-  return (
+  const currentLanguage = nextIntlService.getNextIntlLocale();
+
+  return showTime ? (
     <DateTimePicker
+      sx={{
+        '& .MuiPickersSectionList-root': {
+          padding: '10.5px 0',
+          borderRadius: '7px'
+        },
+        '& .MuiPickersInputBase-root': {
+          borderRadius: '8px'  // your desired radius
+        }
+      }}
       className={error === true ? 'date-error' : ''}
-      onChange={onChange}
+      name={name}
+      format={currentLanguage === "fa" ? "jYYYY/jMM/jDD HH:mm" : "YYYY/MM/DD HH:mm"}
       label={label}
-      value={value || null}
+      value={defaultValue ? moment(defaultValue) : null}
+      onChange={(value: moment.Moment | null) => {
+        // if (!value) setFieldValue(name, null);
+        setFieldValue(name, value);
+        return value;
+      }}
       slotProps={{
         actionBar: {
-          actions: ['clear', 'today']
+          actions: ['clear', 'today'] as PickersActionBarAction[],
+        },
+      }}
+    />
+  ) : (
+    <DatePicker
+      sx={{
+        '& .MuiPickersSectionList-root': {
+          padding: '10.5px 0',
+          borderRadius: '7px'
+        },
+        '& .MuiPickersInputBase-root': {
+          borderRadius: '8px'  // your desired radius
         }
+      }}
+      className={error === true ? 'date-error' : ''}
+      name={name}
+      label={label}
+      format={currentLanguage === "fa" ? "jYYYY/jMM/jDD" : "YYYY/MM/DD"}
+      value={defaultValue ? moment(defaultValue) : null}
+      onChange={(value: moment.Moment | null) => {
+        let selectedDate = value ? moment(value) : '';
+        setFieldValue(name, selectedDate);
+        return selectedDate;
+      }}
+
+      slotProps={{
+        actionBar: {
+          actions: ['clear', 'today'] as PickersActionBarAction[]
+        },
       }}
     />
   );

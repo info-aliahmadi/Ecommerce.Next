@@ -26,7 +26,7 @@ import { useSession } from 'next-auth/react';
 import AnimateButton from '@dashboard/_components/@extended/AnimateButton';
 
 // assets
-import { useTranslation } from 'react-i18next';
+import { useTranslations } from 'next-intl';
 import Notify from '@dashboard/_components/@extended/Notify';
 import setServerErrors from '@root/utils/setServerErrors';
 import AddIcon from '@mui/icons-material/Add';
@@ -52,7 +52,7 @@ const attributeTypeOptions = [
 
 export default function AddOrEditProductAttribute({ productAttributeId, isNew, open, setOpen, refetch }:
   { productAttributeId: number, isNew: boolean, open: boolean, setOpen: (open: boolean) => void, refetch: () => void }) {
-  const [t] = useTranslation();
+  const t = useTranslations("");
   const [fieldsName, validation, buttonName] = ['fields.product-attribute.', 'validation.product-attribute.', 'buttons.product-attribute.'];
   const [productAttribute, setProductAttribute] = useState<ProductAttributeModel>();
   const [notify, setNotify] = useState<NotifyProps>({ open: false });
@@ -171,7 +171,7 @@ export default function AddOrEditProductAttribute({ productAttributeId, isNew, o
                 <CloseDialog onClose={onClose} />
               </DialogTitle>
               <DialogContent>
-                <Grid container spacing={3} direction="column">
+                <Grid container spacing={3} >
                   <Grid item>
                     <Stack spacing={1}>
                       <InputLabel htmlFor="name">{t(fieldsName + 'name')}</InputLabel>

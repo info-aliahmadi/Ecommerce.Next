@@ -6,7 +6,7 @@ import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
 
 // assets
-import { useTranslation } from 'react-i18next';
+import { useTranslations } from 'next-intl';
 import Notify from '@dashboard/_components/@extended/Notify';
 import SlideshowService from '@dashboard/(cms)/_service/SlideshowService';
 import { useSession } from 'next-auth/react';
@@ -20,7 +20,7 @@ export default function DeleteSlideshow({ row, open, setOpen, refetch }:
     setOpen: (open: boolean) => void;
     refetch: () => void
   }>) {
-  const [t] = useTranslation();
+  const t = useTranslations("");
   const { data: session } = useSession();
   const jwt = session?.accessToken;
 

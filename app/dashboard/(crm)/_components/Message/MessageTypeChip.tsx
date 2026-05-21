@@ -1,11 +1,11 @@
 import { Chip } from '@mui/material';
-import { useTranslation } from 'react-i18next';
+import { useTranslations } from 'next-intl';
 import { renderColor, renderTitle } from './MessageType';
 // ===============================|| COLOR BOX ||=============================== //
 import { MessageType } from '../../_types/MessageModel';
 
 export default function MessageTypeChip({ messageTypeId }:{ messageTypeId : MessageType }) {
-  const [t] = useTranslation();
+  const t = useTranslations("");
   const fieldsName = 'fields.message.messageInbox.messageType.';
 
   return (

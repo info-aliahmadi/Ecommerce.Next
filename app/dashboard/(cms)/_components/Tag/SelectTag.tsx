@@ -3,7 +3,7 @@ import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
 import CircularProgress from '@mui/material/CircularProgress';
 import { useState, useEffect } from 'react';
-import { useTranslation } from 'react-i18next';
+import { useTranslations } from 'next-intl';
 import { Chip, FormControl } from '@mui/material';
 import TagsService from '@dashboard/(cms)/_service/TagsService';
 import { useSession } from 'next-auth/react';
@@ -17,7 +17,7 @@ export default function SelectTag({ defaultValues, id, setFieldValue, error, dis
     error?: boolean,
     disabled?: boolean
   }>) {
-  const [t] = useTranslation();
+  const t = useTranslations("");
   const { data: session } = useSession();
   const jwt = session?.accessToken;
 

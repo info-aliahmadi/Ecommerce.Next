@@ -1,101 +1,41 @@
-import axios from 'axios';
-import { setDefaultHeader } from '@root/utils/axiosHeaders';
-import CONFIG from '@root/config';
+import Fetch from '@root/utils/Fetch';
 import Result from '@root/app/types/Result';
+import { GridDataBound } from '@root/app/types/GridDataBound';
+import CONFIG from '@root/config';
 import EmailOutboxModel from '../_types/EmailOutboxModel';
 
 export default class EmailOutboxService {
-  constructor(jwt : string) {
-    setDefaultHeader(jwt);
+  config?: RequestInit;
+  constructor(jwt: string) {
+    if (jwt) this.config = Fetch.SetDefaultHeader(jwt);
   }
-
-  sendEmailOutbox = async (emailOutboxModel : EmailOutboxModel): Promise<Result<EmailOutboxModel>> => {
-    return new Promise((resolve, reject) => {
-      axios
-        .post(CONFIG.API_BASEPATH + '/crm/SendEmailOutbox', emailOutboxModel)
-        .then((response) => {
-          resolve(response.data);
-        })
-        .catch((error) => {
-          reject(error);
-        });
-    });
-  };
-  saveDraftEmailOutbox = async (emailOutboxModel : EmailOutboxModel): Promise<Result<EmailOutboxModel>> => {
-    return new Promise((resolve, reject) => {
-      axios
-        .post(CONFIG.API_BASEPATH + '/crm/SaveDraftEmailOutbox', emailOutboxModel)
-        .then((response) => {
-          resolve(response.data);
-        })
-        .catch((error) => {
-          reject(error);
-        });
-    });
-  };
-
+  
   getAllEmailOutbox = async (searchParams:  GridDataBound): Promise<Result<PaginatedList<EmailOutboxModel>>> => {
-    return new Promise((resolve, reject) => {
-      axios
-        .post(CONFIG.API_BASEPATH + '/crm/GetAllEmailOutbox', searchParams)
-        .then((response) => {
-          resolve(response.data);
-        })
-        .catch((error) => {
-          reject(error);
-        });
-    });
+    return Fetch.Post<Result<PaginatedList<EmailOutboxModel>>>(CONFIG.API_BASEPATH + '/crm/GetAllEmailOutbox', searchParams, this.config);
   };
   getEmailOutboxOfCurrentUser = async (searchParams:  GridDataBound): Promise<Result<PaginatedList<EmailOutboxModel>>> => {
-    return new Promise((resolve, reject) => {
-      axios
-        .post(CONFIG.API_BASEPATH + '/crm/GetEmailOutbox', searchParams)
-        .then((response) => {
-          resolve(response.data);
-        })
-        .catch((error) => {
-          reject(error);
-        });
-    });
+    return Fetch.Post<Result<PaginatedList<EmailOutboxModel>>>(CONFIG.API_BASEPATH + '/crm/GetEmailOutbox', searchParams, this.config);
+  };
+
+  sendEmailOutbox = async (emailOutboxModel : EmailOutboxModel): Promise<Result<EmailOutboxModel>> => {
+    return Fetch.Post<Result<EmailOutboxModel>>(CONFIG.API_BASEPATH + '/crm/SendEmailOutbox', emailOutboxModel, this.config);
+  };
+  saveDraftEmailOutbox = async (emailOutboxModel : EmailOutboxModel): Promise<Result<EmailOutboxModel>> => {
+    return Fetch.Post<Result<EmailOutboxModel>>(CONFIG.API_BASEPATH + '/crm/SaveDraftEmailOutbox', emailOutboxModel, this.config);
   };
 
   getAddressForSelect = async () : Promise<Result<string[]>> => {
-    return new Promise((resolve, reject) => {
-      axios
-        .get(CONFIG.API_BASEPATH + '/crm/GetAddressForSelect')
-        .then((response) => {
-          resolve(response.data);
-        })
-        .catch((error) => {
-          reject(error);
-        });
-    });
+    return Fetch.Get<Result<string[]>>(CONFIG.API_BASEPATH + `/crm/GetAddressForSelect`, this.config);
   };
 
   getEmailOutboxByIdForSender = async (emailOutboxId : number): Promise<Result<EmailOutboxModel>> => {
-    return new Promise((resolve, reject) => {
-      axios
-        .get(CONFIG.API_BASEPATH + '/crm/GetEmailOutboxByIdForSender', { params: { emailOutboxId: emailOutboxId } })
-        .then((response) => {
-          resolve(response.data);
-        })
-        .catch((error) => {
-          reject(error);
-        });
-    });
+    const params = new URLSearchParams({ emailOutboxId: emailOutboxId.toString() });
+    return Fetch.Get<Result<EmailOutboxModel>>(CONFIG.API_BASEPATH + `/crm/GetEmailOutboxByIdForSender?${params.toString()}`, this.config);
   };
 
   removeEmailOutbox = async (emailOutboxId : number): Promise<Result<null>> => {
-    return new Promise((resolve, reject) => {
-      axios
-        .get(CONFIG.API_BASEPATH + '/crm/RemoveEmailOutbox', { params: { emailOutboxId: emailOutboxId } })
-        .then((response) => {
-          resolve(response.data);
-        })
-        .catch((error) => {
-          reject(error);
-        });
-    });
+    const params = new URLSearchParams({ emailOutboxId: emailOutboxId.toString() });
+    return Fetch.Get<Result<null>>(CONFIG.API_BASEPATH + `/crm/RemoveEmailOutbox?${params.toString()}`, this.config);
   };
 
 }

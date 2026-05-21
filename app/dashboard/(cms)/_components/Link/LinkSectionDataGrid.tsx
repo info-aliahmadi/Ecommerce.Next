@@ -5,7 +5,7 @@ import { Box, Button, IconButton, Tooltip, Typography } from '@mui/material';
 import MainCard from '@dashboard/_components/MainCard';
 import TableCard from '@dashboard/_components/TableCard';
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { useTranslation } from 'react-i18next';
+import { useTranslations } from 'next-intl';
 import MaterialTable from '@dashboard/_components/MaterialTable/MaterialTable';
 import { Delete, Visibility, VisibilityOff, Edit } from '@mui/icons-material';
 import AddOrEditLinkSection from './AddOrEditLinkSection';
@@ -16,13 +16,13 @@ import LinkDataGrid from './LinkDataGrid';
 import LinkSectionService from '@dashboard/(cms)/_service/LinkSectionService';
 import { useSession } from 'next-auth/react';
 import { MRT_Row } from 'material-react-table';
-import MRT_Column from '@root/app/types/MRT_Column';
+import { MRT_Column } from '@root/app/types/MRT_Column';
 import Notify from '@root/app/dashboard/_components/@extended/Notify';
 import LinkSectionModel from '../../_types/LinkSection/LinkSectionModel';
 // ===============================|| COLOR BOX ||=============================== //
 
 function LinkSectionDataGrid() {
-  const [t] = useTranslation();
+  const t = useTranslations("");
   const { data: session } = useSession();
   const jwt = session?.accessToken;
 

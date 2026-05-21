@@ -1,6 +1,6 @@
 import Avatar from '@mui/material/Avatar';
 import { useEffect, useState } from 'react';
-import { useTranslation } from 'react-i18next';
+import { useTranslations } from 'next-intl';
 import { useSession } from 'next-auth/react';
 import OrderService from '../../_service/OrderService';
 
@@ -18,7 +18,7 @@ import OrderItemModel, { SumOrderItemsModel } from '../../_types/Order/OrderItem
 // ===============================|| COLOR BOX ||=============================== //
 
 export default function OrderItemData({ orderId, currency }: { orderId: number; currency: 'USD' | 'EUR' | 'GBP' | 'Rial' }) {
-  const [t] = useTranslation();
+  const t = useTranslations("");
   const { data: session } = useSession();
   const jwt = session?.accessToken;
   const service = new OrderService(jwt ?? '');

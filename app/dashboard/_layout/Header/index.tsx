@@ -9,14 +9,16 @@ import AppBarStyled from './AppBarStyled';
 import HeaderContent from './HeaderContent';
 
 // assets
-import { MenuFoldOutlined, MenuUnfoldOutlined } from '@ant-design/icons';
+
+import MenuRoundedIcon from '@mui/icons-material/MenuRounded';
+import MenuOpenRoundedIcon from '@mui/icons-material/MenuOpenRounded';
 
 // ==============================|| MAIN LAYOUT - HEADER ||============================== //
 
 const Header = ({ open, handleDrawerToggle }: { open: any, handleDrawerToggle: any }) => {
   const theme = useTheme();
   const matchDownMD = useMediaQuery(theme.breakpoints.down('lg'));
-
+  const direction = theme.direction; // 'ltr' or 'rtl'
   // common header
   const mainHeader = (
     <Toolbar>
@@ -28,7 +30,7 @@ const Header = ({ open, handleDrawerToggle }: { open: any, handleDrawerToggle: a
         color="secondary"
         sx={{ color: 'text.primary', ml: { xs: 0, lg: -2 } }}
       >
-        {!open ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
+         {!open ? <MenuRoundedIcon /> : <MenuOpenRoundedIcon sx={{ transform: direction == "rtl" ? "rotate(180deg)" : "" }} />}
       </IconButton>
 
       <HeaderContent />

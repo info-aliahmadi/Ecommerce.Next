@@ -2,7 +2,7 @@ import { Box, Button, Chip, Grid, IconButton, Tooltip } from '@mui/material';
 import MainCard from '@dashboard/_components/MainCard';
 import TableCard from '@dashboard/_components/TableCard';
 import { ReactNode, useCallback, useMemo, useState } from 'react';
-import { useTranslation } from 'react-i18next';
+import { useTranslations } from 'next-intl';
 import MaterialTable from '@dashboard/_components/MaterialTable/MaterialTable';
 import { Delete, Edit, RestoreFromTrash, PostAddOutlined, PushPin, Link } from '@mui/icons-material';
 import DeleteArticle from './DeleteArticle';
@@ -12,15 +12,16 @@ import { useRouter } from 'next/navigation';
 import ArticleDetail from './ArticleDetail';
 import { useSession } from 'next-auth/react';
 import CONFIG from '@root/config';
-import { MRT_Cell, MRT_Row } from 'material-react-table';
-import MRT_Column from '@root/app/types/MRT_Column';
+import { MRT_Row } from 'material-react-table';
 
 import ArticleModel from '../../_types/Article/ArticleMode';
+import { GridDataBound } from '@root/app/types/GridDataBound';
+import { MRT_Column } from '@root/app/types/MRT_Column';
 
 
 // ===============================|| COLOR BOX ||=============================== //
 export function ArticlesDataGrid() {
-  const [t, i18n] = useTranslation();
+  const t= useTranslations("");
   const { data: session } = useSession();
   const jwt = session?.accessToken;
 

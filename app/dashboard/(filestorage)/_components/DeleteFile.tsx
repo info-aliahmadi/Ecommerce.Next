@@ -6,7 +6,7 @@ import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
 
 // assets
-import { useTranslation } from 'react-i18next';
+import { useTranslations } from 'next-intl';
 import Notify from '@dashboard/_components/@extended/Notify';
 import FileStorageService from '@dashboard/(filestorage)/_service/FileStorageService';
 import { useSession } from 'next-auth/react';
@@ -21,7 +21,7 @@ interface DeleteFileProps {
 }
 
 const DeleteFile = ({ fileId, open, setOpen, files, setFiles }: DeleteFileProps) => {
-  const [t] = useTranslation();
+  const t = useTranslations("");
   const { data: session } = useSession();
   const jwt = session?.accessToken;
   let fileStorageService = new FileStorageService(jwt ?? '');

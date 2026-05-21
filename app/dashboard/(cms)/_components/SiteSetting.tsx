@@ -13,7 +13,7 @@ import AnimateButton from '@dashboard/_components/@extended/AnimateButton';
 import Save from '@mui/icons-material/Save';
 
 // assets
-import { useTranslation } from 'react-i18next';
+import { useTranslations } from 'next-intl';
 import Notify from '@dashboard/_components/@extended/Notify';
 import SiteSettingsService from '../_service/SiteSettingsService';
 import { useSession } from 'next-auth/react';
@@ -21,7 +21,7 @@ import SiteSettingsModel from '../_types/SiteSetting/SiteSettingsModel';
 // ============================|| FIREBASE - REGISTER ||============================ //
 
 const SiteSetting = () => {
-  const [t] = useTranslation();
+  const t = useTranslations("");
   const { data: session } = useSession();
   const jwt = session?.accessToken;
   let siteSettingsService = new SiteSettingsService(jwt ?? '');

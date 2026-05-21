@@ -2,7 +2,7 @@
 import { Button, Grid, Typography } from '@mui/material';
 
 // project import
-import { useTranslation } from 'react-i18next';
+import { useTranslations } from 'next-intl';
 import { Send, Drafts } from '@mui/icons-material';
 
 import MainCard from '@dashboard/_components/MainCard';
@@ -13,7 +13,7 @@ import Link from 'next/link';
 // ===============================|| COLOR BOX ||=============================== //
 
 function EmailInboxsInbox() {
-  const [t] = useTranslation();
+  const t = useTranslations("");
   const buttonName = 'buttons.emailInbox.emailInboxInbox.';
   const EmailInboxHeader = () => {
     return (
@@ -43,8 +43,8 @@ function EmailInboxsInbox() {
     );
   };
   return (
-      <Grid container justifyContent="center" direction="row" alignItems="flex-start">
-        <Grid container spacing={3} item xs={12} sm={12} md={12} lg={12} direction="column">
+      <Grid container direction="row" sx={{ justifyContent: "center", alignItems: "flex-start" }}>
+        <Grid container spacing={3} item xs={12} sm={12} md={12} lg={12} >
           <Grid item>
             <Typography variant="h5">{t('pages.emailInboxsInbox')}</Typography>
           </Grid>

@@ -1,24 +1,22 @@
 'use client';
-import { Grid2, Typography } from '@mui/material';
+import { Grid, Stack, Typography } from '@mui/material';
 
 // project import
 import UserDataGrid from '../../_components/User/UsersDataGrid';
-import { useTranslation } from 'react-i18next';
+import { useTranslations } from 'next-intl';
 // ===============================|| COLOR BOX ||=============================== //
 
 function UsersList() {
-  const [t] = useTranslation();
+  const t = useTranslations("");
   return (
-    <Grid2 direction="row" sx={{ justifyContent: 'center', alignItems: "flex-start" }}>
-      <Grid2 container spacing={3} direction="column" columns={{ xs: 12, sm: 12, md: 12, lg: 12, xl: 12 }}>
-        <Grid2>
+    <Grid container direction="row" rowSpacing={2}>
+        <Grid size={12}>
           <Typography variant="h5">{t('pages.users')}</Typography>
-        </Grid2>
-        <Grid2>
+        </Grid>
+        <Grid size={12}>
           <UserDataGrid />
-        </Grid2>
-      </Grid2>
-    </Grid2>
+        </Grid>
+    </Grid>
   );
 }
 

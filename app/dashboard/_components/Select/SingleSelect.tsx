@@ -3,13 +3,14 @@ import { useState, useEffect } from 'react';
 import { Chip, FormControl, MenuItem, OutlinedInput, Select, InputLabel, Box, useTheme, Theme } from '@mui/material';
 import Result from '@root/app/types/Result';
 
+
 interface SingleSelectProps {
   defaultValue?: any,
   id: string,
   name?: string,
   label: string,
   optionLabel: string,
-  setFieldValue?: (field: string, value: any) => void,
+  setFieldValue: (field: string, value: any) => void,
   error?: boolean,
   disabled?: boolean,
   loadDataApi:() => Promise<Result<any>>
@@ -38,15 +39,6 @@ export default function SingleSelect({ defaultValue, id, name, label, optionLabe
 
   const ITEM_HEIGHT = 48;
   const ITEM_PADDING_TOP = 8;
-  const MenuProps = {
-    PaperProps: {
-      style: {
-        maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
-        width: 250
-      }
-    }
-  };
-
 
   function getStyles(value: string, defaultValue: string, theme: Theme): React.CSSProperties {
     return {
@@ -55,9 +47,7 @@ export default function SingleSelect({ defaultValue, id, name, label, optionLabe
   }
 
   const handleChange = (event: any) => {
-    if (setFieldValue) {
-      setFieldValue(id, event.target.value);
-    }
+    setFieldValue(id, event.target.value);
     setValue(event.target.value);
   };
 
@@ -70,9 +60,12 @@ export default function SingleSelect({ defaultValue, id, name, label, optionLabe
         className="select-margin"
         value={value ?? ''}
         label={label}
+        style={{
+          maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+          width: 250
+        }}
         size="medium"
         onChange={handleChange}
-        MenuProps={MenuProps}
         input={<OutlinedInput label={label} sx={{ minHeight: '41px' }} />}
         defaultValue={defaultValue ? options?.filter((x: any) => x.id == defaultValue) : ''}
         renderValue={(selected: any) => (<Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>

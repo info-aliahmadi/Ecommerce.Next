@@ -59,6 +59,7 @@ const Palette = (mode : 'light' | 'dark' | undefined) : any => {
             text: {
               primary: "#f3f4f6",
               secondary: "#f3f4f6",
+              
               disabled: paletteColor.grey[400]
             },
             action: {

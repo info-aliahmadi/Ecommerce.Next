@@ -4,13 +4,14 @@ import { Chip, FormControl, MenuItem, OutlinedInput, Select, InputLabel, Box, us
 import {} from '@mui/system';
 import Result from '@root/app/types/Result';
 
+
 interface MultiSelectProps {
   readonly defaultValues: any[];
   readonly id: string;
   readonly name: string;
   readonly label: string;
   readonly optionLabel: string;
-  readonly setFieldValue? : (field: string, value: any) => void;
+  readonly setFieldValue: (field: string, value: any) => void;
   readonly onChange?: (event: React.ChangeEvent<{ value: unknown }>, options: any[]) => void;
   readonly error?: boolean;
   readonly disabled?: boolean;
@@ -41,14 +42,6 @@ export default function MultiSelect({ defaultValues, id, name, label, optionLabe
 
   const ITEM_HEIGHT = 48;
   const ITEM_PADDING_TOP = 8;
-  const MenuProps = {
-    PaperProps: {
-      style: {
-        maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
-        width: 250
-      }
-    }
-  };
   function getStyles(value: string, values: string[], theme: Theme): React.CSSProperties {
     return {
       fontWeight: values.indexOf(value) === -1 ? theme.typography.fontWeightRegular : theme.typography.fontWeightMedium
@@ -59,9 +52,7 @@ export default function MultiSelect({ defaultValues, id, name, label, optionLabe
     if (onChange) {
       onChange(event, options);
     } else {
-      if (setFieldValue) {
-        setFieldValue(id, event.target.value);
-      }
+      setFieldValue(id, event.target.value);
       setValues(event.target.value);
     }
   };
@@ -78,7 +69,10 @@ export default function MultiSelect({ defaultValues, id, name, label, optionLabe
         label={label}
         size="medium"
         onChange={handleChange}
-        MenuProps={MenuProps}
+        style={{
+          maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+          width: 250
+        }}
         input={<OutlinedInput label={label} sx={{ minHeight: '41px' }} />}
         defaultValue={options?.filter((x) => defaultValues?.find((c) => c === x.id)) ?? []}
         renderValue={(selected) => (

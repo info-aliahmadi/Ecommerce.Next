@@ -2,12 +2,11 @@
 import { FormHelperText, Grid, TextField, Stack, Divider } from '@mui/material';
 
 // assets
-import { useTranslation } from 'react-i18next';
+import { useTranslations } from 'next-intl';
 
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Switch from '@mui/material/Switch';
 import ProductAttributeInventory from './ProductAttributeInventory';
-import { useState } from 'react';
 
 export default function ProductInventory({ operation, values, setFieldValue, handleBlur, handleChange, errors, touched }: 
   {
@@ -19,7 +18,7 @@ export default function ProductInventory({ operation, values, setFieldValue, han
      errors: any,
       touched: any 
     }) {
-  const [t, i18n] = useTranslation();
+  const t = useTranslations("");
   const fieldsName = 'fields.product.';
   const handleCheckedChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setFieldValue(event.target.id, event.target.checked);

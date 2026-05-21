@@ -154,7 +154,7 @@ const OrderStatus = ({ status }: { status: number }) => {
   }
 
   return (
-    <Stack direction="row" spacing={1} alignItems="center">
+    <Stack sx={{ alignItems: "center" }} direction="row" spacing={1}>
       <Dot color={color} size={16} />
       <Typography>{title}</Typography>
     </Stack>
@@ -168,7 +168,7 @@ export default function OrderTable() {
   const [orderBy] = useState<keyof Data>('trackingNo');
   const [selected] = useState<number[]>([]);
 
-  const isSelected = (trackingNo : any) => selected.indexOf(trackingNo) !== -1;
+  const isSelected = (trackingNo: any) => selected.indexOf(trackingNo) !== -1;
 
   return (
     <Box>

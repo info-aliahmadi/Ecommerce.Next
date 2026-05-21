@@ -3,7 +3,7 @@ import { Box, IconButton, Link, Tooltip } from '@mui/material';
 
 // project import
 import { ReactNode, useCallback, useMemo, useState } from 'react';
-import { useTranslation } from 'react-i18next';
+import { useTranslations } from 'next-intl';
 import MaterialTable from '@dashboard/_components/MaterialTable/MaterialTable';
 import { Delete, PushPin, AttachFile } from '@mui/icons-material';
 import Notify from '@dashboard/_components/@extended/Notify';
@@ -13,13 +13,13 @@ import DeleteMessage from './DeleteMessage';
 import { MessageTypes } from './MessageType';
 import { useSession } from 'next-auth/react';
 import { MRT_Cell, MRT_Row } from 'material-react-table';
-import MRT_Column from '@root/app/types/MRT_Column';
+import { MRT_Column } from '@root/app/types/MRT_Column';
 
 import MessageModel, { MessageType } from '../../_types/MessageModel';
 // ===============================|| COLOR BOX ||=============================== //
 
 function MessagesPrivateInboxDataGrid() {
-  const [t] = useTranslation();
+  const t = useTranslations("");
   const { data: session } = useSession();
   const jwt = session?.accessToken;
 

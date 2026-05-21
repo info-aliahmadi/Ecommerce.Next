@@ -5,7 +5,7 @@ import { Box, Button, IconButton, Tooltip, Typography } from '@mui/material';
 import MainCard from '@dashboard/_components/MainCard';
 import TableCard from '@dashboard/_components/TableCard';
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { useTranslation } from 'react-i18next';
+import { useTranslations } from 'next-intl';
 import MaterialTable from '@dashboard/_components/MaterialTable/MaterialTable';
 import { Delete } from '@mui/icons-material';
 import { Edit } from '@mui/icons-material';
@@ -16,13 +16,13 @@ import { useSession } from 'next-auth/react';
 import ManufacturerService from '../../_service/ManufacturerService';
 import ManufacturerModel from '../../_types/Product/ManufacturerModel';
 import { MRT_Row } from 'material-react-table';
-import MRT_Column from '@root/app/types/MRT_Column';
+import { MRT_Column } from '@root/app/types/MRT_Column';
 
 
 // ===============================|| COLOR BOX ||=============================== //
 
 function ManufacturerDataGrid() {
-  const [t] = useTranslation();
+  const t = useTranslations("");
   const { data: session } = useSession();
   const jwt = session?.accessToken;
   const service = new ManufacturerService(jwt ?? '');

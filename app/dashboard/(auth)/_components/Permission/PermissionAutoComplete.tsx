@@ -5,6 +5,7 @@ import CircularProgress from '@mui/material/CircularProgress';
 import { useState, useEffect } from 'react';
 import PermissionService from '@dashboard/(auth)/_service/PermissionService';
 import { useSession } from 'next-auth/react';
+import { InputAdornment, Typography } from '@mui/material';
 
 interface PermissionAutoCompleteProps {
   readonly value?: number;
@@ -67,7 +68,6 @@ export default function PermissionAutoComplete({ value, setValue }: PermissionAu
       onClose={() => {
         setOpen(false);
       }}
-      //   inputValue={newValue}s
       onInputChange={onInputChange}
       onChange={onChange}
       //   defaultValue
@@ -82,15 +82,6 @@ export default function PermissionAutoComplete({ value, setValue }: PermissionAu
           value={newValue}
           size="small"
           label="Select Permission"
-          InputProps={{
-            ...params.InputProps,
-            endAdornment: (
-              <React.Fragment>
-                {loading ? <CircularProgress color="inherit" size={15} /> : null}
-                {params.InputProps.endAdornment}
-              </React.Fragment>
-            )
-          }}
         />
       )}
     />

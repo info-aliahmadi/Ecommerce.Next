@@ -19,7 +19,7 @@ import {
 
 // project import
 import { useEffect, useRef, useState } from 'react';
-import { useTranslation } from 'react-i18next';
+import { useTranslations } from 'next-intl';
 import { InfoOutlined, Download, Delete, UploadFile, InsertDriveFile } from '@mui/icons-material';
 
 import LinkIcon from '@mui/icons-material/Link';
@@ -43,7 +43,7 @@ import FileUploadModel from '../_types/FileUploadModel';
 // ===============================|| COLOR BOX ||=============================== //
 
 function FilesList({ directory }: Readonly<{ directory: string }>) {
-  const [t, i18n] = useTranslation();
+  const t = useTranslations("");
   const { data: session } = useSession();
   const jwt = session?.accessToken;
   const theme = useTheme();

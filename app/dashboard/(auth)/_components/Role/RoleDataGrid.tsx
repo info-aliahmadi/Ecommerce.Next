@@ -5,7 +5,7 @@ import { Box, Button, IconButton, Tooltip } from '@mui/material';
 import MainCard from '@dashboard/_components/MainCard';
 import TableCard from '@dashboard/_components/TableCard';
 import { useCallback, useMemo, useState } from 'react';
-import { useTranslation } from 'react-i18next';
+import { useTranslations } from 'next-intl';
 import MaterialTable from '@dashboard/_components/MaterialTable/MaterialTable';
 import { Delete, Edit } from '@mui/icons-material';
 import AddOrEditRole from './AddOrEditRole';
@@ -15,12 +15,13 @@ import AddIcon from '@mui/icons-material/Add';
 import RoleService from '@dashboard/(auth)/_service/RoleService';
 import PermissionRoleDataGrid from '../PermissionRole/PermissionRoleDataGrid';
 import { useSession } from 'next-auth/react';
-import MRT_Column from '@root/app/types/MRT_Column';
+
 import { MRT_Row } from 'material-react-table';
+
 // ===============================|| COLOR BOX ||=============================== //
 
 function RoleDataGrid() {
-  const [t] = useTranslation();
+  const t = useTranslations("");
   const { data: session } = useSession();
   const jwt = session?.accessToken;
 

@@ -12,7 +12,7 @@ import AnimateButton from '@dashboard/_components/@extended/AnimateButton';
 import Save from '@mui/icons-material/Save';
 
 // assets
-import { useTranslation } from 'react-i18next';
+import { useTranslations } from 'next-intl';
 import Notify from '@dashboard/_components/@extended/Notify';
 import { useSession } from 'next-auth/react';
 import MessageSettingService from '../_service/MessageSettingService';
@@ -22,7 +22,7 @@ import MessageSettingModel from '../_types/MessageSettingModel';
 // ============================|| FIREBASE - REGISTER ||============================ //
 
 const MessageSetting = () => {
-  const [t] = useTranslation();
+  const t = useTranslations("");
   const { data: session } = useSession();
   const jwt = session?.accessToken;
   let settingsService = new MessageSettingService(jwt ?? '');

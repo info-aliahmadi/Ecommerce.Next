@@ -1,15 +1,17 @@
 {
   "compilerOptions": {
     "baseUrl": ".",
-    "target": "ES2020",
-    "module": "ESNext",
-    "moduleResolution": "node",
-    "jsx": "preserve",
+    "target": "esnext",
+    "module": "esnext",
+    "outDir": "public",
+    "moduleResolution": "bundler",
+    "jsx": "react-jsx",
     "resolveJsonModule": true,
     "esModuleInterop": true,
     "lib": [
       "dom",
       "dom.iterable",
+      "webworker",
       "esnext"
     ],
     "allowJs": true,
@@ -42,9 +44,10 @@
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx",
-    ".next/types/**/*.ts", "themes/DashboardTheme/fonts/IranSans.tss", "app/dashboard/_components/Authorization/Authorize.tsx", "app/dashboard/(crm)/_lib/menu-items.ts", "app/types/MRT_Column" ],
+    ".next/types/**/*.ts",
+    ".next/dev/types/**/*.ts"
+  ],
   "exclude": [
-    "node_modules",
-    "./public/**/*.ts"
+    "node_modules"
   ]
 }

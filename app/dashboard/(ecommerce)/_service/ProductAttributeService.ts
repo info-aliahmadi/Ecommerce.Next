@@ -1,98 +1,39 @@
-import axios from 'axios';
-import { setDefaultHeader } from '@root/utils/axiosHeaders';
-import CONFIG from '@root/config';
+import Fetch from '@root/utils/Fetch';
 import Result from '@root/app/types/Result';
+import CONFIG from '@root/config';
 import ProductAttributeModel from '../_types/Product/ProductAttributeModel';
 
 
 export default class ProductAttributeService {
-  constructor(jwt : string) {
-    setDefaultHeader(jwt);
+  config?: RequestInit;
+  constructor(jwt: string) {
+    if (jwt) this.config = Fetch.SetDefaultHeader(jwt);
   }
+
   getProductAttributeList = async (): Promise<Result<ProductAttributeModel[]>> => {
-    return new Promise((resolve, reject) => {
-      axios
-        .post(CONFIG.API_BASEPATH + '/Product/getProductAttributeList')
-        .then((response) => {
-          resolve(response.data);
-        })
-        .catch((error) => {
-          reject(error);
-        });
-    });
+    return Fetch.Get<Result<ProductAttributeModel[]>>(CONFIG.API_BASEPATH + `/Product/getProductAttributeList`, this.config);
   };
 
   getProductAttributeListForSelect = async (): Promise<Result<ProductAttributeModel[]>> => {
-    return new Promise((resolve, reject) => {
-      axios
-        .post(CONFIG.API_BASEPATH + '/Product/getProductAttributesForSelect')
-        .then((response) => {
-          resolve(response.data);
-        })
-        .catch((error) => {
-          reject(error);
-        });
-    });
+    return Fetch.Get<Result<ProductAttributeModel[]>>(CONFIG.API_BASEPATH + `/Product/getProductAttributesForSelect`, this.config);
   };
 
   getAllProductAttributes = async (): Promise<Result<ProductAttributeModel[]>> => {
-    return new Promise((resolve, reject) => {
-      axios
-        .get(CONFIG.API_BASEPATH + '/Product/getAllProductAttributes')
-        .then((response) => {
-          resolve(response.data);
-        })
-        .catch((error) => {
-          reject(error);
-        });
-    });
+    return Fetch.Get<Result<ProductAttributeModel[]>>(CONFIG.API_BASEPATH + `/Product/getAllProductAttributes`, this.config);
   };
   getProductAttributeById = async (productAttributeId : number): Promise<Result<ProductAttributeModel>> => {
-    return new Promise((resolve, reject) => {
-      axios
-        .get(CONFIG.API_BASEPATH + '/Product/getProductAttributeById', { params: { productAttributeId: productAttributeId } })
-        .then((response) => {
-          resolve(response.data);
-        })
-        .catch((error) => {
-          reject(error);
-        });
-    });
+    const params = new URLSearchParams({ productAttributeId: productAttributeId.toString() });
+    return Fetch.Get<Result<ProductAttributeModel>>(CONFIG.API_BASEPATH + `/Product/getProductAttributeById?${params.toString()}`, this.config);
   };
   addProductAttribute = async (productAttribute: ProductAttributeModel): Promise<Result<ProductAttributeModel>> => {
-    return new Promise((resolve, reject) => {
-      axios
-        .post(CONFIG.API_BASEPATH + '/Product/addProductAttribute', productAttribute)
-        .then((response) => {
-          resolve(response.data);
-        })
-        .catch((error) => {
-          reject(error);
-        });
-    });
+    return Fetch.Post<Result<ProductAttributeModel>>(CONFIG.API_BASEPATH + '/Product/addProductAttribute', productAttribute, this.config);
   };
   updateProductAttribute = async (productAttribute: ProductAttributeModel): Promise<Result<ProductAttributeModel>> => {
-    return new Promise((resolve, reject) => {
-      axios
-        .post(CONFIG.API_BASEPATH + '/Product/updateProductAttribute', productAttribute)
-        .then((response) => {
-          resolve(response.data);
-        })
-        .catch((error) => {
-          reject(error);
-        });
-    });
+    return Fetch.Post<Result<ProductAttributeModel>>(CONFIG.API_BASEPATH + '/Product/updateProductAttribute', productAttribute, this.config);
+
   };
   deleteProductAttribute = async (productAttributeId : number): Promise<Result<ProductAttributeModel>> => {
-    return new Promise((resolve, reject) => {
-      axios
-        .get(CONFIG.API_BASEPATH + '/Product/deleteProductAttribute', { params: { productAttributeId: productAttributeId } })
-        .then((response) => {
-          resolve(response.data);
-        })
-        .catch((error) => {
-          reject(error);
-        });
-    });
+    const params = new URLSearchParams({ productAttributeId: productAttributeId.toString() });
+    return Fetch.Get<Result<ProductAttributeModel>>(CONFIG.API_BASEPATH + `/Product/deleteProductAttribute?${params.toString()}`, this.config);
   };
 }

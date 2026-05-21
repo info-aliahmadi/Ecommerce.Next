@@ -3,7 +3,7 @@ import { Box, Chip, IconButton, Link, Tooltip } from '@mui/material';
 
 // project import
 import { ReactNode, useCallback, useMemo, useState } from 'react';
-import { useTranslation } from 'react-i18next';
+import { useTranslations } from 'next-intl';
 import MaterialTable from '@dashboard/_components/MaterialTable/MaterialTable';
 import DeleteSweep from '@mui/icons-material/DeleteSweep';
 import AttachFile from '@mui/icons-material/AttachFile';
@@ -18,13 +18,13 @@ import { useRouter } from 'next/navigation';
 import MessageService from '@dashboard/(crm)/_service/MessageService';
 import { useSession } from 'next-auth/react';
 import { MRT_Cell, MRT_Row } from 'material-react-table';
-import MRT_Column from '@root/app/types/MRT_Column';
+import { MRT_Column } from '@root/app/types/MRT_Column';
 import MessageModel, { MessageType } from '../../_types/MessageModel';
 
 // ===============================|| COLOR BOX ||=============================== //
 
 export default function MessagesDraftDataGrid() {
-  const [t] = useTranslation();
+  const t = useTranslations("");
   const { data: session } = useSession();
   const jwt = session?.accessToken;
 

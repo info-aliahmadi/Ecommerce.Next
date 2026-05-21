@@ -21,7 +21,7 @@ import '@root/public/css/filepond-plugin-file-poster.min.css';
 import '@root/public/css/filepond-plugin-get-file.min.css';
 
 import { useEffect, useState } from 'react';
-import { useTranslation } from 'react-i18next';
+import { useTranslations } from 'next-intl';
 import CONFIG from '@root/config';
 import FileStorageService from '@dashboard/(filestorage)/_service/FileStorageService';
 import { useSession } from 'next-auth/react';

@@ -9,17 +9,17 @@ import Notification from './Notification';
 import MobileSection from './MobileSection';
 import Brightness4Icon from '@mui/icons-material/Brightness4';
 import Brightness7Icon from '@mui/icons-material/Brightness7';
-import axios from 'axios';
+import Fetch from '@root/utils/Fetch';
 import CONFIG from '@root/config';
 import { useSession } from 'next-auth/react';
-import { useTranslation } from 'react-i18next';
+import { useTranslations } from 'next-intl';
 
 // ==============================|| HEADER - CONTENT ||============================== //
 
 const HeaderContent = () => {
   const matchesXs = useMediaQuery((theme: any) => theme.breakpoints.down('md'));
 
-  const [t] = useTranslation();
+  const t = useTranslations("");
   const { data: session, update } = useSession();
   const theme = useTheme();
 

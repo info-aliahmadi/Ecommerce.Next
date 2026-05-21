@@ -1,104 +1,244 @@
 'use client';
 
 import { useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { signIn } from 'next-auth/react';
-import { useTranslation } from 'react-i18next';
+import { useTranslations } from 'next-intl';
+import Image from 'next/image';
 
 // material-ui
-import { Box, Container, Typography } from '@mui/material';
-import { SignInPage, type AuthProvider } from '@toolpad/core/SignInPage';
-import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
+import { Box, Typography, Link, Button, Paper, Alert, TextField } from '@mui/material';
+import Grid from '@mui/material/Grid';
 
 // project import
 import Notify from '@dashboard/_components/@extended/Notify';
-
+import './page.css'
+import CONFIG from '@root/config';
 // ============================|| LOGIN ||============================ //
 
 const Login = () => {
   const router = useRouter();
-  const [t] = useTranslation();
-  const [notify, setNotify] = useState<NotifyProps>({ open: false, description: '', type: 'success' });
+  const searchParams = useSearchParams();
 
-  const login: (provider: AuthProvider, formData: FormData) => void = async (
-    provider,
-    formData,
-  ) => {
+  const callbackUrl = searchParams.get('callbackUrl') || '/';
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setLoading(true);
+    setError(null);
+
     try {
-      const email = formData.get('email') as string;
-      const password = formData.get('password') as string;
-
-      if (!email || !password) {
-        setNotify({ open: true, description: t('validation.required-email'), type: 'error' });
-        return;
-      }
-
       const result = await signIn('credentials', {
-        username: email,
-        password: password,
         redirect: false,
+        username: email,
+        password,
+        callbackUrl,
       });
 
       if (result?.error) {
-        setNotify({ open: true, description: t('validation.invalid-credentials'), type: 'error' });
-      } else if (result?.ok) {
-        router.push('/dashboard');
+        setError('Invalid username or password');
+        return;
       }
-    } catch (error) {
-      console.error('Login error:', error);
-      setNotify({ open: true, description: t('validation.error-occurred'), type: 'error' });
+      
+      if (callbackUrl != "/") {
+        router.push(callbackUrl);
+      } else {
+        router.push(CONFIG.DASHBOARD_PATH);
+      }
+      router.refresh();
+
+    } catch {
+      setError('Something went wrong');
+    } finally {
+      setLoading(false);
     }
   };
 
-  const providers: AuthProvider[] = [
-    {
-      id: 'credentials',
-      name: 'Email and Password',
-    },
-  ];
+
+  function SignUpLink() {
+    return (
+      <Link href="/" variant="body2">
+        Sign up
+      </Link>
+    );
+  }
+
+  function ForgotPasswordLink() {
+    return (
+      <Link href="/" variant="body2">
+        Forgot password?
+      </Link>
+    );
+  }
+  const BRANDING = {
+    logo: (
+      <img
+        src="/images/apple-touch-icon.png"
+        alt="MUI logo"
+        style={{ height: 24 }}
+      />
+    ),
+    title: 'MUI',
+  };
 
   return (
-    <Container component="main" maxWidth="xs">
-      <Notify notify={notify} setNotify={setNotify} />
-      <Box
+    <>
+      <Grid
+        container
+        direction="row"
         sx={{
-          marginTop: 8,
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
+          minHeight: '100vh'
         }}
       >
-        <Box
+        {/* <Notify notify={notify} setNotify={setNotify} /> */}
+        {/* Right Side - Login Form */}
+        <Grid
+          size={{ xs: 12, sm: 12, md: 6, lg: 4, xl: 4 }}
           sx={{
+            height: '100vh',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            width: 40,
-            height: 40,
-            borderRadius: '50%',
-            bgcolor: 'primary.main',
-            color: 'white',
-            mb: 2,
+            p: 3,
+            backgroundColor: 'background.default',
           }}
         >
-          <LockOutlinedIcon />
-        </Box>
-        <Typography component="h1" variant="h5">
-          {t('login.title')}
-        </Typography>
-        <Box component="div" sx={{ mt: 1 }}>
-          <SignInPage
-            signIn={login}
-            providers={providers}
-            slotProps={{ 
-              emailField: { autoFocus: true }, 
-              passwordField: { autoFocus: false }, 
-              form: { noValidate: true } 
+          <Grid className='main' sx={{ width: '100%' }}>
+            <Box
+              sx={{
+                minHeight: '100vh',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                bgcolor: '#f5f5f5',
+                px: 2,
+              }}
+            >
+              <Paper elevation={3} sx={{ p: 4, width: '100%', maxWidth: 420 }}>
+                <Typography variant="h4" gutterBottom>
+                  Sign in
+                </Typography>
+
+                <Typography variant="body2" color="text.secondary" sx={{ mb: 3 }}>
+                  Use your account credentials to continue.
+                </Typography>
+
+                <form onSubmit={handleSubmit}>
+                  <TextField
+                    label="Username"
+                    fullWidth
+                    margin="normal"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    autoComplete="username"
+                    required
+                  />
+
+                  <TextField
+                    label="Password"
+                    type="password"
+                    fullWidth
+                    margin="normal"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    autoComplete="current-password"
+                    required
+                  />
+
+                  {error && (
+                    <Alert severity="error" sx={{ mt: 2 }}>
+                      {error}
+                    </Alert>
+                  )}
+
+                  <Button
+                    type="submit"
+                    variant="contained"
+                    fullWidth
+                    sx={{ mt: 3 }}
+                    disabled={loading}
+                  >
+                    {loading ? 'Signing in...' : 'Sign in'}
+                  </Button>
+                </form>
+
+                <Typography variant="body2" sx={{ mt: 2, textAlign: 'center' }}>
+                  <Link href="/" underline="hover">
+                    Back to home
+                  </Link>
+                </Typography>
+              </Paper>
+            </Box>
+          </Grid>
+        </Grid>
+        {/* Left Side - Image/Video */}
+        <Grid
+          size={{ xs: 12, sm: 12, md: 6, lg: 8, xl: 8 }}
+          sx={{
+            height: '100vh',
+            position: 'relative',
+            overflow: 'hidden',
+            background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}
+        >
+          <Grid
+            sx={{
+              position: 'relative',
+              width: '100%',
+              height: '100%',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
             }}
-          />
-        </Box>
-      </Box>
-    </Container>
+          >
+            <Image
+              src="/images/OnWaveLogo.png"
+              alt="Cashier Next"
+              fill
+              style={{
+                objectFit: 'contain',
+                opacity: 0.8,
+              }}
+              priority
+            />
+            <Box
+              sx={{
+                position: 'absolute',
+                top: 0,
+                left: 0,
+                right: 0,
+                bottom: 0,
+                background: 'linear-gradient(45deg, rgba(102, 126, 234, 0.8) 0%, rgba(118, 75, 162, 0.8) 100%)',
+              }}
+            />
+            <Box
+              sx={{
+                position: 'relative',
+                zIndex: 2,
+                textAlign: 'center',
+                color: 'white',
+                p: 3,
+              }}
+            >
+              <Typography variant="h3" component="h1" sx={{ mb: 2, fontWeight: 'bold' }}>
+                Welcome to Hydra Cashier System
+              </Typography>
+              <Typography variant="h6" sx={{ opacity: 0.9 }}>
+                Your complete point of sale solution
+              </Typography>
+            </Box>
+          </Grid>
+        </Grid>
+
+      </Grid >
+    </>
   );
 };
 

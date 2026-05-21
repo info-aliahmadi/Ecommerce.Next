@@ -2,14 +2,14 @@
 import { FormHelperText, Grid, TextField, Stack } from '@mui/material';
 
 // assets
-import { useTranslation } from 'react-i18next';
+import { useTranslations } from 'next-intl';
 
 import SelectProductTag from '../ProductTag/SelectProductTag';
 
 export default function ProductSEO({  values, setFieldValue, handleBlur, handleChange, errors, touched }: 
   { operation: 'add' | 'edit', values: any, setFieldValue: (field: string, value: any) => void, handleBlur: (event: React.FocusEvent<HTMLInputElement>) => void, 
     handleChange: (event: React.ChangeEvent<HTMLInputElement>) => void, errors: any, touched: any }) {
-  const [t, i18n] = useTranslation();
+  const t = useTranslations("");
   const fieldsName = 'fields.product.';
   const handleCheckedChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setFieldValue(event.target.id, event.target.checked);

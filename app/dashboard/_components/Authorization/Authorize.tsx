@@ -3,7 +3,7 @@ import { AuthorizationContext } from './AuthorizationProvider';
 import AccessDenied from '@dashboard/(auth)/_components/AccessDenied';
 import Loader from '@dashboard/_components/Loader';
 
-function Authorize({ permission, children, accessDeniedElement }: Readonly<{ permission: string, children: any, accessDeniedElement?: any}>) {
+function Authorize({ permission, children, accessDeniedElement }: Readonly<{ permission?: string, children: any, accessDeniedElement?: any }>) {
   const context = useContext(AuthorizationContext);
   const permissions = context?.permissions;
   const loading = context?.loading;
@@ -11,9 +11,12 @@ function Authorize({ permission, children, accessDeniedElement }: Readonly<{ per
   const [isAuthorized, setIsAuthorized] = useState<boolean | undefined>(undefined);
 
   useEffect(() => {
+    if (permission == null) {
+      setIsAuthorized(true);
+    }
     if (!loading)
-      if (permissions) {
-        let result = permissions?.findIndex(function (p: string) {
+      if (permissions != null) {
+        let result = permissions.findIndex(function (p: string) {
           return p === permission;
         });
         setIsAuthorized(result >= 0);
@@ -26,7 +29,7 @@ function Authorize({ permission, children, accessDeniedElement }: Readonly<{ per
     return accessDeniedElement || <AccessDenied />;
   } else {
     return (
-      <Loader/>
+      <Loader />
     );
   }
 }

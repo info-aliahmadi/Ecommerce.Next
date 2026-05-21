@@ -3,7 +3,7 @@ import { Avatar, List, ListItemAvatar, ListItemButton, ListItemText } from '@mui
 
 // project import
 import { useEffect, useState } from 'react';
-import { useTranslation } from 'react-i18next';
+import { useTranslations } from 'next-intl';
 import { Folder } from '@mui/icons-material';
 import { fileSizeViewer } from '@root/utils/fileSizeViewer';
 import capitalize from 'lodash/capitalize';
@@ -16,7 +16,7 @@ import DirectoryModel from '../_types/DirectoryModel';
 // ===============================|| COLOR BOX ||=============================== //
 
 function FilesCategoryList() {
-  const [t, i18n] = useTranslation();
+  const t = useTranslations("");
   const { data: session } = useSession();
   const jwt = session?.accessToken;
 

@@ -1,4 +1,4 @@
-class PaginatedList<T> {
+class PaginatedList<T= MRT_RowData> {
     pageIndex: number;
     pageSize: number;
     totalPages: number;

@@ -6,7 +6,7 @@ import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
 
 // assets
-import { useTranslation } from 'react-i18next';
+import { useTranslations } from 'next-intl';
 import Notify from '@dashboard/_components/@extended/Notify';
 import { useSession } from 'next-auth/react';
 import ManufacturerService from '../../_service/ManufacturerService';
@@ -15,7 +15,7 @@ import { MRT_Row } from 'material-react-table';
 import ManufacturerModel from '../../_types/Product/ManufacturerModel';
 
 const DeleteManufacturer = ({ row, open, setOpen, refetch }: { row?: MRT_Row<ManufacturerModel>; open: boolean; setOpen: (open: boolean) => void; refetch: () => void }) => {
-  const [t] = useTranslation();
+  const t = useTranslations("");
   const [notify, setNotify] = useState<NotifyProps>({ open: false });
   const { data: session } = useSession();
   const jwt = session?.accessToken;

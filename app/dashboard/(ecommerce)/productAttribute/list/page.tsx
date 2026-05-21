@@ -4,14 +4,14 @@
 import { Grid } from '@mui/material';
 
 // project import
-import { useTranslation } from 'react-i18next';
+import { useTranslations } from 'next-intl';
 import { useSession } from 'next-auth/react';
 import ProductAttributeDataGrid from '../../_components/ProductAttribute/ProductAttributeDataGrid';
 
 // ===============================|| DASHBOARD - PRODUCT ATTRIBUTE LIST ||=============================== //
 
 export default function ProductAttributeListPage() {
-  const [t] = useTranslation();
+  const t = useTranslations("");
   const { data: session } = useSession();
 
   return (

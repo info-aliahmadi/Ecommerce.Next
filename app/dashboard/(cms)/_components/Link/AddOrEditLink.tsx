@@ -22,7 +22,7 @@ import AddIcon from '@mui/icons-material/Add';
 import AnimateButton from '@dashboard/_components/@extended/AnimateButton';
 
 // assets
-import { useTranslation } from 'react-i18next';
+import { useTranslations } from 'next-intl';
 import Notify from '@dashboard/_components/@extended/Notify';
 import setServerErrors from '@root/utils/setServerErrors';
 import LinkService from '@dashboard/(cms)/_service/LinkService';
@@ -44,7 +44,7 @@ interface AddOrEditLinkProps {
   refetch: () => void
 }
 const AddOrEditLink = ({ row, linkSection, data, setData, isNew, open, setOpen, refetch }: AddOrEditLinkProps) => {
-  const [t] = useTranslation();
+  const t = useTranslations("");
   const { data: session } = useSession();
   const jwt = session?.accessToken;
 
@@ -173,7 +173,7 @@ const AddOrEditLink = ({ row, linkSection, data, setData, isNew, open, setOpen, 
                 <CloseDialog onClose={onClose} />
               </DialogTitle>
               <DialogContent>
-                <Grid container spacing={3} direction="column">
+                <Grid container spacing={3} >
                   <Grid item>
                     <Stack spacing={1}>
                       <InputLabel htmlFor="title">{t(fieldsName + 'title')}</InputLabel>

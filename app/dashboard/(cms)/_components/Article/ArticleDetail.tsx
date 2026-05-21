@@ -6,13 +6,16 @@ import moment from 'moment';
 import ImageUpload from '@dashboard/_components/FileUpload/ImageUpload';
 import SelectTopic from '../Topic/SelectTopic';
 import SelectTag from '../Tag/SelectTag';
-import { useTranslation } from 'react-i18next';
+import { useTranslations } from 'next-intl';
 import { MRT_Row } from 'material-react-table';
 import ArticleModel from '../../_types/Article/ArticleMode';
+import nextIntlService from '@root/locales/nextIntlService';
 
 // ===============================|| COLOR BOX ||=============================== //
 export default function ArticleDetail({ row }: Readonly<{ row: MRT_Row<ArticleModel> }>) {
-  const [t, i18n] = useTranslation();
+  const t = useTranslations();
+  let language = nextIntlService.getNextIntlLocale();
+
   const fieldsName = 'fields.article.';
   return (
     <Grid container spacing={3} direction="row" justifyContent="flex-start" alignItems="flex-start">
@@ -83,11 +86,12 @@ export default function ArticleDetail({ row }: Readonly<{ row: MRT_Row<ArticleMo
               <Chip
                 icon={<EventNote />}
                 title={t(fieldsName + 'registerDate')}
-                label={new Intl.DateTimeFormat(i18n.language, {
-                  dateStyle: CONFIG.DATE_STYLE,
-                  timeStyle: CONFIG.TIME_STYLE,
-                  hour12: false
-                }).format(moment(row.original.registerDate).toDate())}
+                label={row.original.registerDate
+                  ? new Intl.DateTimeFormat(language, {
+                    dateStyle: 'long',
+                    timeStyle: CONFIG.TIME_STYLE as "short" | "full" | "long" | "medium" | undefined,
+                    hour12: false
+                  }).format(moment(row.original.registerDate).toDate()) : ''}
                 variant="filled"
                 size="small"
                 sx={{ borderRadius: '16px' }}
@@ -106,11 +110,12 @@ export default function ArticleDetail({ row }: Readonly<{ row: MRT_Row<ArticleMo
                   <Chip
                     icon={<EventNote />}
                     title={t(fieldsName + 'editDate')}
-                    label={new Intl.DateTimeFormat(i18n.language, {
-                      dateStyle: CONFIG.DATE_STYLE,
-                      timeStyle: CONFIG.TIME_STYLE,
-                      hour12: false
-                    }).format(moment(row.original.editDate).toDate())}
+                    label={row.original.registerDate
+                      ? new Intl.DateTimeFormat(language, {
+                        dateStyle: 'long',
+                        timeStyle: CONFIG.TIME_STYLE as "short" | "full" | "long" | "medium" | undefined,
+                        hour12: false
+                      }).format(moment(row.original.editDate).toDate()) : ''}
                     variant="filled"
                     size="small"
                     sx={{ borderRadius: '16px' }}
@@ -126,11 +131,12 @@ export default function ArticleDetail({ row }: Readonly<{ row: MRT_Row<ArticleMo
             <OutlinedInput
               id="publishDate"
               type="text"
-              value={new Intl.DateTimeFormat(i18n.language, {
-                dateStyle: 'long',
-                timeStyle: CONFIG.TIME_STYLE,
-                hour12: false
-              }).format(moment(row.original.publishDate).toDate())}
+              value={row.original.registerDate
+                ? new Intl.DateTimeFormat(language, {
+                  dateStyle: 'long',
+                  timeStyle: CONFIG.TIME_STYLE as "short" | "full" | "long" | "medium" | undefined,
+                  hour12: false
+                }).format(moment(row.original.publishDate).toDate()) : ''}
               fullWidth
               disabled
             />

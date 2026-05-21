@@ -5,7 +5,7 @@ import { Avatar, Box, Button, CardMedia, Chip, Grid, IconButton, InputAdornment,
 import MainCard from '@dashboard/_components/MainCard';
 import TableCard from '@dashboard/_components/TableCard';
 import { ReactNode, useCallback, useMemo, useState } from 'react';
-import { useTranslation } from 'react-i18next';
+import { useTranslations } from 'next-intl';
 import MaterialTable from '@dashboard/_components/MaterialTable/MaterialTable';
 import { Delete, Edit, Description, EventNote, Link } from '@mui/icons-material';
 import CONFIG from '@root/config';
@@ -17,16 +17,19 @@ import SelectTag from '../Tag/SelectTag';
 import { useRouter } from 'next/navigation';
 import DeletePage from './DeletePage';
 import { useSession } from 'next-auth/react';
-import MRT_Column from '@root/app/types/MRT_Column';
+import { MRT_Column } from '@root/app/types/MRT_Column';
 import { MRT_Row } from 'material-react-table';
 import PageModel from '../../_types/Page/PageModel';
+import { GridDataBound } from '@root/app/types/GridDataBound';
+import nextIntlService from '@root/locales/nextIntlService';
 // ===============================|| COLOR BOX ||=============================== //
 
 function PagesDataGrid() {
-  const [t, i18n] = useTranslation();
+  const t = useTranslations("");
   const { data: session } = useSession();
   const jwt = session?.accessToken;
 
+  let language = nextIntlService.getNextIntlLocale();
 
   const [openDelete, setOpenDelete] = useState(false);
   const [row, setRow] = useState<MRT_Row<PageModel>>();
@@ -156,7 +159,7 @@ function PagesDataGrid() {
   );
   const PageDetail = ({ row }: { row: MRT_Row<PageModel> }) => {
     return (
-      <Grid container spacing={3} direction="row" justifyContent="center" alignItems="flex-start">
+      <Grid container spacing={3} direction="row" sx={{ justifyContent: "center", alignItems: "flex-start" }}>
         <Grid
           container
           item
@@ -205,11 +208,12 @@ function PagesDataGrid() {
                 <Chip
                   icon={<EventNote />}
                   title={t(fieldsName + 'registerDate')}
-                  label={new Intl.DateTimeFormat(i18n.language, {
-                    dateStyle: CONFIG.DATE_STYLE,
-                    timeStyle: CONFIG.TIME_STYLE,
-                    hour12: false
-                  }).format(moment(row.original.registerDate).toDate())}
+                  label={row.original.registerDate
+                    ? new Intl.DateTimeFormat(language, {
+                      dateStyle: 'long',
+                      timeStyle: CONFIG.TIME_STYLE as "short" | "full" | "long" | "medium" | undefined,
+                      hour12: false
+                    }).format(moment(row.original.registerDate).toDate()) : ''}
                   variant="filled"
                   size="small"
                   sx={{ borderRadius: '16px' }}
@@ -228,11 +232,13 @@ function PagesDataGrid() {
                     <Chip
                       icon={<EventNote />}
                       title={t(fieldsName + 'editDate')}
-                      label={new Intl.DateTimeFormat(i18n.language, {
-                        dateStyle: CONFIG.DATE_STYLE,
-                        timeStyle: CONFIG.TIME_STYLE,
-                        hour12: false
-                      }).format(moment(row.original.editDate).toDate())}
+                      label={row.original.registerDate
+                        ? new Intl.DateTimeFormat(language, {
+                          dateStyle: 'long',
+                          timeStyle: CONFIG.TIME_STYLE as "short" | "full" | "long" | "medium" | undefined,
+                          hour12: false
+                        }).format(moment(row.original.editDate).toDate()) : ''}
+                        
                       variant="filled"
                       size="small"
                       sx={{ borderRadius: '16px' }}

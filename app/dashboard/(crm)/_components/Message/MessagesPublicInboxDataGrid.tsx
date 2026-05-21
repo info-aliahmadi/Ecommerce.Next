@@ -3,20 +3,20 @@ import { Chip, Link } from '@mui/material';
 
 // project import
 import { ReactNode, useCallback, useMemo, useState } from 'react';
-import { useTranslation } from 'react-i18next';
+import { useTranslations } from 'next-intl';
 import MaterialTable from '@dashboard/_components/MaterialTable/MaterialTable';
 import { AttachFile } from '@mui/icons-material';
 import Notify from '@dashboard/_components/@extended/Notify';
 import MessageService from '@dashboard/(crm)/_service/MessageService';
 import { MessageTypes } from './MessageType';
 import { useSession } from 'next-auth/react';
-import MRT_Column from '@root/app/types/MRT_Column';
+import { MRT_Column } from '@root/app/types/MRT_Column';
 import { MRT_Row } from 'material-react-table';
 
 import MessageModel from '../../_types/MessageModel';
 
 function MessagesPublicInboxDataGrid() {
-  const [t] = useTranslation();
+  const t = useTranslations("");
   const { data: session } = useSession();
   const jwt = session?.accessToken;
 

@@ -22,7 +22,7 @@ import AddIcon from '@mui/icons-material/Add';
 import AnimateButton from '@dashboard/_components/@extended/AnimateButton';
 
 // assets
-import { useTranslation } from 'react-i18next';
+import { useTranslations } from 'next-intl';
 import Notify from '@dashboard/_components/@extended/Notify';
 import setServerErrors from '@root/utils/setServerErrors';
 import SlideshowService from '@dashboard/(cms)/_service/SlideshowService';
@@ -39,7 +39,7 @@ export default function AddOrEditSlideshow({ row, isNew, open, setOpen, refetch 
     setOpen: (open: boolean) => void,
     refetch: () => void
   }>) {
-  const [t] = useTranslation();
+  const t = useTranslations("");
   const { data: session } = useSession();
   const jwt = session?.accessToken;
 
@@ -151,7 +151,7 @@ export default function AddOrEditSlideshow({ row, isNew, open, setOpen, refetch 
                 <CloseDialog onClose={onClose} />
               </DialogTitle>
               <DialogContent>
-                <Grid container spacing={3} direction="column">
+                <Grid container spacing={3} >
                   <Grid item>
                     <Stack spacing={1}>
                       <InputLabel htmlFor="header">{t(fieldsName + 'header')}</InputLabel>

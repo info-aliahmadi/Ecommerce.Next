@@ -1,112 +1,42 @@
-import axios from 'axios';
-import { setDefaultHeader } from '@root/utils/axiosHeaders';
-import CONFIG from '@root/config';
+import Fetch from '@root/utils/Fetch';
 import Result from '@root/app/types/Result';
-
 import ManufacturerModel from '../_types/Product/ManufacturerModel';
+import CONFIG from '@root/config';
 
 export default class ManufacturerService {
-  constructor(jwt : string) {
-    setDefaultHeader(jwt);
+  config?: RequestInit;
+  constructor(jwt: string) {
+    if (jwt) this.config = Fetch.SetDefaultHeader(jwt);
   }
+
   getManufacturerList = async (): Promise<Result<ManufacturerModel[]>> => {
-    return new Promise((resolve, reject) => {
-      axios
-        .post(CONFIG.API_BASEPATH + '/Product/getManufacturerList')
-        .then((response) => {
-          resolve(response.data);
-        })
-        .catch((error) => {
-          reject(error);
-        });
-    });
+    return Fetch.Get<Result<ManufacturerModel[]>>(CONFIG.API_BASEPATH + `/Product/getManufacturerList`, this.config);
   };
 
   getManufacturerListForSelect = async (): Promise<Result<ManufacturerModel[]>> => {
-    return new Promise((resolve, reject) => {
-      axios
-        .post(CONFIG.API_BASEPATH + '/Product/getManufacturersForSelect')
-        .then((response) => {
-          resolve(response.data);
-        })
-        .catch((error) => {
-          reject(error);
-        });
-    });
+    return Fetch.Get<Result<ManufacturerModel[]>>(CONFIG.API_BASEPATH + `/Product/getManufacturersForSelect`, this.config);
   };
 
   getAllManufacturers = async (): Promise<Result<ManufacturerModel[]>> => {
-    return new Promise((resolve, reject) => {
-      axios
-        .get(CONFIG.API_BASEPATH + '/Product/getAllManufacturers')
-        .then((response) => {
-          resolve(response.data);
-        })
-        .catch((error) => {
-          reject(error);
-        });
-    });
+    return Fetch.Get<Result<ManufacturerModel[]>>(CONFIG.API_BASEPATH + `/Product/getAllManufacturers`, this.config);
   };
   getManufacturerById = async (manufacturerId : number): Promise<Result<ManufacturerModel>> => {
-    return new Promise((resolve, reject) => {
-      axios
-        .get(CONFIG.API_BASEPATH + '/Product/getManufacturerById', { params: { manufacturerId: manufacturerId } })
-        .then((response) => {
-          resolve(response.data);
-        })
-        .catch((error) => {
-          reject(error);
-        });
-    });
+    const params = new URLSearchParams({ manufacturerId: manufacturerId.toString() });
+    return Fetch.Get<Result<ManufacturerModel>>(CONFIG.API_BASEPATH + `/Product/getManufacturerById?${params.toString()}`, this.config);
   };
   addManufacturer = async (manufacturer: ManufacturerModel): Promise<Result<ManufacturerModel>> => {
-    return new Promise((resolve, reject) => {
-      axios
-        .post(CONFIG.API_BASEPATH + '/Product/addManufacturer', manufacturer)
-        .then((response) => {
-          resolve(response.data);
-        })
-        .catch((error) => {
-          reject(error);
-        });
-    });
+    return Fetch.Post<Result<ManufacturerModel>>(CONFIG.API_BASEPATH + '/Product/addManufacturer', manufacturer, this.config);
   };
   updateManufacturer = async (manufacturer: ManufacturerModel): Promise<Result<ManufacturerModel>> => {
-    return new Promise((resolve, reject) => {
-      axios
-        .post(CONFIG.API_BASEPATH + '/Product/updateManufacturer', manufacturer)
-        .then((response) => {
-          resolve(response.data);
-        })
-        .catch((error) => {
-          reject(error);
-        });
-    });
+    return Fetch.Post<Result<ManufacturerModel>>(CONFIG.API_BASEPATH + '/Product/updateManufacturer', manufacturer, this.config);
   };
   // create function to order manufacturers
   orderManufacturers = async (manufacturers: ManufacturerModel[]): Promise<Result<ManufacturerModel[]>> => {
-    return new Promise((resolve, reject) => {
-      axios
-        .post(CONFIG.API_BASEPATH + '/Product/UpdateManufacturerOrders', manufacturers)
-        .then((response) => {
-          resolve(response.data);
-        })
-        .catch((error) => {
-          reject(error);
-        });
-    });
+    return Fetch.Post<Result<ManufacturerModel[]>>(CONFIG.API_BASEPATH + '/Product/UpdateManufacturerOrders', manufacturers, this.config);
   };
   
   deleteManufacturer = async (manufacturerId : number): Promise<Result<ManufacturerModel>> => {
-    return new Promise((resolve, reject) => {
-      axios
-        .get(CONFIG.API_BASEPATH + '/Product/deleteManufacturer', { params: { manufacturerId: manufacturerId } })
-        .then((response) => {
-          resolve(response.data);
-        })
-        .catch((error) => {
-          reject(error);
-        });
-    });
+    const params = new URLSearchParams({ manufacturerId: manufacturerId.toString() });
+    return Fetch.Get<Result<ManufacturerModel>>(CONFIG.API_BASEPATH + `/Product/deleteManufacturer?${params.toString()}`, this.config);
   };
 }

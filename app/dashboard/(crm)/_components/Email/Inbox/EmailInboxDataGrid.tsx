@@ -3,7 +3,7 @@ import { Box, IconButton, Link, Tooltip } from '@mui/material';
 
 // project import
 import { ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
-import { useTranslation } from 'react-i18next';
+import { useTranslations } from 'next-intl';
 import MaterialTable from '@dashboard/_components/MaterialTable/MaterialTable';
 import { Delete, PushPin, AttachFile } from '@mui/icons-material';
 import Notify from '@dashboard/_components/@extended/Notify';
@@ -13,12 +13,12 @@ import { useSession } from 'next-auth/react';
 import { MRT_Cell, MRT_Row } from 'material-react-table';
 import EmailInboxModel from '../../../_types/EmailInboxModel';
 
-import MRT_Column from '@root/app/types/MRT_Column';
+import { MRT_Column } from '@root/app/types/MRT_Column';
 // ===============================|| COLOR BOX ||=============================== //
 
 export default function EmailInboxDataGrid({ reloadCall }: { reloadCall: any }) {
   debugger
-  const [t] = useTranslation();
+  const t = useTranslations("");
   const { data: session } = useSession();
   const jwt = session?.accessToken;
 

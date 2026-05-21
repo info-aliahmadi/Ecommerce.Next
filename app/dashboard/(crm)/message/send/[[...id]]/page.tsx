@@ -8,7 +8,7 @@ import { Formik, FormikErrors } from 'formik';
 
 import AnimateButton from '@dashboard/_components/@extended/AnimateButton';
 
-import { useTranslation } from 'react-i18next';
+import { useTranslations } from 'next-intl';
 import Notify from '@dashboard/_components/@extended/Notify';
 import MainCard from '@dashboard/_components/MainCard';
 import setServerErrors from '@root/utils/setServerErrors';
@@ -22,7 +22,7 @@ import MessageModel, { MessageType } from '@dashboard/(crm)/_types/MessageModel'
 
 
 export default function  SendMessage({ params }: { readonly params: Promise<{ id: number, toUserId: number }> }) {
-  const [t] = useTranslation();
+  const t = useTranslations("");
   const { id, toUserId } = React.use(params);
 
   const { data: session } = useSession();
@@ -131,8 +131,8 @@ export default function  SendMessage({ params }: { readonly params: Promise<{ id
       >
         {({ errors, handleBlur, handleChange, setFieldValue, handleSubmit, isSubmitting, touched, values }) => (
           <form noValidate onSubmit={handleSubmit}>
-            <Grid container justifyContent="center" direction="row" alignItems="flex-start">
-              <Grid container item spacing={3} xs={12} sm={12} md={12} lg={12} xl={12} direction="column">
+            <Grid container direction="row" sx={{ justifyContent: "center", alignItems: "flex-start" }}>
+              <Grid container item spacing={3} xs={12} sm={12} md={12} lg={12} xl={12} >
                 <Grid item>
                   <Typography variant="h5">{t('pages.cards.sendMessage')}</Typography>
                 </Grid>

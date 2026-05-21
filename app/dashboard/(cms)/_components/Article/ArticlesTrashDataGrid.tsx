@@ -5,21 +5,22 @@ import { Box, Chip, IconButton, Tooltip } from '@mui/material';
 import MainCard from '@dashboard/_components/MainCard';
 import TableCard from '@dashboard/_components/TableCard';
 import { ReactNode, useCallback, useMemo, useState } from 'react';
-import { useTranslation } from 'react-i18next';
+import { useTranslations } from 'next-intl';
 import MaterialTable from '@dashboard/_components/MaterialTable/MaterialTable';
 import { DeleteSweep, RestorePage } from '@mui/icons-material';
 import RemoveArticle from './RemoveArticle';
 import ArticlesService from '@dashboard/(cms)/_service/ArticlesService';
 import ArticleDetail from './ArticleDetail';
 import { useSession } from 'next-auth/react';
-import MRT_Column from '@root/app/types/MRT_Column';
 import { MRT_Row } from 'material-react-table';
 import Notify from '@root/app/dashboard/_components/@extended/Notify';
 import ArticleModel from '../../_types/Article/ArticleMode';
+import { MRT_Column } from '@root/app/types/MRT_Column';
+import { GridDataBound } from '@root/app/types/GridDataBound';
 // ===============================|| COLOR BOX ||=============================== //
 
 export default function ArticlesTrashDataGrid() {
-  const [t, i18n] = useTranslation();
+  const t = useTranslations("");
   const { data: session } = useSession();
   const jwt = session?.accessToken;
 

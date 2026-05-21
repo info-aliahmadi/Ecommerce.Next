@@ -3,7 +3,7 @@ import { Box, IconButton, Link, Tooltip } from '@mui/material';
 
 // project import
 import { ReactNode, useCallback, useMemo, useState } from 'react';
-import { useTranslation } from 'react-i18next';
+import { useTranslations } from 'next-intl';
 import MaterialTable from '@dashboard/_components/MaterialTable/MaterialTable';
 import { AttachFile, RestoreFromTrash } from '@mui/icons-material';
 import Notify from '@dashboard/_components/@extended/Notify';
@@ -13,7 +13,7 @@ import TableCard from '@dashboard/_components/TableCard';
 import { MessageTypes } from './MessageType';
 import MessageService from '@dashboard/(crm)/_service/MessageService';
 import { useSession } from 'next-auth/react';
-import MRT_Column from '@root/app/types/MRT_Column';
+import { MRT_Column } from '@root/app/types/MRT_Column';
 import { MRT_Row } from 'material-react-table';
 import { MessageType } from '../../_types/MessageModel';
 
@@ -21,7 +21,7 @@ import MessageModel from '../../_types/MessageModel';
 // ===============================|| COLOR BOX ||=============================== //
 
 export default function MessagesTrashDataGrid() {
-  const [t] = useTranslation();
+  const t = useTranslations("");
   const { data: session } = useSession();
   const jwt = session?.accessToken;
 

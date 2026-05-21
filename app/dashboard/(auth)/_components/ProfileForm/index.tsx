@@ -14,7 +14,7 @@ import {
   Tooltip
 } from '@mui/material';
 
-import Grid from '@mui/material/Grid2';
+import Grid from '@mui/material/Grid';
 // third party
 import * as Yup from 'yup';
 import { Formik } from 'formik';
@@ -25,7 +25,7 @@ import Edit from '@mui/icons-material/Edit';
 import Save from '@mui/icons-material/Save';
 
 // assets
-import { useTranslation } from 'react-i18next';
+import { useTranslations } from 'next-intl';
 import CONFIG from '@root/config';
 import Notify from '@dashboard/_components/@extended/Notify';
 import AnimateButton from '@dashboard/_components/@extended/AnimateButton';
@@ -35,7 +35,7 @@ import { UserModel } from '../../_types/User/UserModel';
 // ============================|| FIREBASE - REGISTER ||============================ //
 
 const ProfileForm = () => {
-  const [t] = useTranslation();
+  const t = useTranslations("");
   const [avatarPreview, setAvatarPreview] = useState<string | ArrayBuffer | null>('');
   const { data: session, update } = useSession();
 
@@ -62,7 +62,7 @@ const ProfileForm = () => {
       .updateCurrentUser(user)
       .then((result) => {
         if (result.succeeded) {
-          let newUserInfo = { ...session?.user, name: user.name, email: user.email, userName: user.userName, phoneNumber: user.phoneNumber, avatar: result.data?.avatar};
+          let newUserInfo = { ...session?.user, name: user.name, email: user.email, userName: user.userName, phoneNumber: user.phoneNumber, avatar: result.data?.avatar };
           update({ ...session, user: newUserInfo });
           setNotify({ open: true });
         } else {
@@ -111,7 +111,7 @@ const ProfileForm = () => {
         validationSchema={Yup.object().shape({
           userName: Yup.string()
             .max(255)
-            .required(t(validation + 'required-username')),
+            .required(t(validation + 'required-userName')),
           email: Yup.string()
             .email(t(validation + 'valid-email'))
             .max(255)
@@ -124,22 +124,22 @@ const ProfileForm = () => {
             handleUpdate(values, setSubmitting);
           } catch (err: any) {
             setStatus({ success: false });
-            
+            setErrors({ submit: err.message });
           }
         }}
       >
         {({ errors, handleBlur, handleChange, setFieldValue, handleSubmit, isSubmitting, touched, values }) => (
           <form noValidate onSubmit={handleSubmit}>
-            <Grid container spacing={3} direction="column">
-              <Grid container spacing={0} direction="row" justifyContent="flex-end" alignItems="flex-start">
+            <Grid container spacing={3} direction="row">
+              <Grid container size={12} spacing={0} direction="row" sx={{ justifyContent: "center", alignItems: "center" }} >
                 <Grid size={{ xs: 12, sm: 12, md: 2, lg: 2, xl: 2 }} >
-                  <Stack justifyContent="center" alignItems="center">
+                  <Stack sx={{ justifyContent: "center", alignItems: "center" }}>
                     <Tooltip title={t('tooltips.edit-avatar')} placement="top">
                       <ButtonBase component="label">
                         <input type="file" hidden accept="image/*" name="avatarFile" onChange={(e) => changeAvatar(e, setFieldValue)} />
                         <Avatar
                           alt=""
-                          src={avatarPreview ? avatarPreview.toString() : values.avatar ? CONFIG.AVATAR_BASEPATH + values.avatar : '/images/users/anonymous.png'}
+                          src={avatarPreview ? avatarPreview.toString() : values.avatar ? CONFIG.AVATAR_BASEPATH + values.avatar : CONFIG.UNKNOWN_USER_BASEPATH}
                           sx={{ width: 85, height: 85 }}
                         ></Avatar>
                       </ButtonBase>
@@ -164,7 +164,7 @@ const ProfileForm = () => {
                   </Stack>
                 </Grid>
               </Grid>
-              <Grid container spacing={3} justifyContent="center">
+              <Grid container spacing={3} size={12} sx={{ justifyContent: "center" }} >
                 <Grid size={{ xs: 12, sm: 12, md: 6, lg: 6, xl: 6 }}>
                   <Stack spacing={1}>
                     <InputLabel htmlFor="name">{t(fieldsName + 'name')}</InputLabel>
@@ -254,7 +254,7 @@ const ProfileForm = () => {
                   </Stack>
                 </Grid>
               </Grid>
-              <Grid container spacing={3} justifyContent="center" alignItems="center" direction="row">
+              <Grid container spacing={3} size={12} direction="row" sx={{ justifyContent: "center", alignItems: "center" }}>
                 <Grid size={{ xs: 12, sm: 6, md: 3, lg: 3, xl: 2 }}>
                   <AnimateButton>
                     <Button

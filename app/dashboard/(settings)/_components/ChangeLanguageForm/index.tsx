@@ -3,14 +3,14 @@ import { useState } from 'react';
 
 // material-ui
 import { InputLabel, MenuItem, Select, Stack } from '@mui/material';
-import Grid from '@mui/material/Grid2';
+import Grid from '@mui/material/Grid';
 
 // third party
 import * as Yup from 'yup';
 import { Formik } from 'formik';
 
 // assets
-import { useTranslation } from 'react-i18next';
+import { useTranslations } from 'next-intl';
 import languageList from '@root/locales/languageList';
 import LocalizationService from '@root/locales/LocalizationService';
 import Notify from '@dashboard/_components/@extended/Notify';
@@ -19,7 +19,7 @@ import { useSession } from 'next-auth/react';
 // ============================|| FIREBASE - REGISTER ||============================ //
 
 const ChangeLanguageForm = () => {
-  const [t, i18n] = useTranslation();
+  const t = useTranslations("");
   const { data: session, update } = useSession();
 
   const accessToken = session?.accessToken;
@@ -59,7 +59,7 @@ const ChangeLanguageForm = () => {
           <form noValidate onSubmit={handleSubmit}>
             <Grid container direction="row" justifyContent="center">
               <Grid size={{ xs: 12, sm: 12, md: 8, lg: 6, xl: 6 }}>
-                <Grid container spacing={2} direction="column" justifyContent="center">
+                <Grid container spacing={2}  justifyContent="center">
                   <Grid size={{ xs: 12 }}>
                     <Stack>
                       <InputLabel id="language-select-label">Default Language</InputLabel>

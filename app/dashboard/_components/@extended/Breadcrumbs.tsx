@@ -11,16 +11,16 @@ import MainCard from '../MainCard';
 
 // ==============================|| BREADCRUMBS ||============================== //
 
-const Breadcrumbs = ({ navigation, title, ...others }: {navigation : any, title: boolean}) => {
-  
+const Breadcrumbs = ({ navigation, title, ...others }: { navigation: any, title: boolean }) => {
+
   const [main, setMain] = useState<{ type?: string; title?: boolean } | null>(null);
   const [item, setItem] = useState<{ type?: string; title?: string; breadcrumbs?: boolean } | null>(null);
   const path = usePathname();
 
   // set active item state
-  const getCollapse = (menu : any) => {
+  const getCollapse = (menu: any) => {
     if (menu.children) {
-      menu.children.filter((collapse  : any) => {
+      menu.children.filter((collapse: any) => {
         if (collapse.type && collapse.type === 'collapse') {
           getCollapse(collapse);
         } else if (collapse.type && collapse.type === 'item') {
@@ -35,8 +35,8 @@ const Breadcrumbs = ({ navigation, title, ...others }: {navigation : any, title:
   };
 
   useEffect(() => {
-    
-    navigation?.items?.map((menu : any) => {
+
+    navigation?.items?.map((menu: any) => {
       if (menu.type && menu.type === 'group') {
         getCollapse(menu);
       }
@@ -76,8 +76,13 @@ const Breadcrumbs = ({ navigation, title, ...others }: {navigation : any, title:
     if (item.breadcrumbs !== false) {
       breadcrumbContent = (
         <MainCard border={false} sx={{ mb: 3, bgcolor: 'transparent' }} {...others} content={false}>
-          <Grid container direction="column" justifyContent="flex-start" alignItems="flex-start" spacing={1}>
-            <Grid item>
+          <Grid container
+            sx={{
+              flexDirection: "column",
+               justifyContent: "flex-start", 
+               alignItems: "flex-start"
+            }} spacing={1}>
+            <Grid>
               <MuiBreadcrumbs aria-label="breadcrumb">
                 <Typography component="a" href="/" color="textSecondary" variant="h6" sx={{ textDecoration: 'none' }}>
                   Home
@@ -87,7 +92,7 @@ const Breadcrumbs = ({ navigation, title, ...others }: {navigation : any, title:
               </MuiBreadcrumbs>
             </Grid>
             {title && (
-              <Grid item sx={{ mt: 2 }}>
+              <Grid sx={{ mt: 2 }}>
                 <Typography variant="h5">{item.title}</Typography>
               </Grid>
             )}

@@ -11,10 +11,11 @@ const icons = {
 
 // ==============================|| MENU ITEMS - EXTRA PAGES ||============================== //
 
-const authentication: MenuItem = {
+const authenticationMenu: MenuItem = {
   id: 'authentication',
   title: 'Authentication',
   type: 'group',
+  icon: icons.People,
   permission: AUTH_USER_MANAGEMENT,
   children: [
     {
@@ -47,4 +48,4 @@ const authentication: MenuItem = {
   ]
 };
 
-export default authentication;
+export default authenticationMenu;

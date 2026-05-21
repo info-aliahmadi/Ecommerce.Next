@@ -5,7 +5,7 @@ import { Avatar, Box, Button, IconButton, Stack, Tooltip } from '@mui/material';
 import MainCard from '@dashboard/_components/MainCard';
 import TableCard from '@dashboard/_components/TableCard';
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { useTranslation } from 'react-i18next';
+import { useTranslations } from 'next-intl';
 import MaterialTable from '@dashboard/_components/MaterialTable/MaterialTable';
 import { Delete, Edit, Add, Link, Save, ImageNotSupported } from '@mui/icons-material';
 import CategoryIcon from '@mui/icons-material/Category';
@@ -15,7 +15,7 @@ import { useSession } from 'next-auth/react';
 import CategoryService from '../../_service/CategoryService';
 import CategoryModel from '../../_types/Product/CategoryModel';
 import { MRT_Row } from 'material-react-table';
-import MRT_Column from '@root/app/types/MRT_Column';
+import { MRT_Column } from '@root/app/types/MRT_Column';
 import CONFIG from '@root/config';
 import SlideshowModel from '@root/app/dashboard/(cms)/_types/Slideshow/SlideshowModel';
 import Notify from '@root/app/dashboard/_components/@extended/Notify';
@@ -24,7 +24,7 @@ import MenuModel from '@root/app/dashboard/(cms)/_types/Menu/MenuModel';
 // ===============================|| CATEGORY DATA GRID ||=============================== //
 
 function CategoryDataGrid() {
-  const [t] = useTranslation();
+  const t = useTranslations("");
   const { data: session } = useSession();
   const jwt = session?.accessToken;
   const service = new CategoryService(jwt ?? '');

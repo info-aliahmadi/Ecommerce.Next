@@ -2,20 +2,14 @@ import * as React from 'react';
 import Autocomplete from '@mui/material/Autocomplete';
 import CircularProgress from '@mui/material/CircularProgress';
 import { useState, useEffect } from 'react';
-import { useTranslation } from 'react-i18next';
+import { useTranslations } from 'next-intl';
 import RoleService from '../../_service/RoleService';
 import { useSession } from 'next-auth/react';
 import { TextField } from '@mui/material';
 
 export default function SelectRole({ defaultValues, id, setFieldValue, error, disabled }:
-  Readonly<{
-    defaultValues: number[],
-    disabled: boolean,
-    id?: string,
-    setFieldValue?: any,
-    error?: boolean
-  }>) {
-  const [t] = useTranslation();
+  { readonly defaultValues: number[], readonly disabled: boolean, readonly id?: string, readonly setFieldValue?: any, readonly error?: boolean }) {
+  const t = useTranslations("");
   const [loading, setLoading] = useState(true);
   const [options, setOptions] = useState<Option[]>([]);
   const { data: session } = useSession();
@@ -26,6 +20,7 @@ export default function SelectRole({ defaultValues, id, setFieldValue, error, di
   const loadRoles = () => {
     setLoading(true);
     roleService.getAllRoles().then((result) => {
+
       const optionsData: Option[] = result.data?.map((x) => ({ id: x.id, name: x.name })) as Option[];
       setOptions(optionsData);
       setLoading(false);
@@ -64,15 +59,17 @@ export default function SelectRole({ defaultValues, id, setFieldValue, error, di
           {...params}
           variant="outlined"
           size="small"
-          InputProps={{
-            ...params.InputProps,
-            endAdornment: (
-              <React.Fragment>
-                {loading && <CircularProgress color="inherit" size={15} />}
-                {params.InputProps.endAdornment}
-              </React.Fragment>
-            )
-          }}
+          // slotProps={{
+          //   ...params.InputProps,
+          //   input: {
+          //     endAdornment: (
+          //       <React.Fragment>
+          //         {loading && <CircularProgress color="inherit" size={15} />}
+          //         {params.InputProps.endAdornment}
+          //       </React.Fragment>
+          //     )
+          //   }
+          // }}
         />
       )}
     />

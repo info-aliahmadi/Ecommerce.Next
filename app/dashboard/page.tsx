@@ -17,7 +17,7 @@ import {
   TextField,
   Typography
 } from '@mui/material';
-import Grid from '@mui/material/Grid2'
+import Grid from '@mui/material/Grid'
 
 // project import
 import OrdersTable from './_components/@extended/OrdersTable';
@@ -30,7 +30,7 @@ import AnalyticEcommerce from './_components/cards/statistics/AnalyticEcommerce'
 
 // // assets
 import { GiftOutlined, MessageOutlined, SettingOutlined } from '@ant-design/icons';
-import { useTranslation } from 'react-i18next';
+import { useTranslations } from 'next-intl';
 
 // avatar style
 const avatarSX = {
@@ -72,7 +72,7 @@ const lngs = [
 // ==============================|| DASHBOARD - DEFAULT ||============================== //
 
 const DashboardDefault = () => {
-  const [t] = useTranslation();
+  const t = useTranslations("");
 
   const [value, setValue] = useState('today');
   const [slot, setSlot] = useState('week');

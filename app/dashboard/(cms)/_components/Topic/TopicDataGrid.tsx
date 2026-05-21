@@ -3,7 +3,7 @@ import { Box, Button, IconButton, Tooltip } from '@mui/material';
 import MainCard from '@dashboard/_components/MainCard';
 import TableCard from '@dashboard/_components/TableCard';
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { useTranslation } from 'react-i18next';
+import { useTranslations } from 'next-intl';
 import MaterialTable from '@dashboard/_components/MaterialTable/MaterialTable';
 import { Edit, Topic, Add, Delete, Link } from '@mui/icons-material';
 import AddOrEditTopic from './AddOrEditTopic';
@@ -12,10 +12,10 @@ import TopicsService from '@dashboard/(cms)/_service/TopicService';
 import { useSession } from 'next-auth/react';
 import CONFIG from '@root/config';
 import { MRT_Row } from 'material-react-table';
-import MRT_Column from '@root/app/types/MRT_Column';
+import { MRT_Column } from '@root/app/types/MRT_Column';
 import TopicModel from '../../_types/Topic/TopicModel';
 function TopicDataGrid() {
-  const [t] = useTranslation();
+  const t = useTranslations("");
   const { data: session } = useSession();
   const jwt = session?.accessToken;
 

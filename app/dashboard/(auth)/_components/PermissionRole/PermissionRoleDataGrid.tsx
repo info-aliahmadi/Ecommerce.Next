@@ -1,10 +1,10 @@
 // material-ui
 import { Box, Button, FormHelperText, IconButton, Tooltip } from '@mui/material';
-import Grid from '@mui/material/Grid2';
+import Grid from '@mui/material/Grid';
 
 // project import
 import { useCallback, useMemo, useState } from 'react';
-import { useTranslation } from 'react-i18next';
+import { useTranslations } from 'next-intl';
 import MaterialTable from '@dashboard/_components/MaterialTable/MaterialTable';
 import { Delete } from '@mui/icons-material';
 import DeletePermissionRole from './DeletePermissionRole';
@@ -13,11 +13,11 @@ import PermissionRoleService from '../../_service/PermissionRoleService';
 import PermissionAutoComplete from '../Permission/PermissionAutoComplete';
 import { useSession } from 'next-auth/react';
 import { MRT_Row, MRT_RowData } from 'material-react-table';
-import MRT_Column from '@root/app/types/MRT_Column';
+
 // ===============================|| COLOR BOX ||=============================== //
 
 function PermissionRoleDataGrid({ row }: { readonly row: MRT_Row<RoleModel> }) {
-  const [t] = useTranslation();
+  const t = useTranslations("");
   const { data: session } = useSession();
   const jwt = session?.accessToken;
   let permissionRoleService = new PermissionRoleService(jwt ?? '');
@@ -57,7 +57,6 @@ function PermissionRoleDataGrid({ row }: { readonly row: MRT_Row<RoleModel> }) {
     permissionRoleService
       .addPermissionRole(permissionId, roleId)
       .then((permission) => {
-        debugger
         if (permission?.data) {
           const newPermission: MRT_RowData = permission?.data as MRT_RowData;
           data.push(newPermission);
@@ -73,7 +72,7 @@ function PermissionRoleDataGrid({ row }: { readonly row: MRT_Row<RoleModel> }) {
       });
   };
   const handleDeleteRow = (row: MRT_Row<MRT_RowData>) => {
-    debugger
+    
     setPermissionRow(row);
     setOpenDelete(true);
   };

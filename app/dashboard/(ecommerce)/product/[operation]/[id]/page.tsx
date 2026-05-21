@@ -23,7 +23,7 @@ import { Formik, FormikErrors } from 'formik';
 import AnimateButton from '@dashboard/_components/@extended/AnimateButton';
 
 // assets
-import { useTranslation } from 'react-i18next';
+import { useTranslations } from 'next-intl';
 import Notify from '@dashboard/_components/@extended/Notify';
 import MainCard from '@dashboard/_components/MainCard';
 import setServerErrors from '@root/utils/setServerErrors';
@@ -66,7 +66,7 @@ function a11yProps(index: any) {
 }
 
 export default function AddOrEditProduct({ params }: { params: Promise<{ operation: 'edit' | 'add'; id: number }> }) {
-  const [t, i18n] = useTranslation();
+  const t = useTranslations("");
   const [tab, setTab] = useState(0);
 
   const { id, operation } = React.use(params);
@@ -282,8 +282,8 @@ export default function AddOrEditProduct({ params }: { params: Promise<{ operati
     <>
       <Notify notify={notify} setNotify={setNotify}></Notify>
 
-      <Grid container justifyContent="center" direction="row" alignItems="flex-start">
-        <Grid container item spacing={3} xs={12} sm={12} md={12} lg={12} xl={12} direction="column">
+      <Grid container direction="row" sx={{ justifyContent: "center", alignItems: "flex-start" }}>
+        <Grid container item spacing={3} xs={12} sm={12} md={12} lg={12} xl={12} >
           <Grid item>
             <Typography variant="h5">{t('pages.cards.product-' + operation)}</Typography>
           </Grid>

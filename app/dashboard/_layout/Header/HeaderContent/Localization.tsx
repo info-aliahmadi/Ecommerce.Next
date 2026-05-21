@@ -7,7 +7,7 @@ import { Box, IconButton, Menu, MenuItem, Tooltip } from '@mui/material';
 
 // assets
 import languageList from '@root/locales/languageList';
-import { useTranslation } from 'react-i18next';
+import { useTranslations } from 'next-intl';
 import LocalizationService from '@root/locales/LocalizationService';
 import { useSession } from 'next-auth/react';
 

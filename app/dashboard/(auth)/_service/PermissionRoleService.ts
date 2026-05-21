@@ -1,48 +1,27 @@
-import axios from 'axios';
-import { setDefaultHeader } from '@root/utils/axiosHeaders';
-import CONFIG from '@root/config';
+import { GridDataBound } from '@root/app/types/GridDataBound';
 import Result from '@root/app/types/Result';
+import CONFIG from '@root/config';
+
+
+import Fetch from '@root/utils/Fetch';
 
 export default class PermissionRoleService {
+  config?: RequestInit;
   constructor(jwt: string) {
-    if (jwt)
-      setDefaultHeader(jwt);
+    if (jwt) this.config = Fetch.SetDefaultHeader(jwt);
   }
+
   getPermissionList = async (searchParams: GridDataBound): Promise<Result<PaginatedList<Permission>>> => {
-    return new Promise((resolve, reject) => {
-      axios
-        .post(CONFIG.API_BASEPATH + '/auth/GetPermissionRoleList', searchParams)
-        .then((response) => {
-          resolve(response.data);
-        })
-        .catch((error) => {
-          reject(error);
-        });
-    });
+    return Fetch.Post<Result<PaginatedList<Permission>>>(CONFIG.API_BASEPATH + '/auth/GetPermissionRoleList', searchParams, this.config);
   };
 
   addPermissionRole = async (permissionId: number, roleId: number): Promise<Result<Permission>> => {
-    return new Promise((resolve, reject) => {
-      axios
-        .get(CONFIG.API_BASEPATH + '/auth/AssignPermissionToRoleByRoleId', { params: { roleId: roleId, permissionId: permissionId } })
-        .then((response) => {
-          resolve(response.data);
-        })
-        .catch((error : any) => {
-          reject(error);
-        });
-    });
+    const params = new URLSearchParams({ roleId: roleId.toString(), permissionId: permissionId.toString() });
+    return Fetch.Get<Result<Permission>>(CONFIG.API_BASEPATH + `/auth/AssignPermissionToRoleByRoleId?${params.toString()}`, this.config);
   };
+  
   deletePermissionRole = async (permissionId: number, roleId: number): Promise<Result<null>> => {
-    return new Promise((resolve, reject) => {
-      axios
-        .get(CONFIG.API_BASEPATH + '/auth/DismissPermissionToRoleByRoleId', { params: { roleId: roleId, permissionId: permissionId } })
-        .then((response) => {
-          resolve(response.data);
-        })
-        .catch((error) => {
-          reject(error);
-        });
-    });
+    const params = new URLSearchParams({ roleId: roleId.toString(), permissionId: permissionId.toString() });
+    return Fetch.Get<Result<null>>(CONFIG.API_BASEPATH + `/auth/DismissPermissionToRoleByRoleId?${params.toString()}`, this.config);
   };
 }

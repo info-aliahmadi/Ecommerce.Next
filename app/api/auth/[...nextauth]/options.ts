@@ -1,14 +1,15 @@
 import type { Account, NextAuthOptions, Profile, Session, User } from 'next-auth';
-import GitHubProvider from 'next-auth/providers/github';
+// import GitHubProvider from 'next-auth/providers/github';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import AuthenticationService from '@root/app/dashboard/(auth)/_service/AuthenticationService';
 import { JWT } from 'next-auth/jwt';
 import { AdapterUser } from 'next-auth/adapters';
 import AccountService from '@root/app/dashboard/(auth)/_service/AccountService';
+import CONFIG from '@root/config';
 
 export const options: NextAuthOptions = {
   pages: {
-    signIn: '/login',
+    signIn: CONFIG.LOGIN_PATH,
   },
   callbacks: {
     async jwt({ token, user, trigger, session }: {
@@ -20,88 +21,92 @@ export const options: NextAuthOptions = {
       isNewUser?: boolean;
       session?: Session;
     }): Promise<JWT> {
-      // the processing of JWT occurs before handling sessions.
       if (user) {
-        console.log("user:" + JSON.stringify(user))
-        token.name = user.name;
-        token.userName = user.userName;
-        token.email = user.email;
-        token.defaultLanguage = user.defaultLanguage;
-        token.defaultTheme = user.defaultTheme;
-        token.avatar = user.avatar;
-        token.roles = user.roles;
-        token.id = user.id;
+        token.user = {
+          id: user.id as number,
+          name: user.name,
+          userName: user.userName,
+          email: user.email,
+          defaultLanguage: user.defaultLanguage || CONFIG.DEFAULT_LANGUAGE,
+          defaultTheme: user.defaultTheme || CONFIG.DASHBOARD_DEFAULT_THEME_MODE,
+          avatar: user.avatar,
+          roles: user.roles,
+          storeCurrencyType: user.storeCurrencyType,
+          storeName: user.storeName,
+        };
         token.accessToken = user.accessToken;
-      }
+      } 
 
       if (trigger === 'update' && session) {
-        // Note, that `session` can be any arbitrary object, remember to validate it!
-        
-        console.log("sessionvvvvvvv:" + JSON.stringify(session))
-        token.name = session?.user.name;
-        token.userName = session?.user.userName;
-        token.email = session?.user.email;
-        token.avatar = session?.user.avatar;
-        token.defaultLanguage = session?.user.defaultLanguage;
-        token.roles = session?.user.roles;
-        token.defaultTheme = session?.user.defaultTheme;
-        token.accessToken = session?.user.accessToken;
+        token.user = {
+          id: session.user.id,
+          name: session.user.name,
+          userName: session.user.userName,
+          email: session.user.email,
+          defaultLanguage: session.user.defaultLanguage || CONFIG.DEFAULT_LANGUAGE,
+          defaultTheme: session.user.defaultTheme || CONFIG.DASHBOARD_DEFAULT_THEME_MODE,
+          avatar: session.user.avatar,
+          roles: session.user.roles,
+          storeCurrencyType: session.user.storeCurrencyType,
+          storeName: session.user.storeName,
+        };
+        token.accessToken = session.user.accessToken;
 
-        console.log("token:" + JSON.stringify(token))
-        let accountService = new AccountService(session?.user.accessToken);
-        let newRefreshToken = await accountService.refreshToken();
+        const accountService = new AccountService(session.user.accessToken);
+        const newRefreshToken = await accountService.refreshToken();
         token.accessToken = newRefreshToken;
-
-        console.log("tokentokentoken:" + JSON.stringify(token))
       }
 
       return token;
     },
 
-    //  The session receives the token from JWT
-    async session({ session, token, user }: { session: Session; token: JWT; user: AdapterUser }) {
-
+    async session({ session, token }: { session: Session; token: JWT; user: AdapterUser }) {
       session.user = {
         ...session.user,
-        userName: token.userName as string,
-        name: token.name as string,
-        email: token.email as string,
-        roles: token.roles as string[],
-        id: token.id as number,
-        defaultLanguage: token.defaultLanguage as string,
-        defaultTheme: token.defaultTheme as "light" | "dark",
-        avatar: token.avatar as string,
+        ...(token.user as {
+          name: string;
+          userName: string;
+          email: string;
+          defaultLanguage: string;
+          defaultTheme: 'light' | 'dark';
+          avatar: string;
+          roles: string[];
+          id: number;
+        }),
         accessToken: token.accessToken as string,
       };
-      session.error = token.error as string;
       session.accessToken = token.accessToken as string;
       session.accessTokenExpires = token.accessTokenExpires as number;
-
+      session.error = token.error as string;
 
       return session;
     }
   },
   providers: [
-    GitHubProvider({
-      clientId: process.env.GITHUB_ID as string,
-      clientSecret: process.env.GITHUB_SECRET as string
-    }),
-     CredentialsProvider({
-      name: 'Credentials',
+    // GitHubProvider({
+    //   clientId: process.env.GITHUB_ID as string,
+    //   clientSecret: process.env.GITHUB_SECRET as string
+    // }),
+    CredentialsProvider({
+      name: 'credentials',
       credentials: {
         username: { label: 'Username', type: 'text' },
         password: { label: 'Password', type: 'password' }
       },
       async authorize(credentials): Promise<User | null> {
         const authenticationService = new AuthenticationService();
-        const result = await authenticationService.login(
-          credentials?.username as string,
-          credentials?.password as string,
-          true
-        );
+        var loginModel : LoginModel = {
+          username : credentials?.username as string,
+          password : credentials?.password as string,
+          rememberMe : true
+        }
+        const result = await authenticationService.login(loginModel);
         
-        return result.succeeded ? result.data ?? null : null;
+        return result.succeeded === true ? result.data ?? null : null;
       }
     })
-  ]
+  ],
+  session: {
+    strategy: 'jwt',
+  },
 };

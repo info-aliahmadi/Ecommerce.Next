@@ -1,41 +1,45 @@
-import camelCase from 'lodash/camelCase';
-import keys from 'lodash/keys';
+function camelCase(str: string): string {
+  return str
+    .replace(/[-_\s]+(.)?/g, (_, c) => (c ? c.toUpperCase() : ''))
+    .replace(/^(.)/, (m) => m.toLowerCase());
+}
 
-export default function setServerErrors(response: any) : { [key: string]: string } {
-  let errorsObject: { [key: string]: string } = {};
-  let errorData = response.response.data;
-  if (errorData) {
-    if (errorData.errors) {
-      let errors = errorData.errors;
-      let errorsLength = errors.length;
-      for (let i = 0; i < errorsLength; i++) {
-        let key = errors[i].property;
-        let description = errors[i].description;
-        errorsObject[camelCase(key)] = description;
-      }
-    } else {
-      let keysVar = keys(errorData);
+export default function setServerErrors(
+  response: any
+): Record<string, string> {
+  const errorsObject: Record<string, string> = {};
+  const errorData = response.data;
 
-      for (const keyVar of keysVar) {
-        let errors = errorData[keyVar];
-        let key = camelCase(keyVar);
-        let error = '';
-        let errorsLength = errors.length;
-        if (!errorsLength) return errorsObject;
-        for (let j = 0; j < errorsLength; j++) {
-          if (j > 0) {
-            error += ' ' + (j + 1) + ' - ' + errors[j];
-          } else if (errorsLength > 1) {
-            error += ' 1 - ' + errors[j];
-          } else {
-            error += errors[j];
-          }
-        }
-        errorsObject[key] = error;
-      }
-    }
-
+  if (!errorData) {
     return errorsObject;
   }
+
+  if (errorData.errors) {
+    for (const errorItem of errorData.errors) {
+      const key = camelCase(errorItem.property);
+      errorsObject[key] = errorItem.description;
+    }
+  } else {
+    for (const keyVar of Object.keys(errorData)) {
+      const errors = errorData[keyVar];
+
+      if (!errors?.length) {
+        continue;
+      }
+
+      const key = camelCase(keyVar);
+
+      const error = errors
+        .map((item: string, index: number) =>
+          errors.length > 1
+            ? `${index + 1} - ${item}`
+            : item
+        )
+        .join(' ');
+
+      errorsObject[key] = error;
+    }
+  }
+
   return errorsObject;
 }

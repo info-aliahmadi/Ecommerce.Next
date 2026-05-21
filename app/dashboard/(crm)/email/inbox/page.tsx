@@ -2,7 +2,7 @@
 import { Button, Chip, Grid, Typography } from '@mui/material';
 
 // project import
-import { useTranslation } from 'react-i18next';
+import { useTranslations } from 'next-intl';
 
 import { Email, RestoreFromTrash, Refresh } from '@mui/icons-material';
 
@@ -18,7 +18,7 @@ import { useState } from 'react';
 
 function EmailInboxsInbox() {
   debugger
-  const [t] = useTranslation();
+  const t = useTranslations("");
   const { data: session } = useSession();
   const jwt = session?.accessToken;
   const [reload, setReload] = useState(false);
@@ -80,8 +80,8 @@ function EmailInboxsInbox() {
     );
   };
   return (
-    <Grid container justifyContent="center" direction="row" alignItems="flex-start">
-      <Grid container spacing={3} item xs={12} sm={12} md={12} lg={12} direction="column">
+    <Grid container direction="row" sx={{ justifyContent: "center", alignItems: "flex-start" }}>
+      <Grid container spacing={3} item xs={12} sm={12} md={12} lg={12} >
         <Grid item>
           <Typography variant="h5">{t('pages.emailInboxs')}</Typography>
         </Grid>

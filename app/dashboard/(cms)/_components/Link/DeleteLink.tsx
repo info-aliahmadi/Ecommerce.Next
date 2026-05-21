@@ -6,7 +6,7 @@ import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
 
 // assets
-import { useTranslation } from 'react-i18next';
+import { useTranslations } from 'next-intl';
 import Notify from '@dashboard/_components/@extended/Notify';
 import LinkService from '@dashboard/(cms)/_service/LinkService';
 import { useSession } from 'next-auth/react';
@@ -26,7 +26,7 @@ interface DeleteLinkProps {
 }
 
 const DeleteLink = ({ row, linkSection, data, setData, open, setOpen, refetch }: DeleteLinkProps) => {
-  const [t] = useTranslation();
+  const t = useTranslations("");
   const { data: session } = useSession();
   const jwt = session?.accessToken;
 

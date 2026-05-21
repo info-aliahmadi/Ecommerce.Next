@@ -59,9 +59,9 @@ const columnChartOptions : ApexOptions = {
       useSeriesColors: false
     },
     markers: {
-      width: 16,
-      height: 16,
-      radius: 50,
+      strokeWidth: 16,
+      // height: 16,
+      // radius: 50,
       offsetX: 2,
       offsetY: 2
     },

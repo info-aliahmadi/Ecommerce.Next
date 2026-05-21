@@ -9,13 +9,13 @@ import ManageAccounts from '@mui/icons-material/ManageAccounts';
 import History from '@mui/icons-material/History';
 
 // assets
-import { useTranslation } from 'react-i18next';
+import { useTranslations } from 'next-intl';
 
 // ==============================|| HEADER PROFILE - SETTING TAB ||============================== //
 
 const SettingTab = () => {
   const theme = useTheme();
-  const [t] = useTranslation();
+  const t = useTranslations("");
 
   const [selectedIndex, setSelectedIndex] = useState(0);
   const handleListItemClick = (event : any, index : any) => {

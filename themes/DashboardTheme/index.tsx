@@ -14,19 +14,19 @@ import { prefixer } from 'stylis';
 import stylisRTLPlugin from 'stylis-plugin-rtl';
 import CONFIG from '@root/config';
 
-import i18n from '@root/locales/i18n';
-
 import IranSans from './fonts/IranSans';
+import Poppins from './fonts/Poppins';
 
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterMomentJalaali } from '@mui/x-date-pickers/AdapterMomentJalaali';
-// import { AdapterDateFnsJalali } from '@mui/x-date-pickers/AdapterDateFnsJalaliV3';
 import '@root/public/css/customStyle/dashboard.css';
 import NextAppDirEmotionCacheProvider from './EmotionCache';
 import { AdapterMoment } from '@mui/x-date-pickers/AdapterMoment';
 import { useSession } from 'next-auth/react';
 import Loader from '@dashboard/_components/Loader';
 import { Options } from '@emotion/cache';
+import { persianCalendar, rtlLocales } from '@root/locales/i18nHomepage';
+import nextIntlService from '@root/locales/nextIntlService';
 // ==============================|| DEFAULT THEME - MAIN  ||============================== //
 export default function DashboardThemeCustomization({ children }: { children: any }) {
 
@@ -37,43 +37,55 @@ export default function DashboardThemeCustomization({ children }: { children: an
   if (session != undefined && themeMode == undefined) {
     themeMode = CONFIG.DASHBOARD_DEFAULT_THEME_MODE as 'light' | 'dark';
   }
-  const dir = i18n.dir(session?.user?.defaultLanguage);
 
-  const [direction, setDirection] = useState<'ltr' | 'rtl'>(dir);
-  const initFonts = dir === 'rtl' ? `Iran Sans` : CONFIG.DASHBOARD_FONT_FAMILY;
+  const [direction, setDirection] = useState<'ltr' | 'rtl'>('ltr'); // Default to LTR
+  const [isPersianCalendar, setIsPersianCalendar] = useState<boolean>(false);
+  const initFonts = direction === 'rtl' ? CONFIG.RTL_FONTS_EDITOR : CONFIG.LTR_FONTS_EDITOR;
   const [fonts, setFonts] = useState(initFonts);
 
-  useLayoutEffect(() => {
-    setDirection(dir)
-    document.dir = dir;
-    i18n.changeLanguage(session?.user?.defaultLanguage);
-  }, [dir, session]);
+  // useLayoutEffect(() => {
+  //   setDirection(dir)
+  //   document.dir = dir;
+  //   //i18n.changeLanguage(session?.user?.defaultLanguage);
+  // }, [dir, session]);
 
   useLayoutEffect(() => {
-    document.dir = direction;
-    direction === 'rtl' ? setFonts(`Iran Sans`) : setFonts(CONFIG.DASHBOARD_FONT_FAMILY);
+    // Only run on client side
+    if (typeof window === 'undefined') return;
+
+    let locale: string = session?.user?.defaultLanguage ?? CONFIG.DEFAULT_LANGUAGE;
+    nextIntlService.setNextIntlLocale(locale);
+    const dir = rtlLocales.includes(locale as any) == true ? 'rtl' : 'ltr';
+    setDirection(dir)
+    setIsPersianCalendar(persianCalendar.includes(locale as any) == true ? true : false);
+
+  }, [session]);
+
+  useLayoutEffect(() => {
+    //document.dir = direction;
+    direction === 'rtl' ? setFonts(CONFIG.RTL_FONTS_EDITOR) : setFonts(CONFIG.LTR_FONTS_EDITOR);
   }, [direction]);
 
   function changeDirection(dir: 'ltr' | 'rtl') {
     setDirection(dir);
   }
 
-  const theme = Palette(themeMode);
+  const themePallete = Palette(themeMode);
   // create custom shadows
-  theme.shadows[1] = themeMode == "light" ? "0 4px 24px rgba(0, 0, 0, 0.08)" : "0 4px 24px rgba(0, 0, 0, 0.3)";
+  themePallete.shadows[1] = themeMode == "light" ? "0 4px 24px rgba(0, 0, 0, 0.08)" : "0 4px 24px rgba(0, 0, 0, 0.3)";
 
 
   const themeTypography = Typography(fonts);
-  const themeCustomShadows = useMemo(() => CustomShadows(theme), [theme]);
+  const themeCustomShadows = useMemo(() => CustomShadows(themePallete), [themePallete]);
   const themeOptions = useMemo<ThemeOptions>(
     () => ({
       breakpoints: {
         values: {
           xs: 0,
-          sm: 768,
-          md: 1024,
-          lg: 1266,
-          xl: 1536
+          sm: 560,
+          md: 1000,
+          lg: 1460,
+          xl: 1900
         }
       },
       direction: direction,
@@ -84,16 +96,16 @@ export default function DashboardThemeCustomization({ children }: { children: an
           paddingBottom: 8
         }
       },
-      palette: theme.palette,
+      palette: themePallete.palette,
       customShadows: themeCustomShadows,
-      shadows: theme.shadows,
+      shadows: themePallete.shadows,
       typography: themeTypography,
       setDirection: changeDirection,
     }),
-    [theme, themeTypography, themeCustomShadows]
+    [themePallete, themeTypography, themeCustomShadows]
   );
-  const themes = createTheme(themeOptions);
-  themes.components = componentsOverride(themes);
+  const theme = createTheme(themeOptions);
+  theme.components = componentsOverride(theme);
   // Create rtl cache
 
   const cacheRtl: Options = {
@@ -107,9 +119,9 @@ export default function DashboardThemeCustomization({ children }: { children: an
 
     <StyledEngineProvider injectFirst>
       {direction === 'rtl' && (
-        <LocalizationProvider dateAdapter={AdapterMomentJalaali}>
+        <LocalizationProvider dateAdapter={isPersianCalendar ? AdapterMomentJalaali : AdapterMoment}>
           <NextAppDirEmotionCacheProvider options={cacheRtl}>
-            <ThemeProvider theme={themes}>
+            <ThemeProvider theme={theme}>
               <CssBaseline />
               <IranSans />
               {children}
@@ -120,8 +132,9 @@ export default function DashboardThemeCustomization({ children }: { children: an
       {direction === 'ltr' && (
         <LocalizationProvider dateAdapter={AdapterMoment}>
           <NextAppDirEmotionCacheProvider options={{ key: 'mui' }}>
-            <ThemeProvider theme={themes}>
+            <ThemeProvider theme={theme}>
               <CssBaseline />
+              <Poppins />
               {children}
             </ThemeProvider>
           </NextAppDirEmotionCacheProvider>

@@ -1,34 +1,18 @@
-import axios from 'axios';
+import Fetch from '@root/utils/Fetch';
 import CONFIG from '@root/config';
-import { setDefaultHeader } from '@root/utils/axiosHeaders';
 import Result from '@root/app/types/Result';
+import SiteSettingsModel from '../_types/SiteSetting/SiteSettingsModel';
 
 export default class SiteSettingsService {
-  constructor(jwt : string) {
-    setDefaultHeader(jwt);
+  config?: RequestInit;
+  constructor(jwt: string) {
+    if (jwt) this.config = Fetch.SetDefaultHeader(jwt);
   }
+
   getSettings = async (): Promise<Result<SiteSettingsModel>> => {
-    return new Promise((resolve, reject) => {
-      axios
-        .get(CONFIG.API_BASEPATH + '/cms/getSettings')
-        .then((response) => {
-          resolve(response.data);
-        })
-        .catch((error) => {
-          reject(error);
-        });
-    });
+    return Fetch.Get<Result<SiteSettingsModel>>(CONFIG.API_BASEPATH + `/cms/getSettings`, this.config);
   };
   addOrUpdateSettings = async (setting: SiteSettingsModel): Promise<Result<SiteSettingsModel>> => {
-    return new Promise((resolve, reject) => {
-      axios
-        .post(CONFIG.API_BASEPATH + '/cms/addOrUpdateSettings', setting)
-        .then((response) => {
-          resolve(response.data);
-        })
-        .catch((error) => {
-          reject(error);
-        });
-    });
+    return Fetch.Post<Result<SiteSettingsModel>>(CONFIG.API_BASEPATH + '/cms/addOrUpdateSettings', setting, this.config);
   };
 }

@@ -1,12 +1,12 @@
 'use client';
 import { Box, Button, Chip, Grid, Typography } from '@mui/material';
 // project import
-import { useTranslation } from 'react-i18next';
+import { useTranslations } from 'next-intl';
 import { useState } from 'react';
 import Tab from '@mui/material/Tab';
-import TabContext from '@mui/lab/TabContext';
-import TabList from '@mui/lab/TabList';
-import TabPanel from '@mui/lab/TabPanel';
+// import TabContext from '@mui/lab/TabContext';
+// import TabList from '@mui/lab/TabList';
+// import TabPanel from '@mui/lab/TabPanel';
 import { RestoreFromTrash, Send, Drafts ,Inbox, Feed} from '@mui/icons-material';
 import MainCard from '@dashboard/_components/MainCard';
 import TableCard from '@dashboard/_components/TableCard';
@@ -17,7 +17,7 @@ import Link from 'next/link';
 // ===============================|| COLOR BOX ||=============================== //
 
 function MessagesInbox() {
-  const [t] = useTranslation();
+  const t = useTranslations("");
   const [value, setValue] = useState('1');
 
   const buttonName = 'buttons.message.messageInbox.';
@@ -67,16 +67,16 @@ function MessagesInbox() {
     );
   };
   return (
-    <Grid container justifyContent="center" direction="row" alignItems="flex-start">
-      <Grid container spacing={3} item xs={12} sm={12} md={12} lg={12} direction="column">
+    <Grid container direction="row" sx={{ justifyContent: "center", alignItems: "flex-start" }}>
+      <Grid container spacing={3} item xs={12} sm={12} md={12} lg={12} >
         <Grid item>
           <Typography variant="h5">{t('pages.messagesInbox')}</Typography>
         </Grid>
         <Grid item>
           <MainCard title={<MessageHeader />}>
-            <TableCard>
+             {/* <TableCard>
               <Box sx={{ width: '100%', typography: 'body1' }} mt={-2}>
-                <TabContext value={value}>
+               <TabContext value={value}>
                   <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
                     <TabList onChange={handleChange} aria-label="lab API tabs example">
                       <Tab icon={<Inbox />} value="1" iconPosition="start" label="Private" />
@@ -89,9 +89,9 @@ function MessagesInbox() {
                   <TabPanel value="2" sx={{ p: '0' }}>
                     <MessagesPublicInboxDataGrid />
                   </TabPanel>
-                </TabContext>
+                </TabContext> 
               </Box>
-            </TableCard>
+            </TableCard>*/}
           </MainCard>
         </Grid>
       </Grid>

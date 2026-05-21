@@ -2,7 +2,7 @@
 import { Button, Grid, Typography } from '@mui/material';
 
 // project import
-import { useTranslation } from 'react-i18next';
+import { useTranslations } from 'next-intl';
 import ArrowBack from '@mui/icons-material/ArrowBack';
 
 import { useRouter } from 'next/navigation';
@@ -14,7 +14,7 @@ import AnimateButton from '@dashboard/_components/@extended/AnimateButton';
 // ===============================|| COLOR BOX ||=============================== //
 
 export default function MessagesOutbox() {
-  const [t] = useTranslation();
+  const t = useTranslations("");
   let router = useRouter();
 
   const MessageHeader = () => {
@@ -40,8 +40,8 @@ export default function MessagesOutbox() {
     );
   };
   return (
-    <Grid container justifyContent="center" direction="row" alignItems="flex-start">
-      <Grid container spacing={3} item xs={12} sm={12} md={12} lg={12} direction="column">
+    <Grid container direction="row" sx={{ justifyContent: "center", alignItems: "flex-start" }}>
+      <Grid container spacing={3} item xs={12} sm={12} md={12} lg={12} >
         <Grid item>
           <Typography variant="h5">{t('pages.messagesDraft')}</Typography>
         </Grid>

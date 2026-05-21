@@ -1,3 +1,4 @@
+import ResultStatusEnum from "./enums/ResultStatusEnum";
 
 export default class Result<T> {
     status: ResultStatusEnum;
@@ -15,26 +16,12 @@ export default class Result<T> {
     }
   
     get statusDescription(): string {
-      return ResultStatusEnum.description(this.status);
+      return ResultStatusEnumDescription.description(this.status);
     }
   }
   
-  export enum ResultStatusEnum {
-    Succeeded = 200,
-    Failed = 500,
-    InvalidValidation = 501,
-    NotFound = 404,
-    IsNotAuthorized = 401,
-    IsNotAllowed = 502,
-    ItsDuplicate = 503,
-    ExceptionThrowed = 504,
-    FileIsTooLarge = 505,
-    FileIsTooSmall = 506,
-    RequiresTwoFactor = 507,
-    IsLockedOut = 508
-  }
   
-  export namespace ResultStatusEnum {
+  export namespace ResultStatusEnumDescription {
     const descriptions: { [key in ResultStatusEnum]: string } = {
       [ResultStatusEnum.Succeeded]: "Succeeded",
       [ResultStatusEnum.Failed]: "Failed",

@@ -17,7 +17,7 @@ export default function Select(theme : Theme) {
       styleOverrides: {
         root: {
           fontWeight: 400,
-          background : "#fff"
+          background : "primary.main"
         },
         outlined: {
           padding : '10px 32px 11px 10px'

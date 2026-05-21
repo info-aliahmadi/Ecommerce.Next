@@ -1,97 +1,37 @@
-import axios from 'axios';
+import Fetch from '@root/utils/Fetch';
 import CONFIG from '@root/config';
-import { setDefaultHeader } from '@root/utils/axiosHeaders';
 import Result from '@root/app/types/Result';
 import CategoryModel from '@dashboard/(ecommerce)/_types/Product/CategoryModel';
 
 export default class CategoryService {
-  constructor(jwt : string) {
-    setDefaultHeader(jwt);
+  config?: RequestInit;
+  constructor(jwt: string) {
+    if (jwt) this.config = Fetch.SetDefaultHeader(jwt);
   }
+
   getCategoryList = async (): Promise<Result<CategoryModel[]>> => {
-    return new Promise((resolve, reject) => {
-      axios
-        .get(CONFIG.API_BASEPATH + '/Product/GetCategoryHierarchy')
-        .then((response) => {
-          resolve(response.data);
-        })
-        .catch((error) => {
-          reject(error);
-        });
-    });
+    return Fetch.Get<Result<CategoryModel[]>>(CONFIG.API_BASEPATH + `/Product/GetCategoryHierarchy`, this.config);
   };
   getCategoryListForSelect = async (): Promise<Result<CategoryModel[]>> => {
-    return new Promise((resolve, reject) => {
-      axios
-        .post(CONFIG.API_BASEPATH + '/Product/GetCategoryListForSelect')
-        .then((response) => {
-          resolve(response.data);
-        })
-        .catch((error) => {
-          reject(error);
-        });
-    });
+    return Fetch.Get<Result<CategoryModel[]>>(CONFIG.API_BASEPATH + `/Product/GetCategoryListForSelect`, this.config);
   };
   getCategoryById = async (categoryId : number): Promise<Result<CategoryModel>> => {
-    return new Promise((resolve, reject) => {
-      axios
-        .get(CONFIG.API_BASEPATH + '/Product/getCategoryById', { params: { categoryId: categoryId } })
-        .then((response) => {
-          resolve(response.data);
-        })
-        .catch((error) => {
-          reject(error);
-        });
-    });
+    const params = new URLSearchParams({ categoryId: categoryId.toString() });
+    return Fetch.Get<Result<CategoryModel>>(CONFIG.API_BASEPATH + `/Product/getCategoryById?${params.toString()}`, this.config);
   };
   addCategory = async (category: CategoryModel): Promise<Result<CategoryModel>> => {
-    return new Promise((resolve, reject) => {
-      axios
-        .post(CONFIG.API_BASEPATH + '/Product/addCategory', category)
-        .then((response) => {
-          resolve(response.data);
-        })
-        .catch((error) => {
-          reject(error);
-        });
-    });
+    return Fetch.Post<Result<CategoryModel>>(CONFIG.API_BASEPATH + '/Product/addCategory', category, this.config);
   };
   updateCategory = async (category: CategoryModel): Promise<Result<CategoryModel>> => {
-    return new Promise((resolve, reject) => {
-      axios
-        .post(CONFIG.API_BASEPATH + '/Product/updateCategory', category)
-        .then((response) => {
-          resolve(response.data);
-        })
-        .catch((error) => {
-          reject(error);
-        });
-    });
+    return Fetch.Post<Result<CategoryModel>>(CONFIG.API_BASEPATH + '/Product/updateCategory', category, this.config);
   };
   // create function to order categories
   updateOrderCategories = async (categories: CategoryModel[]): Promise<Result<CategoryModel[]>> => {
-    return new Promise((resolve, reject) => {
-      axios
-        .post(CONFIG.API_BASEPATH + '/Product/UpdateCategoryOrders', categories)
-        .then((response) => {
-          resolve(response.data);
-        })
-        .catch((error) => {
-          reject(error);
-        });
-    });
+    return Fetch.Post<Result<CategoryModel[]>>(CONFIG.API_BASEPATH + '/Product/UpdateCategoryOrders', categories, this.config);
   };
   
   deleteCategory = async (categoryId : number): Promise<Result<CategoryModel>> => {
-    return new Promise((resolve, reject) => {
-      axios
-        .get(CONFIG.API_BASEPATH + '/Product/deleteCategory', { params: { categoryId: categoryId } })
-        .then((response) => {
-          resolve(response.data);
-        })
-        .catch((error) => {
-          reject(error);
-        });
-    });
+    const params = new URLSearchParams({ categoryId: categoryId.toString() });
+    return Fetch.Get<Result<CategoryModel>>(CONFIG.API_BASEPATH + `/Product/deleteCategory?${params.toString()}`, this.config);
   };
 }

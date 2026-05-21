@@ -2,13 +2,13 @@
 import { Grid, TextField, Stack, Chip } from '@mui/material';
 
 // assets
-import { useTranslation } from 'react-i18next';
+import { useTranslations } from 'next-intl';
 
 import SelectProductAttribute from '../ProductAttribute/SelectProductAttribute';
 import { useState } from 'react';
 
 export default function ProductAttributeInventory({ values, setFieldValue }: { values: any; setFieldValue: (field: string, value: any) => void }) {
-  const [t] = useTranslation();
+  const t = useTranslations("");
   const fieldsName = 'fields.product.';
 
   const handleAttributeChange = (event: any, options: any) => {

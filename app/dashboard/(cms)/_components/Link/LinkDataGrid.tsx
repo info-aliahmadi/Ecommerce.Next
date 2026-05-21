@@ -3,7 +3,7 @@ import { Avatar, Box, Button, Grid, IconButton, Stack, Tooltip } from '@mui/mate
 
 // project import
 import { ReactNode, useCallback, useMemo, useState } from 'react';
-import { useTranslation } from 'react-i18next';
+import { useTranslations } from 'next-intl';
 import MaterialTable from '@dashboard/_components/MaterialTable/MaterialTable';
 import { Delete, Edit, ImageNotSupported, Save } from '@mui/icons-material';
 import LinkIcon from '@mui/icons-material/Link';
@@ -19,7 +19,7 @@ import _ from 'lodash';
 import {  MRT_Row } from 'material-react-table';
 import LinkModel from '@dashboard/(cms)/_types/Link/LinkModel';
 import LinkSectionModel from '../../_types/LinkSection/LinkSectionModel';
-import MRT_Column from '@root/app/types/MRT_Column';
+import { MRT_Column } from '@root/app/types/MRT_Column';
 
 let mediaExtensions = CONFIG.IMAGES_EXTENSIONS.concat(CONFIG.VIDEOS_EXTENSIONS);
 // ===============================|| COLOR BOX ||=============================== //
@@ -53,7 +53,7 @@ const ImagePreviewRow = ({ renderedCellValue, row }: { renderedCellValue: any, r
   );
 };
 function LinkDataGrid({ linkSection }: { linkSection: MRT_Row<LinkSectionModel> }) {
-  const [t] = useTranslation();
+  const t = useTranslations("");
   const { data: session } = useSession();
   const jwt = session?.accessToken;
 

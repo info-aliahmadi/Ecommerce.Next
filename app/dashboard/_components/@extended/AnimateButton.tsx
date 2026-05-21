@@ -5,7 +5,7 @@ import { motion } from 'framer-motion';
 
 // ==============================|| ANIMATION BUTTON ||============================== //
 
-export default function AnimateButton({ children, type }: Readonly<{  children: React.ReactNode,type : string }>) {
+export default function AnimateButton({ children, type }: Readonly<{ children: React.ReactNode, type: 'rotate' | 'slide' | 'scale' | undefined }>) {
   switch (type) {
     case 'rotate': // only available in paid version
     case 'slide': // only available in paid version

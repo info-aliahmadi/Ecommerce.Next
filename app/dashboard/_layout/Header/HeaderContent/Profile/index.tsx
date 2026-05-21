@@ -17,7 +17,7 @@ import {
   Tabs,
   Typography
 } from '@mui/material';
-import Grid from '@mui/material/Grid2';
+import Grid from '@mui/material/Grid';
 // project import
 import ProfileTab from './ProfileTab';
 import SettingTab from './SettingTab';
@@ -28,7 +28,7 @@ import { LogoutOutlined, SettingOutlined, UserOutlined } from '@ant-design/icons
 import CONFIG from '@root/config';
 import Transitions from '@dashboard/_components/@extended/Transitions';
 import MainCard from '@dashboard/_components/MainCard';
-import { useTranslation } from 'react-i18next';
+import { useTranslations } from 'next-intl';
 interface TabPanelProps {
   children?: React.ReactNode;
   index: number;

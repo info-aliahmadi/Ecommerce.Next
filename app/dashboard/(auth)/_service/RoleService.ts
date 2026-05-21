@@ -1,84 +1,40 @@
-import axios from 'axios';
-import { setDefaultHeader } from '@root/utils/axiosHeaders';
-import CONFIG from '@root/config';
+import { GridDataBound } from '@root/app/types/GridDataBound';
 import Result from '@root/app/types/Result';
+import CONFIG from '@root/config';
+
+
+import Fetch from '@root/utils/Fetch';
 
 export default class RoleService {
+  config?: RequestInit;
   constructor(jwt: string) {
-    if (jwt)
-      setDefaultHeader(jwt);
+    if (jwt) this.config = Fetch.SetDefaultHeader(jwt);
   }
+
   getRoleList = async (searchParams: GridDataBound): Promise<Result<PaginatedList<RoleModel>>> => {
-    return new Promise((resolve, reject) => {
-      axios
-        .post(CONFIG.API_BASEPATH + '/auth/GetRoleList', searchParams)
-        .then((response) => {
-          resolve(response.data);
-        })
-        .catch((error) => {
-          reject(error)
-        });
-    });
+    return Fetch.Post<Result<PaginatedList<RoleModel>>>(CONFIG.API_BASEPATH + '/auth/GetRoleList', searchParams, this.config);
   };
+
   getAllRoles = async (): Promise<Result<RoleModel[]>> => {
-    return new Promise((resolve, reject) => {
-      axios
-        .get(CONFIG.API_BASEPATH + '/auth/GetAllRoles')
-        .then((response) => {
-          resolve(response.data);
-        })
-        .catch((error) => {
-          reject(error)
-        });
-    });
+    return Fetch.Get<Result<RoleModel[]>>(CONFIG.API_BASEPATH + `/auth/GetAllRoles`, this.config);
   };
+
   getRoleById = async (roleId: number): Promise<Result<RoleModel>> => {
-    return new Promise((resolve, reject) => {
-      axios
-        .get(CONFIG.API_BASEPATH + '/auth/getRoleById', { params: { roleId: roleId } })
-        .then((response) => {
-          resolve(response.data);
-        })
-        .catch((error) => {
-          reject(error)
-        });
-    });
+    const params = new URLSearchParams({ roleId: roleId.toString() });
+    return Fetch.Get<Result<RoleModel>>(CONFIG.API_BASEPATH + `/auth/getRoleById?${params.toString()}`, this.config);
   };
+
   addRole = async (role: RoleModel): Promise<Result<RoleModel>> => {
-    return new Promise((resolve, reject) => {
-      axios
-        .post(CONFIG.API_BASEPATH + '/auth/addRole', role)
-        .then((response) => {
-          resolve(response.data);
-        })
-        .catch((error) => {
-          reject(error)
-        });
-    });
+    return Fetch.Post<Result<RoleModel>>(CONFIG.API_BASEPATH + '/auth/addRole', role, this.config);
   };
+
   updateRole = async (role: RoleModel): Promise<Result<RoleModel>> => {
-    return new Promise((resolve, reject) => {
-      axios
-        .post(CONFIG.API_BASEPATH + '/auth/updateRole', role)
-        .then((response) => {
-          resolve(response.data);
-        })
-        .catch((error) => {
-          reject(error)
-        });
-    });
+    return Fetch.Post<Result<RoleModel>>(CONFIG.API_BASEPATH + '/auth/updateRole', role, this.config);
   };
+
   deleteRole = async (roleId: number): Promise<Result<null>> => {
-    return new Promise((resolve, reject) => {
-      axios
-        .get(CONFIG.API_BASEPATH + '/auth/deleteRole', { params: { roleId: roleId } })
-        .then((response) => {
-          resolve(response.data);
-        })
-        .catch((error) => {
-          reject(error)
-        });
-    });
+    const params = new URLSearchParams({ roleId: roleId.toString() });
+    return Fetch.Get<Result<null>>(CONFIG.API_BASEPATH + `/auth/deleteRole?${params.toString()}`, this.config);
   };
 }
   

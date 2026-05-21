@@ -22,7 +22,7 @@ import AddIcon from '@mui/icons-material/Add';
 import AnimateButton from '@dashboard/_components/@extended/AnimateButton';
 
 // assets
-import { useTranslation } from 'react-i18next';
+import { useTranslations } from 'next-intl';
 import Notify from '@dashboard/_components/@extended/Notify';
 import setServerErrors from '@root/utils/setServerErrors';
 import TagsService from '@dashboard/(cms)/_service/TagsService';
@@ -38,7 +38,7 @@ const AddOrEditTag = ({ row, isNew, open, setOpen, refetch }:
     setOpen: (open: boolean) => void,
     refetch: () => void
   }) => {
-  const [t] = useTranslation();
+  const t = useTranslations("");
   const { data: session } = useSession();
   const jwt = session?.accessToken;
 
@@ -145,7 +145,7 @@ const AddOrEditTag = ({ row, isNew, open, setOpen, refetch }:
                 <CloseDialog onClose={onClose} />
               </DialogTitle>
               <DialogContent>
-                <Grid container spacing={3} direction="column">
+                <Grid container spacing={3} >
                   <Grid item>
                     <Stack spacing={1}>
                       <InputLabel htmlFor="title">{t(fieldsName + 'title')}</InputLabel>

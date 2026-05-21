@@ -9,7 +9,7 @@ import { Avatar, Chip, ListItemButton, ListItemIcon, ListItemText, Tooltip, Typo
 
 // project import
 import { activeItem } from '@root//store/reducers/menu';
-import { useTranslation } from 'react-i18next';
+import { useTranslations } from 'next-intl';
 import { usePathname } from 'next/navigation';
 import Link from 'next/link';
 
@@ -17,7 +17,7 @@ import Link from 'next/link';
 
 
 const NavItem = ({ item, level }: { item: MenuItem, level: number }) => {
-  const { t } = useTranslation();
+  const t = useTranslations("");
   const nsTranslation = 'navigation.';
   const keyName = nsTranslation + item.id;
   const theme = useTheme();

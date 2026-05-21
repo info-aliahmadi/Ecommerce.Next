@@ -14,7 +14,7 @@ import * as Yup from 'yup';
 import { Formik } from 'formik';
 
 // assets
-import { useTranslation } from 'react-i18next';
+import { useTranslations } from 'next-intl';
 import { useSession } from 'next-auth/react';
 
 import MainCard from '@dashboard/_components/MainCard';
@@ -33,7 +33,7 @@ import AnimateButton from '@root/app/dashboard/_components/@extended/AnimateButt
 import { Button } from '@mui/material';
 
 export default function OrderDetail({ row, refetch }: { row: MRT_Row<OrderModel>; refetch: () => void }) {
-  const [t] = useTranslation();
+  const t = useTranslations("");
   const { data: session } = useSession();
   const jwt = session?.accessToken;
   const orderService = new OrderService(jwt ?? '');
@@ -99,11 +99,11 @@ export default function OrderDetail({ row, refetch }: { row: MRT_Row<OrderModel>
       >
         {({ errors, handleBlur, handleChange, setFieldValue, handleSubmit, isSubmitting, touched, values }) => (
           <form noValidate onSubmit={handleSubmit}>
-            <Grid container justifyContent="center" direction="row" alignItems="flex-start">
-              <Grid container spacing={3} item xs={12} sm={12} md={12} lg={12} xl={12} direction="column">
+            <Grid container direction="row" sx={{ justifyContent: "center", alignItems: "flex-start" }}>
+              <Grid container spacing={3} item xs={12} sm={12} md={12} lg={12} xl={12} >
                 <Grid item>
                   <MainCard>
-                    <Grid container spacing={3} direction="column">
+                    <Grid container spacing={3} >
                       <Grid container item spacing={3}>
                         <Grid item xs={12} md={3} lg={3} xl={3}>
                           <Stack spacing={1}>

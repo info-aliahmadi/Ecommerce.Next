@@ -1,27 +1,25 @@
 'use client'
 // material-ui
 import { Typography } from '@mui/material';
-import Grid from '@mui/material/Grid2';
+import Grid from '@mui/material/Grid';
 // project import
 import ProfileForm from '../../_components/ProfileForm';
-import { useTranslation } from 'react-i18next';
+import { useTranslations } from 'next-intl';
 import MainCard from '@dashboard/_components/MainCard';
 
 // ===============================|| COLOR BOX ||=============================== //
 
 function Profile() {
-  const [t] = useTranslation();
+  const t = useTranslations("");
   return (
-    <Grid container justifyContent="center" direction="row" alignItems="flex-start">
-      <Grid container spacing={3} size={{ xs: 12, sm: 12, md: 10, lg: 10, xl: 7 }} direction="column">
-        <Grid>
-          <Typography variant="h5">{t('pages.edit-profile')}</Typography>
-        </Grid>
-        <Grid>
-          <MainCard>
-            <ProfileForm />
-          </MainCard>
-        </Grid>
+    <Grid container direction="row" spacing={3} sx={{ justifyContent: "center", alignItems: "flex-start" }} >
+      <Grid size={7}>
+        <Typography variant="h5">{t('pages.edit-profile')}</Typography>
+      </Grid>
+      <Grid size={{ xs: 12, sm: 12, md: 12, lg: 10, xl: 7 }}>
+        <MainCard>
+          <ProfileForm />
+        </MainCard>
       </Grid>
     </Grid>
   );

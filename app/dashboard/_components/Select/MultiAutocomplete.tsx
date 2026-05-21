@@ -3,13 +3,14 @@ import TextField from '@mui/material/TextField';
 import Autocomplete, { AutocompleteChangeDetails, AutocompleteChangeReason } from '@mui/material/Autocomplete';
 import CircularProgress from '@mui/material/CircularProgress';
 import { useState, useEffect } from 'react';
-import Result from '@root/app/types/Result';
+
 import { UserModel } from '../../(auth)/_types/User/UserModel';
+import Result from '@root/app/types/Result';
 
 interface MultiAutoCompleteProps {
   id: string;
   defaultValues: number[];
-  setFieldValue?: (field: string, value: any) => void;
+  setFieldValue: (field: string, value: any) => void;
   label: string;
   optionLabel: string;
   inputDataApi: (input: string) => Promise<Result<any[]>>;
@@ -54,9 +55,7 @@ export default function MultiAutoComplete({ id, defaultValues, setFieldValue, la
   const onChange = (event: React.SyntheticEvent, value: Option[], reason: AutocompleteChangeReason, details?: AutocompleteChangeDetails<Option> | undefined) => {
     if (reason == "selectOption" || reason == "removeOption") {
       let ids = value?.map(a => a.id);
-      if (setFieldValue) {
-        setFieldValue(id, ids);
-      }
+      setFieldValue(id, ids);
       setOptions(value);
       setValues(value);
     }
@@ -108,15 +107,15 @@ export default function MultiAutoComplete({ id, defaultValues, setFieldValue, la
           {...params}
           variant="outlined"
           size="small"
-          InputProps={{
-            ...params.InputProps,
-            endAdornment: (
-              <React.Fragment>
-                {loading && <CircularProgress color="inherit" size={15} />}
-                {params.InputProps.endAdornment}
-              </React.Fragment>
-            )
-          }}
+          // InputProps={{
+          //   ...params.InputProps,
+          //   endAdornment: (
+          //     <React.Fragment>
+          //       {loading && <CircularProgress color="inherit" size={15} />}
+          //       {params.InputProps.endAdornment}
+          //     </React.Fragment>
+          //   )
+          // }}
         />
       )}
     />

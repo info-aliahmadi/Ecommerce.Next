@@ -5,7 +5,7 @@ import {
   Button,
   Checkbox,
   FormControlLabel,
-  Grid2,
+  Grid,
   InputLabel,
   ListItemIcon,
   MenuItem,
@@ -15,7 +15,7 @@ import {
 // project import
 import MainCard from '@dashboard/_components/MainCard';
 import { ReactNode, useCallback, useMemo, useState } from 'react';
-import { useTranslation } from 'react-i18next';
+import { useTranslations } from 'next-intl';
 import UsersService from '@dashboard/(auth)/_service/UsersService';
 import { AccountCircle, Send, PersonAdd } from '@mui/icons-material';
 import CONFIG from '@root/config';
@@ -27,15 +27,17 @@ import { useRouter } from 'next/navigation';
 import { useSession } from 'next-auth/react';
 import { MRT_Cell, MRT_Row, MRT_RowData, MRT_TableInstance } from 'material-react-table';
 import { UserModel } from '../../_types/User/UserModel';
-import MRT_Column from '@root/app/types/MRT_Column';
 
+
+import nextIntlService from '@root/locales/nextIntlService';
+import { DateTimeViewer } from '@root/utils/DateViewer';
 // ===============================|| COLOR BOX ||=============================== //
 
 const UserDetail = ({ row, t, fieldsName, language }: { row: MRT_Row<UserModel>, t: any, fieldsName: string, language: string }) => {
   return (
-    <Grid2 container spacing={3} direction="row">
-      <Grid2 container spacing={3} size={{ xs: 12, sm: 6, md: 3, lg: 3, xl: 3 }} direction="row" sx={{ justifyContent: 'center', alignItems: "center" }}>
-        <Grid2 size={{ xs: 12, md: 12 }}>
+    <Grid container spacing={3} direction="row">
+      <Grid container spacing={3} size={{ xs: 12, sm: 6, md: 3, lg: 3, xl: 3 }} direction="row" sx={{ justifyContent: 'center', alignItems: "center" }}>
+        <Grid size={{ xs: 12, md: 12 }}>
           <Stack>
             <Box
               sx={{
@@ -47,34 +49,34 @@ const UserDetail = ({ row, t, fieldsName, language }: { row: MRT_Row<UserModel>,
             >
               <Avatar
                 alt="profile user"
-                src={row.original.avatar ? CONFIG.AVATAR_BASEPATH + row.original.avatar : '/images/users/anonymous.png'}
+                src={row.original.avatar ? CONFIG.AVATAR_BASEPATH + row.original.avatar : CONFIG.UNKNOWN_USER_BASEPATH}
                 sx={{ width: 200, height: 200 }}
               ></Avatar>
               <span>{row.original.name}</span>
             </Box>
           </Stack>
-        </Grid2>
-      </Grid2>
-      <Grid2 container spacing={3} size={{ xs: 12, sm: 6, md: 6, lg: 6, xl: 6 }} >
-        <Grid2 size={{ xs: 12, md: 3 }}>
+        </Grid>
+      </Grid>
+      <Grid container spacing={3} size={{ xs: 12, sm: 6, md: 6, lg: 6, xl: 6 }} >
+        <Grid size={{ xs: 12, md: 3 }}>
           <Stack spacing={1}>
             <InputLabel htmlFor="name">{t(fieldsName + 'name')}</InputLabel>
             <OutlinedInput id="name" type="text" value={row.original.name ? row.original.name : ''} fullWidth disabled />
           </Stack>
-        </Grid2>
-        <Grid2 size={{ xs: 12, md: 3 }}>
+        </Grid>
+        <Grid size={{ xs: 12, md: 3 }}>
           <Stack spacing={1}>
             <InputLabel htmlFor="userName">{t(fieldsName + 'userName')}</InputLabel>
             <OutlinedInput id="userName" type="text" value={row.original.userName ? row.original.userName : ''} fullWidth disabled />
           </Stack>
-        </Grid2>
-        <Grid2 size={{ xs: 12, md: 3 }}>
+        </Grid>
+        <Grid size={{ xs: 12, md: 3 }}>
           <Stack spacing={1}>
             <InputLabel htmlFor="email">{t(fieldsName + 'email')}</InputLabel>
             <OutlinedInput id="email" type="text" value={row.original.email ? row.original.email : ''} fullWidth disabled />
           </Stack>
-        </Grid2>
-        <Grid2 size={{ xs: 12, md: 3 }}>
+        </Grid>
+        <Grid size={{ xs: 12, md: 3 }}>
           <Stack spacing={1}>
             <InputLabel htmlFor="emailConfirmed">{t(fieldsName + 'emailConfirmed')}</InputLabel>
             <FormControlLabel
@@ -91,14 +93,14 @@ const UserDetail = ({ row, t, fieldsName, language }: { row: MRT_Row<UserModel>,
               label={t(fieldsName + 'emailConfirmed')}
             />
           </Stack>
-        </Grid2>
-        <Grid2 size={{ xs: 12, md: 3 }}>
+        </Grid>
+        <Grid size={{ xs: 12, md: 3 }}>
           <Stack spacing={1}>
             <InputLabel htmlFor="phoneNumber">{t(fieldsName + 'phoneNumber')}</InputLabel>
             <OutlinedInput id="phoneNumber" type="text" value={row.original.phoneNumber ? row.original.phoneNumber : ''} fullWidth disabled />
           </Stack>
-        </Grid2>
-        <Grid2 size={{ xs: 12, md: 3 }}>
+        </Grid>
+        <Grid size={{ xs: 12, md: 3 }}>
           <Stack spacing={1}>
             <InputLabel htmlFor="phoneNumberConfirmed">{t(fieldsName + 'phoneNumberConfirmed')}</InputLabel>{' '}
             <FormControlLabel
@@ -115,25 +117,20 @@ const UserDetail = ({ row, t, fieldsName, language }: { row: MRT_Row<UserModel>,
               label={t(fieldsName + 'phoneNumberConfirmed')}
             />
           </Stack>
-        </Grid2>
-        <Grid2 size={{ xs: 12, md: 3 }}>
+        </Grid>
+        <Grid size={{ xs: 12, md: 3 }}>
           <Stack spacing={1}>
             <InputLabel htmlFor="registerDate">{t(fieldsName + 'registerDate')}</InputLabel>
             <OutlinedInput
               id="registerDate"
               type="text"
-              value={row.original.registerDate
-                ? new Intl.DateTimeFormat(language, {
-                  dateStyle: 'long',
-                  timeStyle: CONFIG.TIME_STYLE,
-                  hour12: false
-                }).format(moment(row.original.registerDate).toDate()) : ''}
+              value={DateTimeViewer(language, row.original.registerDate)}
               fullWidth
               disabled
             />
           </Stack>
-        </Grid2>
-        <Grid2 size={{ xs: 12, md: 3 }}>
+        </Grid>
+        <Grid size={{ xs: 12, md: 3 }}>
           <Stack spacing={1}>
             <InputLabel htmlFor="lockoutEnabled">{t(fieldsName + 'lockoutEnabled')}</InputLabel>
             <FormControlLabel
@@ -150,44 +147,46 @@ const UserDetail = ({ row, t, fieldsName, language }: { row: MRT_Row<UserModel>,
               label={t(fieldsName + 'lockoutEnabled')}
             />
           </Stack>
-        </Grid2>
-        <Grid2 size={{ xs: 12, md: 3 }}>
+        </Grid>
+        <Grid size={{ xs: 12, md: 3 }}>
           <Stack spacing={1}>
             <InputLabel htmlFor="lockoutEnd">{t(fieldsName + 'lockoutEnd')}</InputLabel>
             <OutlinedInput id="lockoutEnd" type="text" value={row.original.lockoutEnd ? row.original.lockoutEnd : ''} fullWidth disabled />
           </Stack>
-        </Grid2>
-        <Grid2 size={{ xs: 12, md: 3 }}>
+        </Grid>
+        <Grid size={{ xs: 12, md: 3 }}>
           <Stack spacing={1}>
             <InputLabel htmlFor="accessFailedCount">{t(fieldsName + 'accessFailedCount')}</InputLabel>
             <OutlinedInput id="accessFailedCount" type="text" value={row.original.accessFailedCount ? row.original.accessFailedCount : 0} fullWidth disabled />
           </Stack>
-        </Grid2>
-        <Grid2 size={{ xs: 12, md: 3 }}>
+        </Grid>
+        <Grid size={{ xs: 12, md: 3 }}>
           <Stack spacing={1}>
             <InputLabel htmlFor="defaultLanguage">{t(fieldsName + 'defaultLanguage')}</InputLabel>
             <OutlinedInput id="defaultLanguage" type="text" value={row.original.defaultLanguage ? row.original.defaultLanguage : ''} fullWidth disabled />
           </Stack>
-        </Grid2>
-        <Grid2 size={{ xs: 12, md: 4 }}>
+        </Grid>
+        <Grid size={{ xs: 12, md: 4 }}>
           <Stack spacing={1}>
             <InputLabel htmlFor="roles">{t('pages.roles')}</InputLabel>
             {/* <SelectRole disabled defaultValues={row.original.roleIds} /> */}
           </Stack>
-        </Grid2>
-      </Grid2>
-    </Grid2>
+        </Grid>
+      </Grid>
+    </Grid>
   );
 };
 
 function UsersDataGrid() {
-  const [t, i18n] = useTranslation();
-  const language = i18n.language;
+  const t = useTranslations("");
+
+  let language = nextIntlService.getNextIntlLocale();
+
   const { data: session } = useSession();
 
   const jwt = session?.accessToken;
 
-  const service = new UsersService(jwt ?? '');
+  const service = new UsersService(jwt || '');
   const router = useRouter();
 
   const [fieldsName, buttonName] = ['fields.user.', 'buttons.user.'];
@@ -211,7 +210,7 @@ function UsersDataGrid() {
           >
             <Avatar
               alt="profile user"
-              src={row.original.avatar ? CONFIG.AVATAR_BASEPATH + row.original.avatar : '/images/users/anonymous.png'}
+              src={row.original.avatar ? CONFIG.AVATAR_BASEPATH + row.original.avatar : CONFIG.UNKNOWN_USER_BASEPATH}
               sx={{ width: 40, height: 40 }}
             ></Avatar>
             {/* using renderedCellValue instead of cell.getValue() preserves filter match highlighting */}
@@ -258,7 +257,7 @@ function UsersDataGrid() {
         type: 'dateTime'
       }
     ],
-    [language]
+    []
   );
 
   const handleUserList = useCallback(async (filters: GridDataBound) => {

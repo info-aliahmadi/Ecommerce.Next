@@ -6,7 +6,7 @@ import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
 
 // assets
-import { useTranslation } from 'react-i18next';
+import { useTranslations } from 'next-intl';
 import Notify from '@dashboard/_components/@extended/Notify';
 import { useSession } from 'next-auth/react';
 import CategoryService from '../../_service/CategoryService';
@@ -15,7 +15,7 @@ import { MRT_Row } from 'material-react-table';
 import CategoryModel from '../../_types/Product/CategoryModel';
 
 const DeleteCategory = ({ row, open, setOpen, refetch }: { row?: MRT_Row<CategoryModel>; open: boolean; setOpen: (open: boolean) => void; refetch: () => void }) => {
-  const [t] = useTranslation();
+  const t = useTranslations("");
   const [notify, setNotify] = useState<NotifyProps>({ open: false });
   const { data: session } = useSession();
   const jwt = session?.accessToken;

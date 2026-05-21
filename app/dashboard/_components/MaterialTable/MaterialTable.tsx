@@ -1,17 +1,21 @@
 import { MaterialReactTable, MRT_ColumnFiltersState, MRT_RowData, MRT_SortingState } from 'material-react-table';
 import { useEffect, useState, memo } from 'react';
-import { useTranslation } from 'react-i18next';
-import { Checkbox, IconButton } from '@mui/material';
+import {  Checkbox, IconButton } from '@mui/material';
 import RefreshIcon from '@mui/icons-material/Refresh';
 import { DatePicker } from '@mui/x-date-pickers';
 import moment from 'moment-jalaali';
-import { DateTimeViewer, DateViewer } from '@root//utils/DateViewer';
-import find from 'lodash/find';
-import { MRT_Column } from '@root/app/types/MRT_Column';
-import i18next from 'i18next';
+import { DateTimeViewer, DateViewer } from '@root/utils/DateViewer';
 import { useTheme } from '@mui/material/styles';
+import { rtlLocales } from '@root/locales/i18nHomepage';
+import nextIntlService from '@root/locales/nextIntlService';
+import useMediaQuery from '@mui/material/useMediaQuery';
+import { MobileGrid } from './MobileGrid';
+import { MRT_Column } from '@root/app/types/MRT_Column';
+import { GridDataBound } from '@root/app/types/GridDataBound';
+import { GridDataBoundFilter } from '@root/app/types/GridDataBoundFilter';
+
+// Components
 const dateFilter = ({ header, rangeFilterIndex }: { header: any, rangeFilterIndex: any }) => {
-  
   let filterFn = header.column.getFilterFn().name;
   let doubleActive = filterFn == 'between' || filterFn == 'betweenInclusive';
   const setFilterValue = (old: any, rangeFilterIndex: any, value?: any) => {
@@ -76,15 +80,21 @@ function MaterialTable({
   defaultDensity = 'comfortable'
 }: Readonly<MaterialTableProps>) {
   const theme = useTheme();
-  const [t, i18n] = useTranslation();
   const [tableLocale, setTableLocale] = useState(null);
-  let currentLanguage = i18n.language;
-  let timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
+
+  let currentLanguage = nextIntlService.getNextIntlLocale();
+
+  const dir = rtlLocales.includes(currentLanguage as any) == true ? 'rtl' : 'ltr';
+
+  //let timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
   //data and fetching state
   const [data, setData] = useState<PaginatedList<MRT_RowData>>();
   const [isError, setIsError] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [isRefetching, setIsRefetching] = useState(false);
+  const [columnsWithFilter, setColumnsWithFilter] = useState<MRT_Column<MRT_RowData, any>[]>(columns);
 
   //table state
   const [columnFilters, setColumnFilters] = useState<MRT_ColumnFiltersState>([]);
@@ -94,12 +104,59 @@ function MaterialTable({
     pageIndex: 0,
     pageSize: 10
   });
+  useEffect(() => {
 
-  let numbersFields: MRT_Column<MRT_RowData, any>[] = columns.filter((x) => x.type === 'number');
-  let stringFields: MRT_Column<MRT_RowData, any>[] = columns.filter((x) => x.type === 'string');
-  let booleanFields: MRT_Column<MRT_RowData, any>[] = columns.filter((x) => x.type === 'boolean');
-  let dateFields: MRT_Column<MRT_RowData, any>[] = columns.filter((x) => x.type === 'date');
-  let dateTimeFields: MRT_Column<MRT_RowData, any>[] = columns.filter((x) => x.type === 'dateTime');
+    let numbersFields: MRT_Column<MRT_RowData, any>[] = columns.filter((x) => x.type === 'number');
+    let stringFields: MRT_Column<MRT_RowData, any>[] = columns.filter((x) => x.type === 'string');
+    let booleanFields: MRT_Column<MRT_RowData, any>[] = columns.filter((x) => x.type === 'boolean');
+    let dateFields: MRT_Column<MRT_RowData, any>[] = columns.filter((x) => x.type === 'date');
+    let dateTimeFields: MRT_Column<MRT_RowData, any>[] = columns.filter((x) => x.type === 'dateTime');
+    // Add Cell Renderer
+    booleanFields.forEach((element: any) => {
+      if (!element.Cell) {
+        element.Cell = ({ renderedCellValue }: { renderedCellValue: any }) =>
+          renderedCellValue != null && (
+            <Checkbox checked={!!renderedCellValue} title={renderedCellValue ? 'Yes' : 'No'} color={renderedCellValue ? "success" : "default"} disabled />
+          );
+      }
+    });
+    dateFields.forEach((element: any) => {
+      if (!element.Cell) {
+        element.Cell = ({ renderedCellValue }: { renderedCellValue: any }) =>
+          renderedCellValue != null && <span>{DateViewer(currentLanguage, renderedCellValue)}</span>;
+      }
+    });
+    dateTimeFields.forEach((element: any) => {
+      if (!element.Cell) {
+        element.Cell = ({ renderedCellValue }: { renderedCellValue: any }) =>
+          renderedCellValue != null && <span>{DateTimeViewer(currentLanguage, renderedCellValue)}</span>;
+      }
+    });
+    // Add Filter Mode Options
+    if (!enableGlobalFilterModes) {
+      return;
+    }
+    numbersFields.forEach((element) => {
+      element.columnFilterModeOptions = numberFilterMode;
+    });
+    stringFields.forEach((element: any) => {
+      element.columnFilterModeOptions = stringFilterMode;
+    });
+    booleanFields.forEach((element: any) => {
+      element.filterVariant = 'checkbox';
+    });
+    dateFields.forEach((element: any) => {
+      element.columnFilterModeOptions = dateFilterMode;
+      element.Filter = dateFilter;
+    });
+    dateTimeFields.forEach((element: any) => {
+      element.columnFilterModeOptions = dateFilterMode;
+      element.Filter = dateFilter;
+    });
+
+    setColumnsWithFilter(columns);
+
+  }, [columns]);
 
   let numberFilterMode = [
     'equals',
@@ -131,51 +188,22 @@ function MaterialTable({
     if (!enableGlobalFilterModes) {
       return;
     }
-    numbersFields.forEach((element) => {
-      element.columnFilterModeOptions = numberFilterMode;
-    });
-    stringFields.forEach((element: any) => {
-      element.columnFilterModeOptions = stringFilterMode;
-    });
-    booleanFields.forEach((element: any) => {
-      element.filterVariant = 'checkbox';
-    });
-    dateFields.forEach((element: any) => {
-      element.columnFilterModeOptions = dateFilterMode;
-      element.Filter = dateFilter;
-    });
-    dateTimeFields.forEach((element: any) => {
-      element.columnFilterModeOptions = dateFilterMode;
-      element.Filter = dateFilter;
-    });
+
+
   }
   function setCells() {
-    booleanFields.forEach((element: any) => {
-      if (!element.Cell) {
-        // eslint-disable-next-line react/display-name
-        element.Cell = ({ renderedCellValue }: { renderedCellValue: any }) =>
-          renderedCellValue != null && (
-            <Checkbox checked={!!renderedCellValue} title={renderedCellValue ? 'Yes' : 'No'} color="default" disabled />
-          );
-      }
-    });
-    dateFields.forEach((element: any) => {
-      if (!element.Cell) {
-        // eslint-disable-next-line react/display-name
-        element.Cell = ({ renderedCellValue }: { renderedCellValue: any }) =>
-          renderedCellValue != null && <span>{DateViewer(currentLanguage, renderedCellValue)}</span>;
-      }
-    });
-    dateTimeFields.forEach((element: any) => {
-      if (!element.Cell) {
-        // eslint-disable-next-line react/display-name
-        element.Cell = ({ renderedCellValue }: { renderedCellValue: any }) =>
-          renderedCellValue != null && <span>{DateTimeViewer(currentLanguage, renderedCellValue)}</span>;
-      }
-    });
+
   }
   function GetDefaultFilterFunc() {
     if (!enableColumnFilters) return '';
+
+
+    let numbersFields = columnsWithFilter.filter((x) => x.type === 'number');
+    let stringFields = columnsWithFilter.filter((x) => x.type === 'string');
+    let booleanFields = columnsWithFilter.filter((x) => x.type === 'boolean');
+    let dateFields = columnsWithFilter.filter((x) => x.type === 'date');
+    let dateTimeFields = columnsWithFilter.filter((x) => x.type === 'dateTime');
+
     let numbersDefaultFilters = numbersFields.map((x: any) => x.accessorKey);
     let defaulFilters: any = {};
     for (const element of numbersDefaultFilters) {
@@ -207,16 +235,24 @@ function MaterialTable({
     return defaulFilters;
   }
 
-  function setOperationFields(columnFilterF: any, columnFilters: any) {
-    let keys = Object.keys(columnFilterF);
-    for (const fieldName of keys) {
-      let fieldValue = columnFilterF[fieldName];
-      let element = find(columnFilters, ['id', fieldName]);
-      if (element) {
-        element.operation = fieldValue;
-        const column = find(columns, ['accessorKey', fieldName]);
-        element.type = column ? column.type : undefined;
-      }
+  function setOperationFields(columnFilterF: any, columnFilters: any[]) {
+    const filterMap = new Map(
+      columnFilters.map((item) => [item.id, item])
+    );
+  
+    const columnMap = new Map(
+      columns.map((col) => [col.accessorKey, col])
+    );
+  
+    for (const [fieldName, fieldValue] of Object.entries(columnFilterF)) {
+      const element = filterMap.get(fieldName);
+  
+      if (!element) continue;
+  
+      element.operation = fieldValue;
+  
+      const column = columnMap.get(fieldName);
+      element.type = column?.type;
     }
   }
   const [columnFilterFns, setColumnFilterFns] = useState(GetDefaultFilterFunc());
@@ -228,9 +264,7 @@ function MaterialTable({
         setIsRefetching(true);
       }
 
-      let searchParams: GridDataBound = {
-        addFilter: () => {}
-      };
+      let searchParams: GridDataBound = new GridDataBoundFilter();
       searchParams.pageIndex = pagination.pageIndex;
       searchParams.pageSize = pagination.pageSize;
       setOperationFields(columnFilterFns, columnFilters);
@@ -263,6 +297,7 @@ function MaterialTable({
     if (dataApi) {
       fetchData();
     }
+
   }, [columnFilters, globalFilter, pagination.pageIndex, pagination.pageSize, sorting, refetch, dataSet]);
 
   const supportedLanguage = ['de', 'en', 'es', 'fa', 'ar', 'fr', 'it', 'nl', 'pt'];
@@ -314,82 +349,95 @@ function MaterialTable({
         });
     }
   }, [currentLanguage]);
+
   const handleRefresh = () => {
     setIsRefetching(true);
   };
+
   return (
-    <div className={'material-grid-container ' + i18next.dir() + ' ' + (theme.palette.mode == "dark" ? "dark" : " ight")}>
-      <MaterialReactTable
-        columns={columns}
-        data={dataApi ? data?.items ?? [] : dataSet || []} //data is always an array
-        initialState={{ showColumnFilters: false, density: defaultDensity }}
-        enableTopToolbar={enableTopToolbar ?? true}
-        enableColumnActions={enableColumnActions ?? true}
-        enableColumnFilters={enableColumnFilters ?? true}
-        enablePagination={enablePagination ?? true}
-        enableSorting={enableSorting ?? true}
-        enableColumnOrdering={enableColumnOrdering ?? true}
-        enableBottomToolbar={enableBottomToolbar ?? true}
-        enableRowPinning={enablePinning ?? true}
-        enableColumnPinning={enablePinning ?? true}
-        enableRowDragging={enableRowDragging ?? false}
-        enableColumnDragging={enableColumnDragging ?? false}
-        enableDensityToggle={enableDensityToggle ?? true}
-        enableColumnResizing={enableColumnResizing ?? true}
-        enableFullScreenToggle={enableFullScreenToggle ?? true}
-        enableGlobalFilterModes={enableGlobalFilterModes ?? true}
-        enableColumnFilterModes={enableColumnFilterModes ?? true}
-        enableExpanding={enableExpanding ?? false}
-        enableExpandAll={enableExpandAll ?? false}
-        manualFiltering={manualFiltering ?? true}
-        columnResizeMode='onChange'
-        layoutMode='grid'
-        manualPagination={manualPagination ?? true}
-        manualSorting={manualSorting ?? true}
-        muiToolbarAlertBannerProps={
-          isError
-            ? {
-              color: 'error',
-              children: 'Error loading data'
-            }
-            : undefined
-        }
-        positionToolbarAlertBanner="none"
-        getSubRows={getSubRows}
-        autoResetPageIndex={autoResetPageIndex ?? false}
-        onColumnFiltersChange={setColumnFilters}
-        onColumnFilterFnsChange={setColumnFilterFns}
-        onGlobalFilterChange={setGlobalFilter}
-        onPaginationChange={setPagination}
-        onSortingChange={setSorting}
-        enableRowActions={!!enableRowActions}
-        renderRowActions={renderRowActions}
-        displayColumnDefOptions={displayColumnDefOptions}
-        renderTopToolbarCustomActions={
-          renderTopToolbarCustomActions || (() => (
-            <IconButton onClick={() => handleRefresh()}>
-              <RefreshIcon />
-            </IconButton>
-          ))
-        }
-        renderRowActionMenuItems={renderRowActionMenuItems}
-        renderDetailPanel={renderDetailPanel}
-        muiTableBodyCellProps={muiTableBodyRowDragHandleProps}
-        enableRowOrdering={enableRowOrdering ?? false}
-        rowCount={dataApi ? data?.totalItems ?? 0 : dataSet?.length ?? 0}
-        state={{
-          columnFilters,
-          columnFilterFns,
-          globalFilter,
-          isLoading,
-          pagination,
-          showAlertBanner: isError,
-          showProgressBars: isRefetching,
-          sorting
-        }}
-        localization={tableLocale ?? undefined}
-        columnResizeDirection={i18n.dir()}
-      />
+    <div className={'material-grid-container ' + dir + ' ' + theme.palette.mode}>
+      {isMobile ? (
+        <MobileGrid
+          dataApi={dataApi}
+          data={data}
+          dataSet={dataSet}
+          columns={columnsWithFilter}
+          pagination={pagination}
+          setPagination={setPagination} />
+      ) : (
+        <MaterialReactTable
+          columns={columnsWithFilter}
+          enableStickyFooter={true}
+          data={dataApi ? data?.items ?? [] : dataSet || []} //data is always an array
+          initialState={{ showColumnFilters: false, density: defaultDensity }}
+          enableTopToolbar={enableTopToolbar ?? true}
+          enableColumnActions={enableColumnActions ?? true}
+          enableColumnFilters={enableColumnFilters ?? true}
+          enablePagination={enablePagination ?? true}
+          enableSorting={enableSorting ?? true}
+          enableColumnOrdering={enableColumnOrdering ?? true}
+          enableBottomToolbar={enableBottomToolbar ?? true}
+          enableRowPinning={enablePinning ?? true}
+          enableColumnPinning={enablePinning ?? true}
+          enableRowDragging={enableRowDragging ?? false}
+          enableColumnDragging={enableColumnDragging ?? false}
+          enableDensityToggle={enableDensityToggle ?? true}
+          enableColumnResizing={enableColumnResizing ?? true}
+          enableFullScreenToggle={enableFullScreenToggle ?? true}
+          enableGlobalFilterModes={enableGlobalFilterModes ?? true}
+          enableColumnFilterModes={enableColumnFilterModes ?? true}
+          enableExpanding={enableExpanding ?? false}
+          enableExpandAll={enableExpandAll ?? false}
+          manualFiltering={manualFiltering ?? true}
+          columnResizeMode='onChange'
+          layoutMode='grid'
+          manualPagination={manualPagination ?? true}
+          manualSorting={manualSorting ?? true}
+          muiToolbarAlertBannerProps={
+            isError
+              ? {
+                color: 'error',
+                children: 'Error loading data'
+              }
+              : undefined
+          }
+          positionToolbarAlertBanner="none"
+          getSubRows={getSubRows}
+          autoResetPageIndex={autoResetPageIndex ?? false}
+          onColumnFiltersChange={setColumnFilters}
+          onColumnFilterFnsChange={setColumnFilterFns}
+          onGlobalFilterChange={setGlobalFilter}
+          onPaginationChange={setPagination}
+          onSortingChange={setSorting}
+          enableRowActions={!!enableRowActions}
+          renderRowActions={renderRowActions}
+          displayColumnDefOptions={displayColumnDefOptions}
+          renderTopToolbarCustomActions={
+            renderTopToolbarCustomActions || (() => (
+              <IconButton onClick={() => handleRefresh()}>
+                <RefreshIcon />
+              </IconButton>
+            ))
+          }
+          renderRowActionMenuItems={renderRowActionMenuItems}
+          renderDetailPanel={renderDetailPanel}
+          muiTableBodyCellProps={muiTableBodyRowDragHandleProps}
+          enableRowOrdering={enableRowOrdering ?? false}
+          rowCount={dataApi ? data?.totalItems ?? 0 : dataSet?.length ?? 0}
+          state={{
+            columnFilters,
+            columnFilterFns,
+            globalFilter,
+            isLoading,
+            pagination,
+            showAlertBanner: isError,
+            showProgressBars: isRefetching,
+            sorting
+          }}
+          localization={tableLocale ?? undefined}
+          columnResizeDirection={dir}
+        />
+      )}
     </div>
 
   );

@@ -8,21 +8,23 @@ import MainCard from '@dashboard/_components/MainCard';
 import MessageTypeChip from './MessageTypeChip';
 import CONFIG from '@root/config';
 import moment from 'moment';
-import { useTranslation } from 'react-i18next';
+import { useTranslations } from 'next-intl';
 import { useRouter } from 'next/navigation';
 import FileUpload from '@dashboard/_components/FileUpload/FileUpload';
 import MessageModel from '../../_types/MessageModel';
+import nextIntlService from '@root/locales/nextIntlService';
 
 export default function ViewMessage({ message, fromPage }: Readonly<{ message: MessageModel, fromPage: 'inbox' | 'outbox' }>) {
   const [fieldsName, buttonName] = ['fields.message.messageInbox.', 'buttons.message.messageInbox.'];
   const router = useRouter();
-  const [t, i18n] = useTranslation();
+  const t = useTranslations("");
+  let language = nextIntlService.getNextIntlLocale();
   return (
     <>
       {/* <Notify notify={notify} setNotify={setNotify}></Notify> */}
 
-      <Grid container justifyContent="center" direction="row" alignItems="flex-start" key={message.id}>
-        <Grid container item spacing={3} xs={12} sm={12} md={12} lg={12} xl={12} direction="column">
+      <Grid container direction="row" sx={{ justifyContent: "center", alignItems: "flex-start" }} key={message.id}>
+        <Grid container item spacing={3} xs={12} sm={12} md={12} lg={12} xl={12} >
           <Grid item>
             <Typography variant="h5">{t(fieldsName + 'viewMessage')}</Typography>
           </Grid>
@@ -105,11 +107,12 @@ export default function ViewMessage({ message, fromPage }: Readonly<{ message: M
                         <Chip
                           icon={<EventNote />}
                           title={t(fieldsName + 'registerDate')}
-                          label={new Intl.DateTimeFormat(i18n.language, {
-                            dateStyle: CONFIG.DATE_STYLE,
-                            timeStyle: CONFIG.TIME_STYLE,
-                            hour12: false
-                          }).format(moment(message?.registerDate).toDate())}
+                          label={message?.registerDate
+                            ? new Intl.DateTimeFormat(language, {
+                              dateStyle: 'long',
+                              timeStyle: CONFIG.TIME_STYLE as "short" | "full" | "long" | "medium" | undefined,
+                              hour12: false
+                            }).format(moment(message?.registerDate).toDate()) : ''}
                           variant="filled"
                           size="small"
                           sx={{ borderRadius: '16px' }}

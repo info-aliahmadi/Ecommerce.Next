@@ -3,7 +3,7 @@ import { Box, Button, IconButton, Tooltip } from '@mui/material';
 import MainCard from '@dashboard/_components/MainCard';
 import TableCard from '@dashboard/_components/TableCard';
 import { useCallback, useMemo, useState } from 'react';
-import { useTranslation } from 'react-i18next';
+import { useTranslations } from 'next-intl';
 import MaterialTable from '@dashboard/_components/MaterialTable/MaterialTable';
 import { Edit, Tag, Add, Delete, Link } from '@mui/icons-material';
 import TagsService from '@dashboard/(cms)/_service/TagsService';
@@ -11,13 +11,13 @@ import AddOrEditTag from './AddOrEditTag';
 import DeleteTag from './DeleteTag';
 import { useSession } from 'next-auth/react';
 import { MRT_Row } from 'material-react-table';
-import MRT_Column from '@root/app/types/MRT_Column';
+import { MRT_Column } from '@root/app/types/MRT_Column';
 import CONFIG from '@root/config';
 import TagModel from '../../_types/Tag/TagModel';
 
 
 function TagDataGrid() {
-  const [t] = useTranslation();
+  const t = useTranslations("");
   const { data: session } = useSession();
   const jwt = session?.accessToken;
 

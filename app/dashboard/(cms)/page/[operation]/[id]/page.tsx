@@ -23,7 +23,7 @@ import { Formik, FormikErrors } from 'formik';
 import AnimateButton from '@dashboard/_components/@extended/AnimateButton';
 
 // assets
-import { useTranslation } from 'react-i18next';
+import { useTranslations } from 'next-intl';
 import Notify from '@dashboard/_components/@extended/Notify';
 import CONFIG from '@root/config';
 import MainCard from '@dashboard/_components/MainCard';
@@ -35,13 +35,17 @@ import { useRouter } from 'next/navigation';
 import SelectTag from '@dashboard/(cms)/_components/Tag/SelectTag';
 import Editor from '@dashboard/_components/Editor/Editor';
 import { useSession } from 'next-auth/react';
+import PageModel from '../../../_types/Page/PageModel';
+import nextIntlService from '@root/locales/nextIntlService';
+import LinkModel from '../../../_types/Link/LinkModel';
 
 export default function AddOrEditPage({ params } : { readonly params: Promise<{ id: number, operation: 'edit' | 'add' }> }) {
-  const [t, i18n] = useTranslation();
+  const t = useTranslations("");
     const { id, operation } = React.use(params);
 
   const { data: session } = useSession();
   const jwt = session?.accessToken;
+  let language = nextIntlService.getNextIntlLocale();
 
   let pageService = new PagesService(jwt ?? '');
   const [fieldsName, validation, buttonName] = ['fields.page.', 'validation.page.', 'buttons.page.'];
@@ -128,8 +132,8 @@ export default function AddOrEditPage({ params } : { readonly params: Promise<{ 
       >
         {({ errors, handleBlur, handleChange, setFieldValue, handleSubmit, isSubmitting, touched, values }) => (
           <form noValidate onSubmit={handleSubmit}>
-            <Grid container justifyContent="center" direction="row" alignItems="flex-start">
-              <Grid container item spacing={3} xs={12} sm={12} md={12} lg={12} xl={7} direction="column">
+            <Grid container direction="row" sx={{ justifyContent: "center", alignItems: "flex-start" }}>
+              <Grid container item spacing={3} xs={12} sm={12} md={12} lg={12} xl={7} >
                 <Grid item>
                   <Typography variant="h5">{t('pages.cards.page-' + operation)}</Typography>
                 </Grid>
@@ -202,11 +206,12 @@ export default function AddOrEditPage({ params } : { readonly params: Promise<{ 
                                 <Chip
                                   icon={<EventNote />}
                                   title={t(fieldsName + 'registerDate')}
-                                  label={new Intl.DateTimeFormat(i18n.language, {
-                                    dateStyle: CONFIG.DATE_STYLE,
-                                    timeStyle: CONFIG.TIME_STYLE,
-                                    hour12: false
-                                  }).format(moment(values.registerDate).toDate())}
+                                  label={values.registerDate
+                                    ? new Intl.DateTimeFormat(language, {
+                                      dateStyle: 'long',
+                                      timeStyle: CONFIG.TIME_STYLE as "short" | "full" | "long" | "medium" | undefined,
+                                      hour12: false
+                                    }).format(moment(values.registerDate).toDate()) : ''}
                                   variant="filled"
                                   size="small"
                                   sx={{ borderRadius: '16px' }}
@@ -225,11 +230,12 @@ export default function AddOrEditPage({ params } : { readonly params: Promise<{ 
                                     <Chip
                                       icon={<EventNote />}
                                       title={t(fieldsName + 'editDate')}
-                                      label={new Intl.DateTimeFormat(i18n.language, {
-                                        dateStyle: CONFIG.DATE_STYLE,
-                                        timeStyle: CONFIG.TIME_STYLE,
-                                        hour12: false
-                                      }).format(moment(values.editDate).toDate())}
+                                      label={values.editDate
+                                        ? new Intl.DateTimeFormat(language, {
+                                          dateStyle: 'long',
+                                          timeStyle: CONFIG.TIME_STYLE as "short" | "full" | "long" | "medium" | undefined,
+                                          hour12: false
+                                        }).format(moment(values.editDate).toDate()) : ''}
                                       variant="filled"
                                       size="small"
                                       sx={{ borderRadius: '16px' }}

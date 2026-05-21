@@ -8,15 +8,55 @@ import CircularProgress from '@mui/material/CircularProgress';
 import { useState, useEffect } from 'react';
 import Result from '@root/app/types/Result';
 
+
 interface Option {
   id: number;
   name: string;
 }
+const AutocompleteSmallSx = {
+  height: '31px',
+  '& .MuiAutocomplete-root': {
+    height: '31px',
+    '& .MuiAutocomplete-root, & .MuiAutocomplete-root-inputAdornedStart, & .MuiAutocomplete-root-inputAdornedEnd': {
+      height: '35px'
+    }
+  }
+}
+
+const textSmallSx = {
+  height: '31px',
+  '& .MuiInputBase-root': {
+    minHeight: '31px'
+  },
+  "fieldset": {
+    height: '36px'
+  }
+}
+const AutocompleteMediumSx = {
+  height: '46px',
+  '& .MuiAutocomplete-root': {
+    height: '38px',
+    '& .MuiAutocomplete-root, & .MuiAutocomplete-root-inputAdornedStart, & .MuiAutocomplete-root-inputAdornedEnd': {
+      height: '46px'
+    }
+  }
+}
+
+const textMediumSx = {
+  height: '38px',
+  '& .MuiInputBase-root': {
+    minHeight: '38px'
+  },
+  "fieldset": {
+    height: '46px'
+  }
+}
 
 interface SingleAutocompleteProps {
   id: string;
+  size: "small" | "medium";
   defaultValue?: number;
-  setFieldValue: (field: string, value: any) => void;
+  setFieldValue: (field: string, value: any, shouldValidate?: boolean) => void;
   label: string;
   optionLabel: string;
   inputDataApi?: (input: string) => Promise<Result<any>>;
@@ -24,12 +64,15 @@ interface SingleAutocompleteProps {
   readonly onChange?: (event: React.ChangeEvent<{ value: unknown }>, options: any[]) => void;
   disabled?: boolean;
   loadAllRecords?: boolean;
-  manualOptions?: Option[]; // New prop for passing options manually
+  manualOptions?: Option[];
   selectFirstItem?: boolean;
+  error?: boolean;
+  onBlur?: () => void;
 }
 
 export default function SingleAutocomplete({
   id,
+  size = "medium",
   defaultValue,
   setFieldValue,
   label,
@@ -38,8 +81,10 @@ export default function SingleAutocomplete({
   loadDataApi,
   disabled = false,
   loadAllRecords = false,
-  manualOptions, // New prop
+  manualOptions,
   selectFirstItem = false,
+  error = false,
+  onBlur,
 }: Readonly<SingleAutocompleteProps>) {
   const [open, setOpen] = useState(false);
   const [options, setOptions] = useState<readonly Option[]>([]);
@@ -48,7 +93,7 @@ export default function SingleAutocomplete({
 
   // Load data dynamically if manualOptions is not provided
   const loadAllData = (id: number) => {
-    if (!loadDataApi) return; // Skip if loadDataApi is not provided
+    if (!loadDataApi) return;
 
     setLoading(true);
     loadDataApi(id)
@@ -66,14 +111,13 @@ export default function SingleAutocomplete({
 
   useEffect(() => {
     if (manualOptions) {
-      // If manualOptions is provided, use it directly
       setOptions(manualOptions);
       setValue(
         selectFirstItem && manualOptions.length > 0
           ? manualOptions[0]
           : defaultValue
-          ? manualOptions.find((x) => x.id == defaultValue) || null
-          : null
+            ? manualOptions.find((x) => x.id == defaultValue) || null
+            : null
       );
     } else if (loadAllRecords) {
       // Load all data dynamically
@@ -142,12 +186,12 @@ export default function SingleAutocomplete({
   return (
     <Autocomplete
       id={id}
+      size={size}
       disabled={disabled}
       clearOnBlur={true}
       selectOnFocus
       clearOnEscape={true}
       autoSelect={false}
-      sx={{ minWidth: 300 }}
       open={open}
       multiple={false}
       onOpen={() => {
@@ -163,24 +207,29 @@ export default function SingleAutocomplete({
       isOptionEqualToValue={(option: Option, value: any) =>
         option.id === value.id
       }
-      fullWidth
+      fullWidth={true}
       loading={loading}
       value={value}
+      sx={size == "small" ? { ...AutocompleteSmallSx } : { ...AutocompleteMediumSx}}
       renderInput={(params: any) => (
         <TextField
           {...params}
           variant="outlined"
-          size="small"
+          size={size}
+          error={error}
           label={label}
-          InputProps={{
-            ...params.InputProps,
-            endAdornment: (
-              <React.Fragment>
-                {loading && <CircularProgress color="inherit" size={15} />}
-                {params.InputProps.endAdornment}
-              </React.Fragment>
-            ),
-          }}
+          onBlur={onBlur}
+          sx={size == "small" ? { ...textSmallSx } : {...textMediumSx}}
+          // InputProps={{
+          //   ...params.InputProps,
+
+          //   endAdornment: (
+          //     <React.Fragment>
+          //       {loading && <CircularProgress color="inherit" size={15} />}
+          //       {params.InputProps.endAdornment}
+          //     </React.Fragment>
+          //   ),
+          // }}
         />
       )}
     />

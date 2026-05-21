@@ -13,7 +13,7 @@ import {
   Divider,
   FormHelperText,
   InputAdornment,
-  Grid2,
+  Grid,
   InputLabel,
   OutlinedInput,
   Stack,
@@ -38,7 +38,7 @@ import { Formik } from 'formik';
 import AnimateButton from '@dashboard/_components/@extended/AnimateButton';
 
 // assets
-import { useTranslation } from 'react-i18next';
+import { useTranslations } from 'next-intl';
 import CONFIG from '@root/config';
 import MainCard from '@dashboard/_components/MainCard';
 import languageList from '@root/locales/languageList';
@@ -50,9 +50,10 @@ import SelectRole from '@dashboard/(auth)/_components/Role/SelectRole';
 import { useRouter } from 'next/navigation';
 import { useSession } from 'next-auth/react';
 import { UserModel } from '../../../_types/User/UserModel';
+import SelectUsers from '../../../_components/User/SelectMultiUsers';
 
 export default function AddOrEditUser({ params }: { readonly params: Promise<{ id: number, operation: 'edit' | 'add' }> }) {
-  const [t] = useTranslation();
+  const t = useTranslations("");
   const { id, operation } = React.use(params);
 
   const { data: session } = useSession();
@@ -70,7 +71,7 @@ export default function AddOrEditUser({ params }: { readonly params: Promise<{ i
 
   const loadUser = () => {
     userService.getUserById(id).then((result) => {
-      setUser(result);
+      setUser(result.data);
     });
   };
   useEffect(() => {
@@ -177,24 +178,25 @@ export default function AddOrEditUser({ params }: { readonly params: Promise<{ i
           } catch (err: any) {
             console.error(err);
             setStatus({ success: false });
-            
+            setErrors({ submit: err.message });
           }
         }}
       >
         {({ errors, handleBlur, handleChange, setFieldValue, handleSubmit, isSubmitting, touched, values }) => (
           <form noValidate onSubmit={handleSubmit}>
-            <Grid2 container justifyContent="center" direction="row" alignItems="flex-start">
-              <Grid2 container spacing={3} size={{ xs: 12, sm: 12, md: 10, lg: 10, xl: 7 }} direction="column">
-                <Grid2>
+            <Grid container direction="row" sx={{ justifyContent: "center", alignItems: "flex-start" }}>
+              <Grid container spacing={3} size={{ xs: 12, sm: 12, md: 10, lg: 10, xl: 7 }} >
+                <Grid>
                   <Typography variant="h5">{t('pages.cards.user-' + operation)}</Typography>
-                </Grid2>
-                <Grid2>
+                </Grid>
+                <Grid>
                   <MainCard>
-                    <Grid2 container spacing={3} direction="column">
-                      <Grid2 container spacing={0} direction="row" sx={{ justifyContent: "flex-end", alignItems: "flex-start" }} >
-                        <Grid2 size={{ xs: 12, sm: 12, md: 2, lg: 2, xl: 2 }}>
-                          <Stack justifyContent="center" alignItems="center">
+                    <Grid container spacing={3} >
+                      <Grid container spacing={0} direction="row" sx={{ justifyContent: "flex-end", alignItems: "flex-start" }} >
+                        <Grid size={{ xs: 12, sm: 12, md: 2, lg: 2, xl: 2 }}>
+                          <Stack sx={{ justifyContent: "center", alignItems: "center" }} >
                             <Tooltip title={t('tooltips.edit-avatar')} placement="top">
+                
                               <ButtonBase component="label">
                                 <input
                                   type="file"
@@ -205,7 +207,7 @@ export default function AddOrEditUser({ params }: { readonly params: Promise<{ i
                                 />
                                 <Avatar
                                   alt=""
-                                  src={avatarPreview ? avatarPreview.toString() : values.avatar ? CONFIG.AVATAR_BASEPATH + values.avatar : '/images/users/anonymous.png'}
+                                  src={avatarPreview ? avatarPreview.toString() : values.avatar ? CONFIG.AVATAR_BASEPATH + values.avatar : CONFIG.UNKNOWN_USER_BASEPATH}
                                   sx={{ width: 85, height: 85 }}
                                 ></Avatar>
                               </ButtonBase>
@@ -234,10 +236,10 @@ export default function AddOrEditUser({ params }: { readonly params: Promise<{ i
                               </Tooltip>
                             </ButtonGroup>
                           </Stack>
-                        </Grid2>
-                      </Grid2>
-                      <Grid2 container spacing={3}>
-                        <Grid2 size={{ xs: 12, sm: 12, md: 6, lg: 6, xl: 4 }}>
+                        </Grid>
+                      </Grid>
+                      <Grid container spacing={3}>
+                        <Grid size={{ xs: 12, sm: 12, md: 6, lg: 6, xl: 4 }}>
                           <Stack spacing={1}>
                             <InputLabel htmlFor="name">{t(fieldsName + 'name')}</InputLabel>
                             <OutlinedInput
@@ -257,8 +259,8 @@ export default function AddOrEditUser({ params }: { readonly params: Promise<{ i
                               </FormHelperText>
                             )}
                           </Stack>
-                        </Grid2>
-                        <Grid2 size={{ xs: 12, sm: 12, md: 6, lg: 6, xl: 4 }}>
+                        </Grid>
+                        <Grid size={{ xs: 12, sm: 12, md: 6, lg: 6, xl: 4 }}>
                           <Stack spacing={1}>
                             <InputLabel htmlFor="userName">{t(fieldsName + 'userName')}</InputLabel>
                             <OutlinedInput
@@ -271,7 +273,6 @@ export default function AddOrEditUser({ params }: { readonly params: Promise<{ i
                               onBlur={handleBlur}
                               onChange={handleChange}
                               placeholder={t(fieldsName + 'userName')}
-                              inputProps={{}}
                             />
                             {touched.userName && errors.userName && (
                               <FormHelperText error id="helper-text-lastname">
@@ -279,8 +280,8 @@ export default function AddOrEditUser({ params }: { readonly params: Promise<{ i
                               </FormHelperText>
                             )}
                           </Stack>
-                        </Grid2>
-                        <Grid2 size={{ xs: 12, sm: 12, md: 6, lg: 6, xl: 4 }}>
+                        </Grid>
+                        <Grid size={{ xs: 12, sm: 12, md: 6, lg: 6, xl: 4 }}>
                           <Stack spacing={1}>
                             <InputLabel htmlFor="email">{t(fieldsName + 'email')}</InputLabel>
                             <OutlinedInput
@@ -293,7 +294,6 @@ export default function AddOrEditUser({ params }: { readonly params: Promise<{ i
                               onBlur={handleBlur}
                               onChange={handleChange}
                               placeholder={t(fieldsName + 'email')}
-                              inputProps={{}}
                             />
                             {touched.email && errors.email && (
                               <FormHelperText error id="helper-text-email">
@@ -301,8 +301,8 @@ export default function AddOrEditUser({ params }: { readonly params: Promise<{ i
                               </FormHelperText>
                             )}
                           </Stack>
-                        </Grid2>
-                        <Grid2 size={{ xs: 12, sm: 12, md: 6, lg: 6, xl: 4 }}>
+                        </Grid>
+                        <Grid size={{ xs: 12, sm: 12, md: 6, lg: 6, xl: 4 }}>
                           <Stack spacing={1}>
                             <InputLabel htmlFor="phoneNumber">{t(fieldsName + 'phoneNumber')}</InputLabel>
                             <OutlinedInput
@@ -315,7 +315,6 @@ export default function AddOrEditUser({ params }: { readonly params: Promise<{ i
                               onBlur={handleBlur}
                               onChange={handleChange}
                               placeholder={t(fieldsName + 'phoneNumber')}
-                              inputProps={{}}
                             />
                             {touched.phoneNumber && errors.phoneNumber && (
                               <FormHelperText error id="helper-text-phoneNumber">
@@ -323,9 +322,9 @@ export default function AddOrEditUser({ params }: { readonly params: Promise<{ i
                               </FormHelperText>
                             )}
                           </Stack>
-                        </Grid2>
+                        </Grid>
                         {operation == 'edit' && (
-                          <Grid2 size={{ xs: 12, sm: 12, md: 6, lg: 6, xl: 4 }}>
+                          <Grid size={{ xs: 12, sm: 12, md: 6, lg: 6, xl: 4 }}>
                             <Stack spacing={1}>
                               <InputLabel htmlFor="emailConfirmed">{t(fieldsName + 'emailConfirmed')}</InputLabel>
                               <FormControlLabel
@@ -340,10 +339,10 @@ export default function AddOrEditUser({ params }: { readonly params: Promise<{ i
                                 label={t(fieldsName + 'emailConfirmed')}
                               />
                             </Stack>
-                          </Grid2>
+                          </Grid>
                         )}
                         {operation == 'edit' && (
-                          <Grid2 size={{ xs: 12, sm: 12, md: 6, lg: 6, xl: 4 }}>
+                          <Grid size={{ xs: 12, sm: 12, md: 6, lg: 6, xl: 4 }}>
                             <Stack spacing={1}>
                               <InputLabel htmlFor="phoneNumberConfirmed">{t(fieldsName + 'phoneNumberConfirmed')}</InputLabel>
                               <FormControlLabel
@@ -358,9 +357,9 @@ export default function AddOrEditUser({ params }: { readonly params: Promise<{ i
                                 label={t(fieldsName + 'phoneNumberConfirmed')}
                               />
                             </Stack>
-                          </Grid2>
+                          </Grid>
                         )}
-                        <Grid2 size={{ xs: 12, sm: 12, md: 6, lg: 6, xl: 4 }}>
+                        <Grid size={{ xs: 12, sm: 12, md: 6, lg: 6, xl: 4 }}>
                           <Stack spacing={1}>
                             <InputLabel id="defaultLanguage">{t(fieldsName + 'defaultLanguage')}</InputLabel>
                             <Select
@@ -382,15 +381,15 @@ export default function AddOrEditUser({ params }: { readonly params: Promise<{ i
                               ))}
                             </Select>
                           </Stack>
-                        </Grid2>
-                        <Grid2 size={{ xs: 12, sm: 12, md: 12, lg: 12, xl: 12 }}>
+                        </Grid>
+                        <Grid size={{ xs: 12, sm: 12, md: 12, lg: 12, xl: 12 }}>
                           <Divider textAlign="left">
                             {t('pages.cards.user-security')}
                             {/* <Chip label={t('pages.cards.user-security')} /> */}
                           </Divider>
-                        </Grid2>
-                        <Grid2 container size={{ xs: 12, sm: 12, md: 12, lg: 6, xl: 6 }} spacing={1}>
-                          <Grid2 size={{ xs: 12, sm: 12, md: 12, lg: 6, xl: 6 }}>
+                        </Grid>
+                        <Grid container size={{ xs: 12, sm: 12, md: 12, lg: 6, xl: 6 }} spacing={1}>
+                          <Grid size={{ xs: 12, sm: 12, md: 12, lg: 6, xl: 6 }}>
                             <Stack spacing={1}>
                               <InputLabel htmlFor="newPassword">{t(fieldsName + 'password')}</InputLabel>
                               <OutlinedInput
@@ -406,21 +405,27 @@ export default function AddOrEditUser({ params }: { readonly params: Promise<{ i
                                   handleChange(e);
                                   changePassword(e.target.value);
                                 }}
-                                endAdornment={
-                                  <InputAdornment position="end">
-                                    <IconButton
-                                      aria-label="toggle password visibility"
-                                      onClick={handleClickShowPassword}
-                                      onMouseDown={handleMouseDownPassword}
-                                      edge="end"
-                                      size="large"
-                                    >
-                                      {showPassword ? <EyeOutlined /> : <EyeInvisibleOutlined />}
-                                    </IconButton>
-                                  </InputAdornment>
-                                }
+                                // slotProps={{
+                                //   input: {
+                                //     endAdornment: (
+                                //       <>
+                                //         <InputAdornment position="end">
+                                //           <IconButton
+                                //             aria-label="toggle password visibility"
+                                //             onClick={handleClickShowPassword}
+                                //             onMouseDown={handleMouseDownPassword}
+                                //             edge="end"
+                                //             size="large"
+                                //           >
+                                //             {showPassword ? <EyeOutlined /> : <EyeInvisibleOutlined />}
+                                //           </IconButton>
+                                //         </InputAdornment>
+                                //       </>
+                                //     ),
+                                //   }
+                                // }}
+
                                 placeholder="******"
-                                inputProps={{}}
                               />
                               {touched.password && errors.password && (
                                 <FormHelperText error id="helper-text-password">
@@ -429,19 +434,19 @@ export default function AddOrEditUser({ params }: { readonly params: Promise<{ i
                               )}
                             </Stack>
                             <FormControl sx={{ mt: 2 }}>
-                              <Grid2 container spacing={0} alignItems="center">
-                                <Grid2>
+                              <Grid container spacing={0} sx={{ alignItems: "center" }} >
+                                <Grid>
                                   <Box sx={{ bgcolor: passwordLevel?.color, width: 85, height: 8, borderRadius: '7px' }} />
-                                </Grid2>
-                                <Grid2>
-                                  <Typography variant="subtitle1" fontSize="0.75rem">
+                                </Grid>
+                                <Grid>
+                                  <Typography variant="subtitle1" sx={{ fontSize: "0.75rem" }} >
                                     {passwordLevel?.label}
                                   </Typography>
-                                </Grid2>
-                              </Grid2>
+                                </Grid>
+                              </Grid>
                             </FormControl>
-                          </Grid2>
-                          <Grid2 size={{ xs: 12, sm: 12, md: 6, lg: 12, xl: 12 }}>
+                          </Grid>
+                          <Grid size={{ xs: 12, sm: 12, md: 6, lg: 12, xl: 12 }}>
                             <Stack spacing={1}>
                               <InputLabel htmlFor="roleIds">{t('pages.roles')}</InputLabel>
                               <SelectRole
@@ -457,13 +462,13 @@ export default function AddOrEditUser({ params }: { readonly params: Promise<{ i
                                 </FormHelperText>
                               )}
                             </Stack>
-                          </Grid2>
-                        </Grid2>
+                          </Grid>
+                        </Grid>
                         {operation == 'edit' && (
-                          <Grid2 container size={{ xs: 12, sm: 12, md: 12, lg: 6, xl: 6 }}>
+                          <Grid container size={{ xs: 12, sm: 12, md: 12, lg: 6, xl: 6 }}>
                             <MainCard title={'User Try to Login'}>
-                              <Grid2 container size={{ xs: 12, sm: 12, md: 12, lg: 12, xl: 12 }} spacing={3}>
-                                <Grid2 size={{ xs: 12, sm: 12, md: 6, lg: 6, xl: 4 }}>
+                              <Grid container size={{ xs: 12, sm: 12, md: 12, lg: 12, xl: 12 }} spacing={3}>
+                                <Grid size={{ xs: 12, sm: 12, md: 6, lg: 6, xl: 4 }}>
                                   <Stack spacing={1}>
                                     <InputLabel htmlFor="lockoutEnabled">{t(fieldsName + 'lockoutEnabled')}</InputLabel>
                                     <FormControlLabel
@@ -479,14 +484,14 @@ export default function AddOrEditUser({ params }: { readonly params: Promise<{ i
                                       label={t(fieldsName + 'lockoutEnabled')}
                                     />
                                   </Stack>
-                                </Grid2>
-                                <Grid2 size={{ xs: 12, sm: 12, md: 6, lg: 6, xl: 4 }}>
+                                </Grid>
+                                <Grid size={{ xs: 12, sm: 12, md: 6, lg: 6, xl: 4 }}>
                                   <Stack spacing={1}>
                                     <InputLabel htmlFor="lockoutEnd">{t(fieldsName + 'lockoutEnd')}</InputLabel>
                                     <OutlinedInput id="lockoutEnd" type="text" value={values?.lockoutEnd || ''} fullWidth disabled />
                                   </Stack>
-                                </Grid2>
-                                <Grid2 size={{ xs: 12, sm: 12, md: 6, lg: 6, xl: 4 }}>
+                                </Grid>
+                                <Grid size={{ xs: 12, sm: 12, md: 6, lg: 6, xl: 4 }}>
                                   <Stack spacing={1}>
                                     <InputLabel htmlFor="accessFailedCount">{t(fieldsName + 'accessFailedCount')}</InputLabel>
                                     <OutlinedInput
@@ -497,15 +502,15 @@ export default function AddOrEditUser({ params }: { readonly params: Promise<{ i
                                       disabled
                                     />
                                   </Stack>
-                                </Grid2>
-                              </Grid2>
+                                </Grid>
+                              </Grid>
                             </MainCard>
-                          </Grid2>
+                          </Grid>
                         )}
 
-                      </Grid2>
-                      <Grid2 container spacing={3} direction="row" justifyContent="space-between" alignItems="center">
-                        <Grid2 >
+                      </Grid>
+                      <Grid container spacing={3} direction="row" sx={{ justifyContent: "space-between", alignItems: "center" }} >
+                        <Grid >
                           <Stack direction="row" spacing={2}>
                             <AnimateButton>
                               <Button
@@ -534,8 +539,8 @@ export default function AddOrEditUser({ params }: { readonly params: Promise<{ i
                             </AnimateButton>
 
                           </Stack>
-                        </Grid2>
-                        <Grid2 >
+                        </Grid>
+                        <Grid >
                           {operation == 'edit' && (
                             <AnimateButton>
                               <Button
@@ -549,13 +554,13 @@ export default function AddOrEditUser({ params }: { readonly params: Promise<{ i
                               </Button>
                             </AnimateButton>
                           )}
-                        </Grid2>
-                      </Grid2>
-                    </Grid2>
+                        </Grid>
+                      </Grid>
+                    </Grid>
                   </MainCard>
-                </Grid2>
-              </Grid2>
-            </Grid2>
+                </Grid>
+              </Grid>
+            </Grid>
           </form>
         )}
       </Formik>

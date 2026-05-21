@@ -3,7 +3,7 @@ import { Avatar, Box, Button, IconButton, Tooltip } from '@mui/material';
 import MainCard from '@dashboard/_components/MainCard';
 import TableCard from '@dashboard/_components/TableCard';
 import { ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
-import { useTranslation } from 'react-i18next';
+import { useTranslations } from 'next-intl';
 import MaterialTable from '@dashboard/_components/MaterialTable/MaterialTable';
 import {
   Edit,
@@ -22,12 +22,12 @@ import AddOrEditSlideshow from './AddOrEditSlideshow';
 import DeleteSlideshow from './DeleteSlideshow';
 import { useSession } from 'next-auth/react';
 import { MRT_Row } from 'material-react-table';
-import MRT_Column from '@root/app/types/MRT_Column';
+import { MRT_Column } from '@root/app/types/MRT_Column';
 import SlideshowModel from '../../_types/Slideshow/SlideshowModel';
 import _ from 'lodash';
 
 function SlideshowDataGrid() {
-  const [t] = useTranslation();
+  const t = useTranslations("");
   const { data: session } = useSession();
   const jwt = session?.accessToken;
 

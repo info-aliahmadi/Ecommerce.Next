@@ -32,11 +32,12 @@ export default function Button(theme : any) {
         outlined: {
           ...disabledStyle,
           '&.MuiButton-outlinedSecondary': {
-            color: theme.palette.secondary.contrastText,
-            outline: `1px solid ${theme.palette.secondary.light}`,
+            color:theme.palette.mode === "dark" ? theme.palette.secondary.main : theme.palette.secondary.dark,
+            backgroundColor: "secondary.main",
+            outline: `1px solid ${theme.palette.secondary.dark}`,
             '&:hover': {
-              outline: `1px solid ${theme.palette.secondary.light}`,
-              backgroundColor: "#F9FAFB"
+              outline: `1px solid ${"secondary.lighter"}`,
+              backgroundColor: theme.palette.secondary.light
             }
           }
         },

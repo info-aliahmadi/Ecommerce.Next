@@ -1,83 +1,34 @@
-import axios from 'axios';
+import Fetch from '@root/utils/Fetch';
 import CONFIG from '@root/config';
-import { setDefaultHeader } from '@root/utils/axiosHeaders';
 import Result from '@root/app/types/Result';
+import LinkSectionModel from '../_types/LinkSection/LinkSectionModel';
 
 export default class LinkSectionService {
-  constructor(jwt : string) {
-    setDefaultHeader(jwt);
+  config?: RequestInit;
+  constructor(jwt: string) {
+    if (jwt) this.config = Fetch.SetDefaultHeader(jwt);
   }
+
   getLinkSectionList = async (): Promise<Result<LinkSectionModel[]>> => {
-    return new Promise((resolve, reject) => {
-      axios
-        .get(CONFIG.API_BASEPATH + '/cms/GetLinkSectionList')
-        .then((response) => {
-          resolve(response.data);
-        })
-        .catch((error) => {
-          reject(error);
-        });
-    });
+    return Fetch.Get<Result<LinkSectionModel[]>>(CONFIG.API_BASEPATH + `/cms/GetLinkSectionList`, this.config);
   };
   getLinkSectionById = async (linkSectionId: number): Promise<Result<LinkSectionModel>> => {
-    return new Promise((resolve, reject) => {
-      axios
-        .get(CONFIG.API_BASEPATH + '/cms/getLinkSectionById', { params: { linkSectionId: linkSectionId } })
-        .then((response) => {
-          resolve(response.data);
-        })
-        .catch((error) => {
-          reject(error);
-        });
-    });
+    const params = new URLSearchParams({ linkSectionId: linkSectionId.toString() });
+    return Fetch.Get<Result<LinkSectionModel>>(CONFIG.API_BASEPATH + `/cms/getLinkSectionById?${params.toString()}`, this.config);
   };
   addLinkSection = async (linkSection: LinkSectionModel): Promise<Result<LinkSectionModel>> => {
-    return new Promise((resolve, reject) => {
-      axios
-        .post(CONFIG.API_BASEPATH + '/cms/addLinkSection', linkSection)
-        .then((response) => {
-          resolve(response.data);
-        })
-        .catch((error) => {
-          reject(error);
-        });
-    });
+    return Fetch.Post<Result<LinkSectionModel>>(CONFIG.API_BASEPATH + '/cms/addLinkSection', linkSection, this.config);
   };
   updateLinkSection = async (linkSection: LinkSectionModel): Promise<Result<LinkSectionModel>> => {
-    return new Promise((resolve, reject) => {
-      axios
-        .post(CONFIG.API_BASEPATH + '/cms/updateLinkSection', linkSection)
-        .then((response) => {
-          resolve(response.data);
-        })
-        .catch((error) => {
-          reject(error);
-        });
-    });
+    return Fetch.Post<Result<LinkSectionModel>>(CONFIG.API_BASEPATH + '/cms/updateLinkSection', linkSection, this.config);
   };
 
   visibleLinkSection = async (linkSectionId: number): Promise<Result<LinkSectionModel>> => {
-    return new Promise((resolve, reject) => {
-      axios
-        .get(CONFIG.API_BASEPATH + '/cms/VisibleLinkSection', { params: { linkSectionId: linkSectionId } })
-        .then((response) => {
-          resolve(response.data);
-        })
-        .catch((error) => {
-          reject(error);
-        });
-    });
+    const params = new URLSearchParams({ linkSectionId: linkSectionId.toString() });
+    return Fetch.Get<Result<LinkSectionModel>>(CONFIG.API_BASEPATH + `/cms/VisibleLinkSection?${params.toString()}`, this.config);
   };
   deleteLinkSection = async (linkSectionId: number): Promise<Result<LinkSectionModel>> => {
-    return new Promise((resolve, reject) => {
-      axios
-        .get(CONFIG.API_BASEPATH + '/cms/deleteLinkSection', { params: { linkSectionId: linkSectionId } })
-        .then((response) => {
-          resolve(response.data);
-        })
-        .catch((error) => {
-          reject(error);
-        });
-    });
+    const params = new URLSearchParams({ linkSectionId: linkSectionId.toString() });
+    return Fetch.Get<Result<LinkSectionModel>>(CONFIG.API_BASEPATH + `/cms/deleteLinkSection?${params.toString()}`, this.config);
   };
 }

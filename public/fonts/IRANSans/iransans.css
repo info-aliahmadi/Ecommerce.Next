@@ -1,0 +1,28 @@
+@font-face {
+    font-family: Iran Sans;
+    font-style: normal;
+    font-weight: 700;
+    src: url(IRANSansWeb_Bold.eot);
+    src: url(IRANSansWeb_Bold.eot?#iefix) format('embedded-opentype'), url(IRANSansWeb_Bold.woff2) format('woff2'), url(IRANSansWeb_Bold.woff) format('woff'), url(IRANSansWeb_Bold.ttf) format('truetype')
+}
+@font-face {
+    font-family: Iran Sans;
+    font-style: normal;
+    font-weight: 500;
+    src: url(IRANSansWeb_Medium.eot);
+    src: url(IRANSansWeb_Medium.eot?#iefix) format('embedded-opentype'), url(IRANSansWeb_Medium.woff2) format('woff2'), url(IRANSansWeb_Medium.woff) format('woff'), url(IRANSansWeb_Medium.ttf) format('truetype')
+}
+@font-face {
+    font-family: Iran Sans;
+    font-style: normal;
+    font-weight: 100;
+    src: url(IRANSansWeb_Light.eot);
+    src: url(IRANSansWeb_Light.eot?#iefix) format('embedded-opentype'), url(IRANSansWeb_Light.woff2) format('woff2'), url(IRANSansWeb_Light.woff) format('woff'), url(IRANSansWeb_Light.ttf) format('truetype')
+}
+@font-face {
+    font-family: Iran Sans;
+    font-style: normal;
+    font-weight: 400;
+    src: url(IRANSansWeb.eot);
+    src: url(IRANSansWeb.eot?#iefix) format('embedded-opentype'), url(IRANSansWeb.woff2) format('woff2'), url(IRANSansWeb.woff) format('woff'), url(IRANSansWeb.ttf) format('truetype')
+}

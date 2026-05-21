@@ -1,8 +1,7 @@
-
 import 'next-auth';
-import { DefaultSession } from 'next-auth';
-import { DefaultJWT } from 'next-auth/jwt';
-
+import {DefaultSession} from 'next-auth';
+import {DefaultJWT} from 'next-auth/jwt';
+import CurrencyTypes from './enums/CurrencyTypes';
 
 declare module 'next-auth' {
   interface User {
@@ -14,7 +13,10 @@ declare module 'next-auth' {
     defaultLanguage: string;
     defaultTheme: 'light' | 'dark';
     roles: Array<string>;
-    accessToken : string;
+    accessToken: string;
+    accessTokenExpires: number;
+    storeCurrencyType?: CurrencyTypes;
+    storeName?: string;
   }
 
   interface Session extends DefaultSession {

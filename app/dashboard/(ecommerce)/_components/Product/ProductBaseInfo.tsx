@@ -3,7 +3,7 @@ import { Avatar, Chip, FormHelperText, Grid, InputLabel, TextField, Stack } from
 import { EventNote } from '@mui/icons-material';
 
 // assets
-import { useTranslation } from 'react-i18next';
+import { useTranslations } from 'next-intl';
 import CONFIG from '@root/config';
 
 import moment from 'moment';
@@ -19,10 +19,12 @@ import SelectCurrency from '../Currency/SelectCurrency';
 import Editor from '@dashboard/_components/Editor/Editor';
 import ProductsAutoComplete from './ProductAutoComplete';
 import ProductModel from '../../_types/Product/ProductModel';
+import nextIntlService from '@root/locales/nextIntlService';
 
 export default function ProductBaseInfo({ operation, values, handleBlur, handleChange, errors }: 
   { operation: string, values: ProductModel, handleBlur: (event: React.FocusEvent<HTMLInputElement>) => void, handleChange: (event: React.ChangeEvent<HTMLInputElement>) => void, errors: any }) {
-  const [t, i18n] = useTranslation();
+  const t = useTranslations("");
+  let language = nextIntlService.getNextIntlLocale();
 
   const fieldsName = 'fields.product.';
 
@@ -91,11 +93,12 @@ export default function ProductBaseInfo({ operation, values, handleBlur, handleC
                 <Chip
                   icon={<EventNote />}
                   title={t(fieldsName + 'createdOnUtc')}
-                  label={new Intl.DateTimeFormat(i18n.language, {
-                    dateStyle: CONFIG.DATE_STYLE,
-                    timeStyle: CONFIG.TIME_STYLE,
-                    hour12: false
-                  }).format(moment(values.createdOnUtc).toDate())}
+                  label={values.createdOnUtc
+                    ? new Intl.DateTimeFormat(language, {
+                      dateStyle: 'long',
+                      timeStyle: CONFIG.TIME_STYLE as "short" | "full" | "long" | "medium" | undefined,
+                      hour12: false
+                    }).format(moment(values.createdOnUtc).toDate()) : ''}
                   variant="filled"
                   size="small"
                   sx={{ borderRadius: '16px' }}
@@ -114,11 +117,12 @@ export default function ProductBaseInfo({ operation, values, handleBlur, handleC
                     <Chip
                       icon={<EventNote />}
                       title={t(fieldsName + 'updatedOnUtc')}
-                      label={new Intl.DateTimeFormat(i18n.language, {
-                        dateStyle: CONFIG.DATE_STYLE,
-                        timeStyle: CONFIG.TIME_STYLE,
-                        hour12: false
-                      }).format(moment(values.updatedOnUtc).toDate())}
+                      label={values.updatedOnUtc
+                        ? new Intl.DateTimeFormat(language, {
+                          dateStyle: 'long',
+                          timeStyle: CONFIG.TIME_STYLE as "short" | "full" | "long" | "medium" | undefined,
+                          hour12: false
+                        }).format(moment(values.updatedOnUtc).toDate()) : ''}
                       variant="filled"
                       size="small"
                       sx={{ borderRadius: '16px' }}

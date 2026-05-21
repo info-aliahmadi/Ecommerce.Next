@@ -6,7 +6,7 @@ import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
 
 // assets
-import { useTranslation } from 'react-i18next';
+import { useTranslations } from 'next-intl';
 import Notify from '@dashboard/_components/@extended/Notify';
 import LinkSectionService from '@dashboard/(cms)/_service/LinkSectionService';
 import { useSession } from 'next-auth/react';
@@ -15,7 +15,7 @@ import { MRT_Row } from 'material-react-table';
 import LinkSectionModel from '../../_types/LinkSection/LinkSectionModel';
 
 const DeleteLinkSection = ({ row, open, setOpen, refetch }: { row?: MRT_Row<LinkSectionModel>; open: boolean; setOpen: (open: boolean) => void; refetch: () => void }) => {
-  const [t] = useTranslation();
+  const t = useTranslations("");
   const { data: session } = useSession();
   const jwt = session?.accessToken;
 

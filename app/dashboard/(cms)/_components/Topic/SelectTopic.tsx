@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { useState, useEffect } from 'react';
-import { useTranslation } from 'react-i18next';
+import { useTranslations } from 'next-intl';
 import { Chip, FormControl, MenuItem, OutlinedInput, Select, useTheme, Theme } from '@mui/material';
 import { Box } from '@mui/system';
 import TopicsService from '@dashboard/(cms)/_service/TopicService';
@@ -14,7 +14,7 @@ export default function SelectTopic({ defaultValues, id, setFieldValue, error, d
     error?: boolean,
     disabled?: boolean
   }>) {
-  const [t] = useTranslation();
+  const t = useTranslations("");
   const { data: session } = useSession();
   const jwt = session?.accessToken;
 

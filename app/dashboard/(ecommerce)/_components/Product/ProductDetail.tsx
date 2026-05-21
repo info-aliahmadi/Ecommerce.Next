@@ -9,15 +9,18 @@ import AccordionSummary from '@mui/material/AccordionSummary';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import SelectProductAttribute from "../ProductAttribute/SelectProductAttribute";
-import { useTranslation } from "react-i18next";
+import { useTranslations } from 'next-intl';
 import CONFIG from '@root/config';
 import ProductModel from '../../_types/Product/ProductModel';
 import { MRT_Row } from 'material-react-table';
+import nextIntlService from "@root/locales/nextIntlService";
+import moment from "moment";
 
 export default function ProductDetail({ row }: { row: MRT_Row<ProductModel> }) {
 
-    const [t, i18n] = useTranslation();
+    const t = useTranslations("");
     const fieldsName = 'fields.product.';
+    let language = nextIntlService.getNextIntlLocale();
 
     function AttributeInventory({ invenroty }: { invenroty: any }) {
 
@@ -194,13 +197,37 @@ export default function ProductDetail({ row }: { row: MRT_Row<ProductModel> }) {
                             <Grid item xs={12} md={4}>
                                 <Stack spacing={1}>
                                     <InputLabel htmlFor="availableStartDateTimeUtc">{t(fieldsName + 'availableStartDateTimeUtc')}</InputLabel>
-                                    <OutlinedInput id="availableStartDateTimeUtc" type="text" value={row.original.availableStartDateTimeUtc ? DateTimeViewer(i18n.language, row.original.availableStartDateTimeUtc.toISOString()) : ''} fullWidth disabled />
+                                    <OutlinedInput
+                                        id="availableStartDateTimeUtc"
+                                        type="text"
+                                        value={row.original.availableStartDateTimeUtc
+                                            ? new Intl.DateTimeFormat(language, {
+                                                dateStyle: 'long',
+                                                timeStyle: CONFIG.TIME_STYLE as "short" | "full" | "long" | "medium" | undefined,
+                                                hour12: false
+                                            }).format(moment(row.original.availableStartDateTimeUtc).toDate()) : ''}
+
+                                        fullWidth
+                                        disabled
+                                    />
                                 </Stack>
                             </Grid>
                             <Grid item xs={12} md={4}>
                                 <Stack spacing={1}>
                                     <InputLabel htmlFor="availableEndDateTimeUtc">{t(fieldsName + 'availableEndDateTimeUtc')}</InputLabel>
-                                    <OutlinedInput id="availableEndDateTimeUtc" type="text" value={row.original.availableEndDateTimeUtc ? DateTimeViewer(i18n.language, row.original.availableEndDateTimeUtc.toISOString()) : ''} fullWidth disabled />
+                                    <OutlinedInput
+                                        id="availableEndDateTimeUtc"
+                                        type="text"
+                                        value={row.original.availableEndDateTimeUtc
+                                            ? new Intl.DateTimeFormat(language, {
+                                                dateStyle: 'long',
+                                                timeStyle: CONFIG.TIME_STYLE as "short" | "full" | "long" | "medium" | undefined,
+                                                hour12: false
+                                            }).format(moment(row.original.availableEndDateTimeUtc).toDate()) : ''}
+
+                                        fullWidth
+                                        disabled
+                                    />
                                 </Stack>
                             </Grid>
                             <Grid item xs={12} md={4}>
@@ -279,8 +306,8 @@ export default function ProductDetail({ row }: { row: MRT_Row<ProductModel> }) {
                                         label={t(fieldsName + 'attributeIds')}
                                         disabled={true}
                                         defaultValues={row.original?.inventories?.filter(x => x.stockType == 1).map(x => x.attributeId) || []}
-                                        onChange={() => {}}
-                                        setFieldValue={() => {}}
+                                        onChange={() => { }}
+                                        setFieldValue={() => { }}
                                         error={false}
                                     />
                                 </Stack>
@@ -489,13 +516,37 @@ export default function ProductDetail({ row }: { row: MRT_Row<ProductModel> }) {
                                 <Grid item xs={12} sm={12} md={6} lg={6} xl={4}>
                                     <Stack>
                                         <InputLabel htmlFor="markAsNewStartDateTimeUtc">{t(fieldsName + 'markAsNewStartDateTimeUtc')}</InputLabel>
-                                        <OutlinedInput id="markAsNewStartDateTimeUtc" type="text" value={row.original.markAsNewStartDateTimeUtc ? DateTimeViewer(i18n.language, row.original.markAsNewStartDateTimeUtc.toISOString()) : ''} fullWidth disabled />
+                                        <OutlinedInput
+                                            id="markAsNewStartDateTimeUtc"
+                                            type="text"
+                                            value={row.original.markAsNewStartDateTimeUtc
+                                                ? new Intl.DateTimeFormat(language, {
+                                                    dateStyle: 'long',
+                                                    timeStyle: CONFIG.TIME_STYLE as "short" | "full" | "long" | "medium" | undefined,
+                                                    hour12: false
+                                                }).format(moment(row.original.markAsNewStartDateTimeUtc).toDate()) : ''}
+
+                                            fullWidth
+                                            disabled
+                                        />
                                     </Stack>
                                 </Grid>
                                 <Grid item xs={12} sm={12} md={6} lg={6} xl={4}>
                                     <Stack>
                                         <InputLabel htmlFor="markAsNewEndDateTimeUtc">{t(fieldsName + 'markAsNewEndDateTimeUtc')}</InputLabel>
-                                        <OutlinedInput id="markAsNewEndDateTimeUtc" type="text" value={row.original.markAsNewEndDateTimeUtc ? DateTimeViewer(i18n.language, row.original.markAsNewEndDateTimeUtc.toISOString()) : ''} fullWidth disabled />
+                                        <OutlinedInput
+                                            id="markAsNewEndDateTimeUtc"
+                                            type="text"
+                                            value={row.original.markAsNewEndDateTimeUtc
+                                                ? new Intl.DateTimeFormat(language, {
+                                                    dateStyle: 'long',
+                                                    timeStyle: CONFIG.TIME_STYLE as "short" | "full" | "long" | "medium" | undefined,
+                                                    hour12: false
+                                                }).format(moment(row.original.markAsNewEndDateTimeUtc).toDate()) : ''}
+
+                                            fullWidth
+                                            disabled
+                                        />
                                     </Stack>
                                 </Grid>
                             </>

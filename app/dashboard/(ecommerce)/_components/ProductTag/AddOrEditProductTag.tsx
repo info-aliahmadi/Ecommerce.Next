@@ -21,7 +21,7 @@ import {
 import CloseIcon from '@mui/icons-material/Close';
 
 // assets
-import { useTranslation } from 'react-i18next';
+import { useTranslations } from 'next-intl';
 import Notify from '@dashboard/_components/@extended/Notify';
 import { useSession } from 'next-auth/react';
 import { MRT_Row } from 'material-react-table';
@@ -46,7 +46,7 @@ const AddOrEditProductTag = ({
     isNew: boolean;
     refetch: () => void;
 }) => {
-    const [t] = useTranslation();
+    const t = useTranslations("");
     const [notify, setNotify] = useState<NotifyProps>({ open: false });
     const { data: session } = useSession();
     const jwt = session?.accessToken;

@@ -12,8 +12,7 @@ import {
   OutlinedInput,
   Stack
 } from '@mui/material';
-Stack
-import Grid from '@mui/material/Grid2';
+import Grid from '@mui/material/Grid';
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
 // third party
@@ -23,7 +22,7 @@ import { Formik } from 'formik';
 import AnimateButton from '@dashboard/_components/@extended/AnimateButton';
 
 // assets
-import { useTranslation } from 'react-i18next';
+import { useTranslations } from 'next-intl';
 import Notify from '@dashboard/_components/@extended/Notify';
 import setServerErrors from '@root/utils/setServerErrors';
 import AddIcon from '@mui/icons-material/Add';
@@ -31,7 +30,7 @@ import RoleService from '@dashboard/(auth)/_service/RoleService';
 import { useSession } from 'next-auth/react';
 
 const AddOrEditRole = ({ roleId, isNew, open, setOpen, refetch }: { roleId: number, isNew: boolean, open: boolean, setOpen: (open: boolean) => void, refetch: () => void }) => {
-  const [t] = useTranslation();
+  const t = useTranslations("");
   const { data: session } = useSession();
   const jwt = session?.accessToken;
 
@@ -74,7 +73,7 @@ const AddOrEditRole = ({ roleId, isNew, open, setOpen, refetch }: { roleId: numb
   };
 
   const updateRole = (role: RoleModel, setErrors: any) => {
-    debugger
+    
     roleService
       .updateRole(role)
       .then(() => {
@@ -96,7 +95,7 @@ const AddOrEditRole = ({ roleId, isNew, open, setOpen, refetch }: { roleId: numb
       updateRole(role, setErrors);
     }
   };
-  const CloseDialog = ({ onClose }: { onClose: () => void }) => (
+  const CloseDialog = () => (
     <IconButton
       aria-label="close"
       onClick={onClose}
@@ -148,11 +147,11 @@ const AddOrEditRole = ({ roleId, isNew, open, setOpen, refetch }: { roleId: numb
             <form noValidate onSubmit={handleSubmit}>
               <DialogTitle>
                 {t('dialog.' + (isNew ? 'add' : 'edit') + '.title', { item: 'Role' })}
-                <CloseDialog onClose={onClose} />
+                <CloseDialog />
               </DialogTitle>
               <DialogContent>
-                <Grid container spacing={3} direction="column">
-                  <Grid>
+                <Grid container direction="row" spacing={3} >
+                  <Grid size={10}>
                     <Stack spacing={1}>
                       <InputLabel htmlFor="name">{t(fieldsName + 'name')}</InputLabel>
                       <OutlinedInput
@@ -173,9 +172,9 @@ const AddOrEditRole = ({ roleId, isNew, open, setOpen, refetch }: { roleId: numb
                       )}
                     </Stack>
                   </Grid>
-                  <Grid>
+                  <Grid size={10}>
                     <Stack spacing={1}>
-                      <InputLabel htmlFor="normalizedName">{t(fieldsName + 'normalizedname')}</InputLabel>
+                      <InputLabel htmlFor="normalizedName">{t(fieldsName + 'normalizedName')}</InputLabel>
                       <OutlinedInput
                         fullWidth
                         error={Boolean(touched.normalizedName && errors.normalizedName)}
@@ -185,7 +184,7 @@ const AddOrEditRole = ({ roleId, isNew, open, setOpen, refetch }: { roleId: numb
                         name="normalizedName"
                         onBlur={handleBlur}
                         onChange={handleChange}
-                        placeholder={t(fieldsName + 'normalizedname')}
+                        placeholder={t(fieldsName + 'normalizedName')}
                         inputProps={{}}
                       />
                       {touched.normalizedName && errors.normalizedName && (
@@ -199,7 +198,7 @@ const AddOrEditRole = ({ roleId, isNew, open, setOpen, refetch }: { roleId: numb
               </DialogContent>
               <DialogActions sx={{ p: '1.25rem' }}>
                 <AnimateButton>
-                  <Button onClick={onClose}>{t('buttons.cancel')}</Button>
+                  <Button onClick={onClose}>Cancel</Button>
                 </AnimateButton>
                 <AnimateButton>
                   <Button

@@ -1,39 +1,25 @@
-import axios from 'axios';
 import CONFIG from '@root/config';
-import { setAuthenticationHeader } from '@root/utils/axiosHeaders';
+import { User } from 'next-auth';
+
+import Fetch from '@root/utils/Fetch';
+import Result from '@root/app/types/Result';
 
 export default class AuthenticationService {
-  login = async (username: string, password: string, rememberMe: boolean) => {
-    return new Promise<any>((resolve, reject) => {
-      // Simple POST request with a JSON body using fetch
-      axios
-        .post(CONFIG.LOGIN_API_PATH, null, {
-          params: {
-            username: username,
-            password: password,
-            rememberMe: rememberMe
-          }
-        })
-        .then((response) => {
-          resolve(response.data);
-        })
-        .catch((error) => {
-          reject(error);
-        });
-    });
+  config: RequestInit = {
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+      'Accept-Language': 'fa',
+    },
+  }
+
+  login = async (loginModel: LoginModel): Promise<Result<User>> => {
+
+    return Fetch.Post<Result<User>>(CONFIG.LOGIN_API_PATH, loginModel, this.config);
   };
 
-  refreshToken = async (jwt: string) => {
-    return new Promise<any>((resolve, reject) => {
-      setAuthenticationHeader(jwt, 'application/json');
-      axios
-        .get(CONFIG.REFRESH_TOKEN_API_PATH)
-        .then((response) => {
-          resolve(response.data);
-        })
-        .catch((error) => {
-          reject(null);
-        });
-    });
+  refreshToken = async (jwt: string): Promise<string> => {
+    this.config = Fetch.SetDefaultHeader(jwt);
+    return Fetch.Get<string>(CONFIG.REFRESH_TOKEN_API_PATH,this.config);
   };
 }

@@ -1,36 +1,18 @@
-import axios from 'axios';
-import { setDefaultHeader } from '@root/utils/axiosHeaders';
-import CONFIG from '@root/config';
+import Fetch from '@root/utils/Fetch';
 import Result from '@root/app/types/Result';
+import CONFIG from '@root/config';
 import MessageSettingModel from '../_types/MessageSettingModel';
 
 export default class MessageSettingService {
-  constructor(jwt : string) {
-    setDefaultHeader(jwt);
+  config?: RequestInit;
+  constructor(jwt: string) {
+    if (jwt) this.config = Fetch.SetDefaultHeader(jwt);
   }
-  getSettings = async (): Promise<Result<MessageSettingModel>> => {
-    return new Promise((resolve, reject) => {
-      axios
-        .get(CONFIG.API_BASEPATH + '/crm/getSettings')
-        .then((response) => {
-          resolve(response.data);
-        })
-        .catch((error) => {
-          reject(error);
-        });
-    });
-  };
-  addOrUpdateSettings = async (setting : MessageSettingModel) => {
-    return new Promise((resolve, reject) => {
-      axios
-        .post(CONFIG.API_BASEPATH + '/crm/addOrUpdateSettings', setting)
-        .then((response) => {
-          resolve(response.data);
-        })
-        .catch((error) => {
-          reject(error);
-        });
-    });
-  };
 
+  getSettings = async (): Promise<Result<MessageSettingModel>> => {
+    return Fetch.Get<Result<MessageSettingModel>>(CONFIG.API_BASEPATH + `/crm/getSettings`, this.config);
+  };
+  addOrUpdateSettings = async (setting: MessageSettingModel): Promise<Result<MessageSettingModel>> => {
+    return Fetch.Post<Result<MessageSettingModel>>(CONFIG.API_BASEPATH + '/crm/addOrUpdateSettings', setting, this.config);
+  };
 }

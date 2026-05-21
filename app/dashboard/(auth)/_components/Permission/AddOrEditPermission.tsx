@@ -12,22 +12,22 @@ import {
   OutlinedInput,
   Stack
 } from '@mui/material';
-import Grid from '@mui/material/Grid2';
+import Grid from '@mui/material/Grid';
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
 // third party
 import * as Yup from 'yup';
-import { Formik, FormikErrors } from 'formik';
+import { Formik } from 'formik';
 import AddIcon from '@mui/icons-material/Add';
 import AnimateButton from '@dashboard/_components/@extended/AnimateButton';
 
 // assets
-import { useTranslation } from 'react-i18next';
 import Notify from '@dashboard/_components/@extended/Notify';
 import setServerErrors from '@root/utils/setServerErrors';
 import PermissionService from '@dashboard/(auth)/_service/PermissionService';
 import { useSession } from 'next-auth/react';
-import Result from '@root/app/types/Result';
+
+import { useTranslations } from 'next-intl';
 
 
 const AddOrEditPermission = ({ permissionId, isNew, open, setOpen, refetch }: {
@@ -37,7 +37,7 @@ const AddOrEditPermission = ({ permissionId, isNew, open, setOpen, refetch }: {
   setOpen: (open: boolean) => void,
   refetch: () => void
 }) => {
-  const [t] = useTranslation();
+  const t = useTranslations("");
   const { data: session } = useSession();
   const jwt = session?.accessToken;
 
@@ -53,13 +53,13 @@ const AddOrEditPermission = ({ permissionId, isNew, open, setOpen, refetch }: {
   };
   const onClose = () => {
     setOpen(false);
-    setPermission(undefined);
+    setPermission({});
   };
   useEffect(() => {
     if (!isNew && permissionId > 0) {
       loadPermission();
     } else {
-      setPermission(undefined);
+      setPermission({});
     }
   }, [permissionId, isNew, open]);
 
@@ -76,7 +76,7 @@ const AddOrEditPermission = ({ permissionId, isNew, open, setOpen, refetch }: {
       permissionService
         .addPermission(permission)
         .then(() => {
-          setPermission(undefined);
+          setPermission({});
           onClose();
           setNotify((provious) => ({ ...provious, open: true }));
           refetch();
@@ -92,7 +92,7 @@ const AddOrEditPermission = ({ permissionId, isNew, open, setOpen, refetch }: {
       permissionService
         .updatePermission(permission)
         .then(() => {
-          setPermission(undefined);
+          setPermission({});
           onClose();
           setNotify((provious) => ({ ...provious, open: true }));
           refetch();
@@ -106,7 +106,7 @@ const AddOrEditPermission = ({ permissionId, isNew, open, setOpen, refetch }: {
         });
     }
   };
-  const CloseDialog = ({ onClose }: { onClose: () => void }) => (
+  const CloseDialog = () => (
     <IconButton
       aria-label="close"
       onClick={onClose}
@@ -143,9 +143,9 @@ const AddOrEditPermission = ({ permissionId, isNew, open, setOpen, refetch }: {
             try {
               setSubmitting(true);
               handleSubmit(values, setErrors, setSubmitting);
-            } catch (err: any) {
+            } catch (err) {
               setStatus({ success: false });
-              setErrors({ id: err.message } as FormikErrors<Permission>);
+              setErrors({});
             }
           }}
         >
@@ -153,11 +153,11 @@ const AddOrEditPermission = ({ permissionId, isNew, open, setOpen, refetch }: {
             <form noValidate onSubmit={handleSubmit}>
               <DialogTitle>
                 {t('dialog.' + (isNew ? 'add' : 'edit') + '.title', { item: 'Permission' })}
-                <CloseDialog onClose={onClose} />
+                <CloseDialog />
               </DialogTitle>
               <DialogContent>
-                <Grid container spacing={3} direction="column">
-                  <Grid>
+                <Grid container direction="row" spacing={3}>
+                  <Grid size={10}>
                     <Stack spacing={1}>
                       <InputLabel htmlFor="name">{t(fieldsName + 'name')}</InputLabel>
                       <OutlinedInput
@@ -178,9 +178,9 @@ const AddOrEditPermission = ({ permissionId, isNew, open, setOpen, refetch }: {
                       )}
                     </Stack>
                   </Grid>
-                  <Grid>
+                  <Grid size={10}>
                     <Stack spacing={1}>
-                      <InputLabel htmlFor="normalizedName">{t(fieldsName + 'normalizedname')}</InputLabel>
+                      <InputLabel htmlFor="normalizedName">{t(fieldsName + 'normalizedName')}</InputLabel>
                       <OutlinedInput
                         fullWidth
                         error={Boolean(touched.normalizedName && errors.normalizedName)}
@@ -190,7 +190,7 @@ const AddOrEditPermission = ({ permissionId, isNew, open, setOpen, refetch }: {
                         name="normalizedName"
                         onBlur={handleBlur}
                         onChange={handleChange}
-                        placeholder={t(fieldsName + 'normalizedname')}
+                        placeholder={t(fieldsName + 'normalizedName')}
                         inputProps={{}}
                       />
                       {touched.normalizedName && errors.normalizedName && (
@@ -204,7 +204,7 @@ const AddOrEditPermission = ({ permissionId, isNew, open, setOpen, refetch }: {
               </DialogContent>
               <DialogActions sx={{ p: '1.25rem' }}>
                 <AnimateButton>
-                  <Button onClick={onClose}>{t('buttons.cancel')}</Button>
+                  <Button onClick={onClose}>Cancel</Button>
                 </AnimateButton>
                 <AnimateButton>
                   <Button

@@ -1,43 +1,33 @@
 'use client';
-import axios from 'axios';
+import Result from '@root/app/types/Result';
 import CONFIG from '@root/config';
-import { setDefaultHeader } from '@root/utils/axiosHeaders';
-import LocalStorageService from '@root/utils/LocalStorageService';
+import nextIntlService from '@root/locales/nextIntlService';
+import Fetch from '@root/utils/Fetch';
+
 
 export default class LocalizationService {
-  constructor(jwt: any) {
-    if(jwt)
-    setDefaultHeader(jwt);
+  config?: RequestInit;
+  constructor(jwt: string) {
+    if (jwt) this.config = Fetch.SetDefaultHeader(jwt);
   }
 
-  getCurrentLanguage = async () => {
-    let result = new Promise((resolve, reject) => {
-      axios
-        .get(CONFIG.API_BASEPATH + '/Auth/GetDefaultLanguage')
-        .then((response) => {
-          if (response.data) {
-            resolve(response.data);
-          } else {
-            resolve(this.getDefaultLanguage());
-          }
-        })
-        .catch((error) => {
-          reject(new Error(error));
-        });
-
+  getCurrentLanguage = async (): Promise<string> => {
+    return Fetch.Get<string>(CONFIG.API_BASEPATH + `/auth/GetDefaultLanguage`, this.config).then((response) => {
+      if (response) {
+        return response;
+      } else {
+        return this.getDefaultLanguage();
+      }
     });
-    return await result;
   };
 
-  setCurrentLanguage = async (i18n: any, lang: Language) => {
-    i18n.changeLanguage(lang.key);
-    axios.get(CONFIG.API_BASEPATH + '/Auth/SetDefaultLanguage', { params: { defaultLanguage: lang.key } }).catch((error) => {
-    });
+  setCurrentLanguage = async (lang: Language): Promise<Result<null>> => {
+    const params = new URLSearchParams({ defaultLanguage: lang.key });
+    return Fetch.Get<Result<null>>(CONFIG.API_BASEPATH + `/auth/SetDefaultLanguage?${params.toString()}`, this.config);
   };
 
   getSavedLanguage = () => {
-    let localStorageService = new LocalStorageService(CONFIG.LANGUAGE_STORAGE_NAME);
-    let currentLang = localStorageService.getItem();
+    let currentLang = nextIntlService.getNextIntlLocale();
     if (currentLang == undefined || currentLang == null) {
       return CONFIG.DEFAULT_LANGUAGE;
     }
@@ -46,4 +36,5 @@ export default class LocalizationService {
   getDefaultLanguage = async () => {
     return CONFIG.DEFAULT_LANGUAGE;
   };
+
 }

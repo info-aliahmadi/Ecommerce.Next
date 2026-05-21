@@ -8,13 +8,13 @@ import Password from '@mui/icons-material/Password';
 import Logout from '@mui/icons-material/Logout';
 // assets
 import { EditOutlined, ProfileOutlined, LogoutOutlined, UserOutlined, WalletOutlined } from '@ant-design/icons';
-import { useTranslation } from 'react-i18next';
+import { useTranslations } from 'next-intl';
 
 // ==============================|| HEADER PROFILE - PROFILE TAB ||============================== //
 
 const ProfileTab = ({ handleLogout }: { handleLogout: () => void }) => {
   const theme = useTheme();
-  const [t] = useTranslation();
+  const t = useTranslations("");
 
   const [selectedIndex, setSelectedIndex] = useState<number>(0);
   const handleListItemClick = (event : any, index : number) => {

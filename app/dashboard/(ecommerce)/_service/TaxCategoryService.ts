@@ -1,96 +1,37 @@
-import axios from 'axios';
-import { setDefaultHeader } from '@root/utils/axiosHeaders';
-import CONFIG from '@root/config';
+import Fetch from '@root/utils/Fetch';
 import Result from '@root/app/types/Result';
+import CONFIG from '@root/config';
 import TaxCategoryModel from '../_types/Common/TaxCategoryModel';
 
 export default class TaxCategoryService {
-  constructor(jwt : string) {
-    setDefaultHeader(jwt);
+  config?: RequestInit;
+  constructor(jwt: string) {
+    if (jwt) this.config = Fetch.SetDefaultHeader(jwt);
   }
+
   getTaxCategoryList = async (): Promise<Result<TaxCategoryModel[]>> => {
-    return new Promise((resolve, reject) => {
-      axios
-        .post(CONFIG.API_BASEPATH + '/Common/GetTaxCategoryList')
-        .then((response) => {
-          resolve(response.data);
-        })
-        .catch((error) => {
-          reject(error);
-        });
-    });
+    return Fetch.Get<Result<TaxCategoryModel[]>>(CONFIG.API_BASEPATH + `/Common/GetTaxCategoryList`, this.config);
   };
 
   getTaxCategoryItemList = async (taxCategoryId : number): Promise<Result<TaxCategoryModel[]>> => {
-    return new Promise((resolve, reject) => {
-      axios
-        .get(CONFIG.API_BASEPATH + `/Common/GetTaxCategoryItemList?taxCategoryId=${taxCategoryId}`)
-        .then((response) => {
-          resolve(response.data);
-        })
-        .catch((error) => {
-          reject(error);
-        });
-    });
+    const params = new URLSearchParams({ taxCategoryId: taxCategoryId.toString() });
+    return Fetch.Get<Result<TaxCategoryModel[]>>(CONFIG.API_BASEPATH + `/Common/GetTaxCategoryItemList?${params.toString()}`, this.config);
   };
   getAllTaxCategorys = async (): Promise<Result<TaxCategoryModel[]>> => {
-    return new Promise((resolve, reject) => {
-      axios
-        .get(CONFIG.API_BASEPATH + '/Common/getAllTaxCategorys')
-        .then((response) => {
-          resolve(response.data);
-        })
-        .catch((error) => {
-          reject(error);
-        });
-    });
+    return Fetch.Get<Result<TaxCategoryModel[]>>(CONFIG.API_BASEPATH + `/Common/getAllTaxCategorys`, this.config);
   };
   getTaxCategoryById = async (taxCategoryId : number): Promise<Result<TaxCategoryModel>> => {
-    return new Promise((resolve, reject) => {
-      axios
-        .get(CONFIG.API_BASEPATH + '/Common/getTaxCategoryById', { params: { taxCategoryId: taxCategoryId } })
-        .then((response) => {
-          resolve(response.data);
-        })
-        .catch((error) => {
-          reject(error);
-        });
-    });
+    const params = new URLSearchParams({ taxCategoryId: taxCategoryId.toString() });
+    return Fetch.Get<Result<TaxCategoryModel>>(CONFIG.API_BASEPATH + `/Common/getTaxCategoryById?${params.toString()}`, this.config);
   };
   addTaxCategory = async (taxCategory: TaxCategoryModel): Promise<Result<TaxCategoryModel>> => {
-    return new Promise((resolve, reject) => {
-      axios
-        .post(CONFIG.API_BASEPATH + '/Common/addTaxCategory', taxCategory)
-        .then((response) => {
-          resolve(response.data);
-        })
-        .catch((error) => {
-          reject(error);
-        });
-    });
+    return Fetch.Post<Result<TaxCategoryModel>>(CONFIG.API_BASEPATH + '/Common/addTaxCategory', taxCategory, this.config);
   };
   updateTaxCategory = async (taxCategory: TaxCategoryModel): Promise<Result<TaxCategoryModel>> => {
-    return new Promise((resolve, reject) => {
-      axios
-        .post(CONFIG.API_BASEPATH + '/Common/updateTaxCategory', taxCategory)
-        .then((response) => {
-          resolve(response.data);
-        })
-        .catch((error) => {
-          reject(error);
-        });
-    });
+    return Fetch.Post<Result<TaxCategoryModel>>(CONFIG.API_BASEPATH + '/Common/updateTaxCategory', taxCategory, this.config);
   };
   deleteTaxCategory = async (taxCategoryId : number): Promise<Result<TaxCategoryModel>> => {
-    return new Promise((resolve, reject) => {
-      axios
-        .get(CONFIG.API_BASEPATH + '/Common/deleteTaxCategory', { params: { taxCategoryId: taxCategoryId } })
-        .then((response) => {
-          resolve(response.data);
-        })
-        .catch((error) => {
-          reject(error);
-        });
-    });
+    const params = new URLSearchParams({ taxCategoryId: taxCategoryId.toString() });
+    return Fetch.Get<Result<TaxCategoryModel>>(CONFIG.API_BASEPATH + `/Common/deleteTaxCategory?${params.toString()}`, this.config);
   };
 }

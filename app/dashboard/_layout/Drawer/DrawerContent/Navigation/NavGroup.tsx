@@ -1,25 +1,20 @@
 import PropTypes from 'prop-types';
-import { useSelector } from 'react-redux';
-import { useState, useEffect } from 'react';
 
 // material-ui
 import {
-  Box,
   List,
   Typography,
   ListItemButton,
   ListItemIcon,
   ListItemText,
   Collapse,
-  IconButton,
   useTheme
 } from '@mui/material';
 import { ExpandMore, ChevronRight } from '@mui/icons-material';
 
 // project import
 import NavItem from './NavItem';
-import { useTranslation } from 'react-i18next';
-import Authorize from '@root/app/dashboard/_components/Authorization/Authorize';
+import { useTranslations } from 'next-intl';
 import useDrawerState from '@root/app/dashboard/_hooks/useDrawerState';
 
 // ==============================|| NAVIGATION - LIST GROUP ||============================== //
@@ -37,22 +32,10 @@ const NavGroup = ({ item, isExpanded, onToggle }: NavGroupProps) => {
   const { drawerOpen } = useDrawerState();
   
   const navCollapse = item.children?.map((menuItem) => {
-    return menuItem.permission ? (
-      <Authorize key={menuItem.id + '_auth'} permission={menuItem.permission} accessDeniedElement={<></>}>
-        <NavItem item={menuItem} level={1} />
-      </Authorize>
-    ) : (
-      <NavItem key={menuItem.id + '_nav-item'} item={menuItem} level={1} />
-    );
+    return <NavItem key={menuItem.id + '_nav-item'} item={menuItem} level={1} />
   });
 
-  return item.permission ? (
-    <Authorize permission={item.permission} accessDeniedElement={<></>}>
-      <NavList key={item.id} item={item} navCollapse={navCollapse} drawerOpen={drawerOpen} open={isExpanded} handleClick={onToggle} />
-    </Authorize>
-  ) : (
-    <NavList key={item.id} item={item} navCollapse={navCollapse} drawerOpen={drawerOpen} open={isExpanded} handleClick={onToggle} />
-  );
+  return  <NavList key={item.id} item={item} navCollapse={navCollapse} drawerOpen={drawerOpen} open={isExpanded} handleClick={onToggle} />
 };
 
 interface NavListProps {
@@ -64,7 +47,7 @@ interface NavListProps {
 }
 
 const NavList = ({ item, navCollapse, drawerOpen, open, handleClick }: NavListProps) => {
-  const { t } = useTranslation();
+  const t = useTranslations("");
   const nsTranslation = 'navigation.';
   const theme = useTheme();
   const themeMode = theme.palette.mode;
