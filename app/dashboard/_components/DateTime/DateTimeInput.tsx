@@ -6,7 +6,7 @@ interface DateTimeInputProps {
   name: string;
   label: string;
   setFieldValue: (field: string, value: any) => void;
-  defaultValue?: string;
+  defaultValue?: string | Date;
   error?: boolean;
   showTime?: boolean;
 }

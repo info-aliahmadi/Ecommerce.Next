@@ -42,6 +42,8 @@ import ProductSEO from '@dashboard/(ecommerce)/_components/Product/ProductSEO';
 import { useSession } from 'next-auth/react';
 
 import ProductModel from '@dashboard/(ecommerce)/_types/Product/ProductModel';
+import DeliveryDate from '@root/app/types/enums/DeliveryDateType';
+import CurrencyTypes from '@root/app/types/enums/CurrencyTypes';
 function TabPanel(props: any) {
   const { children, value, index, ...other } = props;
 
@@ -106,7 +108,7 @@ export default function AddOrEditProduct({ params }: { params: Promise<{ operati
     shortDescription: '',
     fullDescription: '',
     adminComment: '',
-    deliveryDateId: 0,
+    deliveryDateId: DeliveryDate.ThreeDays,
     taxCategoryId: 0,
     stockQuantity: 0,
     minStockQuantity: 0,
@@ -150,7 +152,7 @@ export default function AddOrEditProduct({ params }: { params: Promise<{ operati
     previewImage: null,
     deliveryDateName: '',
     taxCategoryName: '',
-    currencyCode: '',
+    currencyCode: CurrencyTypes.Rial,
     weight: 0,
     length: 0,
     width: 0,
@@ -215,7 +217,23 @@ export default function AddOrEditProduct({ params }: { params: Promise<{ operati
       });
     }
   };
+  const setFieldValue = (field: string, value: any) : void => {
+    // fill the field in product
+    const updatedProduct: ProductModel = {
+      ...product,       // Override with existing product data
+      [field]: value     // Add the new field value
+    };
 
+    setProduct(updatedProduct);
+
+    // Clear error when field is edited
+    if (errors && (errors as any)[field]) {
+      setErrors({
+        ...errors,
+        [field]: undefined
+      });
+    }
+  };
   const handleBlur = async (e: any) => {
     const { name, value } = e.target;
 
@@ -283,11 +301,11 @@ export default function AddOrEditProduct({ params }: { params: Promise<{ operati
       <Notify notify={notify} setNotify={setNotify}></Notify>
 
       <Grid container direction="row" sx={{ justifyContent: "center", alignItems: "flex-start" }}>
-        <Grid container item spacing={3} xs={12} sm={12} md={12} lg={12} xl={12} >
-          <Grid item>
+        <Grid container size={{ xs: 12, sm: 12, md: 12, lg: 12, xl: 12 }} spacing={3} >
+          <Grid size={12}>
             <Typography variant="h5">{t('pages.cards.product-' + operation)}</Typography>
           </Grid>
-          <Grid item key={'product-' + product?.id}>
+          <Grid key={'product-' + product?.id}>
             <MainCard>
               <Tabs
                 value={tab}
@@ -308,6 +326,7 @@ export default function AddOrEditProduct({ params }: { params: Promise<{ operati
                   values={product}
                   handleChange={handleChange}
                   handleBlur={handleBlur}
+                  setFieldValue={setFieldValue}
                   errors={errors}
                 />
               </TabPanel>
@@ -338,8 +357,8 @@ export default function AddOrEditProduct({ params }: { params: Promise<{ operati
                   errors={errors}
                 /> */}
               </TabPanel>
-              <Grid container pt={2} pb={3}>
-                <Grid item xl={7}>
+              <Grid container sx={{ pt: 2, pb: 3 }} >
+                <Grid sx={{ xl: 7 }}>
                   {(product.published || product.published == false) && Object.values(errors).length > 0 && <Alert severity="error">
                     <AlertTitle>Error</AlertTitle>
                     {Object.values(errors)?.map((error, index) =>
@@ -350,8 +369,8 @@ export default function AddOrEditProduct({ params }: { params: Promise<{ operati
                   </Alert>}
                 </Grid>
               </Grid>
-              <Grid container item spacing={3} direction="row" justifyContent="space-between" alignItems="center">
-                <Grid item>
+              <Grid container spacing={3} direction="row" sx={{ justifyContent: "space-between", alignItems: "center" }} >
+                <Grid size={12}>
                   <Stack direction="row" spacing={2}>
                     <AnimateButton>
                       <Button

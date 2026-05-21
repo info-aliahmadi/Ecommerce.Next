@@ -17,6 +17,7 @@ const pages = {
   id: 'contents',
   title: 'Contents',
   type: 'group',
+  icon: icons.Article,
   permission: null,
   children: [
     {

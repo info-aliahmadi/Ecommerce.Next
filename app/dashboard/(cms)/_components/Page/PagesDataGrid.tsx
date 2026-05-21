@@ -164,15 +164,15 @@ function PagesDataGrid() {
           container
           item
           spacing={3}
-          xs={12}
+          size={12}
           sm={6}
           md={6}
           lg={6}
           direction="row"
-          justifyContent="flex-start"
+          sx={{ justifyContent: "flex-start" }}
           alignItems="flex-start"
         >
-          <Grid item xs={12} md={12}>
+          <Grid size={{ xs: 12, sm: 12, md: 12, lg: 12, xl: 12}}>
             <Stack spacing={1}>
               <InputLabel htmlFor="pageTitle">{t(fieldsName + 'pageTitle')}</InputLabel>
               <OutlinedInput
@@ -185,17 +185,17 @@ function PagesDataGrid() {
               />
             </Stack>
           </Grid>
-          <Grid item xs={12} md={12}>
+          <Grid size={{ xs: 12, sm: 12, md: 12, lg: 12, xl: 12}}>
             <Stack spacing={1}>
               <InputLabel htmlFor="subject">{t(fieldsName + 'subject')}</InputLabel>
               <OutlinedInput id="subject" type="text" value={row.original.subject} fullWidth disabled />
             </Stack>
           </Grid>
-          <Grid item xs={12} md={12}>
+          <Grid size={{ xs: 12, sm: 12, md: 12, lg: 12, xl: 12}}>
             <Stack spacing={1}>
               <InputLabel htmlFor="body">{t(fieldsName + 'body')}</InputLabel>
               <div className="MuiOutlinedvid-notchedOutline" dangerouslySetInnerHTML={{ __html: row.original.body }} />
-              <Grid>
+              <Grid size={12}>
                 {t(fieldsName + 'writedBy') + ' : '}
                 <Chip
                   title={t(fieldsName + 'writer')}
@@ -248,7 +248,7 @@ function PagesDataGrid() {
               </Grid>
             </Stack>
           </Grid>
-          <Grid item xs={12} md={12}>
+          <Grid size={{ xs: 12, sm: 12, md: 12, lg: 12, xl: 12}}>
             <Stack spacing={1}>
               <InputLabel htmlFor="tags">{t(fieldsName + 'tags')}</InputLabel>
               <SelectTag defaultValues={row.original.tags || []} disabled={true} />

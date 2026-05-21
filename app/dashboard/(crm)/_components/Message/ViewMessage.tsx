@@ -24,20 +24,20 @@ export default function ViewMessage({ message, fromPage }: Readonly<{ message: M
       {/* <Notify notify={notify} setNotify={setNotify}></Notify> */}
 
       <Grid container direction="row" sx={{ justifyContent: "center", alignItems: "flex-start" }} key={message.id}>
-        <Grid container item spacing={3} xs={12} sm={12} md={12} lg={12} xl={12} >
-          <Grid item>
+        <Grid container size={{ xs: 12, sm: 12, md: 12, lg: 12, xl: 12 }} spacing={3} >
+          <Grid size={12}>
             <Typography variant="h5">{t(fieldsName + 'viewMessage')}</Typography>
           </Grid>
-          <Grid item>
+          <Grid size={12}>
             <MainCard>
-              <Grid container item spacing={3} direction="row" justifyContent="flex-start" alignItems="flex-start">
-                <Grid container item spacing={3} xs={12} sm={12} md={12} lg={12} xl={8}>
-                  <Grid item xs={12} sm={12} md={10} lg={10} xl={10}>
+              <Grid container spacing={3} direction="row" sx={{ justifyContent: "flex-start", alignItems: "flex-start" }}>
+                <Grid container spacing={3} size={{ xs: 12, sm: 12, md: 12, lg: 12, xl: 8 }}>
+                  <Grid size={{ xs: 12, sm: 12, md: 10, lg: 10, xl: 10 }}>
                     <Stack spacing={1}>
                       {fromPage == 'inbox' && (
                         <>
                           <InputLabel htmlFor="fromUser">{t(fieldsName + 'fromUser')}</InputLabel>
-                          <Link display="block">
+                          <Link sx={{ display: "block" }}>
                             <Tooltip title={t('tooltips.reply')}>
                               <Chip
                                 onClick={() => {
@@ -59,7 +59,7 @@ export default function ViewMessage({ message, fromPage }: Readonly<{ message: M
                       {fromPage == 'outbox' && (
                         <>
                           <InputLabel htmlFor="toUsers">{t(fieldsName + 'toUsers')}</InputLabel>
-                          <Link display="block">
+                          <Link sx={{ display: "block" }} >
                             {message?.toUsers?.map((user) => {
                               return (
                                 <Tooltip title={t('tooltips.reply')} key={user?.toUserId}>
@@ -82,12 +82,12 @@ export default function ViewMessage({ message, fromPage }: Readonly<{ message: M
                       )}
                     </Stack>
                   </Grid>
-                  <Grid item xs={12} sm={12} md={2} lg={2} xl={2} p={0} mt={3}>
+                  <Grid size={{ xs: 12, sm: 12, md: 2, lg: 2, xl: 2 }} sx={{ p: 0, mt: 3 }}>
                     <Stack spacing={1}>
                       <MessageTypeChip messageTypeId={message?.messageType} />
                     </Stack>
                   </Grid>
-                  <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
+                  <Grid size={{ xs: 12, sm: 12, md: 12, lg: 12, xl: 12 }}>
                     <Stack spacing={1}>
                       <InputLabel htmlFor="subject">{t(fieldsName + 'subject')}</InputLabel>
                       <OutlinedInput
@@ -100,10 +100,10 @@ export default function ViewMessage({ message, fromPage }: Readonly<{ message: M
                       />
                     </Stack>
                   </Grid>
-                  <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
+                  <Grid size={{ xs: 12, sm: 12, md: 12, lg: 12, xl: 12 }}>
                     <Stack spacing={1}>
                       <div className="MuiOutlinedvid-notchedOutline" dangerouslySetInnerHTML={{ __html: message?.content }} />
-                      <Grid>
+                      <Grid size={12}>
                         <Chip
                           icon={<EventNote />}
                           title={t(fieldsName + 'registerDate')}
@@ -121,8 +121,8 @@ export default function ViewMessage({ message, fromPage }: Readonly<{ message: M
                     </Stack>
                   </Grid>
                 </Grid>
-                <Grid container item spacing={3} xs={12} sm={12} md={12} lg={12} xl={4} justifyContent="flex-start" alignItems="flex-start">
-                  <Grid item xs={12} sm={12} md={6} lg={6} xl={12}>
+                <Grid container spacing={3} size={{ lg: 12, xl: 4 }} sx={{ justifyContent: "flex-start", alignItems: "flex-start" }}>
+                  <Grid size={12}>
                     <Stack spacing={1}>
                       <InputLabel htmlFor="attachments">{t(fieldsName + 'attachments')}</InputLabel>
                       <FileUpload
@@ -135,8 +135,8 @@ export default function ViewMessage({ message, fromPage }: Readonly<{ message: M
                     </Stack>
                   </Grid>
                 </Grid>
-                <Grid container item spacing={3} direction="row" justifyContent="space-between" alignItems="center">
-                  <Grid item>
+                <Grid container spacing={3} direction="row" sx={{ justifyContent: "space-between", alignItems: "center" }}>
+                  <Grid size={12}>
                     <Stack direction="row" spacing={2}>
                       <AnimateButton>
                         <Button

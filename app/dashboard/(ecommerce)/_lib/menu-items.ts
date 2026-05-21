@@ -16,6 +16,7 @@ const pages = {
   id: 'sale',
   title: 'Sales',
   type: 'group',
+  icon: icons.ShoppingCart,
   permission: SALE_PRODUCT_MANAGEMENT,
   children: [
     {

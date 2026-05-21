@@ -4,7 +4,7 @@ import MultiSelect from '@dashboard/_components/Select/MultiSelect';
 import { useSession } from 'next-auth/react';
 
 export default function SelectProductAttribute({ defaultValues, id, name, label, onChange, setFieldValue, error, disabled }: 
-  { defaultValues: any; id: string; name: string; label: string; onChange: (event: any, options: any) => void; setFieldValue?: (field: string, value: any) => void; error: boolean; disabled: boolean }) {
+  { defaultValues: any; id: string; name: string; label: string; onChange: (event: any, options: any) => void; setFieldValue: (field: string, value: any) => void; error: boolean; disabled: boolean }) {
   const { data: session } = useSession();
   const jwt = session?.accessToken;
 

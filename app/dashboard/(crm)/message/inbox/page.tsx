@@ -27,8 +27,8 @@ function MessagesInbox() {
   };
   const MessageHeader = () => {
     return (
-      <Grid container item direction="row" justifyContent="space-between" alignItems="center">
-        <Grid item>
+      <Grid container direction="row" sx={{ justifyContent: "space-between", alignItems: "center" }}>
+        <Grid size={12}>
           <Button
             component={Link}
             color="primary"
@@ -49,7 +49,7 @@ function MessagesInbox() {
             {t('pages.cards.messagesDraft')}
           </Button>
         </Grid>
-        <Grid item>
+        <Grid size={12}>
           <Chip
             href="/dashboard/message/inbox/trash"
             clickable
@@ -68,11 +68,11 @@ function MessagesInbox() {
   };
   return (
     <Grid container direction="row" sx={{ justifyContent: "center", alignItems: "flex-start" }}>
-      <Grid container spacing={3} item xs={12} sm={12} md={12} lg={12} >
-        <Grid item>
+      <Grid container spacing={3} size={12} >
+        <Grid size={12}>
           <Typography variant="h5">{t('pages.messagesInbox')}</Typography>
         </Grid>
-        <Grid item>
+        <Grid size={12}>
           <MainCard title={<MessageHeader />}>
              {/* <TableCard>
               <Box sx={{ width: '100%', typography: 'body1' }} mt={-2}>

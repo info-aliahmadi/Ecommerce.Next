@@ -21,7 +21,6 @@ import TableCard from '@dashboard/_components/TableCard';
 import { useRouter } from 'next/navigation';
 import { useSession } from 'next-auth/react';
 import DeleteProduct from './DeleteProduct';
-import CurrencyViewer from '@root/utils/CurrencyViewer';
 import ProductDetail from './ProductDetail';
 import { MRT_Row } from 'material-react-table';
 import ProductModel from '../../_types/Product/ProductModel';
@@ -100,7 +99,7 @@ export default function ProductDataGrid() {
         header: t(fieldsName + 'price'),
         type: 'number',
         enableResizing: true,
-        Cell: ({ renderedCellValue, row }) => CurrencyViewer(renderedCellValue as number, row.original.currencyCode)
+        Cell: ({ renderedCellValue, row }) => (renderedCellValue as number).toCurrency(row.original.currencyCode)
       },
       {
         accessorKey: 'published',

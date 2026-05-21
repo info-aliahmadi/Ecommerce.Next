@@ -42,11 +42,15 @@
     "fileStorage": "Storage",
     "sale": "Sale",
     "product": "Products",
+    "product-tag": "Product Tag",
+    "product-attribute": "Product Attribute",
+    "category": "Category",
     "order": "Orders",
     "manufacturer": "Manufacturers"
   },
   "pages": {
     "edit-profile": "Edit Profile",
+    "history": "History",
     "change-password": "Change Password",
     "language": "Language",
     "accountSettings": "Account Settings",
@@ -147,7 +151,14 @@
       "siteKeywords": "Site Keywords(SEO)",
       "headerHtml": "Header Html",
       "footerHtml": "Footer Html",
-      "numberOfPostsPerList": "Number Of Posts Per List"
+      "numberOfPostsPerList": "Number Of Posts Per List",
+      "currencyTypes": {
+        "Rial": "Rial",
+        "Toman": "Toman",
+        "Dollar": "Dollar",
+        "Euro": "Euro",
+        "Dinar": "Dinar"
+      }
     },
     "topic": {
       "title": "Title",
@@ -319,7 +330,13 @@
       "paymentDateUtcToString": "Payment Date",
       "cardName": "Card Name",
       "cardNumber": "Card Number",
-      "paymentTypeTitle": "Payment Type"
+      "paymentTypeTitle": "Payment Type",
+      "deliveryDate" :{
+        "OneDay" : "one Day",
+        "ThreeDays" : "Three Days",
+        "OneWeek" : "One Week",
+        "OneMonth" : "One Month"
+      }
     },
     "orderItem": {
       "id": "Id",
@@ -537,7 +554,7 @@
     "fileStorage": {
       "upload": "Upload",
       "uploadFiles": "Upload Files",
-      "uploadedInfo": "Uploaded By {{user}} On {{date}}",
+      "uploadedInfo": "Uploaded By {user} On {date}",
       "edit": "Edit File",
       "download": "Download",
       "delete": "Delete File"
@@ -648,26 +665,26 @@
   },
   "dialog": {
     "add": {
-      "title": "Add New {{item}}"
+      "title": "Add New {item}"
     },
     "edit": {
-      "title": "Edit {{item}}"
+      "title": "Edit {item}"
     },
     "delete": {
-      "title": "Delete {{item}}",
+      "title": "Delete {item}",
       "description": "Are You Sure to Delete This Item Permanently?",
       "moveToTrash": "Are You Sure to Move This Item To Trash?"
     },
     "topic": {
       "addMain": "Add Main Topic",
-      "addSub": "Add Sub Topic in {{parentTitle}}"
+      "addSub": "Add Sub Topic in {parentTitle}"
     },
     "tag": {
       "addMain": "Add New Tag"
     },
     "menu": {
       "addMain": "Add Main Menu",
-      "addSub": "Add Sub Menu in {{parentTitle}}"
+      "addSub": "Add Sub Menu in {parentTitle}"
     },
     "slideshow": {
       "add": "Add New Slide"

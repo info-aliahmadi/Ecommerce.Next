@@ -1,50 +1,44 @@
 import CurrencyTypes from '@root/app/types/enums/CurrencyTypes';
 
-// Extend the Number interface
 declare global {
   interface Number {
-    toCurrency(options?: {
-      currencyType?: CurrencyTypes;
-    }): string | React.ReactNode;
-    toFormattedCurrency(options?: {currencyType?: CurrencyTypes}): number;
+    toCurrency(currencyType?: CurrencyTypes | undefined): string | React.ReactNode;
+    toFormattedCurrency(currencyType?: CurrencyTypes | undefined): number;
   }
 }
 
-Number.prototype.toCurrency = function (
-  options: {
-    currencyType?: CurrencyTypes;
-  } = {},
-): string {
+Number.prototype.toCurrency = function (currencyType?: CurrencyTypes | undefined): string {
   // Only run on client side to avoid hydration mismatch
   if (typeof window === 'undefined') {
     return this.toString();
   }
 
+  if (currencyType == undefined || currencyType == null || this == undefined)
+    return '';
+
   const getCurrencySettings = (type: CurrencyTypes) => {
     switch (type) {
       case CurrencyTypes.Dinar:
-        return {code: 'IQD', symbol: 'د.ع'};
+        return { code: 'IQD', symbol: 'د.ع' };
       case CurrencyTypes.Rial:
-        return {code: 'ریال', symbol: '﷼'};
+        return { code: 'ریال', symbol: '﷼' };
       case CurrencyTypes.Toman:
-        return {code: 'تومان', symbol: 'تومان'};
+        return { code: 'تومان', symbol: 'تومان' };
       case CurrencyTypes.Dollar:
-        return {code: 'USD', symbol: '$'};
+        return { code: 'USD', symbol: '$' };
       case CurrencyTypes.Euro:
-        return {code: 'EUR', symbol: '€'};
+        return { code: 'EUR', symbol: '€' };
       case CurrencyTypes.None:
-        return {code: '', symbol: ''};
+        return { code: '', symbol: '' };
       default:
-        return {code: 'UNK', symbol: '?'};
+        return { code: 'UNK', symbol: '?' };
     }
   };
-  const {code, symbol} = getCurrencySettings(
-    options.currencyType ?? CurrencyTypes.Dinar,
+  const { code, symbol } = getCurrencySettings(
+    currencyType ?? CurrencyTypes.Dinar,
   );
 
-  const value = Number(this).toFormattedCurrency({
-    currencyType: options.currencyType,
-  });
+  const value = Number(this).toFormattedCurrency(currencyType);
   return `${value.toLocaleString()} ${code}`;
 
   //   return this.toLocaleString('en-US', {
@@ -60,17 +54,13 @@ Number.prototype.toCurrency = function (
 };
 
 // New extension for formatted currency with decimal handling
-Number.prototype.toFormattedCurrency = function (
-  options: {
-    currencyType?: CurrencyTypes;
-  } = {},
-): number {
+Number.prototype.toFormattedCurrency = function (currencyType?: CurrencyTypes | undefined): number {
   const value = Number(this);
 
   // Format based on currency type
   if (
-    options.currencyType === CurrencyTypes.Dollar ||
-    options.currencyType === CurrencyTypes.Euro
+    currencyType === CurrencyTypes.Dollar ||
+    currencyType === CurrencyTypes.Euro
   ) {
     // For USD and Euro: keep 2 decimal places
     return Number(value.toFixed(2));
@@ -80,4 +70,4 @@ Number.prototype.toFormattedCurrency = function (
   }
 };
 
-export {}; // Ensure this file is a module
+export { }; // Ensure this file is a module

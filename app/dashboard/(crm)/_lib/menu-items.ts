@@ -13,6 +13,7 @@ const crmMenu = {
   id: 'messaging',
   title: 'Messaging',
   type: 'group',
+  icon: icons.Message,
   permission: null,
   children: [
     {

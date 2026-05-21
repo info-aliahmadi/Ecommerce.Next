@@ -13,7 +13,7 @@ function Setting() {
   return (
     <Grid container direction="row" sx={{ justifyContent: "center", alignItems: "flex-start" }}>
       <Grid container spacing={3} size={{ xs: 12, sm: 12, md: 12, lg: 12, xl: 7 }} >
-        <Grid>
+        <Grid size={12}>
           <Typography variant="h5">{t('pages.settings')}</Typography>
         </Grid>
       </Grid>

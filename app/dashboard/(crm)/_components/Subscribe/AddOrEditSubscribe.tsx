@@ -155,7 +155,7 @@ const AddOrEditSubscribe = ({ subscribeId, isNew, open, setOpen, refetch }: AddO
               </DialogTitle>
               <DialogContent>
                 <Grid container spacing={3} >
-                  <Grid item>
+                  <Grid size={12}>
                     <Stack spacing={1}>
                       <SelectSubscribeLabel
                         label={t(fieldsName + 'subscribeLabelId')}
@@ -173,7 +173,7 @@ const AddOrEditSubscribe = ({ subscribeId, isNew, open, setOpen, refetch }: AddO
                       )}
                     </Stack>
                   </Grid>
-                  <Grid item>
+                  <Grid size={12}>
                     <Stack spacing={1}>
                       <InputLabel htmlFor="email">{t(fieldsName + 'email')}</InputLabel>
                       <OutlinedInput

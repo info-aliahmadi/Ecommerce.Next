@@ -160,7 +160,7 @@ const AddOrEditMenu = ({ row, isNew, open, setOpen, refetch }:
               </DialogTitle>
               <DialogContent>
                 <Grid container spacing={3} >
-                  <Grid item>
+                  <Grid size={12}>
                     <Stack spacing={1}>
                       <InputLabel htmlFor="title">{t(fieldsName + 'title')}</InputLabel>
                       <OutlinedInput
@@ -181,7 +181,7 @@ const AddOrEditMenu = ({ row, isNew, open, setOpen, refetch }:
                       )}
                     </Stack>
                   </Grid>
-                  <Grid item>
+                  <Grid size={12}>
                     <Stack spacing={1}>
                       <InputLabel htmlFor="url">{t(fieldsName + 'url')}</InputLabel>
                       <OutlinedInput
@@ -202,7 +202,7 @@ const AddOrEditMenu = ({ row, isNew, open, setOpen, refetch }:
                       )}
                     </Stack>
                   </Grid>
-                  <Grid item>
+                  <Grid size={12}>
                     <Stack spacing={1}>
                       <InputLabel htmlFor="previewImageId">{t(fieldsName + 'previewImageId')}</InputLabel>
                       <ImageUpload

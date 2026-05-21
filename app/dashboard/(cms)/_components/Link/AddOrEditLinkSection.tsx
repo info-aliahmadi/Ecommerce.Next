@@ -161,7 +161,7 @@ const AddOrEditLinkSection = ({ row, isNew, open, setOpen, refetch }:
               </DialogTitle>
               <DialogContent>
                 <Grid container spacing={3} >
-                  <Grid item>
+                  <Grid size={12}>
                     <Stack spacing={1}>
                       <InputLabel htmlFor="key">{t(fieldsName + 'key')}</InputLabel>
                       <OutlinedInput
@@ -182,7 +182,7 @@ const AddOrEditLinkSection = ({ row, isNew, open, setOpen, refetch }:
                       )}
                     </Stack>
                   </Grid>
-                  <Grid item>
+                  <Grid size={12}>
                     <Stack spacing={1}>
                       <InputLabel htmlFor="title">{t(fieldsName + 'title')}</InputLabel>
                       <OutlinedInput

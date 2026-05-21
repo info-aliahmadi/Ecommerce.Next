@@ -11,11 +11,11 @@ function CategoryList() {
   return (
     <>
       <Grid container direction="row" sx={{ justifyContent: "center", alignItems: "flex-start" }}>
-        <Grid container spacing={3} item xs={12} sm={12} md={12} lg={12} xl={8} >
-          <Grid item>
+        <Grid container spacing={3} size={12} xl={8} >
+          <Grid size={12}>
             <Typography variant="h5">{t('pages.categories')}</Typography>
           </Grid>
-          <Grid item>
+          <Grid size={12}>
             <CategoryDataGrid />
           </Grid>
         </Grid>

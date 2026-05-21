@@ -12,6 +12,7 @@ const dashboard : MenuItem = {
   id: 'group-dashboard',
   title: 'Navigation',
   type: 'group',
+  icon: icons.DashboardOutlined,
   permission: null,
   children: [
     {

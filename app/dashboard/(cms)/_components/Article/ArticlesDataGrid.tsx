@@ -183,11 +183,11 @@ export function ArticlesDataGrid() {
 
   const ArticleHeader = () => {
     return (
-      <Grid container item direction="row" justifyContent="space-between" alignItems="center">
-        <Grid item>
+      <Grid container direction="row" sx={{ justifyContent: "space-between", alignItems: "center" }}>
+        <Grid size={12}>
           <AddRow />
         </Grid>
-        <Grid item>
+        <Grid size={12}>
           <Chip
             href="/dashboard/article/trash-list"
             clickable

@@ -10,25 +10,39 @@ import languageList from '@root/locales/languageList';
 import { useTranslations } from 'next-intl';
 import LocalizationService from '@root/locales/LocalizationService';
 import { useSession } from 'next-auth/react';
+import CONFIG from '@root/config';
+import LocalStorageService from '@root/utils/LocalStorageService';
+import nextIntlService from '@root/locales/nextIntlService';
 
 // ==============================|| HEADER CONTENT - NOTIFICATION ||============================== //
 
 const Localization = () => {
   const theme = useTheme();
-  const [t, i18n] = useTranslation();
-  const { data: session } = useSession();
+  const t = useTranslations("");
+  const { data: session, update } = useSession();
   const jwt = session?.accessToken;
-  let currentLanguage = languageList.find((l : any) => l.key === i18n.language);
+
+  
+  let locale = session?.user?.defaultLanguage ?? CONFIG.DEFAULT_LANGUAGE;
+
+  let currentLanguage = languageList.find((l : any) => l.key === locale);
 
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
 
-  const changeLanguage = (lng :Language) => {
-    let locService = new LocalizationService(jwt ?? '');
-    locService.setCurrentLanguage(i18n, lng);
+  const changeLanguage = async (lng :Language) => {
+    let locService = new LocalizationService(jwt ?? "");
+    locService.setCurrentLanguage(lng);
+    nextIntlService.setNextIntlLocale(lng.key);
+
+    if (session) {
+      
+      session.user.defaultLanguage = lng.key;
+      await update({ ...session, user: session.user });
+    }
     setAnchorEl(null);
   };
-  const handleClick = (event : any) => {
+  const handleClick = async (event : any) => {
     setAnchorEl(event.currentTarget);
   };
   const handleClose = () => {
@@ -56,7 +70,7 @@ const Localization = () => {
       <Menu
         id="demo-positioned-menu"
         aria-labelledby="demo-positioned-button"
-        anchorEl={anchorEl}
+       // anchorEl={anchorEl}
         open={open}
         onClose={handleClose}
         slotProps={{

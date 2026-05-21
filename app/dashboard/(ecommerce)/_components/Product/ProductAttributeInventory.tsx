@@ -58,13 +58,13 @@ export default function ProductAttributeInventory({ values, setFieldValue }: { v
       setFieldValue('inventories', newInvenroty.filter((x: any) => x.stockQuantity >= 0));
     }
 
-    return <Grid item container spacing={1} xs={12} sm={12} md={12} lg={12} xl={12}>
-      <Grid item xs={4} sm={4} md={3} lg={3} xl={3} p={2}>
+    return <Grid container spacing={1} size={12}>
+      <Grid size={{ xs: 4, sm: 4, md: 3, lg: 3, xl: 3 }} sx={{ p: 2 }}>
         <Stack>
           <Chip label={invenroty.attributeName}></Chip>
         </Stack>
       </Grid>
-      <Grid item xs={8} sm={8} md={6} lg={5} xl={5}>
+      <Grid size={{ xs: 8, sm: 8, md: 6, lg: 5, xl: 5 }}>
         <Stack>
           <TextField
             id={invenroty.attributeId}
@@ -96,7 +96,7 @@ export default function ProductAttributeInventory({ values, setFieldValue }: { v
         />
       </Stack>
       <Stack>
-        <Grid container spacing={1} xs={12} sm={12} md={12} lg={12} xl={12} pt={3}>
+        <Grid container spacing={1} size={12} sx={{ pt: 3 }}>
           {values?.inventories?.filter((x: any) => x.stockType == 1).map((item: any, index: number) => <AttributeInventory key={index} invenroty={item} />)}
 
         </Grid>

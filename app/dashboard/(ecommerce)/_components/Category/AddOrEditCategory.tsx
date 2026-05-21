@@ -175,7 +175,7 @@ const AddOrEditCategory = ({ row, isNew, open, setOpen, refetch }: AddOrEditCate
               </DialogTitle>
               <DialogContent>
                 <Grid container spacing={3} >
-                  <Grid item>
+                  <Grid size={12}>
                     <Stack spacing={1}>
                       <InputLabel htmlFor="name">{t(fieldsName + 'name')}</InputLabel>
                       <OutlinedInput
@@ -197,7 +197,7 @@ const AddOrEditCategory = ({ row, isNew, open, setOpen, refetch }: AddOrEditCate
                     </Stack>
                   </Grid>
 
-                  <Grid item>
+                  <Grid size={12}>
                     <Stack spacing={1}>
                       <InputLabel htmlFor="metaKeywords">{t(fieldsName + 'metaKeywords')}</InputLabel>
                       <OutlinedInput
@@ -219,7 +219,7 @@ const AddOrEditCategory = ({ row, isNew, open, setOpen, refetch }: AddOrEditCate
                     </Stack>
                   </Grid>
 
-                  <Grid item>
+                  <Grid size={12}>
                     <Stack spacing={1}>
                       <InputLabel htmlFor="metaTitle">{t(fieldsName + 'metaTitle')}</InputLabel>
                       <OutlinedInput
@@ -241,7 +241,7 @@ const AddOrEditCategory = ({ row, isNew, open, setOpen, refetch }: AddOrEditCate
                     </Stack>
                   </Grid>
 
-                  <Grid item>
+                  <Grid size={12}>
                     <Stack spacing={1}>
                       <InputLabel htmlFor="description">{t(fieldsName + 'description')}</InputLabel>
                       <OutlinedInput
@@ -263,7 +263,7 @@ const AddOrEditCategory = ({ row, isNew, open, setOpen, refetch }: AddOrEditCate
                     </Stack>
                   </Grid>
 
-                  <Grid item>
+                  <Grid size={12}>
                     <Stack spacing={1}>
                       <InputLabel htmlFor="metaDescription">{t(fieldsName + 'metaDescription')}</InputLabel>
                       <OutlinedInput
@@ -285,7 +285,7 @@ const AddOrEditCategory = ({ row, isNew, open, setOpen, refetch }: AddOrEditCate
                     </Stack>
                   </Grid>
 
-                  <Grid item>
+                  <Grid size={12}>
                     <Stack spacing={1}>
                       <InputLabel htmlFor="pictureId">{t(fieldsName + 'pictureId')}</InputLabel>
                       <ImageUpload
@@ -297,7 +297,7 @@ const AddOrEditCategory = ({ row, isNew, open, setOpen, refetch }: AddOrEditCate
                     </Stack>
                   </Grid>
 
-                  <Grid item>
+                  <Grid size={12}>
                     <Stack spacing={1}>
                       <FormControlLabel
                         control={
@@ -313,7 +313,7 @@ const AddOrEditCategory = ({ row, isNew, open, setOpen, refetch }: AddOrEditCate
                     </Stack>
                   </Grid>
 
-                  <Grid item>
+                  <Grid size={12}>
                     <Stack spacing={1}>
                       <FormControlLabel
                         control={
@@ -329,7 +329,7 @@ const AddOrEditCategory = ({ row, isNew, open, setOpen, refetch }: AddOrEditCate
                     </Stack>
                   </Grid>
 
-                  <Grid item>
+                  <Grid size={12}>
                     <Stack spacing={1}>
                       <InputLabel htmlFor="displayOrder">{t(fieldsName + 'displayOrder')}</InputLabel>
                       <OutlinedInput

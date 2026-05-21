@@ -21,7 +21,7 @@ import SelectMultiUsers from '@root/app/dashboard/(auth)/_components/User/Select
 import MessageModel, { MessageType } from '@dashboard/(crm)/_types/MessageModel';
 
 
-export default function  SendMessage({ params }: { readonly params: Promise<{ id: number, toUserId: number }> }) {
+export default function SendMessage({ params }: { readonly params: Promise<{ id: number, toUserId: number }> }) {
   const t = useTranslations("");
   const { id, toUserId } = React.use(params);
 
@@ -44,7 +44,7 @@ export default function  SendMessage({ params }: { readonly params: Promise<{ id
     if (id > 0) loadMessage();
   }, [id, toUserId]);
 
-  const handleSubmit = async (message : MessageModel, resetForm : any, setErrors: (errors: FormikErrors<MessageModel>) => void, setSubmitting: (open: boolean) => void) => {
+  const handleSubmit = async (message: MessageModel, resetForm: any, setErrors: (errors: FormikErrors<MessageModel>) => void, setSubmitting: (open: boolean) => void) => {
     if (!message.isDraft) {
       if (isPublicMessage) {
         message.toUserIds = [];
@@ -98,8 +98,8 @@ export default function  SendMessage({ params }: { readonly params: Promise<{ id
     isDraft: message?.isDraft ?? false,
     toUserIds: message?.toUserIds ?? [],
     attachments: message?.attachments ?? [],
-    isDeleted : false,
-    toUsers : message?.toUsers ?? [],
+    isDeleted: false,
+    toUsers: message?.toUsers ?? [],
   }
   return (
     <>
@@ -132,15 +132,15 @@ export default function  SendMessage({ params }: { readonly params: Promise<{ id
         {({ errors, handleBlur, handleChange, setFieldValue, handleSubmit, isSubmitting, touched, values }) => (
           <form noValidate onSubmit={handleSubmit}>
             <Grid container direction="row" sx={{ justifyContent: "center", alignItems: "flex-start" }}>
-              <Grid container item spacing={3} xs={12} sm={12} md={12} lg={12} xl={12} >
-                <Grid item>
+              <Grid container size={{ xs: 12, sm: 12, md: 12, lg: 12, xl: 12 }} spacing={3} >
+                <Grid size={12}>
                   <Typography variant="h5">{t('pages.cards.sendMessage')}</Typography>
                 </Grid>
-                <Grid item>
+                <Grid size={12}>
                   <MainCard>
-                    <Grid container item spacing={3} direction="row" justifyContent="flex-start" alignItems="flex-start">
-                      <Grid container item spacing={3} xs={12} sm={12} md={12} lg={12} xl={8} display={''}>
-                        <Grid item xs={12} sm={12} md={10} lg={10} xl={10}>
+                    <Grid container spacing={3} direction="row" sx={{ justifyContent: "flex-start", alignItems: "flex-start" }}>
+                      <Grid container spacing={3} size={{ xs: 12, sm: 12, md: 12, lg: 12, xl: 8 }}>
+                        <Grid size={{ xs: 12, sm: 12, md: 10, lg: 10, xl: 10 }} >
                           <Stack spacing={1}>
                             <InputLabel htmlFor="toUserIds">{t(fieldsName + 'toUserIds')}</InputLabel>
                             <SelectMultiUsers
@@ -158,7 +158,7 @@ export default function  SendMessage({ params }: { readonly params: Promise<{ id
                             )}
                           </Stack>
                         </Grid>
-                        <Grid item xs={12} sm={12} md={2} lg={2} xl={2} p={0} mt={3}>
+                        <Grid size={{ xs: 12, sm: 12, md: 2, lg: 2, xl: 2 }} sx={{ p: 0, mt: 3 }} >
                           <Stack spacing={1}>
                             <FormControlLabel
                               control={
@@ -175,7 +175,7 @@ export default function  SendMessage({ params }: { readonly params: Promise<{ id
                             />
                           </Stack>
                         </Grid>
-                        <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
+                        <Grid size={{ xs: 12, sm: 12, md: 12, lg: 12, xl: 12 }}>
                           <Stack spacing={1}>
                             <InputLabel htmlFor="subject">{t(fieldsName + 'subject')}</InputLabel>
                             <OutlinedInput
@@ -196,7 +196,7 @@ export default function  SendMessage({ params }: { readonly params: Promise<{ id
                             )}
                           </Stack>
                         </Grid>
-                        <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
+                        <Grid size={{ xs: 12, sm: 12, md: 12, lg: 12, xl: 12 }}>
                           <Stack spacing={1}>
                             <InputLabel htmlFor="content">{t(fieldsName + 'content')}</InputLabel>
                             <Editor
@@ -213,19 +213,8 @@ export default function  SendMessage({ params }: { readonly params: Promise<{ id
                           </Stack>
                         </Grid>
                       </Grid>
-                      <Grid
-                        container
-                        item
-                        spacing={3}
-                        xs={12}
-                        sm={12}
-                        md={12}
-                        lg={12}
-                        xl={4}
-                        justifyContent="flex-start"
-                        alignItems="flex-start"
-                      >
-                        <Grid item xs={12} sm={12} md={6} lg={6} xl={12}>
+                      <Grid container spacing={3} size={{ xs: 12, sm: 12, md: 12, lg: 12, xl: 4 }} sx={{ justifyContent: "flex-start", alignItems: "flex-start" }} >
+                        <Grid size={12}>
                           <Stack spacing={1}>
                             <InputLabel htmlFor="attachments">{t(fieldsName + 'attachments')}</InputLabel>
                             <FileUpload
@@ -238,8 +227,8 @@ export default function  SendMessage({ params }: { readonly params: Promise<{ id
                           </Stack>
                         </Grid>
                       </Grid>
-                      <Grid container item spacing={3} direction="row" justifyContent="space-between" alignItems="center">
-                        <Grid item>
+                      <Grid container spacing={3} direction="row" sx={{ justifyContent: "space-between", alignItems: "center" }}>
+                        <Grid size={12}>
                           <Stack direction="row" spacing={2}>
                             <AnimateButton>
                               <Button

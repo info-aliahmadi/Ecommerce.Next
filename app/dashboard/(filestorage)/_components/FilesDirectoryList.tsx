@@ -6,7 +6,6 @@ import { useEffect, useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { Folder } from '@mui/icons-material';
 import { fileSizeViewer } from '@root/utils/fileSizeViewer';
-import capitalize from 'lodash/capitalize';
 import Notify from '@dashboard/_components/@extended/Notify';
 import MainCard from '@dashboard/_components/MainCard';
 import FileStorageService from '@dashboard/(filestorage)/_service/FileStorageService';
@@ -54,7 +53,7 @@ function FilesCategoryList() {
                 </Avatar>
               </ListItemAvatar>
               <ListItemText
-                primary={capitalize(directory.directoryName)}
+                primary={directory.directoryName.capitalize()}
                 secondary={
                   directory.filesCount +
                   ' ' +

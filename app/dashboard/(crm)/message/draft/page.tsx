@@ -19,8 +19,8 @@ export default function MessagesOutbox() {
 
   const MessageHeader = () => {
     return (
-      <Grid container item direction="row" justifyContent="space-between" alignItems="center">
-        <Grid item>
+      <Grid container direction="row" sx={{ justifyContent: "space-between", alignItems: "center" }}>
+        <Grid size={12}>
           <AnimateButton>
             <Button
               size="large"
@@ -41,11 +41,11 @@ export default function MessagesOutbox() {
   };
   return (
     <Grid container direction="row" sx={{ justifyContent: "center", alignItems: "flex-start" }}>
-      <Grid container spacing={3} item xs={12} sm={12} md={12} lg={12} >
-        <Grid item>
+      <Grid container spacing={3} size={12} >
+        <Grid size={12}>
           <Typography variant="h5">{t('pages.messagesDraft')}</Typography>
         </Grid>
-        <Grid item>
+        <Grid size={12}>
           <MainCard title={<MessageHeader />}>
             <TableCard>
               <MessagesDraftDataGrid />

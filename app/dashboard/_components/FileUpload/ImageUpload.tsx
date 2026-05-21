@@ -15,10 +15,10 @@ registerPlugin(
   FilePondPluginGetFile
 );
 // Import FilePond styles
-import '/public/css/filepond.min.css';
-import '/public/css/filepond-plugin-image-preview.css';
-import '/public/css/filepond-plugin-file-poster.min.css';
-import '/public/css/filepond-plugin-get-file.min.css';
+import 'filepond/dist/filepond.min.css';
+import 'filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css';
+import 'filepond-plugin-file-poster/dist/filepond-plugin-file-poster.css';
+import 'filepond-plugin-get-file/dist/filepond-plugin-get-file.css';
 
 import { useEffect, useState } from 'react';
 import { useTranslations } from 'next-intl';
@@ -51,7 +51,8 @@ export default function ImageUpload({
 }: Readonly<ImageUploadProps>) {
   const [files, setFiles] = useState<FilePondInitialFile[]>([]);
   const [values, setValues] = useState<any[]>([]);
-  const [t, i18n] = useTranslation();
+  const t = useTranslations("");
+
   const { data: session } = useSession();
   const jwt = session?.accessToken;
 
@@ -132,6 +133,7 @@ export default function ImageUpload({
   };
 
   useEffect(() => {
+
     if (allowMultiple) {
       if (value != undefined && value.length > 0) {
         loadFiles(value);
@@ -232,7 +234,7 @@ export default function ImageUpload({
       }
     }
   }
-  const getError = (errorCode : number) => {
+  const getError = (errorCode: number) => {
     switch (errorCode) {
       case 500:
         return 'Operation Failed';
@@ -268,21 +270,22 @@ export default function ImageUpload({
       allowFilePoster={true}
       allowFileTypeValidation={true}
       acceptedFileTypes={['image/png', 'image/jpeg', 'video/*']}
-      labelFileTypeNotAllowed={t('validation.fileUpload.labelFileTypeNotAllowed')}
-      fileValidateTypeLabelExpectedTypes={t('validation.fileUpload.fileValidateTypeLabelExpectedTypes')}
+      // labelFileTypeNotAllowed={t('validation.fileUpload.labelFileTypeNotAllowed')}
+      labelFileTypeNotAllowed={"نوع فایل مجاز نیست"}
+      fileValidateTypeLabelExpectedTypes={"انتظار می‌رود {allButLastType} یا {lastType}"}
       allowFileSizeValidation={true}
       minFileSize={minFileSize ? minFileSize : '5KB'}
       maxFileSize={maxFileSize ? maxFileSize : '200MB'}
-      labelMaxFileSizeExceeded={t('validation.fileUpload.labelMaxFileSizeExceeded')}
-      labelMaxFileSize={t('validation.fileUpload.labelMaxFileSize')}
-      labelMinFileSizeExceeded={t('validation.fileUpload.labelMinFileSizeExceeded')}
-      labelMinFileSize={t('validation.fileUpload.labelMinFileSize')}
+      labelMaxFileSizeExceeded={"فایل خیلی بزرگ است"}
+      labelMaxFileSize={"حداکثر اندازه فایل {filesize} است"}
+      labelMinFileSizeExceeded={"فایل خیلی کوچک است"}
+      labelMinFileSize={"حداقل اندازه فایل {filesize} است"}
+      labelIdle={"فایل‌های خود را بکشید و رها کنید یا <span class='filepond--label-action'>مرور کنید</span>"}
       allowReplace={true}
       instantUpload={true}
       allowMultiple={(allowMultiple && true) ?? false}
       credits={false}
       name="file" /* sets the file input name, it's filepond by default */
-      labelIdle={t('validation.fileUpload.imagePreviewDescription')}
       files={files}
       onupdatefiles={onupdatefiles}
       server={{

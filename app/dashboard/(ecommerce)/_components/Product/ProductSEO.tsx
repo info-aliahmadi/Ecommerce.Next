@@ -15,9 +15,9 @@ export default function ProductSEO({  values, setFieldValue, handleBlur, handleC
     setFieldValue(event.target.id, event.target.checked);
   };
   return (
-    <Grid container item columnSpacing={3}>
-      <Grid container item spacing={3} xs={12} sm={12} md={12} lg={8} xl={8}>
-        <Grid item xs={12} sm={12} md={6} lg={4} xl={4}>
+    <Grid container columnSpacing={3}>
+      <Grid container spacing={3} size={{ xs: 12, sm: 12, md: 12, lg: 8, xl: 8}}>
+        <Grid size={{ xs: 12, sm: 12, md: 6, lg: 4, xl: 4}}>
           <Stack>
             <SelectProductTag
               defaultValues={values?.productTags || []}
@@ -34,7 +34,7 @@ export default function ProductSEO({  values, setFieldValue, handleBlur, handleC
             )}
           </Stack>
         </Grid>
-        <Grid item xs={12} sm={12} md={6} lg={4} xl={4}>
+        <Grid size={{ xs: 12, sm: 12, md: 6, lg: 4, xl: 4}}>
           <Stack>
             <TextField
               id="metaTitle"
@@ -55,7 +55,7 @@ export default function ProductSEO({  values, setFieldValue, handleBlur, handleC
           </Stack>
         </Grid>
 
-        <Grid item xs={12} sm={12} md={6} lg={4} xl={4}>
+        <Grid size={{ xs: 12, sm: 12, md: 6, lg: 4, xl: 4}}>
           <Stack>
             <TextField
               id="metaKeywords"
@@ -76,7 +76,7 @@ export default function ProductSEO({  values, setFieldValue, handleBlur, handleC
             )}
           </Stack>
         </Grid>
-        <Grid item xs={12} sm={12} md={6} lg={4} xl={4}>
+        <Grid size={{ xs: 12, sm: 12, md: 6, lg: 4, xl: 4}}>
           <Stack>
             <TextField
               id="metaDescription"

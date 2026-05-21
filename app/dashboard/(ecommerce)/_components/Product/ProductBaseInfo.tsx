@@ -21,17 +21,31 @@ import ProductsAutoComplete from './ProductAutoComplete';
 import ProductModel from '../../_types/Product/ProductModel';
 import nextIntlService from '@root/locales/nextIntlService';
 
-export default function ProductBaseInfo({ operation, values, handleBlur, handleChange, errors }: 
-  { operation: string, values: ProductModel, handleBlur: (event: React.FocusEvent<HTMLInputElement>) => void, handleChange: (event: React.ChangeEvent<HTMLInputElement>) => void, errors: any }) {
+export default function ProductBaseInfo({
+  operation,
+  values,
+  handleBlur,
+  handleChange,
+  setFieldValue,
+  errors
+}:
+  {
+    operation: string,
+    values: ProductModel,
+    handleBlur: (event: React.FocusEvent<HTMLInputElement>) => void,
+    handleChange: (event: React.ChangeEvent<HTMLInputElement>) => void,
+    setFieldValue: (field: string, value: any) => void,
+    errors: any
+  }) {
   const t = useTranslations("");
   let language = nextIntlService.getNextIntlLocale();
 
   const fieldsName = 'fields.product.';
 
   return (
-    <Grid container item columnSpacing={3} alignItems="flex-start">
-      <Grid container item spacing={3} xs={12} sm={12} md={12} lg={8} xl={8}>
-        <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
+    <Grid container columnSpacing={3} sx={{ alignItems: "flex-start" }} >
+      <Grid container spacing={3} size={{ xs: 12, sm: 12, md: 12, lg: 8, xl: 8 }}>
+        <Grid size={{ xs: 12, sm: 12, md: 12, lg: 12, xl: 12 }}>
           <Stack>
             <TextField
               id="name"
@@ -51,7 +65,7 @@ export default function ProductBaseInfo({ operation, values, handleBlur, handleC
             )}
           </Stack>
         </Grid>
-        <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
+        <Grid size={{ xs: 12, sm: 12, md: 12, lg: 12, xl: 12 }}>
           <Stack>
             <TextField
               id="shortDescription"
@@ -71,16 +85,16 @@ export default function ProductBaseInfo({ operation, values, handleBlur, handleC
             )}
           </Stack>
         </Grid>
-        <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
+        <Grid size={{ xs: 12, sm: 12, md: 12, lg: 12, xl: 12 }}>
           <Stack>
             <Editor
               id={'fullDescription'}
               name={'fullDescription'}
               defaultValue={values?.fullDescription || ''}
-              onChange={handleChange}
+              setFieldValue={setFieldValue}
             />
             {operation == 'edit' && (
-              <Grid>
+              <Grid size={12}>
                 {t(fieldsName + 'createdBy') + ' : '}
                 <Chip
                   avatar={<Avatar src={CONFIG.AVATAR_BASEPATH + values.createUser?.avatar} />}
@@ -138,14 +152,13 @@ export default function ProductBaseInfo({ operation, values, handleBlur, handleC
             )}
           </Stack>
         </Grid>
-        <Grid item xs={12} sm={12} md={6} lg={6} xl={4}>
+        <Grid size={{ xs: 12, sm: 12, md: 6, lg: 6, xl: 4 }}>
           <Stack>
             <SelectDeliveryDate
               defaultValue={values?.deliveryDateId || null}
               id="deliveryDateId"
               label={t(fieldsName + 'deliveryDateId')}
-              name="deliveryDateId"
-              // onChange={handleChange}
+              setFieldValue={setFieldValue}
               error={Boolean(errors.deliveryDateId)}
             />
             {errors.deliveryDateId && (
@@ -155,14 +168,14 @@ export default function ProductBaseInfo({ operation, values, handleBlur, handleC
             )}
           </Stack>
         </Grid>
-        <Grid item xs={12} sm={12} md={6} lg={6} xl={4}>
+        <Grid size={{ xs: 12, sm: 12, md: 6, lg: 6, xl: 4 }}>
           <Stack>
             <SelectTaxCategory
               defaultValue={values?.taxCategoryId || null}
               id="taxCategoryId"
               name="taxCategoryId"
               label={t(fieldsName + 'taxCategoryId')}
-              // setFieldValue={setFieldValue}
+              setFieldValue={setFieldValue}
               error={Boolean(errors.taxCategoryId)}
             />
             {errors.taxCategoryId && (
@@ -172,8 +185,8 @@ export default function ProductBaseInfo({ operation, values, handleBlur, handleC
             )}
           </Stack>
         </Grid>
-        <Grid container item columnSpacing={1} xs={12} sm={12} md={6} lg={6} xl={4}>
-          <Grid item xs={8} sm={8} md={8} lg={7} xl={7}>
+        <Grid container columnSpacing={1} size={{ xs: 12, sm: 12, md: 6, lg: 6, xl: 4 }}>
+          <Grid size={{ xs: 8, sm: 8, md: 8, lg: 7, xl: 7 }}>
             <Stack>
               <TextField
                 id="price"
@@ -193,32 +206,9 @@ export default function ProductBaseInfo({ operation, values, handleBlur, handleC
               )}
             </Stack>
           </Grid>
-          <Grid item xs={4} sm={4} md={4} lg={5} xl={5}>
-            <Stack>
-              <SelectCurrency
-                defaultValue={values?.currencyId || null}
-                id="currencyId"
-                name="currencyId"
-                label={''}
-                // setFieldValue={setFieldValue}
-                error={Boolean(errors.currencyId)}
-                // sx={{
-                //   '& .MuiInputBase-root': {
-                //     borderBottomLeftRadius: 0,
-                //     borderTopLeftRadius: 0
-                //   }
-                // }}
-              />
-              {errors.currencyId && (
-                <FormHelperText error id="helper-text">
-                  {errors.currencyId}
-                </FormHelperText>
-              )}
-            </Stack>
-          </Grid>
 
         </Grid>
-        <Grid item xs={12} sm={12} md={6} lg={6} xl={4}>
+        <Grid size={{ xs: 12, sm: 12, md: 6, lg: 6, xl: 4 }}>
           <Stack>
             <TextField
               id="oldPrice"
@@ -239,14 +229,14 @@ export default function ProductBaseInfo({ operation, values, handleBlur, handleC
           </Stack>
         </Grid>
 
-        <Grid item xs={12} sm={12} md={6} lg={6} xl={4}>
+        <Grid size={{ xs: 12, sm: 12, md: 6, lg: 6, xl: 4 }}>
           <Stack>
             <SelectCategory
               defaultValues={values?.categoryIds || []}
               id="categoryIds"
               name="categoryIds"
               label={t(fieldsName + 'categoryIds')}
-              // setFieldValue={setFieldValue}
+              setFieldValue={setFieldValue}
               error={Boolean(errors.categoryIds)}
             />
             {errors.categoryIds && (
@@ -257,14 +247,14 @@ export default function ProductBaseInfo({ operation, values, handleBlur, handleC
           </Stack>
         </Grid>
 
-        <Grid item xs={12} sm={12} md={6} lg={6} xl={4}>
+        <Grid size={{ xs: 12, sm: 12, md: 6, lg: 6, xl: 4 }}>
           <Stack>
             <SelectManufacturer
               defaultValues={values?.manufacturerIds || []}
               id="manufacturerIds"
               name="manufacturerIds"
               label={t(fieldsName + 'manufacturerIds')}
-              // setFieldValue={setFieldValue}
+              setFieldValue={setFieldValue}
               error={Boolean(errors.manufacturerIds)}
             />
             {errors.manufacturerIds && (
@@ -274,15 +264,13 @@ export default function ProductBaseInfo({ operation, values, handleBlur, handleC
             )}
           </Stack>
         </Grid>
-        <Grid item xs={12} sm={12} md={6} lg={6} xl={4}>
+        <Grid size={{ xs: 12, sm: 12, md: 6, lg: 6, xl: 4 }}>
           <Stack>
             <DateTimeInput
-              id="availableStartDateTimeUtc"
               name="availableStartDateTimeUtc"
               label={t(fieldsName + 'availableStartDateTimeUtc')}
-              // setFieldValue={setFieldValue}
-              placeholder={t(fieldsName + 'availableStartDateTimeUtc')}
-              defaultValue={values?.availableStartDateTimeUtc || null}
+              setFieldValue={setFieldValue}
+              defaultValue={values?.availableStartDateTimeUtc || undefined}
               error={Boolean(errors.availableStartDateTimeUtc)}
             />
             {errors.availableStartDateTimeUtc && (
@@ -292,15 +280,13 @@ export default function ProductBaseInfo({ operation, values, handleBlur, handleC
             )}
           </Stack>
         </Grid>
-        <Grid item xs={12} sm={12} md={6} lg={6} xl={4}>
+        <Grid size={{ xs: 12, sm: 12, md: 6, lg: 6, xl: 4 }}>
           <Stack>
             <DateTimeInput
-              id="availableEndDateTimeUtc"
               name="availableEndDateTimeUtc"
               label={t(fieldsName + 'availableEndDateTimeUtc')}
-              // setFieldValue={setFieldValue}
-              placeholder={t(fieldsName + 'availableEndDateTimeUtc')}
-              defaultValue={values?.availableEndDateTimeUtc || null}
+              setFieldValue={setFieldValue}
+              defaultValue={values?.availableEndDateTimeUtc || undefined}
               error={Boolean(errors.availableEndDateTimeUtc)}
             />
             {errors.availableEndDateTimeUtc && (
@@ -310,16 +296,16 @@ export default function ProductBaseInfo({ operation, values, handleBlur, handleC
             )}
           </Stack>
         </Grid>
-        <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
+        <Grid size={{ xs: 12, sm: 12, md: 12, lg: 12, xl: 12 }}>
           <Stack>
             <SelectProductAttribute
               defaultValues={values?.attributeIds || []}
               id="attributeIds"
               name="attributeIds"
               label={t(fieldsName + 'attributeIds')}
-              // setFieldValue={setFieldValue}
+              setFieldValue={setFieldValue}
               error={Boolean(errors.attributeIds)}
-              onChange={() => {}}
+              onChange={() => { }}
               disabled={false}
             />
             {errors.attributeIds && (
@@ -329,14 +315,14 @@ export default function ProductBaseInfo({ operation, values, handleBlur, handleC
             )}
           </Stack>
         </Grid>
-        <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
+        <Grid size={{ xs: 12, sm: 12, md: 12, lg: 12, xl: 12 }}>
           <Stack>
             <ProductsAutoComplete
               id="relatedProductIds"
               name="relatedProductIds"
               defaultValues={values?.relatedProductIds || []}
               label={t(fieldsName + 'relatedProductIds')}
-              // setFieldValue={setFieldValue}
+              setFieldValue={setFieldValue}
             />
             {errors.relatedProductIds && (
               <FormHelperText error id="helper-text">
@@ -346,12 +332,12 @@ export default function ProductBaseInfo({ operation, values, handleBlur, handleC
           </Stack>
         </Grid>
       </Grid>
-      <Grid item xs={12} sm={12} md={12} lg={4} xl={4}>
+      <Grid size={{ xs: 12, sm: 12, md: 12, lg: 4, xl: 4 }}>
         <Stack>
           <InputLabel htmlFor="pictureIds" sx={{ textAlign: 'center', mb: '5px' }}>{t(fieldsName + 'pictureIds')}</InputLabel>
           <ImageUpload
             id="pictureIds"
-            //  setFieldValue={setFieldValue}
+            setFieldValue={setFieldValue}
             value={values?.pictureIds || []}
             filePosterMaxHeight={200}
             allowMultiple={true}

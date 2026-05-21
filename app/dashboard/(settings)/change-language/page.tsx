@@ -14,10 +14,10 @@ function ChangeLanguage() {
   return (
     <Grid container direction="row" sx={{ justifyContent: "center", alignItems: "flex-start" }}>
       <Grid container spacing={3} size={{ xs: 12, sm: 12, md: 6, lg: 6, xl: 6 }} >
-        <Grid>
+        <Grid size={12}>
           <Typography variant="h5">{t('pages.language')}</Typography>
         </Grid>
-        <Grid>
+        <Grid size={12}>
           <MainCard>
             <ChangeLanguageForm />
           </MainCard>

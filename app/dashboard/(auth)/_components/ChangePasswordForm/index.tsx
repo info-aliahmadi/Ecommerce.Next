@@ -172,10 +172,10 @@ const ChangePasswordForm = () => {
                     <Grid container spacing={0} sx={{
                       alignItems: "center",
                     }}>
-                      <Grid>
+                      <Grid size={12}>
                         <Box sx={{ bgcolor: level?.color, width: 85, height: 8, borderRadius: '7px' }} />
                       </Grid>
-                      <Grid>
+                      <Grid size={12}>
                         <Typography variant="subtitle1" sx={{ fontSize: "0.75rem" }} >
                           {level?.label}
                         </Typography>

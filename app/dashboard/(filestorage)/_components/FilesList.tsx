@@ -25,14 +25,8 @@ import { InfoOutlined, Download, Delete, UploadFile, InsertDriveFile } from '@mu
 import LinkIcon from '@mui/icons-material/Link';
 
 import { fileSizeViewer } from '@root/utils/fileSizeViewer';
-import upperCase from 'lodash/upperCase';
-import capitalize from 'lodash/capitalize';
-import lowerCase from 'lodash/lowerCase';
-import toLower from 'lodash/toLower';
-import truncate from 'lodash/truncate';
 import CONFIG from '@root/config';
 import DeleteFile from './DeleteFile';
-import { DateViewer } from '@root/utils/DateViewer';
 import Notify from '@dashboard/_components/@extended/Notify';
 import MainCard from '@dashboard/_components/MainCard';
 import FileUpload from '@dashboard/_components/FileUpload/FileUpload';
@@ -46,6 +40,8 @@ function FilesList({ directory }: Readonly<{ directory: string }>) {
   const t = useTranslations("");
   const { data: session } = useSession();
   const jwt = session?.accessToken;
+  const currentLanguage = session?.user.defaultLanguage;
+
   const theme = useTheme();
 
   const [files, setFiles] = useState<FileUploadModel[]>([]);
@@ -83,18 +79,18 @@ function FilesList({ directory }: Readonly<{ directory: string }>) {
   };
   const Breadcramb = () => {
     return (
-      <Grid container item direction="row" justifyContent="space-between" alignItems="center">
-        <Grid item>
+      <Grid container direction="row" sx={{ justifyContent: "space-between", alignItems: "center" }}>
+        <Grid size={12}>
           <Breadcrumbs aria-label="breadcrumb">
             <Link underline="hover" color="inherit" href="/dashboard/filestorage">
               {t('pages.cards.fileStorage')}
             </Link>
             <Link underline="hover" color="inherit" href="#">
-              {capitalize(directory)}
+              {directory.capitalize()}
             </Link>
           </Breadcrumbs>
         </Grid>
-        <Grid item>
+        <Grid size={12}>
           <Chip
             onClick={() => setUploadShow(!uploadShow)}
             // href="/ArticlesTrashList"
@@ -114,8 +110,8 @@ function FilesList({ directory }: Readonly<{ directory: string }>) {
     );
   };
 
-  const FileViewer = ({ extention } : { extention : string }) => {
-    extention = lowerCase(extention);
+  const FileViewer = ({ extention }: { extention: string }) => {
+    extention = extention.toLowerCase();
     let themeMode = theme.palette.mode;
     let bgColor = themeMode == 'light' ? 'secondary.main' : 'secondary.light';
     switch (extention) {
@@ -151,8 +147,8 @@ function FilesList({ directory }: Readonly<{ directory: string }>) {
         }}
       >
         <InsertDriveFile sx={{ fontSize: '100px' }} />
-        <Typography variant="h2" display="block" gutterBottom>
-          {upperCase(extention)}
+        <Typography variant="h2" sx={{ display: "block" }} gutterBottom>
+          {extention.toUpperCase()}
         </Typography>
       </Box>
     );
@@ -163,16 +159,16 @@ function FilesList({ directory }: Readonly<{ directory: string }>) {
       <Notify notify={notify} setNotify={setNotify}></Notify>
       <MainCard title={<Breadcramb />} ref={containerRef}>
         <Slide direction="down" in={uploadShow} mountOnEnter unmountOnExit container={containerRef.current}>
-          <Box p={3}>
-            <FileUpload allowMultiple  />
+          <Box sx={{p:3}}>
+            <FileUpload allowMultiple name='FileUpload1' />
           </Box>
         </Slide>
-        <Grid container spacing={3} direction="row" justifyContent="flex-start" alignItems="flex-start">
+        <Grid container spacing={3} direction="row" sx={{ justifyContent: "flex-start", alignItems: "flex-start" }}>
           {files.map((file) => (
             <Grow in={true} key={'card-' + file.fileName}>
-              <Grid item xs={12} sm={6} md={3} lg={2} xl={2}>
+              <Grid size={{ xs: 12, sm: 12, md: 3, lg: 2, xl: 2 }}>
                 <Card>
-                  {mediaExtensions.some((extension) => extension == toLower(file?.extension)) ? (
+                  {mediaExtensions.some((extension) => extension == file?.extension.toLowerCase()) ? (
                     <CardMedia
                       component={'img'}
                       height="194"
@@ -182,11 +178,11 @@ function FilesList({ directory }: Readonly<{ directory: string }>) {
                   ) : (
                     <CardMedia component="div" sx={{ height: 194 }} children={<FileViewer extention={file.extension} />} />
                   )}
-                  <CardHeader sx={{ padding: '10px' }} title={truncate(file.fileName)} subheader={fileSizeViewer(file.size, true)} />
+                  <CardHeader sx={{ padding: '10px' }} title={file.fileName.truncate()} subheader={fileSizeViewer(file.size, true)} />
 
                   <CardActions disableSpacing>
-                    <Grid container justifyContent="space-between">
-                      <Grid item>
+                    <Grid container sx={{ justifyContent: 'space-between' }}>
+                      <Grid size={12}>
                         <Tooltip
                           arrow
                           placement="top-start"
@@ -213,7 +209,7 @@ function FilesList({ directory }: Readonly<{ directory: string }>) {
                           placement="top-start"
                           title={t('buttons.fileStorage.uploadedInfo', {
                             user: file.userName,
-                            date: DateViewer(i18n.language, file.uploadDate)
+                            date:  file.uploadDate.toLocalDatetime(currentLanguage)
                           })}
                         >
                           <IconButton>
@@ -221,7 +217,7 @@ function FilesList({ directory }: Readonly<{ directory: string }>) {
                           </IconButton>
                         </Tooltip>
                       </Grid>
-                      <Grid item>
+                      <Grid size={12}>
                         <Tooltip arrow placement="top-start" title={t('buttons.delete')}>
                           <IconButton color="error" onClick={() => handleDeleteFile(file.id)}>
                             <Delete />

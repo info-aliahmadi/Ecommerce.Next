@@ -30,12 +30,12 @@ const NavGroup = ({ item, isExpanded, onToggle }: NavGroupProps) => {
   // const { drawerOpen } = menu;
   // Use custom hook for drawer state persistence
   const { drawerOpen } = useDrawerState();
-  
+
   const navCollapse = item.children?.map((menuItem) => {
     return <NavItem key={menuItem.id + '_nav-item'} item={menuItem} level={1} />
   });
 
-  return  <NavList key={item.id} item={item} navCollapse={navCollapse} drawerOpen={drawerOpen} open={isExpanded} handleClick={onToggle} />
+  return <NavList key={item.id} item={item} navCollapse={navCollapse} drawerOpen={drawerOpen} open={isExpanded} handleClick={onToggle} />
 };
 
 interface NavListProps {
@@ -95,7 +95,8 @@ const NavList = ({ item, navCollapse, drawerOpen, open, handleClick }: NavListPr
           <Typography
             variant="subtitle2"
             color={open ? selectedTextColor : 'text.primary'}
-            fontWeight={open ? 600 : 400}
+            sx={{ fontWeight: open ? 600 : 400 }}
+
           >
             {t(nsTranslation + item.id)}
           </Typography>

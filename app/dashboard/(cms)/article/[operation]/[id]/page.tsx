@@ -100,8 +100,8 @@ export default function AddOrEditArticle({ params }: { readonly params: Promise<
     previewImageUrl: article?.previewImageUrl,
     topicsIds: article?.topicsIds ?? [],
     tags: article?.tags ?? [],
-    isDeleted : false,
-    isPinned : false
+    isDeleted: false,
+    isPinned: false
   }
   return (
     <>
@@ -134,15 +134,15 @@ export default function AddOrEditArticle({ params }: { readonly params: Promise<
         {({ errors, handleBlur, handleChange, setFieldValue, handleSubmit, isSubmitting, touched, values }) => (
           <form noValidate onSubmit={handleSubmit}>
             <Grid container direction="row" sx={{ justifyContent: "center", alignItems: "flex-start" }}>
-              <Grid container item spacing={3} xs={12} sm={12} md={12} lg={12} xl={12} >
-                <Grid item>
+              <Grid container size={{ xs: 12, sm: 12, md: 12, lg: 12, xl: 12 }} spacing={3} >
+                <Grid size={12}>
                   <Typography variant="h5">{t('pages.cards.article-' + operation)}</Typography>
                 </Grid>
-                <Grid item>
+                <Grid size={12}>
                   <MainCard>
-                    <Grid container item spacing={3} direction="row" justifyContent="flex-start" alignItems="flex-start">
-                      <Grid container item spacing={3} xs={12} sm={12} md={12} lg={12} xl={8} display={''}>
-                        <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
+                    <Grid container spacing={3} direction="row" sx={{ justifyContent: "flex-start", alignItems: "flex-start" }} >
+                      <Grid container spacing={3} size={{ xs: 12, sm: 12, md: 12, lg: 12, xl: 8 }}>
+                        <Grid size={{ xs: 12, sm: 12, md: 12, lg: 12, xl: 12 }}>
                           <Stack spacing={1}>
                             <InputLabel htmlFor="subject">{t(fieldsName + 'subject')}</InputLabel>
                             <OutlinedInput
@@ -163,7 +163,7 @@ export default function AddOrEditArticle({ params }: { readonly params: Promise<
                             )}
                           </Stack>
                         </Grid>
-                        <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
+                        <Grid size={{ xs: 12, sm: 12, md: 12, lg: 12, xl: 12 }}>
                           <Stack spacing={1}>
                             <InputLabel htmlFor="body">{t(fieldsName + 'body')}</InputLabel>
                             <Editor
@@ -173,7 +173,7 @@ export default function AddOrEditArticle({ params }: { readonly params: Promise<
                               setFieldValue={setFieldValue}
                             />
                             {operation == 'edit' && (
-                              <Grid>
+                              <Grid size={12}>
                                 <span>{t(fieldsName + 'writedBy') + ' : '}</span>
                                 <Chip
                                   title={t(fieldsName + 'writer')}
@@ -232,19 +232,8 @@ export default function AddOrEditArticle({ params }: { readonly params: Promise<
                           </Stack>
                         </Grid>
                       </Grid>
-                      <Grid
-                        container
-                        item
-                        spacing={3}
-                        xs={12}
-                        sm={12}
-                        md={12}
-                        lg={12}
-                        xl={4}
-                        justifyContent="flex-start"
-                        alignItems="flex-start"
-                      >
-                        <Grid item xs={12} sm={12} md={6} lg={6} xl={12}>
+                      <Grid container size={{ lg: 12, xl: 4 }} sx={{ justifyContent: "flex-start", alignItems: "flex-start" }} >
+                        <Grid size={12}>
                           <Stack spacing={1}>
                             <InputLabel htmlFor="previewImageId">{t(fieldsName + 'previewImageId')}</InputLabel>
                             <ImageUpload
@@ -268,19 +257,8 @@ export default function AddOrEditArticle({ params }: { readonly params: Promise<
                             )}
                           </Stack>
                         </Grid>
-                        <Grid
-                          container
-                          item
-                          spacing={3}
-                          xs={12}
-                          sm={12}
-                          md={6}
-                          lg={6}
-                          xl={12}
-                          justifyContent="flex-start"
-                          alignItems="flex-start"
-                        >
-                          <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
+                        <Grid container size={{ sm: 12, md: 6, lg: 6, xl: 12 }} sx={{ justifyContent: "flex-start", alignItems: "flex-start" }}   >
+                          <Grid size={{ xs: 12, sm: 12, md: 12, lg: 12, xl: 12 }}>
                             <Stack spacing={1}>
                               <InputLabel htmlFor="topicsIds">{t(fieldsName + 'topicsIds')}</InputLabel>
                               <SelectTopic
@@ -296,7 +274,7 @@ export default function AddOrEditArticle({ params }: { readonly params: Promise<
                               )}
                             </Stack>
                           </Grid>
-                          <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
+                          <Grid size={{ xs: 12, sm: 12, md: 12, lg: 12, xl: 12 }}>
                             <Stack spacing={1}>
                               <InputLabel htmlFor="tags">
                                 {t(fieldsName + 'tags')}
@@ -320,17 +298,15 @@ export default function AddOrEditArticle({ params }: { readonly params: Promise<
                           </Grid>
                         </Grid>
                       </Grid>
-                      <Grid container spacing={3} item xs={12} sm={12} md={12} lg={12} xl={12}>
-                        <Grid item xs={12} sm={12} md={6} lg={6} xl={4}>
+                      <Grid container spacing={3} size={{ xs: 12, sm: 12, md: 12, lg: 12, xl: 12 }}>
+                        <Grid size={{ xs: 12, sm: 12, md: 6, lg: 6, xl: 4 }}>
                           <Stack spacing={1}>
                             <InputLabel htmlFor="publishDate">{t(fieldsName + 'publishDate')}</InputLabel>
                             <DateTimeInput
-                              id="publishDate"
                               name="publishDate"
                               label={t(fieldsName + 'publishDate')}
                               setFieldValue={setFieldValue}
-                              placeholder={t(fieldsName + 'publishDate')}
-                              defaultValue={values?.publishDate }
+                              defaultValue={values?.publishDate}
                               error={Boolean(touched.publishDate && errors.publishDate)}
                             />
                             {touched.publishDate && errors.publishDate && (
@@ -341,8 +317,8 @@ export default function AddOrEditArticle({ params }: { readonly params: Promise<
                           </Stack>
                         </Grid>
                       </Grid>
-                      <Grid container item spacing={3} direction="row" justifyContent="space-between" alignItems="center">
-                        <Grid item>
+                      <Grid container spacing={3} direction="row" sx={{ justifyContent: "space-between", alignItems: "center" }}>
+                        <Grid size={12}>
                           <Stack direction="row" spacing={2}>
                             {' '}
                             <AnimateButton>

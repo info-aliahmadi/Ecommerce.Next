@@ -2,7 +2,7 @@
 import { Avatar, Box, Button, Grid, IconButton, Stack, Tooltip } from '@mui/material';
 
 // project import
-import { ReactNode, useCallback, useMemo, useState } from 'react';
+import {  useCallback, useMemo, useState } from 'react';
 import { useTranslations } from 'next-intl';
 import MaterialTable from '@dashboard/_components/MaterialTable/MaterialTable';
 import { Delete, Edit, ImageNotSupported, Save } from '@mui/icons-material';
@@ -14,7 +14,6 @@ import AddOrEditLink from './AddOrEditLink';
 import CONFIG from '@root/config';
 import LinkService from '@dashboard/(cms)/_service/LinkService';
 import { useSession } from 'next-auth/react';
-import _ from 'lodash';
 
 import {  MRT_Row } from 'material-react-table';
 import LinkModel from '@dashboard/(cms)/_types/Link/LinkModel';
@@ -26,7 +25,7 @@ let mediaExtensions = CONFIG.IMAGES_EXTENSIONS.concat(CONFIG.VIDEOS_EXTENSIONS);
 const ImagePreviewRow = ({ renderedCellValue, row }: { renderedCellValue: any, row: MRT_Row<LinkModel> }) => {
   let src;
   if (renderedCellValue?.fileName) {
-    src = mediaExtensions.some((extension) => extension == _.toLower(renderedCellValue?.extension))
+    src = mediaExtensions.some((extension) => extension == renderedCellValue?.extension.toLowerCase())
       ? CONFIG.UPLOAD_BASEPATH + renderedCellValue.directory + renderedCellValue?.thumbnail
       : undefined;
   } else {
@@ -169,7 +168,7 @@ function LinkDataGrid({ linkSection }: { linkSection: MRT_Row<LinkSectionModel> 
     <>
       <Notify notify={notify} setNotify={setNotify}></Notify>
       <Grid container spacing={3} direction="row">
-        <Grid item xs={12} sm={12} md={12}>
+        <Grid size={12}>
           <MaterialTable
             refetch={refetch}
             columns={columns}

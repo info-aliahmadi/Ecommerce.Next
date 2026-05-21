@@ -10,6 +10,8 @@ const CONFIG = {
   PRESET_COLOR: 'default',
   DOMAIN: process.env.NEXT_PUBLIC_FRONT_URL,
   API_BASEPATH: process.env.NEXT_PUBLIC_API_BASE_URL, // application api basepath
+  UNKNOWN_IMAGE_BASEPATH: `${process.env.NEXT_PUBLIC_FRONT_URL}/images/unknown.png`,
+  UNKNOWN_USER_BASEPATH: `${process.env.NEXT_PUBLIC_FRONT_URL}/images/users/anonymous.png`,
   AVATAR_BASEPATH: `${process.env.NEXT_PUBLIC_API_BASE_URL}/profile/`,
   PRODUCT_BASEPATH: `${process.env.NEXT_PUBLIC_API_BASE_URL}/productimage/`,
   CATEGORY_BASEPATH: `${process.env.NEXT_PUBLIC_API_BASE_URL}/categoryimage/`,

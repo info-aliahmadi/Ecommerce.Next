@@ -1,9 +1,6 @@
 import { ImageNotSupported } from "@mui/icons-material";
 import { Avatar, Box, Chip, FormControlLabel, Grid, InputLabel, MenuItem, OutlinedInput, Select, Stack, Switch, TextField } from "@mui/material";
 
-import CurrencyViewer from '@root/utils/CurrencyViewer';
-import { DateTimeViewer } from '@root/utils/DateViewer';
-
 import Accordion from '@mui/material/Accordion';
 import AccordionSummary from '@mui/material/AccordionSummary';
 import AccordionDetails from '@mui/material/AccordionDetails';
@@ -24,13 +21,13 @@ export default function ProductDetail({ row }: { row: MRT_Row<ProductModel> }) {
 
     function AttributeInventory({ invenroty }: { invenroty: any }) {
 
-        return <Grid item container spacing={1} xs={12} sm={12} md={12} lg={12} xl={12}>
-            <Grid item xs={4} sm={4} md={3} lg={3} xl={3} p={2}>
+        return <Grid container spacing={1} size={12} >
+            <Grid size={{ xs: 4, sm: 4, md: 3, lg: 3, xl: 3 }} sx={{ p: 2 }}>
                 <Stack>
                     <Chip label={invenroty.attributeName}></Chip>
                 </Stack>
             </Grid>
-            <Grid item xs={8} sm={8} md={6} lg={5} xl={5}>
+            <Grid size={{ xs: 8, sm: 8, md: 6, lg: 5, xl: 5 }}>
                 <Stack>
                     <TextField
                         disabled
@@ -45,8 +42,8 @@ export default function ProductDetail({ row }: { row: MRT_Row<ProductModel> }) {
     }
     return (
         <Grid container spacing={3} direction="row">
-            <Grid container item spacing={3} xs={12} sm={6} md={3} lg={3} direction="row" justifyContent="center" alignItems="center">
-                <Grid item xs={12} md={12}>
+            <Grid container spacing={3} size={{ xs: 12, sm: 6, md: 3, lg: 3, xl: 3 }} direction="row" sx={{ justifyContent: "center", alignItems: "center" }}>
+                <Grid size={{ xs: 12, sm: 12, md: 12, lg: 12, xl: 12 }}>
                     <Stack>
                         <Box
                             sx={{
@@ -72,7 +69,7 @@ export default function ProductDetail({ row }: { row: MRT_Row<ProductModel> }) {
                     </Stack>
                 </Grid>
             </Grid>
-            <Grid container item xs={12} sm={6} md={6} lg={6}>
+            <Grid container size={{ xs: 12, sm: 6, md: 6, lg: 6, xl: 4 }}>
 
                 <Accordion >
                     <AccordionSummary
@@ -84,7 +81,7 @@ export default function ProductDetail({ row }: { row: MRT_Row<ProductModel> }) {
                     </AccordionSummary>
                     <AccordionDetails>
                         <Grid container spacing={3}>
-                            <Grid item xs={12} md={4}>
+                            <Grid size={{ xs: 12, sm: 12, md: 4, lg: 4, xl: 4 }}>
                                 <Stack spacing={1}>
                                     <InputLabel htmlFor="deliveryDateName">{t(fieldsName + 'deliveryDateId')}</InputLabel>
                                     <Select
@@ -105,7 +102,7 @@ export default function ProductDetail({ row }: { row: MRT_Row<ProductModel> }) {
                                     </Select>
                                 </Stack>
                             </Grid>
-                            <Grid item xs={12} md={4}>
+                            <Grid size={{ xs: 12, sm: 12, md: 4, lg: 4, xl: 4 }}>
                                 <Stack spacing={1}>
                                     <InputLabel htmlFor="taxCategoryName">{t(fieldsName + 'taxCategoryId')}</InputLabel>
                                     <Select
@@ -126,19 +123,19 @@ export default function ProductDetail({ row }: { row: MRT_Row<ProductModel> }) {
                                     </Select>
                                 </Stack>
                             </Grid>
-                            <Grid item xs={12} md={4}>
+                            <Grid size={{ xs: 12, sm: 12, md: 4, lg: 4, xl: 4 }}>
                                 <Stack spacing={1}>
                                     <InputLabel htmlFor="price">{t(fieldsName + 'price')}</InputLabel>
-                                    <OutlinedInput id="price" type="text" value={CurrencyViewer(row.original.price, row.original.currencyCode)} fullWidth disabled />
+                                    <OutlinedInput id="price" type="text" value={row.original.price.toCurrency(row.original.currencyCode)} fullWidth disabled />
                                 </Stack>
                             </Grid>
-                            <Grid item xs={12} md={4}>
+                            <Grid size={{ xs: 12, sm: 12, md: 4, lg: 4, xl: 4 }}>
                                 <Stack spacing={1}>
                                     <InputLabel htmlFor="oldPrice">{t(fieldsName + 'oldPrice')}</InputLabel>
-                                    <OutlinedInput id="oldPrice" type="text" value={CurrencyViewer(row.original.oldPrice, row.original.currencyCode)} fullWidth disabled />
+                                    <OutlinedInput id="oldPrice" type="text" value={row.original.oldPrice.toCurrency(row.original.currencyCode)} fullWidth disabled />
                                 </Stack>
                             </Grid>
-                            <Grid item xs={12} md={4}>
+                            <Grid size={{ xs: 12, sm: 12, md: 4, lg: 4, xl: 4 }}>
                                 <Stack spacing={1}>
                                     <InputLabel htmlFor="categoryNames">{t(fieldsName + 'categoryIds')}</InputLabel>
                                     <Select
@@ -166,7 +163,7 @@ export default function ProductDetail({ row }: { row: MRT_Row<ProductModel> }) {
                                     </Select>
                                 </Stack>
                             </Grid>
-                            <Grid item xs={12} md={4}>
+                            <Grid size={{ xs: 12, sm: 12, md: 4, lg: 4, xl: 4 }}>
                                 <Stack spacing={1}>
                                     <InputLabel htmlFor="manufacturerNames">{t(fieldsName + 'manufacturerIds')}</InputLabel>
                                     <Select
@@ -194,7 +191,7 @@ export default function ProductDetail({ row }: { row: MRT_Row<ProductModel> }) {
                                     </Select>
                                 </Stack>
                             </Grid>
-                            <Grid item xs={12} md={4}>
+                            <Grid size={{ xs: 12, sm: 12, md: 4, lg: 4, xl: 4 }}>
                                 <Stack spacing={1}>
                                     <InputLabel htmlFor="availableStartDateTimeUtc">{t(fieldsName + 'availableStartDateTimeUtc')}</InputLabel>
                                     <OutlinedInput
@@ -212,7 +209,7 @@ export default function ProductDetail({ row }: { row: MRT_Row<ProductModel> }) {
                                     />
                                 </Stack>
                             </Grid>
-                            <Grid item xs={12} md={4}>
+                            <Grid size={{ xs: 12, sm: 12, md: 4, lg: 4, xl: 4 }}>
                                 <Stack spacing={1}>
                                     <InputLabel htmlFor="availableEndDateTimeUtc">{t(fieldsName + 'availableEndDateTimeUtc')}</InputLabel>
                                     <OutlinedInput
@@ -230,7 +227,7 @@ export default function ProductDetail({ row }: { row: MRT_Row<ProductModel> }) {
                                     />
                                 </Stack>
                             </Grid>
-                            <Grid item xs={12} md={4}>
+                            <Grid size={{ xs: 12, sm: 12, md: 4, lg: 4, xl: 4 }}>
                                 <Stack spacing={1}>
                                     <InputLabel htmlFor="attributeNames">{t(fieldsName + 'attributeIds')}</InputLabel>
                                     <Select
@@ -271,34 +268,34 @@ export default function ProductDetail({ row }: { row: MRT_Row<ProductModel> }) {
                     </AccordionSummary>
                     <AccordionDetails>
                         <Grid container spacing={3}>
-                            <Grid item xs={12} sm={12} md={3} lg={3} xl={3}>
+                            <Grid size={{ xs: 12, sm: 12, md: 3, lg: 3, xl: 3 }} >
                                 <Stack>
                                     <InputLabel htmlFor="stockQuantity">{t(fieldsName + 'stockQuantity')}</InputLabel>
                                     <OutlinedInput id="stockQuantity" type="text" value={row.original.stockQuantity} fullWidth disabled />
                                 </Stack>
                             </Grid>
 
-                            <Grid item xs={12} sm={12} md={3} lg={3} xl={3}>
+                            <Grid size={{ xs: 12, sm: 12, md: 3, lg: 3, xl: 3 }}>
                                 <Stack>
                                     <InputLabel htmlFor="minStockQuantity">{t(fieldsName + 'minStockQuantity')}</InputLabel>
                                     <OutlinedInput id="minStockQuantity" type="text" value={row.original.minStockQuantity} fullWidth disabled />
                                 </Stack>
                             </Grid>
-                            <Grid item xs={12} sm={12} md={3} lg={3} xl={3}>
+                            <Grid size={{ xs: 12, sm: 12, md: 3, lg: 3, xl: 3 }}>
                                 <Stack>
 
                                     <InputLabel htmlFor="orderMinimumQuantity">{t(fieldsName + 'orderMinimumQuantity')}</InputLabel>
                                     <OutlinedInput id="orderMinimumQuantity" type="text" value={row.original.orderMinimumQuantity} fullWidth disabled />
                                 </Stack>
                             </Grid>
-                            <Grid item xs={12} sm={12} md={3} lg={3} xl={3}>
+                            <Grid size={{ xs: 12, sm: 12, md: 3, lg: 3, xl: 3 }}>
                                 <Stack>
 
                                     <InputLabel htmlFor="orderMaximumQuantity">{t(fieldsName + 'orderMaximumQuantity')}</InputLabel>
                                     <OutlinedInput id="orderMaximumQuantity" type="text" value={row.original.orderMaximumQuantity} fullWidth disabled />
                                 </Stack>
                             </Grid>
-                            <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
+                            <Grid size={{ xs: 12, sm: 12, md: 12, lg: 12, xl: 12 }}>
                                 <Stack>
                                     <SelectProductAttribute
                                         id="attributeIds"
@@ -312,14 +309,14 @@ export default function ProductDetail({ row }: { row: MRT_Row<ProductModel> }) {
                                     />
                                 </Stack>
                                 <Stack>
-                                    <Grid container spacing={1} xs={12} sm={12} md={12} lg={12} xl={12} pt={3}>
+                                    <Grid container spacing={1} size={12} sx={{ pt: 3 }}>
                                         {row.original?.inventories?.filter(x => x.stockType == 1).map((item, index) => <AttributeInventory key={index} invenroty={item} />)}
                                     </Grid>
                                 </Stack>
 
                             </Grid>
 
-                            <Grid item xs={12} sm={12} md={4} lg={4} xl={4}>
+                            <Grid size={{ xs: 12, sm: 12, md: 4, lg: 4, xl: 4 }}>
                                 <Stack>
                                     <FormControlLabel
                                         control={
@@ -331,7 +328,7 @@ export default function ProductDetail({ row }: { row: MRT_Row<ProductModel> }) {
                                     />
                                 </Stack>
                             </Grid>
-                            <Grid item xs={12} sm={12} md={4} lg={4} xl={4}>
+                            <Grid size={{ xs: 12, sm: 12, md: 4, lg: 4, xl: 4 }}>
                                 <Stack>
                                     <FormControlLabel
                                         control={
@@ -343,7 +340,7 @@ export default function ProductDetail({ row }: { row: MRT_Row<ProductModel> }) {
                                     />
                                 </Stack>
                             </Grid>
-                            <Grid item xs={12} sm={12} md={4} lg={4} xl={4}>
+                            <Grid size={{ xs: 12, sm: 12, md: 4, lg: 4, xl: 4 }}>
                                 <Stack>
                                     <FormControlLabel
                                         control={
@@ -368,7 +365,7 @@ export default function ProductDetail({ row }: { row: MRT_Row<ProductModel> }) {
                     </AccordionSummary>
                     <AccordionDetails>
                         <Grid container spacing={3}>
-                            <Grid item xs={12} sm={12} md={4} lg={4} xl={3}>
+                            <Grid size={{ xs: 12, sm: 12, md: 4, lg: 4, xl: 3 }}>
                                 <Stack spacing={1}>
                                     <FormControlLabel
                                         control={
@@ -382,7 +379,7 @@ export default function ProductDetail({ row }: { row: MRT_Row<ProductModel> }) {
                                 </Stack>
                             </Grid>
 
-                            <Grid item xs={12} sm={12} md={4} lg={4} xl={3}>
+                            <Grid size={{ xs: 12, sm: 12, md: 4, lg: 4, xl: 3 }}>
                                 <Stack>
                                     <FormControlLabel
                                         control={
@@ -395,7 +392,7 @@ export default function ProductDetail({ row }: { row: MRT_Row<ProductModel> }) {
                                     />
                                 </Stack>
                             </Grid>
-                            <Grid item xs={12} sm={12} md={4} lg={4} xl={3}>
+                            <Grid size={{ xs: 12, sm: 12, md: 4, lg: 4, xl: 3 }}>
                                 <Stack>
                                     <FormControlLabel
                                         control={
@@ -408,7 +405,7 @@ export default function ProductDetail({ row }: { row: MRT_Row<ProductModel> }) {
                                     />
                                 </Stack>
                             </Grid>
-                            <Grid item xs={12} sm={12} md={4} lg={4} xl={3}>
+                            <Grid size={{ xs: 12, sm: 12, md: 4, lg: 4, xl: 3 }}>
                                 <Stack>
                                     <FormControlLabel
                                         control={
@@ -421,7 +418,7 @@ export default function ProductDetail({ row }: { row: MRT_Row<ProductModel> }) {
                                     />
                                 </Stack>
                             </Grid>
-                            <Grid item xs={12} sm={12} md={4} lg={4} xl={3}>
+                            <Grid size={{ xs: 12, sm: 12, md: 4, lg: 4, xl: 3 }}>
                                 <Stack>
                                     <FormControlLabel
                                         control={
@@ -434,7 +431,7 @@ export default function ProductDetail({ row }: { row: MRT_Row<ProductModel> }) {
                                     />
                                 </Stack>
                             </Grid>
-                            <Grid item xs={12} sm={12} md={4} lg={4} xl={3}>
+                            <Grid size={{ xs: 12, sm: 12, md: 4, lg: 4, xl: 3 }}>
                                 <Stack>
                                     <FormControlLabel
                                         control={
@@ -447,7 +444,7 @@ export default function ProductDetail({ row }: { row: MRT_Row<ProductModel> }) {
                                     />
                                 </Stack>
                             </Grid>
-                            <Grid item xs={12} sm={12} md={4} lg={4} xl={3}>
+                            <Grid size={{ xs: 12, sm: 12, md: 4, lg: 4, xl: 3 }}>
                                 <Stack>
                                     <FormControlLabel
                                         control={
@@ -460,7 +457,7 @@ export default function ProductDetail({ row }: { row: MRT_Row<ProductModel> }) {
                                     />
                                 </Stack>
                             </Grid>
-                            <Grid item xs={12} sm={12} md={4} lg={4} xl={3}>
+                            <Grid size={{ xs: 12, sm: 12, md: 4, lg: 4, xl: 3 }}>
                                 <Stack>
                                     <FormControlLabel
                                         control={
@@ -473,7 +470,7 @@ export default function ProductDetail({ row }: { row: MRT_Row<ProductModel> }) {
                                     />
                                 </Stack>
                             </Grid>
-                            <Grid item xs={12} sm={12} md={4} lg={4} xl={3}>
+                            <Grid size={{ xs: 12, sm: 12, md: 4, lg: 4, xl: 3 }}>
                                 <Stack>
                                     <FormControlLabel
                                         control={
@@ -486,7 +483,7 @@ export default function ProductDetail({ row }: { row: MRT_Row<ProductModel> }) {
                                     />
                                 </Stack>
                             </Grid>
-                            <Grid item xs={12} sm={12} md={4} lg={4} xl={3}>
+                            <Grid size={{ xs: 12, sm: 12, md: 4, lg: 4, xl: 3 }}>
                                 <Stack>
                                     <FormControlLabel
                                         control={
@@ -499,7 +496,7 @@ export default function ProductDetail({ row }: { row: MRT_Row<ProductModel> }) {
                                     />
                                 </Stack>
                             </Grid>
-                            <Grid item xs={12} sm={12} md={4} lg={4} xl={3}>
+                            <Grid size={{ xs: 12, sm: 12, md: 4, lg: 4, xl: 3 }}>
                                 <Stack>
                                     <FormControlLabel
                                         control={
@@ -513,7 +510,7 @@ export default function ProductDetail({ row }: { row: MRT_Row<ProductModel> }) {
                                 </Stack>
                             </Grid>
                             {row.original?.markAsNew && <>
-                                <Grid item xs={12} sm={12} md={6} lg={6} xl={4}>
+                                <Grid size={{ xs: 12, sm: 12, md: 6, lg: 6, xl: 4 }}>
                                     <Stack>
                                         <InputLabel htmlFor="markAsNewStartDateTimeUtc">{t(fieldsName + 'markAsNewStartDateTimeUtc')}</InputLabel>
                                         <OutlinedInput
@@ -531,7 +528,7 @@ export default function ProductDetail({ row }: { row: MRT_Row<ProductModel> }) {
                                         />
                                     </Stack>
                                 </Grid>
-                                <Grid item xs={12} sm={12} md={6} lg={6} xl={4}>
+                                <Grid size={{ xs: 12, sm: 12, md: 6, lg: 6, xl: 4 }}>
                                     <Stack>
                                         <InputLabel htmlFor="markAsNewEndDateTimeUtc">{t(fieldsName + 'markAsNewEndDateTimeUtc')}</InputLabel>
                                         <OutlinedInput

@@ -23,8 +23,8 @@ import {
 
 // assets
 import { CloseOutlined, GiftOutlined, MessageOutlined, SettingOutlined } from '@ant-design/icons';
-import  Email  from '@mui/icons-material/Email';
-import  Message  from '@mui/icons-material/Message';
+import Email from '@mui/icons-material/Email';
+import Message from '@mui/icons-material/Message';
 import Transitions from '@dashboard/_components/@extended/Transitions';
 import MainCard from '@dashboard/_components/MainCard';
 // sx styles
@@ -47,7 +47,7 @@ const actionSX = {
 // ==============================|| HEADER CONTENT - NOTIFICATION ||============================== //
 
 const Notification = () => {
-  const theme:any = useTheme();
+  const theme: any = useTheme();
   const matchesXs = useMediaQuery(theme.breakpoints.down('md'));
 
   const anchorRefMessaage = useRef<HTMLButtonElement>(null);
@@ -58,7 +58,7 @@ const Notification = () => {
     setOpenMessage((prevOpen) => !prevOpen);
   };
 
-  const handleCloseMessage = (event : any) => {
+  const handleCloseMessage = (event: any) => {
     if (anchorRefMessaage.current?.contains(event.target)) {
       return;
     }
@@ -69,7 +69,7 @@ const Notification = () => {
     setOpenEmail((prevOpen) => !prevOpen);
   };
 
-  const handleCloseEmail = (event : any) => {
+  const handleCloseEmail = (event: any) => {
     if (anchorRefEmail.current?.contains(event.target)) {
       return;
     }
@@ -282,7 +282,7 @@ const Notification = () => {
                     </ListItemButton>
                     <Divider />
                     <ListItemButton href="/message/Inbox" sx={{ textAlign: 'center', py: `${12}px !important` }}>
-                      <Typography variant="h6" color="primary" textAlign="center" display="block" sx={{ width: '100%' }}>
+                      <Typography variant="h6" color="primary" sx={{ width: '100%', textAlign: "center", display: "block" }}>
                         View All
                       </Typography>
                     </ListItemButton>

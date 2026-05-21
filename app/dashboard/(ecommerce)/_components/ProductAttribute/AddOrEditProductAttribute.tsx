@@ -172,7 +172,7 @@ export default function AddOrEditProductAttribute({ productAttributeId, isNew, o
               </DialogTitle>
               <DialogContent>
                 <Grid container spacing={3} >
-                  <Grid item>
+                  <Grid size={12}>
                     <Stack spacing={1}>
                       <InputLabel htmlFor="name">{t(fieldsName + 'name')}</InputLabel>
                       <OutlinedInput
@@ -194,7 +194,7 @@ export default function AddOrEditProductAttribute({ productAttributeId, isNew, o
                     </Stack>
                   </Grid>
 
-                  <Grid item>
+                  <Grid size={12}>
                     <Stack spacing={1}>
                       <InputLabel htmlFor="value">{t(fieldsName + 'value')}</InputLabel>
                       <OutlinedInput
@@ -216,7 +216,7 @@ export default function AddOrEditProductAttribute({ productAttributeId, isNew, o
                     </Stack>
                   </Grid>
 
-                  <Grid item>
+                  <Grid size={12}>
                     <Stack spacing={1}>
                       <InputLabel htmlFor="attributeType">{t(fieldsName + 'attributeType')}</InputLabel>
                       <FormControl fullWidth error={Boolean(touched.attributeType && errors.attributeType)}>
@@ -243,7 +243,7 @@ export default function AddOrEditProductAttribute({ productAttributeId, isNew, o
                     </Stack>
                   </Grid>
 
-                  <Grid item>
+                  <Grid size={12}>
                     <Stack spacing={1}>
                       <InputLabel htmlFor="description">{t(fieldsName + 'description')}</InputLabel>
                       <OutlinedInput
@@ -265,7 +265,7 @@ export default function AddOrEditProductAttribute({ productAttributeId, isNew, o
                     </Stack>
                   </Grid>
 
-                  <Grid item>
+                  <Grid size={12}>
                     <Stack spacing={1}>
                       <InputLabel htmlFor="pictureId">{t(fieldsName + 'pictureId')}</InputLabel>
                       <ImageUpload

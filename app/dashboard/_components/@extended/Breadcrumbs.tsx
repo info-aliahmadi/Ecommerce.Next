@@ -82,7 +82,7 @@ const Breadcrumbs = ({ navigation, title, ...others }: { navigation: any, title:
                justifyContent: "flex-start", 
                alignItems: "flex-start"
             }} spacing={1}>
-            <Grid>
+            <Grid size={12}>
               <MuiBreadcrumbs aria-label="breadcrumb">
                 <Typography component="a" href="/" color="textSecondary" variant="h6" sx={{ textDecoration: 'none' }}>
                   Home

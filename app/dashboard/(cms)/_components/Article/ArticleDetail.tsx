@@ -18,9 +18,9 @@ export default function ArticleDetail({ row }: Readonly<{ row: MRT_Row<ArticleMo
 
   const fieldsName = 'fields.article.';
   return (
-    <Grid container spacing={3} direction="row" justifyContent="flex-start" alignItems="flex-start">
-      <Grid container item spacing={3} xs={12} sm={6} md={3} lg={3} direction="row" justifyContent="center" alignItems="center">
-        <Grid item xs={12} md={12}>
+    <Grid container spacing={3} direction="row" sx={{ justifyContent: "flex-start", alignItems: "flex-start" }}>
+      <Grid container spacing={3} size={{ xs: 12, sm: 6, md: 3, lg: 3, xl: 3 }} direction="row" sx={{ justifyContent: "center", alignItems: "center" }}>
+        <Grid size={{ xs: 12, sm: 12, md: 12, lg: 12, xl: 12}}>
           <Stack>
             {row.original.previewImageId && <ImageUpload value={row.original.previewImageId} id={"previewImageId"} disabled={true} filePosterMaxHeight={300} />}
             {row.original.previewImageUrl && (
@@ -37,19 +37,8 @@ export default function ArticleDetail({ row }: Readonly<{ row: MRT_Row<ArticleMo
           </Stack>
         </Grid>
       </Grid>
-      <Grid
-        container
-        item
-        spacing={3}
-        xs={12}
-        sm={6}
-        md={6}
-        lg={6}
-        direction="row"
-        justifyContent="flex-start"
-        alignItems="flex-start"
-      >
-        <Grid item xs={12} md={12}>
+      <Grid container spacing={3} size={{ xs: 12, sm: 6, md: 6, lg: 6, xl: 6}} direction="row"sx={{ justifyContent: "flex-start", alignItems: "flex-start" }}>
+        <Grid size={{ xs: 12, sm: 12, md: 12, lg: 12, xl: 12}}>
           <Stack spacing={1}>
             <InputLabel htmlFor="subject">{t(fieldsName + 'subject')}</InputLabel>
             <OutlinedInput
@@ -69,11 +58,11 @@ export default function ArticleDetail({ row }: Readonly<{ row: MRT_Row<ArticleMo
             />
           </Stack>
         </Grid>
-        <Grid item xs={12} md={12}>
+        <Grid size={{ xs: 12, sm: 12, md: 12, lg: 12, xl: 12}}>
           <Stack spacing={1}>
             <InputLabel htmlFor="body">{t(fieldsName + 'body')}</InputLabel>
             <div className="MuiOutlinedvid-notchedOutline" dangerouslySetInnerHTML={{ __html: row.original.body }} />
-            <Grid>
+            <Grid size={12}>
               {t(fieldsName + 'writedBy') + ' : '}
               <Chip
                 title={t(fieldsName + 'writer')}
@@ -125,7 +114,7 @@ export default function ArticleDetail({ row }: Readonly<{ row: MRT_Row<ArticleMo
             </Grid>
           </Stack>
         </Grid>
-        <Grid item xs={12} md={4}>
+        <Grid size={{ xs: 12, sm: 12, md: 4, lg: 4, xl: 4 }}>
           <Stack spacing={1}>
             <InputLabel htmlFor="publishDate">{t(fieldsName + 'publishDate')}</InputLabel>
             <OutlinedInput
@@ -142,13 +131,13 @@ export default function ArticleDetail({ row }: Readonly<{ row: MRT_Row<ArticleMo
             />
           </Stack>
         </Grid>
-        <Grid item xs={12} md={4}>
+        <Grid size={{ xs: 12, sm: 12, md: 4, lg: 4, xl: 4 }}>
           <Stack spacing={1}>
             <InputLabel htmlFor="topicsIds">{t(fieldsName + 'topicsIds')}</InputLabel>
             <SelectTopic disabled defaultValues={row.original.topicsIds} />
           </Stack>
         </Grid>
-        <Grid item xs={12} md={4}>
+        <Grid size={{ xs: 12, sm: 12, md: 4, lg: 4, xl: 4 }}>
           <Stack spacing={1}>
             <InputLabel htmlFor="tags">{t(fieldsName + 'tags')}</InputLabel>
             <SelectTag defaultValues={row.original.tags || []} disabled={true} />

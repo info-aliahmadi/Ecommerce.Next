@@ -28,6 +28,7 @@ import PermissionService from '@dashboard/(auth)/_service/PermissionService';
 import { useSession } from 'next-auth/react';
 
 import { useTranslations } from 'next-intl';
+import Result from '@root/app/types/Result';
 
 
 const AddOrEditPermission = ({ permissionId, isNew, open, setOpen, refetch }: {

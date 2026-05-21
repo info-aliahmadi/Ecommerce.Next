@@ -1,35 +1,63 @@
-import * as React from 'react';
-import CurrencyService from '@dashboard/(ecommerce)/_service/CurrencyService';
-import SingleSelect from '@dashboard/_components/Select/SingleSelect';
-import { useSession } from 'next-auth/react';
+import React from 'react';
+import { FormControl, InputLabel } from '@mui/material';
+import { useTranslations } from 'next-intl';
+import EnumDropdown from '@dashboard/_components/EnumDropdown';
+import CurrencyTypes from '@root/app/types/enums/CurrencyTypes';
 
 interface SelectCurrencyProps {
   defaultValue?: number | null;
   id: string;
-  name: string;
+  setFieldValue: (field: string, value: any, shouldValidate?: boolean) => void;
+  error: boolean;
   label: string;
-  setFieldValue?: (field: string, value: any, shouldValidate?: boolean) => void;
-  error?: boolean;
   disabled?: boolean;
+  showNoneOption?: boolean;
 }
 
-export default function SelectCurrency({ defaultValue, id, name, label, setFieldValue, error = false, disabled = false }: Readonly<SelectCurrencyProps>) {
-  const { data: session } = useSession();
-  const jwt = session?.accessToken;
+const SelectCurrency: React.FC<SelectCurrencyProps> = ({
+  defaultValue,
+  id,
+  setFieldValue,
+  error,
+  label,
+  disabled = false,
+  showNoneOption = false,
+}) => {
+  const t = useTranslations('');
 
-  const service = new CurrencyService(jwt ?? '');
+  const handleChange = (newValue: number | null) => {
+    setFieldValue(id, newValue);
+  };
 
+  // Create filtered enum object with only Cash and Debit
+  const filteredCurrency = {
+    Rial: CurrencyTypes.Rial,
+    Toman: CurrencyTypes.Toman,
+    Dollar: CurrencyTypes.Dollar,
+    Euro: CurrencyTypes.Euro,
+    Dinar: CurrencyTypes.Dinar
+  };
+  // Create filtered enum object with only Cash and Debit
+  const filteredCurrencyLabels = {
+    Rial: t("fields.siteSetting.currencyTypes.Rial"),
+    Toman: t("fields.siteSetting.currencyTypes.Toman"),
+    Dollar: t("fields.siteSetting.currencyTypes.Dollar"),
+    Euro: t("fields.siteSetting.currencyTypes.Euro"),
+    Dinar: t("fields.siteSetting.currencyTypes.Dinar")
+  };
   return (
-    <SingleSelect
-      defaultValue={defaultValue}
-      id={id}
-      name={name}
-      label={label}
-      optionLabel={'currencyCode'}
-      setFieldValue={setFieldValue}
-      error={error}
-      disabled={disabled}
-      loadDataApi={() => service.getAllCurrencies()}
-    />
+    <FormControl error={error} key={id} fullWidth>
+      <InputLabel id={`${id}-label`}>{label}</InputLabel>
+      <EnumDropdown
+        defaultValue={defaultValue || null}
+        enumObject={filteredCurrency}
+        customLabels={filteredCurrencyLabels}
+        onChange={handleChange}
+        showNoneOption={showNoneOption}
+        noneOptionLabel="-"
+      />
+    </FormControl>
   );
-}
+};
+
+export default SelectCurrency;

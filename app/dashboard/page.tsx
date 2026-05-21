@@ -104,12 +104,12 @@ const DashboardDefault = () => {
 
       {/* row 2 */}
       <Grid size={{ xs: 12, sm: 7, md: 8, lg: 8 }}>
-        <Grid container alignItems="center" justifyContent="space-between">
-          <Grid>
+        <Grid container sx={{ alignItems: "center", justifyContent: "space-between" }} >
+          <Grid size={12}>
             <Typography variant="h5">Unique Visitor</Typography>
           </Grid>
-          <Grid>
-            <Stack direction="row" alignItems="center" spacing={0}>
+          <Grid size={12}>
+            <Stack direction="row" sx={{ alignItems: "center"}} spacing={0}>
               <Button
                 size="small"
                 onClick={() => setSlot('month')}
@@ -136,8 +136,8 @@ const DashboardDefault = () => {
         </MainCard>
       </Grid>
       <Grid size={{ xs: 12, sm: 12, md: 5, lg: 4 }}>
-        <Grid container alignItems="center" justifyContent="space-between">
-          <Grid>
+        <Grid container sx={{ alignItems: "center", justifyContent: "space-between" }}>
+          <Grid size={12}>
             <Typography variant="h5">Income Overview</Typography>
           </Grid>
           <Grid />
@@ -157,8 +157,8 @@ const DashboardDefault = () => {
 
       {/* row 3 */}
       <Grid size={{ xs: 12, sm: 12, md: 7, lg: 8 }}>
-        <Grid container alignItems="center" justifyContent="space-between">
-          <Grid>
+        <Grid container sx={{ alignItems: "center", justifyContent: "space-between" }}>
+          <Grid size={12}>
             <Typography variant="h5">Recent Orders</Typography>
           </Grid>
           <Grid />
@@ -168,8 +168,8 @@ const DashboardDefault = () => {
         </MainCard>
       </Grid>
       <Grid size={{ xs: 12, sm: 12, md: 5, lg: 4 }}>
-        <Grid container alignItems="center" justifyContent="space-between">
-          <Grid>
+        <Grid container sx={{ alignItems: "center", justifyContent: "space-between" }}>
+          <Grid size={12}>
             <Typography variant="h5">Analytics Report</Typography>
           </Grid>
           <Grid />
@@ -195,11 +195,11 @@ const DashboardDefault = () => {
 
       {/* row 4 */}
       <Grid size={{ xs: 12, sm: 12, md: 7, lg: 8 }}>
-        <Grid container alignItems="center" justifyContent="space-between">
-          <Grid>
+        <Grid container sx={{ alignItems: "center", justifyContent: "space-between" }}>
+          <Grid size={12}>
             <Typography variant="h5">Sales Report</Typography>
           </Grid>
-          <Grid>
+          <Grid size={12}>
             <TextField
               id="standard-select-currency"
               size="small"
@@ -228,8 +228,8 @@ const DashboardDefault = () => {
       </Grid>
 
       <Grid size={{ xs: 12, sm: 12, md: 5, lg: 4 }}>
-        <Grid container alignItems="center" justifyContent="space-between">
-          <Grid>
+        <Grid container sx={{ alignItems: "center", justifyContent: "space-between" }}>
+          <Grid size={12}>
             <Typography variant="h5">Transaction History</Typography>
           </Grid>
           <Grid />
@@ -260,7 +260,7 @@ const DashboardDefault = () => {
               </ListItemAvatar>
               <ListItemText primary={<Typography variant="subtitle1">Order #002434</Typography>} secondary="Today, 2:00 AM" />
               <ListItemSecondaryAction>
-                <Stack alignItems="flex-end">
+                <Stack sx={{ alignItems: "flex-end"}}>
                   <Typography variant="subtitle1" noWrap>
                     + $1,430
                   </Typography>
@@ -283,7 +283,7 @@ const DashboardDefault = () => {
               </ListItemAvatar>
               <ListItemText primary={<Typography variant="subtitle1">Order #984947</Typography>} secondary="5 August, 1:45 PM" />
               <ListItemSecondaryAction>
-                <Stack alignItems="flex-end">
+                <Stack sx={{ alignItems: "flex-end"}}>
                   <Typography variant="subtitle1" noWrap>
                     + $302
                   </Typography>
@@ -306,7 +306,7 @@ const DashboardDefault = () => {
               </ListItemAvatar>
               <ListItemText primary={<Typography variant="subtitle1">Order #988784</Typography>} secondary="7 hours ago" />
               <ListItemSecondaryAction>
-                <Stack alignItems="flex-end">
+                <Stack sx={{ alignItems: "flex-end"}}>
                   <Typography variant="subtitle1" noWrap>
                     + $682
                   </Typography>
@@ -320,8 +320,8 @@ const DashboardDefault = () => {
         </MainCard>
         <MainCard sx={{ mt: 2 }}>
           <Stack spacing={3}>
-            <Grid container justifyContent="space-between" alignItems="center">
-              <Grid>
+            <Grid container sx={{ justifyContent: "space-between", alignItems: "center" }}>
+              <Grid size={12}>
                 <Stack>
                   <Typography variant="h5" noWrap>
                     Help & Support Chat
@@ -331,7 +331,7 @@ const DashboardDefault = () => {
                   </Typography>
                 </Stack>
               </Grid>
-              <Grid>
+              <Grid size={12}>
                 <AvatarGroup sx={{ '& .MuiAvatar-root': { width: 32, height: 32 } }}>
                   <Avatar alt="Remy Sharp" src="/images/users/avatar-1.png" />
                   <Avatar alt="Travis Howard" src="/images/users/avatar-2.png" />

@@ -4,7 +4,6 @@ import {  Checkbox, IconButton } from '@mui/material';
 import RefreshIcon from '@mui/icons-material/Refresh';
 import { DatePicker } from '@mui/x-date-pickers';
 import moment from 'moment-jalaali';
-import { DateTimeViewer, DateViewer } from '@root/utils/DateViewer';
 import { useTheme } from '@mui/material/styles';
 import { rtlLocales } from '@root/locales/i18nHomepage';
 import nextIntlService from '@root/locales/nextIntlService';
@@ -123,13 +122,13 @@ function MaterialTable({
     dateFields.forEach((element: any) => {
       if (!element.Cell) {
         element.Cell = ({ renderedCellValue }: { renderedCellValue: any }) =>
-          renderedCellValue != null && <span>{DateViewer(currentLanguage, renderedCellValue)}</span>;
+          renderedCellValue != null && <span>{(renderedCellValue as Date).toLocalDate(currentLanguage)}</span>;
       }
     });
     dateTimeFields.forEach((element: any) => {
       if (!element.Cell) {
         element.Cell = ({ renderedCellValue }: { renderedCellValue: any }) =>
-          renderedCellValue != null && <span>{DateTimeViewer(currentLanguage, renderedCellValue)}</span>;
+          renderedCellValue != null && <span>{(renderedCellValue as Date).toLocalDatetime(currentLanguage)}</span>;
       }
     });
     // Add Filter Mode Options

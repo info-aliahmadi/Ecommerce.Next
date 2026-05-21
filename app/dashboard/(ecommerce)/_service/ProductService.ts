@@ -15,19 +15,19 @@ export default class ProductService {
     return Fetch.Post<Result<PaginatedList<ProductModel>>>(CONFIG.API_BASEPATH + '/Product/GetProductList', searchParams, this.config);
   };
 
-  getProductItemList = async (productId : number): Promise<Result<ProductModel[]>> => {
+  getProductItemList = async (productId: number): Promise<Result<ProductModel[]>> => {
     const params = new URLSearchParams({ productId: productId.toString() });
     return Fetch.Get<Result<ProductModel[]>>(CONFIG.API_BASEPATH + `/Product/GetProductItemList?${params.toString()}`, this.config);
   };
   getAllProducts = async (): Promise<Result<ProductModel[]>> => {
     return Fetch.Get<Result<ProductModel[]>>(CONFIG.API_BASEPATH + `/Product/getAllProducts`, this.config);
   };
-  getProductById = async (productId : number): Promise<Result<ProductModel>> => {
+  getProductById = async (productId: number): Promise<Result<ProductModel>> => {
     const params = new URLSearchParams({ productId: productId.toString() });
     return Fetch.Get<Result<ProductModel>>(CONFIG.API_BASEPATH + `/Product/getProductById?${params.toString()}`, this.config);
   };
   getProductsByIds = async (productIds: number[]): Promise<Result<ProductModel[]>> => {
-    const params = new URLSearchParams({ productIds: productIds.toString() });
+    const params = new URLSearchParams({ productIds: productIds.join(',') });
     return Fetch.Get<Result<ProductModel[]>>(CONFIG.API_BASEPATH + `/Product/getProductsByIds?${params.toString()}`, this.config);
   };
   getProductsByInput = async (input: string): Promise<Result<ProductModel[]>> => {
@@ -41,11 +41,11 @@ export default class ProductService {
     return Fetch.Post<Result<ProductModel>>(CONFIG.API_BASEPATH + '/Product/updateProduct', product, this.config);
 
   };
-  deleteProduct = async (productId : number): Promise<Result<ProductModel>> => {
+  deleteProduct = async (productId: number): Promise<Result<ProductModel>> => {
     const params = new URLSearchParams({ productId: productId.toString() });
     return Fetch.Get<Result<ProductModel>>(CONFIG.API_BASEPATH + `/Product/deleteProduct?${params.toString()}`, this.config);
   };
-  removeProduct = async (productId : number): Promise<Result<ProductModel>> => {
+  removeProduct = async (productId: number): Promise<Result<ProductModel>> => {
     const params = new URLSearchParams({ productId: productId.toString() });
     return Fetch.Get<Result<ProductModel>>(CONFIG.API_BASEPATH + `/Product/removeProduct?${params.toString()}`, this.config);
   };

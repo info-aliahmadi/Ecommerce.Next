@@ -57,7 +57,7 @@ export default function OrderDetail({ row, refetch }: { row: MRT_Row<OrderModel>
     return orderService.getAllShippingMethodForSelect();
   };
 
-  const handleSubmit = (order: OrderModel, resetForm: (values: any) => void, setErrors: (errors: any) => void ) => {
+  const handleSubmit = (order: OrderModel, resetForm: (values: any) => void, setErrors: (errors: any) => void) => {
     orderService
       .updateOrder(order)
       .then(() => {
@@ -92,7 +92,7 @@ export default function OrderDetail({ row, refetch }: { row: MRT_Row<OrderModel>
           } catch (err) {
             console.error(err);
             setStatus({ success: false });
-            
+
             setSubmitting(false);
           }
         }}
@@ -100,12 +100,12 @@ export default function OrderDetail({ row, refetch }: { row: MRT_Row<OrderModel>
         {({ errors, handleBlur, handleChange, setFieldValue, handleSubmit, isSubmitting, touched, values }) => (
           <form noValidate onSubmit={handleSubmit}>
             <Grid container direction="row" sx={{ justifyContent: "center", alignItems: "flex-start" }}>
-              <Grid container spacing={3} item xs={12} sm={12} md={12} lg={12} xl={12} >
-                <Grid item>
+              <Grid container spacing={3} size={{ xs: 12, sm: 12, md: 12, lg: 12, xl: 12 }} >
+                <Grid size={12}>
                   <MainCard>
                     <Grid container spacing={3} >
-                      <Grid container item spacing={3}>
-                        <Grid item xs={12} md={3} lg={3} xl={3}>
+                      <Grid container spacing={3}>
+                        <Grid size={{ xs: 12, sm: 12, md: 3, lg: 3, xl: 3 }}>
                           <Stack spacing={1}>
                             <InputLabel htmlFor="paymentStatusId">{t(fieldsName + 'paymentStatusId')}</InputLabel>
                             <SelectPaymentStatus
@@ -127,7 +127,7 @@ export default function OrderDetail({ row, refetch }: { row: MRT_Row<OrderModel>
                           </Stack>
                         </Grid>
 
-                        <Grid item xs={12} md={3} lg={3} xl={3}>
+                        <Grid size={{ xs: 12, sm: 12, md: 3, lg: 3, xl: 3 }}>
                           <Stack spacing={1}>
                             <InputLabel htmlFor="shippingStatusId">{t(fieldsName + 'shippingStatusId')}</InputLabel>
                             <SelectShippingStatus
@@ -149,7 +149,7 @@ export default function OrderDetail({ row, refetch }: { row: MRT_Row<OrderModel>
                           </Stack>
                         </Grid>
 
-                        <Grid item xs={12} md={3} lg={3} xl={3}>
+                        <Grid size={{ xs: 12, sm: 12, md: 3, lg: 3, xl: 3 }}>
                           <Stack spacing={1}>
                             <InputLabel htmlFor="orderStatusId">{t(fieldsName + 'orderStatusId')}</InputLabel>
                             <SelectOrderStatus
@@ -170,7 +170,7 @@ export default function OrderDetail({ row, refetch }: { row: MRT_Row<OrderModel>
                             )}
                           </Stack>
                         </Grid>
-                        <Grid item xs={12} md={3} lg={3} xl={3}>
+                        <Grid size={{ xs: 12, sm: 12, md: 3, lg: 3, xl: 3 }}>
                           <Stack spacing={1}>
                             <InputLabel htmlFor="shippingMethodId">{t(fieldsName + 'shippingMethodId')}</InputLabel>
                             <SelectShippingMethod
@@ -191,69 +191,61 @@ export default function OrderDetail({ row, refetch }: { row: MRT_Row<OrderModel>
                             )}
                           </Stack>
                         </Grid>
-                        <Grid container item spacing={3}>
-                          {/* <Grid item xs={12} md={3} lg={3} xl={3}>
+                        <Grid container spacing={3}>
+                          {/* <Grid size={{ xs: 12, sm: 12, md: 3, lg: 3, xl:3}}>
                             <Stack spacing={1}>
                               <TextField
                                 id="paymentStatusTitle"
                                 label={t(fieldsName + 'paymentStatusTitle')}
                                 defaultValue={row.original.paymentStatusTitle}
-                                InputProps={{
-                                  readOnly: true
-                                }}
+                                disabled
                               />
                             </Stack>
                           </Grid> */}
 
-                          <Grid item xs={12} md={3} lg={3} xl={3}>
+                          <Grid size={{ xs: 12, sm: 12, md: 3, lg: 3, xl: 3 }}>
                             <Stack spacing={1}>
                               <TextField
                                 id="transactionTrackingCode"
                                 label={t(fieldsName + 'transactionTrackingCode')}
                                 defaultValue={row.original.transactionTrackingCode}
-                                InputProps={{
-                                  readOnly: true
-                                }}
+                                disabled
                               />
                             </Stack>
                           </Grid>
-                          <Grid item xs={12} md={3} lg={3} xl={3}>
+                          <Grid size={{ xs: 12, sm: 12, md: 3, lg: 3, xl: 3 }}>
                             <Stack spacing={1}>
                               <TextField
                                 id="paymentTrackingCode"
                                 label={t(fieldsName + 'paymentTrackingCode')}
                                 defaultValue={row.original.paymentTrackingCode}
-                                InputProps={{
-                                  readOnly: true
-                                }}
+                                disabled
                               />
                             </Stack>
                           </Grid>
 
-                          <Grid item xs={12} md={3} lg={3} xl={3}>
+                          <Grid size={{ xs: 12, sm: 12, md: 3, lg: 3, xl: 3 }}>
                             <Stack spacing={1}>
                               <TextField
                                 id="trackingNumber"
                                 label={t(fieldsName + 'trackingNumber')}
                                 defaultValue={row.original.trackingNumber}
-                                InputProps={{
-                                  readOnly: true
-                                }}
+                                disabled
                               />
                             </Stack>
                           </Grid>
                         </Grid>
                       </Grid>
                     </Grid>
-                    <Grid container mt={1} direction="row" justifyContent="space-between" alignItems="center">
-                      <Grid item>
+                    <Grid container direction="row" sx={{ justifyContent: "space-between", alignItems: "center", mt: 1 }}>
+                      <Grid size={12}>
                         <Stack direction="row" spacing={2}>
                           <AnimateButton>
                             <Button
                               disabled={isSubmitting}
                               variant="contained"
                               color="warning"
-                              onClick={() => {}}
+                              onClick={() => { }}
                               startIcon={<Save />}
                             >
                               {t(buttonName + 'save')}

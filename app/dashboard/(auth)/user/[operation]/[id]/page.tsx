@@ -186,10 +186,10 @@ export default function AddOrEditUser({ params }: { readonly params: Promise<{ i
           <form noValidate onSubmit={handleSubmit}>
             <Grid container direction="row" sx={{ justifyContent: "center", alignItems: "flex-start" }}>
               <Grid container spacing={3} size={{ xs: 12, sm: 12, md: 10, lg: 10, xl: 7 }} >
-                <Grid>
+                <Grid size={12}>
                   <Typography variant="h5">{t('pages.cards.user-' + operation)}</Typography>
                 </Grid>
-                <Grid>
+                <Grid size={12}>
                   <MainCard>
                     <Grid container spacing={3} >
                       <Grid container spacing={0} direction="row" sx={{ justifyContent: "flex-end", alignItems: "flex-start" }} >
@@ -435,10 +435,10 @@ export default function AddOrEditUser({ params }: { readonly params: Promise<{ i
                             </Stack>
                             <FormControl sx={{ mt: 2 }}>
                               <Grid container spacing={0} sx={{ alignItems: "center" }} >
-                                <Grid>
+                                <Grid size={12}>
                                   <Box sx={{ bgcolor: passwordLevel?.color, width: 85, height: 8, borderRadius: '7px' }} />
                                 </Grid>
-                                <Grid>
+                                <Grid size={12}>
                                   <Typography variant="subtitle1" sx={{ fontSize: "0.75rem" }} >
                                     {passwordLevel?.label}
                                   </Typography>

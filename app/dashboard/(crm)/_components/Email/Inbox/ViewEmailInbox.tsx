@@ -20,15 +20,15 @@ export default function ViewEmailInbox({ emailInbox }: Readonly<{ emailInbox: Em
   let language = nextIntlService.getNextIntlLocale();
   return (
     <Grid container direction="row" sx={{ justifyContent: "center", alignItems: "flex-start" }} key={emailInbox.id}>
-      <Grid container item spacing={3} xs={12} sm={12} md={12} lg={12} xl={12} >
-        <Grid item>
+      <Grid container size={{ xs: 12, sm: 12, md: 12, lg: 12, xl: 12 }} spacing={3} >
+        <Grid size={12}>
           <Typography variant="h5">{t('pages.emailInboxs')}</Typography>
         </Grid>
-        <Grid item>
+        <Grid size={12}>
           <MainCard>
-            <Grid container item spacing={3} direction="row" justifyContent="flex-start" alignItems="flex-start">
-              <Grid container item spacing={3} xs={12} sm={12} md={12} lg={12} xl={8}>
-                <Grid item xs={12} sm={12} md={10} lg={10} xl={10}>
+            <Grid container spacing={3} direction="row" sx={{ justifyContent: "flex-start", alignItems: "flex-start" }}>
+              <Grid container spacing={3} size={{ xs: 12, sm: 12, md: 12, lg: 12, xl: 8 }}>
+                <Grid size={{ xs: 12, sm: 12, md: 10, lg: 10, xl: 10 }}>
                   <Stack spacing={1}>
                     <InputLabel htmlFor="fromAddress">{t(fieldsName + 'fromAddress')}</InputLabel>
                     {emailInbox?.fromAddress.map((fromAddress, index) => {
@@ -50,7 +50,7 @@ export default function ViewEmailInbox({ emailInbox }: Readonly<{ emailInbox: Em
                     })}
                   </Stack>
                 </Grid>
-                <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
+                <Grid size={{ xs: 12, sm: 12, md: 12, lg: 12, xl: 12 }}>
                   <Stack spacing={1}>
                     <InputLabel htmlFor="subject">{t(fieldsName + 'subject')}</InputLabel>
                     <OutlinedInput
@@ -63,10 +63,10 @@ export default function ViewEmailInbox({ emailInbox }: Readonly<{ emailInbox: Em
                     />
                   </Stack>
                 </Grid>
-                <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
+                <Grid size={{ xs: 12, sm: 12, md: 12, lg: 12, xl: 12 }}>
                   <Stack spacing={1}>
                     <div className="MuiOutlinedvid-notchedOutline" dangerouslySetInnerHTML={{ __html: emailInbox?.content }} />
-                    <Grid>
+                    <Grid size={12}>
                       <Tooltip title={t(fieldsName + 'registerDate')}>
                         <Chip
                           icon={<EventNote />}
@@ -103,8 +103,8 @@ export default function ViewEmailInbox({ emailInbox }: Readonly<{ emailInbox: Em
                   </Stack>
                 </Grid>
               </Grid>
-              <Grid container item spacing={3} xs={12} sm={12} md={12} lg={12} xl={4} justifyContent="flex-start" alignItems="flex-start">
-                <Grid item xs={12} sm={12} md={6} lg={6} xl={12}>
+              <Grid container spacing={3} size={12} xl={4} sx={{ justifyContent: "flex-start", alignItems: "flex-start" }}>
+                <Grid size={12}>
                   <Stack spacing={1}>
                     <InputLabel htmlFor="attachments">{t(fieldsName + 'attachments')}</InputLabel>
                     <FileUpload
@@ -117,8 +117,8 @@ export default function ViewEmailInbox({ emailInbox }: Readonly<{ emailInbox: Em
                   </Stack>
                 </Grid>
               </Grid>
-              <Grid container item spacing={3} direction="row" justifyContent="space-between" alignItems="center">
-                <Grid item>
+              <Grid container spacing={3} direction="row" sx={{ justifyContent: "space-between", alignItems: "center" }}>
+                <Grid size={12}>
                   <Stack direction="row" spacing={2}>
                     <AnimateButton>
                       <Button

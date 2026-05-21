@@ -1,34 +1,61 @@
-import * as React from 'react';
-import SingleSelect from '@dashboard/_components/Select/SingleSelect';
-import { useSession } from 'next-auth/react';
+import React from 'react';
+import { FormControl, InputLabel } from '@mui/material';
+import { useTranslations } from 'next-intl';
+import EnumDropdown from '@dashboard/_components/EnumDropdown';
+import DeliveryDateType from '@root/app/types/enums/DeliveryDateType';
 
 interface SelectDeliveryDateProps {
   defaultValue?: number | null;
   id: string;
-  name: string;
+  setFieldValue: (field: string, value: any, shouldValidate?: boolean) => void;
+  error: boolean;
   label: string;
-  setFieldValue?: (field: string, value: any, shouldValidate?: boolean) => void;
-  error?: boolean;
   disabled?: boolean;
+  showNoneOption?: boolean;
 }
 
-export default function SelectDeliveryDate({ defaultValue, id, name, label, setFieldValue, error = false, disabled = false }: Readonly<SelectDeliveryDateProps>) {
-  const { data: session } = useSession();
-  const jwt = session?.accessToken;
+const SelectDeliveryDate: React.FC<SelectDeliveryDateProps> = ({
+  defaultValue,
+  id,
+  setFieldValue,
+  error,
+  label,
+  disabled = false,
+  showNoneOption = false,
+}) => {
+  const t = useTranslations('');
 
-  const deliveryDateService = new DeliveryDateService(jwt ?? '');
+  const handleChange = (newValue: number | null) => {
+    setFieldValue(id, newValue);
+  };
 
+  // Create filtered enum object with only Cash and Debit
+  const filteredDeliveryDate = {
+    OneDay: DeliveryDateType.OneDay,
+    ThreeDays: DeliveryDateType.ThreeDays,
+    OneWeek: DeliveryDateType.OneWeek,
+    OneMonth: DeliveryDateType.OneMonth
+  };
+  // Create filtered enum object with only Cash and Debit
+  const filteredDeliveryDateLabels = {
+    OneDay: t("fields.order.deliveryDate.OneDay"),
+    ThreeDays: t("fields.order.deliveryDate.ThreeDays"),
+    OneWeek: t("fields.order.deliveryDate.OneWeek"),
+    OneMonth: t("fields.order.deliveryDate.OneMonth")
+  };
   return (
-    <SingleSelect
-      defaultValue={defaultValue}
-      id={id}
-      name={name}
-      label={label}
-      optionLabel={'name'}
-      setFieldValue={setFieldValue}
-      error={error}
-      disabled={disabled}
-      loadDataApi={() => deliveryDateService.getDeliveryDateList()}
-    />
+    <FormControl error={error} key={id} fullWidth>
+      <InputLabel id={`${id}-label`}>{label}</InputLabel>
+      <EnumDropdown
+        defaultValue={defaultValue || null}
+        enumObject={filteredDeliveryDate}
+        customLabels={filteredDeliveryDateLabels}
+        onChange={handleChange}
+        showNoneOption={showNoneOption}
+        noneOptionLabel="-"
+      />
+    </FormControl>
   );
-}
+};
+
+export default SelectDeliveryDate;

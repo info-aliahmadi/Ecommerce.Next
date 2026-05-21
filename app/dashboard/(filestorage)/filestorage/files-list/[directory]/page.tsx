@@ -12,11 +12,11 @@ export default function FilesListPage({ params }: { readonly params: Promise<{ d
   const { directory } = React.use(params);
   return (
     <Grid container direction="row" sx={{ justifyContent: "center", alignItems: "flex-start" }}>
-      <Grid container spacing={3} item xs={12} sm={12} md={12} lg={12} >
-        <Grid item>
+      <Grid container spacing={3} size={12} >
+        <Grid size={12}>
           <Typography variant="h5">{t('pages.filesList')}</Typography>
         </Grid>
-        <Grid item>
+        <Grid size={12}>
           <FilesList directory={directory} />
         </Grid>
       </Grid>

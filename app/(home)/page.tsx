@@ -98,11 +98,11 @@ export default function HomePage() {
           }}
         />
         <Grid container sx={{ height: '100%' }}>
-          <Grid item md={6} sx={{ position: 'relative', p: { xs: 3, md: 6 }, pr: { md: 0 }, display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+          <Grid size={{md:6}} sx={{ position: 'relative', p: { xs: 3, md: 6 }, pr: { md: 0 }, display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
             <Typography component="h1" variant="h3" color="inherit" gutterBottom>
               Welcome to Our Shop
             </Typography>
-            <Typography variant="h5" color="inherit" paragraph>
+            <Typography variant="h5" color="inherit" >
               Discover our wide range of products at amazing prices. Quality products delivered to your doorstep.
             </Typography>
             <Button variant="contained" color="primary" size="large" sx={{ mt: 2, alignSelf: 'flex-start' }}>
@@ -137,7 +137,7 @@ export default function HomePage() {
             onChange={(e) => setSearchQuery(e.target.value)}
             fullWidth
             variant="standard"
-            InputProps={{ disableUnderline: true }}
+            // InputProps={{ disableUnderline: true }}
           />
           <IconButton type="submit" aria-label="search">
             <Search />
@@ -153,7 +153,7 @@ export default function HomePage() {
           <Grid container spacing={3}>
             {featuredCategories.length > 0 ? (
               featuredCategories.map((category) => (
-                <Grid item xs={12} sm={6} md={4} key={category.id}>
+                <Grid size={{ xs: 12, sm: 12, md: 6, lg: 4, xl:4}} key={category.id}>
                   <Card 
                     sx={{ 
                       height: '100%', 
@@ -198,7 +198,7 @@ export default function HomePage() {
                 </Grid>
               ))
             ) : (
-              <Grid item xs={12}>
+              <Grid size={12}>
                 <Paper sx={{ p: 3, textAlign: 'center' }}>
                   <Typography variant="body1">No categories found.</Typography>
                 </Paper>
@@ -216,7 +216,7 @@ export default function HomePage() {
           <Grid container spacing={3}>
             {featuredProducts.length > 0 ? (
               featuredProducts.map((product) => (
-                <Grid item xs={12} sm={6} md={3} key={product.id}>
+                <Grid size={{ xs: 12, sm: 12, md: 3, lg: 3, xl:3}} key={product.id}>
                   <Card 
                     sx={{ 
                       height: '100%', 
@@ -273,7 +273,7 @@ export default function HomePage() {
                 </Grid>
               ))
             ) : (
-              <Grid item xs={12}>
+              <Grid size={12}>
                 <Paper sx={{ p: 3, textAlign: 'center' }}>
                   <Typography variant="body1">No products found.</Typography>
                 </Paper>
@@ -364,7 +364,7 @@ export default function HomePage() {
       <Box sx={{ bgcolor: 'background.paper', py: 6 }}>
         <Container maxWidth="lg">
           <Grid container spacing={4}>
-            <Grid item xs={12} sm={6} md={3}>
+            <Grid size={{ xs: 12, sm: 12, md: 3, lg: 3, xl:3}}>
               <Typography variant="h6" gutterBottom>
                 Shop
               </Typography>
@@ -375,7 +375,7 @@ export default function HomePage() {
                 <Link href="/sale" style={{ textDecoration: 'none', marginBottom: '8px' }}>Sale</Link>
               </Box>
             </Grid>
-            <Grid item xs={12} sm={6} md={3}>
+            <Grid size={{ xs: 12, sm: 12, md: 3, lg: 3, xl:3}}>
               <Typography variant="h6" gutterBottom>
                 Customer Service
               </Typography>
@@ -386,7 +386,7 @@ export default function HomePage() {
                 <Link href="/terms" style={{ textDecoration: 'none', marginBottom: '8px' }}>Terms & Conditions</Link>
               </Box>
             </Grid>
-            <Grid item xs={12} sm={6} md={3}>
+            <Grid size={{ xs: 12, sm: 12, md: 3, lg: 3, xl:3}}>
               <Typography variant="h6" gutterBottom>
                 My Account
               </Typography>
@@ -397,7 +397,7 @@ export default function HomePage() {
                 <Link href="/wishlist" style={{ textDecoration: 'none', marginBottom: '8px' }}>Wishlist</Link>
               </Box>
             </Grid>
-            <Grid item xs={12} sm={6} md={3}>
+            <Grid size={{ xs: 12, sm: 12, md: 3, lg: 3, xl:3}}>
               <Typography variant="h6" gutterBottom>
                 About Us
               </Typography>

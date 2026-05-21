@@ -1,7 +1,7 @@
 import CONFIG from '@root/config';
-import {formatDistanceToNow} from 'date-fns';
+import { formatDistanceToNow } from 'date-fns';
 import moment from 'moment';
-import {enUS, faIR, ar} from 'date-fns/locale';
+import { enUS, faIR, ar } from 'date-fns/locale';
 
 type DateStyle = 'short' | 'full' | 'long' | 'medium';
 
@@ -9,8 +9,8 @@ export const DateViewer = (
   currentLanguage: string,
   date?: Date | number | undefined,
   dateStyle?: DateStyle,
-) => {
-  if (date === null || date === undefined) return false;
+): string => {
+  if (date === null || date === undefined) return '';
 
   // Only run on client side to avoid hydration mismatch
   if (typeof window === 'undefined') {
@@ -28,7 +28,7 @@ export const DateViewer = (
 export const DateTimeViewer = (
   currentLanguage: string,
   dateTime: Date | undefined,
-) => {
+): string => {
   if (dateTime === null || dateTime === undefined) return '';
 
   // Only run on client side to avoid hydration mismatch

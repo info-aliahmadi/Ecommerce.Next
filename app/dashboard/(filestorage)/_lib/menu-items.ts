@@ -12,6 +12,7 @@ const pages = {
   id: 'utilities',
   title: 'Utilities',
   type: 'group',
+  icon: icons.Storage,
   permission: FS_GALLEY_VIEW,
   children: [
     {

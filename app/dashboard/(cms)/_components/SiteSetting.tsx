@@ -84,8 +84,8 @@ const SiteSetting = () => {
       >
         {({ errors, handleBlur, handleChange, setFieldValue, handleSubmit, isSubmitting, touched, values }) => (
           <form noValidate onSubmit={handleSubmit}>
-            <Grid container item spacing={3} justifyContent="flex-start">
-              <Grid item xs={12} md={12}>
+            <Grid container spacing={3} sx={{ justifyContent: "flex-start" }} >
+              <Grid size={{ xs: 12, sm: 12, md: 12, lg: 12, xl: 12 }}>
                 <Stack spacing={1}>
                   <InputLabel htmlFor="siteTitle">{t(fieldsName + 'siteTitle')}</InputLabel>
                   <OutlinedInput
@@ -106,7 +106,7 @@ const SiteSetting = () => {
                   )}
                 </Stack>
               </Grid>
-              <Grid item xs={12} md={12}>
+              <Grid size={{ xs: 12, sm: 12, md: 12, lg: 12, xl: 12 }}>
                 <Stack spacing={1}>
                   <InputLabel htmlFor="siteDescription">{t(fieldsName + 'siteDescription')}</InputLabel>
                   <TextareaAutosize
@@ -135,7 +135,7 @@ const SiteSetting = () => {
                 </Stack>
               </Grid>
 
-              <Grid item xs={12} md={12}>
+              <Grid size={{ xs: 12, sm: 12, md: 12, lg: 12, xl: 12 }}>
                 <Stack spacing={1}>
                   <InputLabel htmlFor="siteKeywords">{t(fieldsName + 'siteKeywords')}</InputLabel>
                   <TextareaAutosize
@@ -164,7 +164,7 @@ const SiteSetting = () => {
                 </Stack>
               </Grid>
 
-              <Grid item xs={12} md={12}>
+              <Grid size={{ xs: 12, sm: 12, md: 12, lg: 12, xl: 12 }}>
                 <Stack spacing={1}>
                   <InputLabel htmlFor="headerHtml">{t(fieldsName + 'headerHtml')}</InputLabel>
                   <TextareaAutosize
@@ -193,7 +193,7 @@ const SiteSetting = () => {
                 </Stack>
               </Grid>
 
-              <Grid item xs={12} md={12}>
+              <Grid size={{ xs: 12, sm: 12, md: 12, lg: 12, xl: 12 }}>
                 <Stack spacing={1}>
                   <InputLabel htmlFor="footerHtml">{t(fieldsName + 'footerHtml')}</InputLabel>
                   <TextareaAutosize
@@ -221,7 +221,7 @@ const SiteSetting = () => {
                   )}
                 </Stack>
               </Grid>
-              <Grid item xs={12} md={3}>
+              <Grid size={{ xs: 12, sm: 12, md: 3, lg: 3, xl: 3 }}>
                 <Stack spacing={1}>
                   <InputLabel htmlFor="numberOfPostsPerList">{t(fieldsName + 'numberOfPostsPerList')}</InputLabel>
                   <OutlinedInput
@@ -242,8 +242,8 @@ const SiteSetting = () => {
                   )}
                 </Stack>
               </Grid>
-              <Grid container item spacing={3} direction="row" justifyContent="space-between" alignItems="center">
-                <Grid item>
+              <Grid container spacing={3} direction="row" sx={{ justifyContent: "space-between", alignItems: "center" }}>
+                <Grid size={12}>
                   <Stack direction="row" spacing={2}>
                     <AnimateButton>
                       <Button

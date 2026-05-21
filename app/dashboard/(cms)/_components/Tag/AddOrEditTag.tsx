@@ -146,7 +146,7 @@ const AddOrEditTag = ({ row, isNew, open, setOpen, refetch }:
               </DialogTitle>
               <DialogContent>
                 <Grid container spacing={3} >
-                  <Grid item>
+                  <Grid size={12}>
                     <Stack spacing={1}>
                       <InputLabel htmlFor="title">{t(fieldsName + 'title')}</InputLabel>
                       <OutlinedInput

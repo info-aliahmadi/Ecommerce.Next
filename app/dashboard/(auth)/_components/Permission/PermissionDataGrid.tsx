@@ -15,6 +15,8 @@ import AddIcon from '@mui/icons-material/Add';
 import PermissionService from '@dashboard/(auth)/_service/PermissionService';
 import { useSession } from 'next-auth/react';
 import { MRT_Row } from 'material-react-table';
+import { MRT_Column } from '@root/app/types/MRT_Column';
+import { GridDataBound } from '@root/app/types/GridDataBound';
 // ===============================|| COLOR BOX ||=============================== //
 
 function PermissionDataGrid() {

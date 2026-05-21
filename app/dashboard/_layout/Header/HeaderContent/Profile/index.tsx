@@ -33,13 +33,13 @@ interface TabPanelProps {
   children?: React.ReactNode;
   index: number;
   value: number;
-  dir : 'ltr' | 'rtl'
+  dir: 'ltr' | 'rtl'
 }
 // tab panel wrapper
 function TabPanel(props: Readonly<TabPanelProps>) {
-  const { children, value, index, dir,...other } = props;
+  const { children, value, index, dir, ...other } = props;
   return (
-    <div role="tabpanel" hidden={value !== index} id={`profile-tabpanel-${index}`} aria-labelledby={`profile-tab-${index}`}{...other} style={{direction : dir}}>
+    <div role="tabpanel" hidden={value !== index} id={`profile-tabpanel-${index}`} aria-labelledby={`profile-tab-${index}`}{...other} style={{ direction: dir }}>
       {value === index && <Box >{children}</Box>}
     </div>
   );
@@ -56,7 +56,7 @@ function a11yProps(index: number) {
 
 const Profile = () => {
   const theme = useTheme();
-  const [t]= useTranslation();
+  const t = useTranslations("");
 
   const { data: session } = useSession();
 
@@ -84,7 +84,7 @@ const Profile = () => {
 
   return (
     <Box sx={{ flexShrink: 0, ml: 0.75 }}>
-      
+
       <ButtonBase
         sx={{
           p: 0.25,
@@ -97,7 +97,7 @@ const Profile = () => {
         aria-haspopup="true"
         onClick={handleToggle}
       >
-        <Stack direction="row" spacing={2} alignItems="center" sx={{ p: 0.5 }}>
+        <Stack direction="row" spacing={2} sx={{ alignItems: "center", p: 0.5 }}>
           <Avatar alt="" src={avatar} sx={{ width: 32, height: 32 }} />
           <Typography variant="subtitle1">{user?.name}</Typography>
         </Stack>
@@ -137,9 +137,9 @@ const Profile = () => {
                 <ClickAwayListener onClickAway={handleClose}>
                   <MainCard elevation={0} border={false} content={false}>
                     <CardContent sx={{ px: 2.5, pt: 3 }}>
-                      <Grid container justifyContent="space-between" alignItems="center">
-                        <Grid>
-                          <Stack direction="row" spacing={1.25} alignItems="center">
+                      <Grid container sx={{ justifyContent: "space-between", alignItems: "center" }}>
+                        <Grid size={12}>
+                          <Stack direction="row" spacing={1.25} sx={{ alignItems: "center" }}>
                             <Avatar alt="" src={avatar} sx={{ width: 32, height: 32 }} />
                             <Stack>
                               <Typography variant="h6">{user?.userName}</Typography>
@@ -149,7 +149,7 @@ const Profile = () => {
                             </Stack>
                           </Stack>
                         </Grid>
-                        <Grid>
+                        <Grid size={12}>
                           <IconButton size="large" color="secondary" onClick={() => signOut()}>
                             <LogoutOutlined />
                           </IconButton>

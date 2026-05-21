@@ -42,11 +42,15 @@
     "fileStorage": "Storage",
     "sale": "Sale",
     "product": "Products",
+    "product-tag": "Product Tag",
+    "product-attribute": "Product Attribute",
+    "category": "Category",
     "order": "Orders",
     "manufacturer": "Manufacturers"
   },
   "pages": {
     "edit-profile": "ویرایش پروفایل",
+    "history": "History",
     "change-password": "تغییر رمز عبور",
     "language": "زبان",
     "accountSettings": "تنظیمات حساب",
@@ -135,11 +139,11 @@
     "new-password": "رمز عبور جدید",
     "role": {
       "name": "نام",
-      "normalizedname": "نام نرمال شده"
+      "normalizedName": "نام نرمال شده"
     },
     "permission": {
       "name": "نام",
-      "normalizedname": "نام نرمال شده"
+      "normalizedName": "نام نرمال شده"
     },
     "siteSetting": {
       "siteTitle": "عنوان سایت",
@@ -147,7 +151,14 @@
       "siteKeywords": "کلمات کلیدی سایت (SEO)",
       "headerHtml": "هدر HTML",
       "footerHtml": "فوتر HTML",
-      "numberOfPostsPerList": "تعداد پست‌ها در هر لیست"
+      "numberOfPostsPerList": "تعداد پست‌ها در هر لیست",
+      "currencyTypes": {
+        "Rial": "Rial",
+        "Toman": "Toman",
+        "Dollar": "Dollar",
+        "Euro": "Euro",
+        "Dinar": "Dinar"
+      }
     },
     "topic": {
       "title": "عنوان",
@@ -319,7 +330,13 @@
       "paymentDateUtcToString": "تاریخ پرداخت",
       "cardName": "نام کارت",
       "cardNumber": "شماره کارت",
-      "paymentTypeTitle": "نوع پرداخت"
+      "paymentTypeTitle": "نوع پرداخت",
+      "deliveryDate" :{
+        "OneDay" : "one Day",
+        "ThreeDays" : "Three Days",
+        "OneWeek" : "One Week",
+        "OneMonth" : "One Month"
+      }
     },
     "orderItem": {
       "id": "شناسه",
@@ -537,7 +554,7 @@
     "fileStorage": {
       "upload": "بارگذاری",
       "uploadFiles": "بارگذاری فایل‌ها",
-      "uploadedInfo": "بارگذاری شده توسط {{user}} در {{date}}",
+      "uploadedInfo": "بارگذاری شده توسط {user} در {date}",
       "edit": "ویرایش فایل",
       "download": "دانلود",
       "delete": "حذف فایل"
@@ -648,26 +665,26 @@
   },
   "dialog": {
     "add": {
-      "title": "افزودن {{item}} جدید"
+      "title": "افزودن {item} جدید"
     },
     "edit": {
-      "title": "ویرایش {{item}}"
+      "title": "ویرایش {item}"
     },
     "delete": {
-      "title": "حذف {{item}}",
+      "title": "حذف {item}",
       "description": "آیا مطمئن هستید که می‌خواهید این مورد را برای همیشه حذف کنید؟",
       "moveToTrash": "آیا مطمئن هستید که می‌خواهید این مورد را به سطل زباله منتقل کنید؟"
     },
     "topic": {
       "addMain": "افزودن موضوع اصلی",
-      "addSub": "افزودن موضوع فرعی در {{parentTitle}}"
+      "addSub": "افزودن موضوع فرعی در {parentTitle}"
     },
     "tag": {
       "addMain": "افزودن برچسب جدید"
     },
     "menu": {
       "addMain": "افزودن منوی اصلی",
-      "addSub": "افزودن منوی فرعی در {{parentTitle}}"
+      "addSub": "افزودن منوی فرعی در {parentTitle}"
     },
     "slideshow": {
       "add": "افزودن اسلاید جدید"

@@ -51,6 +51,7 @@
   },
   "pages": {
     "edit-profile": "ویرایش پروفایل",
+    "history": "تاریخچه",
     "change-password": "تغییر رمز عبور",
     "language": "زبان",
     "accountSettings": "تنظیمات حساب",
@@ -149,11 +150,11 @@
     "new-password": "رمز عبور جدید",
     "role": {
       "name": "نام",
-      "normalizedname": "نام نرمال شده"
+      "normalizedName": "نام نرمال شده"
     },
     "permission": {
       "name": "نام",
-      "normalizedname": "نام نرمال شده"
+      "normalizedName": "نام نرمال شده"
     },
     "siteSetting": {
       "siteTitle": "عنوان سایت",
@@ -161,7 +162,14 @@
       "siteKeywords": "کلمات کلیدی سایت (SEO)",
       "headerHtml": "هدر HTML",
       "footerHtml": "فوتر HTML",
-      "numberOfPostsPerList": "تعداد پست‌ها در هر لیست"
+      "numberOfPostsPerList": "تعداد پست‌ها در هر لیست",
+      "currencyTypes": {
+        "Rial": "ریال",
+        "Toman": "تومان",
+        "Dollar": "دلار",
+        "Euro": "یورو",
+        "Dinar": "دینار"
+      }
     },
     "topic": {
       "title": "عنوان",
@@ -333,7 +341,13 @@
       "paymentDateUtcToString": "تاریخ پرداخت",
       "cardName": "نام کارت",
       "cardNumber": "شماره کارت",
-      "paymentTypeTitle": "نوع پرداخت"
+      "paymentTypeTitle": "نوع پرداخت",
+      "deliveryDate" :{
+        "OneDay" : "یک روز",
+        "ThreeDays" : "سه روز",
+        "OneWeek" : "یک هفته",
+        "OneMonth" : "یک ماه"
+      }
     },
     "orderItem": {
       "id": "شناسه",
@@ -573,7 +587,7 @@
     "fileStorage": {
       "upload": "بارگذاری",
       "uploadFiles": "بارگذاری فایل‌ها",
-      "uploadedInfo": "بارگذاری شده توسط {{user}} در {{date}}",
+      "uploadedInfo": "بارگذاری شده توسط {user} در {date}",
       "edit": "ویرایش فایل",
       "download": "دانلود",
       "delete": "حذف فایل",
@@ -718,26 +732,26 @@
   },
   "dialog": {
     "add": {
-      "title": "افزودن {{item}} جدید"
+      "title": "افزودن {item} جدید"
     },
     "edit": {
-      "title": "ویرایش {{item}}"
+      "title": "ویرایش {item}"
     },
     "delete": {
-      "title": "حذف {{item}}",
+      "title": "حذف {item}",
       "description": "آیا مطمئن هستید که می‌خواهید این مورد را برای همیشه حذف کنید؟",
       "moveToTrash": "آیا مطمئن هستید که می‌خواهید این مورد را به سطل زباله منتقل کنید؟"
     },
     "topic": {
       "addMain": "افزودن موضوع اصلی",
-      "addSub": "افزودن موضوع فرعی در {{parentTitle}}"
+      "addSub": "افزودن موضوع فرعی در {parentTitle}"
     },
     "tag": {
       "addMain": "افزودن برچسب جدید"
     },
     "menu": {
       "addMain": "افزودن منوی اصلی",
-      "addSub": "افزودن منوی فرعی در {{parentTitle}}"
+      "addSub": "افزودن منوی فرعی در {parentTitle}"
     },
     "slideshow": {
       "add": "افزودن اسلاید جدید"
@@ -759,7 +773,7 @@
     },
     "category": {
       "addMain": "افزودن دسته‌بندی اصلی",
-      "addSub": "افزودن دسته‌بندی فرعی در {{parentTitle}}"
+      "addSub": "افزودن دسته‌بندی فرعی در {parentTitle}"
     },
     "product-tag" : {
       "add" :"افزودن برچسب جدید",

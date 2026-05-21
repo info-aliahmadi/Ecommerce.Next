@@ -174,7 +174,7 @@ const AddOrEditLink = ({ row, linkSection, data, setData, isNew, open, setOpen, 
               </DialogTitle>
               <DialogContent>
                 <Grid container spacing={3} >
-                  <Grid item>
+                  <Grid size={12}>
                     <Stack spacing={1}>
                       <InputLabel htmlFor="title">{t(fieldsName + 'title')}</InputLabel>
                       <OutlinedInput
@@ -195,7 +195,7 @@ const AddOrEditLink = ({ row, linkSection, data, setData, isNew, open, setOpen, 
                       )}
                     </Stack>
                   </Grid>
-                  <Grid item>
+                  <Grid size={12}>
                     <Stack spacing={1}>
                       <InputLabel htmlFor="url">{t(fieldsName + 'url')}</InputLabel>
                       <OutlinedInput
@@ -216,7 +216,7 @@ const AddOrEditLink = ({ row, linkSection, data, setData, isNew, open, setOpen, 
                       )}
                     </Stack>
                   </Grid>
-                  <Grid item>
+                  <Grid size={12}>
                     <Stack spacing={1}>
                       <InputLabel htmlFor="description">{t(fieldsName + 'description')}</InputLabel>
                       <OutlinedInput
@@ -238,7 +238,7 @@ const AddOrEditLink = ({ row, linkSection, data, setData, isNew, open, setOpen, 
                       )}
                     </Stack>
                   </Grid>
-                  <Grid item>
+                  <Grid size={12}>
                     <Stack spacing={1}>
                       <InputLabel htmlFor="imagePreviewId">{t(fieldsName + 'imagePreviewId')}</InputLabel>
                       <ImageUpload

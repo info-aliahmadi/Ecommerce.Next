@@ -15,10 +15,10 @@ registerPlugin(
   FilePondPluginGetFile
 );
 // Import FilePond styles
-import '@root/public/css/filepond.min.css';
-import '@root/public/css/filepond-plugin-image-preview.css';
-import '@root/public/css/filepond-plugin-file-poster.min.css';
-import '@root/public/css/filepond-plugin-get-file.min.css';
+import 'filepond/dist/filepond.min.css';
+import 'filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css';
+import 'filepond-plugin-file-poster/dist/filepond-plugin-file-poster.css';
+import 'filepond-plugin-get-file/dist/filepond-plugin-get-file.css';
 
 import { useEffect, useState } from 'react';
 import { useTranslations } from 'next-intl';
@@ -26,10 +26,11 @@ import CONFIG from '@root/config';
 import FileStorageService from '@dashboard/(filestorage)/_service/FileStorageService';
 import { useSession } from 'next-auth/react';
 import { FilePondFile, FilePondInitialFile } from 'filepond';
+import FileUploadModel from '../../(filestorage)/_types/FileUploadModel';
 
 interface FileUploadProps {
   id?: string;
-  name?: string;
+  name: string;
   setFieldValue?: (field: string, value: any) => void;
   value?: any;
   minFileSize?: string;
@@ -52,7 +53,7 @@ export default function FileUpload({
 }: Readonly<FileUploadProps>) {
   const [files, setFiles] = useState<FilePondInitialFile[]>([]);
   const [values, setValues] = useState<any[]>([]);
-  const [t, i18n] = useTranslation();
+  const t = useTranslations("");
   const { data: session } = useSession();
   const jwt = session?.accessToken;
 
@@ -205,10 +206,10 @@ export default function FileUpload({
           let newValue = values;
           const index = newValue.indexOf(fileId);
           newValue.splice(index, 1);
-          setFieldValue(id, newValue);
+          setFieldValue(name, newValue);
           setValues(newValue);
         } else {
-          setFieldValue(id, fileId);
+          setFieldValue(name, fileId);
           return true;
         }
       }
@@ -225,11 +226,11 @@ export default function FileUpload({
           newValues.push(fileInfo?.id);
 
           if (setFieldValue != undefined)
-            setFieldValue(id, newValues);
+            setFieldValue(name, newValues);
           setValues((old) => [...old, fileInfo?.id]);
         } else {
           if (setFieldValue != undefined)
-            setFieldValue(id, fileInfo?.id);
+            setFieldValue(name, fileInfo?.id);
         }
       }
     }
@@ -270,21 +271,20 @@ export default function FileUpload({
       allowFilePoster={true}
       allowFileTypeValidation={true}
       // acceptedFileTypes={['image/png', 'image/jpeg', 'video/*']}
-      labelFileTypeNotAllowed={t('validation.fileUpload.labelFileTypeNotAllowed')}
-      fileValidateTypeLabelExpectedTypes={t('validation.fileUpload.fileValidateTypeLabelExpectedTypes')}
+      labelFileTypeNotAllowed={"نوع فایل مجاز نیست"}
+      fileValidateTypeLabelExpectedTypes={"انتظار می‌رود {allButLastType} یا {lastType}"}
       allowFileSizeValidation={true}
       minFileSize={minFileSize ? minFileSize : '5KB'}
       maxFileSize={maxFileSize ? maxFileSize : '200MB'}
-      labelMaxFileSizeExceeded={t('validation.fileUpload.labelMaxFileSizeExceeded')}
-      labelMaxFileSize={t('validation.fileUpload.labelMaxFileSize')}
-      labelMinFileSizeExceeded={t('validation.fileUpload.labelMinFileSizeExceeded')}
-      labelMinFileSize={t('validation.fileUpload.labelMinFileSize')}
-      allowReplace={true}
+      labelMaxFileSizeExceeded={"فایل خیلی بزرگ است"}
+      labelMaxFileSize={"حداکثر اندازه فایل {filesize} است"}
+      labelMinFileSizeExceeded={"فایل خیلی کوچک است"}
+      labelMinFileSize={"حداقل اندازه فایل {filesize} است"}
+      labelIdle={"فایل‌های خود را بکشید و رها کنید یا <span class='filepond--label-action'>مرور کنید</span>"}
       instantUpload={true}
       allowMultiple={(allowMultiple && true) ?? false}
       credits={false}
       name={name ?? 'filepond'} /* sets the file input name, it's filepond by default */
-      labelIdle={t('validation.fileUpload.imagePreviewDescription')}
       files={files}
       onupdatefiles={onupdatefiles}
       server={{

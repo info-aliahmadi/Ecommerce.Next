@@ -137,7 +137,7 @@ const AddOrEditProductTag = ({
                     </DialogTitle>
                     <DialogContent>
                         <Grid container spacing={3} sx={{ mt: 0.25 }}>
-                            <Grid item xs={12}>
+                            <Grid size={12}>
                                 <Stack spacing={1}>
                                     <InputLabel htmlFor="name">{t('fields.product-tag.name')}</InputLabel>
                                     <OutlinedInput

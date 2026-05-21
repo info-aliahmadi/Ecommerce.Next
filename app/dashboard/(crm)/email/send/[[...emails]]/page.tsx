@@ -80,7 +80,7 @@ export default function SendEmailOutbox({ params }: { readonly params: Promise<{
     isDraft: emailOutbox?.isDraft,
     toAddress: emailOutbox?.toAddress ?? [],
     attachments: emailOutbox?.attachments ?? [],
-    fromAddress : []
+    fromAddress: []
   }
   return (
     <>
@@ -108,15 +108,15 @@ export default function SendEmailOutbox({ params }: { readonly params: Promise<{
         {({ errors, handleBlur, handleChange, setFieldValue, handleSubmit, isSubmitting, touched, values }) => (
           <form noValidate onSubmit={handleSubmit}>
             <Grid container direction="row" sx={{ justifyContent: "center", alignItems: "flex-start" }}>
-              <Grid container item spacing={3} xs={12} sm={12} md={12} lg={12} xl={12} >
-                <Grid item>
+              <Grid container size={{ xs: 12, sm: 12, md: 12, lg: 12, xl: 12 }} spacing={3} >
+                <Grid size={12}>
                   <Typography variant="h5">{t('pages.cards.sendEmail')}</Typography>
                 </Grid>
-                <Grid item>
+                <Grid size={12}>
                   <MainCard>
-                    <Grid container item spacing={3} direction="row" justifyContent="flex-start" alignItems="flex-start">
-                      <Grid container item spacing={3} xs={12} sm={12} md={12} lg={12} xl={8} display={''}>
-                        <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
+                    <Grid container spacing={3} direction="row" sx={{ justifyContent: "flex-start", alignItems: "flex-start" }}>
+                      <Grid container spacing={3} size={{ xs: 12, sm: 12, md: 12, lg: 12, xl: 8 }}>
+                        <Grid size={{ xs: 12, sm: 12, md: 12, lg: 12, xl: 12 }}>
                           <Stack spacing={1}>
                             <InputLabel htmlFor="toUserIds">{t(fieldsName + 'toAddress')}</InputLabel>
                             <SelectEmailAddress
@@ -134,7 +134,7 @@ export default function SendEmailOutbox({ params }: { readonly params: Promise<{
                             )}
                           </Stack>
                         </Grid>
-                        <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
+                        <Grid size={{ xs: 12, sm: 12, md: 12, lg: 12, xl: 12 }}>
                           <Stack spacing={1}>
                             <InputLabel htmlFor="subject">{t(fieldsName + 'subject')}</InputLabel>
                             <OutlinedInput
@@ -155,7 +155,7 @@ export default function SendEmailOutbox({ params }: { readonly params: Promise<{
                             )}
                           </Stack>
                         </Grid>
-                        <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
+                        <Grid size={{ xs: 12, sm: 12, md: 12, lg: 12, xl: 12 }}>
                           <Stack spacing={1}>
                             <Editor
                               id="content"
@@ -171,19 +171,8 @@ export default function SendEmailOutbox({ params }: { readonly params: Promise<{
                           </Stack>
                         </Grid>
                       </Grid>
-                      <Grid
-                        container
-                        item
-                        spacing={3}
-                        xs={12}
-                        sm={12}
-                        md={12}
-                        lg={12}
-                        xl={4}
-                        justifyContent="flex-start"
-                        alignItems="flex-start"
-                      >
-                        <Grid item xs={12} sm={12} md={6} lg={6} xl={12}>
+                      <Grid container spacing={3} size={{ lg: 12, xl: 4 }} sx={{ justifyContent: "flex-start", alignItems: "flex-start" }}>
+                        <Grid size={12}>
                           <Stack spacing={1}>
                             <InputLabel htmlFor="attachments">{t(fieldsName + 'attachments')}</InputLabel>
                             <FileUpload
@@ -197,8 +186,8 @@ export default function SendEmailOutbox({ params }: { readonly params: Promise<{
                           </Stack>
                         </Grid>
                       </Grid>
-                      <Grid container item spacing={3} direction="row" justifyContent="space-between" alignItems="center">
-                        <Grid item>
+                      <Grid container spacing={3} direction="row" sx={{ justifyContent: "space-between", alignItems: "center" }}>
+                        <Grid size={12}>
                           <Stack direction="row" spacing={2}>
                             <AnimateButton>
                               <Button

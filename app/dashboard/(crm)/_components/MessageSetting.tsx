@@ -76,8 +76,8 @@ const MessageSetting = () => {
       >
         {({ errors, handleBlur, handleChange, setFieldValue, handleSubmit, isSubmitting, touched, values }) => (
           <form noValidate onSubmit={handleSubmit}>
-            <Grid container item spacing={3} justifyContent="flex-start">
-              <Grid item xs={12} md={12}>
+            <Grid container spacing={3} sx={{ justifyContent: "flex-start" }}>
+              <Grid size={{ xs: 12, sm: 12, md: 12, lg: 12, xl: 12}}>
                 <Stack spacing={1}>
                   <InputLabel htmlFor="recipientIdsForContactMessage">{t(fieldsName + 'recipientIdsForContactMessage')}</InputLabel>
                   <SelectMultiUsers
@@ -88,7 +88,7 @@ const MessageSetting = () => {
                   />
                 </Stack>
               </Grid>
-              <Grid item xs={12} md={12}>
+              <Grid size={{ xs: 12, sm: 12, md: 12, lg: 12, xl: 12}}>
                 <Stack spacing={1}>
                   <InputLabel htmlFor="recipientIdsForRequestMessage">{t(fieldsName + 'recipientIdsForRequestMessage')}</InputLabel>
                   <SelectMultiUsers
@@ -100,8 +100,8 @@ const MessageSetting = () => {
                 </Stack>
               </Grid>
 
-              <Grid container item spacing={3} direction="row" justifyContent="space-between" alignItems="center">
-                <Grid item>
+              <Grid container spacing={3} direction="row" sx={{ justifyContent: "space-between", alignItems: "center" }}>
+                <Grid size={12}>
                   <Stack direction="row" spacing={2}>
                     <AnimateButton>
                       <Button

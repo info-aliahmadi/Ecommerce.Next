@@ -32,7 +32,6 @@ function ClientOnly({ children }: { children: any }) {
 // ==============================|| MAIN LAYOUT ||============================== //
 
 export default function DashboardThemeLayout({ children }: { children: any }) {
-
   return (
     <SessionProvider>
       <ReduxProvider store={store}>

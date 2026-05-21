@@ -1,6 +1,3 @@
-// third-party
-import merge from 'lodash/merge';
-
 // project import
 import Badge from './Badge';
 import Button from './Button';
@@ -26,25 +23,25 @@ import { Theme } from '@mui/material';
 // ==============================|| OVERRIDES - MAIN ||============================== //
 
 export default function ComponentsOverrides(theme : Theme) {
-  return merge(
-    Button(theme),
-    Badge(theme),
-    CardContent(),
-    Checkbox(theme),
-    Chip(theme),
-    IconButton(theme),
-    InputLabel(theme),
-    LinearProgress(),
-    Link(theme),
-    ListItemIcon(),
-    OutlinedInput(theme),
-    TextareaAutosize(theme),
-    Tab(theme),
-    TableCell(theme),
-    Tabs(),
-    Typography(),
-    Tooltip(theme),
-    DialogContent(theme),
-    Select(theme)
-  );
+  return {
+    ...Button(theme),
+    ...Badge(theme),
+    ...CardContent(),
+    ...Checkbox(theme),
+    ...Chip(theme),
+    ...IconButton(theme),
+    ...InputLabel(theme),
+    ...LinearProgress(),
+    ...Link(theme),
+    ...ListItemIcon(),
+    ...OutlinedInput(theme),
+    ...TextareaAutosize(theme),
+    ...Tab(theme),
+    ...TableCell(theme),
+    ...Tabs(),
+    ...Typography(),
+    ...Tooltip(theme),
+    ...DialogContent(theme),
+    ...Select(theme)
+  };
 }

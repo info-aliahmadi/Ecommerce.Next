@@ -5,14 +5,12 @@ import { Box, IconButton, Tooltip, useMediaQuery, useTheme } from '@mui/material
 // project import
 import Search from './Search';
 import Profile from './Profile';
-import Notification from './Notification';
 import MobileSection from './MobileSection';
 import Brightness4Icon from '@mui/icons-material/Brightness4';
 import Brightness7Icon from '@mui/icons-material/Brightness7';
-import Fetch from '@root/utils/Fetch';
-import CONFIG from '@root/config';
 import { useSession } from 'next-auth/react';
 import { useTranslations } from 'next-intl';
+import AccountService from '@root/app/dashboard/(auth)/_service/AccountService';
 
 // ==============================|| HEADER - CONTENT ||============================== //
 
@@ -21,6 +19,11 @@ const HeaderContent = () => {
 
   const t = useTranslations("");
   const { data: session, update } = useSession();
+
+  const jwt = session?.accessToken;
+
+  var accountService = new AccountService(jwt ?? '');
+
   const theme = useTheme();
 
   const handleThemeMode = async (mode: 'light' | 'dark') => {
@@ -28,8 +31,8 @@ const HeaderContent = () => {
       session.user.defaultTheme = mode;
       await update({ ...session, user: session.user });
     }
-    axios.get(CONFIG.API_BASEPATH + '/Auth/SetDefaultTheme', { params: { defaultTheme: mode } }).catch((error) => {
-    });
+
+    await accountService.setDefaultTheme(mode);
   };
   return (
     <>
@@ -62,7 +65,7 @@ const HeaderContent = () => {
         </Tooltip>
       )}
       {/* <Localization /> */}
-      <Notification />
+      {/* <Notification /> */}
       {!matchesXs && <Profile />}
       {matchesXs && <MobileSection />}
     </>

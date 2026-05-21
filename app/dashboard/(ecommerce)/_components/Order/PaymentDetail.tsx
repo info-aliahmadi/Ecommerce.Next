@@ -69,12 +69,12 @@ export default function PaymentDetail({ orderId, open, setOpen, refetch }: { ord
           <CloseDialog onClose={onClose} />
         </DialogTitle>
         <Grid container direction="row" sx={{ justifyContent: "center", alignItems: "flex-start" }}>
-          <Grid container spacing={3} item xs={12} sm={12} md={12} lg={12} xl={12} >
-            <Grid item>
+          <Grid container spacing={3} size={{ xs: 12, sm: 12, md: 12, lg: 12, xl: 12 }} >
+            <Grid size={12}>
               <MainCard>
                 <Grid container spacing={3} >
-                  <Grid container item spacing={3}>
-                    <Grid item xs={12} md={4} lg={4} xl={4}>
+                  <Grid container spacing={3}>
+                    <Grid size={{ xs: 12, sm: 12, md: 4, lg: 4, xl: 4 }} lg={4} xl={4}>
                       <Stack spacing={1}>
                         <TextField
                           id="transactionTrackingCode"
@@ -87,7 +87,7 @@ export default function PaymentDetail({ orderId, open, setOpen, refetch }: { ord
                       </Stack>
                     </Grid>
 
-                    <Grid item xs={12} md={4} lg={4} xl={4}>
+                    <Grid size={{ xs: 12, sm: 12, md: 4, lg: 4, xl: 4 }} lg={4} xl={4}>
                       <Stack spacing={1}>
                         <TextField
                           id="paymentTrackingCode"
@@ -100,7 +100,7 @@ export default function PaymentDetail({ orderId, open, setOpen, refetch }: { ord
                       </Stack>
                     </Grid>
 
-                    <Grid item xs={12} md={4} lg={4} xl={4}>
+                    <Grid size={{ xs: 12, sm: 12, md: 4, lg: 4, xl: 4 }} lg={4} xl={4}>
                       <Stack spacing={1}>
                         <TextField
                           id="paymentDateUtcToString"
@@ -113,7 +113,7 @@ export default function PaymentDetail({ orderId, open, setOpen, refetch }: { ord
                       </Stack>
                     </Grid>
 
-                    <Grid item xs={12} md={4} lg={4} xl={4}>
+                    <Grid size={{ xs: 12, sm: 12, md: 4, lg: 4, xl: 4 }} lg={4} xl={4}>
                       <Stack spacing={1}>
                         <TextField
                           id="paymentMethodId"
@@ -126,7 +126,7 @@ export default function PaymentDetail({ orderId, open, setOpen, refetch }: { ord
                       </Stack>
                     </Grid>
 
-                    <Grid item xs={12} md={4} lg={4} xl={4}>
+                    <Grid size={{ xs: 12, sm: 12, md: 4, lg: 4, xl: 4 }} lg={4} xl={4}>
                       <Stack spacing={1}>
                         <TextField
                           id="paymentStatusTitle"
@@ -139,7 +139,7 @@ export default function PaymentDetail({ orderId, open, setOpen, refetch }: { ord
                       </Stack>
                     </Grid>
 
-                    <Grid item xs={12} md={12} lg={12} xl={12}>
+                    <Grid size={{ xs: 12, sm: 12, md: 12, lg: 12, xl: 12}} lg={12} xl={12}>
                       <Stack spacing={1}>
                         <PaymentStatus status={payment?.paymentStatusTitle ?? ''} id={payment?.paymentStatusId ?? 0} />
                       </Stack>

@@ -26,9 +26,9 @@ export default function ProductInventory({ operation, values, setFieldValue, han
 
 
   return (
-    <Grid container item columnSpacing={3}>
-      <Grid container item spacing={3} xs={12} sm={12} md={12} lg={8} xl={8}>
-        <Grid item xs={12} sm={12} md={3} lg={3} xl={3}>
+    <Grid container columnSpacing={3}>
+      <Grid container spacing={3} size={{ xs: 12, sm: 12, md: 12, lg: 8, xl: 8}}>
+        <Grid size={{ xs: 12, sm: 12, md: 3, lg: 3, xl: 3 }}>
           <Stack>
             <TextField
               id="stockQuantity"
@@ -50,7 +50,7 @@ export default function ProductInventory({ operation, values, setFieldValue, han
           </Stack>
         </Grid>
 
-        <Grid item xs={12} sm={12} md={3} lg={3} xl={3}>
+        <Grid size={{ xs: 12, sm: 12, md: 3, lg: 3, xl: 3 }}>
           <Stack>
             <TextField
               id="minStockQuantity"
@@ -71,7 +71,7 @@ export default function ProductInventory({ operation, values, setFieldValue, han
             )}
           </Stack>
         </Grid>
-        <Grid item xs={12} sm={12} md={3} lg={3} xl={3}>
+        <Grid size={{ xs: 12, sm: 12, md: 3, lg: 3, xl: 3 }}>
           <Stack>
             <TextField
               id="orderMinimumQuantity"
@@ -92,7 +92,7 @@ export default function ProductInventory({ operation, values, setFieldValue, han
             )}
           </Stack>
         </Grid>
-        <Grid item xs={12} sm={12} md={3} lg={3} xl={3}>
+        <Grid size={{ xs: 12, sm: 12, md: 3, lg: 3, xl: 3 }}>
           <Stack>
             <TextField
               id="orderMaximumQuantity"
@@ -114,7 +114,7 @@ export default function ProductInventory({ operation, values, setFieldValue, han
           </Stack>
         </Grid>
         <Divider />
-        <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
+        <Grid size={{ xs: 12, sm: 12, md: 12, lg: 12, xl: 12 }}>
           <ProductAttributeInventory setFieldValue={setFieldValue} values={values} />
           {touched.inventories && errors.inventories && (
             <FormHelperText error id="helper-text">
@@ -125,7 +125,7 @@ export default function ProductInventory({ operation, values, setFieldValue, han
 
         <Divider />
 
-        <Grid item xs={12} sm={12} md={4} lg={4} xl={3}>
+        <Grid size={{ xs: 12, sm: 12, md: 4, lg: 4, xl: 3 }}>
           <Stack>
             <FormControlLabel
               control={
@@ -140,7 +140,7 @@ export default function ProductInventory({ operation, values, setFieldValue, han
             />
           </Stack>
         </Grid>
-        <Grid item xs={12} sm={12} md={4} lg={4} xl={3}>
+        <Grid size={{ xs: 12, sm: 12, md: 4, lg: 4, xl: 3 }}>
           <Stack>
             <FormControlLabel
               control={
@@ -155,7 +155,7 @@ export default function ProductInventory({ operation, values, setFieldValue, han
             />
           </Stack>
         </Grid>
-        <Grid item xs={12} sm={12} md={4} lg={4} xl={3}>
+        <Grid size={{ xs: 12, sm: 12, md: 4, lg: 4, xl: 3 }}>
           <Stack>
             <FormControlLabel
               control={
