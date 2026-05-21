@@ -1,8 +1,6 @@
-import * as React from 'react';
 import TaxCategoryService from '@dashboard/(ecommerce)/_service/TaxCategoryService';
 import SingleSelect from '@dashboard/_components/Select/SingleSelect';
 import { useSession } from 'next-auth/react';
-
 
 interface SelectTaxCategoryProps {
   defaultValue?: number | null;
