@@ -15,10 +15,8 @@ import {
   Typography
 } from '@mui/material';
 import { ArrowBack, Save, Send } from '@mui/icons-material';
-// third party
-import * as Yup from 'yup';
-
 import AnimateButton from '@dashboard/_components/@extended/AnimateButton';
+import { createProductValidationSchema } from '@dashboard/(ecommerce)/_service/ProductValidationSchema';
 
 // assets
 import { useTranslations } from 'next-intl';
@@ -168,33 +166,8 @@ export default function AddOrEditProduct({ params }: Readonly<{ params: Promise<
   };
   const [product, setProduct] = useState<ProductModel>(initProduct);
 
-
-  // Define your validation schema with Yup
-  const validationSchema = Yup.object().shape({
-    name: Yup.string()
-      .max(250)
-      .required(t(validation + 'requiredName')),
-    fullDescription: Yup.string().required(t(validation + 'requiredFullDescription')),
-    categoryIds: Yup.array()
-      .min(1, t(validation + 'requiredCategoryIds'))
-      .required(t(validation + 'requiredCategoryIds')),
-    deliveryDateType: Yup.number()
-      .required(t(validation + 'requiredDeliveryDateId')),
-    taxCategoryId: Yup.number()
-      .required(t(validation + 'requiredTaxCategoryId')),
-    stockQuantity: Yup.number()
-      .required(t(validation + 'requiredStockQuantity')),
-    minStockQuantity: Yup.number()
-      .required(t(validation + 'requiredMinStockQuantity')),
-    orderMinimumQuantity: Yup.number()
-      .required(t(validation + 'requiredOrderMinimumQuantity')),
-    orderMaximumQuantity: Yup.number()
-      .required(t(validation + 'requiredOrderMaximumQuantity')),
-    price: Yup.number()
-      .required(t(validation + 'requiredPrice')),
-    currencyId: Yup.number()
-      .required(t(validation + 'requiredCurrencyId'))
-  } );
+  // Initialize validation schema with translated messages
+  const validationSchema = createProductValidationSchema(t);
 
   const handleChange = (e: any) => {
     const { name, value } = e.target;
@@ -253,7 +226,8 @@ export default function AddOrEditProduct({ params }: Readonly<{ params: Promise<
     setIsSubmitting(true);
 
     try {
-      const isValid = await validationSchema.validate(product, { abortEarly: false });
+      await validationSchema.validate(product, { abortEarly: false });
+      setErrors({});
 
       if (operation == 'add') {
         productService
@@ -263,7 +237,6 @@ export default function AddOrEditProduct({ params }: Readonly<{ params: Promise<
             setNotify({ open: true });
           })
           .catch((error) => {
-            // setErrors(setServerErrors(error));
             setNotify({ open: true, type: 'error', description: error });
           });
       } else {
@@ -274,20 +247,18 @@ export default function AddOrEditProduct({ params }: Readonly<{ params: Promise<
             setNotify({ open: true });
           })
           .catch((error) => {
-            //setErrors(setServerErrors(error));
             setNotify({ open: true, type: 'error', description: error });
           });
       }
-
     } catch (error) {
-      const validationErrors = {};
-
-      // if (error.inner) {
-      //   error.inner.forEach(err => {
-      //     validationErrors[err.path] = err.message;
-      //   });
-      // }
-
+      const validationErrors: Record<string, string> = {};
+      
+      if ((error as any).inner) {
+        (error as any).inner.forEach((err: any) => {
+          validationErrors[err.path] = err.message;
+        });
+        setErrors(validationErrors);
+      }
     } finally {
       setIsSubmitting(false);
     }
