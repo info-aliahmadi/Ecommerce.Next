@@ -1,6 +1,6 @@
 import Fetch from '@root/utils/Fetch';
 import Result from '@root/app/types/Result';
-import { GridDataBound } from '@root/app/types/GridDataBound';
+import GridDataBound from '@root/app/types/GridDataBound';
 import CONFIG from '@root/config';
 import ProductModel from '../_types/Product/ProductModel';
 

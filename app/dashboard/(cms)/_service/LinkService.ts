@@ -1,7 +1,7 @@
 import Fetch from '@root/utils/Fetch';
 import CONFIG from '@root/config';
 import Result from '@root/app/types/Result';
-import { GridDataBound } from '@root/app/types/GridDataBound';
+import GridDataBound from '@root/app/types/GridDataBound';
 import LinkModel from '../_types/Link/LinkModel';
 
 export default class LinkService {

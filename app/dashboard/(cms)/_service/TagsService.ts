@@ -1,7 +1,7 @@
 import Fetch from '@root/utils/Fetch';
 import CONFIG from '@root/config';
 import Result from '@root/app/types/Result';
-import { GridDataBound } from '@root/app/types/GridDataBound';
+import GridDataBound from '@root/app/types/GridDataBound';
 import TagModel from '../_types/Tag/TagModel';
 
 export default class TagsService {

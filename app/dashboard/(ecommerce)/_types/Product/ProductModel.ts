@@ -1,7 +1,7 @@
 import AuthorModel from "@root/app/dashboard/(cms)/_types/Article/AuthorModel";
 import FileUploadModel from "@root/app/dashboard/(filestorage)/_types/FileUploadModel";
 import InventoryModel from "./InventoryModel";
-import DeliveryDate from "@root/app/types/enums/DeliveryDateType";
+import DeliveryDateType from "@root/app/types/enums/DeliveryDateType";
 import CurrencyTypes from "@root/app/types/enums/CurrencyTypes";
 /**
  * Represents a product.
@@ -80,7 +80,7 @@ export default interface ProductModel {
   /**
    * The ID of the delivery date.
    */
-  deliveryDateId: DeliveryDate;
+  deliveryDateType: DeliveryDateType;
 
   /**
    * The name of the delivery date.
@@ -138,14 +138,9 @@ export default interface ProductModel {
   oldPrice: number;
 
   /**
-   * The ID of the currency.
+   * The type of the currency.
    */
-  currencyId: number;
-
-  /**
-   * The code of the currency.
-   */
-  currencyCode: CurrencyTypes;
+  currencyType: CurrencyTypes;
 
   /**
    * The weight of the product.

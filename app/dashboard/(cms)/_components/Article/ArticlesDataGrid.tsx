@@ -15,7 +15,7 @@ import CONFIG from '@root/config';
 import { MRT_Row } from 'material-react-table';
 
 import ArticleModel from '../../_types/Article/ArticleMode';
-import { GridDataBound } from '@root/app/types/GridDataBound';
+import GridDataBound from '@root/app/types/GridDataBound';
 import { MRT_Column } from '@root/app/types/MRT_Column';
 
 

@@ -71,7 +71,7 @@ export default function MultiSelect({ defaultValues, id, name, label, optionLabe
         onChange={handleChange}
         style={{
           maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
-          width: 250
+          width: '100%'
         }}
         input={<OutlinedInput label={label} sx={{ minHeight: '41px' }} />}
         defaultValue={options?.filter((x) => defaultValues?.find((c) => c === x.id)) ?? []}

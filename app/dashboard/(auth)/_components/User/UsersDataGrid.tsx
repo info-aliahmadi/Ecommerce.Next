@@ -31,7 +31,8 @@ import { UserModel } from '../../_types/User/UserModel';
 
 import nextIntlService from '@root/locales/nextIntlService';
 import { MRT_Column } from '@root/app/types/MRT_Column';
-import { GridDataBound } from '@root/app/types/GridDataBound';
+import GridDataBound from '@root/app/types/GridDataBound';
+import { DateTimeViewer } from '@root/utils/DateViewer';
 // ===============================|| COLOR BOX ||=============================== //
 
 const UserDetail = ({ row, t, fieldsName, language }: { row: MRT_Row<UserModel>, t: any, fieldsName: string, language: string }) => {
@@ -125,7 +126,7 @@ const UserDetail = ({ row, t, fieldsName, language }: { row: MRT_Row<UserModel>,
             <OutlinedInput
               id="registerDate"
               type="text"
-              value={row.original.registerDate?.toLocalDatetime(language)}
+              value={DateTimeViewer(language, row.original.registerDate)}
               fullWidth
               disabled
             />

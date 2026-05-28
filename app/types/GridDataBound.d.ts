@@ -9,3 +9,4 @@ interface GridDataBound {
     filters?: string;
     addFilter(id: string, value: string | number | Date | boolean | null | undefined, operation: FilterOperation = FilterOperation.Equals, type: FilterType = FilterType.String): void;
 }
+export default GridDataBound;

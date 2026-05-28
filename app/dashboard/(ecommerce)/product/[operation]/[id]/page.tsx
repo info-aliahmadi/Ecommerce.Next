@@ -1,6 +1,5 @@
 'use client';
-import React from 'react';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 // material-ui
 import {
@@ -18,7 +17,6 @@ import {
 import { ArrowBack, Save, Send } from '@mui/icons-material';
 // third party
 import * as Yup from 'yup';
-import { Formik, FormikErrors } from 'formik';
 
 import AnimateButton from '@dashboard/_components/@extended/AnimateButton';
 
@@ -26,7 +24,6 @@ import AnimateButton from '@dashboard/_components/@extended/AnimateButton';
 import { useTranslations } from 'next-intl';
 import Notify from '@dashboard/_components/@extended/Notify';
 import MainCard from '@dashboard/_components/MainCard';
-import setServerErrors from '@root/utils/setServerErrors';
 
 import PropTypes from 'prop-types';
 import { useRouter } from 'next/navigation';
@@ -44,6 +41,7 @@ import { useSession } from 'next-auth/react';
 import ProductModel from '@dashboard/(ecommerce)/_types/Product/ProductModel';
 import DeliveryDate from '@root/app/types/enums/DeliveryDateType';
 import CurrencyTypes from '@root/app/types/enums/CurrencyTypes';
+import DeliveryDateType from '@root/app/types/enums/DeliveryDateType';
 function TabPanel(props: any) {
   const { children, value, index, ...other } = props;
 
@@ -67,7 +65,7 @@ function a11yProps(index: any) {
   };
 }
 
-export default function AddOrEditProduct({ params }: { params: Promise<{ operation: 'edit' | 'add'; id: number }> }) {
+export default function AddOrEditProduct({ params }: Readonly<{ params: Promise<{ operation: 'edit' | 'add'; id: number }> }>) {
   const t = useTranslations("");
   const [tab, setTab] = useState(0);
 
@@ -108,7 +106,7 @@ export default function AddOrEditProduct({ params }: { params: Promise<{ operati
     shortDescription: '',
     fullDescription: '',
     adminComment: '',
-    deliveryDateId: DeliveryDate.ThreeDays,
+    deliveryDateType: DeliveryDate.ThreeDays,
     taxCategoryId: 0,
     stockQuantity: 0,
     minStockQuantity: 0,
@@ -117,7 +115,7 @@ export default function AddOrEditProduct({ params }: { params: Promise<{ operati
     orderMaximumQuantity: 0,
     price: 0,
     oldPrice: 0,
-    currencyId: 0,
+    currencyType: 0,
     availableStartDateTimeUtc: null,
     availableEndDateTimeUtc: null,
     hasDiscountsApplied: false,
@@ -152,7 +150,6 @@ export default function AddOrEditProduct({ params }: { params: Promise<{ operati
     previewImage: null,
     deliveryDateName: '',
     taxCategoryName: '',
-    currencyCode: CurrencyTypes.Rial,
     weight: 0,
     length: 0,
     width: 0,
@@ -181,7 +178,7 @@ export default function AddOrEditProduct({ params }: { params: Promise<{ operati
     categoryIds: Yup.array()
       .min(1, t(validation + 'requiredCategoryIds'))
       .required(t(validation + 'requiredCategoryIds')),
-    deliveryDateId: Yup.number()
+    deliveryDateType: Yup.number()
       .required(t(validation + 'requiredDeliveryDateId')),
     taxCategoryId: Yup.number()
       .required(t(validation + 'requiredTaxCategoryId')),
@@ -197,7 +194,7 @@ export default function AddOrEditProduct({ params }: { params: Promise<{ operati
       .required(t(validation + 'requiredPrice')),
     currencyId: Yup.number()
       .required(t(validation + 'requiredCurrencyId'))
-  });
+  } );
 
   const handleChange = (e: any) => {
     const { name, value } = e.target;
@@ -217,7 +214,7 @@ export default function AddOrEditProduct({ params }: { params: Promise<{ operati
       });
     }
   };
-  const setFieldValue = (field: string, value: any) : void => {
+  const setFieldValue = (field: string, value: any): void => {
     // fill the field in product
     const updatedProduct: ProductModel = {
       ...product,       // Override with existing product data

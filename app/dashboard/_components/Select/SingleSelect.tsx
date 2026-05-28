@@ -62,7 +62,8 @@ export default function SingleSelect({ defaultValue, id, name, label, optionLabe
         label={label}
         style={{
           maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
-          width: 250
+          width: '100%',
+          minWidth: '100%'
         }}
         size="medium"
         onChange={handleChange}

@@ -1,4 +1,4 @@
-import { GridDataBound } from '@root/app/types/GridDataBound';
+import GridDataBound from '@root/app/types/GridDataBound';
 import Result from '@root/app/types/Result';
 import CONFIG from '@root/config';
 

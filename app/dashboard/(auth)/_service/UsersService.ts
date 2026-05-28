@@ -2,7 +2,7 @@ import CONFIG from '@root/config';
 
 import { UserModel } from '../_types/User/UserModel';
 import Fetch from '@root/utils/Fetch';
-import { GridDataBound } from '@root/app/types/GridDataBound';
+import GridDataBound from '@root/app/types/GridDataBound';
 import Result from '@root/app/types/Result';
 
 export default class UsersService {

@@ -1,4 +1,4 @@
-// material-ui
+'use client'
 import { Avatar, Chip, FormHelperText, Grid, InputLabel, TextField, Stack } from '@mui/material';
 import { EventNote } from '@mui/icons-material';
 
@@ -7,7 +7,6 @@ import { useTranslations } from 'next-intl';
 import CONFIG from '@root/config';
 
 import moment from 'moment';
-// import Editor from '@dashboard/_components/Editor/Editor';
 import ImageUpload from '@dashboard/_components/FileUpload/ImageUpload';
 import DateTimeInput from '@dashboard/_components/DateTime/DateTimeInput';
 import SelectDeliveryDate from '../DeliveryDate/SelectDeliveryDate';
@@ -29,14 +28,14 @@ export default function ProductBaseInfo({
   setFieldValue,
   errors
 }:
-  {
+  Readonly<{
     operation: string,
     values: ProductModel,
     handleBlur: (event: React.FocusEvent<HTMLInputElement>) => void,
     handleChange: (event: React.ChangeEvent<HTMLInputElement>) => void,
     setFieldValue: (field: string, value: any) => void,
     errors: any
-  }) {
+  }>) {
   const t = useTranslations("");
   let language = nextIntlService.getNextIntlLocale();
 
@@ -76,13 +75,7 @@ export default function ProductBaseInfo({
               onBlur={handleBlur}
               onChange={handleChange}
               fullWidth
-              error={Boolean(errors.shortDescription)}
             />
-            {errors.shortDescription && (
-              <FormHelperText error id="helper-text">
-                {errors.shortDescription}
-              </FormHelperText>
-            )}
           </Stack>
         </Grid>
         <Grid size={{ xs: 12, sm: 12, md: 12, lg: 12, xl: 12 }}>
@@ -153,37 +146,33 @@ export default function ProductBaseInfo({
           </Stack>
         </Grid>
         <Grid size={{ xs: 12, sm: 12, md: 6, lg: 6, xl: 4 }}>
-          <Stack>
-            <SelectDeliveryDate
-              defaultValue={values?.deliveryDateId || null}
-              id="deliveryDateId"
-              label={t(fieldsName + 'deliveryDateId')}
-              setFieldValue={setFieldValue}
-              error={Boolean(errors.deliveryDateId)}
-            />
-            {errors.deliveryDateId && (
-              <FormHelperText error id="helper-text">
-                {errors.deliveryDateId}
-              </FormHelperText>
-            )}
-          </Stack>
+          <SelectDeliveryDate
+            defaultValue={values?.deliveryDateType || null}
+            id="deliveryDateId"
+            label={t(fieldsName + 'deliveryDateId')}
+            setFieldValue={setFieldValue}
+            error={Boolean(errors.deliveryDateId)}
+          />
+          {errors.deliveryDateId && (
+            <FormHelperText error id="helper-text">
+              {errors.deliveryDateId}
+            </FormHelperText>
+          )}
         </Grid>
         <Grid size={{ xs: 12, sm: 12, md: 6, lg: 6, xl: 4 }}>
-          <Stack>
-            <SelectTaxCategory
-              defaultValue={values?.taxCategoryId || null}
-              id="taxCategoryId"
-              name="taxCategoryId"
-              label={t(fieldsName + 'taxCategoryId')}
-              setFieldValue={setFieldValue}
-              error={Boolean(errors.taxCategoryId)}
-            />
-            {errors.taxCategoryId && (
-              <FormHelperText error id="helper-text">
-                {errors.taxCategoryId}
-              </FormHelperText>
-            )}
-          </Stack>
+          <SelectTaxCategory
+            defaultValue={values?.taxCategoryId || null}
+            id="taxCategoryId"
+            name="taxCategoryId"
+            label={t(fieldsName + 'taxCategoryId')}
+            setFieldValue={setFieldValue}
+            error={Boolean(errors.taxCategoryId)}
+          />
+          {errors.taxCategoryId && (
+            <FormHelperText error id="helper-text">
+              {errors.taxCategoryId}
+            </FormHelperText>
+          )}
         </Grid>
         <Grid container columnSpacing={1} size={{ xs: 12, sm: 12, md: 6, lg: 6, xl: 4 }}>
           <Grid size={{ xs: 8, sm: 8, md: 8, lg: 7, xl: 7 }}>

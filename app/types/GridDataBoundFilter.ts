@@ -1,3 +1,5 @@
+import GridDataBound from "./GridDataBound";
+
 export class GridDataBoundFilter implements GridDataBound {
     pageIndex?: number;
     pageSize?: number;

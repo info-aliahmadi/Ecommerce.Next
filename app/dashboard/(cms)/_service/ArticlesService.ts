@@ -1,7 +1,7 @@
 import CONFIG from '@root/config';
 import Result from '@root/app/types/Result';
 import Fetch from '@root/utils/Fetch';
-import { GridDataBound } from '@root/app/types/GridDataBound';
+import GridDataBound from '@root/app/types/GridDataBound';
 import ArticleModel from '../_types/Article/ArticleMode';
 
 export default class ArticlesService {

@@ -20,7 +20,7 @@ import { useSession } from 'next-auth/react';
 import { MRT_Column } from '@root/app/types/MRT_Column';
 import { MRT_Row } from 'material-react-table';
 import PageModel from '../../_types/Page/PageModel';
-import { GridDataBound } from '@root/app/types/GridDataBound';
+import GridDataBound from '@root/app/types/GridDataBound';
 import nextIntlService from '@root/locales/nextIntlService';
 // ===============================|| COLOR BOX ||=============================== //
 

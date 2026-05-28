@@ -1,7 +1,7 @@
 import Fetch from '@root/utils/Fetch';
 import CONFIG from '@root/config';
 import Result from '@root/app/types/Result';
-import { GridDataBound } from '@root/app/types/GridDataBound';
+import GridDataBound from '@root/app/types/GridDataBound';
 import PageModel from '../_types/Page/PageModel';
 
 export default class PagesService {

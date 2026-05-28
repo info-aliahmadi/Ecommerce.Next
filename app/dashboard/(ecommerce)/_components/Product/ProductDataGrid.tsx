@@ -25,7 +25,7 @@ import ProductDetail from './ProductDetail';
 import { MRT_Row } from 'material-react-table';
 import ProductModel from '../../_types/Product/ProductModel';
 import { MRT_Column } from '@root/app/types/MRT_Column';
-import { GridDataBound } from '@root/app/types/GridDataBound';
+import GridDataBound from '@root/app/types/GridDataBound';
 
 // ===============================|| COLOR BOX ||=============================== //
 

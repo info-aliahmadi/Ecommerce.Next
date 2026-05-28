@@ -4,13 +4,14 @@ import {  Checkbox, IconButton } from '@mui/material';
 import RefreshIcon from '@mui/icons-material/Refresh';
 import { DatePicker } from '@mui/x-date-pickers';
 import moment from 'moment-jalaali';
+import { DateTimeViewer, DateViewer } from '@root/utils/DateViewer';
 import { useTheme } from '@mui/material/styles';
 import { rtlLocales } from '@root/locales/i18nHomepage';
 import nextIntlService from '@root/locales/nextIntlService';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { MobileGrid } from './MobileGrid';
+import GridDataBound from '@root/app/types/GridDataBound';
 import { MRT_Column } from '@root/app/types/MRT_Column';
-import { GridDataBound } from '@root/app/types/GridDataBound';
 import { GridDataBoundFilter } from '@root/app/types/GridDataBoundFilter';
 
 // Components
@@ -93,6 +94,8 @@ function MaterialTable({
   const [isError, setIsError] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [isRefetching, setIsRefetching] = useState(false);
+  // ۱. اضافه کردن یک استیت داخلی برای تریگر کردن آپدیت
+  const [internalRefetch, setInternalRefetch] = useState(Date.now());
   const [columnsWithFilter, setColumnsWithFilter] = useState<MRT_Column<MRT_RowData, any>[]>(columns);
 
   //table state
@@ -122,13 +125,13 @@ function MaterialTable({
     dateFields.forEach((element: any) => {
       if (!element.Cell) {
         element.Cell = ({ renderedCellValue }: { renderedCellValue: any }) =>
-          renderedCellValue != null && <span>{(renderedCellValue as Date).toLocalDate(currentLanguage)}</span>;
+          renderedCellValue != null && <span>{DateViewer(currentLanguage, renderedCellValue)}</span>;
       }
     });
     dateTimeFields.forEach((element: any) => {
       if (!element.Cell) {
         element.Cell = ({ renderedCellValue }: { renderedCellValue: any }) =>
-          renderedCellValue != null && <span>{(renderedCellValue as Date).toLocalDatetime(currentLanguage)}</span>;
+          renderedCellValue != null && <span>{DateTimeViewer(currentLanguage, renderedCellValue)}</span>;
       }
     });
     // Add Filter Mode Options
@@ -297,7 +300,7 @@ function MaterialTable({
       fetchData();
     }
 
-  }, [columnFilters, globalFilter, pagination.pageIndex, pagination.pageSize, sorting, refetch, dataSet]);
+  }, [columnFilters, globalFilter, pagination.pageIndex, pagination.pageSize, sorting, refetch, dataSet,internalRefetch]);
 
   const supportedLanguage = ['de', 'en', 'es', 'fa', 'ar', 'fr', 'it', 'nl', 'pt'];
 
@@ -350,7 +353,8 @@ function MaterialTable({
   }, [currentLanguage]);
 
   const handleRefresh = () => {
-    setIsRefetching(true);
+    //setIsRefetching(true);
+    setInternalRefetch(Date.now()); // با تغییر این مقدار، useEffect اجرا می‌شود
   };
 
   return (

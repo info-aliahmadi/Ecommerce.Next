@@ -16,7 +16,7 @@ import { MRT_Row } from 'material-react-table';
 import Notify from '@root/app/dashboard/_components/@extended/Notify';
 import ArticleModel from '../../_types/Article/ArticleMode';
 import { MRT_Column } from '@root/app/types/MRT_Column';
-import { GridDataBound } from '@root/app/types/GridDataBound';
+import GridDataBound from '@root/app/types/GridDataBound';
 // ===============================|| COLOR BOX ||=============================== //
 
 export default function ArticlesTrashDataGrid() {
