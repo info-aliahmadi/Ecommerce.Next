@@ -14,7 +14,7 @@ import MainCard from '@dashboard/_components/MainCard';
 import setServerErrors from '@root/utils/setServerErrors';
 import { useRouter } from 'next/navigation';
 import MessagesService from '@dashboard/(crm)/_service/MessageService';
-import Editor from '@dashboard/_components/Editor/Editor';
+import Editor from '@root/app/dashboard/_components/Editor/Editor';
 import FileUpload from '@dashboard/_components/FileUpload/FileUpload';
 import { useSession } from 'next-auth/react';
 import SelectMultiUsers from '@root/app/dashboard/(auth)/_components/User/SelectMultiUsers';

@@ -24,7 +24,7 @@ import { useSession } from 'next-auth/react';
 import { MRT_Row } from 'material-react-table';
 import { MRT_Column } from '@root/app/types/MRT_Column';
 import SlideshowModel from '../../_types/Slideshow/SlideshowModel';
-import _ from 'lodash';
+import FileUploadModel from '@root/app/dashboard/(filestorage)/_types/FileUploadModel';
 
 function SlideshowDataGrid() {
   const t = useTranslations("");
@@ -43,9 +43,10 @@ function SlideshowDataGrid() {
   let mediaExtensions = CONFIG.IMAGES_EXTENSIONS.concat(CONFIG.VIDEOS_EXTENSIONS);
 
   const ImagePreviewRow = ({ renderedCellValue, row }: { renderedCellValue: any, row: MRT_Row<SlideshowModel> }) => {
-    let src = renderedCellValue?.fileName
-      ? mediaExtensions.some((extension) => extension == _.toLower(renderedCellValue?.extension))
-        ? CONFIG.UPLOAD_BASEPATH + renderedCellValue.directory + renderedCellValue?.thumbnail
+   let fileUploadModel = renderedCellValue as FileUploadModel;
+    let src = fileUploadModel?.fileName
+    ? mediaExtensions.some((extension) => extension == fileUploadModel.extension.toLocaleLowerCase())
+        ? CONFIG.UPLOAD_BASEPATH + fileUploadModel.directory + fileUploadModel?.thumbnail
         : row.original.previewImageUrl
           ? row.original.previewImageUrl
           : null

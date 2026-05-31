@@ -365,7 +365,7 @@
       "metaTitle": "عنوان متا",
       "metaDescription": "توضیحات متا",
       "shortDescription": "توضیحات کوتاه",
-      "fullDescription": "توضیحات کامل",
+      "fullDescription": "توضیحات کامل...",
       "deliveryDateId": "تاریخ تحویل",
       "taxCategoryId": "دسته‌بندی مالیات",
       "stockQuantity": "موجودی انبار",
@@ -637,6 +637,7 @@
       "requiredtoAddress": "گیرنده ایمیل الزامی است"
     },
     "product": {
+      "maxName": "The max of Product name length is 250 Characters",
       "requiredName": "نام محصول الزامی است",
       "requiredFullDescription": "توضیحات کامل الزامی است",
       "requiredCategoryIds": "دسته‌بندی الزامی است",

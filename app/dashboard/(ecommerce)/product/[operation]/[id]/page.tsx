@@ -222,6 +222,7 @@ export default function AddOrEditProduct({ params }: Readonly<{ params: Promise<
   };
 
   const handleSubmit = async (e: any) => {
+    alert(product.fullDescription)
     e.preventDefault();
     setIsSubmitting(true);
 

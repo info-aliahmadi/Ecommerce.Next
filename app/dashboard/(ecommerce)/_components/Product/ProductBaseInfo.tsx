@@ -15,7 +15,7 @@ import SelectProductAttribute from '../ProductAttribute/SelectProductAttribute';
 import SelectCategory from '../Category/SelectCategory';
 import SelectManufacturer from '../Manufacturer/SelectManufacturer';
 import SelectCurrency from '../Currency/SelectCurrency';
-import Editor from '@dashboard/_components/Editor/Editor';
+import Editor from '@root/app/dashboard/_components/Editor/Editor';
 import ProductsAutoComplete from './ProductAutoComplete';
 import ProductModel from '../../_types/Product/ProductModel';
 import nextIntlService from '@root/locales/nextIntlService';
@@ -81,10 +81,10 @@ export default function ProductBaseInfo({
         <Grid size={{ xs: 12, sm: 12, md: 12, lg: 12, xl: 12 }}>
           <Stack>
             <Editor
-              id={'fullDescription'}
-              name={'fullDescription'}
-              defaultValue={values?.fullDescription || ''}
+              name='fullDescription'
               setFieldValue={setFieldValue}
+              placeholder={t("fields.product.fullDescription")}
+              locale={language}
             />
             {operation == 'edit' && (
               <Grid size={12}>

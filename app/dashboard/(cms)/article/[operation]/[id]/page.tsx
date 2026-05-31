@@ -24,7 +24,7 @@ import ImageUpload from '@dashboard/_components/FileUpload/ImageUpload';
 import SelectTopic from '@dashboard/(cms)/_components/Topic/SelectTopic';
 import SelectTag from '@dashboard/(cms)/_components/Tag/SelectTag';
 import DateTimeInput from '@dashboard/_components/DateTime/DateTimeInput';
-import Editor from '@dashboard/_components/Editor/Editor';
+import Editor from '@root/app/dashboard/_components/Editor/Editor';
 import { useSession } from 'next-auth/react';
 import ArticleModel from '../../../_types/Article/ArticleMode';
 import nextIntlService from '@root/locales/nextIntlService';

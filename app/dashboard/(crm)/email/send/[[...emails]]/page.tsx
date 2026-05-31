@@ -15,7 +15,7 @@ import setServerErrors from '@root/utils/setServerErrors';
 import { useRouter } from 'next/navigation';
 import EmailOutboxService from '@dashboard/(crm)/_service/EmailOutboxService';
 import SelectEmailAddress from '@dashboard/(crm)/_components/Email/SelectEmailAddress';
-import Editor from '@dashboard/_components/Editor/Editor';
+import Editor from '@root/app/dashboard/_components/Editor/Editor';
 import FileUpload from '@dashboard/_components/FileUpload/FileUpload';
 import { useSession } from 'next-auth/react';
 import EmailOutboxModel from '../../../_types/EmailOutboxModel';

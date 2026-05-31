@@ -365,7 +365,7 @@
       "metaTitle": "Meta Title",
       "metaDescription": "Meta Description",
       "shortDescription": "Short Description",
-      "fullDescription": "Full Description",
+      "fullDescription": "Full Description...",
       "deliveryDateId": "Delivery Date",
       "taxCategoryId": "Tax Category",
       "stockQuantity": "Stock Quantity",
@@ -637,6 +637,7 @@
       "requiredtoAddress": "Recipient of Email Is Required"
     },
     "product": {
+      "maxName": "The max of Product name length is 250 Characters",
       "requiredName": "Product name is require",
       "requiredFullDescription": "Full Description is require",
       "requiredCategoryIds": "Category is require",

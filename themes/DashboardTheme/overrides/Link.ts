@@ -6,7 +6,7 @@ export default function Link(theme: Theme) {
   return {
     MuiLink: {
       defaultProps: {
-        underline: 'none',
+        textDecoration: "none",
         color: theme.palette.grey[600]
       }
     }

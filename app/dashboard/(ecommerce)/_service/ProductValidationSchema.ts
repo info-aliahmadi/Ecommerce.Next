@@ -32,7 +32,7 @@ export const createProductValidationSchema = (t: (key: string) => string) => {
         .required(t(validation + 'requiredOrderMaximumQuantity')),
       price: Yup.number()
         .required(t(validation + 'requiredPrice')),
-      currencyId: Yup.number()
+      CurrencyType: Yup.number()
         .required(t(validation + 'requiredCurrencyId'))
     })
     .strict(false); // Allow extra fields without validation errors

@@ -33,7 +33,7 @@ import moment from 'moment';
 import PagesService from '@dashboard/(cms)/_service/PagesService';
 import { useRouter } from 'next/navigation';
 import SelectTag from '@dashboard/(cms)/_components/Tag/SelectTag';
-import Editor from '@dashboard/_components/Editor/Editor';
+import Editor from '@root/app/dashboard/_components/Editor/Editor';
 import { useSession } from 'next-auth/react';
 import PageModel from '../../../_types/Page/PageModel';
 import nextIntlService from '@root/locales/nextIntlService';
