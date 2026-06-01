@@ -33,6 +33,7 @@ import FileUpload from '@dashboard/_components/FileUpload/FileUpload';
 import FileStorageService from '@dashboard/(filestorage)/_service/FileStorageService';
 import { useSession } from 'next-auth/react';
 import FileUploadModel from '../_types/FileUploadModel';
+import { Capitalize, Truncate } from '@root/utils/StringViewer';
 
 // ===============================|| COLOR BOX ||=============================== //
 
@@ -86,7 +87,7 @@ function FilesList({ directory }: Readonly<{ directory: string }>) {
               {t('pages.cards.fileStorage')}
             </Link>
             <Link underline="hover" color="inherit" href="#">
-              {directory.capitalize()}
+              {Capitalize(directory)}
             </Link>
           </Breadcrumbs>
         </Grid>
@@ -159,7 +160,7 @@ function FilesList({ directory }: Readonly<{ directory: string }>) {
       <Notify notify={notify} setNotify={setNotify}></Notify>
       <MainCard title={<Breadcramb />} ref={containerRef}>
         <Slide direction="down" in={uploadShow} mountOnEnter unmountOnExit container={containerRef.current}>
-          <Box sx={{p:3}}>
+          <Box sx={{ p: 3 }}>
             <FileUpload allowMultiple name='FileUpload1' />
           </Box>
         </Slide>
@@ -178,7 +179,7 @@ function FilesList({ directory }: Readonly<{ directory: string }>) {
                   ) : (
                     <CardMedia component="div" sx={{ height: 194 }} children={<FileViewer extention={file.extension} />} />
                   )}
-                  <CardHeader sx={{ padding: '10px' }} title={file.fileName.truncate()} subheader={fileSizeViewer(file.size, true)} />
+                  <CardHeader sx={{ padding: '10px' }} title={Truncate(file.fileName)} subheader={fileSizeViewer(file.size, true)} />
 
                   <CardActions disableSpacing>
                     <Grid container sx={{ justifyContent: 'space-between' }}>
@@ -209,7 +210,7 @@ function FilesList({ directory }: Readonly<{ directory: string }>) {
                           placement="top-start"
                           title={t('buttons.fileStorage.uploadedInfo', {
                             user: file.userName,
-                            date:  file.uploadDate.toLocalDatetime(currentLanguage)
+                            date: file.uploadDate.toLocalDatetime(currentLanguage ?? "")
                           })}
                         >
                           <IconButton>

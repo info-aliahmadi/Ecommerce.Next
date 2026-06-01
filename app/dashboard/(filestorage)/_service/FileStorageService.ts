@@ -34,15 +34,16 @@ export default class FileStorageService {
     return Fetch.Get<Result<FileUploadModel>>(CONFIG.API_BASEPATH + `/FileStorage/GetFileInfoByName?${params.toString()}`, this.config);
   };
   uploadFile = async (file: any, uploadAction: any): Promise<Result<FileUploadModel>> => {
+    const headers = { ...(this.config?.headers as Record<string, string>) };
+    delete headers['Content-Type'];
+    delete headers['content-type'];
+
     let config: RequestInit = {
       headers: {
-        ...this.config?.headers,
-        UploadAction: uploadAction,
-        'Content-Type': 'multipart/form-data'
+        ...headers,
+        UploadAction: uploadAction
       }
     };
-
-    this.config?.headers
     return Fetch.Post<Result<FileUploadModel>>(CONFIG.API_BASEPATH + '/FileStorage/UploadFile', file, config);
   };
   uploadBase64File = async (file: any, uploadAction: any): Promise<Result<FileUploadModel>> => {

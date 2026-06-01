@@ -25,7 +25,7 @@ import { useTranslations } from 'next-intl';
 import CONFIG from '@root/config';
 import FileStorageService from '@dashboard/(filestorage)/_service/FileStorageService';
 import { useSession } from 'next-auth/react';
-import { FilePondFile, FilePondInitialFile } from 'filepond';
+import { FileOrigin, FilePondFile, FilePondInitialFile } from 'filepond';
 import FileUploadModel from '../../(filestorage)/_types/FileUploadModel';
 
 interface ImageUploadProps {
@@ -49,7 +49,7 @@ export default function ImageUpload({
   filePosterMaxHeight,
   allowMultiple
 }: Readonly<ImageUploadProps>) {
-  const [files, setFiles] = useState<FilePondInitialFile[]>([]);
+  const [files, setFiles] = useState<Array<FilePondInitialFile | Blob | string>>([]);
   const [values, setValues] = useState<any[]>([]);
   const t = useTranslations("");
 
@@ -171,27 +171,31 @@ export default function ImageUpload({
 
 
   const onupdatefiles = async (fileItems: FilePondFile[]) => {
-    let fileInfosData: FilePondInitialFile[] = [];
+    let fileInfosData: Array<FilePondInitialFile | Blob | string> = [];
     fileItems.forEach(fileInfo => {
-      fileInfosData.push({
-        // the server file reference
-        source: fileInfo.id.toString(),
-        // set type to local to indicate an already uploaded file
-        options: {
-          type: 'local',
-          // optional stub file information
-          file: {
-            name: fileInfo.filename,
-            type: fileInfo.fileType,
-            size: fileInfo.fileSize
-          },
-          // pass poster property
-          metadata: {
-            poster: fileInfo.getMetadata('poster'),
-            url: fileInfo.getMetadata('url')
+      if (fileInfo.origin === FileOrigin.LOCAL) {
+        fileInfosData.push({
+          // the server file reference
+          source: fileInfo.source.toString(),
+          // set type to local to indicate an already uploaded file
+          options: {
+            type: 'local',
+            // optional stub file information
+            file: {
+              name: fileInfo.filename,
+              type: fileInfo.fileType,
+              size: fileInfo.fileSize
+            },
+            // pass poster property
+            metadata: {
+              poster: fileInfo.getMetadata('poster'),
+              url: fileInfo.getMetadata('url')
+            }
           }
-        }
-      });
+        });
+      } else {
+        fileInfosData.push(fileInfo.file);
+      }
     });
     setFiles(fileInfosData);
   };

@@ -12,6 +12,7 @@ import FileStorageService from '@dashboard/(filestorage)/_service/FileStorageSer
 import { useSession } from 'next-auth/react';
 
 import DirectoryModel from '../_types/DirectoryModel';
+import { Capitalize } from '@root/utils/StringViewer';
 // ===============================|| COLOR BOX ||=============================== //
 
 function FilesCategoryList() {
@@ -53,7 +54,7 @@ function FilesCategoryList() {
                 </Avatar>
               </ListItemAvatar>
               <ListItemText
-                primary={directory.directoryName.capitalize()}
+                primary={Capitalize(directory.directoryName)}
                 secondary={
                   directory.filesCount +
                   ' ' +

@@ -57,7 +57,7 @@ export default class Fetch {
           headers: {
             ...config?.headers,
           },
-          body: body ? JSON.stringify(body) : undefined,
+          body: body instanceof FormData ? body : body ? JSON.stringify(body) : undefined,
           ...config,
         });
         if (!response.ok) {
@@ -112,7 +112,7 @@ export default class Fetch {
       headers: {
         ...config?.headers,
       },
-      body: body ? JSON.stringify(body) : undefined,
+      body: body instanceof FormData ? body : body ? JSON.stringify(body) : undefined,
       ...config,
     });
 

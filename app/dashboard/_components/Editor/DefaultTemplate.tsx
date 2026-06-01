@@ -60,6 +60,7 @@ import { useTranslations } from "next-intl";
 import { useSession } from "next-auth/react";
 import CONFIG from "@root/config";
 import { rtlLocales } from "@root/locales/i18nHomepage";
+import FileStorageService from "@dashboard/(filestorage)/_service/FileStorageService";
 
 type TableConfig = {
   rows?: number;
@@ -128,6 +129,8 @@ export interface DefaultTemplateRef {
 // Hook for image handling logic
 function useImageHandlers(commands: EditorCommands, editor: LexicalEditor | null) {
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const { data: session } = useSession();
+  const fileStorageService = useMemo(() => new FileStorageService(session?.accessToken ?? ""), [session?.accessToken]);
 
   const handlers = useMemo(
     () => ({
@@ -142,19 +145,24 @@ function useImageHandlers(commands: EditorCommands, editor: LexicalEditor | null
       handleUpload: async (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
         if (!file) return;
-        let src: string;
-        if (imageExtension.config.uploadHandler) {
-          try {
-            src = await imageExtension.config.uploadHandler(file);
-          } catch (error) {
-            alert("Failed to upload image");
+
+        try {
+          const formData = new FormData();
+          formData.append("file", file);
+          const result = await fileStorageService.uploadFile(formData, "Rename");
+          const uploadedFile = result.data;
+
+          if (!uploadedFile) {
+            alert(result.message || "Failed to upload image");
             return;
           }
-        } else {
-          src = URL.createObjectURL(file);
+          // if you dont want to upload the file use   src = URL.createObjectURL(file);
+          const src = CONFIG.UPLOAD_BASEPATH + uploadedFile.directory + uploadedFile.fileName;
+          commands.insertImage({ src, alt: uploadedFile.alt || file.name, file });
+          e.target.value = "";
+        } catch (error) {
+          alert("Failed to upload image");
         }
-        commands.insertImage({ src, alt: file.name, file });
-        e.target.value = "";
       },
       setAlignment: (alignment: "left" | "center" | "right" | "none") => {
         commands.setImageAlignment(alignment);
@@ -164,7 +172,7 @@ function useImageHandlers(commands: EditorCommands, editor: LexicalEditor | null
         commands.setImageCaption(newCaption);
       },
     }),
-    [commands],
+    [commands, fileStorageService],
   );
 
   return { handlers, fileInputRef };

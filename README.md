@@ -15,7 +15,7 @@ The project also features a customizable dashboard theme, making it easy to deve
 ## Installation
 
 1. Clone the repository:
-`git clone https://github.com/info-aliahmadi/Hydra.React.git`
+`git clone https://github.com/info-aliahmadi/Ecommerce.Next`
 
 2. Install dependencies:
 `npm install`

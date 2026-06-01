@@ -25,7 +25,7 @@ import { useTranslations } from 'next-intl';
 import CONFIG from '@root/config';
 import FileStorageService from '@dashboard/(filestorage)/_service/FileStorageService';
 import { useSession } from 'next-auth/react';
-import { FilePondFile, FilePondInitialFile } from 'filepond';
+import { FileOrigin, FilePondFile, FilePondInitialFile } from 'filepond';
 import FileUploadModel from '../../(filestorage)/_types/FileUploadModel';
 
 interface FileUploadProps {
@@ -51,7 +51,7 @@ export default function FileUpload({
   filePosterMaxHeight,
   allowMultiple
 }: Readonly<FileUploadProps>) {
-  const [files, setFiles] = useState<FilePondInitialFile[]>([]);
+  const [files, setFiles] = useState<Array<FilePondInitialFile | Blob | string>>([]);
   const [values, setValues] = useState<any[]>([]);
   const t = useTranslations("");
   const { data: session } = useSession();
@@ -171,8 +171,9 @@ export default function FileUpload({
   }
 
   const onupdatefiles = async (fileItems: FilePondFile[]) => {
-    let fileInfosData: FilePondInitialFile[] = [];
+    let fileInfosData: Array<FilePondInitialFile | Blob | string> = [];
     fileItems.forEach(fileInfo => {
+      if (fileInfo.origin === FileOrigin.LOCAL) {
       fileInfosData.push({
         // the server file reference
         source: fileInfo.id.toString(),
@@ -192,6 +193,9 @@ export default function FileUpload({
           }
         }
       });
+    } else {
+      fileInfosData.push(fileInfo.file);
+    }
     });
     setFiles(fileInfosData);
   };
@@ -289,7 +293,7 @@ export default function FileUpload({
       onupdatefiles={onupdatefiles}
       server={{
         url: uploadUrl,
-        headers: { Authorization: "Bearer " + jwt, UploadAction: 'Rename' }
+        headers: { Authorization: 'Bearer ' + jwt, UploadAction: 'Rename' }
       }}
       onprocessfile={onprocessfile}
       labelFileProcessingError={(error: any) => getError(error.code)}
