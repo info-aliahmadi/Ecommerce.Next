@@ -174,28 +174,28 @@ export default function FileUpload({
     let fileInfosData: Array<FilePondInitialFile | Blob | string> = [];
     fileItems.forEach(fileInfo => {
       if (fileInfo.origin === FileOrigin.LOCAL) {
-      fileInfosData.push({
-        // the server file reference
-        source: fileInfo.id.toString(),
-        // set type to local to indicate an already uploaded file
-        options: {
-          type: 'local',
-          // optional stub file information
-          file: {
-            name: fileInfo.filename,
-            type: fileInfo.fileType,
-            size: fileInfo.fileSize
-          },
-          // pass poster property
-          metadata: {
-            poster: fileInfo.getMetadata('poster'),
-            url: fileInfo.getMetadata('url')
+        fileInfosData.push({
+          // the server file reference
+          source: fileInfo.source.toString(),
+          // set type to local to indicate an already uploaded file
+          options: {
+            type: 'local',
+            // optional stub file information
+            file: {
+              name: fileInfo.filename,
+              type: fileInfo.fileType,
+              size: fileInfo.fileSize
+            },
+            // pass poster property
+            metadata: {
+              poster: fileInfo.getMetadata('poster'),
+              url: fileInfo.getMetadata('url')
+            }
           }
-        }
-      });
-    } else {
-      fileInfosData.push(fileInfo.file);
-    }
+        });
+      } else {
+        fileInfosData.push(fileInfo.file);
+      }
     });
     setFiles(fileInfosData);
   };
@@ -288,7 +288,7 @@ export default function FileUpload({
       instantUpload={true}
       allowMultiple={(allowMultiple && true) ?? false}
       credits={false}
-      name={name ?? 'filepond'} /* sets the file input name, it's filepond by default */
+      name="file" /* sets the multipart form field expected by the API */
       files={files}
       onupdatefiles={onupdatefiles}
       server={{
