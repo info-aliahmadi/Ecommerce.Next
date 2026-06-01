@@ -36,7 +36,6 @@ export default class FileStorageService {
   uploadFile = async (file: any, uploadAction: any): Promise<Result<FileUploadModel>> => {
     const headers = { ...(this.config?.headers as Record<string, string>) };
     delete headers['Content-Type'];
-    delete headers['content-type'];
 
     let config: RequestInit = {
       headers: {
@@ -56,14 +55,32 @@ export default class FileStorageService {
     return Fetch.Post<Result<FileUploadModel>>(CONFIG.API_BASEPATH + '/FileStorage/UploadBase64File', file, config);
   };
   uploadLargeFile = async (file: any, uploadAction: any): Promise<Result<FileUploadModel>> => {
+    const headers = { ...(this.config?.headers as Record<string, string>) };
+    delete headers['Content-Type'];
+
     let config: RequestInit = {
       headers: {
-        ...this.config?.headers,
+        ...headers,
         UploadAction: uploadAction
       }
     };
+    
     return Fetch.Post<Result<FileUploadModel>>(CONFIG.API_BASEPATH + '/FileStorage/UploadLargeFile', file, config);
   };
+  uploadSmallFile = async (file: any, uploadAction: any): Promise<Result<FileUploadModel>> => {
+    const headers = { ...(this.config?.headers as Record<string, string>) };
+    delete headers['Content-Type'];
+
+    let config: RequestInit = {
+      headers: {
+        ...headers,
+        UploadAction: uploadAction
+      }
+    };
+    
+    return Fetch.Post<Result<FileUploadModel>>(CONFIG.API_BASEPATH + '/FileStorage/UploadSmallFile', file, config);
+  };
+
   deleteFile = async (fileId: number): Promise<Result<boolean>> => {
     const params = new URLSearchParams({ fileId: fileId.toString() });
     return Fetch.Get<Result<boolean>>(CONFIG.API_BASEPATH + `/FileStorage/DeleteFile?${params.toString()}`, this.config);
