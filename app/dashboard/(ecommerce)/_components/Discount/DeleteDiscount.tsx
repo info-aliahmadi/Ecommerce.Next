@@ -1,50 +1,41 @@
-import { Dispatch, SetStateAction, useState } from 'react';
+import { useState } from 'react';
 
 // material-ui
-import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Typography } from '@mui/material';
+import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Typography } from '@mui/material';
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
 
 // assets
 import { useTranslations } from 'next-intl';
 import Notify from '@dashboard/_components/@extended/Notify';
-import FileStorageService from '@dashboard/(filestorage)/_service/FileStorageService';
 import { useSession } from 'next-auth/react';
-import FileUploadModel from '@dashboard/(filestorage)/_types/FileUploadModel';
+import DiscountService from '../../_service/DiscountService';
+import { MRT_Row } from 'material-react-table';
 
-interface DeleteFileProps {
-  fileId?: number;
-  open: boolean;
-  setOpen: (open: boolean) => void;
-  files?: FileUploadModel[];
-  setFiles: Dispatch<SetStateAction<FileUploadModel[]>>;
-}
+import DiscountModel from '../../_types/Common/DiscountModel';
 
-const DeleteFile = ({ fileId, open, setOpen, files, setFiles }: DeleteFileProps) => {
-  const t = useTranslations("");
+const DeleteDiscount = ({ row, open, setOpen, refetch }: { row?: MRT_Row<DiscountModel>; open: boolean; setOpen: (open: boolean) => void; refetch: () => void }) => {
+  const t = useTranslations('');
+  const [notify, setNotify] = useState<NotifyProps>({ open: false });
   const { data: session } = useSession();
   const jwt = session?.accessToken;
-  let fileStorageService = new FileStorageService(jwt ?? '');
-  const [notify, setNotify] = useState<NotifyProps>({ open: false });
+  let discountService = new DiscountService(jwt ?? '');
 
   const onClose = () => {
     setOpen(false);
   };
 
   const handleSubmit = () => {
-    fileId && fileStorageService
-      .deleteFile(fileId)
+    let discountId = row?.original.id;
+    discountId && discountService
+      .deleteDiscount(discountId)
       .then(() => {
         onClose();
         setNotify({ open: true });
-        if (files) {
-          let index = files.findIndex((x) => x.id == fileId);
-          files.splice(index, 1);
-          setFiles([...files]);
-        }
+        refetch();
       })
       .catch((error) => {
-        setNotify({ open: true, type: 'error', description: error.message });
+        setNotify({ open: true, type: 'error', description: error });
       });
   };
   const CloseDialog = ({ onClose }: { onClose: () => void }) => (
@@ -68,7 +59,7 @@ const DeleteFile = ({ fileId, open, setOpen, files, setFiles }: DeleteFileProps)
       <Dialog open={open} onClose={onClose} aria-labelledby="alert-dialog-title" aria-describedby="alert-dialog-description">
         <DialogTitle id="alert-dialog-title">
           <Typography variant="caption" sx={{ fontSize: 17, fontWeight: 600 }}>
-            {t('buttons.fileStorage.delete')}
+            {t('buttons.discount.delete')}
           </Typography>
           <CloseDialog onClose={onClose} />
         </DialogTitle>
@@ -90,4 +81,4 @@ const DeleteFile = ({ fileId, open, setOpen, files, setFiles }: DeleteFileProps)
   );
 };
 
-export default DeleteFile;
+export default DeleteDiscount;

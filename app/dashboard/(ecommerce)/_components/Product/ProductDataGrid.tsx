@@ -99,7 +99,7 @@ export default function ProductDataGrid() {
         header: t(fieldsName + 'price'),
         type: 'number',
         enableResizing: true,
-        Cell: ({ renderedCellValue, row }) => (renderedCellValue as number).toCurrency(row.original.currencyCode)
+        Cell: ({ renderedCellValue, row }) => (renderedCellValue as number).toCurrency(row.original.currencyType)
       },
       {
         accessorKey: 'published',

@@ -1,3 +1,6 @@
+import { DiscountLimitationType } from "@root/app/types/enums/DiscountLimitationType";
+import { DiscountType } from "@root/app/types/enums/DiscountType";
+
 /**
  * Represents a discount.
  */
@@ -81,34 +84,9 @@ export default interface DiscountModel {
      * Indicates whether the discount is active.
      */
     isActive: boolean;
-  
-    /**
-     * The number of order discounts associated with this discount.
-     */
-    orderDiscounts: number;
-  
-    /**
-     * The number of categories the discount applies to.
-     */
-    categories: number;
-  
-    /**
-     * The number of manufacturers the discount applies to.
-     */
-    manufacturers: number;
-  
-    /**
-     * The number of products the discount applies to.
-     */
-    products: number;
   }
   
   
-  // Example Enum Definitions (If not defined elsewhere)
-  export enum DiscountType {
-    // ... your enum values
-  }
+
   
-  export enum DiscountLimitationType {
-    // ... your enum values
-  }
+  

@@ -2,6 +2,7 @@ import Fetch from '@root/utils/Fetch';
 import CONFIG from '@root/config';
 import Result from '@root/app/types/Result';
 import DiscountModel from '@dashboard/(ecommerce)/_types/Common/DiscountModel';
+import GridDataBound from '@root/app/types/GridDataBound';
 
 export default class DiscountService {
   config?: RequestInit;
@@ -9,8 +10,8 @@ export default class DiscountService {
     if (jwt) this.config = Fetch.SetDefaultHeader(jwt);
   }
 
-  getDiscountList = async (): Promise<Result<DiscountModel[]>> => {
-    return Fetch.Get<Result<DiscountModel[]>>(CONFIG.API_BASEPATH + `/Common/GetDiscountHierarchy`, this.config);
+  getDiscountList = async (searchParams: GridDataBound): Promise<Result<PaginatedList<DiscountModel>>> => {
+    return Fetch.Post<Result<PaginatedList<DiscountModel>>>(CONFIG.API_BASEPATH + '/Common/GetDiscountList', searchParams, this.config);
   };
   getDiscountListForSelect = async (): Promise<Result<DiscountModel[]>> => {
     return Fetch.Get<Result<DiscountModel[]>>(CONFIG.API_BASEPATH + `/Common/GetDiscountListForSelect`, this.config);

@@ -63,14 +63,14 @@ export default function RemoveDraftMessage({ row, open, setOpen, refetch }: Read
       <Notify notify={notify} setNotify={setNotify}></Notify>
       <Dialog open={open} onClose={onClose} aria-labelledby="alert-dialog-title" aria-describedby="alert-dialog-description">
         <DialogTitle id="alert-dialog-title">
-          <Typography variant="caption" fontSize={17} fontWeight={600}>
+          <Typography variant="caption" sx={{ fontSize: 17, fontWeight: 600 }}>
             {t('buttons.message.messageOutbox.remove')}
           </Typography>
           <CloseDialog onClose={onClose} />
         </DialogTitle>
         <DialogContent>
         <div id="alert-dialog-description">
-            <Typography variant="caption" fontSize={15}>
+            <Typography variant="caption" sx={{ fontSize: 15 }}>
               {t('dialog.delete.description')}
             </Typography>
           </div>

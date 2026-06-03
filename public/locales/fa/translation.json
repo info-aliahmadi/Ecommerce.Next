@@ -46,7 +46,8 @@
     "manufacturer": "تولیدکنندگان",
     "category": "دسته‌بندی‌ها",
     "product-tag": "برچسب‌ها",
-    "product-attribute": "خصوصیات محصول"
+    "product-attribute": "خصوصیات محصول",
+    "common": "اطلاعات پایه"
     
   },
   "pages": {
@@ -81,9 +82,11 @@
     "orders": "سفارش‌ها",
     "deliveryDates": "تاریخ‌های تحویل",
     "manufacturers": "تولیدکنندگان",
+    "discount": "تخفیف‌ها",
     "product-attributes": "خصوصیات محصول",
     "product-tags": "برچسب‌ها",
     "categories": "دسته‌بندی‌ها",
+    "common": "اطلاعات پایه",
 
     "cards": {
       "users-list": "لیست کاربران",
@@ -369,6 +372,28 @@
       "published": "منتشر شده",
       "displayOrder": "ترتیب نمایش"
     },
+    "discount": {
+      "id": "شناسه",
+      "name": "نام",
+      "couponCode": "کد تخفیف",
+      "adminComment": "توضیحات مدیر",
+      "discountTypeId": "نوع تخفیف",
+      "usePercentage": "درصدی",
+      "discountPercentage": "درصد تخفیف",
+      "discountAmount": "مبلغ تخفیف",
+      "maximumDiscountAmount": "حداکثر مبلغ تخفیف",
+      "startDateUtc": "تاریخ شروع",
+      "endDateUtc": "تاریخ پایان",
+      "requiresCouponCode": "نیازمند کد تخفیف",
+      "discountLimitationId": "محدودیت تخفیف",
+      "limitationTimes": "تعداد محدودیت",
+      "maximumDiscountedQuantity": "حداکثر تعداد تخفیف‌دار",
+      "isActive": "فعال",
+      "orderDiscounts": "تخفیف‌های سفارش",
+      "categories": "دسته‌بندی‌ها",
+      "manufacturers": "تولیدکنندگان",
+      "products": "محصولات"
+    },
     "category": {
       "id": "شناسه",
       "name": "نام",
@@ -608,6 +633,13 @@
       "edit": "ویرایش تولیدکننده",
       "delete": "حذف تولیدکننده",
       "saveManufacturer": "ذخیره تولیدکننده",
+      "cancel": "لغو"
+    },
+    "discount": {
+      "add": "تخفیف جدید",
+      "edit": "ویرایش تخفیف",
+      "delete": "حذف تخفیف",
+      "saveDiscount": "ذخیره تخفیف",
       "cancel": "لغو"
     },
     "category": {

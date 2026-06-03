@@ -11,7 +11,7 @@ function ManufacturerList() {
   return (
     <>
       <Grid container direction="row" sx={{ justifyContent: "center", alignItems: "flex-start" }}>
-        <Grid container spacing={3} size={12} xl={8} >
+        <Grid container spacing={3} size={12} >
           <Grid size={12}>
             <Typography variant="h5">{t('pages.manufacturers')}</Typography>
           </Grid>

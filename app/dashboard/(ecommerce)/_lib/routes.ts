@@ -1,6 +1,6 @@
 // ==============================|| ROUTE ITEMS ||============================== //
 
-import { SALE_CATEGORY_MANAGEMENT, SALE_PRODUCT_ATTRIBUTE_MANAGEMENT, SALE_PRODUCT_MANAGEMENT, SALE_PRODUCT_TAG_MANAGEMENT, SALE_TAX_MANAGEMENT } from "../../_lib/Permissions";
+import { SALE_BASE_INFORMATION_MANAGEMENT, SALE_CATEGORY_MANAGEMENT, SALE_PRODUCT_ATTRIBUTE_MANAGEMENT, SALE_PRODUCT_MANAGEMENT, SALE_PRODUCT_TAG_MANAGEMENT, SALE_TAX_MANAGEMENT } from "../../_lib/Permissions";
 
 import { SALE_MANUFACTURER_MANAGEMENT } from "../../_lib/Permissions";
 
@@ -30,6 +30,10 @@ const saleRoutes = [
   {
     path: '/dashboard/category/list',
     permission: SALE_CATEGORY_MANAGEMENT
+  },
+  {
+    path: '/dashboard/common/list',
+    permission: SALE_BASE_INFORMATION_MANAGEMENT
   },
 
 ];

@@ -46,7 +46,8 @@
     "product-attribute": "Product Attribute",
     "category": "Category",
     "order": "Orders",
-    "manufacturer": "Manufacturers"
+    "manufacturer": "Manufacturers",
+    "common": "Common Information"
   },
   "pages": {
     "edit-profile": "Edit Profile",
@@ -80,6 +81,8 @@
     "orders": "Orders",
     "deliveryDates": "Delivery Dates",
     "manufacturers": "Manufacturers",
+    "common": "Common Information",
+    "discount": "Discounts",
     "cards": {
       "users-list": "Users List",
       "user-add": "Add New User",
@@ -358,6 +361,28 @@
       "published": "Published",
       "displayOrder": "Display Order"
     },
+    "discount": {
+      "id": "Id",
+      "name": "Name",
+      "couponCode": "Coupon Code",
+      "adminComment": "Admin Comment",
+      "discountTypeId": "Discount Type",
+      "usePercentage": "Use Percentage",
+      "discountPercentage": "Discount Percentage",
+      "discountAmount": "Discount Amount",
+      "maximumDiscountAmount": "Maximum Discount Amount",
+      "startDateUtc": "Start Date",
+      "endDateUtc": "End Date",
+      "requiresCouponCode": "Requires Coupon Code",
+      "discountLimitationId": "Discount Limitation",
+      "limitationTimes": "Limitation Times",
+      "maximumDiscountedQuantity": "Maximum Discounted Quantity",
+      "isActive": "Active",
+      "orderDiscounts": "Order Discounts",
+      "categories": "Categories",
+      "manufacturers": "Manufacturers",
+      "products": "Products"
+    },
     "product": {
       "id": "Id",
       "name": "Name",
@@ -440,6 +465,12 @@
       "edit": "Edit Manufacturer",
       "delete": "Delete Manufacturer",
       "saveManufacturer": "Save Manufacturer"
+    },
+    "discount": {
+      "add": "New Discount",
+      "edit": "Edit Discount",
+      "delete": "Delete Discount",
+      "saveDiscount": "Save Discount"
     },
     "role": {
       "add": "Add New Role",

@@ -46,7 +46,8 @@
     "product-attribute": "Product Attribute",
     "category": "Category",
     "order": "Orders",
-    "manufacturer": "Manufacturers"
+    "manufacturer": "Manufacturers",
+    "common" : "Common Information"
   },
   "pages": {
     "edit-profile": "ویرایش پروفایل",
@@ -80,6 +81,8 @@
     "orders": "سفارش‌ها",
     "deliveryDates": "تاریخ‌های تحویل",
     "manufacturers": "تولیدکنندگان",
+    "common": "Common Information",
+    "discount": "Discounts",
     "cards": {
       "users-list": "لیست کاربران",
       "user-add": "افزودن کاربر جدید",

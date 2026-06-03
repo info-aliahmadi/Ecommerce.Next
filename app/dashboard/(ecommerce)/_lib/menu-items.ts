@@ -2,7 +2,7 @@
 import   ShoppingCart  from '@mui/icons-material/ShoppingCart';
 import CategoryIcon from '@mui/icons-material/Category';
 import LocalOfferIcon from '@mui/icons-material/LocalOffer';
-import {  SALE_CATEGORY_MANAGEMENT, SALE_MANUFACTURER_MANAGEMENT, SALE_ORDER_MANAGEMENT, SALE_PRODUCT_ATTRIBUTE_MANAGEMENT, SALE_PRODUCT_MANAGEMENT, SALE_PRODUCT_TAG_MANAGEMENT } from '../../_lib/Permissions';
+import {  SALE_BASE_INFORMATION_MANAGEMENT, SALE_CATEGORY_MANAGEMENT, SALE_MANUFACTURER_MANAGEMENT, SALE_ORDER_MANAGEMENT, SALE_PRODUCT_ATTRIBUTE_MANAGEMENT, SALE_PRODUCT_MANAGEMENT, SALE_PRODUCT_TAG_MANAGEMENT } from '../../_lib/Permissions';
 // icons
 const icons = {
   CategoryIcon,
@@ -67,6 +67,14 @@ const pages = {
       icon: icons.LocalOfferIcon,
       breadcrumbs: false,
       permission: SALE_PRODUCT_TAG_MANAGEMENT
+    },{
+      id: 'common',
+      title: 'Common Information',
+      type: 'item',
+      url: '/dashboard/common/list',
+      icon: icons.LocalOfferIcon,
+      breadcrumbs: false,
+      permission: SALE_BASE_INFORMATION_MANAGEMENT
     }
   ]
 };
