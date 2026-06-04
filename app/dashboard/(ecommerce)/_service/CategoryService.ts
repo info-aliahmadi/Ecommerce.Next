@@ -30,8 +30,8 @@ export default class CategoryService {
     return Fetch.Post<Result<CategoryModel[]>>(CONFIG.API_BASEPATH + '/Product/UpdateCategoryOrders', categories, this.config);
   };
   
-  deleteCategory = async (categoryId : number): Promise<Result<CategoryModel>> => {
+  deleteCategory = async (categoryId : number): Promise<Result<null>> => {
     const params = new URLSearchParams({ categoryId: categoryId.toString() });
-    return Fetch.Get<Result<CategoryModel>>(CONFIG.API_BASEPATH + `/Product/deleteCategory?${params.toString()}`, this.config);
+    return Fetch.Get<Result<null>>(CONFIG.API_BASEPATH + `/Product/deleteCategory?${params.toString()}`, this.config);
   };
 }

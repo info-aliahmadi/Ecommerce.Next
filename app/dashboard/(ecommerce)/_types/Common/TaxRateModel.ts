@@ -1,7 +1,7 @@
 /**
  * Represents a tax rate.
  */
-export interface TaxRateModel {
+export default interface TaxRateModel {
     /**
      * The ID of the tax rate.
      */
@@ -11,16 +11,19 @@ export interface TaxRateModel {
      * The ID of the tax category to which the tax rate belongs.
      */
     taxCategoryId: number;
+    /**
+     * The ID of the tax category to which the tax rate belongs.
+     */
+    taxCategoryName: string;
   
     /**
      * The ID of the country to which the tax rate applies.
      */
     countryId: number;
-  
     /**
-     * The ID of the state/province to which the tax rate applies (nullable).
+     * The ID of the country to which the tax rate applies.
      */
-    stateProvinceId: number | null; // Made nullable as it might not always be required
+    countryName: string;
   
     /**
      * The tax percentage.

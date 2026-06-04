@@ -32,8 +32,8 @@ export default class ProductAttributeService {
     return Fetch.Post<Result<ProductAttributeModel>>(CONFIG.API_BASEPATH + '/Product/updateProductAttribute', productAttribute, this.config);
 
   };
-  deleteProductAttribute = async (productAttributeId : number): Promise<Result<ProductAttributeModel>> => {
+  deleteProductAttribute = async (productAttributeId : number): Promise<Result<null>> => {
     const params = new URLSearchParams({ productAttributeId: productAttributeId.toString() });
-    return Fetch.Get<Result<ProductAttributeModel>>(CONFIG.API_BASEPATH + `/Product/deleteProductAttribute?${params.toString()}`, this.config);
+    return Fetch.Get<Result<null>>(CONFIG.API_BASEPATH + `/Product/deleteProductAttribute?${params.toString()}`, this.config);
   };
 }

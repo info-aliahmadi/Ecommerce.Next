@@ -41,9 +41,9 @@ export default class ProductService {
     return Fetch.Post<Result<ProductModel>>(CONFIG.API_BASEPATH + '/Product/updateProduct', product, this.config);
 
   };
-  deleteProduct = async (productId: number): Promise<Result<ProductModel>> => {
+  deleteProduct = async (productId: number): Promise<Result<null>> => {
     const params = new URLSearchParams({ productId: productId.toString() });
-    return Fetch.Get<Result<ProductModel>>(CONFIG.API_BASEPATH + `/Product/deleteProduct?${params.toString()}`, this.config);
+    return Fetch.Get<Result<null>>(CONFIG.API_BASEPATH + `/Product/deleteProduct?${params.toString()}`, this.config);
   };
   removeProduct = async (productId: number): Promise<Result<ProductModel>> => {
     const params = new URLSearchParams({ productId: productId.toString() });

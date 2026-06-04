@@ -17,13 +17,4 @@ export default interface TaxCategoryModel {
      */
     displayOrder: number;
   
-    /**
-     * The number of products associated with this tax category.
-     */
-    products: number;
-  
-    /**
-     * The number of tax rates associated with this tax category.
-     */
-    taxRates: number;
   }

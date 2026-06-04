@@ -48,7 +48,6 @@
     "product-tag": "برچسب‌ها",
     "product-attribute": "خصوصیات محصول",
     "common": "اطلاعات پایه"
-    
   },
   "pages": {
     "edit-profile": "ویرایش پروفایل",
@@ -82,12 +81,14 @@
     "orders": "سفارش‌ها",
     "deliveryDates": "تاریخ‌های تحویل",
     "manufacturers": "تولیدکنندگان",
-    "discount": "تخفیف‌ها",
     "product-attributes": "خصوصیات محصول",
     "product-tags": "برچسب‌ها",
     "categories": "دسته‌بندی‌ها",
     "common": "اطلاعات پایه",
-
+    "discount": "تخفیف‌ها",
+    "stateProvince": "استان‌ها",
+    "taxRate": "نرخ مالیات",
+    "taxCategory": "دسته‌بندی مالیات",
     "cards": {
       "users-list": "لیست کاربران",
       "user-add": "افزودن کاربر جدید",
@@ -345,11 +346,11 @@
       "cardName": "نام کارت",
       "cardNumber": "شماره کارت",
       "paymentTypeTitle": "نوع پرداخت",
-      "deliveryDate" :{
-        "OneDay" : "یک روز",
-        "ThreeDays" : "سه روز",
-        "OneWeek" : "یک هفته",
-        "OneMonth" : "یک ماه"
+      "deliveryDate": {
+        "OneDay": "یک روز",
+        "ThreeDays": "سه روز",
+        "OneWeek": "یک هفته",
+        "OneMonth": "یک ماه"
       }
     },
     "orderItem": {
@@ -392,7 +393,20 @@
       "orderDiscounts": "تخفیف‌های سفارش",
       "categories": "دسته‌بندی‌ها",
       "manufacturers": "تولیدکنندگان",
-      "products": "محصولات"
+      "products": "محصولات",
+      "discountTypes": {
+        "AssignedToOrderTotal": "Assigned to order total",
+        "AssignedToSkus": "Assigned to products",
+        "AssignedToCategories": "Assigned to categories",
+        "AssignedToManufacturers": "Assigned to manufacturers",
+        "AssignedToShipping": "Assigned to shipping",
+        "AssignedToOrderSubTotal": "Assigned to order subtotal"
+      },
+      "discountLimitationTypes": {
+        "Unlimited": "Unlimited",
+        "NTimesOnly": "N times only",
+        "NTimesPerCustomer": "N times per customer"
+      }
     },
     "category": {
       "id": "شناسه",
@@ -408,6 +422,25 @@
       "published": "منتشر شده",
       "deleted": "حذف شده",
       "showOnHomepage": "نمایش در صفحه اصلی"
+    },
+    "stateProvince": {
+      "id": "شناسه",
+      "name": "نام",
+      "abbreviation": "اختصار",
+      "countryId": "کشور",
+      "displayOrder": "ترتیب نمایش",
+      "published": "منتشر شده"
+    },
+    "taxRate": {
+      "id": "شناسه",
+      "taxCategoryId": "دسته‌بندی مالیات",
+      "countryId": "کشور",
+      "percentage": "درصد مالیات"
+    },
+    "taxCategory": {
+      "id": "شناسه",
+      "name": "نام",
+      "displayOrder": "ترتیب نمایش"
     },
     "product": {
       "id": "شناسه",
@@ -602,7 +635,7 @@
         "delete": "حذف ایمیل",
         "pin": "پین کردن ایمیل",
         "trash": "زباله‌دان ایمیل‌ها",
-      "cancel": "لغو"
+        "cancel": "لغو"
       },
       "emailOutbox": {
         "outbox": "ایمیل‌های ارسال شده",
@@ -665,6 +698,27 @@
       "add": "برچسب جدید",
       "edit": "ویرایش برچسب",
       "delete": "حذف برچسب",
+      "cancel": "لغو"
+    },
+    "stateProvince": {
+      "save": "ذخیره",
+      "add": "استان جدید",
+      "edit": "ویرایش استان",
+      "delete": "حذف استان",
+      "cancel": "لغو"
+    },
+    "taxRate": {
+      "save": "ذخیره",
+      "add": "نرخ مالیات جدید",
+      "edit": "ویرایش نرخ مالیات",
+      "delete": "حذف نرخ مالیات",
+      "cancel": "لغو"
+    },
+    "taxCategory": {
+      "save": "ذخیره",
+      "add": "دسته‌بندی مالیات جدید",
+      "edit": "ویرایش دسته‌بندی مالیات",
+      "delete": "حذف دسته‌بندی مالیات",
       "cancel": "لغو"
     }
   },
@@ -808,13 +862,13 @@
       "addMain": "افزودن دسته‌بندی اصلی",
       "addSub": "افزودن دسته‌بندی فرعی در {parentTitle}"
     },
-    "product-tag" : {
-      "add" :"افزودن برچسب جدید",
-      "edit" : "ویرایش برچسب"
+    "product-tag": {
+      "add": "افزودن برچسب جدید",
+      "edit": "ویرایش برچسب"
     },
-    "product-attribute" : {
-      "add" : "افزودن خصوصیات محصول جدید",
-      "edit" : "ویرایش خصوصیات محصول"
+    "product-attribute": {
+      "add": "افزودن خصوصیات محصول جدید",
+      "edit": "ویرایش خصوصیات محصول"
     }
   }
 }

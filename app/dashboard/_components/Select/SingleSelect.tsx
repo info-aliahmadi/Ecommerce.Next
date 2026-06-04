@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { useState, useEffect } from 'react';
-import { Chip, FormControl, MenuItem, OutlinedInput, Select, InputLabel, Box, useTheme, Theme } from '@mui/material';
+import { Autocomplete, TextField } from '@mui/material';
 import Result from '@root/app/types/Result';
 
 
@@ -17,7 +17,6 @@ interface SingleSelectProps {
 }
 
 export default function SingleSelect({ defaultValue, id, name, label, optionLabel, setFieldValue, error = false, disabled= false, loadDataApi }: Readonly<SingleSelectProps>) {
-  const theme = useTheme();
   const [loading, setLoading] = useState(true);
   const [options, setOptions] = useState<Option[]>([]);
   const [value, setValue] = useState<any>();
@@ -37,51 +36,34 @@ export default function SingleSelect({ defaultValue, id, name, label, optionLabe
     setValue(defaultValue);
   }, [defaultValue]);
 
-  const ITEM_HEIGHT = 48;
-  const ITEM_PADDING_TOP = 8;
+  const selectedOption = options.find((option) => option.id == value) ?? null;
 
-  function getStyles(value: string, defaultValue: string, theme: Theme): React.CSSProperties {
-    return {
-      fontWeight: defaultValue === value ? theme.typography.fontWeightMedium : theme.typography.fontWeightRegular
-    };
-  }
-
-  const handleChange = (event: any) => {
-    setFieldValue(id, event.target.value);
-    setValue(event.target.value);
+  const handleChange = (event: React.SyntheticEvent, option: Option | null) => {
+    const nextValue = option?.id ?? '';
+    setFieldValue(id, nextValue);
+    setValue(nextValue);
   };
 
   return (
-    <FormControl error={error} disabled={disabled}>
-      <InputLabel htmlFor={id} sx={{ overflow: 'visible' }}>{label}</InputLabel>
-      <Select
-        id={id}
-        name={name?? id}
-        className="select-margin"
-        value={value ?? ''}
-        label={label}
-        style={{
-          maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
-          width: '100%',
-          minWidth: '100%'
-        }}
-        size="medium"
-        onChange={handleChange}
-        input={<OutlinedInput label={label} sx={{ minHeight: '41px' }} />}
-        defaultValue={defaultValue ? options?.filter((x: any) => x.id == defaultValue) : ''}
-        renderValue={(selected: any) => (<Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
-          <Chip label={options?.find((x: any) => x.id == selected)?.name} sx={{ height: '23px' }} />
-        </Box>
-        )}
-      >
-        {options?.map((item: Option) => {
-          return (
-            <MenuItem key={'menu-' + name + item.id} value={item.id} style={value && getStyles(item.id.toString(), value, theme)}>
-              <span style={{ whiteSpace: 'pre-wrap' }}>{item?.name}</span>
-            </MenuItem>
-          );
-        })}
-      </Select>
-    </FormControl>
+    <Autocomplete
+      id={id}
+      value={selectedOption}
+      options={options}
+      loading={loading}
+      disabled={disabled}
+      onChange={handleChange}
+      getOptionLabel={(option) => option?.name ?? ''}
+      isOptionEqualToValue={(option, value) => option.id == value.id}
+      sx={{ width: '100%', minWidth: '100%' }}
+      renderInput={(params) => (
+        <TextField
+          {...params}
+          name={name ?? id}
+          error={error}
+          size="small"
+          label={label}
+        />
+      )}
+    />
   );
 }

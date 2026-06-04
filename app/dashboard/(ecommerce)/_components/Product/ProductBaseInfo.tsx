@@ -147,15 +147,15 @@ export default function ProductBaseInfo({
         </Grid>
         <Grid size={{ xs: 12, sm: 12, md: 6, lg: 6, xl: 4 }}>
           <SelectDeliveryDate
-            defaultValue={values?.deliveryDateType || null}
-            id="deliveryDateId"
+            defaultValue={values?.deliveryDateType ?? null}
+            id="deliveryDateType"
             label={t(fieldsName + 'deliveryDateId')}
             setFieldValue={setFieldValue}
-            error={Boolean(errors.deliveryDateId)}
+            error={Boolean(errors.deliveryDateType)}
           />
-          {errors.deliveryDateId && (
+          {errors.deliveryDateType && (
             <FormHelperText error id="helper-text">
-              {errors.deliveryDateId}
+              {errors.deliveryDateType}
             </FormHelperText>
           )}
         </Grid>

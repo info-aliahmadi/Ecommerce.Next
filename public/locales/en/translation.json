@@ -83,6 +83,9 @@
     "manufacturers": "Manufacturers",
     "common": "Common Information",
     "discount": "Discounts",
+    "stateProvince": "State/Provinces",
+    "taxRate": "Tax Rates",
+    "taxCategory": "Tax Categories",
     "cards": {
       "users-list": "Users List",
       "user-add": "Add New User",
@@ -334,11 +337,11 @@
       "cardName": "Card Name",
       "cardNumber": "Card Number",
       "paymentTypeTitle": "Payment Type",
-      "deliveryDate" :{
-        "OneDay" : "one Day",
-        "ThreeDays" : "Three Days",
-        "OneWeek" : "One Week",
-        "OneMonth" : "One Month"
+      "deliveryDate": {
+        "OneDay": "one Day",
+        "ThreeDays": "Three Days",
+        "OneWeek": "One Week",
+        "OneMonth": "One Month"
       }
     },
     "orderItem": {
@@ -367,6 +370,14 @@
       "couponCode": "Coupon Code",
       "adminComment": "Admin Comment",
       "discountTypeId": "Discount Type",
+      "discountTypes": {
+        "AssignedToOrderTotal": "Assigned to order total",
+        "AssignedToSkus": "Assigned to products",
+        "AssignedToCategories": "Assigned to categories",
+        "AssignedToManufacturers": "Assigned to manufacturers",
+        "AssignedToShipping": "Assigned to shipping",
+        "AssignedToOrderSubTotal": "Assigned to order subtotal"
+      },
       "usePercentage": "Use Percentage",
       "discountPercentage": "Discount Percentage",
       "discountAmount": "Discount Amount",
@@ -375,6 +386,11 @@
       "endDateUtc": "End Date",
       "requiresCouponCode": "Requires Coupon Code",
       "discountLimitationId": "Discount Limitation",
+      "discountLimitationTypes": {
+        "Unlimited": "Unlimited",
+        "NTimesOnly": "N times only",
+        "NTimesPerCustomer": "N times per customer"
+      },
       "limitationTimes": "Limitation Times",
       "maximumDiscountedQuantity": "Maximum Discounted Quantity",
       "isActive": "Active",
@@ -382,6 +398,21 @@
       "categories": "Categories",
       "manufacturers": "Manufacturers",
       "products": "Products"
+    },
+    "category": {
+      "id": "Id",
+      "name": "Name",
+      "metaKeywords": "Meta Keywords",
+      "metaTitle": "Meta Title",
+      "description": "Description",
+      "metaDescription": "Meta Description",
+      "pictureId": "Picture Id",
+      "parentCategoryId": "Parent Category Id",
+      "parentCategory": "Parent Category",
+      "displayOrder": "Display Order",
+      "published": "Published",
+      "deleted": "Deleted",
+      "showOnHomepage": "Show On Homepage"
     },
     "product": {
       "id": "Id",
@@ -436,6 +467,25 @@
       "productTags": "Product Tags",
       "createdBy": "created By",
       "editedBy": "Edited By"
+    },
+    "stateProvince": {
+      "id": "Id",
+      "name": "Name",
+      "abbreviation": "Abbreviation",
+      "countryId": "Country",
+      "displayOrder": "Display Order",
+      "published": "Published"
+    },
+    "taxRate": {
+      "id": "Id",
+      "taxCategoryId": "Tax Category",
+      "countryId": "Country",
+      "percentage": "Percentage"
+    },
+    "taxCategory": {
+      "id": "Id",
+      "name": "Name",
+      "displayOrder": "Display Order"
     }
   },
   "buttons": {
@@ -598,6 +648,18 @@
       "draft": "Save as Draft",
       "delete": "Delete Product",
       "saveOrder": "Save Order"
+    },
+    "stateProvince": {
+      "save": "Save",
+      "add": "New State/Province",
+      "edit": "Edit State/Province",
+      "delete": "Delete State/Province"
+    },
+    "taxRate": {
+      "save": "Save",
+      "add": "New Tax Rate",
+      "edit": "Edit Tax Rate",
+      "delete": "Delete Tax Rate"
     }
   },
   "validation": {

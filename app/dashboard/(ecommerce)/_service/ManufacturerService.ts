@@ -35,8 +35,8 @@ export default class ManufacturerService {
     return Fetch.Post<Result<ManufacturerModel[]>>(CONFIG.API_BASEPATH + '/Product/UpdateManufacturerOrders', manufacturers, this.config);
   };
   
-  deleteManufacturer = async (manufacturerId : number): Promise<Result<ManufacturerModel>> => {
+  deleteManufacturer = async (manufacturerId : number): Promise<Result<null>> => {
     const params = new URLSearchParams({ manufacturerId: manufacturerId.toString() });
-    return Fetch.Get<Result<ManufacturerModel>>(CONFIG.API_BASEPATH + `/Product/deleteManufacturer?${params.toString()}`, this.config);
+    return Fetch.Get<Result<null>>(CONFIG.API_BASEPATH + `/Product/deleteManufacturer?${params.toString()}`, this.config);
   };
 }

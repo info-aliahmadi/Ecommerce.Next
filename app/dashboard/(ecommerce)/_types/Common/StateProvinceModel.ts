@@ -21,6 +21,10 @@ export default interface StateProvinceModel {
      * The ID of the country to which the state/province belongs.
      */
     countryId: number;
+    /**
+     * The ID of the country to which the state/province belongs.
+     */
+    countryName: string;
   
     /**
      * Indicates whether the state/province is published.
@@ -32,14 +36,5 @@ export default interface StateProvinceModel {
      */
     displayOrder: number;
   
-    /**
-     * The number of addresses associated with this state/province.
-     */
-    addresses: number;
-  
-    /**
-     * The number of tax rates associated with this state/province.
-     */
-    taxRates: number;
   }
   

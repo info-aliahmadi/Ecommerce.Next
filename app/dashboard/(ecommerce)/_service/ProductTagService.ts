@@ -39,8 +39,8 @@ export default class ProductTagService {
     return Fetch.Post<Result<ProductTagModel>>(CONFIG.API_BASEPATH + '/Product/updateProductTag', productTag, this.config);
 
   };
-  deleteProductTag = async (productTagId : number): Promise<Result<ProductTagModel>> => {
+  deleteProductTag = async (productTagId : number): Promise<Result<null>> => {
     const params = new URLSearchParams({ productTagId: productTagId.toString() });
-    return Fetch.Get<Result<ProductTagModel>>(CONFIG.API_BASEPATH + `/Product/deleteProductTag?${params.toString()}`, this.config);
+    return Fetch.Get<Result<null>>(CONFIG.API_BASEPATH + `/Product/deleteProductTag?${params.toString()}`, this.config);
   };
 }

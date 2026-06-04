@@ -34,6 +34,7 @@ import ManufacturerModel from '../../_types/Product/ManufacturerModel';
 const AddOrEditManufacturer = ({ manufacturerId, isNew, open, setOpen, refetch }: { manufacturerId: number, isNew: boolean, open: boolean, setOpen: (open: boolean) => void, refetch: () => void }) => {
   const t = useTranslations("");
   const [fieldsName, validation, buttonName] = ['fields.manufacturer.', 'validation.manufacturer.', 'buttons.manufacturer.'];
+  const dialogName = t('pages.manufacturer');
   const [manufacturer, setManufacturer] = useState<ManufacturerModel | undefined>(undefined);
   const [notify, setNotify] = useState<NotifyProps>({ open: false });
   const { data: session } = useSession();
@@ -145,7 +146,7 @@ const AddOrEditManufacturer = ({ manufacturerId, isNew, open, setOpen, refetch }
           {({ errors, handleBlur, handleChange, setFieldValue, handleSubmit, isSubmitting, touched, values }) => (
             <form noValidate onSubmit={handleSubmit}>
               <DialogTitle>
-                {t('dialog.' + (isNew == true ? 'add' : 'edit') + '.title', { item: 'Manufacturer' })}
+                {t('dialog.' + (isNew == true ? 'add' : 'edit') + '.title', { item: dialogName })}
                 <CloseDialog onClose={onClose} />
               </DialogTitle>
               <DialogContent>

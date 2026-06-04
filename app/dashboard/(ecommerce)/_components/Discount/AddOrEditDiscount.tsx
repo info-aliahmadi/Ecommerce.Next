@@ -32,10 +32,12 @@ import AddIcon from '@mui/icons-material/Add';
 import DiscountService from '../../_service/DiscountService';
 import DiscountModel from '../../_types/Common/DiscountModel';
 import SelectDiscountLimitationType from './SelectDiscountLimitationType';
+import SelectDiscountType from './SelectDiscountType';
 
 const AddOrEditDiscount = ({ discountId, isNew, open, setOpen, refetch }: { discountId: number, isNew: boolean, open: boolean, setOpen: (open: boolean) => void, refetch: () => void }) => {
   const t = useTranslations('');
   const [fieldsName, buttonName] = ['fields.discount.', 'buttons.discount.'];
+  const dialogName = t('pages.discount');
   const [discount, setDiscount] = useState<DiscountModel | undefined>(undefined);
   const [notify, setNotify] = useState<NotifyProps>({ open: false });
   const { data: session } = useSession();
@@ -152,7 +154,7 @@ const AddOrEditDiscount = ({ discountId, isNew, open, setOpen, refetch }: { disc
           {({ errors, handleBlur, handleChange, handleSubmit, isSubmitting, setFieldValue, touched, values }) => (
             <form noValidate onSubmit={handleSubmit}>
               <DialogTitle>
-                {t('dialog.' + (isNew == true ? 'add' : 'edit') + '.title', { item: 'Discount' })}
+                {t('dialog.' + (isNew == true ? 'add' : 'edit') + '.title', { item: dialogName })}
                 <CloseDialog onClose={onClose} />
               </DialogTitle>
               <DialogContent>
@@ -221,6 +223,16 @@ const AddOrEditDiscount = ({ discountId, isNew, open, setOpen, refetch }: { disc
                         </FormHelperText>
                       )}
                     </Stack>
+                  </Grid>
+
+                  <Grid size={12}>
+                    <SelectDiscountType
+                      defaultValue={values?.discountTypeId}
+                      id="discountTypeId"
+                      setFieldValue={setFieldValue}
+                      error={Boolean(touched.discountTypeId && errors.discountTypeId)}
+                      label={t(fieldsName + 'discountTypeId')}
+                    />
                   </Grid>
 
                   <Grid size={12}>

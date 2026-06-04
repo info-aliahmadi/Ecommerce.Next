@@ -54,6 +54,7 @@ export default function AddOrEditProductAttribute({ productAttributeId, isNew, o
   { productAttributeId: number, isNew: boolean, open: boolean, setOpen: (open: boolean) => void, refetch: () => void }) {
   const t = useTranslations("");
   const [fieldsName, validation, buttonName] = ['fields.product-attribute.', 'validation.product-attribute.', 'buttons.product-attribute.'];
+  const dialogName = t('pages.product-attribute');
   const [productAttribute, setProductAttribute] = useState<ProductAttributeModel>();
   const [notify, setNotify] = useState<NotifyProps>({ open: false });
   const { data: session } = useSession();
@@ -167,7 +168,7 @@ export default function AddOrEditProductAttribute({ productAttributeId, isNew, o
           {({ errors, handleBlur, handleChange, setFieldValue, handleSubmit, isSubmitting, touched, values }) => (
             <form noValidate onSubmit={handleSubmit}>
               <DialogTitle>
-                {t('dialog.' + (isNew == true ? 'add' : 'edit') + '.title', { item: 'Manufacturer' })}
+                {t('dialog.' + (isNew == true ? 'add' : 'edit') + '.title', { item: dialogName })}
                 <CloseDialog onClose={onClose} />
               </DialogTitle>
               <DialogContent>

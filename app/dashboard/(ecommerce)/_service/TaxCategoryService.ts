@@ -30,8 +30,8 @@ export default class TaxCategoryService {
   updateTaxCategory = async (taxCategory: TaxCategoryModel): Promise<Result<TaxCategoryModel>> => {
     return Fetch.Post<Result<TaxCategoryModel>>(CONFIG.API_BASEPATH + '/Common/updateTaxCategory', taxCategory, this.config);
   };
-  deleteTaxCategory = async (taxCategoryId : number): Promise<Result<TaxCategoryModel>> => {
+  deleteTaxCategory = async (taxCategoryId : number): Promise<Result<null>> => {
     const params = new URLSearchParams({ taxCategoryId: taxCategoryId.toString() });
-    return Fetch.Get<Result<TaxCategoryModel>>(CONFIG.API_BASEPATH + `/Common/deleteTaxCategory?${params.toString()}`, this.config);
+    return Fetch.Get<Result<null>>(CONFIG.API_BASEPATH + `/Common/deleteTaxCategory?${params.toString()}`, this.config);
   };
 }

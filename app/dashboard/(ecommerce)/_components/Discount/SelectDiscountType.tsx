@@ -2,9 +2,9 @@ import React from 'react';
 import { FormControl, InputLabel } from '@mui/material';
 import { useTranslations } from 'next-intl';
 import EnumDropdown from '@dashboard/_components/EnumDropdown';
-import DeliveryDateType from '@root/app/types/enums/DeliveryDateType';
+import { DiscountType } from '@root/app/types/enums/DiscountType';
 
-interface SelectDeliveryDateProps {
+interface SelectDiscountTypeProps {
   defaultValue?: number | null;
   id: string;
   setFieldValue: (field: string, value: any, shouldValidate?: boolean) => void;
@@ -14,7 +14,7 @@ interface SelectDeliveryDateProps {
   showNoneOption?: boolean;
 }
 
-const SelectDeliveryDate: React.FC<SelectDeliveryDateProps> = ({
+const SelectDiscountType: React.FC<SelectDiscountTypeProps> = ({
   defaultValue,
   id,
   setFieldValue,
@@ -29,20 +29,23 @@ const SelectDeliveryDate: React.FC<SelectDeliveryDateProps> = ({
     setFieldValue(id, newValue);
   };
 
-  const deliveryDateLabels = {
-    OneDay: t("fields.order.deliveryDate.OneDay"),
-    ThreeDays: t("fields.order.deliveryDate.ThreeDays"),
-    OneWeek: t("fields.order.deliveryDate.OneWeek"),
-    OneMonth: t("fields.order.deliveryDate.OneMonth")
+  const discountTypeLabels = {
+    AssignedToOrderTotal: t('fields.discount.discountTypes.AssignedToOrderTotal'),
+    AssignedToSkus: t('fields.discount.discountTypes.AssignedToSkus'),
+    AssignedToCategories: t('fields.discount.discountTypes.AssignedToCategories'),
+    AssignedToManufacturers: t('fields.discount.discountTypes.AssignedToManufacturers'),
+    AssignedToShipping: t('fields.discount.discountTypes.AssignedToShipping'),
+    AssignedToOrderSubTotal: t('fields.discount.discountTypes.AssignedToOrderSubTotal')
   };
+
   return (
     <FormControl error={error} key={id} fullWidth>
       <InputLabel id={`${id}-label`}>{label}</InputLabel>
       <EnumDropdown
         defaultValue={defaultValue ?? null}
-        enumObject={DeliveryDateType}
+        enumObject={DiscountType}
         disabled={disabled}
-        customLabels={deliveryDateLabels}
+        customLabels={discountTypeLabels}
         onChange={handleChange}
         showNoneOption={showNoneOption}
         noneOptionLabel="-"
@@ -51,4 +54,4 @@ const SelectDeliveryDate: React.FC<SelectDeliveryDateProps> = ({
   );
 };
 
-export default SelectDeliveryDate;
+export default SelectDiscountType;

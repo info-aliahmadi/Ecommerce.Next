@@ -47,7 +47,7 @@
     "category": "Category",
     "order": "Orders",
     "manufacturer": "Manufacturers",
-    "common" : "Common Information"
+    "common": "Common Information"
   },
   "pages": {
     "edit-profile": "ویرایش پروفایل",
@@ -83,6 +83,9 @@
     "manufacturers": "تولیدکنندگان",
     "common": "Common Information",
     "discount": "Discounts",
+    "stateProvince": "State/Provinces",
+    "taxRate": "Tax Rates",
+    "taxCategory": "Tax Categories",
     "cards": {
       "users-list": "لیست کاربران",
       "user-add": "افزودن کاربر جدید",
@@ -334,11 +337,11 @@
       "cardName": "نام کارت",
       "cardNumber": "شماره کارت",
       "paymentTypeTitle": "نوع پرداخت",
-      "deliveryDate" :{
-        "OneDay" : "one Day",
-        "ThreeDays" : "Three Days",
-        "OneWeek" : "One Week",
-        "OneMonth" : "One Month"
+      "deliveryDate": {
+        "OneDay": "one Day",
+        "ThreeDays": "Three Days",
+        "OneWeek": "One Week",
+        "OneMonth": "One Month"
       }
     },
     "orderItem": {
@@ -360,6 +363,56 @@
       "pictureId": "شناسه تصویر",
       "published": "منتشر شده",
       "displayOrder": "ترتیب نمایش"
+    },
+    "discount": {
+      "id": "شناسه",
+      "name": "نام",
+      "couponCode": "کد تخفیف",
+      "adminComment": "توضیحات مدیر",
+      "discountTypeId": "نوع تخفیف",
+      "usePercentage": "درصدی",
+      "discountPercentage": "درصد تخفیف",
+      "discountAmount": "مبلغ تخفیف",
+      "maximumDiscountAmount": "حداکثر مبلغ تخفیف",
+      "startDateUtc": "تاریخ شروع",
+      "endDateUtc": "تاریخ پایان",
+      "requiresCouponCode": "نیازمند کد تخفیف",
+      "discountLimitationId": "محدودیت تخفیف",
+      "limitationTimes": "تعداد محدودیت",
+      "maximumDiscountedQuantity": "حداکثر تعداد تخفیف‌دار",
+      "isActive": "فعال",
+      "orderDiscounts": "تخفیف‌های سفارش",
+      "categories": "دسته‌بندی‌ها",
+      "manufacturers": "تولیدکنندگان",
+      "products": "محصولات",
+      "discountTypes": {
+        "AssignedToOrderTotal": "Assigned to order total",
+        "AssignedToSkus": "Assigned to products",
+        "AssignedToCategories": "Assigned to categories",
+        "AssignedToManufacturers": "Assigned to manufacturers",
+        "AssignedToShipping": "Assigned to shipping",
+        "AssignedToOrderSubTotal": "Assigned to order subtotal"
+      },
+      "discountLimitationTypes": {
+        "Unlimited": "Unlimited",
+        "NTimesOnly": "N times only",
+        "NTimesPerCustomer": "N times per customer"
+      }
+    },
+    "category": {
+      "id": "شناسه",
+      "name": "نام",
+      "metaKeywords": "کلمات کلیدی متا",
+      "metaTitle": "عنوان متا",
+      "description": "توضیحات",
+      "metaDescription": "توضیحات متا",
+      "pictureId": "شناسه تصویر",
+      "parentCategoryId": "شناسه دسته‌بندی والد",
+      "parentCategory": "دسته‌بندی والد",
+      "displayOrder": "ترتیب نمایش",
+      "published": "منتشر شده",
+      "deleted": "حذف شده",
+      "showOnHomepage": "نمایش در صفحه اصلی"
     },
     "product": {
       "id": "شناسه",
@@ -414,6 +467,25 @@
       "productTags": "برچسب‌های محصول",
       "createdBy": "ایجاد شده توسط",
       "editedBy": "ویرایش شده توسط"
+    },
+    "stateProvince": {
+      "id": "شناسه",
+      "name": "نام",
+      "abbreviation": "اختصار",
+      "countryId": "کشور",
+      "displayOrder": "ترتیب نمایش",
+      "published": "منتشر شده"
+    },
+    "taxRate": {
+      "id": "شناسه",
+      "taxCategoryId": "دسته‌بندی مالیات",
+      "countryId": "کشور",
+      "percentage": "درصد مالیات"
+    },
+    "taxCategory": {
+      "id": "شناسه",
+      "name": "نام",
+      "displayOrder": "ترتیب نمایش"
     }
   },
   "buttons": {
@@ -570,6 +642,18 @@
       "draft": "ذخیره به عنوان پیش‌نویس",
       "delete": "حذف محصول",
       "saveOrder": "ذخیره ترتیب"
+    },
+    "stateProvince": {
+      "save": "ذخیره",
+      "add": "افزودن استان جدید",
+      "edit": "ویرایش استان",
+      "delete": "حذف استان"
+    },
+    "taxRate": {
+      "save": "Save",
+      "add": "New Tax Rate",
+      "edit": "Edit Tax Rate",
+      "delete": "Delete Tax Rate"
     }
   },
   "validation": {

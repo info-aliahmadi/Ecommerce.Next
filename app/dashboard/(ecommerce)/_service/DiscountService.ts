@@ -26,8 +26,8 @@ export default class DiscountService {
   updateDiscount = async (discount: DiscountModel): Promise<Result<DiscountModel>> => {
     return Fetch.Post<Result<DiscountModel>>(CONFIG.API_BASEPATH + '/Common/updateDiscount', discount, this.config);
   };
-  deleteDiscount = async (discountId : number): Promise<Result<DiscountModel>> => {
+  deleteDiscount = async (discountId : number): Promise<Result<null>> => {
     const params = new URLSearchParams({ discountId: discountId.toString() });
-    return Fetch.Get<Result<DiscountModel>>(CONFIG.API_BASEPATH + `/sale/deleteDiscount?${params.toString()}`, this.config);
+    return Fetch.Get<Result<null>>(CONFIG.API_BASEPATH + `/Common/deleteDiscount?${params.toString()}`, this.config);
   };
 }
