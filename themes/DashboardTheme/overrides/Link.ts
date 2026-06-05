@@ -6,7 +6,7 @@ export default function Link(theme: Theme) {
   return {
     MuiLink: {
       defaultProps: {
-        textDecoration: "none",
+        underline: "hover" as const,
         color: theme.palette.grey[600]
       }
     }

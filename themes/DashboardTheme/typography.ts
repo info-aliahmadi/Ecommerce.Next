@@ -1,8 +1,8 @@
 // ==============================|| DEFAULT THEME - TYPOGRAPHY  ||============================== //
 
-import { TypographyOptions } from "@mui/material/styles/createTypography";
+import { TypographyVariantsOptions } from "@mui/material";
 
-const Typography = (fontFamily : string) : TypographyOptions  => ({
+const Typography = (fontFamily : string) : TypographyVariantsOptions  => ({
   htmlFontSize: 16,
   fontFamily: fontFamily,
   fontWeightLight: 300,

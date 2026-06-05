@@ -19,6 +19,7 @@ import Tooltip from './Tooltip';
 import DialogContent from './DialogContent';
 import Select from './Select';
 import { Theme } from '@mui/material';
+import Switch from './Switch';
 
 // ==============================|| OVERRIDES - MAIN ||============================== //
 
@@ -28,6 +29,7 @@ export default function ComponentsOverrides(theme : Theme) {
     ...Badge(theme),
     ...CardContent(),
     ...Checkbox(theme),
+    ...Switch(theme),
     ...Chip(theme),
     ...IconButton(theme),
     ...InputLabel(theme),

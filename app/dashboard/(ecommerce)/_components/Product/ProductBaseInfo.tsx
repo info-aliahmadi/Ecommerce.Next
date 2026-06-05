@@ -14,11 +14,11 @@ import SelectTaxCategory from '../TaxCategory/SelectTaxCategory';
 import SelectProductAttribute from '../ProductAttribute/SelectProductAttribute';
 import SelectCategory from '../Category/SelectCategory';
 import SelectManufacturer from '../Manufacturer/SelectManufacturer';
-import SelectCurrency from '../Currency/SelectCurrency';
 import Editor from '@root/app/dashboard/_components/Editor/Editor';
 import ProductsAutoComplete from './ProductAutoComplete';
 import ProductModel from '../../_types/Product/ProductModel';
 import nextIntlService from '@root/locales/nextIntlService';
+import CurrencyInput from '@root/app/dashboard/_components/Currency/CurrencyInput';
 
 export default function ProductBaseInfo({
   operation,
@@ -174,18 +174,16 @@ export default function ProductBaseInfo({
             </FormHelperText>
           )}
         </Grid>
-        <Grid container columnSpacing={1} size={{ xs: 12, sm: 12, md: 6, lg: 6, xl: 4 }}>
-          <Grid size={{ xs: 8, sm: 8, md: 8, lg: 7, xl: 7 }}>
+        <Grid size={{ xs: 12, sm: 12, md: 6, lg: 6, xl: 4 }}>
             <Stack>
-              <TextField
+              <CurrencyInput
                 id="price"
-                type="number"
-                value={values?.price || ''}
                 name="price"
                 label={t(fieldsName + 'price')}
-                onBlur={handleBlur}
-                onChange={handleChange}
                 fullWidth
+                currencyType={CONFIG.DEFAULT_CURRENCY}
+                value={values?.price ?? values?.price ?? 0}
+                onChange={(v: any) => setFieldValue('price', Number(v))}
                 error={Boolean(errors.price)}
               />
               {errors.price && (
@@ -194,20 +192,17 @@ export default function ProductBaseInfo({
                 </FormHelperText>
               )}
             </Stack>
-          </Grid>
-
         </Grid>
         <Grid size={{ xs: 12, sm: 12, md: 6, lg: 6, xl: 4 }}>
           <Stack>
-            <TextField
+            <CurrencyInput
               id="oldPrice"
-              type="number"
-              value={values?.oldPrice || ''}
               name="oldPrice"
               label={t(fieldsName + 'oldPrice')}
-              onBlur={handleBlur}
-              onChange={handleChange}
               fullWidth
+              currencyType={CONFIG.DEFAULT_CURRENCY}
+              value={values?.oldPrice ?? values?.oldPrice ?? 0}
+              onChange={(v: any) => setFieldValue('oldPrice', Number(v))}
               error={Boolean(errors.oldPrice)}
             />
             {errors.oldPrice && (
@@ -294,7 +289,6 @@ export default function ProductBaseInfo({
               label={t(fieldsName + 'attributeIds')}
               setFieldValue={setFieldValue}
               error={Boolean(errors.attributeIds)}
-              onChange={() => { }}
               disabled={false}
             />
             {errors.attributeIds && (

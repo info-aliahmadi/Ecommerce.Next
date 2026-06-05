@@ -24,7 +24,7 @@ import OrderService from '../../_service/OrderService';
 import SelectPaymentStatus from './SelectPaymentStatus';
 import SelectShippingStatus from './SelectPaymentStatus';
 import SelectOrderStatus from './SelectOrderStatus';
-import SelectShippingMethod from './SelectShippingMethod';
+import SelectShippingMethod from '../ShippingMethod/SelectShippingMethod';
 import OrderItemData from '../OrderItem/OrderItemData';
 
 import { MRT_Row } from 'material-react-table';
@@ -51,10 +51,6 @@ export default function OrderDetail({ row, refetch }: { row: MRT_Row<OrderModel>
 
   const getShippingStatusForSelect = () => {
     return orderService.getAllShippingStatusForSelect();
-  };
-
-  const getShippingMethodForSelect = () => {
-    return orderService.getAllShippingMethodForSelect();
   };
 
   const handleSubmit = (order: OrderModel, resetForm: (values: any) => void, setErrors: (errors: any) => void) => {
@@ -175,10 +171,8 @@ export default function OrderDetail({ row, refetch }: { row: MRT_Row<OrderModel>
                             <InputLabel htmlFor="shippingMethodId">{t(fieldsName + 'shippingMethodId')}</InputLabel>
                             <SelectShippingMethod
                               disabled={true}
-                              dataApi={getShippingMethodForSelect}
                               label={t(fieldsName + 'shippingMethodId')}
-                              optionLabel={t(fieldsName + 'shippingMethodId')}
-                              defaultValue={row.original.shippingMethodId?.toString() ?? ''}
+                              defaultValue={row.original.shippingMethodId ?? 0}
                               id="shippingMethodId"
                               name="shippingMethodId"
                               setFieldValue={setFieldValue}

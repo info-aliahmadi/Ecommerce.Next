@@ -253,7 +253,7 @@ export default function AddOrEditProduct({ params }: Readonly<{ params: Promise<
       }
     } catch (error) {
       const validationErrors: Record<string, string> = {};
-      
+
       if ((error as any).inner) {
         (error as any).inner.forEach((err: any) => {
           validationErrors[err.path] = err.message;
@@ -300,22 +300,24 @@ export default function AddOrEditProduct({ params }: Readonly<{ params: Promise<
                 />
               </TabPanel>
               <TabPanel component="div" value={tab} index={1}>
-                {/* <ProductSettings
+                <ProductSettings
                   operation={operation}
                   values={product}
                   handleChange={handleChange}
+                  setFieldValue={setFieldValue}
                   handleBlur={handleBlur}
                   errors={errors}
-                /> */}
+                />
               </TabPanel>
               <TabPanel component="div" value={tab} index={2}>
-                {/* <ProductInventory
+                <ProductInventory
                   operation={operation}
                   values={product}
                   handleChange={handleChange}
+                  setFieldValue={setFieldValue}
                   handleBlur={handleBlur}
                   errors={errors}
-                /> */}
+                />
               </TabPanel>
               <TabPanel component="div" value={tab} index={3}>
                 {/* <ProductSEO

@@ -41,7 +41,7 @@ const Palette = (mode : 'light' | 'dark' | undefined) : any => {
               disabled: paletteColor.grey[400]
             },
             action: {
-              disabled: paletteColor.grey[300]
+              disabled: paletteColor.grey[400]
             },
             divider: paletteColor.grey[400],
             background: {

@@ -89,6 +89,7 @@
     "stateProvince": "استان‌ها",
     "taxRate": "نرخ مالیات",
     "taxCategory": "دسته‌بندی مالیات",
+    "shippingMethod": "روش‌های حمل و نقل",
     "cards": {
       "users-list": "لیست کاربران",
       "user-add": "افزودن کاربر جدید",
@@ -423,25 +424,6 @@
       "deleted": "حذف شده",
       "showOnHomepage": "نمایش در صفحه اصلی"
     },
-    "stateProvince": {
-      "id": "شناسه",
-      "name": "نام",
-      "abbreviation": "اختصار",
-      "countryId": "کشور",
-      "displayOrder": "ترتیب نمایش",
-      "published": "منتشر شده"
-    },
-    "taxRate": {
-      "id": "شناسه",
-      "taxCategoryId": "دسته‌بندی مالیات",
-      "countryId": "کشور",
-      "percentage": "درصد مالیات"
-    },
-    "taxCategory": {
-      "id": "شناسه",
-      "name": "نام",
-      "displayOrder": "ترتیب نمایش"
-    },
     "product": {
       "id": "شناسه",
       "name": "نام",
@@ -507,6 +489,31 @@
       "description": "توضیحات",
       "displayOrder": "ترتیب نمایش",
       "pictureId": " تصویر"
+    },
+    "stateProvince": {
+      "id": "شناسه",
+      "name": "نام",
+      "abbreviation": "اختصار",
+      "countryId": "کشور",
+      "displayOrder": "ترتیب نمایش",
+      "published": "منتشر شده"
+    },
+    "taxRate": {
+      "id": "شناسه",
+      "taxCategoryId": "دسته‌بندی مالیات",
+      "countryId": "کشور",
+      "percentage": "درصد مالیات"
+    },
+    "taxCategory": {
+      "id": "شناسه",
+      "name": "نام",
+      "displayOrder": "ترتیب نمایش"
+    },
+    "shippingMethod": {
+      "id": "شناسه",
+      "name": "نام",
+      "description": "توضیحات",
+      "displayOrder": "ترتیب نمایش"
     }
   },
   "buttons": {
@@ -719,6 +726,13 @@
       "add": "دسته‌بندی مالیات جدید",
       "edit": "ویرایش دسته‌بندی مالیات",
       "delete": "حذف دسته‌بندی مالیات",
+      "cancel": "لغو"
+    },
+    "shippingMethod": {
+      "save": "ذخیره",
+      "add": "روش حمل و نقل جدید",
+      "edit": "ویرایش روش حمل و نقل",
+      "delete": "حذف روش حمل و نقل",
       "cancel": "لغو"
     }
   },

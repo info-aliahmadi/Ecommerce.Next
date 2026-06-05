@@ -2,6 +2,7 @@
 
 import { PalettesProps } from "@ant-design/colors";
 
+
 const Theme = (colors : PalettesProps) => {
   const { blue, red, gold, cyan, green, grey } = colors;
   const greyColors = {
@@ -45,9 +46,9 @@ const Theme = (colors : PalettesProps) => {
       200: greyColors[200],
       light: "#bbbcbd",
       400: greyColors[400],
-      main: "#F9FAFB",
+      main: "#6f7173",
       600: greyColors[600],
-      dark: "#5f6061",
+      dark: "#53535380",
       800: greyColors[800],
       darker:"#202021",
       A100: greyColors[0],

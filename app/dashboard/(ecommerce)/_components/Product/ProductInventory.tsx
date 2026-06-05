@@ -7,17 +7,17 @@ import { useTranslations } from 'next-intl';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Switch from '@mui/material/Switch';
 import ProductAttributeInventory from './ProductAttributeInventory';
+interface ProductInventoryProps {
+  operation: 'add' | 'edit',
+  values: any,
+  setFieldValue: (field: string, value: any) => void,
+  handleBlur: (event: React.FocusEvent<HTMLInputElement>) => void,
+  handleChange: (event: React.ChangeEvent<HTMLInputElement>) => void,
+  errors: any,
+}
 
-export default function ProductInventory({ operation, values, setFieldValue, handleBlur, handleChange, errors, touched }: 
-  {
-     operation: 'add' | 'edit', 
-     values: any, 
-     setFieldValue: (field: string, value: any) => void, 
-     handleBlur: (event: React.FocusEvent<HTMLInputElement>) => void, 
-    handleChange: (event: React.ChangeEvent<HTMLInputElement>) => void,
-     errors: any,
-      touched: any 
-    }) {
+export default function ProductInventory({ operation, values, setFieldValue, handleBlur, handleChange, errors }:
+  Readonly<ProductInventoryProps>) {
   const t = useTranslations("");
   const fieldsName = 'fields.product.';
   const handleCheckedChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -27,7 +27,7 @@ export default function ProductInventory({ operation, values, setFieldValue, han
 
   return (
     <Grid container columnSpacing={3}>
-      <Grid container spacing={3} size={{ xs: 12, sm: 12, md: 12, lg: 8, xl: 8}}>
+      <Grid container spacing={3} size={{ xs: 12, sm: 12, md: 12, lg: 8, xl: 8 }}>
         <Grid size={{ xs: 12, sm: 12, md: 3, lg: 3, xl: 3 }}>
           <Stack>
             <TextField
@@ -40,9 +40,9 @@ export default function ProductInventory({ operation, values, setFieldValue, han
               onChange={handleChange}
               // placeholder={t(fieldsName + 'stockQuantity')}
               fullWidth
-              error={Boolean(touched.stockQuantity && errors.stockQuantity)}
+              error={Boolean(errors.stockQuantity)}
             />
-            {touched.stockQuantity && errors.stockQuantity && (
+            {errors.stockQuantity && (
               <FormHelperText error id="helper-text">
                 {errors.stockQuantity}
               </FormHelperText>
@@ -62,9 +62,9 @@ export default function ProductInventory({ operation, values, setFieldValue, han
               onChange={handleChange}
               placeholder={t(fieldsName + 'minStockQuantity')}
               fullWidth
-              error={Boolean(touched.minStockQuantity && errors.minStockQuantity)}
+              error={Boolean(errors.minStockQuantity)}
             />
-            {touched.minStockQuantity && errors.minStockQuantity && (
+            {errors.minStockQuantity && (
               <FormHelperText error id="helper-text">
                 {errors.minStockQuantity}
               </FormHelperText>
@@ -83,9 +83,9 @@ export default function ProductInventory({ operation, values, setFieldValue, han
               onChange={handleChange}
               placeholder={t(fieldsName + 'orderMinimumQuantity')}
               fullWidth
-              error={Boolean(touched.orderMinimumQuantity && errors.orderMinimumQuantity)}
+              error={Boolean(errors.orderMinimumQuantity)}
             />
-            {touched.orderMinimumQuantity && errors.orderMinimumQuantity && (
+            {errors.orderMinimumQuantity && (
               <FormHelperText error id="helper-text">
                 {errors.orderMinimumQuantity}
               </FormHelperText>
@@ -104,9 +104,9 @@ export default function ProductInventory({ operation, values, setFieldValue, han
               onChange={handleChange}
               placeholder={t(fieldsName + 'orderMaximumQuantity')}
               fullWidth
-              error={Boolean(touched.orderMaximumQuantity && errors.orderMaximumQuantity)}
+              error={Boolean(errors.orderMaximumQuantity)}
             />
-            {touched.orderMaximumQuantity && errors.orderMaximumQuantity && (
+            {errors.orderMaximumQuantity && (
               <FormHelperText error id="helper-text">
                 {errors.orderMaximumQuantity}
               </FormHelperText>
@@ -116,7 +116,7 @@ export default function ProductInventory({ operation, values, setFieldValue, han
         <Divider />
         <Grid size={{ xs: 12, sm: 12, md: 12, lg: 12, xl: 12 }}>
           <ProductAttributeInventory setFieldValue={setFieldValue} values={values} />
-          {touched.inventories && errors.inventories && (
+          {errors.inventories && (
             <FormHelperText error id="helper-text">
               {errors.inventories}
             </FormHelperText>
@@ -132,7 +132,7 @@ export default function ProductInventory({ operation, values, setFieldValue, han
                 <Switch
                   id="notifyAdminForQuantityBelow"
                   name="notifyAdminForQuantityBelow"
-                  checked={values?.notifyAdminForQuantityBelow != undefined ? values?.notifyAdminForQuantityBelow : false}
+                  checked={values?.notifyAdminForQuantityBelow ?? false}
                   onChange={handleCheckedChange}
                 />
               }
@@ -147,7 +147,7 @@ export default function ProductInventory({ operation, values, setFieldValue, han
                 <Switch
                   id="allowedQuantities"
                   name="allowedQuantities"
-                  checked={values?.allowedQuantities != undefined ? values?.allowedQuantities : true}
+                  checked={values?.allowedQuantities ?? true}
                   onChange={handleCheckedChange}
                 />
               }
@@ -162,7 +162,7 @@ export default function ProductInventory({ operation, values, setFieldValue, han
                 <Switch
                   id="displayStockQuantity"
                   name="displayStockQuantity"
-                  checked={values?.displayStockQuantity != undefined ? values?.displayStockQuantity : false}
+                  checked={values?.displayStockQuantity ?? false}
                   onChange={handleCheckedChange}
                 />
               }

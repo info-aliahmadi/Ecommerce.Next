@@ -1,3 +1,5 @@
+import CurrencyTypes from "./app/types/enums/CurrencyTypes";
+
 // ==============================|| THEME CONFIG  ||============================== //
 const CONFIG = {
   APP_VERSION: '1.2',
@@ -30,6 +32,7 @@ const CONFIG = {
   AUTHORIZATION_STORAGE_NAME: 'HydraAuthorizationStorage',
   LANGUAGE_STORAGE_NAME: 'NEXT_LOCALE',
   DEFAULT_LANGUAGE: 'fa',
+  DEFAULT_CURRENCY: CurrencyTypes.Toman,
   DATE_STYLE: "short", // "full" | "long" | "medium" | "short",
   TIME_STYLE: 'short', // "full" | "long" | "medium" | "short"
   LTR_FONTS_EDITOR: '"Poppins", Arial, tohoma',

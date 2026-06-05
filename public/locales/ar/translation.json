@@ -86,6 +86,7 @@
     "stateProvince": "State/Provinces",
     "taxRate": "Tax Rates",
     "taxCategory": "Tax Categories",
+    "shippingMethod": "Shipping Methods",
     "cards": {
       "users-list": "لیست کاربران",
       "user-add": "افزودن کاربر جدید",
@@ -486,6 +487,12 @@
       "id": "شناسه",
       "name": "نام",
       "displayOrder": "ترتیب نمایش"
+    },
+    "shippingMethod": {
+      "id": "شناسه",
+      "name": "نام",
+      "displayOrder": "ترتیب نمایش",
+      "description": "توضیحات"
     }
   },
   "buttons": {
@@ -654,6 +661,18 @@
       "add": "New Tax Rate",
       "edit": "Edit Tax Rate",
       "delete": "Delete Tax Rate"
+    },
+    "taxCategory": {
+      "save": "Save",
+      "add": "New Tax Category",
+      "edit": "Edit Tax Category",
+      "delete": "Delete Tax Category"
+    },
+    "shippingMethod": {
+      "save": "Save",
+      "add": "New Shipping Method",
+      "edit": "Edit Shipping Method",
+      "delete": "Delete Shipping Method"
     }
   },
   "validation": {

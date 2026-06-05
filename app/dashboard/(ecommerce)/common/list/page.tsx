@@ -13,6 +13,7 @@ import DiscountDataGrid from '../../_components/Discount/DiscountDataGrid';
 import StateProvinceDataGrid from '../../_components/StateProvince/StateProvinceDataGrid';
 import TaxCategoryDataGrid from '../../_components/TaxCategory/TaxCategoryDataGrid';
 import TaxRateDataGrid from '../../_components/TaxRate/TaxRateDataGrid';
+import ShippingMethodDataGrid from '../../_components/ShippingMethod/ShippingMethodDataGrid';
 // ===============================|| COLOR BOX ||=============================== //
 function CommonList() {
   const t = useTranslations("");
@@ -81,12 +82,12 @@ function CommonList() {
               <TaxCategoryDataGrid />
             </AccordionDetails>
           </Accordion>
-          
+
           <Accordion expanded={expanded === 'taxRate'} onChange={handleChange('taxRate')}>
             <AccordionSummary
               expandIcon={<ExpandMoreIcon />}
-              aria-controls="panel3bh-content"
-              id="panel3bh-header"
+              aria-controls="panel4bh-content"
+              id="panel4bh-header"
             >
               <Typography component="span" sx={{ width: '33%', flexShrink: 0 }}>
                 {t("pages.taxRate")}
@@ -99,21 +100,21 @@ function CommonList() {
               <TaxRateDataGrid />
             </AccordionDetails>
           </Accordion>
-          <Accordion expanded={expanded === 'panel4'} onChange={handleChange('panel4')}>
+          <Accordion expanded={expanded === 'shippingMethod'} onChange={handleChange('shippingMethod')}>
             <AccordionSummary
               expandIcon={<ExpandMoreIcon />}
-              aria-controls="panel4bh-content"
-              id="panel4bh-header"
+              aria-controls="panel5bh-content"
+              id="panel5bh-header"
             >
               <Typography component="span" sx={{ width: '33%', flexShrink: 0 }}>
-                Personal data
+                {t("pages.shippingMethod")}
+              </Typography>
+              <Typography component="span" sx={{ color: 'text.secondary' }}>
+                {t("pages.shippingMethod")}
               </Typography>
             </AccordionSummary>
             <AccordionDetails>
-              <Typography>
-                Nunc vitae orci ultricies, auctor nunc in, volutpat nisl. Integer sit
-                amet egestas eros, vitae egestas augue. Duis vel est augue.
-              </Typography>
+              <ShippingMethodDataGrid />
             </AccordionDetails>
           </Accordion>
         </Grid>

@@ -15,8 +15,6 @@ declare module 'next-auth' {
     roles: Array<string>;
     accessToken: string;
     accessTokenExpires: number;
-    storeCurrencyType?: CurrencyTypes;
-    storeName?: string;
   }
 
   interface Session extends DefaultSession {

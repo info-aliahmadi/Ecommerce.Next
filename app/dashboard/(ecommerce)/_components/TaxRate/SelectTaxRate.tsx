@@ -1,8 +1,8 @@
-import TaxCategoryService from '@dashboard/(ecommerce)/_service/TaxCategoryService';
+import TaxRateService from '@dashboard/(ecommerce)/_service/TaxRateService';
 import SingleSelect from '@dashboard/_components/Select/SingleSelect';
 import { useSession } from 'next-auth/react';
 
-interface SelectTaxCategoryProps {
+interface SelectTaxRateProps {
   defaultValue?: number | null;
   id: string;
   name: string;
@@ -12,11 +12,11 @@ interface SelectTaxCategoryProps {
   disabled?: boolean;
 }
 
-export default function SelectTaxCategory({ defaultValue, id, name, label, setFieldValue, error = false, disabled = false }: Readonly<SelectTaxCategoryProps>) {
+export default function SelectTaxRate({ defaultValue, id, name, label, setFieldValue, error = false, disabled = false }: Readonly<SelectTaxRateProps>) {
   const { data: session } = useSession();
   const jwt = session?.accessToken;
 
-  const taxCategoryService = new TaxCategoryService(jwt ?? '');
+  const taxRateService = new TaxRateService(jwt ?? '');
 
   return (
     <SingleSelect
@@ -28,7 +28,7 @@ export default function SelectTaxCategory({ defaultValue, id, name, label, setFi
       setFieldValue={setFieldValue}
       error={error}
       disabled={disabled}
-      loadDataApi={() => taxCategoryService.getTaxCategoryListForSelect()}
+      loadDataApi={() => taxRateService.getTaxRateListForSelect()}
     />
   );
 }

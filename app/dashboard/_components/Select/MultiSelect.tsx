@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { useState, useEffect } from 'react';
-import { Chip, FormControl, MenuItem, OutlinedInput, Select, InputLabel, Box, useTheme ,Theme } from '@mui/material';
-import {} from '@mui/system';
+import { Chip, FormControl, MenuItem, OutlinedInput, Select, InputLabel, Box, useTheme, Theme } from '@mui/material';
+import { } from '@mui/system';
 import Result from '@root/app/types/Result';
 
 
@@ -15,19 +15,31 @@ interface MultiSelectProps {
   readonly onChange?: (event: React.ChangeEvent<{ value: unknown }>, options: any[]) => void;
   readonly error?: boolean;
   readonly disabled?: boolean;
-  readonly loadDataApi:() => Promise<Result<any>>;
+  readonly loadDataApi: () => Promise<Result<any>>;
   readonly sx?: object;
 }
 
-export default function MultiSelect({ defaultValues, id, name, label, optionLabel, setFieldValue, onChange, error = false, disabled = false, loadDataApi, sx }: MultiSelectProps) {
+export default function MultiSelect({
+  defaultValues,
+  id,
+  name,
+  label,
+  optionLabel,
+  setFieldValue,
+  onChange,
+  error = false,
+  disabled = false,
+  loadDataApi,
+  sx
+}: MultiSelectProps) {
   const theme = useTheme();
   const [loading, setLoading] = useState(true);
   const [options, setOptions] = useState<Option[]>([]);
   const [values, setValues] = useState<any[]>([]);
 
   const loadAllData = () => {
-    loadDataApi().then((result : any) => {
-      const optionsData: Option[] = result.data?.map((x : any) => ({ id: x.id, name: x[optionLabel] })) as Option[];
+    loadDataApi().then((result: any) => {
+      const optionsData: Option[] = result.data?.map((x: any) => ({ id: x.id, name: x[optionLabel] })) as Option[];
       setOptions(optionsData);
       setLoading(false);
     });
@@ -48,7 +60,7 @@ export default function MultiSelect({ defaultValues, id, name, label, optionLabe
     };
   }
 
-  const handleChange = (event : any) => {
+  const handleChange = (event: any) => {
     if (onChange) {
       onChange(event, options);
     } else {

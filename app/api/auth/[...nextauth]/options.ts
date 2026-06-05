@@ -31,8 +31,6 @@ export const options: NextAuthOptions = {
           defaultTheme: user.defaultTheme || CONFIG.DASHBOARD_DEFAULT_THEME_MODE,
           avatar: user.avatar,
           roles: user.roles,
-          storeCurrencyType: user.storeCurrencyType,
-          storeName: user.storeName,
         };
         token.accessToken = user.accessToken;
       } 
@@ -47,8 +45,6 @@ export const options: NextAuthOptions = {
           defaultTheme: session.user.defaultTheme || CONFIG.DASHBOARD_DEFAULT_THEME_MODE,
           avatar: session.user.avatar,
           roles: session.user.roles,
-          storeCurrencyType: session.user.storeCurrencyType,
-          storeName: session.user.storeName,
         };
         token.accessToken = session.user.accessToken;
 

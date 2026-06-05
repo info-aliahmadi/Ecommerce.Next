@@ -107,6 +107,7 @@ export default function MultiAutoComplete({ id, defaultValues, setFieldValue, la
           {...params}
           variant="outlined"
           size="small"
+          label={label}
           // InputProps={{
           //   ...params.InputProps,
           //   endAdornment: (
