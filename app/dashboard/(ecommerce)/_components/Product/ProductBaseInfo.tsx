@@ -182,7 +182,7 @@ export default function ProductBaseInfo({
                 label={t(fieldsName + 'price')}
                 fullWidth
                 currencyType={CONFIG.DEFAULT_CURRENCY}
-                value={values?.price ?? values?.price ?? 0}
+                value={values?.sellUnitprice ?? values?.sellUnitprice ?? 0}
                 onChange={(v: any) => setFieldValue('price', Number(v))}
                 error={Boolean(errors.price)}
               />
@@ -201,7 +201,7 @@ export default function ProductBaseInfo({
               label={t(fieldsName + 'oldPrice')}
               fullWidth
               currencyType={CONFIG.DEFAULT_CURRENCY}
-              value={values?.oldPrice ?? values?.oldPrice ?? 0}
+              value={values?.oldSellUnitPrice ?? values?.oldSellUnitPrice ?? 0}
               onChange={(v: any) => setFieldValue('oldPrice', Number(v))}
               error={Boolean(errors.oldPrice)}
             />

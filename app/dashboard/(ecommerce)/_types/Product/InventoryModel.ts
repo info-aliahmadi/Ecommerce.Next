@@ -15,12 +15,12 @@ export default interface InventoryModel {
     /**
      * The ID of the associated attribute (nullable).
      */
-    attributeId: number | null;
+    attributeId: number | undefined;
   
     /**
      * The name of the associated attribute (nullable).
      */
-    attributeName: string | null;
+    attributeName: string | undefined;
   
     /**
      * The stock type.
@@ -36,6 +36,11 @@ export default interface InventoryModel {
      * The quantity of reserved stock.
      */
     reservedQuantity: number;
+
+    /**
+     * The unit price of buy stock.
+     */
+    buyUnitPrice : number;
   }
   
   export enum StockType {

@@ -1,63 +1,58 @@
-// material-ui
 import { Grid, TextField, Stack, Chip } from '@mui/material';
-
-// assets
 import { useTranslations } from 'next-intl';
-
 import SelectProductAttribute from '../ProductAttribute/SelectProductAttribute';
 import { useState } from 'react';
+import ProductModel from '../../_types/Product/ProductModel';
+import InventoryModel from '../../_types/Product/InventoryModel';
 
-export default function ProductAttributeInventory({ values, setFieldValue }: { values: any; setFieldValue: (field: string, value: any) => void }) {
+export default function ProductAttributeInventory({ values, setFieldValue }: Readonly<{ values: ProductModel; setFieldValue: (field: string, value: any) => void }>) {
   const t = useTranslations("");
   const fieldsName = 'fields.product.';
 
   const handleAttributeChange = (event: any, options: any) => {
-    let allValues = event.target.value;
+    let allValues = event.target.value as number[];
 
     // remove 
     if (values.inventories && allValues.length < values.inventories.length) {
-      const modifiedInventories = values.inventories.filter((obj: any) => {
+      const modifiedInventories = values.inventories.filter((obj: InventoryModel) => {
         return allValues.find((x: any) => x == obj.attributeId);
       });
       setFieldValue('inventories', modifiedInventories);
 
       // Add
     } else {
-      let attributeId = allValues[allValues.length - 1];
+      let attributeId = allValues.at(-1);
       let name = options.find((x: any) => x.id == attributeId).name;
-      let modifiedInventories = [];
+
       if (values.inventories) {
-        modifiedInventories = [...values.inventories, { id: 0, attributeId: attributeId, attributeName: name, stockQuantity: 0, stockType: 1 }]
+        let tempInventories = { id: 0, attributeId: attributeId, attributeName: name, stockQuantity: 0, stockType: 1 } as InventoryModel;
+        values.inventories.push(tempInventories);
       } else {
-        modifiedInventories = [{ id: 0, attributeId: attributeId, attributeName: name, stockQuantity: 0, stockType: 1 }]
+        let modifiedInventories = [{ id: 0, attributeId: attributeId, attributeName: name, stockQuantity: 0, stockType: 1 } as InventoryModel] as InventoryModel[];
+        values.inventories = modifiedInventories;
       }
-      setFieldValue('inventories', modifiedInventories);
+      setFieldValue('inventories', values.inventories);
     }
   };
 
 
-  function AttributeInventory({ invenroty }: { invenroty: any }) {
+  function AttributeInventory({ invenroty }: Readonly<{ invenroty: InventoryModel }>) {
 
     const [value, setValue] = useState(invenroty.stockQuantity);
-    const [newInvenroty, setNewInvenroty] = useState(values.inventories);
-
     function handleChange(event: any) {
       let newVa = event.target.value;
       setValue(newVa)
       let attributeId = parseInt(event.target.id);
-      const modifiedInventories = values.inventories.map((obj: any) => {
+      const modifiedInventories = values.inventories.map((obj: InventoryModel) => {
         if (obj.attributeId === attributeId) {
           return { ...obj, stockQuantity: newVa };
         }
         return obj;
       });
-      setNewInvenroty(modifiedInventories);
+      setFieldValue('inventories', modifiedInventories);
     }
 
-    function handleOnBlur() {
-      setFieldValue('inventories', newInvenroty.filter((x: any) => x.stockQuantity >= 0));
-    }
-
+    // Removed handleOnBlur function as updates are now handled in handleChange
     return <Grid container spacing={1} size={12}>
       <Grid size={{ xs: 4, sm: 4, md: 3, lg: 3, xl: 3 }} sx={{ p: 2 }}>
         <Stack>
@@ -67,13 +62,13 @@ export default function ProductAttributeInventory({ values, setFieldValue }: { v
       <Grid size={{ xs: 8, sm: 8, md: 6, lg: 5, xl: 5 }}>
         <Stack>
           <TextField
-            id={invenroty.attributeId}
-            name={invenroty.attributeId}
+            id={"attributeId-" + invenroty.attributeId}
+            name={"attributeId" + invenroty.attributeId}
             type="number"
-            value={value || 0}
+            value={value || ''}
             label={t(fieldsName + 'stockQuantity')}
             onChange={handleChange}
-            onBlur={handleOnBlur}
+            // Removed onBlur handler
             fullWidth
           />
         </Stack>
@@ -85,7 +80,7 @@ export default function ProductAttributeInventory({ values, setFieldValue }: { v
     <>
       <Stack>
         <SelectProductAttribute
-          defaultValues={values?.inventories?.filter((x: any) => x.stockType == 1).map((x: any) => x.attributeId) || []}
+          defaultValues={values?.inventories?.filter((x: InventoryModel) => x.stockType == 1).map((x: InventoryModel) => x.attributeId) || []}
           id="inventoryAttributeIds"
           name="inventoryAttributeIds"
           label={t(fieldsName + 'attributeIds')}
@@ -97,10 +92,11 @@ export default function ProductAttributeInventory({ values, setFieldValue }: { v
       </Stack>
       <Stack>
         <Grid container spacing={1} size={12} sx={{ pt: 3 }}>
-          {values?.inventories?.filter((x: any) => x.stockType == 1).map((item: any, index: number) => <AttributeInventory key={index} invenroty={item} />)}
+          {values?.inventories?.filter((x: InventoryModel) => x.stockType == 1).map((item: InventoryModel, index: number) => <AttributeInventory key={index} invenroty={item} />)}
 
         </Grid>
       </Stack>
     </>
   );
 }
+

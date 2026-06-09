@@ -7,9 +7,10 @@ import { useTranslations } from 'next-intl';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Switch from '@mui/material/Switch';
 import ProductAttributeInventory from './ProductAttributeInventory';
+import ProductModel from '../../_types/Product/ProductModel';
 interface ProductInventoryProps {
   operation: 'add' | 'edit',
-  values: any,
+  values: ProductModel,
   setFieldValue: (field: string, value: any) => void,
   handleBlur: (event: React.FocusEvent<HTMLInputElement>) => void,
   handleChange: (event: React.ChangeEvent<HTMLInputElement>) => void,
@@ -22,8 +23,8 @@ export default function ProductInventory({ operation, values, setFieldValue, han
   const fieldsName = 'fields.product.';
   const handleCheckedChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setFieldValue(event.target.id, event.target.checked);
+    console.log(event.target.id, event.target.checked);
   };
-
 
   return (
     <Grid container columnSpacing={3}>

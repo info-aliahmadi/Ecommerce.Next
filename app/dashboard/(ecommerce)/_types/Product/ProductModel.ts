@@ -3,6 +3,7 @@ import FileUploadModel from "@root/app/dashboard/(filestorage)/_types/FileUpload
 import InventoryModel from "./InventoryModel";
 import DeliveryDateType from "@root/app/types/enums/DeliveryDateType";
 import CurrencyTypes from "@root/app/types/enums/CurrencyTypes";
+import MeasureType from "@root/app/types/enums/MeasureType";
 /**
  * Represents a product.
  */
@@ -130,17 +131,22 @@ export default interface ProductModel {
   /**
    * The price of the product.
    */
-  price: number;
+  sellUnitprice: number;
 
   /**
    * The old price of the product.
    */
-  oldPrice: number;
+  oldSellUnitPrice: number;
 
   /**
    * The type of the currency.
    */
   currencyType: CurrencyTypes;
+
+  /**
+   * The type of the MeasureType.
+   */
+  measureType: MeasureType;
 
   /**
    * The weight of the product.

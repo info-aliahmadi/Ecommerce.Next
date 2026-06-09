@@ -23,7 +23,7 @@ import { useTranslations } from 'next-intl';
 import Notify from '@dashboard/_components/@extended/Notify';
 import MainCard from '@dashboard/_components/MainCard';
 
-import PropTypes from 'prop-types';
+import PropTypes, { number } from 'prop-types';
 import { useRouter } from 'next/navigation';
 import ProductsService from '@dashboard/(ecommerce)/_service/ProductService';
 import StoreIcon from '@mui/icons-material/Store';
@@ -40,6 +40,8 @@ import ProductModel from '@dashboard/(ecommerce)/_types/Product/ProductModel';
 import DeliveryDate from '@root/app/types/enums/DeliveryDateType';
 import CurrencyTypes from '@root/app/types/enums/CurrencyTypes';
 import DeliveryDateType from '@root/app/types/enums/DeliveryDateType';
+import CONFIG from '@root/config';
+import MeasureType from '@root/app/types/enums/MeasureType';
 function TabPanel(props: any) {
   const { children, value, index, ...other } = props;
 
@@ -111,9 +113,10 @@ export default function AddOrEditProduct({ params }: Readonly<{ params: Promise<
     notifyAdminForQuantityBelow: false,
     orderMinimumQuantity: 0,
     orderMaximumQuantity: 0,
-    price: 0,
-    oldPrice: 0,
-    currencyType: 0,
+    oldSellUnitPrice: 0,
+    sellUnitprice: 0,
+    currencyType: CONFIG.DEFAULT_CURRENCY,
+    measureType : MeasureType.Number,
     availableStartDateTimeUtc: null,
     availableEndDateTimeUtc: null,
     hasDiscountsApplied: false,
