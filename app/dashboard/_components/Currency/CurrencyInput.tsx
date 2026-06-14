@@ -14,7 +14,7 @@ interface CurrencyInputProps extends Omit<
   'onChange' | 'value'
 > {
   value?: string | number;
-  onChange?: (value: string) => void;
+  onChange?: (value: number) => void;
   error?: boolean;
   currencyType?: CurrencyTypes;
 }
@@ -45,7 +45,7 @@ const CurrencyInput = React.forwardRef<HTMLInputElement, CurrencyInputProps>(
 
         if (rawValue === '' || numberRegex.test(rawValue)) {
           setInternalValue(rawValue);
-          onChange?.(rawValue);
+          onChange?.(parseFloat(rawValue) || 0);
         }
       },
       [onChange, shouldAllowDecimals],
@@ -53,7 +53,7 @@ const CurrencyInput = React.forwardRef<HTMLInputElement, CurrencyInputProps>(
 
     const handleClear = useCallback(() => {
       setInternalValue('');
-      onChange?.('');
+      onChange?.(0);
     }, [onChange]);
 
     const getDisplayValue = useCallback(

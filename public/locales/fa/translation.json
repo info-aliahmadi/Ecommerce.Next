@@ -434,13 +434,10 @@
       "fullDescription": "توضیحات کامل...",
       "deliveryDateId": "تاریخ تحویل",
       "taxCategoryId": "دسته‌بندی مالیات",
-      "stockQuantity": "موجودی انبار",
       "minStockQuantity": "حداقل موجودی انبار",
-      "notifyAdminForQuantityBelow": "اطلاع به مدیر برای موجودی کمتر از",
+      "notifyAdminForQuantityBelow": "اطلاع به مدیر برای موجودی کمتر از حداقل",
       "orderMinimumQuantity": "حداقل تعداد سفارش",
       "orderMaximumQuantity": "حداکثر تعداد سفارش",
-      "price": "قیمت",
-      "oldPrice": "قیمت قدیمی",
       "availableStartDateTimeUtc": "در دسترس از",
       "availableEndDateTimeUtc": "در دسترس تا",
       "displayOrder": "ترتیب نمایش",
@@ -453,7 +450,7 @@
       "markAsNewStartDateTimeUtc": "'علامت‌گذاری به عنوان جدید' از",
       "markAsNewEndDateTimeUtc": "'علامت‌گذاری به عنوان جدید' تا",
       "notReturnable": "غیر قابل بازگشت",
-      "allowedQuantities": "مقادیر مجاز",
+      "allowedQuantities": "تعیین مقادیر مجاز سفارش",
       "isTaxExempt": "معاف از مالیات",
       "showOnHomepage": "نمایش در صفحه اصلی",
       "isFreeShipping": "حمل و نقل رایگان",
@@ -476,7 +473,21 @@
       "attributeIds": "ویژگی‌ها",
       "productTags": "برچسب‌های محصول",
       "createdBy": "ایجاد شده توسط",
-      "editedBy": "ویرایش شده توسط"
+      "editedBy": "ویرایش شده توسط",
+      "sellUnitprice": "قیمت فروش",
+      "oldSellUnitPrice": "قیمت فروش قدیم",
+      "currencyType": "نوع ارز",
+      "measureType": "نوع اندازه‌گیری",
+      "stockType": {
+        "Total": "کل موجودی انبار",
+        "PerAttribute": "موجودی انبار بر اساس خصوصیت"
+      },
+      "inventory": {
+        "attributeName": "خصوصیت",
+        "stockQuantity": "موجودی انبار",
+        "reservedQuantity": "موجودی رزرو شده",
+        "buyUnitPrice": "قیمت خرید"
+      }
     },
     "product-tag": {
       "name": "عنوان برچسب",

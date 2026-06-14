@@ -367,7 +367,6 @@ function Toolbar({
           </button>
         </div>
 
-        {/* Block Format */}
         {hasExtension("blockFormat") && (
           <div className="lexkit-toolbar-section">
             <Select value={currentBlockFormat} onValueChange={handleBlockFormatChange} options={blockFormatOptions} placeholder="Format" />
@@ -377,7 +376,6 @@ function Toolbar({
           </div>
         )}
 
-        {/* Lists */}
         {hasExtension("list") && (
           <div className="lexkit-toolbar-section">
             <button onClick={() => commands.toggleUnorderedList()} className={`lexkit-toolbar-button ${activeStates.unorderedList ? "active" : ""}`} title="Bullet List"><List size={16} /></button>
@@ -391,21 +389,18 @@ function Toolbar({
           </div>
         )}
 
-        {/* Horizontal Rule */}
         {hasExtension("horizontalRule") && (
           <div className="lexkit-toolbar-section">
             <button onClick={() => commands.insertHorizontalRule()} className="lexkit-toolbar-button" title="Insert Horizontal Rule"><Minus size={16} /></button>
           </div>
         )}
 
-        {/* Table */}
         {hasExtension("table") && (
           <div className="lexkit-toolbar-section">
             <button onClick={() => setShowTableDialog(true)} className="lexkit-toolbar-button" title="Insert Table (Ctrl+Shift+T)"><TableIcon size={16} /></button>
           </div>
         )}
 
-        {/* Image */}
         {hasExtension("image") && (
           <div className="lexkit-toolbar-section">
             <Dropdown
@@ -432,7 +427,6 @@ function Toolbar({
           </div>
         )}
 
-        {/* HTML Embed */}
         {hasExtension("htmlEmbed") && (
           <div className="lexkit-toolbar-section">
             <button onClick={() => commands.insertHTMLEmbed()} className={`lexkit-toolbar-button ${activeStates.isHTMLEmbedSelected ? "active" : ""}`} title="Insert HTML Embed"><FileCode size={16} /></button>
@@ -444,7 +438,6 @@ function Toolbar({
           </div>
         )}
 
-        {/* History */}
         {hasExtension("history") && (
           <div className="lexkit-toolbar-section">
             <button onClick={() => commands.undo()} disabled={!activeStates.canUndo} className="lexkit-toolbar-button" title="Undo (Ctrl+Z)"><Undo size={16} /></button>
@@ -452,12 +445,10 @@ function Toolbar({
           </div>
         )}
 
-        {/* Command Palette */}
         <div className="lexkit-toolbar-section">
           <button onClick={onCommandPaletteOpen} className="lexkit-toolbar-button" title="Command Palette (Ctrl+K)"><Command size={16} /></button>
         </div>
 
-        {/* Theme Toggle */}
         <div className="lexkit-toolbar-section">
           <button onClick={toggleTheme} className="lexkit-toolbar-button" title={isDark ? "Light Mode" : "Dark Mode"}>
             {isDark ? <Sun size={16} /> : <Moon size={16} />}
@@ -793,7 +784,7 @@ export const DefaultTemplate = forwardRef<DefaultTemplateRef, DefaultTemplatePro
   };
 
   return (
-    <div className={`lexkit-editor-wrapper ${className || ""}`} data-editor-theme={editorTheme}>
+    <div className={`lexkit-editor-wrapper ${className || ""}`} data-editor-theme={editorTheme} style={{maxWidth: "100%", width: "100%"}}>
       <Provider extensions={extensions} config={{ theme: defaultTheme }}>
         <EditorContent
           className={className}

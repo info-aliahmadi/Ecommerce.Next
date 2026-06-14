@@ -430,8 +430,6 @@
       "notifyAdminForQuantityBelow": "Notify Admin For Quantity Below",
       "orderMinimumQuantity": "Order Minimum Quantity",
       "orderMaximumQuantity": "Order Maximum Quantity",
-      "price": "Price",
-      "oldPrice": "Old Price",
       "availableStartDateTimeUtc": "Available Start At",
       "availableEndDateTimeUtc": "Available End At",
       "displayOrder": "Display Order",
@@ -467,7 +465,21 @@
       "attributeIds": "Attributes",
       "productTags": "Product Tags",
       "createdBy": "created By",
-      "editedBy": "Edited By"
+      "editedBy": "Edited By",
+      "sellUnitprice": "Sell Unit Price",
+      "oldSellUnitPrice": "Old Sell Unit Price",
+      "currencyType": "Currency Type",
+      "measureType": "Measure Type",
+      "stockType": {
+        "Total": "Stock Total",
+        "PerAttribute": "Stock Per Attribute"
+      },
+      "inventory": {
+        "attributeName": "Attribute",
+        "stockQuantity": "Stock Quantity",
+        "reservedQuantity": "Reserved Quantity",
+        "buyUnitPrice": "Buy Unit Price"
+      }
     },
     "stateProvince": {
       "id": "Id",

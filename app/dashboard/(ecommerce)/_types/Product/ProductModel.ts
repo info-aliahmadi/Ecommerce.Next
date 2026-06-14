@@ -98,20 +98,6 @@ export default interface ProductModel {
    */
   taxCategoryName: string;
 
-  /**
-   * The quantity of stock.
-   */
-  stockQuantity: number;
-
-  /**
-   * The quantity of inventory stock.
-   */
-  inventoryStockQuantity: number;
-
-  /**
-   * The minimum stock quantity.
-   */
-  minStockQuantity: number;
 
   /**
    * Indicates whether to notify the admin for quantity below the minimum.
@@ -132,6 +118,7 @@ export default interface ProductModel {
    * The price of the product.
    */
   sellUnitprice: number;
+
 
   /**
    * The old price of the product.
@@ -299,6 +286,30 @@ export default interface ProductModel {
   updatedOnUtc: Date | null;
 
   /**
+   * The stock type.
+   */
+  stockType: StockType;
+
+  /**
+   * The quantity of stock.
+   */
+  stockQuantity: number;
+
+  /**
+   * The quantity of inventory stock.
+   */
+  inventoryStockQuantity: number;
+
+  /**
+   * The minimum stock quantity.
+   */
+  minStockQuantity: number;
+  /**
+   * The product inventories.
+   */
+  inventories: InventoryModel[];
+  
+  /**
    * The IDs of the categories the product belongs to.
    */
   categoryIds: number[];
@@ -328,10 +339,6 @@ export default interface ProductModel {
    */
   attributeNames: string[];
 
-  /**
-   * The product inventories.
-   */
-  inventories: InventoryModel[];
 
   /**
    * The IDs of the pictures associated with the product.
@@ -352,4 +359,9 @@ export default interface ProductModel {
    * The product tags.
    */
   productTags: string[];
+}
+
+export enum StockType {
+  Total = 0,
+  PerAttribute = 1
 }

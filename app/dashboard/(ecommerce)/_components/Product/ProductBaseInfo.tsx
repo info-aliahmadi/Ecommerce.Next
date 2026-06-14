@@ -177,18 +177,18 @@ export default function ProductBaseInfo({
         <Grid size={{ xs: 12, sm: 12, md: 6, lg: 6, xl: 4 }}>
             <Stack>
               <CurrencyInput
-                id="price"
-                name="price"
-                label={t(fieldsName + 'price')}
+                id="sellUnitprice"
+                name="sellUnitprice"
+                label={t(fieldsName + 'sellUnitprice')}
                 fullWidth
                 currencyType={CONFIG.DEFAULT_CURRENCY}
                 value={values?.sellUnitprice ?? values?.sellUnitprice ?? 0}
-                onChange={(v: any) => setFieldValue('price', Number(v))}
-                error={Boolean(errors.price)}
+                onChange={(v: any) => setFieldValue('sellUnitprice', Number(v))}
+                error={Boolean(errors.sellUnitprice)}
               />
-              {errors.price && (
+              {errors.sellUnitprice && (
                 <FormHelperText error id="helper-text">
-                  {errors.price}
+                  {errors.sellUnitprice}
                 </FormHelperText>
               )}
             </Stack>
@@ -196,18 +196,18 @@ export default function ProductBaseInfo({
         <Grid size={{ xs: 12, sm: 12, md: 6, lg: 6, xl: 4 }}>
           <Stack>
             <CurrencyInput
-              id="oldPrice"
-              name="oldPrice"
-              label={t(fieldsName + 'oldPrice')}
+              id="oldSellUnitPrice"
+              name="oldSellUnitPrice"
+              label={t(fieldsName + 'oldSellUnitPrice')}
               fullWidth
               currencyType={CONFIG.DEFAULT_CURRENCY}
               value={values?.oldSellUnitPrice ?? values?.oldSellUnitPrice ?? 0}
-              onChange={(v: any) => setFieldValue('oldPrice', Number(v))}
-              error={Boolean(errors.oldPrice)}
+              onChange={(v: any) => setFieldValue('oldSellUnitPrice', Number(v))}
+              error={Boolean(errors.oldSellUnitPrice)}
             />
-            {errors.oldPrice && (
+            {errors.oldSellUnitPrice && (
               <FormHelperText error id="helper-text">
-                {errors.oldPrice}
+                {errors.oldSellUnitPrice}
               </FormHelperText>
             )}
           </Stack>

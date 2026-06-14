@@ -36,7 +36,7 @@ import ProductInventory from '@dashboard/(ecommerce)/_components/Product/Product
 import ProductSEO from '@dashboard/(ecommerce)/_components/Product/ProductSEO';
 import { useSession } from 'next-auth/react';
 
-import ProductModel from '@dashboard/(ecommerce)/_types/Product/ProductModel';
+import ProductModel, { StockType } from '@dashboard/(ecommerce)/_types/Product/ProductModel';
 import DeliveryDate from '@root/app/types/enums/DeliveryDateType';
 import CurrencyTypes from '@root/app/types/enums/CurrencyTypes';
 import DeliveryDateType from '@root/app/types/enums/DeliveryDateType';
@@ -110,13 +110,14 @@ export default function AddOrEditProduct({ params }: Readonly<{ params: Promise<
     taxCategoryId: 0,
     stockQuantity: 0,
     minStockQuantity: 0,
+    stockType: StockType.Total,
     notifyAdminForQuantityBelow: false,
     orderMinimumQuantity: 0,
     orderMaximumQuantity: 0,
     oldSellUnitPrice: 0,
     sellUnitprice: 0,
     currencyType: CONFIG.DEFAULT_CURRENCY,
-    measureType : MeasureType.Number,
+    measureType: MeasureType.Number,
     availableStartDateTimeUtc: null,
     availableEndDateTimeUtc: null,
     hasDiscountsApplied: false,
@@ -277,7 +278,7 @@ export default function AddOrEditProduct({ params }: Readonly<{ params: Promise<
           <Grid size={12}>
             <Typography variant="h5">{t('pages.cards.product-' + operation)}</Typography>
           </Grid>
-          <Grid key={'product-' + product?.id}>
+          <Grid key={'product-' + product?.id}  size={12}>
             <MainCard>
               <Tabs
                 value={tab}
@@ -392,6 +393,14 @@ export default function AddOrEditProduct({ params }: Readonly<{ params: Promise<
           </Grid>
         </Grid>
       </Grid>
+{/* 
+      <Grid container>
+        <Grid size={5}>
+          {JSON.stringify(product)}
+
+        </Grid>
+      </Grid> */}
+
     </>
   );
 }
