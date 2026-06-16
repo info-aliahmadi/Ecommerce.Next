@@ -1,23 +1,6 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { 
-  Box, 
-  Button, 
-  Card, 
-  CardContent, 
-  CardMedia, 
-  Container, 
-  Divider, 
-  Grid, 
-  Paper, 
-  Typography, 
-  TextField,
-  IconButton,
-  useTheme,
-  useMediaQuery
-} from '@mui/material';
-import { Search, ShoppingCart, ArrowForward, Email } from '@mui/icons-material';
 import { useRouter } from 'next/navigation';
 import { useSession } from 'next-auth/react';
 import Link from 'next/link';
@@ -29,395 +12,223 @@ import ProductModel from '@dashboard/(ecommerce)/_types/Product/ProductModel';
 
 export default function HomePage() {
   const router = useRouter();
-  const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const { data: session } = useSession();
   const [featuredCategories, setFeaturedCategories] = useState<CategoryModel[]>([]);
   const [featuredProducts, setFeaturedProducts] = useState<ProductModel[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
-  
+  const [email, setEmail] = useState('');
+
   useEffect(() => {
     const loadData = async () => {
       try {
         const categoryService = new CategoryService(session?.accessToken ?? '');
         const productService = new ProductService(session?.accessToken ?? '');
-        
+
         const categoriesResult = await categoryService.getCategoryList();
         if (categoriesResult.succeeded) {
-          // Filter categories that are marked to show on homepage
           const homepageCategories = categoriesResult.data?.filter(cat => cat.showOnHomepage) || [];
-          // Take up to 6 categories to display
           setFeaturedCategories(homepageCategories.slice(0, 6));
         }
-        
+
         const productsResult = await productService.getAllProducts();
         if (productsResult.succeeded) {
-          // Just take the first 8 products for now - in a real app you'd have a featured flag
           setFeaturedProducts(productsResult.data?.slice(0, 8) || []);
         }
       } catch (error) {
         console.error('Failed to load homepage data:', error);
       }
     };
-    
+
     loadData();
   }, [session]);
-  
+
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
     if (searchQuery.trim()) {
       router.push(`/search?q=${encodeURIComponent(searchQuery)}`);
     }
   };
-  
-  return (
-    <Box>
-      {/* Hero Section */}
-      <Paper
-        sx={{
-          position: 'relative',
-          backgroundColor: 'grey.800',
-          color: '#fff',
-          mb: 4,
-          backgroundSize: 'cover',
-          backgroundRepeat: 'no-repeat',
-          backgroundPosition: 'center',
-          backgroundImage: 'url(https://source.unsplash.com/random?ecommerce)',
-          height: '500px'
-        }}
-      >
-        {/* Overlay */}
-        <Box
-          sx={{
-            position: 'absolute',
-            top: 0,
-            bottom: 0,
-            right: 0,
-            left: 0,
-            backgroundColor: 'rgba(0,0,0,.5)',
-          }}
-        />
-        <Grid container sx={{ height: '100%' }}>
-          <Grid size={{md:6}} sx={{ position: 'relative', p: { xs: 3, md: 6 }, pr: { md: 0 }, display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-            <Typography component="h1" variant="h3" color="inherit" gutterBottom>
-              Welcome to Our Shop
-            </Typography>
-            <Typography variant="h5" color="inherit" >
-              Discover our wide range of products at amazing prices. Quality products delivered to your doorstep.
-            </Typography>
-            <Button variant="contained" color="primary" size="large" sx={{ mt: 2, alignSelf: 'flex-start' }}>
-              Shop Now
-            </Button>
-          </Grid>
-        </Grid>
-      </Paper>
 
-      <Container maxWidth="lg">
+  const handleNewsletter = (e: React.FormEvent) => {
+    e.preventDefault();
+    console.log('Newsletter signup:', email);
+    setEmail('');
+  };
+
+  return (
+    <div className="min-h-screen bg-gray-50">
+      {/* Hero Section */}
+      <div className="relative bg-gradient-to-r from-blue-600 to-purple-600 h-[500px] flex items-center">
+        <div className="absolute inset-0 bg-black opacity-30"></div>
+        <div className="container mx-auto px-4 relative z-10">
+          <div className="max-w-2xl text-white">
+            <h1 className="text-5xl font-bold mb-4">Welcome to Our Shop</h1>
+            <p className="text-xl mb-6">
+              Discover our wide range of products at amazing prices. Quality products delivered to your doorstep.
+            </p>
+            <button className="bg-white text-blue-600 px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors">
+              Shop Now
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div className="container mx-auto px-4">
         {/* Search Bar */}
-        <Paper 
-          component="form" 
-          sx={{ 
-            p: '2px 4px', 
-            display: 'flex', 
-            alignItems: 'center', 
-            width: '100%',
-            mb: 6,
-            mt: -6,
-            position: 'relative',
-            zIndex: 1,
-            boxShadow: '0 4px 20px rgba(0,0,0,0.1)'
-          }}
-          elevation={3}
-          onSubmit={handleSearch}
-        >
-          <TextField
-            sx={{ ml: 1, flex: 1 }}
-            placeholder="Search for products"
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            fullWidth
-            variant="standard"
-            // InputProps={{ disableUnderline: true }}
-          />
-          <IconButton type="submit" aria-label="search">
-            <Search />
-          </IconButton>
-        </Paper>
+        <div className="relative -mt-8 mb-12 z-20">
+          <form onSubmit={handleSearch} className="bg-white rounded-lg shadow-lg p-4 flex items-center gap-2">
+            <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+            </svg>
+            <input
+              type="text"
+              placeholder="Search for products..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="flex-1 outline-none text-gray-700"
+            />
+            <button type="submit" className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-colors">
+              Search
+            </button>
+          </form>
+        </div>
 
         {/* Featured Categories */}
-        <Box sx={{ mb: 8 }}>
-          <Typography variant="h4" component="h2" gutterBottom>
-            Browse Categories
-          </Typography>
-          <Divider sx={{ mb: 4 }} />
-          <Grid container spacing={3}>
-            {featuredCategories.length > 0 ? (
-              featuredCategories.map((category) => (
-                <Grid size={{ xs: 12, sm: 12, md: 6, lg: 4, xl:4}} key={category.id}>
-                  <Card 
-                    sx={{ 
-                      height: '100%', 
-                      display: 'flex', 
-                      flexDirection: 'column',
-                      transition: 'transform 0.2s',
-                      '&:hover': {
-                        transform: 'translateY(-5px)',
-                        boxShadow: '0 10px 20px rgba(0,0,0,0.1)'
-                      }
-                    }}
-                  >
-                    <CardMedia
-                      component="div"
-                      sx={{
-                        height: 140,
-                        backgroundColor: category.pictureId ? 'transparent' : 'grey.300',
-                        backgroundSize: 'cover',
-                        backgroundPosition: 'center',
-                      }}
-                      image={category.pictureId ? `/api/picture/${category.pictureId}` : 'https://source.unsplash.com/random?category'}
-                    />
-                    <CardContent sx={{ flexGrow: 1 }}>
-                      <Typography gutterBottom variant="h5" component="h2">
-                        {category.name}
-                      </Typography>
-                      <Typography>
-                        {category.description?.substring(0, 80)}
-                        {category.description && category.description.length > 80 ? '...' : ''}
-                      </Typography>
-                    </CardContent>
-                    <Box sx={{ p: 2 }}>
-                      <Button 
-                        component={Link} 
-                        href={`/category/${category.id}`}
-                        endIcon={<ArrowForward />}
-                      >
-                        Browse
-                      </Button>
-                    </Box>
-                  </Card>
-                </Grid>
-              ))
-            ) : (
-              <Grid size={12}>
-                <Paper sx={{ p: 3, textAlign: 'center' }}>
-                  <Typography variant="body1">No categories found.</Typography>
-                </Paper>
-              </Grid>
-            )}
-          </Grid>
-        </Box>
+        <section className="mb-16">
+          <h2 className="text-3xl font-bold mb-8 text-gray-800">Shop by Category</h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {featuredCategories.map((category) => (
+              <div
+                key={category.id}
+                onClick={() => router.push(`/category/${category.id}`)}
+                className="bg-white rounded-lg shadow-md overflow-hidden cursor-pointer transition-transform hover:scale-105 hover:shadow-xl"
+              >
+                <img
+                  src={'https://via.placeholder.com/400x250'}
+                  alt={category.name}
+                  className="w-full h-48 object-cover"
+                />
+                <div className="p-4 text-center">
+                  <h3 className="text-xl font-semibold text-gray-800 mb-2">{category.name}</h3>
+                  {category.description && (
+                    <p className="text-gray-600 text-sm">{category.description}</p>
+                  )}
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
 
         {/* Featured Products */}
-        <Box sx={{ mb: 8 }}>
-          <Typography variant="h4" component="h2" gutterBottom>
-            Featured Products
-          </Typography>
-          <Divider sx={{ mb: 4 }} />
-          <Grid container spacing={3}>
-            {featuredProducts.length > 0 ? (
-              featuredProducts.map((product) => (
-                <Grid size={{ xs: 12, sm: 12, md: 3, lg: 3, xl:3}} key={product.id}>
-                  <Card 
-                    sx={{ 
-                      height: '100%', 
-                      display: 'flex', 
-                      flexDirection: 'column',
-                      transition: 'transform 0.2s',
-                      '&:hover': {
-                        transform: 'translateY(-5px)',
-                        boxShadow: '0 10px 20px rgba(0,0,0,0.1)'
-                      }
-                    }}
-                  >
-                    <CardMedia
-                      component="div"
-                      sx={{
-                        height: 200,
-                        backgroundColor: product.previewImageId ? 'transparent' : 'grey.300',
-                        backgroundSize: 'cover',
-                        backgroundPosition: 'center',
-                      }}
-                      image={product.previewImageId ? `/api/picture/${product.previewImageId}` : 'https://source.unsplash.com/random?product'}
-                    />
-                    <CardContent sx={{ flexGrow: 1 }}>
-                      <Typography gutterBottom variant="h6" component="h2">
-                        {product.name}
-                      </Typography>
-                      <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
-                        {product.shortDescription?.substring(0, 60)}
-                        {product.shortDescription && product.shortDescription.length > 60 ? '...' : ''}
-                      </Typography>
-                      <Typography variant="h6" color="primary">
-                        ${product.price?.toFixed(2)}
-                      </Typography>
-                    </CardContent>
-                    <Box sx={{ p: 2, pt: 0, display: 'flex', justifyContent: 'space-between' }}>
-                      <Button 
-                        component={Link} 
-                        href={`/product/${product.id}`}
-                        variant="outlined" 
-                        size="small"
-                      >
-                        View
-                      </Button>
-                      <Button
-                        variant="contained"
-                        color="primary"
-                        size="small"
-                        startIcon={<ShoppingCart />}
-                      >
-                        Add to Cart
-                      </Button>
-                    </Box>
-                  </Card>
-                </Grid>
-              ))
-            ) : (
-              <Grid size={12}>
-                <Paper sx={{ p: 3, textAlign: 'center' }}>
-                  <Typography variant="body1">No products found.</Typography>
-                </Paper>
-              </Grid>
-            )}
-          </Grid>
-          <Box sx={{ display: 'flex', justifyContent: 'center', mt: 4 }}>
-            <Button 
-              variant="contained" 
-              size="large" 
-              component={Link} 
-              href="/products"
-            >
-              View All Products
-            </Button>
-          </Box>
-        </Box>
+        <section className="mb-16">
+          <h2 className="text-3xl font-bold mb-8 text-gray-800">Featured Products</h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {featuredProducts.map((product) => (
+              <div
+                key={product.id}
+                onClick={() => router.push(`/product/${product.id}`)}
+                className="bg-white rounded-lg shadow-md overflow-hidden cursor-pointer transition-transform hover:-translate-y-1 hover:shadow-xl"
+              >
+                <img
+                  src={'https://via.placeholder.com/300'}
+                  alt={product.name}
+                  className="w-full h-64 object-cover"
+                />
+                <div className="p-4">
+                  <h3 className="text-lg font-semibold text-gray-800 mb-2 truncate">{product.name}</h3>
+                  <p className="text-gray-600 text-sm mb-3 line-clamp-2">{product.fullDescription}</p>
+                  <div className="flex items-center justify-between">
+                    <span className="text-2xl font-bold text-blue-600">${product.sellUnitprice.toFixed(2)}</span>
+                    <button className="bg-blue-600 text-white p-2 rounded-lg hover:bg-blue-700 transition-colors">
+                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+                      </svg>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
 
-        {/* Special Offers */}
-        <Paper 
-          sx={{ 
-            p: 4, 
-            mb: 8, 
-            bgcolor: 'primary.light', 
-            color: 'primary.contrastText',
-            backgroundImage: 'linear-gradient(135deg, rgba(0,0,0,0.05) 25%, transparent 25%, transparent 50%, rgba(0,0,0,0.05) 50%, rgba(0,0,0,0.05) 75%, transparent 75%, transparent)',
-            backgroundSize: '30px 30px'
-          }}
-        >
-          <Box sx={{ display: 'flex', flexDirection: isMobile ? 'column' : 'row', alignItems: 'center', justifyContent: 'space-between' }}>
-            <Box>
-              <Typography variant="h4" gutterBottom>
-                Special Offer!
-              </Typography>
-              <Typography variant="h6" sx={{ mb: 2 }}>
-                Get 20% off on all products with code: WELCOME20
-              </Typography>
-            </Box>
-            <Button 
-              variant="contained" 
-              color="secondary" 
-              size="large"
-              sx={{ mt: isMobile ? 2 : 0 }}
-            >
-              Shop Now
-            </Button>
-          </Box>
-        </Paper>
+        {/* Promotional Banner */}
+        <section className="mb-16">
+          <div className="bg-gradient-to-r from-orange-500 to-pink-500 rounded-lg p-8 text-white">
+            <div className="flex flex-col md:flex-row items-center justify-between">
+              <div>
+                <h2 className="text-3xl font-bold mb-2">Special Offer!</h2>
+                <p className="text-lg">Get 20% off on all products with code: WELCOME20</p>
+              </div>
+              <button className="mt-4 md:mt-0 bg-white text-orange-500 px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors">
+                Shop Now
+              </button>
+            </div>
+          </div>
+        </section>
 
         {/* Newsletter */}
-        <Paper sx={{ p: 4, mb: 8, bgcolor: 'background.paper' }}>
-          <Typography variant="h5" gutterBottom align="center">
-            Subscribe to Our Newsletter
-          </Typography>
-          <Typography variant="body1" align="center" sx={{ mb: 3 }}>
-            Stay updated with the latest products and special offers.
-          </Typography>
-          <Box 
-            component="form" 
-            sx={{ 
-              display: 'flex', 
-              flexDirection: isMobile ? 'column' : 'row',
-              maxWidth: '600px', 
-              mx: 'auto',
-              gap: 2 
-            }}
-          >
-            <TextField
-              fullWidth
-              placeholder="Your Email Address"
-              variant="outlined"
-              size="small"
-            />
-            <Button 
-              variant="contained" 
-              color="primary"
-              startIcon={<Email />}
-              type="submit"
-              sx={{ flexShrink: 0 }}
-            >
-              Subscribe
-            </Button>
-          </Box>
-        </Paper>
-      </Container>
+        <section className="mb-16">
+          <div className="bg-white rounded-lg shadow-md p-8 text-center">
+            <h2 className="text-2xl font-bold mb-2 text-gray-800">Subscribe to Our Newsletter</h2>
+            <p className="text-gray-600 mb-6">Stay updated with the latest products and special offers.</p>
+            <form onSubmit={handleNewsletter} className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto">
+              <input
+                type="email"
+                placeholder="Enter your email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+                className="flex-1 px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+              <button
+                type="submit"
+                className="bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors whitespace-nowrap"
+              >
+                Subscribe
+              </button>
+            </form>
+          </div>
+        </section>
+      </div>
 
       {/* Footer */}
-      <Box sx={{ bgcolor: 'background.paper', py: 6 }}>
-        <Container maxWidth="lg">
-          <Grid container spacing={4}>
-            <Grid size={{ xs: 12, sm: 12, md: 3, lg: 3, xl:3}}>
-              <Typography variant="h6" gutterBottom>
-                Shop
-              </Typography>
-              <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-                <Link href="/products" style={{ textDecoration: 'none', marginBottom: '8px' }}>All Products</Link>
-                <Link href="/categories" style={{ textDecoration: 'none', marginBottom: '8px' }}>Categories</Link>
-                <Link href="/brands" style={{ textDecoration: 'none', marginBottom: '8px' }}>Brands</Link>
-                <Link href="/sale" style={{ textDecoration: 'none', marginBottom: '8px' }}>Sale</Link>
-              </Box>
-            </Grid>
-            <Grid size={{ xs: 12, sm: 12, md: 3, lg: 3, xl:3}}>
-              <Typography variant="h6" gutterBottom>
-                Customer Service
-              </Typography>
-              <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-                <Link href="/contact" style={{ textDecoration: 'none', marginBottom: '8px' }}>Contact Us</Link>
-                <Link href="/shipping" style={{ textDecoration: 'none', marginBottom: '8px' }}>Shipping & Returns</Link>
-                <Link href="/faq" style={{ textDecoration: 'none', marginBottom: '8px' }}>FAQ</Link>
-                <Link href="/terms" style={{ textDecoration: 'none', marginBottom: '8px' }}>Terms & Conditions</Link>
-              </Box>
-            </Grid>
-            <Grid size={{ xs: 12, sm: 12, md: 3, lg: 3, xl:3}}>
-              <Typography variant="h6" gutterBottom>
-                My Account
-              </Typography>
-              <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-                <Link href="/login" style={{ textDecoration: 'none', marginBottom: '8px' }}>Sign In</Link>
-                <Link href="/register" style={{ textDecoration: 'none', marginBottom: '8px' }}>Register</Link>
-                <Link href="/orders" style={{ textDecoration: 'none', marginBottom: '8px' }}>Order History</Link>
-                <Link href="/wishlist" style={{ textDecoration: 'none', marginBottom: '8px' }}>Wishlist</Link>
-              </Box>
-            </Grid>
-            <Grid size={{ xs: 12, sm: 12, md: 3, lg: 3, xl:3}}>
-              <Typography variant="h6" gutterBottom>
-                About Us
-              </Typography>
-              <Typography variant="body2" sx={{ mb: 2 }}>
+      <footer className="bg-gray-900 text-white py-12">
+        <div className="container mx-auto px-4">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
+            <div>
+              <h3 className="text-lg font-semibold mb-4">Customer Service</h3>
+              <ul className="space-y-2">
+                <li><Link href="/about" className="text-gray-300 hover:text-white transition-colors">About Us</Link></li>
+                <li><Link href="/contact" className="text-gray-300 hover:text-white transition-colors">Contact Us</Link></li>
+                <li><Link href="/shipping" className="text-gray-300 hover:text-white transition-colors">Shipping & Returns</Link></li>
+                <li><Link href="/faq" className="text-gray-300 hover:text-white transition-colors">FAQ</Link></li>
+              </ul>
+            </div>
+            <div>
+              <h3 className="text-lg font-semibold mb-4">My Account</h3>
+              <ul className="space-y-2">
+                <li><Link href="/login" className="text-gray-300 hover:text-white transition-colors">Sign In</Link></li>
+                <li><Link href="/register" className="text-gray-300 hover:text-white transition-colors">Register</Link></li>
+                <li><Link href="/orders" className="text-gray-300 hover:text-white transition-colors">Order History</Link></li>
+                <li><Link href="/wishlist" className="text-gray-300 hover:text-white transition-colors">Wishlist</Link></li>
+              </ul>
+            </div>
+            <div>
+              <h3 className="text-lg font-semibold mb-4">About Us</h3>
+              <p className="text-gray-300 mb-4">
                 We provide high-quality products at competitive prices, with excellent customer service.
-              </Typography>
-              <Typography variant="body2">
-                Contact: info@example.com<br />
+              </p>
+              <p className="text-gray-300">
+                Email: info@example.com<br />
                 Phone: +1 234 567 890
-              </Typography>
-            </Grid>
-          </Grid>
-          <Box sx={{ mt: 5 }}>
-            <Divider />
-            <Typography variant="body2" align="center" sx={{ mt: 2 }}>
-              © {new Date().getFullYear()} Your E-commerce Store. All rights reserved.
-            </Typography>
-          </Box>
-        </Container>
-      </Box>
-    </Box>
+              </p>
+            </div>
+          </div>
+          <div className="border-t border-gray-700 pt-8 text-center">
+            <p className="text-gray-400">© {new Date().getFullYear()} Your E-commerce Store. All rights reserved.</p>
+          </div>
+        </div>
+      </footer>
+    </div>
   );
-} 
+}

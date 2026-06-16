@@ -113,3 +113,4 @@ build
 .cloud/
 /.cloud
 .env.production
+.kilo/kilo.json
