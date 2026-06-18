@@ -1,20 +1,26 @@
 
 export default class Fetch {
   static SetDefaultHeader(
-    token: string,
+    token?: string,
     contentType: string = 'application/json',
     language: string = 'fa',
   ): RequestInit {
-    let tokenBearer: string = token ? 'Bearer ' + token : '';
 
     let config: RequestInit = {
       headers: {
         Accept: 'application/json',
         'Content-Type': contentType,
-        Authorization: tokenBearer,
         'Accept-Language': language,
       },
     };
+    if (token) {
+      let tokenBearer: string = token ? 'Bearer ' + token : '';
+      config.headers = {
+        ...config.headers,
+        Authorization: tokenBearer,
+      };
+    }
+
     return config;
   }
 
