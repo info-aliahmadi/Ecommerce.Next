@@ -12,7 +12,7 @@ import ProductTagModel from '../../_types/Product/ProductTagModel';
 
 export default function SelectProductTag({ defaultValues, id, name, label, setFieldValue, error, disabled = false }:
   Readonly<{
-    defaultValues: ProductTagModel[],
+    defaultValues: string[],
     id: string,
     name: string,
     label: string,
@@ -25,13 +25,14 @@ export default function SelectProductTag({ defaultValues, id, name, label, setFi
   const jwt = session?.accessToken;
 
   const [loading, setLoading] = useState(true);
-  const [options, setOptions] = useState<ProductTagModel[]>([]);
-  const [values, setValues] = useState<ProductTagModel[]>([]);
+  const [options, setOptions] = useState<string[]>([]);
+  const [values, setValues] = useState<string[]>([]);
   const tagService = new ProductTagService(jwt ?? '');
 
   const loadTags = () => {
     tagService.getProductTagListForSelect().then((result) => {
-      setOptions(result.data ?? []);
+      let tags = result.data?.map((tag: any) => tag.name) as string[] ?? [];
+      setOptions(tags);
       setLoading(false);
     });
   };
@@ -58,17 +59,16 @@ export default function SelectProductTag({ defaultValues, id, name, label, setFi
         // getOptionLabel={(option: ProductTagModel) => option.name}
         options={options}
         loading={loading}
-        defaultValue={options.filter((x) => defaultValues?.find((c) => c.id === x.id)) ?? []}
+        defaultValue={options.filter((x) => defaultValues?.includes(x)) ?? []}
         onChange={(e, newValue : any) => {
           setFieldValue(id, newValue);
           setValues(newValue);
         }}
-        renderTags={(value, getTagProps) => {
-          return value.map((option, index) => {
+        renderValue={(value, getTagProps) => {
+          return value.map((name, index) => {
             return <Chip
              key={'tg-' + index} 
-             label={option.name} 
-            //  {...getTagProps({ index })} 
+             label={name} 
              sx={{height : '23px'}} />;
           });
         }}
@@ -79,15 +79,15 @@ export default function SelectProductTag({ defaultValues, id, name, label, setFi
             size="small"
             label={label}
             //  placeholder={label}
-            InputProps={{
-              ...params.InputProps,
-              endAdornment: (
-                <React.Fragment>
-                  {loading ? <CircularProgress color="inherit" size={20} /> : null}
-                  {params.InputProps.endAdornment}
-                </React.Fragment>
-              )
-            }}
+            // InputProps={{
+            //   ...params.InputProps,
+            //   endAdornment: (
+            //     <React.Fragment>
+            //       {loading ? <CircularProgress color="inherit" size={20} /> : null}
+            //       {params.InputProps.endAdornment}
+            //     </React.Fragment>
+            //   )
+            // }}
           />
         )}
       />

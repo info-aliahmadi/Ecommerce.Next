@@ -3,7 +3,6 @@
 import { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { ArrowForward } from '@mui/icons-material';
 import CONFIG from '@root/config';
 
 interface CategoryCardProps {
@@ -47,7 +46,9 @@ export default function CategoryCard({ category }: CategoryCardProps) {
           
           <div className="flex items-center justify-between text-blue-600 font-medium group-hover:text-blue-700 transition-colors">
             <span>Shop Now</span>
-            <ArrowForward className="transition-transform group-hover:translate-x-1" />
+            <svg className="w-5 h-5 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
+            </svg>
           </div>
         </div>
       </div>

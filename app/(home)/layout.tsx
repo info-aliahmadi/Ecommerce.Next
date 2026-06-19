@@ -3,7 +3,8 @@
 import { ReactNode, useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Providers } from './providers';
+import { SessionProvider } from 'next-auth/react';
+import './globals.css';
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -34,7 +35,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
   }, [mobileMenuOpen]);
 
   return (
-    <Providers>
+    <SessionProvider>
       <header className="sticky top-0 z-50 bg-blue-600 shadow-md">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
@@ -172,6 +173,6 @@ export default function RootLayout({ children }: { children: ReactNode }) {
       <main>
         {children}
       </main>
-    </Providers>
+    </SessionProvider>
   );
 }

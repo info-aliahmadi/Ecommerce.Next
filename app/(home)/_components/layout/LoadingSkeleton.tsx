@@ -1,17 +1,15 @@
 'use client';
 
-import { Skeleton } from '@mui/material';
-
 export function ProductCardSkeleton() {
   return (
-    <div className="bg-white rounded-lg shadow-md overflow-hidden">
-      <Skeleton variant="rectangular" height={256} />
+    <div className="bg-white rounded-lg shadow-md overflow-hidden animate-pulse">
+      <div className="h-64 bg-gray-200" />
       <div className="p-4">
-        <Skeleton variant="text" width="60%" height={20} />
-        <Skeleton variant="text" width="100%" height={48} className="mb-2" />
-        <Skeleton variant="text" width="40%" height={20} className="mb-3" />
-        <Skeleton variant="text" width="50%" height={32} className="mb-3" />
-        <Skeleton variant="rectangular" height={40} className="rounded-lg" />
+        <div className="h-5 bg-gray-200 rounded w-3/5 mb-2" />
+        <div className="h-12 bg-gray-200 rounded w-full mb-2" />
+        <div className="h-5 bg-gray-200 rounded w-2/5 mb-3" />
+        <div className="h-8 bg-gray-200 rounded w-1/2 mb-3" />
+        <div className="h-10 bg-gray-200 rounded" />
       </div>
     </div>
   );
@@ -29,12 +27,12 @@ export function ProductGridSkeleton({ count = 8 }: { count?: number }) {
 
 export function CategoryCardSkeleton() {
   return (
-    <div className="bg-white rounded-lg shadow-md overflow-hidden">
-      <Skeleton variant="rectangular" height={192} />
+    <div className="bg-white rounded-lg shadow-md overflow-hidden animate-pulse">
+      <div className="h-48 bg-gray-200" />
       <div className="p-4">
-        <Skeleton variant="text" width="80%" height={24} className="mb-2" />
-        <Skeleton variant="text" width="100%" height={40} className="mb-3" />
-        <Skeleton variant="text" width="40%" height={24} />
+        <div className="h-6 bg-gray-200 rounded w-4/5 mb-2" />
+        <div className="h-10 bg-gray-200 rounded w-full mb-3" />
+        <div className="h-6 bg-gray-200 rounded w-2/5" />
       </div>
     </div>
   );

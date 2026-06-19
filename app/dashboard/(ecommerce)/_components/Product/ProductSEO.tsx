@@ -1,14 +1,22 @@
-// material-ui
 import { FormHelperText, Grid, TextField, Stack } from '@mui/material';
-
-// assets
 import { useTranslations } from 'next-intl';
-
 import SelectProductTag from '../ProductTag/SelectProductTag';
+import ProductModel from '../../_types/Product/ProductModel';
 
-export default function ProductSEO({  values, setFieldValue, handleBlur, handleChange, errors, touched }: 
-  { operation: 'add' | 'edit', values: any, setFieldValue: (field: string, value: any) => void, handleBlur: (event: React.FocusEvent<HTMLInputElement>) => void, 
-    handleChange: (event: React.ChangeEvent<HTMLInputElement>) => void, errors: any, touched: any }) {
+export default function ProductSEO({
+  values,
+  setFieldValue,
+  handleBlur,
+  handleChange,
+  errors
+}:
+  Readonly<{
+    operation: 'add' | 'edit',
+    values: ProductModel, setFieldValue: (field: string, value: any) => void,
+    handleBlur: (event: React.FocusEvent<HTMLInputElement>) => void,
+    handleChange: (event: React.ChangeEvent<HTMLInputElement>) => void,
+    errors: any,
+  }>) {
   const t = useTranslations("");
   const fieldsName = 'fields.product.';
   const handleCheckedChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -16,8 +24,8 @@ export default function ProductSEO({  values, setFieldValue, handleBlur, handleC
   };
   return (
     <Grid container columnSpacing={3}>
-      <Grid container spacing={3} size={{ xs: 12, sm: 12, md: 12, lg: 8, xl: 8}}>
-        <Grid size={{ xs: 12, sm: 12, md: 6, lg: 4, xl: 4}}>
+      <Grid container spacing={3} size={{ xs: 12, sm: 12, md: 12, lg: 8, xl: 8 }}>
+        <Grid size={{ xs: 12, sm: 12, md: 6, lg: 4, xl: 4 }}>
           <Stack>
             <SelectProductTag
               defaultValues={values?.productTags || []}
@@ -25,16 +33,16 @@ export default function ProductSEO({  values, setFieldValue, handleBlur, handleC
               name="productTags"
               label={t(fieldsName + 'productTags')}
               setFieldValue={setFieldValue}
-              error={Boolean(touched.productTags && errors.productTags)}
+              error={Boolean(errors.productTags)}
             />
-            {touched.productTags && errors.productTags && (
+            {errors.productTags && (
               <FormHelperText error id="helper-tagIds">
                 {errors.productTags}
               </FormHelperText>
             )}
           </Stack>
         </Grid>
-        <Grid size={{ xs: 12, sm: 12, md: 6, lg: 4, xl: 4}}>
+        <Grid size={{ xs: 12, sm: 12, md: 6, lg: 4, xl: 4 }}>
           <Stack>
             <TextField
               id="metaTitle"
@@ -45,9 +53,9 @@ export default function ProductSEO({  values, setFieldValue, handleBlur, handleC
               onBlur={handleBlur}
               onChange={handleChange}
               fullWidth
-              error={Boolean(touched.metaTitle && errors.metaTitle)}
+              error={Boolean(errors.metaTitle)}
             />
-            {touched.metaTitle && errors.metaTitle && (
+            {errors.metaTitle && (
               <FormHelperText error id="helper-text">
                 {errors.metaTitle}
               </FormHelperText>
@@ -55,7 +63,7 @@ export default function ProductSEO({  values, setFieldValue, handleBlur, handleC
           </Stack>
         </Grid>
 
-        <Grid size={{ xs: 12, sm: 12, md: 6, lg: 4, xl: 4}}>
+        <Grid size={{ xs: 12, sm: 12, md: 6, lg: 4, xl: 4 }}>
           <Stack>
             <TextField
               id="metaKeywords"
@@ -67,16 +75,16 @@ export default function ProductSEO({  values, setFieldValue, handleBlur, handleC
               onChange={handleChange}
               placeholder={t(fieldsName + 'metaKeywords')}
               fullWidth
-              error={Boolean(touched.metaKeywords && errors.metaKeywords)}
+              error={Boolean(errors.metaKeywords)}
             />
-            {touched.metaKeywords && errors.metaKeywords && (
+            {errors.metaKeywords && (
               <FormHelperText error id="helper-text">
                 {errors.metaKeywords}
               </FormHelperText>
             )}
           </Stack>
         </Grid>
-        <Grid size={{ xs: 12, sm: 12, md: 6, lg: 4, xl: 4}}>
+        <Grid size={{ xs: 12, sm: 12, md: 6, lg: 4, xl: 4 }}>
           <Stack>
             <TextField
               id="metaDescription"
@@ -88,9 +96,9 @@ export default function ProductSEO({  values, setFieldValue, handleBlur, handleC
               onChange={handleChange}
               placeholder={t(fieldsName + 'metaDescription')}
               fullWidth
-              error={Boolean(touched.metaDescription && errors.metaDescription)}
+              error={Boolean(errors.metaDescription)}
             />
-            {touched.metaDescription && errors.metaDescription && (
+            {errors.metaDescription && (
               <FormHelperText error id="helper-text">
                 {errors.metaDescription}
               </FormHelperText>

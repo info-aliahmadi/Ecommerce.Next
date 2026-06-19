@@ -324,13 +324,14 @@ export default function AddOrEditProduct({ params }: Readonly<{ params: Promise<
                 />
               </TabPanel>
               <TabPanel component="div" value={tab} index={3}>
-                {/* <ProductSEO
+                <ProductSEO
                   operation={operation}
                   values={product}
+                  setFieldValue={setFieldValue}
                   handleChange={handleChange}
                   handleBlur={handleBlur}
                   errors={errors}
-                /> */}
+                />
               </TabPanel>
               <Grid container sx={{ pt: 2, pb: 3 }} >
                 <Grid sx={{ xl: 7 }}>
