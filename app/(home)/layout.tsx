@@ -1,34 +1,14 @@
 'use client';
 
-import { ReactNode } from 'react';
-import { AppBar, Box, Button, Container, Toolbar, Typography, IconButton, Badge, useTheme, useMediaQuery, Drawer, List, ListItem, ListItemText, Divider } from '@mui/material';
-import { ShoppingCart, Person, Menu as MenuIcon } from '@mui/icons-material';
-import { useState } from 'react';
+import { ReactNode, useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { Providers } from './providers';
 
 export default function RootLayout({ children }: { children: ReactNode }) {
-  const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [cartItemCount, setCartItemCount] = useState(0);
   const pathname = usePathname();
-
-  // Check if the current path is in the dashboard section
-  const isDashboard = pathname?.startsWith('/dashboard');
-
-  // If we're in the dashboard, don't show the ecommerce header/footer
-  if (isDashboard) {
-    return (
-      <html lang="en">
-        <body>
-          <Providers>
-            {children}
-          </Providers>
-        </body>
-      </html>
-    );
-  }
 
   const navItems = [
     { name: 'Home', path: '/' },
@@ -42,172 +22,156 @@ export default function RootLayout({ children }: { children: ReactNode }) {
     setMobileMenuOpen(!mobileMenuOpen);
   };
 
+  useEffect(() => {
+    if (mobileMenuOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
+  }, [mobileMenuOpen]);
 
   return (
     <Providers>
-      <AppBar position="sticky">
-        <Container maxWidth="lg">
-          <Toolbar disableGutters>
-            <Typography
-              variant="h6"
-              noWrap
-              component={Link}
-              href="/"
-              sx={{
-                mr: 2,
-                display: { xs: 'none', md: 'flex' },
-                fontWeight: 700,
-                color: 'inherit',
-                textDecoration: 'none',
-              }}
+      <header className="sticky top-0 z-50 bg-blue-600 shadow-md">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex items-center justify-between h-16">
+            {/* Logo - Desktop */}
+            <Link 
+              href="/" 
+              className="hidden md:flex text-white text-xl font-bold no-underline hover:opacity-90 transition-opacity"
             >
               E-COMMERCE
-            </Typography>
+            </Link>
 
-            {isMobile ? (
-              <>
-                <IconButton
-                  size="large"
-                  edge="start"
-                  color="inherit"
-                  aria-label="menu"
+            {/* Mobile Menu Button & Logo */}
+            <div className="flex items-center md:hidden">
+              <button
+                onClick={toggleMobileMenu}
+                className="text-white p-2 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-white"
+                aria-label="Toggle menu"
+                aria-expanded={mobileMenuOpen}
+              >
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+                </svg>
+              </button>
+              <Link 
+                href="/" 
+                className="ml-4 text-white text-xl font-bold no-underline hover:opacity-90 transition-opacity"
+              >
+                E-COMMERCE
+              </Link>
+            </div>
+
+            {/* Desktop Navigation */}
+            <nav className="hidden md:flex flex-1 ml-8 space-x-1">
+              {navItems.map((item) => (
+                <Link
+                  key={item.name}
+                  href={item.path}
+                  className={`px-4 py-2 text-white rounded-md hover:bg-blue-700 transition-colors ${
+                    pathname === item.path ? 'border-b-2 border-white' : ''
+                  }`}
+                >
+                  {item.name}
+                </Link>
+              ))}
+            </nav>
+
+            {/* Right Side Icons */}
+            <div className="flex items-center space-x-2">
+              <Link
+                href="/cart"
+                className="relative p-2 text-white rounded-full hover:bg-blue-700 transition-colors"
+                aria-label="Shopping cart"
+              >
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+                </svg>
+                {cartItemCount > 0 && (
+                  <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">
+                    {cartItemCount}
+                  </span>
+                )}
+              </Link>
+              <Link
+                href="/login"
+                className="p-2 text-white rounded-full hover:bg-blue-700 transition-colors"
+                aria-label="User account"
+              >
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                </svg>
+              </Link>
+            </div>
+          </div>
+        </div>
+
+        {/* Mobile Menu Drawer */}
+        {mobileMenuOpen && (
+          <>
+            {/* Backdrop */}
+            <div 
+              className="fixed inset-0 bg-black bg-opacity-50 z-40"
+              onClick={toggleMobileMenu}
+            />
+            
+            {/* Drawer */}
+            <div className="fixed top-0 left-0 h-full w-64 bg-white shadow-xl z-50 transform transition-transform duration-300">
+              <div className="p-4">
+                <button
                   onClick={toggleMobileMenu}
-                  sx={{ mr: 2 }}
+                  className="mb-4 p-2 text-gray-600 hover:text-gray-900 rounded-md hover:bg-gray-100"
+                  aria-label="Close menu"
                 >
-                  <MenuIcon />
-                </IconButton>
-                <Typography
-                  variant="h6"
-                  noWrap
-                  component={Link}
-                  href="/"
-                  sx={{
-                    flexGrow: 1,
-                    fontWeight: 700,
-                    color: 'inherit',
-                    textDecoration: 'none',
-                  }}
-                >
-                  E-COMMERCE
-                </Typography>
-                <Drawer
-                  anchor="left"
-                  open={mobileMenuOpen}
-                  onClose={toggleMobileMenu}
-                >
-                  <Box
-                    sx={{ width: 250 }}
-                    role="presentation"
-                    onClick={toggleMobileMenu}
-                    onKeyDown={toggleMobileMenu}
-                  >
-                    <List>
-                      {navItems.map((item) => (
-                        <ListItem
-                          key={item.name}
-                          component={Link}
-                          href={item.path}
-                          sx={{
-                            color: 'inherit',
-                            textDecoration: 'none',
-                            '&:hover': {
-                              backgroundColor: 'rgba(0, 0, 0, 0.04)'
-                            }
-                          }}
-                        >
-                          <ListItemText primary={item.name} />
-                        </ListItem>
-                      ))}
-                    </List>
-                    <Divider />
-                    <List>
-                      <ListItem
-                        component={Link}
-                        href="/login"
-                        sx={{
-                          color: 'inherit',
-                          textDecoration: 'none',
-                          '&:hover': {
-                            backgroundColor: 'rgba(0, 0, 0, 0.04)'
-                          }
-                        }}
-                      >
-                        <ListItemText primary="Sign In" />
-                      </ListItem>
-                      <ListItem
-                        component={Link}
-                        href="/register"
-                        sx={{
-                          color: 'inherit',
-                          textDecoration: 'none',
-                          '&:hover': {
-                            backgroundColor: 'rgba(0, 0, 0, 0.04)'
-                          }
-                        }}
-                      >
-                        <ListItemText primary="Register" />
-                      </ListItem>
-                    </List>
-                  </Box>
-                </Drawer>
-              </>
-            ) : (
-              <>
-                <Box sx={{ flexGrow: 1, display: 'flex' }}>
+                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </button>
+
+                <nav className="space-y-1">
                   {navItems.map((item) => (
-                    <Button
+                    <Link
                       key={item.name}
-                      component={Link}
                       href={item.path}
-                      sx={{
-                        my: 2,
-                        color: 'white',
-                        display: 'block',
-                        '&:hover': {
-                          backgroundColor: 'rgba(255, 255, 255, 0.1)'
-                        },
-                        ...(pathname === item.path && {
-                          borderBottom: '2px solid white'
-                        })
-                      }}
+                      onClick={toggleMobileMenu}
+                      className="block px-4 py-3 text-gray-700 rounded-md hover:bg-gray-100 transition-colors"
                     >
                       {item.name}
-                    </Button>
+                    </Link>
                   ))}
-                </Box>
-              </>
-            )}
+                </nav>
 
-            <Box sx={{ display: 'flex' }}>
-              <IconButton
-                size="large"
-                aria-label="show cart items"
-                color="inherit"
-                component={Link}
-                href="/cart"
-              >
-                <Badge badgeContent={0} color="error">
-                  <ShoppingCart />
-                </Badge>
-              </IconButton>
-              <IconButton
-                size="large"
-                edge="end"
-                aria-label="account"
-                color="inherit"
-                component={Link}
-                href="/login"
-              >
-                <Person />
-              </IconButton>
-            </Box>
-          </Toolbar>
-        </Container>
-      </AppBar>
+                <hr className="my-4 border-gray-200" />
 
-      <Box component="main">
+                <div className="space-y-1">
+                  <Link
+                    href="/login"
+                    onClick={toggleMobileMenu}
+                    className="block px-4 py-3 text-gray-700 rounded-md hover:bg-gray-100 transition-colors"
+                  >
+                    Sign In
+                  </Link>
+                  <Link
+                    href="/register"
+                    onClick={toggleMobileMenu}
+                    className="block px-4 py-3 text-gray-700 rounded-md hover:bg-gray-100 transition-colors"
+                  >
+                    Register
+                  </Link>
+                </div>
+              </div>
+            </div>
+          </>
+        )}
+      </header>
+
+      <main>
         {children}
-      </Box>
+      </main>
     </Providers>
   );
-} 
+}

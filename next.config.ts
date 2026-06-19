@@ -8,12 +8,19 @@ const nextConfig: NextConfig = {
   typescript: {
     ignoreBuildErrors: true,
   },
+  // For Next.js 13 and later, you can use the `images` configuration to allow loading images from external domains
   images: {
     remotePatterns: [
       {
         protocol: 'https',
-        hostname: 'placehold.co',
-        port: '',
+        hostname: 'localhost',
+        port: process.env.NEXT_PUBLIC_API_BASE_URL?.includes('https://localhost:7134') ? '7134' : '80',
+        pathname: '/**',    
+      },
+      {
+        protocol: 'http',
+        hostname: 'localhost',
+        port: '3000',
         pathname: '/**',
       },
     ],

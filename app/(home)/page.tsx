@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { Container, Alert, Snackbar } from '@mui/material';
 
 import HeroBanner from './_components/hero/HeroBanner';
 import CategoryCard from './_components/category/CategoryCard';
@@ -62,7 +61,6 @@ export default function HomePage() {
         setLatestProducts(latestResult.data || []);
       }
 
-
       setLoadingProducts(false);
     } catch (error) {
       console.error('Failed to load homepage data:', error);
@@ -88,7 +86,7 @@ export default function HomePage() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <Container maxWidth="xl" className="py-8">
+      <div className="max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <section className="mb-16">
           <HeroBanner />
         </section>
@@ -101,7 +99,7 @@ export default function HomePage() {
             </div>
             <button
               onClick={() => router.push('/categories')}
-              className="text-blue-600 hover:text-blue-700 font-semibold"
+              className="text-blue-600 hover:text-blue-700 font-semibold transition-colors"
             >
               View All →
             </button>
@@ -131,7 +129,7 @@ export default function HomePage() {
               </div>
               <button
                 onClick={() => router.push('/products?filter=featured')}
-                className="text-blue-600 hover:text-blue-700 font-semibold"
+                className="text-blue-600 hover:text-blue-700 font-semibold transition-colors"
               >
                 View All →
               </button>
@@ -158,7 +156,7 @@ export default function HomePage() {
               </div>
               <button
                 onClick={() => router.push('/products?filter=bestsellers')}
-                className="text-blue-600 hover:text-blue-700 font-semibold"
+                className="text-blue-600 hover:text-blue-700 font-semibold transition-colors"
               >
                 View All →
               </button>
@@ -185,7 +183,7 @@ export default function HomePage() {
               </div>
               <button
                 onClick={() => router.push('/products?filter=new')}
-                className="text-blue-600 hover:text-blue-700 font-semibold"
+                className="text-blue-600 hover:text-blue-700 font-semibold transition-colors"
               >
                 View All →
               </button>
@@ -216,21 +214,42 @@ export default function HomePage() {
         <section className="mb-8">
           <NewsletterSection />
         </section>
-      </Container>
+      </div>
 
+      {/* Error Alert */}
       {error && (
-        <Alert severity="error" onClose={() => setError(null)} className="fixed bottom-4 right-4 z-50">
-          {error}
-        </Alert>
+        <div className="fixed bottom-4 right-4 z-50 max-w-sm">
+          <div className="bg-red-50 border border-red-200 rounded-lg shadow-lg p-4 flex items-start">
+            <svg className="w-5 h-5 text-red-600 mr-3 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+              <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
+            </svg>
+            <div className="flex-1">
+              <p className="text-sm text-red-800">{error}</p>
+            </div>
+            <button
+              onClick={() => setError(null)}
+              className="ml-3 text-red-400 hover:text-red-600 transition-colors"
+              aria-label="Close"
+            >
+              <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                <path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd" />
+              </svg>
+            </button>
+          </div>
+        </div>
       )}
 
-      <Snackbar
-        open={snackbar.open}
-        autoHideDuration={3000}
-        onClose={() => setSnackbar({ ...snackbar, open: false })}
-        message={snackbar.message}
-        anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
-      />
+      {/* Snackbar Notification */}
+      {snackbar.open && (
+        <div className="fixed bottom-4 right-4 z-50 animate-fade-in">
+          <div className="bg-gray-800 text-white px-6 py-3 rounded-lg shadow-lg flex items-center">
+            <svg className="w-5 h-5 text-green-400 mr-3" fill="currentColor" viewBox="0 0 20 20">
+              <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+            </svg>
+            <span className="text-sm">{snackbar.message}</span>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

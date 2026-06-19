@@ -65,7 +65,7 @@ export default class HomePageService {
 
   async getFeaturedProducts(): Promise<Result<ProductModel[]>> {
     let filter: ProductFilterModel = {
-      pageIndex: 0,
+      pageIndex: 1,
       pageSize: 8,
       hasDiscounts: true,
       categoryIds: [],
@@ -77,7 +77,7 @@ export default class HomePageService {
 
   async getBestSellingProducts(): Promise<Result<ProductModel[]>> {
     let filter: ProductFilterModel = {
-      pageIndex: 0,
+      pageIndex: 1,
       pageSize: 8,
       categoryIds: [],
       manufacturerIds: []
@@ -91,7 +91,7 @@ export default class HomePageService {
    */
   async getLatestProducts(): Promise<Result<ProductModel[]>> {
     let filter: ProductFilterModel = {
-      pageIndex: 0,
+      pageIndex: 1,
       pageSize: 8,
       sorting: { id: 'availableStartDateTimeUtc', desc: true },
       categoryIds: [],
@@ -105,7 +105,7 @@ export default class HomePageService {
   /**
    * Search products by query
    */
-  async searchProducts(query: string, pageIndex: number = 0, pageSize: number = 10): Promise<Result<ProductModel[]>> {
+  async searchProducts(query: string, pageIndex: number = 1, pageSize: number = 10): Promise<Result<ProductModel[]>> {
     let filter: ProductFilterModel = {
       pageIndex: pageIndex,
       pageSize: pageSize,
