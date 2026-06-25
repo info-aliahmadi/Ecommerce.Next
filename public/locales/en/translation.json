@@ -425,8 +425,6 @@
       "fullDescription": "Full Description...",
       "deliveryDateId": "Delivery Date",
       "taxCategoryId": "Tax Category",
-      "stockQuantity": "Stock Quantity",
-      "minStockQuantity": "Min Stock Quantity",
       "notifyAdminForQuantityBelow": "Notify Admin For Quantity Below",
       "orderMinimumQuantity": "Order Minimum Quantity",
       "orderMaximumQuantity": "Order Maximum Quantity",
@@ -466,10 +464,12 @@
       "productTags": "Product Tags",
       "createdBy": "created By",
       "editedBy": "Edited By",
-      "sellUnitprice": "Sell Unit Price",
+      "sellUnitPrice": "Sell Unit Price",
       "oldSellUnitPrice": "Old Sell Unit Price",
       "currencyType": "Currency Type",
       "measureType": "Measure Type",
+      "stockQuantity": "Stock Quantity",
+      "minStockQuantity": "Min Stock Quantity",
       "stockType": {
         "Total": "Stock Total",
         "PerAttribute": "Stock Per Attribute"
@@ -761,6 +761,7 @@
       "requiredtoAddress": "Recipient of Email Is Required"
     },
     "product": {
+      "error": "Validation Errors",
       "maxName": "The max of Product name length is 250 Characters",
       "requiredName": "Product name is require",
       "requiredFullDescription": "Full Description is require",
@@ -771,8 +772,12 @@
       "requiredMinStockQuantity": "Min Stock Quantity is require",
       "requiredOrderMinimumQuantity": "Order Minimum Quantity is require",
       "requiredOrderMaximumQuantity": "Order Maximum Quantity is require",
-      "requiredPrice": "Price is require",
-      "requiredCurrencyId": "Currency is require"
+      "requiredSellUnitPrice": "Sell Unit Price is require",
+      "requiredPreviewImageId": "Preview Image is require",
+      "requiredMeasureType": "Measure Type is require",
+      "requiredavailableStartDateTimeUtc": "Available Start Date is require",
+      "requiredInventories": "Inventories is require",
+      "requiredManufacturerIds": "ManufacturerIds is require"
     }
   },
   "tooltips": {

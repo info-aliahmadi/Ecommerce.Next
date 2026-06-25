@@ -29,7 +29,7 @@ export default function ProductInventory({ operation, values, setFieldValue, han
   const [isAttributeView, setIsAttributeView] = useState(values.stockType === StockType.PerAttribute);
 
   const fieldsName = 'fields.product.';
-
+  const inventoryError = errors?.inventories;
   const handleCheckedChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setFieldValue(event.target.id, event.target.checked);
     console.log(event.target.id, event.target.checked);
@@ -70,7 +70,7 @@ export default function ProductInventory({ operation, values, setFieldValue, han
       setFieldValue('inventories', updatedInventories);
     };
     return (
-      <Grid container size={fullWidthGridSize}>
+      <>
         <Grid size={{ xs: 12, sm: 12, md: 3, lg: 3, xl: 3 }}>
           <Stack>
             <TextField
@@ -119,25 +119,16 @@ export default function ProductInventory({ operation, values, setFieldValue, han
               placeholder={t(fieldsName + 'inventory.buyUnitPrice')}
               onChange={(value) => handleInventoryFieldChange('buyUnitPrice', value)}
             />
-          
+
           </Stack>
         </Grid>
-      </Grid>)
+      </>)
   };
 
   // Function to render Attribute Inventory section (which contains its own components)
   const renderAttributeInventorySection = () => {
-    const inventoryError = errors?.inventories;
-
     return (
-      <Grid size={fullWidthGridSize}>
-        <ProductAttributeInventory setFieldValue={setFieldValue} values={values} />
-        {inventoryError ? (
-          <FormHelperText error id="inventories-helper-text">
-            {inventoryError}
-          </FormHelperText>
-        ) : null}
-      </Grid>
+      <ProductAttributeInventory setFieldValue={setFieldValue} values={values} />
     );
   };
 
@@ -161,12 +152,20 @@ export default function ProductInventory({ operation, values, setFieldValue, han
             </Stack>
           </Grid>
         </Grid>
-        {/* Conditional Rendering based on selected view */}
-        {isAttributeView ? (
-          renderAttributeInventorySection()
-        ) : (
-          renderTotalInventoryFields()
-        )}
+        <Grid container size={fullWidthGridSize}>
+          {/* Conditional Rendering based on selected view */}
+          {isAttributeView ? (
+            renderAttributeInventorySection()
+          ) : (
+            renderTotalInventoryFields()
+          )}
+
+          {inventoryError ? (
+            <FormHelperText error id="inventories-helper-text">
+              {inventoryError}
+            </FormHelperText>
+          ) : null}
+        </Grid>
 
         <Divider />
 

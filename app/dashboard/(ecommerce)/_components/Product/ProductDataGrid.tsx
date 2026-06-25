@@ -95,8 +95,8 @@ export default function ProductDataGrid() {
         enableResizing: true
       },
       {
-        accessorKey: 'price',
-        header: t(fieldsName + 'price'),
+        accessorKey: 'sellUnitPrice',
+        header: t(fieldsName + 'sellUnitPrice'),
         type: 'number',
         enableResizing: true,
         Cell: ({ renderedCellValue, row }) => (renderedCellValue as number).toCurrency(row.original.currencyType)

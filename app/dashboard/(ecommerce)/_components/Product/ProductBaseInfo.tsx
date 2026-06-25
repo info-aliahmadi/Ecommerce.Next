@@ -161,7 +161,7 @@ export default function ProductBaseInfo({
         </Grid>
         <Grid size={{ xs: 12, sm: 12, md: 6, lg: 6, xl: 4 }}>
           <SelectTaxCategory
-            defaultValue={values?.taxCategoryId || null}
+            defaultValue={values?.taxCategoryId || undefined}
             id="taxCategoryId"
             name="taxCategoryId"
             label={t(fieldsName + 'taxCategoryId')}
@@ -177,18 +177,18 @@ export default function ProductBaseInfo({
         <Grid size={{ xs: 12, sm: 12, md: 6, lg: 6, xl: 4 }}>
             <Stack>
               <CurrencyInput
-                id="sellUnitprice"
-                name="sellUnitprice"
-                label={t(fieldsName + 'sellUnitprice')}
+                id="sellUnitPrice"
+                name="sellUnitPrice"
+                label={t(fieldsName + 'sellUnitPrice')}
                 fullWidth
                 currencyType={CONFIG.DEFAULT_CURRENCY}
-                value={values?.sellUnitprice ?? values?.sellUnitprice ?? 0}
-                onChange={(v: any) => setFieldValue('sellUnitprice', Number(v))}
-                error={Boolean(errors.sellUnitprice)}
+                value={values?.sellUnitPrice ?? values?.sellUnitPrice ?? 0}
+                onChange={(v: any) => setFieldValue('sellUnitPrice', Number(v))}
+                error={Boolean(errors.sellUnitPrice)}
               />
-              {errors.sellUnitprice && (
+              {errors.sellUnitPrice && (
                 <FormHelperText error id="helper-text">
-                  {errors.sellUnitprice}
+                  {errors.sellUnitPrice}
                 </FormHelperText>
               )}
             </Stack>

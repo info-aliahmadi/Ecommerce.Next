@@ -434,7 +434,6 @@
       "fullDescription": "توضیحات کامل...",
       "deliveryDateId": "تاریخ تحویل",
       "taxCategoryId": "دسته‌بندی مالیات",
-      "minStockQuantity": "حداقل موجودی انبار",
       "notifyAdminForQuantityBelow": "اطلاع به مدیر برای موجودی کمتر از حداقل",
       "orderMinimumQuantity": "حداقل تعداد سفارش",
       "orderMaximumQuantity": "حداکثر تعداد سفارش",
@@ -474,10 +473,12 @@
       "productTags": "برچسب‌های محصول",
       "createdBy": "ایجاد شده توسط",
       "editedBy": "ویرایش شده توسط",
-      "sellUnitprice": "قیمت فروش",
+      "sellUnitPrice": "قیمت فروش",
       "oldSellUnitPrice": "قیمت فروش قدیم",
       "currencyType": "نوع ارز",
       "measureType": "نوع اندازه‌گیری",
+      "stockQuantity": "موجودی انبار",
+      "minStockQuantity": "حداقل موجودی انبار",
       "stockType": {
         "Total": "کل موجودی انبار",
         "PerAttribute": "موجودی انبار بر اساس خصوصیت"
@@ -815,18 +816,23 @@
       "requiredtoAddress": "گیرنده ایمیل الزامی است"
     },
     "product": {
+      "error": "خطا در اعتبارسنجی محصول",
       "maxName": "نام محصول حداکثر 250 کاراکتر است",
       "requiredName": "نام محصول الزامی است",
       "requiredFullDescription": "توضیحات کامل الزامی است",
       "requiredCategoryIds": "دسته‌بندی الزامی است",
-      "requiredDeliveryDateId": "تاریخ تحویل الزامی است",
+      "requiredDeliveryDateType": "تاریخ تحویل الزامی است",
       "requiredTaxCategoryId": "دسته‌بندی مالیات الزامی است",
       "requiredStockQuantity": "موجودی انبار الزامی است",
       "requiredMinStockQuantity": "حداقل موجودی انبار الزامی است",
       "requiredOrderMinimumQuantity": "حداقل تعداد سفارش الزامی است",
       "requiredOrderMaximumQuantity": "حداکثر تعداد سفارش الزامی است",
-      "requiredPrice": "قیمت الزامی است",
-      "requiredCurrencyId": "واحد پول الزامی است"
+      "requiredSellUnitPrice": "قیمت الزامی است",
+      "requiredPreviewImageId": "پیشنمایش محصول الزامی است",
+      "requiredMeasureType": "نوع اندازه گیری محصول الزامی است",
+      "requiredavailableStartDateTimeUtc": "تاریخ انتشار الزامی است",
+      "requiredInventories": "موجودی محصول الزامی است",
+      "requiredManufacturerIds": "تولیدکننده الزامی است"
     }
   },
   "tooltips": {

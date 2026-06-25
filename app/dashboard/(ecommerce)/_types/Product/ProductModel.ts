@@ -91,7 +91,7 @@ export default interface ProductModel {
   /**
    * The ID of the tax category.
    */
-  taxCategoryId: number;
+  taxCategoryId: number| null ;
 
   /**
    * The name of the tax category.
@@ -117,7 +117,7 @@ export default interface ProductModel {
   /**
    * The price of the product.
    */
-  sellUnitprice: number;
+  sellUnitPrice: number;
 
 
   /**
@@ -293,12 +293,7 @@ export default interface ProductModel {
   /**
    * The quantity of stock.
    */
-  stockQuantity: number;
-
-  /**
-   * The quantity of inventory stock.
-   */
-  inventoryStockQuantity: number;
+  stockQuantity: number | null;
 
   /**
    * The minimum stock quantity.

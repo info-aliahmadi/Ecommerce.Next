@@ -1,7 +1,5 @@
 'use client';
 import React, { useEffect, useState } from 'react';
-
-// material-ui
 import {
   Alert,
   AlertTitle,
@@ -17,13 +15,10 @@ import {
 import { ArrowBack, Save, Send } from '@mui/icons-material';
 import AnimateButton from '@dashboard/_components/@extended/AnimateButton';
 import { createProductValidationSchema } from '@dashboard/(ecommerce)/_service/ProductValidationSchema';
-
-// assets
 import { useTranslations } from 'next-intl';
 import Notify from '@dashboard/_components/@extended/Notify';
 import MainCard from '@dashboard/_components/MainCard';
-
-import PropTypes, { number } from 'prop-types';
+import PropTypes from 'prop-types';
 import { useRouter } from 'next/navigation';
 import ProductsService from '@dashboard/(ecommerce)/_service/ProductService';
 import StoreIcon from '@mui/icons-material/Store';
@@ -38,8 +33,6 @@ import { useSession } from 'next-auth/react';
 
 import ProductModel, { StockType } from '@dashboard/(ecommerce)/_types/Product/ProductModel';
 import DeliveryDate from '@root/app/types/enums/DeliveryDateType';
-import CurrencyTypes from '@root/app/types/enums/CurrencyTypes';
-import DeliveryDateType from '@root/app/types/enums/DeliveryDateType';
 import CONFIG from '@root/config';
 import MeasureType from '@root/app/types/enums/MeasureType';
 function TabPanel(props: any) {
@@ -75,28 +68,6 @@ export default function AddOrEditProduct({ params }: Readonly<{ params: Promise<
 
   const jwt = session?.accessToken;
   let productService = new ProductsService(jwt ?? '');
-
-  const [fieldsName, validation, buttonName] = ['fields.product.', 'validation.product.', 'buttons.product.'];
-
-  const [notify, setNotify] = useState<NotifyProps>({ open: false });
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [errors, setErrors] = useState({});
-
-
-  const router = useRouter();
-
-  const loadProduct = () => {
-    productService.getProductById(id).then((result) => {
-      setProduct(result.data ?? product);
-    });
-  };
-  useEffect(() => {
-    if (operation == 'edit' && id > 0) loadProduct();
-  }, [operation, id]);
-
-  const handleTabChange = (event: any, newValue: any) => {
-    setTab(newValue);
-  };
   const initProduct: ProductModel = {
     id: 0,
     name: '',
@@ -107,7 +78,7 @@ export default function AddOrEditProduct({ params }: Readonly<{ params: Promise<
     fullDescription: '',
     adminComment: '',
     deliveryDateType: DeliveryDate.ThreeDays,
-    taxCategoryId: 0,
+    taxCategoryId: null,
     stockQuantity: 0,
     minStockQuantity: 0,
     stockType: StockType.Total,
@@ -115,7 +86,7 @@ export default function AddOrEditProduct({ params }: Readonly<{ params: Promise<
     orderMinimumQuantity: 0,
     orderMaximumQuantity: 0,
     oldSellUnitPrice: 0,
-    sellUnitprice: 0,
+    sellUnitPrice: 0,
     currencyType: CONFIG.DEFAULT_CURRENCY,
     measureType: MeasureType.Number,
     availableStartDateTimeUtc: null,
@@ -156,7 +127,6 @@ export default function AddOrEditProduct({ params }: Readonly<{ params: Promise<
     length: 0,
     width: 0,
     height: 0,
-    inventoryStockQuantity: 0,
     displayOrder: 0,
     approvedRatingSum: 0,
     notApprovedRatingSum: 0,
@@ -168,13 +138,35 @@ export default function AddOrEditProduct({ params }: Readonly<{ params: Promise<
     attributeNames: [],
     reviewIds: [],
   };
+  const  buttonName = 'buttons.product.';
+
+  const [notify, setNotify] = useState<NotifyProps>({ open: false });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [errors, setErrors] = useState<Record<string, string>>({});
   const [product, setProduct] = useState<ProductModel>(initProduct);
+
+  const router = useRouter();
+
+  useEffect(() => {
+    if (operation === 'edit' && id > 0) {
+      productService.getProductById(id).then((result) => {
+        setProduct(result.data ?? product);
+      });
+    }
+  }, [operation, id, productService]);
+
+  const handleTabChange = (event: any, newValue: any) => {
+    setTab(newValue);
+  };
+
 
   // Initialize validation schema with translated messages
   const validationSchema = createProductValidationSchema(t);
 
   const handleChange = (e: any) => {
     const { name, value } = e.target;
+
+    
     // fill the field in product
     const updatedProduct: ProductModel = {
       ...product,       // Override with existing product data
@@ -185,10 +177,9 @@ export default function AddOrEditProduct({ params }: Readonly<{ params: Promise<
 
     // Clear error when field is edited
     if (errors && (errors as any)[name]) {
-      setErrors({
-        ...errors,
-        [name]: undefined
-      });
+      const newErrors = { ...errors };
+      delete newErrors[name];
+      setErrors(newErrors);
     }
   };
   const setFieldValue = (field: string, value: any): void => {
@@ -202,21 +193,19 @@ export default function AddOrEditProduct({ params }: Readonly<{ params: Promise<
 
     // Clear error when field is edited
     if (errors && (errors as any)[field]) {
-      setErrors({
-        ...errors,
-        [field]: undefined
-      });
+      const newErrors = { ...errors };
+      delete newErrors[field];
+      setErrors(newErrors);
     }
   };
   const handleBlur = async (e: any) => {
-    const { name, value } = e.target;
+    const { name } = e.target;
 
     try {
       await validationSchema.validateAt(name, product);
-      setErrors({
-        ...errors,
-        [name]: undefined
-      });
+      const newErrors = { ...errors };
+      delete newErrors[name];
+      setErrors(newErrors);
     } catch (error) {
       setErrors({
         ...errors,
@@ -226,7 +215,6 @@ export default function AddOrEditProduct({ params }: Readonly<{ params: Promise<
   };
 
   const handleSubmit = async (e: any) => {
-    alert(product.fullDescription)
     e.preventDefault();
     setIsSubmitting(true);
 
@@ -335,8 +323,8 @@ export default function AddOrEditProduct({ params }: Readonly<{ params: Promise<
               </TabPanel>
               <Grid container sx={{ pt: 2, pb: 3 }} >
                 <Grid sx={{ xl: 7 }}>
-                  {(product.published || product.published == false) && Object.values(errors).length > 0 && <Alert severity="error">
-                    <AlertTitle>Error</AlertTitle>
+                  {Object.keys(errors).length > 0 && <Alert severity="error">
+                    <AlertTitle>{t('validation.product.error')}</AlertTitle>
                     {Object.values(errors)?.map((error, index) =>
                       <FormHelperText key={index} error id="helper-text">
                         {typeof error === 'object' ? JSON.stringify(error) : String(error)}

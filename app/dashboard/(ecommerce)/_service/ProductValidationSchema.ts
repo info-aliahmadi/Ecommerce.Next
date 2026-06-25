@@ -14,12 +14,10 @@ export const createProductValidationSchema = (t: (key: string) => string) => {
         .max(250, t(validation + 'maxName'))
         .required(t(validation + 'requiredName')),
       fullDescription: Yup.string()
+        .min(77, t(validation + 'requiredFullDescription'))
         .required(t(validation + 'requiredFullDescription')),
-      categoryIds: Yup.array()
-        .min(1, t(validation + 'requiredCategoryIds'))
-        .required(t(validation + 'requiredCategoryIds')),
       deliveryDateType: Yup.number()
-        .required(t(validation + 'requiredDeliveryDateId')),
+        .required(t(validation + 'requiredDeliveryDateType')),
       taxCategoryId: Yup.number()
         .required(t(validation + 'requiredTaxCategoryId')),
       stockQuantity: Yup.number()
@@ -30,10 +28,23 @@ export const createProductValidationSchema = (t: (key: string) => string) => {
         .required(t(validation + 'requiredOrderMinimumQuantity')),
       orderMaximumQuantity: Yup.number()
         .required(t(validation + 'requiredOrderMaximumQuantity')),
-      price: Yup.number()
-        .required(t(validation + 'requiredPrice')),
-      CurrencyType: Yup.number()
-        .required(t(validation + 'requiredCurrencyId'))
+      sellUnitPrice: Yup.number()
+        .required(t(validation + 'requiredSellUnitPrice')),
+      previewImageId: Yup.number()
+        .required(t(validation + 'requiredPreviewImageId')),
+      measureType: Yup.number()
+        .required(t(validation + 'requiredMeasureType')),
+      availableStartDateTimeUtc: Yup.date()
+        .required(t(validation + 'requiredavailableStartDateTimeUtc')),
+      inventories: Yup.array()
+        .min(1, t(validation + 'requiredInventories'))
+        .required(t(validation + 'requiredInventories')),
+      categoryIds: Yup.array()
+        .min(1, t(validation + 'requiredCategoryIds'))
+        .required(t(validation + 'requiredCategoryIds')),
+      manufacturerIds: Yup.array()
+        .min(1, t(validation + 'requiredManufacturerIds'))
+        .required(t(validation + 'requiredManufacturerIds'))
     })
     .strict(false); // Allow extra fields without validation errors
 };
