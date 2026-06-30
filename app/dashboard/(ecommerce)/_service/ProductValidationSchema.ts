@@ -20,18 +20,16 @@ export const createProductValidationSchema = (t: (key: string) => string) => {
         .required(t(validation + 'requiredDeliveryDateType')),
       taxCategoryId: Yup.number()
         .required(t(validation + 'requiredTaxCategoryId')),
-      stockQuantity: Yup.number()
-        .required(t(validation + 'requiredStockQuantity')),
       minStockQuantity: Yup.number()
         .required(t(validation + 'requiredMinStockQuantity')),
       orderMinimumQuantity: Yup.number()
         .required(t(validation + 'requiredOrderMinimumQuantity')),
       orderMaximumQuantity: Yup.number()
         .required(t(validation + 'requiredOrderMaximumQuantity')),
-      sellUnitPrice: Yup.number()
+      sellUnitPrice: Yup.number().min(1, t(validation + 'requiredSellUnitPrice'))
         .required(t(validation + 'requiredSellUnitPrice')),
-      previewImageId: Yup.number()
-        .required(t(validation + 'requiredPreviewImageId')),
+      picturePreviewId: Yup.number().min(1, t(validation + 'requiredPicturePreviewId'))
+        .required(t(validation + 'requiredPicturePreviewId')),
       measureType: Yup.number()
         .required(t(validation + 'requiredMeasureType')),
       availableStartDateTimeUtc: Yup.date()

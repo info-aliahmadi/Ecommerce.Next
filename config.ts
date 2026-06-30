@@ -1,4 +1,5 @@
 import CurrencyTypes from "./app/types/enums/CurrencyTypes";
+import MeasureType from "./app/types/enums/MeasureType";
 
 // ==============================|| THEME CONFIG  ||============================== //
 const CONFIG = {
@@ -33,6 +34,7 @@ const CONFIG = {
   LANGUAGE_STORAGE_NAME: 'NEXT_LOCALE',
   DEFAULT_LANGUAGE: 'fa',
   DEFAULT_CURRENCY: CurrencyTypes.Toman,
+  DEFAULT_MEASURETYPE: MeasureType.Number,
   DATE_STYLE: "short", // "full" | "long" | "medium" | "short",
   TIME_STYLE: 'short', // "full" | "long" | "medium" | "short"
   LTR_FONTS_EDITOR: '"Poppins", Arial, tohoma',

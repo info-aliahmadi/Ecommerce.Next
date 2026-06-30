@@ -41,12 +41,12 @@ export default interface ProductModel {
   /**
    * The ID of the preview image (nullable).
    */
-  previewImageId: number | null;
+  picturePreviewId?: number | null;
 
   /**
    * The preview image (nullable).
    */
-  previewImage: FileUploadModel | null;
+  picturePreview?: FileUploadModel | null;
 
   /**
    * Meta keywords for SEO.

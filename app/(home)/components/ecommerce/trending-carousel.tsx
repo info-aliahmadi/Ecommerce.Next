@@ -1,0 +1,245 @@
+'use client';
+
+import { useQuery } from '@tanstack/react-query';
+import { useUIStore } from '@/lib/store';
+import { Eye, TrendingUp, Star, ChevronLeft, ChevronRight, ShoppingCart } from 'lucide-react';
+import { motion } from 'framer-motion';
+import { useRef, useCallback } from 'react';
+import { toast } from 'sonner';
+import { useCartStore } from '@/lib/store';
+
+interface TrendingProduct {
+  id: string;
+  name: string;
+  price: number;
+  comparePrice?: number;
+  image: string;
+  rating: number;
+  reviewCount: number;
+  category: { name: string; color: string };
+  shortDesc?: string;
+  description?: string;
+  stock?: number;
+  sku?: string;
+  tags?: string;
+}
+
+export function TrendingCarousel() {
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const { setQuickViewProduct } = useUIStore();
+  const addItem = useCartStore((s) => s.addItem);
+
+  const { data, isLoading } = useQuery({
+    queryKey: ['products', 'trending'],
+    queryFn: () =>
+      fetch('/api/products?sort=popular&limit=8').then((r) => r.json()),
+  });
+
+  const products: TrendingProduct[] = data?.products || [];
+
+  const scroll = useCallback((direction: 'left' | 'right') => {
+    if (!scrollRef.current) return;
+    const amount = direction === 'left' ? -300 : 300;
+    scrollRef.current.scrollBy({ left: amount, behavior: 'smooth' });
+  }, []);
+
+  const handleQuickView = (product: TrendingProduct) => {
+    setQuickViewProduct({
+      id: product.id,
+      name: product.name,
+      price: product.price,
+      comparePrice: product.comparePrice,
+      image: product.image,
+      rating: product.rating,
+      reviewCount: product.reviewCount,
+      category: product.category,
+      shortDesc: product.shortDesc,
+      description: product.description || '',
+      stock: product.stock || 0,
+      sku: product.sku,
+      tags: product.tags,
+    });
+  };
+
+  const handleAddToCart = (e: React.MouseEvent, product: TrendingProduct) => {
+    e.stopPropagation();
+    addItem({
+      id: product.id,
+      name: product.name,
+      price: product.price,
+      comparePrice: product.comparePrice,
+      image: product.image,
+      category: product.category.name,
+    });
+    toast.success('Added to cart!');
+  };
+
+  if (products.length === 0 && !isLoading) return null;
+
+  return (
+    <section className="py-12 sm:py-16 bg-ecommerce-surface-hover/30 dark:bg-[#0F1117]/20 relative">
+      {/* Section Header */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-8">
+        <div className="text-center">
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-ecommerce-teal/10 text-ecommerce-teal text-xs font-semibold uppercase tracking-widest mb-3"
+          >
+            <TrendingUp size={12} />
+            Trending
+          </motion.div>
+          <h2 className="text-2xl sm:text-3xl font-extrabold text-ecommerce-text-primary tracking-tight">
+            Trending <span className="gradient-text-warm">Now</span>
+          </h2>
+          <p className="text-sm text-ecommerce-text-muted mt-1">
+            Most popular picks this week
+          </p>
+          {/* Dot divider */}
+          <div className="mt-4 flex items-center justify-center gap-2">
+            <div className="h-px w-8 bg-ecommerce-border" />
+            <div className="h-1.5 w-1.5 rounded-full bg-ecommerce-teal" />
+            <div className="h-px w-8 bg-ecommerce-border" />
+          </div>
+        </div>
+      </div>
+
+      {/* Carousel */}
+      <div className="relative max-w-7xl mx-auto">
+        {/* Left Arrow */}
+        <button
+          onClick={() => scroll('left')}
+          className="hidden md:flex absolute left-0 top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-full bg-white dark:bg-ecommerce-surface shadow-xl border border-ecommerce-border hover:bg-ecommerce-red hover:text-white items-center justify-center text-ecommerce-text-secondary transition-colors -translate-x-3"
+          aria-label="Scroll left"
+        >
+          <ChevronLeft size={18} />
+        </button>
+
+        {/* Right Arrow */}
+        <button
+          onClick={() => scroll('right')}
+          className="hidden md:flex absolute right-0 top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-full bg-white dark:bg-ecommerce-surface shadow-xl border border-ecommerce-border hover:bg-ecommerce-red hover:text-white items-center justify-center text-ecommerce-text-secondary transition-colors translate-x-3"
+          aria-label="Scroll right"
+        >
+          <ChevronRight size={18} />
+        </button>
+
+        {/* Scroll Container */}
+        <div
+          ref={scrollRef}
+          className="flex gap-4 sm:gap-6 overflow-x-auto scrollbar-thin snap-x snap-mandatory pb-4 -mx-4 px-4 sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8"
+        >
+          {isLoading
+            ? Array.from({ length: 4 }).map((_, i) => (
+                <div
+                  key={`skeleton-${i}`}
+                  className="w-64 sm:w-72 shrink-0 snap-start bg-white dark:bg-ecommerce-surface rounded-2xl border border-ecommerce-border overflow-hidden"
+                >
+                  <div className="aspect-[4/5] bg-muted shimmer" />
+                  <div className="p-4 space-y-3">
+                    <div className="h-3 w-16 bg-muted rounded shimmer" />
+                    <div className="h-4 w-full bg-muted rounded shimmer" />
+                    <div className="h-3 w-20 bg-muted rounded shimmer" />
+                  </div>
+                </div>
+              ))
+            : products.map((product, index) => (
+                <motion.div
+                  key={product.id}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.4, delay: index * 0.05 }}
+                  className="w-64 sm:w-72 shrink-0 snap-start bg-white dark:bg-ecommerce-surface rounded-2xl border border-ecommerce-border overflow-hidden card-lift group cursor-pointer"
+                  onClick={() => handleQuickView(product)}
+                >
+                  {/* Image Container */}
+                  <div className="relative aspect-[4/5] overflow-hidden bg-ecommerce-surface-hover dark:bg-[#252836]">
+                    <img
+                      src={product.image}
+                      alt={product.name}
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                      loading="lazy"
+                    />
+
+                    {/* Gradient overlay on hover */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+
+                    {/* Ranking Badge */}
+                    <motion.div
+                      initial={{ scale: 0 }}
+                      animate={{ scale: 1 }}
+                      transition={{ type: 'spring', stiffness: 300, damping: 20, delay: index * 0.08 }}
+                      className="absolute top-3 left-3 w-8 h-8 rounded-full bg-ecommerce-red text-white flex items-center justify-center text-xs font-bold shadow-lg"
+                    >
+                      #{index + 1}
+                    </motion.div>
+
+                    {/* Overlay content on hover */}
+                    <div className="absolute inset-x-0 bottom-0 flex flex-col items-center justify-end p-4 opacity-0 group-hover:opacity-100 translate-y-3 group-hover:translate-y-0 transition-all duration-300">
+                      <p className="text-white font-bold text-sm text-center line-clamp-2 mb-1">
+                        {product.name}
+                      </p>
+                      <p className="text-white font-semibold text-base mb-3">
+                        ${product.price.toFixed(2)}
+                      </p>
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleQuickView(product);
+                        }}
+                        className="bg-white/20 backdrop-blur-sm hover:bg-white/30 rounded-xl px-4 py-2 text-white text-xs font-medium flex items-center gap-1.5 transition-colors"
+                      >
+                        <Eye size={13} />
+                        Quick View
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* Card Content Below Image */}
+                  <div className="p-4">
+                    {/* Category with colored dot */}
+                    <div className="flex items-center gap-1.5 mb-2">
+                      <span
+                        className="w-2 h-2 rounded-full shrink-0"
+                        style={{ backgroundColor: product.category.color }}
+                      />
+                      <span className="text-[11px] font-medium text-ecommerce-text-muted uppercase tracking-wider truncate">
+                        {product.category.name}
+                      </span>
+                    </div>
+
+                    {/* Rating stars */}
+                    <div className="flex items-center gap-1.5 mb-1.5">
+                      <div className="flex items-center gap-px">
+                        {Array.from({ length: 5 }).map((_, i) => (
+                          <Star
+                            key={i}
+                            size={11}
+                            className={
+                              i < Math.floor(product.rating)
+                                ? 'fill-ecommerce-amber text-ecommerce-amber'
+                                : 'text-ecommerce-border'
+                            }
+                          />
+                        ))}
+                      </div>
+                      <span className="text-[11px] text-ecommerce-text-muted">
+                        {product.rating}
+                      </span>
+                    </div>
+
+                    {/* Sold count */}
+                    <p className="text-[11px] text-ecommerce-text-muted">
+                      <ShoppingCart size={10} className="inline mr-1 -mt-0.5" />
+                      {product.reviewCount} sold
+                    </p>
+                  </div>
+                </motion.div>
+              ))}
+        </div>
+      </div>
+    </section>
+  );
+}

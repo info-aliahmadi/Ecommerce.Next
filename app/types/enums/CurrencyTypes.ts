@@ -1,10 +1,10 @@
 export enum CurrencyTypes {
-  Dinar = 1, // IQD
-  Rial = 2, // IRR
-  Toman = 3, // IRT
+  None = 0,
+  Rial = 1, // IRR
+  Toman = 2, // IRT
+  Dinar = 3, // IQD
   Dollar = 4, // USD
   Euro = 5, // EU
-  None = 0,
 }
 
 export default CurrencyTypes;

@@ -175,23 +175,23 @@ export default function ProductBaseInfo({
           )}
         </Grid>
         <Grid size={{ xs: 12, sm: 12, md: 6, lg: 6, xl: 4 }}>
-            <Stack>
-              <CurrencyInput
-                id="sellUnitPrice"
-                name="sellUnitPrice"
-                label={t(fieldsName + 'sellUnitPrice')}
-                fullWidth
-                currencyType={CONFIG.DEFAULT_CURRENCY}
-                value={values?.sellUnitPrice ?? values?.sellUnitPrice ?? 0}
-                onChange={(v: any) => setFieldValue('sellUnitPrice', Number(v))}
-                error={Boolean(errors.sellUnitPrice)}
-              />
-              {errors.sellUnitPrice && (
-                <FormHelperText error id="helper-text">
-                  {errors.sellUnitPrice}
-                </FormHelperText>
-              )}
-            </Stack>
+          <Stack>
+            <CurrencyInput
+              id="sellUnitPrice"
+              name="sellUnitPrice"
+              label={t(fieldsName + 'sellUnitPrice')}
+              fullWidth
+              currencyType={CONFIG.DEFAULT_CURRENCY}
+              value={values?.sellUnitPrice ?? values?.sellUnitPrice ?? 0}
+              onChange={(v: any) => setFieldValue('sellUnitPrice', Number(v))}
+              error={Boolean(errors.sellUnitPrice)}
+            />
+            {errors.sellUnitPrice && (
+              <FormHelperText error id="helper-text">
+                {errors.sellUnitPrice}
+              </FormHelperText>
+            )}
+          </Stack>
         </Grid>
         <Grid size={{ xs: 12, sm: 12, md: 6, lg: 6, xl: 4 }}>
           <Stack>
@@ -316,6 +316,21 @@ export default function ProductBaseInfo({
         </Grid>
       </Grid>
       <Grid size={{ xs: 12, sm: 12, md: 12, lg: 4, xl: 4 }}>
+        <Stack>
+          <InputLabel htmlFor="picturePreviewId" sx={{ textAlign: 'center', mb: '5px' }}>{t(fieldsName + 'picturePreviewId')}</InputLabel>
+          <ImageUpload
+            id="picturePreviewId"
+            setFieldValue={setFieldValue}
+            value={values?.picturePreviewId || null}
+            filePosterMaxHeight={200}
+            allowMultiple={false}
+          />
+          {errors.picturePreviewId && (
+            <FormHelperText error id="helper-text">
+              {errors.picturePreviewId}
+            </FormHelperText>
+          )}
+        </Stack>
         <Stack>
           <InputLabel htmlFor="pictureIds" sx={{ textAlign: 'center', mb: '5px' }}>{t(fieldsName + 'pictureIds')}</InputLabel>
           <ImageUpload

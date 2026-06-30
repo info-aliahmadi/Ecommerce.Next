@@ -12,6 +12,7 @@ import { useState } from 'react';
 import InventoryModel from '../../_types/Product/InventoryModel';
 import CurrencyInput from '@root/app/dashboard/_components/Currency/CurrencyInput';
 import CONFIG from '@root/config';
+import SelectMeasureType from '../MeasureType/SelectMeasureType';
 interface ProductInventoryProps {
   operation: 'add' | 'edit',
   values: ProductModel,
@@ -71,7 +72,7 @@ export default function ProductInventory({ operation, values, setFieldValue, han
     };
     return (
       <>
-        <Grid size={{ xs: 12, sm: 12, md: 3, lg: 3, xl: 3 }}>
+        <Grid size={{ xs: 12, sm: 12, md: 4, lg: 3, xl: 3 }}>
           <Stack>
             <TextField
               id="stockQuantity"
@@ -82,16 +83,11 @@ export default function ProductInventory({ operation, values, setFieldValue, han
               onChange={(event) => handleInventoryFieldChange('stockQuantity', parseFloat(event.target.value) || 0)}
               placeholder={t(fieldsName + 'inventory.stockQuantity')}
               fullWidth
-              error={Boolean(errors.stockQuantity)}
+              error={Boolean(inventoryError)}
             />
-            {errors.stockQuantity && (
-              <FormHelperText error id="helper-text">
-                {errors.stockQuantity}
-              </FormHelperText>
-            )}
           </Stack>
         </Grid>
-        <Grid size={{ xs: 12, sm: 12, md: 3, lg: 3, xl: 3 }}>
+        <Grid size={{ xs: 12, sm: 12, md: 4, lg: 3, xl: 3 }}>
           <Stack>
             <TextField
               id="reservedQuantity"
@@ -107,7 +103,7 @@ export default function ProductInventory({ operation, values, setFieldValue, han
           </Stack>
         </Grid>
 
-        <Grid size={{ xs: 12, sm: 12, md: 3, lg: 3, xl: 3 }}>
+        <Grid size={{ xs: 12, sm: 12, md: 4, lg: 3, xl: 3 }}>
           <Stack>
             <CurrencyInput
               id="buyUnitPrice"
@@ -133,12 +129,12 @@ export default function ProductInventory({ operation, values, setFieldValue, han
   };
 
   return (
-    <Grid container columnSpacing={3}>
+    <Grid container spacing={3}>
       <Grid container spacing={3} size={{ xs: 12, sm: 12, md: 12, lg: 10, xl: 8 }}>
-        <Grid size={{ xs: 12, sm: 12, md: 12, lg: 12, xl: 12 }}>
+        <Grid container size={fullWidthGridSize}>
           {/* Inventory View Selector */}
-          <Grid sx={{ mb: 2, xs: 12 }}>
-            <Stack direction="row" sx={{ alignItems: "center" }} spacing={2} >
+          <Grid size={{ xs: 12, sm: 12, md: 3, lg: 3, xl: 3 }}>
+            <Stack direction="row" sx={{ alignItems: "center" }} >
               <FormControlLabel
                 control={
                   <Switch
@@ -151,138 +147,150 @@ export default function ProductInventory({ operation, values, setFieldValue, han
               />
             </Stack>
           </Grid>
+          <Grid size={{ xs: 12, sm: 12, md: 3, lg: 3, xl: 3 }} >
+            <Stack >
+              <SelectMeasureType
+                defaultValue={values.measureType}
+                id="measureType"
+                setFieldValue={setFieldValue}
+                error={Boolean(errors.measureType)}
+                label={t(fieldsName + 'measureType')}
+              />
+            </Stack>
+          </Grid>
         </Grid>
-        <Grid container size={fullWidthGridSize}>
-          {/* Conditional Rendering based on selected view */}
-          {isAttributeView ? (
-            renderAttributeInventorySection()
-          ) : (
-            renderTotalInventoryFields()
-          )}
-
+      </Grid>
+      <Grid container size={{ xs: 12, sm: 12, md: 12, lg: 10, xl: 8 }}>
+        {/* Conditional Rendering based on selected view */}
+        {isAttributeView ? (
+          renderAttributeInventorySection()
+        ) : (
+          renderTotalInventoryFields()
+        )}
+        <Grid size={{ xs: 12, sm: 12, md: 12, lg: 12, xl: 12 }} >
           {inventoryError ? (
             <FormHelperText error id="inventories-helper-text">
               {inventoryError}
             </FormHelperText>
           ) : null}
         </Grid>
+      </Grid>
 
-        <Divider />
+      <Divider />
 
-        <Grid size={{ xs: 12, sm: 12, md: 4, lg: 4, xl: 4 }}>
-          <Grid size={12}>
-            <Stack>
-              <FormControlLabel
-                control={
-                  <Switch
-                    id="notifyAdminForQuantityBelow"
-                    name="notifyAdminForQuantityBelow"
-                    checked={values?.notifyAdminForQuantityBelow ?? false}
-                    onChange={handleCheckedChange}
-                  />
-                }
-                label={t(fieldsName + "notifyAdminForQuantityBelow")}
-              />
-            </Stack>
-          </Grid>
-          <Grid size={8} sx={{ display: values?.notifyAdminForQuantityBelow ? 'block' : 'none' }}>
-            <Stack>
-              <TextField
-                id="minStockQuantity"
-                name="minStockQuantity"
-                type="number"
-                value={values?.minStockQuantity || ''}
-                label={t(fieldsName + 'minStockQuantity')}
-                onBlur={handleBlur}
-                onChange={handleChange}
-                placeholder={t(fieldsName + 'minStockQuantity')}
-                fullWidth
-                error={Boolean(errors.minStockQuantity)}
-              />
-              {errors.minStockQuantity && (
-                <FormHelperText error id="helper-text">
-                  {errors.minStockQuantity}
-                </FormHelperText>
-              )}
-            </Stack>
-          </Grid>
-
-        </Grid>
-        <Grid size={{ xs: 12, sm: 12, md: 4, lg: 4, xl: 4 }}>
-          <Grid size={12}>
-            <Stack>
-              <FormControlLabel
-                control={
-                  <Switch
-                    id="allowedQuantities"
-                    name="allowedQuantities"
-                    checked={values?.allowedQuantities ?? true}
-                    onChange={handleCheckedChange}
-                  />
-                }
-                label={t(fieldsName + "allowedQuantities")}
-              />
-            </Stack>
-          </Grid>
-          <Grid size={8} sx={{ display: values?.allowedQuantities ? 'block' : 'none' }}>
-            <Stack>
-              <TextField
-                id="orderMinimumQuantity"
-                name="orderMinimumQuantity"
-                type="number"
-                value={values?.orderMinimumQuantity || ''}
-                label={t(fieldsName + 'orderMinimumQuantity')}
-                onBlur={handleBlur}
-                onChange={handleChange}
-                placeholder={t(fieldsName + 'orderMinimumQuantity')}
-                fullWidth
-                error={Boolean(errors.orderMinimumQuantity)}
-              />
-              {errors.orderMinimumQuantity && (
-                <FormHelperText error id="helper-text">
-                  {errors.orderMinimumQuantity}
-                </FormHelperText>
-              )}
-            </Stack>
-          </Grid>
-          <Grid size={8} sx={{ display: values?.allowedQuantities ? 'block' : 'none', pt: 2 }}>
-            <Stack>
-              <TextField
-                id="orderMaximumQuantity"
-                name="orderMaximumQuantity"
-                type="number"
-                value={values?.orderMaximumQuantity || ''}
-                label={t(fieldsName + 'orderMaximumQuantity')}
-                onBlur={handleBlur}
-                onChange={handleChange}
-                placeholder={t(fieldsName + 'orderMaximumQuantity')}
-                fullWidth
-                error={Boolean(errors.orderMaximumQuantity)}
-              />
-              {errors.orderMaximumQuantity && (
-                <FormHelperText error id="helper-text">
-                  {errors.orderMaximumQuantity}
-                </FormHelperText>
-              )}
-            </Stack>
-          </Grid>
-        </Grid>
-        <Grid size={{ xs: 12, sm: 12, md: 4, lg: 4, xl: 3 }}>
+      <Grid size={{ xs: 12, sm: 12, md: 4, lg: 4, xl: 4 }}>
+        <Grid size={12}>
           <Stack>
             <FormControlLabel
               control={
                 <Switch
-                  id="displayStockQuantity"
-                  name="displayStockQuantity"
-                  checked={values?.displayStockQuantity ?? false}
+                  id="notifyAdminForQuantityBelow"
+                  name="notifyAdminForQuantityBelow"
+                  checked={values?.notifyAdminForQuantityBelow ?? false}
                   onChange={handleCheckedChange}
                 />
               }
-              label={t(fieldsName + "displayStockQuantity")}
+              label={t(fieldsName + "notifyAdminForQuantityBelow")}
             />
           </Stack>
         </Grid>
+        <Grid size={8} sx={{ display: values?.notifyAdminForQuantityBelow ? 'block' : 'none' }}>
+          <Stack>
+            <TextField
+              id="minStockQuantity"
+              name="minStockQuantity"
+              type="number"
+              value={values?.minStockQuantity || ''}
+              label={t(fieldsName + 'minStockQuantity')}
+              onBlur={handleBlur}
+              onChange={handleChange}
+              placeholder={t(fieldsName + 'minStockQuantity')}
+              fullWidth
+              error={Boolean(errors.minStockQuantity)}
+            />
+            {errors.minStockQuantity && (
+              <FormHelperText error id="helper-text">
+                {errors.minStockQuantity}
+              </FormHelperText>
+            )}
+          </Stack>
+        </Grid>
+
       </Grid>
-    </Grid>
+      <Grid size={{ xs: 12, sm: 12, md: 4, lg: 4, xl: 4 }}>
+        <Grid size={12}>
+          <Stack>
+            <FormControlLabel
+              control={
+                <Switch
+                  id="allowedQuantities"
+                  name="allowedQuantities"
+                  checked={values?.allowedQuantities ?? true}
+                  onChange={handleCheckedChange}
+                />
+              }
+              label={t(fieldsName + "allowedQuantities")}
+            />
+          </Stack>
+        </Grid>
+        <Grid size={8} sx={{ display: values?.allowedQuantities ? 'block' : 'none' }}>
+          <Stack>
+            <TextField
+              id="orderMinimumQuantity"
+              name="orderMinimumQuantity"
+              type="number"
+              value={values?.orderMinimumQuantity || ''}
+              label={t(fieldsName + 'orderMinimumQuantity')}
+              onBlur={handleBlur}
+              onChange={handleChange}
+              placeholder={t(fieldsName + 'orderMinimumQuantity')}
+              fullWidth
+              error={Boolean(errors.orderMinimumQuantity)}
+            />
+            {errors.orderMinimumQuantity && (
+              <FormHelperText error id="helper-text">
+                {errors.orderMinimumQuantity}
+              </FormHelperText>
+            )}
+          </Stack>
+        </Grid>
+        <Grid size={8} sx={{ display: values?.allowedQuantities ? 'block' : 'none', pt: 2 }}>
+          <Stack>
+            <TextField
+              id="orderMaximumQuantity"
+              name="orderMaximumQuantity"
+              type="number"
+              value={values?.orderMaximumQuantity || ''}
+              label={t(fieldsName + 'orderMaximumQuantity')}
+              onBlur={handleBlur}
+              onChange={handleChange}
+              placeholder={t(fieldsName + 'orderMaximumQuantity')}
+              fullWidth
+              error={Boolean(errors.orderMaximumQuantity)}
+            />
+            {errors.orderMaximumQuantity && (
+              <FormHelperText error id="helper-text">
+                {errors.orderMaximumQuantity}
+              </FormHelperText>
+            )}
+          </Stack>
+        </Grid>
+      </Grid>
+      <Grid size={{ xs: 12, sm: 12, md: 4, lg: 4, xl: 3 }}>
+        <Stack>
+          <FormControlLabel
+            control={
+              <Switch
+                id="displayStockQuantity"
+                name="displayStockQuantity"
+                checked={values?.displayStockQuantity ?? false}
+                onChange={handleCheckedChange}
+              />
+            }
+            label={t(fieldsName + "displayStockQuantity")}
+          />
+        </Stack>
+      </Grid>
+    </Grid >
   );
 }

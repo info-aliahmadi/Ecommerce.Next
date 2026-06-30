@@ -70,7 +70,7 @@ export default function MultiSelect({
   };
 
   return (
-    <FormControl error={error} disabled={disabled}>
+    <FormControl error={error} disabled={disabled} fullWidth>
       <InputLabel htmlFor={id} sx={{ overflow: 'visible' }}>{label}</InputLabel>
       <Select
         id={id}
@@ -79,6 +79,7 @@ export default function MultiSelect({
         multiple
         value={values || ''}
         label={label}
+        fullWidth
         size="medium"
         onChange={handleChange}
         style={{

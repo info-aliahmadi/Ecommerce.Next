@@ -32,7 +32,7 @@ const AttributeInventory = memo(({
         </Stack>
       </Grid>
 
-      <Grid size={{ xs: 12, sm: 6, md: 4, lg: 3, xl: 3 }}>
+      <Grid size={{ xs: 12, sm: 4, md: 4, lg: 3, xl: 3 }}>
         <Stack>
           <TextField
             id={`stockQuantity-${inventory.attributeId}`}
@@ -46,7 +46,7 @@ const AttributeInventory = memo(({
         </Stack>
       </Grid>
 
-      <Grid size={{ xs: 12, sm: 6, md: 4, lg: 3, xl: 3 }}>
+      <Grid size={{ xs: 12, sm: 4, md: 4, lg: 3, xl: 3 }}>
         <Stack>
           <TextField
             id={`reservedQuantity-${inventory.attributeId}`}
@@ -60,7 +60,7 @@ const AttributeInventory = memo(({
         </Stack>
       </Grid>
 
-      <Grid size={{ xs: 12, sm: 6, md: 4, lg: 3, xl: 3 }}>
+      <Grid size={{ xs: 12, sm: 4, md: 4, lg: 3, xl: 3 }}>
         <Stack>
           <CurrencyInput
             id={`buyUnitPrice-${inventory.attributeId}`}
@@ -139,7 +139,7 @@ export default function ProductAttributeInventory({ values, setFieldValue }: Rea
 
   return (
     <>
-      <Stack>
+      <Stack sx={{width:'100%'}}>
         <SelectProductAttribute
           defaultValues={values?.inventories?.map((x: InventoryModel) => x.attributeId).filter((id: number | undefined) => id !== undefined) || []}
           id="inventoryAttributeIds"

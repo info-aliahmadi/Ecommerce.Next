@@ -58,12 +58,12 @@ export default function ImageUpload({
 
   const uploadUrl = CONFIG.API_BASEPATH + '/FileStorage/UploadFile';
 
-  var fileUploadService = new FileStorageService(jwt ?? '');
+  let fileUploadService = new FileStorageService(jwt ?? '');
 
   const loadFiles = async (fileIds: number[]) => {
     fileUploadService.getFilesInfoById(fileIds).then((fileInfos) => {
       let fileInfosData: FilePondInitialFile[] = [];
-      fileInfos.data && fileInfos.data.forEach((fileInfo: FileUploadModel) => {
+      fileInfos.data?.forEach((fileInfo: FileUploadModel) => {
         let fileUrl = CONFIG.UPLOAD_BASEPATH + fileInfo.directory + fileInfo.fileName;
         let imagePosterUrl = CONFIG.UPLOAD_BASEPATH + fileInfo.directory;
         let isVideo = CONFIG.VIDEOS_EXTENSIONS.some((extension) => extension == fileInfo.extension);

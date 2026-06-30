@@ -467,7 +467,6 @@
       "sellUnitPrice": "قیمت فروش",
       "oldSellUnitPrice": "قیمت فروش قدیم",
       "currencyType": "نوع ارز",
-      "measureType": "نوع اندازه‌گیری",
       "stockQuantity": "موجودی انبار",
       "minStockQuantity": "حداقل موجودی انبار",
       "stockType": {
@@ -479,7 +478,18 @@
         "stockQuantity": "موجودی انبار",
         "reservedQuantity": "موجودی رزرو شده",
         "buyUnitPrice": "قیمت خرید"
-      }
+      },
+      "measureType": "نوع اندازه‌گیری",
+      "measureTypes": {
+        "Kilogram": "کیلوگرم",
+        "Number":"عدد",
+        "Box": "جعبه",
+        "Meter": "متر",
+        "Litr": "لیتر",
+        "Gram": "گرم",
+        "Mesghal": "مثقال"
+      },
+      "picturePreviewId" : "پیش‌نمایش محصول"
     },
     "stateProvince": {
       "id": "شناسه",
@@ -560,7 +570,7 @@
     },
     "article": {
       "save": "ذخیره",
-      "draft": "ذخیره به عنوان پیش‌نویس",
+      "draft": "ذخیره بعنوان پیش‌نویس",
       "add": "مقاله جدید",
       "publish": "انتشار",
       "edit": "ویرایش مقاله",
@@ -619,7 +629,7 @@
         "inbox": "صندوق ورودی پیام",
         "send": "ارسال پیام",
         "reply": "پاسخ",
-        "draft": "ذخیره به عنوان پیش‌نویس",
+        "draft": "ذخیره بعنوان پیش‌نویس",
         "delete": "حذف پیام",
         "pin": "پین کردن پیام",
         "trash": "زباله‌دان پیام‌ها"
@@ -635,7 +645,7 @@
         "send": "ارسال ایمیل",
         "reply": "پاسخ",
         "reload": "بارگذاری مجدد",
-        "draft": "ذخیره به عنوان پیش‌نویس",
+        "draft": "ذخیره بعنوان پیش‌نویس",
         "delete": "حذف ایمیل",
         "pin": "پین کردن ایمیل",
         "trash": "زباله‌دان ایمیل‌ها"
@@ -658,7 +668,7 @@
       "save": "ذخیره",
       "add": "افزودن محصول جدید",
       "edit": "ویرایش محصول",
-      "draft": "ذخیره به عنوان پیش‌نویس",
+      "draft": "ذخیره بعنوان پیش‌نویس",
       "delete": "حذف محصول",
       "saveOrder": "ذخیره ترتیب"
     },
@@ -767,7 +777,7 @@
       "requiredOrderMinimumQuantity": "حداقل تعداد سفارش الزامی است",
       "requiredOrderMaximumQuantity": "حداکثر تعداد سفارش الزامی است",
       "requiredSellUnitPrice": "قیمت فروش الزامی است",
-      "requiredPreviewImageId": "پیشنمایش محصول الزامی است",
+      "requiredPicturePreviewId": "پیشنمایش محصول الزامی است",
       "requiredMeasureType": "نوع اندازه گیری محصول الزامی است",
       "requiredavailableStartDateTimeUtc": "تاریخ انتشار الزامی است",
       "requiredInventories": "موجودی محصول الزامی است",

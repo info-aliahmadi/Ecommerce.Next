@@ -1,9 +1,11 @@
-.date-error fieldset {
-  border-color: #a61d24 !important;
+.date-error * {
+  border-color: #e63341 !important;
+  color: #e63341 !important;
 }
 
-.select-error fieldset {
-  border-color: #a61d24 !important;
+.select-error * {
+  border-color: #e63341 !important;
+  color: #e63341 !important;
 }
 
 .MuiOutlinedvid-notchedOutline {

@@ -467,7 +467,6 @@
       "sellUnitPrice": "Sell Unit Price",
       "oldSellUnitPrice": "Old Sell Unit Price",
       "currencyType": "Currency Type",
-      "measureType": "Measure Type",
       "stockQuantity": "Stock Quantity",
       "minStockQuantity": "Min Stock Quantity",
       "stockType": {
@@ -479,7 +478,18 @@
         "stockQuantity": "Stock Quantity",
         "reservedQuantity": "Reserved Quantity",
         "buyUnitPrice": "Buy Unit Price"
-      }
+      },
+      "measureType": "Measure Type",
+      "measureTypes": {
+        "Kilogram": "Kilogram",
+        "Number":"Number",
+        "Box": "Box",
+        "Meter": "Meter",
+        "Litr": "Litr",
+        "Gram": "Gram",
+        "Mesghal": "Mesghal"
+      },
+      "picturePreviewId": "Product Preview"
     },
     "stateProvince": {
       "id": "Id",
@@ -773,7 +783,7 @@
       "requiredOrderMinimumQuantity": "Order Minimum Quantity is require",
       "requiredOrderMaximumQuantity": "Order Maximum Quantity is require",
       "requiredSellUnitPrice": "Sell Unit Price is require",
-      "requiredPreviewImageId": "Preview Image is require",
+      "requiredPicturePreviewId": "Preview Image is require",
       "requiredMeasureType": "Measure Type is require",
       "requiredavailableStartDateTimeUtc": "Available Start Date is require",
       "requiredInventories": "Inventories is require",

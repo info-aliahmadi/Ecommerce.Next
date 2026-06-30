@@ -88,7 +88,7 @@ export default function AddOrEditProduct({ params }: Readonly<{ params: Promise<
     oldSellUnitPrice: 0,
     sellUnitPrice: 0,
     currencyType: CONFIG.DEFAULT_CURRENCY,
-    measureType: MeasureType.Number,
+    measureType: CONFIG.DEFAULT_MEASURETYPE,
     availableStartDateTimeUtc: null,
     availableEndDateTimeUtc: null,
     hasDiscountsApplied: false,
@@ -119,8 +119,7 @@ export default function AddOrEditProduct({ params }: Readonly<{ params: Promise<
     inventories: [],
     productTags: [],
     createUserId: 0,
-    previewImageId: 0,
-    previewImage: null,
+    picturePreviewId: 0,
     deliveryDateName: '',
     taxCategoryName: '',
     weight: 0,
@@ -138,7 +137,7 @@ export default function AddOrEditProduct({ params }: Readonly<{ params: Promise<
     attributeNames: [],
     reviewIds: [],
   };
-  const  buttonName = 'buttons.product.';
+  const buttonName = 'buttons.product.';
 
   const [notify, setNotify] = useState<NotifyProps>({ open: false });
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -166,7 +165,7 @@ export default function AddOrEditProduct({ params }: Readonly<{ params: Promise<
   const handleChange = (e: any) => {
     const { name, value } = e.target;
 
-    
+
     // fill the field in product
     const updatedProduct: ProductModel = {
       ...product,       // Override with existing product data
@@ -207,17 +206,18 @@ export default function AddOrEditProduct({ params }: Readonly<{ params: Promise<
       delete newErrors[name];
       setErrors(newErrors);
     } catch (error) {
-      setErrors({
-        ...errors,
-        [name]: (error as any).message
-      });
+      // setErrors({
+      //   ...errors,
+      //   [name]: (error as any).message
+      // });
     }
   };
 
-  const handleSubmit = async (e: any) => {
+  const handleSubmit = async (e: any, isDraft: boolean) => {
     e.preventDefault();
+    product.published = !isDraft; // Set published based on isDraft flag
     setIsSubmitting(true);
-
+    alert('Submitting product: ' + product.picturePreviewId);
     try {
       await validationSchema.validate(product, { abortEarly: false });
       setErrors({});
@@ -266,7 +266,7 @@ export default function AddOrEditProduct({ params }: Readonly<{ params: Promise<
           <Grid size={12}>
             <Typography variant="h5">{t('pages.cards.product-' + operation)}</Typography>
           </Grid>
-          <Grid key={'product-' + product?.id}  size={12}>
+          <Grid key={'product-' + product?.id} size={12}>
             <MainCard>
               <Tabs
                 value={tab}
@@ -336,6 +336,33 @@ export default function AddOrEditProduct({ params }: Readonly<{ params: Promise<
               <Grid container spacing={3} direction="row" sx={{ justifyContent: "space-between", alignItems: "center" }} >
                 <Grid size={12}>
                   <Stack direction="row" spacing={2}>
+
+                    <AnimateButton>
+                      <Button
+                        disabled={isSubmitting}
+                        size="large"
+                        type="submit"
+                        variant="contained"
+                        color="primary"
+                        onClick={(e) => handleSubmit(e, false)}
+                        startIcon={<Send />}
+                      >
+                        {operation == 'edit' ? t(buttonName + 'save') : t(buttonName + 'publish')}
+                      </Button>
+                    </AnimateButton>
+                    <AnimateButton>
+                      <Button
+                        disabled={isSubmitting}
+                        size="large"
+                        type="submit"
+                        variant="contained"
+                        color="warning"
+                        onClick={(e) => handleSubmit(e, true)}
+                        startIcon={<Save />}
+                      >
+                        {t(buttonName + 'draft')}
+                      </Button>
+                    </AnimateButton>
                     <AnimateButton>
                       <Button
                         size="large"
@@ -349,32 +376,6 @@ export default function AddOrEditProduct({ params }: Readonly<{ params: Promise<
                         {t('buttons.cancel')}
                       </Button>
                     </AnimateButton>
-                    <AnimateButton>
-                      <Button
-                        disabled={isSubmitting}
-                        size="large"
-                        type="submit"
-                        variant="contained"
-                        color="primary"
-                        onClick={handleSubmit}
-                        startIcon={<Send />}
-                      >
-                        {operation == 'edit' ? t(buttonName + 'save') : t(buttonName + 'publish')}
-                      </Button>
-                    </AnimateButton>
-                    <AnimateButton>
-                      <Button
-                        disabled={isSubmitting}
-                        size="large"
-                        type="submit"
-                        variant="contained"
-                        color="warning"
-                        onClick={handleSubmit}
-                        startIcon={<Save />}
-                      >
-                        {t(buttonName + 'draft')}
-                      </Button>
-                    </AnimateButton>
                   </Stack>
                 </Grid>
               </Grid>
@@ -382,7 +383,7 @@ export default function AddOrEditProduct({ params }: Readonly<{ params: Promise<
           </Grid>
         </Grid>
       </Grid>
-{/* 
+      {/* 
       <Grid container>
         <Grid size={5}>
           {JSON.stringify(product)}
