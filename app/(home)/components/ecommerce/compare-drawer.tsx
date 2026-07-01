@@ -1,12 +1,13 @@
 'use client';
 
 import { X, Star, ShoppingCart, GitCompareArrows, Package } from 'lucide-react';
-import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sheet';
-import { ScrollArea } from '@/components/ui/scroll-area';
-import { Button } from '@/components/ui/button';
-import { useCompareStore, useCartStore } from '@/lib/store';
+import { Sheet, SheetContent, SheetHeader, SheetTitle } from '../ui/sheet';
+import { ScrollArea } from '../ui/scroll-area';
+import { Button } from '../ui/button';
+import { useCompareStore, useCartStore } from '../../lib/store';
 import { motion } from 'framer-motion';
 import { toast } from 'sonner';
+import { useTranslations } from 'next-intl';
 
 interface CompareDrawerProps {
   open: boolean;
@@ -20,7 +21,7 @@ function ComparisonRow({ label, children }: { label: string; children: React.Rea
       animate={{ opacity: 1, x: 0 }}
       className="border-b border-ecommerce-border last:border-b-0"
     >
-      <td className="py-3 px-3 text-xs font-semibold text-ecommerce-text-muted uppercase tracking-wider whitespace-nowrap w-24 align-top bg-ecommerce-surface-hover/40 dark:bg-[#252836]/40 rounded-l-lg">
+      <td className="py-3 px-3 text-xs font-semibold text-ecommerce-text-muted uppercase tracking-wider whitespace-nowrap w-24 align-top bg-ecommerce-surface-hover/40 dark:bg-[#252836]/40 rounded-s-lg">
         {label}
       </td>
       {children}
@@ -46,6 +47,7 @@ function ComparisonCell({ children, delay = 0 }: { children: React.ReactNode; de
 export function CompareDrawer({ open, onClose }: CompareDrawerProps) {
   const { items, removeItem, clearAll } = useCompareStore();
   const { addItem } = useCartStore();
+  const t = useTranslations();
 
   const handleAddToCart = (item: typeof items[0]) => {
     addItem({
@@ -56,9 +58,9 @@ export function CompareDrawer({ open, onClose }: CompareDrawerProps) {
       image: item.image,
       category: item.category.name,
     });
-    toast.success(`${item.name} added to cart!`, {
+    toast.success(t('cart.itemAdded', { name: item.name }), {
       description: `$${item.price.toFixed(2)}`,
-      action: { label: 'View Cart', onClick: () => useCartStore.getState().setCartOpen(true) },
+      action: { label: t('common.addToCart'), onClick: () => useCartStore.getState().setCartOpen(true) },
     });
   };
 
@@ -70,13 +72,13 @@ export function CompareDrawer({ open, onClose }: CompareDrawerProps) {
       >
         {/* Header */}
         <SheetHeader className="p-4 sm:p-6 pb-0 border-b border-ecommerce-border">
-          <div className="flex items-center justify-between pr-6">
+          <div className="flex items-center justify-between pe-6">
             <div className="flex items-center gap-2.5">
               <div className="w-8 h-8 rounded-lg bg-ecommerce-purple/10 flex items-center justify-center">
                 <GitCompareArrows size={16} className="text-ecommerce-purple" />
               </div>
               <SheetTitle className="text-base font-bold text-ecommerce-text-primary">
-                Product Comparison
+                {t('compare.title')}
               </SheetTitle>
               {items.length > 0 && (
                 <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-ecommerce-purple/10 text-ecommerce-purple">
@@ -92,7 +94,7 @@ export function CompareDrawer({ open, onClose }: CompareDrawerProps) {
                   onClick={clearAll}
                   className="h-8 px-3 text-xs text-ecommerce-text-muted hover:text-ecommerce-red hover:bg-ecommerce-red/5 rounded-lg"
                 >
-                  Clear All
+                  {t('compare.clearAll')}
                 </Button>
               )}
             </div>
@@ -111,9 +113,9 @@ export function CompareDrawer({ open, onClose }: CompareDrawerProps) {
                 <div className="w-16 h-16 rounded-2xl bg-ecommerce-surface-hover dark:bg-[#252836] flex items-center justify-center mb-4">
                   <GitCompareArrows size={28} className="text-ecommerce-text-muted" />
                 </div>
-                <h3 className="text-sm font-semibold text-ecommerce-text-primary mb-1">No products to compare</h3>
+                <h3 className="text-sm font-semibold text-ecommerce-text-primary mb-1">{t('compare.empty')}</h3>
                 <p className="text-xs text-ecommerce-text-muted max-w-[200px]">
-                  Add products to compare by clicking the compare button on product cards
+                  {t('compare.emptyDesc')}
                 </p>
               </motion.div>
             ) : (
@@ -136,8 +138,8 @@ export function CompareDrawer({ open, onClose }: CompareDrawerProps) {
                           >
                             <button
                               onClick={() => removeItem(item.id)}
-                              className="absolute top-0 right-0 w-6 h-6 rounded-full bg-ecommerce-surface-hover dark:bg-[#252836] flex items-center justify-center hover:bg-ecommerce-red hover:text-white transition-colors text-ecommerce-text-muted"
-                              aria-label={`Remove ${item.name}`}
+                              className="absolute top-0 end-0 w-6 h-6 rounded-full bg-ecommerce-surface-hover dark:bg-[#252836] flex items-center justify-center hover:bg-ecommerce-red hover:text-white transition-colors text-ecommerce-text-muted"
+                              aria-label={t('compare.remove')}
                             >
                               <X size={12} />
                             </button>
@@ -153,7 +155,7 @@ export function CompareDrawer({ open, onClose }: CompareDrawerProps) {
                   </thead>
                   <tbody>
                     {/* Name */}
-                    <ComparisonRow label="Name">
+                    <ComparisonRow label={t('compare.name')}>
                       {items.map((item, i) => (
                         <ComparisonCell key={item.id} delay={i * 0.05}>
                           <span className="text-xs font-semibold text-ecommerce-text-primary text-center leading-tight max-w-[140px]">
@@ -164,7 +166,7 @@ export function CompareDrawer({ open, onClose }: CompareDrawerProps) {
                     </ComparisonRow>
 
                     {/* Price */}
-                    <ComparisonRow label="Price">
+                    <ComparisonRow label={t('compare.price')}>
                       {items.map((item, i) => (
                         <ComparisonCell key={item.id} delay={i * 0.05}>
                           <div className="flex flex-col items-center gap-0.5">
@@ -182,7 +184,7 @@ export function CompareDrawer({ open, onClose }: CompareDrawerProps) {
                     </ComparisonRow>
 
                     {/* Rating */}
-                    <ComparisonRow label="Rating">
+                    <ComparisonRow label={t('compare.rating')}>
                       {items.map((item, i) => (
                         <ComparisonCell key={item.id} delay={i * 0.05}>
                           <div className="flex flex-col items-center gap-0.5">
@@ -204,7 +206,7 @@ export function CompareDrawer({ open, onClose }: CompareDrawerProps) {
                     </ComparisonRow>
 
                     {/* Category */}
-                    <ComparisonRow label="Category">
+                    <ComparisonRow label={t('compare.category')}>
                       {items.map((item, i) => (
                         <ComparisonCell key={item.id} delay={i * 0.05}>
                           <span className="inline-flex items-center gap-1.5 text-[11px] font-medium text-ecommerce-text-secondary">
@@ -216,7 +218,7 @@ export function CompareDrawer({ open, onClose }: CompareDrawerProps) {
                     </ComparisonRow>
 
                     {/* Stock */}
-                    <ComparisonRow label="Stock">
+                    <ComparisonRow label={t('compare.stock')}>
                       {items.map((item, i) => (
                         <ComparisonCell key={item.id} delay={i * 0.05}>
                           <span className={`text-[11px] font-medium px-2 py-0.5 rounded-md ${
@@ -226,14 +228,14 @@ export function CompareDrawer({ open, onClose }: CompareDrawerProps) {
                                 ? 'bg-ecommerce-amber/10 text-ecommerce-amber'
                                 : 'bg-ecommerce-emerald/10 text-ecommerce-emerald'
                           }`}>
-                            {item.stock === 0 ? 'Out of Stock' : item.stock < 10 ? `Only ${item.stock} left` : 'In Stock'}
+                            {item.stock === 0 ? t('common.outOfStock') : item.stock < 10 ? t('common.onlyLeft', { count: item.stock }) : t('common.inStock')}
                           </span>
                         </ComparisonCell>
                       ))}
                     </ComparisonRow>
 
                     {/* SKU */}
-                    <ComparisonRow label="SKU">
+                    <ComparisonRow label={t('compare.sku')}>
                       {items.map((item, i) => (
                         <ComparisonCell key={item.id} delay={i * 0.05}>
                           <span className="text-[11px] text-ecommerce-text-muted font-mono">
@@ -249,18 +251,18 @@ export function CompareDrawer({ open, onClose }: CompareDrawerProps) {
                     </ComparisonRow>
 
                     {/* Description */}
-                    <ComparisonRow label="Description">
+                    <ComparisonRow label={t('compare.description')}>
                       {items.map((item, i) => (
                         <ComparisonCell key={item.id} delay={i * 0.05}>
-                          <p className="text-[11px] text-ecommerce-text-muted text-left max-w-[160px] line-clamp-4 leading-relaxed">
-                            {item.description || 'No description available'}
+                          <p className="text-[11px] text-ecommerce-text-muted text-start max-w-[160px] line-clamp-4 leading-relaxed">
+                            {item.description || '—'}
                           </p>
                         </ComparisonCell>
                       ))}
                     </ComparisonRow>
 
                     {/* Add to Cart */}
-                    <ComparisonRow label="Action">
+                    <ComparisonRow label={t('quickView.quantity')}>
                       {items.map((item, i) => (
                         <ComparisonCell key={item.id} delay={i * 0.05}>
                           <Button
@@ -270,7 +272,7 @@ export function CompareDrawer({ open, onClose }: CompareDrawerProps) {
                             className="h-8 px-3 bg-ecommerce-red hover:bg-ecommerce-red/90 text-white rounded-lg text-[11px] font-medium gap-1.5 transition-all hover:scale-105 active:scale-95 disabled:opacity-50"
                           >
                             <ShoppingCart size={12} />
-                            Add to Cart
+                            {t('compare.addToCart')}
                           </Button>
                         </ComparisonCell>
                       ))}

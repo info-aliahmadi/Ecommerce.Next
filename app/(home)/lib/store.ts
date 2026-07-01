@@ -160,12 +160,19 @@ export interface QuickViewProduct {
   tags?: string;
 }
 
+export type PageName = 'home' | 'checkout' | 'products' | 'product-detail' | 'profile';
+
+export interface PageParams {
+  productId?: string;
+  [key: string]: string | undefined;
+}
+
 interface UIStore {
   searchQuery: string;
   setSearchQuery: (query: string) => void;
   selectedCategory: string | null;
   setSelectedCategory: (category: string | null) => void;
-  sortBy: 'newest' | 'price-asc' | 'price-desc' | 'popular';
+  sortBy: 'newest' | 'price-asc' | 'price-desc' | 'popular' | 'rating' | 'name-asc' | 'name-desc' | 'oldest';
   setSortBy: (sort: UIStore['sortBy']) => void;
   isMobileMenuOpen: boolean;
   setMobileMenuOpen: (open: boolean) => void;
@@ -173,6 +180,12 @@ interface UIStore {
   setWishlistOpen: (open: boolean) => void;
   quickViewProduct: QuickViewProduct | null;
   setQuickViewProduct: (product: QuickViewProduct | null) => void;
+  isCatalogOpen: boolean;
+  setCatalogOpen: (open: boolean) => void;
+  currentPage: PageName;
+  pageParams: PageParams;
+  navigate: (page: PageName, params?: PageParams) => void;
+  goHome: () => void;
 }
 
 export const useUIStore = create<UIStore>((set) => ({
@@ -188,6 +201,12 @@ export const useUIStore = create<UIStore>((set) => ({
   setWishlistOpen: (open) => set({ isWishlistOpen: open }),
   quickViewProduct: null,
   setQuickViewProduct: (product) => set({ quickViewProduct: product }),
+  isCatalogOpen: false,
+  setCatalogOpen: (open) => set({ isCatalogOpen: open }),
+  currentPage: 'home' as PageName,
+  pageParams: {} as PageParams,
+  navigate: (page, params) => set({ currentPage: page, pageParams: params || {} }),
+  goHome: () => set({ currentPage: 'home', pageParams: {} }),
 }));
 
 export interface RecentItem {
@@ -318,6 +337,34 @@ export const useStockAlertStore = create<StockAlertStore>()(
     {
       name: 'ecommerce-stock-alerts',
       partialize: (state) => ({ alerts: state.alerts }),
+    }
+  )
+);
+
+// ── Locale Store ──────────────────────────────────────────────
+export type Locale = 'en' | 'fa' | 'ar';
+
+export const RTL_LOCALES: Locale[] = ['fa', 'ar'];
+
+export const LOCALE_CONFIG: Record<Locale, { name: string; dir: 'ltr' | 'rtl'; nativeName: string }> = {
+  en: { name: 'English', dir: 'ltr', nativeName: 'English' },
+  fa: { name: 'Farsi', dir: 'rtl', nativeName: 'فارسی' },
+  ar: { name: 'Arabic', dir: 'rtl', nativeName: 'العربية' },
+};
+
+interface LocaleStore {
+  locale: Locale;
+  setLocale: (locale: Locale) => void;
+}
+
+export const useLocaleStore = create<LocaleStore>()(
+  persist(
+    (set) => ({
+      locale: 'en' as Locale,
+      setLocale: (locale) => set({ locale }),
+    }),
+    {
+      name: 'ecommerce-locale',
     }
   )
 );

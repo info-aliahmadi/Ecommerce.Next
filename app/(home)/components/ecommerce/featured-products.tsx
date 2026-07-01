@@ -3,8 +3,9 @@
 import { useQuery } from '@tanstack/react-query';
 import { ProductCard } from './product-card';
 import { ArrowRight, Sparkles } from 'lucide-react';
-import { Button } from '@/components/ui/button';
+import { Button } from '../ui/button';
 import { motion } from 'framer-motion';
+import { useTranslations } from 'next-intl';
 
 function ProductCardWrapper({ product, index }: { product: Record<string, unknown>; index: number }) {
   return (
@@ -29,6 +30,7 @@ function ProductCardWrapper({ product, index }: { product: Record<string, unknow
 }
 
 export function FeaturedProducts() {
+  const t = useTranslations();
   const { data } = useQuery({
     queryKey: ['products', 'featured'],
     queryFn: () => fetch('/api/products?featured=true&limit=4').then(r => r.json()),
@@ -53,10 +55,10 @@ export function FeaturedProducts() {
               className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-ecommerce-amber/10 text-ecommerce-amber text-xs font-semibold uppercase tracking-widest mb-3"
             >
               <Sparkles size={12} />
-              Handpicked
+              {t('featuredProducts.handpicked')}
             </motion.div>
-            <h2 className="text-2xl sm:text-3xl font-extrabold text-ecommerce-text-primary tracking-tight">Featured Products</h2>
-            <p className="text-sm text-ecommerce-text-muted mt-1">Our editors&apos; top picks just for you</p>
+            <h2 className="text-2xl sm:text-3xl font-extrabold text-ecommerce-text-primary tracking-tight">{t('featuredProducts.title')}</h2>
+            <p className="text-sm text-ecommerce-text-muted mt-1">{t('featuredProducts.subtitle')}</p>
             {/* Decorative dot divider */}
             <div className="mt-4 flex items-center gap-2">
               <div className="h-px w-8 bg-ecommerce-border" />
@@ -69,7 +71,7 @@ export function FeaturedProducts() {
             variant="ghost"
             className="hidden sm:flex text-ecommerce-red hover:text-ecommerce-red/80 hover:bg-ecommerce-red/5 rounded-xl gap-1.5"
           >
-            <a href="#products">View All <ArrowRight size={16} /></a>
+            <a href="#products">{t('common.viewAll')} <ArrowRight size={16} /></a>
           </Button>
         </div>
 

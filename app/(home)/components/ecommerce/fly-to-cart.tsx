@@ -3,6 +3,7 @@
 import { useEffect, useState, useCallback, useSyncExternalStore } from 'react';
 import { createPortal } from 'react-dom';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useTranslations } from 'next-intl';
 
 interface FlyingItem {
   id: string;
@@ -57,6 +58,7 @@ export function triggerFlyToCart(imageUrl: string, sourceElement: HTMLElement) {
 }
 
 export function FlyToCart() {
+  const t = useTranslations();
   const [flyingItems, setFlyingItems] = useState<FlyingItem[]>([]);
   const mounted = useSyncExternalStore(
     () => () => {},

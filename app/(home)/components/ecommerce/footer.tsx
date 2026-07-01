@@ -1,14 +1,16 @@
 'use client';
 
 import { useQuery } from '@tanstack/react-query';
-import { useUIStore, useCartStore } from '@/lib/store';
+import { useUIStore, useCartStore } from '../../lib/store';
 import Link from 'next/link';
 import { Facebook, Twitter, Instagram, Youtube, MapPin, Phone, Mail, CreditCard, Truck, Shield, RotateCcw, Send, ArrowUp, Heart, Zap, Tag, Package } from 'lucide-react';
 import { useState } from 'react';
 import { toast } from 'sonner';
 import { motion } from 'framer-motion';
+import { useTranslations } from 'next-intl';
 
 export function Footer() {
+  const t = useTranslations();
   const { setSelectedCategory } = useUIStore();
   const { totalItems } = useCartStore();
   const [email, setEmail] = useState('');
@@ -22,30 +24,30 @@ export function Footer() {
     e.preventDefault();
     if (!email) return;
     setEmail('');
-    toast.success('Subscribed!', { description: 'You\'ll get our latest deals.' });
+    toast.success(t('newsletter.success'));
   };
 
   const footerLinks = {
     shop: [
-      { label: 'All Products', href: '#products' },
-      { label: 'New Arrivals', href: '#products' },
-      { label: 'Best Sellers', href: '#products' },
-      { label: 'Deals & Offers', href: '#deals' },
-      { label: 'Gift Cards', href: '#' },
+      { label: t('footer.allProducts'), href: '#products' },
+      { label: t('footer.newArrivals'), href: '#products' },
+      { label: t('footer.bestSellers'), href: '#products' },
+      { label: t('footer.dealsAndOffers'), href: '#deals' },
+      { label: t('footer.giftCards'), href: '#' },
     ],
     support: [
-      { label: 'Help Center', href: '#' },
-      { label: 'Shipping Info', href: '#' },
-      { label: 'Returns', href: '#' },
-      { label: 'Order Tracking', href: '#' },
-      { label: 'Contact Us', href: '#' },
+      { label: t('footer.helpCenter'), href: '#' },
+      { label: t('footer.shippingInfo'), href: '#' },
+      { label: t('footer.returns'), href: '#' },
+      { label: t('footer.orderTrackingLink'), href: '#' },
+      { label: t('footer.contactUs'), href: '#' },
     ],
     company: [
-      { label: 'About Us', href: '#' },
-      { label: 'Careers', href: '#' },
-      { label: 'Press', href: '#' },
-      { label: 'Privacy Policy', href: '#' },
-      { label: 'Terms of Service', href: '#' },
+      { label: t('footer.aboutUs'), href: '#' },
+      { label: t('footer.careers'), href: '#' },
+      { label: t('footer.press'), href: '#' },
+      { label: t('footer.privacyPolicy'), href: '#' },
+      { label: t('footer.termsOfService'), href: '#' },
     ],
   };
 
@@ -70,9 +72,9 @@ export function Footer() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             {[
-              { icon: CreditCard, title: 'Secure Payments', desc: 'SSL encrypted checkout' },
-              { icon: Truck, title: 'Express Delivery', desc: 'Free on orders $50+' },
-              { icon: RotateCcw, title: 'Easy Returns', desc: '30-day return guarantee' },
+              { icon: CreditCard, title: t('footer.securePayments'), desc: t('footer.sslEncryptedCheckout') },
+              { icon: Truck, title: t('footer.expressDelivery'), desc: t('footer.freeOnOrders') },
+              { icon: RotateCcw, title: t('footer.easyReturnsFooter'), desc: t('footer.returnGuarantee') },
             ].map((item) => (
               <div key={item.title} className="flex items-center gap-3 px-4 py-3 rounded-xl bg-white/[0.03] border border-white/[0.05] hover:bg-white/[0.06] transition-colors">
                 <item.icon size={20} className="text-ecommerce-amber shrink-0" />
@@ -100,20 +102,20 @@ export function Footer() {
               </span>
             </Link>
             <p className="text-sm text-white/60 leading-relaxed max-w-sm mb-6">
-              Your one-stop destination for premium products. We curate the best from tech, fashion, home, and more.
+              {t('footer.tagline')}
             </p>
 
             {/* Mini Newsletter Form */}
             <form onSubmit={handleMiniSubscribe} className="flex gap-2 mb-6 max-w-sm">
               <div className="relative flex-1">
-                <Mail size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-white/30" />
+                <Mail size={14} className="absolute start-3 top-1/2 -translate-y-1/2 text-white/30" />
                 <input
                   type="email"
-                  placeholder="Your email"
+                  placeholder={t('footer.newsletterPlaceholder')}
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   required
-                  className="w-full h-10 pl-9 pr-3 rounded-xl bg-white/[0.06] border border-white/10 text-sm text-white placeholder:text-white/30 focus:outline-none focus:border-ecommerce-red/40 focus:bg-white/[0.08] transition-all"
+                  className="w-full h-10 ps-9 pe-3 rounded-xl bg-white/[0.06] border border-white/10 text-sm text-white placeholder:text-white/30 focus:outline-none focus:border-ecommerce-red/40 focus:bg-white/[0.08] transition-all"
                 />
               </div>
               <button
@@ -126,7 +128,7 @@ export function Footer() {
 
             {/* Categories Quick Links */}
             <div className="mb-6">
-              <p className="text-xs font-semibold uppercase tracking-wider text-white/40 mb-3">Categories</p>
+              <p className="text-xs font-semibold uppercase tracking-wider text-white/40 mb-3">{t('footer.categoriesTitle')}</p>
               <div className="flex flex-wrap gap-2">
                 {categories.slice(0, 5).map((cat: { slug: string; name: string; color: string }) => (
                   <button
@@ -158,14 +160,14 @@ export function Footer() {
                 <div className="w-7 h-7 rounded-lg bg-white/[0.05] flex items-center justify-center">
                   <MapPin size={12} />
                 </div>
-                123 Commerce Street, NY 10001
+                {t('footer.address')}
               </div>
             </div>
           </div>
 
           {/* Shop Links */}
           <div>
-            <p className="text-xs font-semibold uppercase tracking-wider text-white/40 mb-4 flex items-center gap-2">Shop<span className="w-1 h-1 rounded-full bg-ecommerce-red" /></p>
+            <p className="text-xs font-semibold uppercase tracking-wider text-white/40 mb-4 flex items-center gap-2">{t('footer.shop')}<span className="w-1 h-1 rounded-full bg-ecommerce-red" /></p>
             <ul className="space-y-2.5">
               {footerLinks.shop.map((link) => (
                 <li key={link.label}>
@@ -179,7 +181,7 @@ export function Footer() {
 
           {/* Support Links */}
           <div>
-            <p className="text-xs font-semibold uppercase tracking-wider text-white/40 mb-4 flex items-center gap-2">Support<span className="w-1 h-1 rounded-full bg-ecommerce-red" /></p>
+            <p className="text-xs font-semibold uppercase tracking-wider text-white/40 mb-4 flex items-center gap-2">{t('footer.support')}<span className="w-1 h-1 rounded-full bg-ecommerce-red" /></p>
             <ul className="space-y-2.5">
               {footerLinks.support.map((link) => (
                 <li key={link.label}>
@@ -193,7 +195,7 @@ export function Footer() {
 
           {/* Company Links */}
           <div>
-            <p className="text-xs font-semibold uppercase tracking-wider text-white/40 mb-4 flex items-center gap-2">Company<span className="w-1 h-1 rounded-full bg-ecommerce-red" /></p>
+            <p className="text-xs font-semibold uppercase tracking-wider text-white/40 mb-4 flex items-center gap-2">{t('footer.company')}<span className="w-1 h-1 rounded-full bg-ecommerce-red" /></p>
             <ul className="space-y-2.5">
               {footerLinks.company.map((link) => (
                 <li key={link.label}>
@@ -212,14 +214,14 @@ export function Footer() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <div className="flex flex-col md:flex-row items-center md:items-start justify-between gap-6">
             {/* Left Side */}
-            <div className="text-center md:text-left">
-              <h3 className="text-lg sm:text-xl font-bold text-white">Get the ShopSphere App</h3>
-              <p className="text-sm text-white/50 mt-1.5 max-w-md">Shop on the go with our mobile app. Get exclusive app-only deals.</p>
+            <div className="text-center md:text-start">
+              <h3 className="text-lg sm:text-xl font-bold text-white">{t('footer.appTitle')}</h3>
+              <p className="text-sm text-white/50 mt-1.5 max-w-md">{t('footer.appDesc')}</p>
               <div className="flex flex-wrap items-center justify-center md:justify-start gap-2 mt-4">
                 {[
-                  { icon: Zap, label: 'Faster Checkout' },
-                  { icon: Tag, label: 'App-Only Deals' },
-                  { icon: Package, label: 'Order Tracking' },
+                  { icon: Zap, label: t('footer.fasterCheckout') },
+                  { icon: Tag, label: t('footer.appOnlyDeals') },
+                  { icon: Package, label: t('footer.orderTracking') },
                 ].map((feature) => (
                   <span
                     key={feature.label}
@@ -238,8 +240,8 @@ export function Footer() {
               <div className="flex items-center gap-3 px-5 py-3 rounded-xl bg-white/[0.06] border border-white/[0.06] hover:bg-white/[0.1] transition-colors cursor-pointer">
                 <span className="text-2xl" role="img" aria-label="Apple">🍎</span>
                 <div className="flex flex-col leading-tight">
-                  <span className="text-[10px] text-white/50">Download on the</span>
-                  <span className="text-sm font-semibold text-white">App Store</span>
+                  <span className="text-[10px] text-white/50">{t('footer.downloadOn')}</span>
+                  <span className="text-sm font-semibold text-white">{t('footer.appStore')}</span>
                 </div>
               </div>
 
@@ -247,8 +249,8 @@ export function Footer() {
               <div className="flex items-center gap-3 px-5 py-3 rounded-xl bg-white/[0.06] border border-white/[0.06] hover:bg-white/[0.1] transition-colors cursor-pointer">
                 <span className="text-2xl" role="img" aria-label="Android">🤖</span>
                 <div className="flex flex-col leading-tight">
-                  <span className="text-[10px] text-white/50">Download on the</span>
-                  <span className="text-sm font-semibold text-white">Google Play</span>
+                  <span className="text-[10px] text-white/50">{t('footer.downloadOn')}</span>
+                  <span className="text-sm font-semibold text-white">{t('footer.googlePlay')}</span>
                 </div>
               </div>
             </div>
@@ -262,14 +264,14 @@ export function Footer() {
           <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
             <div className="flex items-center gap-3">
               <p className="text-xs text-white/40">
-                © 2025 ShopSphere. All rights reserved.
+                {t('footer.copyright')}
               </p>
               <button
                 onClick={scrollToTop}
                 className="flex items-center gap-1 text-xs text-white/30 hover:text-white/60 transition-colors"
               >
                 <ArrowUp size={12} />
-                Back to top
+                {t('footer.backToTop')}
               </button>
             </div>
 

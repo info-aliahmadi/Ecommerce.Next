@@ -3,11 +3,13 @@
 import { useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, Flame } from 'lucide-react';
-import { useStockAlertStore, type StockAlert } from '@/lib/store';
+import { useStockAlertStore, type StockAlert } from '../../lib/store';
+import { useTranslations } from 'next-intl';
 
 const AUTO_DISMISS_MS = 5000;
 
 function AlertCard({ alert, onDismiss }: { alert: StockAlert; onDismiss: () => void }) {
+  const t = useTranslations();
   useEffect(() => {
     const timer = setTimeout(onDismiss, AUTO_DISMISS_MS);
     return () => clearTimeout(timer);
@@ -22,7 +24,7 @@ function AlertCard({ alert, onDismiss }: { alert: StockAlert; onDismiss: () => v
       transition={{ type: 'spring', stiffness: 400, damping: 30 }}
       className="w-80 max-w-[calc(100vw-2rem)] rounded-xl bg-white dark:bg-ecommerce-surface shadow-xl border border-ecommerce-border overflow-hidden"
     >
-      <div className="relative p-3.5 pr-9">
+      <div className="relative p-3.5 pe-9">
         {/* Auto-dismiss progress bar */}
         <motion.div
           className="absolute bottom-0 left-0 right-0 h-0.5 bg-ecommerce-red/60 origin-left"
@@ -37,7 +39,7 @@ function AlertCard({ alert, onDismiss }: { alert: StockAlert; onDismiss: () => v
           </div>
           <div className="flex-1 min-w-0">
             <p className="text-sm font-semibold text-ecommerce-text-primary leading-snug">
-              🔥 Only <span className="text-ecommerce-red">{alert.stock}</span> left in stock — order soon!
+              🔥 {t('stockAlert.message', { count: alert.stock })}
             </p>
             <p className="text-xs text-ecommerce-text-muted mt-0.5 truncate">
               {alert.productName}
@@ -45,8 +47,8 @@ function AlertCard({ alert, onDismiss }: { alert: StockAlert; onDismiss: () => v
           </div>
           <button
             onClick={onDismiss}
-            className="absolute top-2.5 right-2.5 w-6 h-6 rounded-full flex items-center justify-center text-ecommerce-text-muted hover:text-ecommerce-text-primary hover:bg-ecommerce-surface-hover transition-colors"
-            aria-label="Dismiss alert"
+            className="absolute top-2.5 end-2.5 w-6 h-6 rounded-full flex items-center justify-center text-ecommerce-text-muted hover:text-ecommerce-text-primary hover:bg-ecommerce-surface-hover transition-colors"
+            aria-label={t('stockAlert.dismiss')}
           >
             <X size={14} />
           </button>
@@ -82,7 +84,7 @@ export function StockAlert() {
   }, [dismissAlert]);
 
   return (
-    <div className="fixed bottom-20 sm:bottom-6 right-4 sm:right-6 z-50 flex flex-col-reverse gap-3 pointer-events-none">
+    <div className="fixed bottom-20 sm:bottom-6 end-4 sm:end-6 z-50 flex flex-col-reverse gap-3 pointer-events-none">
       <AnimatePresence mode="popLayout">
         {alerts.map((alert) => (
           <div key={alert.id} className="pointer-events-auto">

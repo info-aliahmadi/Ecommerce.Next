@@ -2,10 +2,11 @@
 
 import { motion } from 'framer-motion';
 import { ShoppingCart, Sparkles, Percent } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { useCartStore } from '@/lib/store';
+import { Button } from '../ui/button';
+import { Badge } from '../ui/badge';
+import { useCartStore } from '../../lib/store';
 import { toast } from 'sonner';
+import { useTranslations } from 'next-intl';
 
 interface BundleProduct {
   id: string;
@@ -120,6 +121,7 @@ function getBundleSavings(products: BundleProduct[]) {
 }
 
 export function ProductBundles() {
+  const t = useTranslations();
   const addItem = useCartStore((s) => s.addItem);
 
   const handleAddBundle = (bundle: Bundle) => {
@@ -133,8 +135,8 @@ export function ProductBundles() {
         category: p.category,
       });
     });
-    toast.success(`"${bundle.title}" added to cart!`, {
-      description: `${bundle.products.length} items at a special price`,
+    toast.success(t('cart.itemAdded', { name: bundle.title }), {
+      description: t('bundles.itemsAtSpecialPrice', { count: bundle.products.length }),
     });
   };
 
@@ -150,13 +152,13 @@ export function ProductBundles() {
         >
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-ecommerce-amber/10 text-ecommerce-amber text-xs font-semibold mb-4">
             <Sparkles size={14} />
-            Curated Bundles
+            {t('bundles.curated')}
           </div>
           <h2 className="text-2xl md:text-3xl font-bold text-ecommerce-text-primary">
-            Complete the <span className="gradient-text">Look</span>
+            {t('bundles.title').split(' ').slice(0, -1).join(' ')} <span className="gradient-text">{t('bundles.title').split(' ').slice(-1)}</span>
           </h2>
           <p className="text-ecommerce-text-secondary mt-2 text-sm md:text-base max-w-lg mx-auto">
-            Save more when you shop our hand-picked bundles — designed to complement each other perfectly.
+            {t('bundles.subtitleFull')}
           </p>
         </motion.div>
 
@@ -176,16 +178,16 @@ export function ProductBundles() {
                 <div className="animated-border h-full">
                   <div className="relative bg-ecommerce-surface dark:bg-ecommerce-surface rounded-[calc(1rem-2px)] h-full flex flex-col overflow-hidden">
                     {/* Savings badge */}
-                    <div className="absolute top-3 right-3 z-10">
+                    <div className="absolute top-3 end-3 z-10">
                       <Badge className="bg-ecommerce-red text-white text-[10px] font-bold px-2 py-0.5 hover:bg-ecommerce-red gap-1">
                         <Percent size={10} />
-                        Save {percentage}%
+                        {t('bundles.save', { percent: percentage })}
                       </Badge>
                     </div>
 
                     {/* Content */}
                     <div className="p-5 flex-1 flex flex-col">
-                      <h3 className="font-bold text-ecommerce-text-primary text-base mb-1 pr-16">
+                      <h3 className="font-bold text-ecommerce-text-primary text-base mb-1 pe-16">
                         {bundle.title}
                       </h3>
                       <p className="text-xs text-ecommerce-text-muted mb-4">
@@ -227,7 +229,7 @@ export function ProductBundles() {
                       <div className="mt-5 pt-4 border-t border-ecommerce-border">
                         <div className="flex items-center justify-between mb-3">
                           <div>
-                            <p className="text-xs text-ecommerce-text-muted">Bundle Price</p>
+                            <p className="text-xs text-ecommerce-text-muted">{t('bundles.bundlePrice')}</p>
                             <div className="flex items-baseline gap-2">
                               <span className="text-xl font-bold text-ecommerce-text-primary">
                                 ${totalPrice.toFixed(2)}
@@ -239,7 +241,7 @@ export function ProductBundles() {
                           </div>
                           <div className="text-right">
                             <p className="text-xs text-ecommerce-emerald font-semibold">
-                              You save ${savings.toFixed(2)}
+                              {t('bundles.youSave', { amount: savings.toFixed(2) })}
                             </p>
                           </div>
                         </div>
@@ -249,7 +251,7 @@ export function ProductBundles() {
                           className="w-full btn-shine bg-ecommerce-red hover:bg-ecommerce-red/90 text-white rounded-xl h-11 gap-2 font-semibold"
                         >
                           <ShoppingCart size={16} />
-                          Add Bundle to Cart
+                          {t('bundles.addToCart')}
                         </Button>
                       </div>
                     </div>

@@ -1,12 +1,12 @@
 'use client';
 
 import { useState, useEffect, useRef, useSyncExternalStore, useCallback } from 'react';
-import { Search, ShoppingCart, Menu, X, User, Heart, ChevronDown, Sun, Moon, Bell } from 'lucide-react';
-
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Badge } from '@/components/ui/badge';
-import { useCartStore, useWishlistStore, useUIStore } from '@/lib/store';
+import { Search, ShoppingCart, Menu, X, User, Heart, ChevronDown, Sun, Moon, Bell, SlidersHorizontal } from 'lucide-react';
+import { useTranslations } from 'next-intl';
+import { Button } from '../ui/button';
+import { Input } from '../ui/input';
+import { Badge } from '../ui/badge';
+import { useCartStore, useWishlistStore, useUIStore } from '../../lib/store';
 import { useQuery } from '@tanstack/react-query';
 import { useTheme } from 'next-themes';
 import Link from 'next/link';
@@ -14,6 +14,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { SearchSuggestions } from './search-suggestions';
 import { WishlistDrawer } from './wishlist-drawer';
 import { NotificationPanel } from './notification-panel';
+import { LanguageSwitcher } from '../ecommerce/language-switcher';
 
 function useMounted() {
   return useSyncExternalStore(
@@ -23,16 +24,17 @@ function useMounted() {
   );
 }
 
-const PROMO_MESSAGES = [
-  { full: '🔥 Summer Sale — Up to 60% OFF on selected items! | Free shipping on orders $50+', short: '🔥 Summer Sale — Up to 60% OFF!' },
-  { full: '✨ New Arrivals Just Dropped — Shop the Latest Collection', short: '✨ New Arrivals Just Dropped!' },
-  { full: '🎁 Use code WELCOME15 for 15% off your first order', short: '🎁 Use code WELCOME15 — 15% off!' },
-];
-
 export function PromoBar() {
+  const t = useTranslations();
   const [isVisible, setIsVisible] = useState(true);
   const [currentIndex, setCurrentIndex] = useState(0);
   const mounted = useMounted();
+
+  const PROMO_MESSAGES = [
+    { full: t('header.promo1'), short: t('header.promo1Short') },
+    { full: t('header.promo2'), short: t('header.promo2Short') },
+    { full: t('header.promo3'), short: t('header.promo3Short') },
+  ];
 
   useEffect(() => {
     if (!mounted) return;
@@ -40,7 +42,7 @@ export function PromoBar() {
       setCurrentIndex((prev) => (prev + 1) % PROMO_MESSAGES.length);
     }, 4000);
     return () => clearInterval(interval);
-  }, [mounted]);
+  }, [mounted, PROMO_MESSAGES.length]);
 
   if (!isVisible) return null;
 
@@ -67,8 +69,8 @@ export function PromoBar() {
       </div>
       <button
         onClick={() => setIsVisible(false)}
-        className="absolute right-3 top-1/2 -translate-y-1/2 text-white/60 hover:text-white transition-colors p-1 hover:rotate-90 transition-transform duration-200 z-10"
-        aria-label="Dismiss"
+        className="absolute end-3 top-1/2 -translate-y-1/2 text-white/60 hover:text-white transition-colors p-1 hover:rotate-90 transition-transform duration-200 z-10"
+        aria-label={t('common.close')}
       >
         <X size={14} />
       </button>
@@ -77,6 +79,7 @@ export function PromoBar() {
 }
 
 function ThemeToggle() {
+  const t = useTranslations();
   const { theme, setTheme } = useTheme();
   const mounted = useMounted();
 
@@ -88,7 +91,7 @@ function ThemeToggle() {
     <button
       onClick={() => setTheme(isDark ? 'light' : 'dark')}
       className="p-2 rounded-lg hover:bg-ecommerce-surface-hover transition-colors relative group"
-      aria-label="Toggle theme"
+      aria-label={t('header.toggleTheme')}
     >
       <AnimatePresence mode="wait">
         {isDark ? (
@@ -118,9 +121,10 @@ function ThemeToggle() {
 }
 
 export function Header() {
+  const t = useTranslations();
   const { totalItems, toggleCart } = useCartStore();
   const { totalCount: wishlistTotal } = useWishlistStore();
-  const { searchQuery, setSearchQuery, selectedCategory, setSelectedCategory, isMobileMenuOpen, setMobileMenuOpen, isWishlistOpen, setWishlistOpen } = useUIStore();
+  const { searchQuery, setSearchQuery, selectedCategory, setSelectedCategory, isMobileMenuOpen, setMobileMenuOpen, isWishlistOpen, setWishlistOpen, setCatalogOpen } = useUIStore();
   const mounted = useMounted();
   const [isScrolled, setIsScrolled] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
@@ -149,10 +153,10 @@ export function Header() {
   }, []);
 
   const navItems = [
-    { label: 'Home', href: '#' },
-    { label: 'Shop', href: '#products', hasDropdown: true },
-    { label: 'Categories', href: '#categories' },
-    { label: 'Deals', href: '#deals' },
+    { label: t('header.home'), href: '/' },
+    { label: t('header.shop'), href: '/products', hasDropdown: true },
+    { label: t('header.categories'), href: '/#categories' },
+    { label: t('header.deals'), href: '/#deals' },
   ];
 
   return (
@@ -171,7 +175,7 @@ export function Header() {
             <button
               onClick={() => setMobileMenuOpen(!isMobileMenuOpen)}
               className="lg:hidden p-2 rounded-lg hover:bg-ecommerce-surface-hover transition-colors"
-              aria-label="Toggle menu"
+              aria-label={isMobileMenuOpen ? t('header.closeMenu') : t('header.menu')}
             >
               <AnimatePresence mode="wait">
                 {isMobileMenuOpen ? (
@@ -199,37 +203,39 @@ export function Header() {
 
             {/* Desktop Nav */}
             <nav className="hidden lg:flex items-center gap-1">
-              {navItems.map((item) => (
+              {navItems.map((item : any) => (
                 <div key={item.label} className="relative group">
                   <Link
                     href={item.href}
-                    className="px-4 py-2 text-sm font-medium text-ecommerce-text-secondary hover:text-ecommerce-text-primary transition-colors rounded-lg hover:bg-ecommerce-surface-hover flex items-center gap-1 animated-underline"
+                    onClick={item.onClick || (() => {})}
+                    className="px-4 py-2 text-sm font-medium text-ecommerce-text-secondary hover:text-ecommerce-text-primary transition-colors rounded-lg hover:bg-ecommerce-surface-hover flex items-center gap-1 animated-underline cursor-pointer"
                   >
                     {item.label}
                     {item.hasDropdown && <ChevronDown size={14} className="transition-transform group-hover:rotate-180 duration-200" />}
                   </Link>
                   {item.hasDropdown && categories.length > 0 && (
-                    <div className="absolute top-full left-0 pt-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200">
+                    <div className="absolute top-full start-0 pt-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200">
                       <div className="bg-white dark:bg-ecommerce-surface rounded-xl shadow-xl border border-ecommerce-border py-2 min-w-[220px]">
-                        <button
-                          onClick={() => { setSelectedCategory(null); }}
-                          className={`w-full text-left px-4 py-2.5 text-sm hover:bg-ecommerce-surface-hover transition-colors ${!selectedCategory ? 'text-ecommerce-red font-medium bg-ecommerce-red/5' : 'text-ecommerce-text-secondary'}`}
+                        <Link
+                          href="/products"
+                          className="w-full text-start px-4 py-2.5 text-sm hover:bg-ecommerce-surface-hover transition-colors flex items-center gap-2 text-ecommerce-red font-medium bg-ecommerce-red/5 rounded-t-lg"
                         >
-                          All Products
-                        </button>
+                          <SlidersHorizontal size={14} />
+                          {t('catalog.openCatalog')}
+                        </Link>
                         <div className="my-1 border-t border-ecommerce-border" />
                         {categories.map((cat: { slug: string; name: string; color: string; _count?: { products: number } }) => (
-                          <button
+                          <Link
                             key={cat.slug}
-                            onClick={() => { setSelectedCategory(cat.slug); }}
-                            className={`w-full text-left px-4 py-2.5 text-sm hover:bg-ecommerce-surface-hover transition-colors flex items-center justify-between ${selectedCategory === cat.slug ? 'text-ecommerce-red font-medium bg-ecommerce-red/5' : 'text-ecommerce-text-secondary'}`}
+                            href={`/products?category=${cat.slug}`}
+                            className="w-full text-start px-4 py-2.5 text-sm hover:bg-ecommerce-surface-hover transition-colors flex items-center justify-between text-ecommerce-text-secondary"
                           >
                             <span className="flex items-center gap-2">
                               <span className="w-2 h-2 rounded-full" style={{ backgroundColor: cat.color }} />
                               {cat.name}
                             </span>
                             <span className="text-xs text-ecommerce-text-muted">{cat._count?.products || 0}</span>
-                          </button>
+                          </Link>
                         ))}
                       </div>
                     </div>
@@ -241,20 +247,20 @@ export function Header() {
             {/* Search Bar - Desktop */}
             <div ref={searchRef} className="hidden md:flex flex-1 max-w-md mx-4 relative">
               <div className="relative w-64 focus-within:w-80 transition-all duration-300 group">
-                <Search size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-ecommerce-text-muted group-focus-within:text-ecommerce-purple transition-colors" />
+                <Search size={16} className="absolute start-3.5 top-1/2 -translate-y-1/2 text-ecommerce-text-muted group-focus-within:text-ecommerce-purple transition-colors" />
                 <Input
-                  placeholder="Search products..."
+                  placeholder={t('common.searchPlaceholder')}
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   onFocus={() => setIsSearchFocused(true)}
                   onKeyDown={handleSearchKeyDown}
-                  className="pl-10 pr-10 h-10 bg-ecommerce-surface-hover border-ecommerce-border rounded-xl text-sm focus-visible:ring-2 focus-visible:ring-ecommerce-purple/30 focus-visible:border-ecommerce-purple transition-all duration-300"
+                  className="ps-10 pe-10 h-10 bg-ecommerce-surface-hover border-ecommerce-border rounded-xl text-sm focus-visible:ring-2 focus-visible:ring-ecommerce-purple/30 focus-visible:border-ecommerce-purple transition-all duration-300"
                 />
                 {searchQuery && (
                   <button
                     onClick={() => { setSearchQuery(''); setIsSearchFocused(false); }}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-ecommerce-text-muted hover:text-ecommerce-text-primary transition-colors"
-                    aria-label="Clear search"
+                    className="absolute end-3 top-1/2 -translate-y-1/2 text-ecommerce-text-muted hover:text-ecommerce-text-primary transition-colors"
+                    aria-label={t('common.clear')}
                   >
                     <X size={14} />
                   </button>
@@ -273,7 +279,7 @@ export function Header() {
               <button
                 onClick={() => setIsSearchOpen(!isSearchOpen)}
                 className="md:hidden p-2 rounded-lg hover:bg-ecommerce-surface-hover transition-colors"
-                aria-label="Search"
+                aria-label={t('common.searchPlaceholder').replace('...', '')}
               >
                 <Search size={20} className="text-ecommerce-text-secondary" />
               </button>
@@ -281,29 +287,32 @@ export function Header() {
               {/* Dark Mode Toggle */}
               <ThemeToggle />
 
+              {/* Language Switcher */}
+              <LanguageSwitcher />
+
               {/* Notifications */}
               <button
                 onClick={() => setIsNotifOpen(true)}
                 className="relative p-2 rounded-lg hover:bg-ecommerce-surface-hover transition-colors group"
-                aria-label="Notifications"
+                aria-label={t('header.notifications')}
               >
                 <Bell size={18} className="text-ecommerce-text-secondary group-hover:text-ecommerce-amber transition-colors duration-200" />
                 {/* Unread dot */}
-                <span className="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-ecommerce-red badge-pulse" />
+                <span className="absolute top-1.5 end-1.5 w-2 h-2 rounded-full bg-ecommerce-red badge-pulse" />
               </button>
 
               {/* Wishlist */}
               <button
                 onClick={() => setWishlistOpen(true)}
                 className="relative p-2 rounded-lg hover:bg-ecommerce-surface-hover transition-colors duration-200 group"
-                aria-label="Wishlist"
+                aria-label={t('mobileNav.wishlist')}
               >
                 <Heart size={18} className="text-ecommerce-text-secondary group-hover:text-ecommerce-rose transition-colors duration-200" />
                 {wishCount > 0 && (
                   <motion.div
                     initial={{ scale: 0 }}
                     animate={{ scale: 1 }}
-                    className="absolute -top-0.5 -right-0.5"
+                    className="absolute -top-0.5 -end-0.5"
                   >
                     <Badge className="h-4 w-4 flex items-center justify-center p-0 text-[9px] font-bold bg-ecommerce-rose text-white border border-white dark:border-ecommerce-surface">
                       {wishCount > 99 ? '99+' : wishCount}
@@ -313,22 +322,22 @@ export function Header() {
               </button>
 
               {/* Account */}
-              <button className="hidden sm:flex p-2 rounded-lg hover:bg-ecommerce-surface-hover transition-colors duration-200" aria-label="Account">
+              <Link href="/profile" className="hidden sm:flex p-2 rounded-lg hover:bg-ecommerce-surface-hover transition-colors duration-200" aria-label={t('header.account')}>
                 <User size={18} className="text-ecommerce-text-secondary" />
-              </button>
+              </Link>
 
               {/* Cart Button */}
               <button
                 onClick={toggleCart}
                 className="relative p-2 rounded-lg hover:bg-ecommerce-surface-hover transition-colors duration-200 group"
-                aria-label="Cart"
+                aria-label={t('header.cart')}
               >
                 <ShoppingCart size={18} className="text-ecommerce-text-secondary" />
                 {total > 0 && (
                   <motion.div
                     initial={{ scale: 0 }}
                     animate={{ scale: 1 }}
-                    className="absolute -top-0.5 -right-0.5"
+                    className="absolute -top-0.5 -end-0.5"
                   >
                     <Badge className="h-4 w-4 flex items-center justify-center p-0 text-[9px] font-bold bg-ecommerce-red text-white border border-white dark:border-ecommerce-surface">
                       {total > 99 ? '99+' : total}
@@ -349,12 +358,12 @@ export function Header() {
                 className="md:hidden overflow-hidden"
               >
                 <div className="pb-3 relative">
-                  <Search size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-ecommerce-text-muted" />
+                  <Search size={16} className="absolute start-3.5 top-1/2 -translate-y-1/2 text-ecommerce-text-muted" />
                   <Input
-                    placeholder="Search products..."
+                    placeholder={t('common.searchPlaceholder')}
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
-                    className="pl-10 pr-4 h-10 bg-ecommerce-surface-hover border-ecommerce-border rounded-xl text-sm"
+                    className="ps-10 pe-4 h-10 bg-ecommerce-surface-hover border-ecommerce-border rounded-xl text-sm"
                     autoFocus
                   />
                 </div>
@@ -373,7 +382,7 @@ export function Header() {
               className="lg:hidden border-t border-ecommerce-border bg-white dark:bg-ecommerce-surface max-h-[60vh] overflow-y-auto scrollbar-thin"
             >
               <nav className="max-w-7xl mx-auto px-4 py-3 space-y-1">
-                {navItems.map((item, i) => (
+                {navItems.map((item : any, i) => (
                   <motion.div
                     key={item.label}
                     initial={{ x: -20, opacity: 0 }}
@@ -382,7 +391,10 @@ export function Header() {
                   >
                     <Link
                       href={item.href}
-                      onClick={() => setMobileMenuOpen(false)}
+                      onClick={() => {
+                        if (item.onClick) item.onClick();
+                        setMobileMenuOpen(false);
+                      }}
                       className="block px-4 py-2.5 text-sm font-medium text-ecommerce-text-secondary hover:text-ecommerce-text-primary hover:bg-ecommerce-surface-hover rounded-lg transition-colors"
                     >
                       {item.label}
@@ -390,16 +402,17 @@ export function Header() {
                   </motion.div>
                 ))}
                 <div className="pt-2 border-t border-ecommerce-border mt-2">
-                  <p className="px-4 py-1 text-xs font-semibold text-ecommerce-text-muted uppercase tracking-wider">Categories</p>
+                  <p className="px-4 py-1 text-xs font-semibold text-ecommerce-text-muted uppercase tracking-wider">{t('header.categories')}</p>
                   {categories.map((cat: { slug: string; name: string; color: string }) => (
-                    <button
+                    <Link
                       key={cat.slug}
-                      onClick={() => { setSelectedCategory(cat.slug); setMobileMenuOpen(false); }}
-                      className={`w-full text-left px-4 py-2 text-sm rounded-lg flex items-center gap-2 transition-colors ${selectedCategory === cat.slug ? 'bg-ecommerce-red/10 text-ecommerce-red font-medium' : 'text-ecommerce-text-secondary hover:bg-ecommerce-surface-hover'}`}
+                      href={`/products?category=${cat.slug}`}
+                      onClick={() => setMobileMenuOpen(false)}
+                      className="w-full text-start px-4 py-2 text-sm rounded-lg flex items-center gap-2 transition-colors text-ecommerce-text-secondary hover:bg-ecommerce-surface-hover"
                     >
                       <span className="w-2 h-2 rounded-full" style={{ backgroundColor: cat.color }} />
                       {cat.name}
-                    </button>
+                    </Link>
                   ))}
                 </div>
               </nav>

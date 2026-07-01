@@ -1,11 +1,12 @@
 'use client';
 
 import { Send, Sparkles, Mail, ShieldCheck, CheckCircle2, Hexagon, Triangle, Circle, Square } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
+import { Button } from '../ui/button';
+import { Input } from '../ui/input';
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { toast } from 'sonner';
 import { motion, useInView, AnimatePresence } from 'framer-motion';
+import { useTranslations } from 'next-intl';
 
 function AnimatedCounter({ target, suffix = '' }: { target: number; suffix?: string }) {
   const [count, setCount] = useState(0);
@@ -69,6 +70,7 @@ function generateConfetti(): ConfettiParticle[] {
 }
 
 export function NewsletterSection() {
+  const t = useTranslations();
   const [email, setEmail] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [isSubscribed, setIsSubscribed] = useState(false);
@@ -89,16 +91,14 @@ export function NewsletterSection() {
     setEmail('');
     setIsSubscribed(true);
 
-    toast.success('Welcome to the club!', {
-      description: 'You\'ll receive our latest deals and updates.',
-    });
+    toast.success(t('newsletter.success'));
 
     // Revert to form after 3 seconds
     if (revertTimerRef.current) clearTimeout(revertTimerRef.current);
     revertTimerRef.current = setTimeout(() => {
       setIsSubscribed(false);
     }, 3000);
-  }, [email]);
+  }, [email, t]);
 
   // Cleanup timer on unmount
   useEffect(() => {
@@ -175,7 +175,7 @@ export function NewsletterSection() {
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-white/3 rounded-full blur-3xl" />
 
           <div className="relative flex flex-col lg:flex-row items-center gap-8">
-            <div className="flex-1 text-center lg:text-left">
+            <div className="flex-1 text-center lg:text-start">
               <motion.div
                 initial={{ opacity: 0, scale: 0.8 }}
                 whileInView={{ opacity: 1, scale: 1 }}
@@ -188,10 +188,10 @@ export function NewsletterSection() {
                 Exclusive Access
               </motion.div>
               <h2 className="text-2xl sm:text-3xl font-bold text-white tracking-tight">
-                Get 15% Off Your First Order
+                {t('newsletter.title')}
               </h2>
               <p className="text-white/70 mt-2 max-w-md mx-auto lg:mx-0 text-sm">
-                Subscribe to our newsletter and stay updated with the latest deals, new arrivals, and exclusive offers.
+                {t('newsletter.subtitle')}
               </p>
               {/* Subscriber count with count-up animation */}
               <div className="flex items-center gap-2 mt-4 justify-center lg:justify-start">
@@ -211,7 +211,7 @@ export function NewsletterSection() {
                   </div>
                 </div>
                 <span className="text-xs text-white/60">
-                  Join <AnimatedCounter target={15000} suffix="+" /> subscribers
+                  {t('newsletter.subscribers', { count: '15,000' })}
                 </span>
               </div>
 
@@ -328,15 +328,15 @@ export function NewsletterSection() {
                       <div className="flex-1 relative">
                         <Mail
                           size={16}
-                          className="absolute left-3.5 top-1/2 -translate-y-1/2 text-white/40 pointer-events-none z-10"
+                          className="absolute start-3.5 top-1/2 -translate-y-1/2 text-white/40 pointer-events-none z-10"
                         />
                         <Input
                           type="email"
-                          placeholder="your@email.com"
+                          placeholder={t('newsletter.placeholder')}
                           value={email}
                           onChange={(e) => setEmail(e.target.value)}
                           required
-                          className="h-12 pl-10 pr-4 bg-white/15 border-white/20 text-white placeholder:text-white/50 rounded-xl focus-visible:ring-2 focus-visible:ring-white/30 focus-visible:border-white/40 backdrop-blur-sm transition-all duration-200 hover:scale-[1.01] focus:scale-[1.01]"
+                          className="h-12 ps-10 pe-4 bg-white/15 border-white/20 text-white placeholder:text-white/50 rounded-xl focus-visible:ring-2 focus-visible:ring-white/30 focus-visible:border-white/40 backdrop-blur-sm transition-all duration-200 hover:scale-[1.01] focus:scale-[1.01]"
                         />
                       </div>
                       <Button
@@ -348,8 +348,8 @@ export function NewsletterSection() {
                           <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
                         ) : (
                           <>
-                            Subscribe
-                            <Send size={16} className="ml-2" />
+                            {t('newsletter.subscribe')}
+                            <Send size={16} className="ms-2" />
                           </>
                         )}
                       </Button>
@@ -358,7 +358,7 @@ export function NewsletterSection() {
                     {/* No spam + unsubscribe row */}
                     <div className="flex items-center justify-center gap-1.5 mt-2.5 lg:justify-start">
                       <CheckCircle2 size={12} className="text-white/40" />
-                      <span className="text-white/40 text-xs">No spam, unsubscribe anytime</span>
+                      <span className="text-white/40 text-xs">{t('newsletter.privacyNote')}</span>
                     </div>
                   </motion.form>
                 )}

@@ -2,6 +2,7 @@
 
 import { useEffect, useSyncExternalStore } from 'react';
 import { toast } from 'sonner';
+import { useTranslations } from 'next-intl';
 
 function useMounted() {
   return useSyncExternalStore(
@@ -12,6 +13,7 @@ function useMounted() {
 }
 
 export function WelcomeToast() {
+  const t = useTranslations();
   const mounted = useMounted();
 
   useEffect(() => {
@@ -20,8 +22,8 @@ export function WelcomeToast() {
     const timer = setTimeout(() => {
       const welcomed = localStorage.getItem('shopsphere-welcomed');
       if (!welcomed) {
-        toast('Welcome to ShopSphere! 🎉', {
-          description: 'Use code FIRST10 for 10% off your first order',
+        toast(t('welcome.title'), {
+          description: t('welcome.message'),
           duration: 6000,
         });
         localStorage.setItem('shopsphere-welcomed', 'true');

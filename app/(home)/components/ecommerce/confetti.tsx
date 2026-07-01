@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useRef, useCallback } from 'react';
+import { useTranslations } from 'next-intl';
 
 interface ConfettiParticle {
   x: number;
@@ -19,6 +20,7 @@ interface ConfettiParticle {
 const COLORS = ['#E63946', '#FFC107', '#20B2AA', '#6A5ACD', '#FF69B4', '#10B981'];
 
 export function Confetti({ trigger }: { trigger: boolean }) {
+  const t = useTranslations();
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const particlesRef = useRef<ConfettiParticle[]>([]);
   const animationRef = useRef<number>(0);

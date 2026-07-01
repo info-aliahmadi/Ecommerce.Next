@@ -2,8 +2,10 @@
 
 import { useEffect, useState } from 'react';
 import { motion, useSpring } from 'framer-motion';
+import { useTranslations } from 'next-intl';
 
 export function ScrollProgress() {
+  const t = useTranslations();
   const [scrollProgress, setScrollProgress] = useState(0);
 
   useEffect(() => {
@@ -26,7 +28,7 @@ export function ScrollProgress() {
 
   return (
     <motion.div
-      className="fixed top-0 left-0 right-0 h-[3px] z-[60] origin-left"
+      className="fixed top-0 start-0 end-0 h-[3px] z-[60] origin-left"
       style={{
         scaleX,
         background: 'linear-gradient(90deg, #E63946, #FF69B4, #6A5ACD, #20B2AA)',

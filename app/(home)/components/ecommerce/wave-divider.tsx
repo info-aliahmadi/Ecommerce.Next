@@ -1,6 +1,9 @@
 'use client';
 
+import { useTranslations } from 'next-intl';
+
 export function WaveDivider({ variant = 'default', flip = false, color }: { variant?: 'default' | 'subtle' | 'gradient'; flip?: boolean; color?: string }) {
+  const t = useTranslations();
   const height = variant === 'subtle' ? 24 : 40;
 
   return (

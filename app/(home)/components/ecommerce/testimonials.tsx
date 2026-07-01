@@ -3,6 +3,7 @@
 import { Star, ChevronLeft, ChevronRight, Truck, Shield, RotateCcw, Headphones, Sparkles, TrendingUp, Award, Clock } from 'lucide-react';
 import { useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useTranslations } from 'next-intl';
 
 const testimonials = [
   {
@@ -58,6 +59,7 @@ const testimonials = [
 ];
 
 export function TestimonialsSection() {
+  const t = useTranslations();
   const [currentIndex, setCurrentIndex] = useState(0);
   const [direction, setDirection] = useState(0);
 
@@ -104,11 +106,10 @@ export function TestimonialsSection() {
             Testimonials
           </div>
           <h2 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-ecommerce-text-primary tracking-tight">
-            What Our Customers{' '}
-            <span className="gradient-text">Say</span>
+            {t('testimonials.title')}
           </h2>
           <p className="text-sm text-ecommerce-text-muted mt-3 max-w-lg mx-auto">
-            Trusted by over 50,000 happy shoppers worldwide. Here&apos;s what they think.
+            {t('testimonials.subtitle')}
           </p>
           {/* Decorative line */}
           <div className="mt-6 flex items-center justify-center gap-2">
@@ -123,16 +124,16 @@ export function TestimonialsSection() {
           <button
             onClick={prev}
             disabled={currentIndex === 0}
-            className="absolute -left-2 lg:-left-5 top-1/2 -translate-y-1/2 z-10 w-11 h-11 rounded-full bg-white dark:bg-ecommerce-surface shadow-xl border border-ecommerce-border flex items-center justify-center hover:bg-ecommerce-red hover:text-white hover:border-ecommerce-red hover:shadow-lg hover:shadow-ecommerce-red/20 transition-all duration-200 disabled:opacity-20 disabled:cursor-not-allowed disabled:hover:bg-white disabled:hover:text-ecommerce-text-primary disabled:hover:border-ecommerce-border disabled:hover:shadow-xl hidden md:flex"
-            aria-label="Previous"
+            className="absolute -start-2 lg:-start-5 top-1/2 -translate-y-1/2 z-10 w-11 h-11 rounded-full bg-white dark:bg-ecommerce-surface shadow-xl border border-ecommerce-border flex items-center justify-center hover:bg-ecommerce-red hover:text-white hover:border-ecommerce-red hover:shadow-lg hover:shadow-ecommerce-red/20 transition-all duration-200 disabled:opacity-20 disabled:cursor-not-allowed disabled:hover:bg-white disabled:hover:text-ecommerce-text-primary disabled:hover:border-ecommerce-border disabled:hover:shadow-xl hidden md:flex"
+            aria-label={t('testimonials.prev')}
           >
             <ChevronLeft size={18} />
           </button>
           <button
             onClick={next}
             disabled={currentIndex >= maxIndex}
-            className="absolute -right-2 lg:-right-5 top-1/2 -translate-y-1/2 z-10 w-11 h-11 rounded-full bg-white dark:bg-ecommerce-surface shadow-xl border border-ecommerce-border flex items-center justify-center hover:bg-ecommerce-red hover:text-white hover:border-ecommerce-red hover:shadow-lg hover:shadow-ecommerce-red/20 transition-all duration-200 disabled:opacity-20 disabled:cursor-not-allowed disabled:hover:bg-white disabled:hover:text-ecommerce-text-primary disabled:hover:border-ecommerce-border disabled:hover:shadow-xl hidden md:flex"
-            aria-label="Next"
+            className="absolute -end-2 lg:-end-5 top-1/2 -translate-y-1/2 z-10 w-11 h-11 rounded-full bg-white dark:bg-ecommerce-surface shadow-xl border border-ecommerce-border flex items-center justify-center hover:bg-ecommerce-red hover:text-white hover:border-ecommerce-red hover:shadow-lg hover:shadow-ecommerce-red/20 transition-all duration-200 disabled:opacity-20 disabled:cursor-not-allowed disabled:hover:bg-white disabled:hover:text-ecommerce-text-primary disabled:hover:border-ecommerce-border disabled:hover:shadow-xl hidden md:flex"
+            aria-label={t('testimonials.next')}
           >
             <ChevronRight size={18} />
           </button>
@@ -153,7 +154,7 @@ export function TestimonialsSection() {
                     className="testimonial-card bg-white dark:bg-ecommerce-surface rounded-2xl p-6 border border-ecommerce-border relative group hover:shadow-lg hover:-translate-y-1 transition-all duration-300 overflow-hidden"
                   >
                     {/* Decorative large quote mark */}
-                    <div className="absolute -top-4 -left-2 text-8xl font-serif leading-none text-ecommerce-purple/[0.05] dark:text-ecommerce-purple/[0.08] pointer-events-none select-none" aria-hidden="true">
+                    <div className="absolute -top-4 -start-2 text-8xl font-serif leading-none text-ecommerce-purple/[0.05] dark:text-ecommerce-purple/[0.08] pointer-events-none select-none" aria-hidden="true">
                       &ldquo;
                     </div>
 
@@ -165,7 +166,7 @@ export function TestimonialsSection() {
                           className={`transition-colors duration-200 ${i < t.rating ? 'star-gradient' : 'text-ecommerce-border'}`}
                         />
                       ))}
-                      <span className="ml-1.5 text-xs font-semibold text-ecommerce-amber">{t.rating}.0</span>
+                      <span className="ms-1.5 text-xs font-semibold text-ecommerce-amber">{t.rating}.0</span>
                     </div>
 
                     <p className="text-sm text-ecommerce-text-secondary leading-relaxed mb-5 min-h-[60px] relative">

@@ -3,8 +3,10 @@
 import { ArrowUp } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useTranslations } from 'next-intl';
 
 export function BackToTop() {
+  const t = useTranslations();
   const [show, setShow] = useState(false);
   const [progress, setProgress] = useState(0);
 
@@ -35,8 +37,8 @@ export function BackToTop() {
           exit={{ opacity: 0, scale: 0.5, y: 20 }}
           transition={{ duration: 0.2 }}
           onClick={scrollToTop}
-          className="fixed bottom-20 sm:bottom-8 right-4 sm:right-6 z-40 group"
-          aria-label="Back to top"
+          className="fixed bottom-20 sm:bottom-8 end-4 sm:end-6 z-40 group"
+          aria-label={t('backToTop.label')}
         >
           {/* Progress ring */}
           <div className="relative w-12 h-12">

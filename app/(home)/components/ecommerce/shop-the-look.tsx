@@ -4,7 +4,8 @@ import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Sparkles, ShoppingCart, Plus } from 'lucide-react';
 import { toast } from 'sonner';
-import { useCartStore, useUIStore } from '@/lib/store';
+import { useCartStore, useUIStore } from '../../lib/store';
+import { useTranslations } from 'next-intl';
 
 interface LookProduct {
   id: string;
@@ -123,6 +124,7 @@ const looks: Look[] = [
 ];
 
 function ProductThumbnails({ products }: { products: LookProduct[] }) {
+  const t = useTranslations();
   const setQuickViewProduct = useUIStore((s) => s.setQuickViewProduct);
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
 
@@ -131,7 +133,7 @@ function ProductThumbnails({ products }: { products: LookProduct[] }) {
 
   return (
     <div className="flex items-center">
-      <div className="flex items-center" style={{ marginLeft: '-12px' }}>
+      <div className="flex items-center" style={{ marginInlineStart: '-12px' }}>
         {visibleProducts.map((product, i) => (
           <button
             key={product.id}
@@ -151,7 +153,7 @@ function ProductThumbnails({ products }: { products: LookProduct[] }) {
             onMouseEnter={() => setHoveredIndex(i)}
             onMouseLeave={() => setHoveredIndex(null)}
             className="relative shrink-0 w-14 h-14 rounded-full border-2 border-white shadow-md transition-transform duration-200 hover:scale-110 hover:z-10"
-            style={{ marginLeft: i === 0 ? '12px' : '-12px' }}
+            style={{ marginInlineStart: i === 0 ? '12px' : '-12px' }}
             aria-label={`View ${product.name}`}
           >
             <img
@@ -169,8 +171,8 @@ function ProductThumbnails({ products }: { products: LookProduct[] }) {
         ))}
       </div>
       {extraCount > 0 && (
-        <span className="ml-3 text-xs font-medium text-ecommerce-text-muted">
-          +{extraCount} more
+        <span className="ms-3 text-xs font-medium text-ecommerce-text-muted">
+          +{extraCount} {t('common.seeMore').toLowerCase()}
         </span>
       )}
     </div>
@@ -186,6 +188,7 @@ function LookCard({
   index: number;
   isFirst: boolean;
 }) {
+  const t = useTranslations();
   const addItem = useCartStore((s) => s.addItem);
   const totalPrice = look.products.reduce((sum, p) => sum + p.price, 0);
 
@@ -199,7 +202,7 @@ function LookCard({
         category: product.category,
       });
     });
-    toast.success(`Added ${look.products.length} items to cart!`);
+    toast.success(t('cart.itemAdded', { name: look.name }));
   };
 
   if (isFirst) {
@@ -221,10 +224,10 @@ function LookCard({
               loading="lazy"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-            <span className="absolute top-3 right-3 px-3 py-1 rounded-full bg-white/80 dark:bg-black/40 backdrop-blur-sm text-xs font-bold text-ecommerce-text-primary">
-              From ${Math.round(totalPrice)}
+            <span className="absolute top-3 end-3 px-3 py-1 rounded-full bg-white/80 dark:bg-black/40 backdrop-blur-sm text-xs font-bold text-ecommerce-text-primary">
+              From {t('shopTheLook.from')} ${Math.round(totalPrice)}
             </span>
-            <h3 className="absolute bottom-3 left-3 text-lg font-bold text-white drop-shadow-lg md:bottom-4 md:left-4 md:text-xl">
+            <h3 className="absolute bottom-3 start-3 text-lg font-bold text-white drop-shadow-lg md:bottom-4 md:start-4 md:text-xl">
               {look.name}
             </h3>
           </div>
@@ -235,11 +238,11 @@ function LookCard({
                 {look.name}
               </h3>
               <p className="text-sm text-ecommerce-text-muted mb-4">
-                A complete {look.name.toLowerCase()} outfit with {look.products.length} curated pieces.
+                {t('shopTheLook.outfitDesc', { name: look.name.toLowerCase(), count: look.products.length })}
               </p>
               <div className="mb-4">
                 <p className="text-xs font-medium text-ecommerce-text-muted mb-2">
-                  Included pieces:
+                  {t('shopTheLook.includedPieces')}
                 </p>
                 <div className="flex flex-wrap gap-1.5">
                   {look.products.map((p) => (
@@ -260,7 +263,7 @@ function LookCard({
                 className="inline-flex items-center gap-2 px-4 py-2.5 bg-ecommerce-red hover:bg-ecommerce-red/90 text-white text-sm font-semibold rounded-xl transition-all duration-200 hover:scale-[1.02] active:scale-95 shrink-0"
               >
                 <ShoppingCart size={15} />
-                Get the Look
+                {t('shopTheLook.getTheLook')}
               </button>
             </div>
           </div>
@@ -286,10 +289,10 @@ function LookCard({
           loading="lazy"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-        <span className="absolute top-3 right-3 px-3 py-1 rounded-full bg-white/80 dark:bg-black/40 backdrop-blur-sm text-xs font-bold text-ecommerce-text-primary">
-          From ${Math.round(totalPrice)}
+        <span className="absolute top-3 end-3 px-3 py-1 rounded-full bg-white/80 dark:bg-black/40 backdrop-blur-sm text-xs font-bold text-ecommerce-text-primary">
+          {t('shopTheLook.from')} ${Math.round(totalPrice)}
         </span>
-        <h3 className="absolute bottom-3 left-3 text-lg font-bold text-white drop-shadow-lg">
+        <h3 className="absolute bottom-3 start-3 text-lg font-bold text-white drop-shadow-lg">
           {look.name}
         </h3>
       </div>
@@ -297,7 +300,7 @@ function LookCard({
       {/* Card content */}
       <div className="p-4 sm:p-5">
         <p className="text-sm text-ecommerce-text-muted mb-4">
-          {look.products.length} curated pieces for the perfect ensemble.
+          {t('shopTheLook.piecesDesc', { count: look.products.length })}
         </p>
         <div className="flex items-center justify-between gap-3">
           <ProductThumbnails products={look.products} />
@@ -306,7 +309,7 @@ function LookCard({
             className="inline-flex items-center gap-2 px-4 py-2.5 bg-ecommerce-red hover:bg-ecommerce-red/90 text-white text-sm font-semibold rounded-xl transition-all duration-200 hover:scale-[1.02] active:scale-95 shrink-0"
           >
             <ShoppingCart size={15} />
-            Get the Look
+            {t('shopTheLook.getTheLook')}
           </button>
         </div>
       </div>
@@ -315,6 +318,8 @@ function LookCard({
 }
 
 export function ShopTheLook() {
+  const t = useTranslations();
+
   return (
     <section className="py-12 sm:py-16 bg-white dark:bg-ecommerce-surface relative overflow-hidden">
       {/* Background decorations */}
@@ -331,13 +336,13 @@ export function ShopTheLook() {
             className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-ecommerce-rose/10 text-ecommerce-rose text-xs font-semibold uppercase tracking-widest mb-3"
           >
             <Sparkles size={12} />
-            Curated
+            {t('shopTheLook.curated')}
           </motion.div>
           <h2 className="text-2xl sm:text-3xl font-extrabold text-ecommerce-text-primary tracking-tight">
-            Shop the <span className="gradient-text-warm">Look</span>
+            {t('shopTheLook.title')}
           </h2>
           <p className="text-sm text-ecommerce-text-muted mt-2 max-w-md mx-auto">
-            Complete outfits curated by our style experts
+            {t('shopTheLook.subtitle')}
           </p>
           {/* Decorative dot-line divider */}
           <div className="mt-4 flex items-center justify-center gap-2">

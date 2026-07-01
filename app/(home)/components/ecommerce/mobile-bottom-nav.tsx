@@ -2,27 +2,44 @@
 
 import { useState } from 'react';
 import { Home, Search, ShoppingBag, Heart, User } from 'lucide-react';
-import { useCartStore, useWishlistStore, useUIStore } from '@/lib/store';
+import { useCartStore, useWishlistStore, useUIStore } from '../../lib/store';
 import { motion } from 'framer-motion';
+import { useTranslations } from 'next-intl';
 
-const navItems = [
-  { icon: Home, label: 'Home', href: '#' },
-  { icon: Search, label: 'Search', href: '#', action: 'search' as const },
-  { icon: ShoppingBag, label: 'Shop', href: '#products', action: 'cart' as const },
-  { icon: Heart, label: 'Wishlist', href: '#', action: 'wishlist' as const },
-  { icon: User, label: 'Account', href: '#' },
-];
+interface NavItem {
+  icon: typeof Home;
+  id: string;
+  href: string;
+  action?: 'search' | 'cart' | 'wishlist';
+}
 
 export function MobileBottomNav() {
-  const [activeTab, setActiveTab] = useState('Home');
+  const t = useTranslations();
+  const [activeTab, setActiveTab] = useState('home');
   const { totalItems, toggleCart } = useCartStore();
   const { totalCount: wishlistCount } = useWishlistStore();
   const { setSearchQuery, setWishlistOpen } = useUIStore();
   const total = totalItems();
   const wishCount = wishlistCount();
 
-  const handleClick = (item: (typeof navItems)[number], e: React.MouseEvent) => {
-    setActiveTab(item.label);
+  const navItems: NavItem[] = [
+    { icon: Home, id: 'home', href: '/' },
+    { icon: Search, id: 'search', href: '/products', action: 'search' },
+    { icon: ShoppingBag, id: 'cart', href: '/products', action: 'cart' },
+    { icon: Heart, id: 'wishlist', href: '/profile', action: 'wishlist' },
+    { icon: User, id: 'account', href: '/profile' },
+  ];
+
+  const labels: Record<string, string> = {
+    home: t('mobileNav.home'),
+    search: t('common.searchPlaceholder').split(' ')[0],
+    cart: t('mobileNav.cart'),
+    wishlist: t('mobileNav.wishlist'),
+    account: t('mobileNav.account'),
+  };
+
+  const handleClick = (item: NavItem, e: React.MouseEvent) => {
+    setActiveTab(item.id);
 
     if (item.action === 'cart') {
       e.preventDefault();
@@ -39,17 +56,17 @@ export function MobileBottomNav() {
   };
 
   return (
-    <nav className="lg:hidden fixed bottom-0 left-0 right-0 z-50 bg-white/95 dark:bg-ecommerce-surface/95 backdrop-blur-xl border-t border-ecommerce-border safe-area-pb before:absolute before:top-0 before:left-0 before:right-0 before:h-px before:bg-gradient-to-r before:from-transparent before:via-ecommerce-red/20 before:to-transparent">
+    <nav className="lg:hidden fixed bottom-0 start-0 end-0 z-50 bg-white/95 dark:bg-ecommerce-surface/95 backdrop-blur-xl border-t border-ecommerce-border safe-area-pb before:absolute before:top-0 before:start-0 before:end-0 before:h-px before:bg-gradient-to-r before:from-transparent before:via-ecommerce-red/20 before:to-transparent">
       <div className="flex items-center h-[68px] px-2">
         {navItems.map((item) => {
-          const isCart = item.label === 'Shop';
-          const isWishlist = item.label === 'Wishlist';
+          const isCart = item.id === 'cart';
+          const isWishlist = item.id === 'wishlist';
           const badge = isCart ? total : isWishlist ? wishCount : 0;
-          const isActive = activeTab === item.label;
+          const isActive = activeTab === item.id;
 
           return (
             <a
-              key={item.label}
+              key={item.id}
               href={item.href}
               onClick={(e) => handleClick(item, e)}
               className="relative flex flex-col items-center justify-center gap-0.5 flex-1 h-full group active:scale-90 transition-transform"
@@ -67,7 +84,7 @@ export function MobileBottomNav() {
                   <motion.span
                     initial={{ scale: 0 }}
                     animate={{ scale: 1 }}
-                    className="absolute -top-1.5 -right-2.5 min-w-[16px] h-4 flex items-center justify-center px-1 text-[10px] font-bold bg-ecommerce-red text-white rounded-full shadow-sm shadow-ecommerce-red/20"
+                    className="absolute -top-1.5 -end-2.5 min-w-[16px] h-4 flex items-center justify-center px-1 text-[10px] font-bold bg-ecommerce-red text-white rounded-full shadow-sm shadow-ecommerce-red/20"
                   >
                     {badge > 99 ? '99+' : badge}
                   </motion.span>
@@ -80,12 +97,12 @@ export function MobileBottomNav() {
                     : 'text-ecommerce-text-muted group-hover:text-ecommerce-text-secondary'
                 }`}
               >
-                {item.label}
+                {labels[item.id]}
               </span>
               {isActive && (
                 <motion.div
                   layoutId="mobile-nav-indicator"
-                  className="absolute -bottom-px left-1/2 -translate-x-1/2 w-4 h-0.5 rounded-full bg-ecommerce-red"
+                  className="absolute -bottom-px start-1/2 -translate-x-1/2 w-4 h-0.5 rounded-full bg-ecommerce-red"
                   transition={{ type: 'spring', stiffness: 500, damping: 30 }}
                 />
               )}

@@ -1,8 +1,8 @@
 'use client';
 
 import { useCallback } from 'react';
-import { triggerFlyToCart } from '@/components/ecommerce/fly-to-cart';
-import { useCartStore } from '@/lib/store';
+import { triggerFlyToCart } from '../components/ecommerce/fly-to-cart';
+import { useCartStore } from '../lib/store';
 import { toast } from 'sonner';
 
 interface CartItemData {

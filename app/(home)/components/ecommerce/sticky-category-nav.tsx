@@ -4,7 +4,9 @@ import { useEffect, useRef, useSyncExternalStore } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X } from 'lucide-react';
-import { useUIStore } from '@/lib/store';
+import { useUIStore } from '../../lib/store';
+import { useTranslations } from 'next-intl';
+import { useCategoryTranslations } from '../../lib/category-translations';
 
 interface Category {
   id: string;
@@ -64,6 +66,8 @@ function getServerSnapshot() {
 }
 
 export function StickyCategoryNav() {
+  const t = useTranslations();
+  const catTrans = useCategoryTranslations();
   const isVisible = useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
 
   const { data: categories = [] } = useQuery<Category[]>({
@@ -94,7 +98,7 @@ export function StickyCategoryNav() {
           animate={{ y: 0, opacity: 1 }}
           exit={{ y: -56, opacity: 0 }}
           transition={{ duration: 0.3, ease: 'easeOut' }}
-          className="fixed top-0 left-0 right-0 z-50 h-14 bg-white/90 dark:bg-ecommerce-surface/90 backdrop-blur-xl border-b border-ecommerce-border shadow-md"
+          className="fixed top-0 start-0 end-0 z-50 h-14 bg-white/90 dark:bg-ecommerce-surface/90 backdrop-blur-xl border-b border-ecommerce-border shadow-md"
         >
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-full flex items-center gap-3">
             {/* Brand text - desktop only */}
@@ -116,7 +120,7 @@ export function StickyCategoryNav() {
                     : 'bg-ecommerce-surface-hover text-ecommerce-text-secondary hover:bg-ecommerce-surface-hover/80'
                 }`}
               >
-                All
+                {t('common.allCategories')}
               </motion.button>
 
               {/* Category pills with staggered entrance */}
@@ -142,7 +146,7 @@ export function StickyCategoryNav() {
                       className="w-2 h-2 rounded-full shrink-0"
                       style={{ backgroundColor: cat.color }}
                     />
-                    <span>{cat.name}</span>
+                    <span>{catTrans[cat.name] || cat.name}</span>
                     <span className="text-ecommerce-text-muted text-xs">
                       {cat._count.products}
                     </span>
@@ -163,7 +167,7 @@ export function StickyCategoryNav() {
                 <button
                   onClick={handleClearSearch}
                   className="p-0.5 rounded-full hover:bg-ecommerce-border/50 transition-colors cursor-pointer"
-                  aria-label="Clear search"
+                  aria-label={t('common.clear')}
                 >
                   <X size={12} />
                 </button>

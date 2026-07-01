@@ -978,4 +978,42 @@
     -webkit-text-fill-color: transparent;
     background-clip: text;
   }
+
+  /* RTL logical property utilities */
+  .start-0 { inset-inline-start: 0; }
+  .end-0 { inset-inline-end: 0; }
+  .start-auto { margin-inline-start: auto; }
+  .end-auto { margin-inline-end: auto; }
+  .ps-0 { padding-inline-start: 0; }
+  .pe-0 { padding-inline-end: 0; }
+  .ms-0 { margin-inline-start: 0; }
+  .me-0 { margin-inline-end: 0; }
+  .text-start { text-align: start; }
+  .text-end { text-align: end; }
+
+  /* RTL-safe shadow and border */
+  .dark .card-lift:hover {
+    box-shadow: 0 12px 40px rgba(0, 0, 0.3);
+  }
+
+  /* RTL-safe hover glow */
+  .dark .hover-glow:hover {
+    box-shadow: 0 0 20px rgba(255, 107, 107, 0.08);
+  }
+
+  /* RTL safe category glow */
+  .dark .category-glow:hover {
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3), 0 0 40px color-mix(in srgb, var(--glow-color) 10%, transparent);
+  }
+
+  /* RTL badge positioning fix */
+  .rtl-fix-rotate {
+    transform: scaleX(-1);
+  }
+
+  /* RTL font face for Arabic script languages */
+  [dir="rtl"] body,
+  [dir="rtl"] .font-sans {
+    font-family: var(--font-vazirmatn), var(--font-cairo), 'Segoe UI', Tahoma, sans-serif;
+  }
 }

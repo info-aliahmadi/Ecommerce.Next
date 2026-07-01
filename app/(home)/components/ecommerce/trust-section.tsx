@@ -3,6 +3,7 @@
 import { motion, useInView } from 'framer-motion';
 import { Truck, Shield, RotateCcw, Headphones, BadgePercent, Zap, ShieldCheck } from 'lucide-react';
 import { useState, useEffect, useRef } from 'react';
+import { useTranslations } from 'next-intl';
 
 function AnimatedMetric({ value, suffix = '' }: { value: number; suffix: string }) {
   const [count, setCount] = useState(0);
@@ -110,7 +111,7 @@ const containerVariants = {
   },
 };
 
-const cardVariants = {
+const cardVariants : any = {
   hidden: { opacity: 0, y: 24 },
   visible: {
     opacity: 1,
@@ -120,6 +121,8 @@ const cardVariants = {
 };
 
 export function TrustSection() {
+  const t = useTranslations();
+
   return (
     <section className="py-14 sm:py-20 relative overflow-hidden bg-gradient-to-b from-transparent via-ecommerce-red/[0.02] to-transparent">
       {/* Background decorations */}
@@ -148,7 +151,7 @@ export function TrustSection() {
             transition={{ duration: 0.4, delay: 0.05 }}
             className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-ecommerce-text-primary tracking-tight"
           >
-            Shopping With <span className="gradient-text">Confidence</span>
+            {t('trust.title')}
           </motion.h2>
           <motion.p
             initial={{ opacity: 0, y: 10 }}

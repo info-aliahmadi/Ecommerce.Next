@@ -2,40 +2,44 @@
 
 import { useQuery } from '@tanstack/react-query';
 import { ProductCard } from './product-card';
-import { useUIStore, useWishlistStore, useCompareStore } from '@/lib/store';
-import { useFlyToCart } from '@/hooks/use-fly-to-cart';
-import { Button } from '@/components/ui/button';
-import { Skeleton } from '@/components/ui/skeleton';
-import { SlidersHorizontal, Grid3X3, LayoutList, X, Filter, Loader2, Star, ShoppingCart, Heart, Eye, GitCompareArrows, ArrowDown, PackageSearch } from 'lucide-react';
+import { useUIStore, useWishlistStore, useCompareStore } from '../../lib/store';
+import { useFlyToCart } from '../../hooks/use-fly-to-cart';
+import { Button } from '../ui/button';
+import { Skeleton } from '../ui/skeleton';
+import { SlidersHorizontal, Grid3X3, LayoutList, X, Filter, Loader2, Star, ShoppingCart, Heart, Eye, GitCompareArrows, ArrowDown, PackageSearch, ArrowRight } from 'lucide-react';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select';
+} from '../ui/select';
 import { useState, useMemo, useCallback } from 'react';
-import { Badge } from '@/components/ui/badge';
+import { Badge } from '../ui/badge';
 import { motion, AnimatePresence } from 'framer-motion';
 import { toast } from 'sonner';
+import { useTranslations } from 'next-intl';
+import { useCategoryTranslations } from '../../lib/category-translations';
 
 const PAGE_SIZE = 8;
 
-const SORT_LABELS: Record<string, string> = {
-  'newest': 'Newest',
-  'price-asc': 'Price: Low to High',
-  'price-desc': 'Price: High to Low',
-  'popular': 'Most Popular',
-};
-
 export function ProductGrid() {
-  const { searchQuery, selectedCategory, sortBy, setSortBy, setSelectedCategory } = useUIStore();
+  const t = useTranslations();
+  const catTrans = useCategoryTranslations();
+  const { searchQuery, selectedCategory, sortBy, setSortBy, setSelectedCategory, setCatalogOpen } = useUIStore();
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
   const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
   const [priceRange, setPriceRange] = useState<[number, number]>([0, 9999]);
   const [showFilters, setShowFilters] = useState(false);
   const [tempPriceMin, setTempPriceMin] = useState('');
   const [tempPriceMax, setTempPriceMax] = useState('');
+
+  const SORT_LABELS: Record<string, string> = {
+    'newest': t('common.newest'),
+    'price-asc': t('common.priceLowHigh'),
+    'price-desc': t('common.priceHighLow'),
+    'popular': t('common.popular'),
+  };
 
   const { data, isLoading, isError } = useQuery({
     queryKey: ['products', selectedCategory, searchQuery, sortBy],
@@ -117,21 +121,21 @@ export function ProductGrid() {
     <section id="products" className="py-12 sm:py-16 relative overflow-hidden">
       {/* Background decorations */}
       <div className="absolute inset-0 grid-bg-pattern opacity-40 pointer-events-none" />
-      <div className="absolute -top-32 -right-32 w-64 h-64 bg-ecommerce-purple/5 rounded-full blur-3xl pointer-events-none" />
-      <div className="absolute -bottom-32 -left-32 w-64 h-64 bg-ecommerce-red/5 rounded-full blur-3xl pointer-events-none" />
+      <div className="absolute -top-32 -end-32 w-64 h-64 bg-ecommerce-purple/5 rounded-full blur-3xl pointer-events-none" />
+      <div className="absolute -bottom-32 -start-32 w-64 h-64 bg-ecommerce-red/5 rounded-full blur-3xl pointer-events-none" />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
         {/* Section Header */}
-        <div className="mb-8">
+        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-8">
           <div>
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-ecommerce-purple/10 text-ecommerce-purple text-xs font-semibold uppercase tracking-widest mb-3">
               <Grid3X3 size={12} />
-              All Products
+              {t('featuredProducts.handpicked')}
             </div>
             <h2 className="text-2xl sm:text-3xl font-extrabold text-ecommerce-text-primary tracking-tight">
-              All Products
+              {t('featuredProducts.title')}
             </h2>
-            <p className="text-sm text-ecommerce-text-muted mt-1">Browse our complete collection</p>
+            <p className="text-sm text-ecommerce-text-muted mt-1">{t('featuredProducts.subtitle')}</p>
             {/* Decorative dot divider */}
             <div className="mt-4 flex items-center gap-2">
               <div className="h-px w-8 bg-ecommerce-border" />
@@ -139,6 +143,15 @@ export function ProductGrid() {
               <div className="h-px w-8 bg-ecommerce-border" />
             </div>
           </div>
+          <Button
+            onClick={() => setCatalogOpen(true)}
+            variant="outline"
+            className="shrink-0 rounded-xl border-ecommerce-purple text-ecommerce-purple hover:bg-ecommerce-purple/5 gap-2 h-10"
+          >
+            <SlidersHorizontal size={16} />
+            {t('catalog.openCatalog')}
+            <ArrowRight size={14} />
+          </Button>
         </div>
 
         {/* Active Filter Chips */}
@@ -153,33 +166,33 @@ export function ProductGrid() {
               <div className="flex items-center gap-2 flex-wrap">
                 {selectedCategory && (
                   <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-ecommerce-red/10 text-ecommerce-red text-xs font-medium">
-                    Category: {categories.find((c: { slug: string }) => c.slug === selectedCategory)?.name || selectedCategory}
+                    {t('common.category')}: {catTrans[categories.find((c: { slug: string }) => c.slug === selectedCategory)?.name || ''] || categories.find((c: { slug: string }) => c.slug === selectedCategory)?.name || selectedCategory}
                     <button onClick={() => setSelectedCategory(null)} className="hover:bg-ecommerce-red/20 rounded-full p-0.5 transition-colors"><X size={12} /></button>
                   </span>
                 )}
                 {searchQuery && (
                   <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-ecommerce-red/10 text-ecommerce-red text-xs font-medium">
-                    Search: &quot;{searchQuery}&quot;
+                    {t('common.searchPlaceholder').replace('...', '').replace('...', '')}: &quot;{searchQuery}&quot;
                     <button onClick={() => useUIStore.getState().setSearchQuery('')} className="hover:bg-ecommerce-red/20 rounded-full p-0.5 transition-colors"><X size={12} /></button>
                   </span>
                 )}
                 {sortBy && sortBy !== 'newest' && (
                   <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-ecommerce-red/10 text-ecommerce-red text-xs font-medium">
-                    Sort: {SORT_LABELS[sortBy] || sortBy}
+                    {t('common.sortBy')}: {SORT_LABELS[sortBy] || sortBy}
                     <button onClick={() => setSortBy('newest')} className="hover:bg-ecommerce-red/20 rounded-full p-0.5 transition-colors"><X size={12} /></button>
                   </span>
                 )}
                 {(priceRange[0] > 0 || priceRange[1] < 9999) && (
                   <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-ecommerce-red/10 text-ecommerce-red text-xs font-medium">
-                    Price: ${priceRange[0]} – ${priceRange[1] < 9999 ? priceRange[1] : '∞'}
+                    {t('common.priceRange')}: ${priceRange[0]} – ${priceRange[1] < 9999 ? priceRange[1] : '∞'}
                     <button onClick={handleClearPrice} className="hover:bg-ecommerce-red/20 rounded-full p-0.5 transition-colors"><X size={12} /></button>
                   </span>
                 )}
                 <button
                   onClick={handleClearAll}
-                  className="text-xs text-ecommerce-red hover:underline font-medium ml-1"
+                  className="text-xs text-ecommerce-red hover:underline font-medium ms-1"
                 >
-                  Clear All
+                  {t('common.clearAll')}
                 </button>
               </div>
             </motion.div>
@@ -189,8 +202,8 @@ export function ProductGrid() {
         {/* Toolbar: Controls Row */}
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6">
           <div className="flex items-center gap-2 text-sm text-ecommerce-text-muted">
-            <span>Showing <strong className="text-ecommerce-text-primary">{visibleProducts.length}</strong> product{visibleProducts.length !== 1 ? 's' : ''}</span>
-            {hasMore && <span>of {filteredProducts.length}</span>}
+            <span>{t('common.showing')} <strong className="text-ecommerce-text-primary">{visibleProducts.length}</strong> {visibleProducts.length !== 1 ? t('common.products') : t('common.product')}</span>
+            {hasMore && <span>{t('common.of')} {filteredProducts.length}</span>}
           </div>
 
           <div className="flex items-center gap-3 w-full sm:w-auto">
@@ -202,9 +215,9 @@ export function ProductGrid() {
               className="md:hidden h-9 rounded-xl border-ecommerce-border gap-2 relative"
             >
               <Filter size={14} />
-              Filters
+              {t('common.activeFilters').split(' ').pop()}
               {activeFilterCount > 0 && (
-                <span className="w-4 h-4 rounded-full bg-ecommerce-red text-white text-[9px] font-bold flex items-center justify-center absolute -top-1 -right-1">
+                <span className="w-4 h-4 rounded-full bg-ecommerce-red text-white text-[9px] font-bold flex items-center justify-center absolute -top-1 -end-1">
                   {activeFilterCount}
                 </span>
               )}
@@ -212,14 +225,14 @@ export function ProductGrid() {
 
             <Select value={sortBy} onValueChange={(v) => setSortBy(v as typeof sortBy)}>
               <SelectTrigger className="w-[160px] h-9 rounded-xl text-sm bg-white dark:bg-ecommerce-surface border-ecommerce-border">
-                <SlidersHorizontal size={14} className="mr-2 text-ecommerce-text-muted" />
+                <SlidersHorizontal size={14} className="me-2 text-ecommerce-text-muted" />
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="newest">Newest First</SelectItem>
-                <SelectItem value="popular">Most Popular</SelectItem>
-                <SelectItem value="price-asc">Price: Low to High</SelectItem>
-                <SelectItem value="price-desc">Price: High to Low</SelectItem>
+                <SelectItem value="newest">{t('common.newest')}</SelectItem>
+                <SelectItem value="popular">{t('common.popular')}</SelectItem>
+                <SelectItem value="price-asc">{t('common.priceLowHigh')}</SelectItem>
+                <SelectItem value="price-desc">{t('common.priceHighLow')}</SelectItem>
               </SelectContent>
             </Select>
 
@@ -227,14 +240,14 @@ export function ProductGrid() {
               <button
                 onClick={() => setViewMode('grid')}
                 className={`p-2.5 transition-all duration-200 ${viewMode === 'grid' ? 'bg-ecommerce-red text-white shadow-sm' : 'text-ecommerce-text-muted hover:bg-ecommerce-surface-hover'}`}
-                aria-label="Grid view"
+                aria-label={t('common.grid')}
               >
                 <Grid3X3 size={16} />
               </button>
               <button
                 onClick={() => setViewMode('list')}
                 className={`p-2.5 transition-all duration-200 ${viewMode === 'list' ? 'bg-ecommerce-red text-white shadow-sm' : 'text-ecommerce-text-muted hover:bg-ecommerce-surface-hover'}`}
-                aria-label="List view"
+                aria-label={t('common.list')}
               >
                 <LayoutList size={16} />
               </button>
@@ -253,7 +266,7 @@ export function ProductGrid() {
                   : 'bg-white dark:bg-ecommerce-surface text-ecommerce-text-secondary border-ecommerce-border hover:border-ecommerce-red/40 hover:text-ecommerce-red'
               }`}
             >
-              All Categories
+              {t('common.allCategories')}
             </button>
             {categories.map((cat: { slug: string; name: string; color: string; _count?: { products: number } }) => (
               <button
@@ -266,7 +279,7 @@ export function ProductGrid() {
                 }`}
               >
                 <span className="w-2 h-2 rounded-full shrink-0" style={{ backgroundColor: cat.color }} />
-                {cat.name}
+                {catTrans[cat.name] || cat.name}
                 <span className={`text-[10px] ${selectedCategory === cat.slug ? 'text-white/70' : 'text-ecommerce-text-muted'}`}>
                   {cat._count?.products || 0}
                 </span>
@@ -278,30 +291,30 @@ export function ProductGrid() {
         {/* Price Range Filter Row (desktop always visible, mobile toggle) */}
         <div className={`mb-6 ${showFilters ? 'block' : 'hidden md:block'}`}>
           <div className="flex items-center gap-3 p-3 rounded-xl bg-ecommerce-surface-hover/60 dark:bg-[#252836]/60 border border-ecommerce-border/60">
-            <span className="text-xs font-semibold text-ecommerce-text-muted uppercase tracking-wider shrink-0">Price</span>
+            <span className="text-xs font-semibold text-ecommerce-text-muted uppercase tracking-wider shrink-0">{t('common.priceRange')}</span>
             <div className="flex items-center gap-2 flex-1">
               <div className="relative flex-1 max-w-[120px]">
-                <span className="absolute left-2.5 top-1/2 -translate-y-1/2 text-xs text-ecommerce-text-muted">$</span>
+                <span className="absolute start-2.5 top-1/2 -translate-y-1/2 text-xs text-ecommerce-text-muted">$</span>
                 <input
                   type="number"
-                  placeholder="Min"
+                  placeholder={t('common.minPrice')}
                   value={tempPriceMin || (priceRange[0] > 0 ? String(priceRange[0]) : '')}
                   onChange={(e) => setTempPriceMin(e.target.value)}
                   onKeyDown={(e) => e.key === 'Enter' && handleApplyPrice()}
-                  className="w-full h-8 pl-6 pr-2 text-xs rounded-lg bg-white dark:bg-ecommerce-surface border border-ecommerce-border focus:outline-none focus:ring-1 focus:ring-ecommerce-red/30 focus:border-ecommerce-red/50 text-ecommerce-text-primary transition-all"
+                  className="w-full h-8 ps-6 pe-2 text-xs rounded-lg bg-white dark:bg-ecommerce-surface border border-ecommerce-border focus:outline-none focus:ring-1 focus:ring-ecommerce-red/30 focus:border-ecommerce-red/50 text-ecommerce-text-primary transition-all"
                   min="0"
                 />
               </div>
               <span className="text-ecommerce-text-muted text-xs">—</span>
               <div className="relative flex-1 max-w-[120px]">
-                <span className="absolute left-2.5 top-1/2 -translate-y-1/2 text-xs text-ecommerce-text-muted">$</span>
+                <span className="absolute start-2.5 top-1/2 -translate-y-1/2 text-xs text-ecommerce-text-muted">$</span>
                 <input
                   type="number"
-                  placeholder="Max"
+                  placeholder={t('common.maxPrice')}
                   value={tempPriceMax || (priceRange[1] < 9999 ? String(priceRange[1]) : '')}
                   onChange={(e) => setTempPriceMax(e.target.value)}
                   onKeyDown={(e) => e.key === 'Enter' && handleApplyPrice()}
-                  className="w-full h-8 pl-6 pr-2 text-xs rounded-lg bg-white dark:bg-ecommerce-surface border border-ecommerce-border focus:outline-none focus:ring-1 focus:ring-ecommerce-red/30 focus:border-ecommerce-red/50 text-ecommerce-text-primary transition-all"
+                  className="w-full h-8 ps-6 pe-2 text-xs rounded-lg bg-white dark:bg-ecommerce-surface border border-ecommerce-border focus:outline-none focus:ring-1 focus:ring-ecommerce-red/30 focus:border-ecommerce-red/50 text-ecommerce-text-primary transition-all"
                   min="0"
                 />
               </div>
@@ -309,7 +322,7 @@ export function ProductGrid() {
                 onClick={handleApplyPrice}
                 className="h-8 px-3 text-xs font-medium rounded-lg bg-ecommerce-red text-white hover:bg-ecommerce-red/90 transition-colors"
               >
-                Apply
+                {t('common.apply')}
               </button>
               {(priceRange[0] > 0 || priceRange[1] < 9999) && (
                 <button
@@ -317,7 +330,7 @@ export function ProductGrid() {
                   className="h-8 px-2 text-xs text-ecommerce-text-muted hover:text-ecommerce-red transition-colors flex items-center gap-1"
                 >
                   <X size={12} />
-                  Clear
+                  {t('common.clear')}
                 </button>
               )}
             </div>
@@ -354,10 +367,10 @@ export function ProductGrid() {
             <div className="w-16 h-16 rounded-full bg-ecommerce-red/10 flex items-center justify-center mx-auto mb-4">
               <span className="text-2xl">⚠️</span>
             </div>
-            <h3 className="text-lg font-semibold text-ecommerce-text-primary">Failed to load products</h3>
-            <p className="text-sm text-ecommerce-text-muted mt-1">Please try again later</p>
+            <h3 className="text-lg font-semibold text-ecommerce-text-primary">{t('common.noProductsFound')}</h3>
+            <p className="text-sm text-ecommerce-text-muted mt-1">{t('common.pleaseTryAgain')}</p>
             <Button onClick={() => window.location.reload()} variant="outline" className="mt-4 rounded-xl">
-              Retry
+              {t('common.retry')}
             </Button>
           </div>
         )}
@@ -415,7 +428,7 @@ export function ProductGrid() {
             {hasMore && (
               <div className="flex flex-col items-center mt-10 gap-3">
                 <p className="text-xs text-ecommerce-text-muted">
-                  Showing {visibleProducts.length} of {filteredProducts.length} products
+                  {t('common.showing')} {visibleProducts.length} {t('common.of')} {filteredProducts.length} {t('common.products')}
                 </p>
                 <Button
                   onClick={handleLoadMore}
@@ -423,7 +436,7 @@ export function ProductGrid() {
                   className="h-11 px-8 rounded-xl border-ecommerce-border text-ecommerce-text-secondary hover:border-ecommerce-red hover:text-ecommerce-red font-medium gap-2 transition-all hover:scale-[1.02] active:scale-95"
                 >
                   <ArrowDown size={16} />
-                  Load More ({filteredProducts.length - visibleProducts.length} remaining)
+                  {t('common.loadMore')} ({filteredProducts.length - visibleProducts.length} {t('common.remaining')})
                 </Button>
               </div>
             )}
@@ -436,11 +449,11 @@ export function ProductGrid() {
             <div className="w-20 h-20 rounded-full bg-ecommerce-surface-hover dark:bg-ecommerce-surface flex items-center justify-center mx-auto mb-5">
               <PackageSearch size={32} className="text-ecommerce-text-muted" />
             </div>
-            <h3 className="text-lg font-semibold text-ecommerce-text-primary">No products found</h3>
+            <h3 className="text-lg font-semibold text-ecommerce-text-primary">{t('common.noProductsFound')}</h3>
             <p className="text-sm text-ecommerce-text-muted mt-2 max-w-sm mx-auto">
               {searchQuery
-                ? `We couldn't find any products matching "${searchQuery}". Try adjusting your search or filters.`
-                : 'No products match your current filters. Try broadening your selection.'}
+                ? t('common.noProductsDesc', { query: searchQuery })
+                : t('common.noProductsFilterDesc')}
             </p>
             {(selectedCategory || priceRange[0] > 0 || priceRange[1] < 9999 || searchQuery || (sortBy && sortBy !== 'newest')) && (
               <Button
@@ -449,7 +462,7 @@ export function ProductGrid() {
                 className="mt-5 rounded-xl border-ecommerce-border hover:border-ecommerce-red hover:text-ecommerce-red gap-2 transition-colors"
               >
                 <X size={14} />
-                Clear Filters
+                {t('common.clearAll')}
               </Button>
             )}
           </div>
@@ -481,6 +494,7 @@ interface ProductListCardProps {
 function ProductListCard({
   id, name, price, comparePrice, image, rating, reviewCount, category, shortDesc, description, tags, stock, sku, index = 0
 }: ProductListCardProps) {
+  const t = useTranslations();
   const { toggleItem, isInWishlist } = useWishlistStore();
   const { setQuickViewProduct } = useUIStore();
   const { addItem: addCompareItem, isInCompare } = useCompareStore();
@@ -501,7 +515,7 @@ function ProductListCard({
     e.preventDefault();
     e.stopPropagation();
     toggleItem({ id, name, price, comparePrice, image, category: category.name });
-    toast.success(wishlisted ? 'Removed from wishlist' : 'Added to wishlist!');
+    toast.success(wishlisted ? t('common.removeFromWishlist') : t('common.addToWishlist'));
   };
 
   const handleCompare = (e: React.MouseEvent) => {
@@ -509,14 +523,14 @@ function ProductListCard({
     e.stopPropagation();
     if (inCompare) {
       addCompareItem({ id, name, price, comparePrice, image, rating, reviewCount, category, stock: stock || 0, description: description || '', sku });
-      toast.success('Removed from comparison');
+      toast.success(t('compare.remove'));
     } else {
       if (useCompareStore.getState().items.length >= 4) {
-        toast.warning('You can compare up to 4 products');
+        toast.warning(t('compare.maxWarning'));
         return;
       }
       addCompareItem({ id, name, price, comparePrice, image, rating, reviewCount, category, stock: stock || 0, description: description || '', sku });
-      toast.success('Added to comparison!');
+      toast.success(t('common.compare'));
     }
   };
 
@@ -546,22 +560,22 @@ function ProductListCard({
             loading="lazy"
           />
           {discount > 0 && (
-            <Badge className="absolute top-2.5 left-2.5 bg-ecommerce-red text-white border-0 text-[10px] font-bold px-1.5 py-0.5 rounded-md">
-              -{discount}%
+            <Badge className="absolute top-2.5 start-2.5 bg-ecommerce-red text-white border-0 text-[10px] font-bold px-1.5 py-0.5 rounded-md">
+              {t('common.off', { percent: discount })}
             </Badge>
           )}
           {parsedTags.includes('new') && (
-            <Badge className="absolute top-2.5 left-2.5 bg-ecommerce-teal text-white border-0 text-[10px] font-bold px-1.5 py-0.5 rounded-md">
-              NEW
+            <Badge className="absolute top-2.5 start-2.5 bg-ecommerce-teal text-white border-0 text-[10px] font-bold px-1.5 py-0.5 rounded-md">
+              {t('common.newBadge')}
             </Badge>
           )}
           {/* Stock indicator */}
           {stock !== undefined && (
-            <div className="absolute bottom-2.5 left-2.5">
+            <div className="absolute bottom-2.5 start-2.5">
               {stock === 0 ? (
-                <span className="text-[10px] font-bold px-2 py-0.5 rounded-md bg-black/50 text-white">Out of Stock</span>
+                <span className="text-[10px] font-bold px-2 py-0.5 rounded-md bg-black/50 text-white">{t('common.outOfStock')}</span>
               ) : stock < 10 ? (
-                <span className="text-[10px] font-bold px-2 py-0.5 rounded-md bg-ecommerce-amber/90 text-white">Only {stock} left</span>
+                <span className="text-[10px] font-bold px-2 py-0.5 rounded-md bg-ecommerce-amber/90 text-white">{t('common.onlyLeft', { count: stock })}</span>
               ) : null}
             </div>
           )}
@@ -574,7 +588,7 @@ function ProductListCard({
               <div className="flex items-center gap-1.5 mb-1">
                 <span className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: category.color }} />
                 <span className="text-[11px] font-medium text-ecommerce-text-muted uppercase tracking-wider">{category.name}</span>
-                {sku && <span className="text-[10px] text-ecommerce-text-muted ml-auto sm:ml-2">SKU: {sku}</span>}
+                {sku && <span className="text-[10px] text-ecommerce-text-muted ms-auto sm:ms-2">{t('common.sku')}: {sku}</span>}
               </div>
               <h3 className="font-semibold text-base text-ecommerce-text-primary line-clamp-1 group-hover:text-ecommerce-red transition-colors">{name}</h3>
               {shortDesc && <p className="text-xs text-ecommerce-text-muted mt-1 line-clamp-2">{shortDesc}</p>}
@@ -588,7 +602,7 @@ function ProductListCard({
                 <Star key={i} size={12} className={i < Math.floor(rating) ? 'fill-ecommerce-amber text-ecommerce-amber' : 'text-ecommerce-border'} />
               ))}
             </div>
-            <span className="text-xs text-ecommerce-text-muted">{rating} ({reviewCount} reviews)</span>
+            <span className="text-xs text-ecommerce-text-muted">{rating} ({reviewCount})</span>
           </div>
 
           {/* Tags */}
@@ -612,21 +626,21 @@ function ProductListCard({
               <button
                 onClick={handleCompare}
                 className={`w-9 h-9 rounded-lg border flex items-center justify-center transition-all ${inCompare ? 'bg-ecommerce-teal/5 border-ecommerce-teal/30 text-ecommerce-teal' : 'border-ecommerce-border hover:bg-ecommerce-teal hover:text-white hover:border-ecommerce-teal'}`}
-                aria-label={inCompare ? 'Remove from comparison' : 'Add to comparison'}
+                aria-label={inCompare ? t('compare.remove') : t('common.compare')}
               >
                 <GitCompareArrows size={14} />
               </button>
               <button
                 onClick={handleQuickView}
                 className="w-9 h-9 rounded-lg border border-ecommerce-border flex items-center justify-center hover:bg-ecommerce-purple hover:text-white hover:border-ecommerce-purple transition-all"
-                aria-label="Quick view"
+                aria-label={t('common.quickView')}
               >
                 <Eye size={14} />
               </button>
               <button
                 onClick={handleWishlist}
                 className={`w-9 h-9 rounded-lg border flex items-center justify-center transition-all ${wishlisted ? 'bg-ecommerce-red/5 border-ecommerce-red/30 text-ecommerce-red' : 'border-ecommerce-border hover:bg-ecommerce-rose hover:text-white hover:border-ecommerce-rose'}`}
-                aria-label="Wishlist"
+                aria-label={wishlisted ? t('common.removeFromWishlist') : t('common.addToWishlist')}
               >
                 <Heart size={14} className={wishlisted ? 'fill-ecommerce-red' : ''} />
               </button>
@@ -637,7 +651,7 @@ function ProductListCard({
                 className="h-9 px-4 bg-ecommerce-red hover:bg-ecommerce-red/90 text-white rounded-lg text-xs font-medium gap-1.5 transition-all hover:scale-105 active:scale-95 ripple disabled:opacity-50"
               >
                 <ShoppingCart size={13} />
-                Add to Cart
+                {t('common.addToCart')}
               </Button>
             </div>
           </div>

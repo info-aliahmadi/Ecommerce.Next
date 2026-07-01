@@ -1,16 +1,18 @@
 'use client';
 
 import { X, Heart, ShoppingCart, Trash2 } from 'lucide-react';
-import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sheet';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { useWishlistStore, useCartStore } from '@/lib/store';
+import { Sheet, SheetContent, SheetHeader, SheetTitle } from '../ui/sheet';
+import { Button } from '../ui/button';
+import { Badge } from '../ui/badge';
+import { useWishlistStore, useCartStore } from '../../lib/store';
 import { motion, AnimatePresence } from 'framer-motion';
 import { toast } from 'sonner';
+import { useTranslations } from 'next-intl';
 
 export function WishlistDrawer({ open, onClose }: { open: boolean; onClose: () => void }) {
   const { items, removeItem, totalCount } = useWishlistStore();
   const { addItem } = useCartStore();
+  const t = useTranslations();
 
   const handleMoveToCart = (item: typeof items[0]) => {
     addItem({
@@ -22,12 +24,12 @@ export function WishlistDrawer({ open, onClose }: { open: boolean; onClose: () =
       category: item.category,
     });
     removeItem(item.id);
-    toast.success(`${item.name} moved to cart!`);
+    toast.success(t('cart.itemAdded', { name: item.name }));
   };
 
   const handleRemove = (id: string, name: string) => {
     removeItem(id);
-    toast.success(`${name} removed from wishlist`);
+    toast.success(t('common.removeFromWishlist'));
   };
 
   return (
@@ -36,7 +38,7 @@ export function WishlistDrawer({ open, onClose }: { open: boolean; onClose: () =
         <SheetHeader className="px-6 py-4 border-b border-ecommerce-border">
           <SheetTitle className="flex items-center gap-2 text-ecommerce-text-primary">
             <Heart size={20} className="text-ecommerce-rose" />
-            Wishlist
+            {t('wishlist.title')}
             {totalCount() > 0 && (
               <Badge className="bg-ecommerce-rose text-white border-0 text-xs px-2 py-0">
                 {totalCount()}
@@ -50,9 +52,9 @@ export function WishlistDrawer({ open, onClose }: { open: boolean; onClose: () =
             <div className="w-16 h-16 rounded-full bg-ecommerce-rose/10 flex items-center justify-center mb-4">
               <Heart size={24} className="text-ecommerce-rose/50" />
             </div>
-            <p className="text-sm font-semibold text-ecommerce-text-primary">Your wishlist is empty</p>
+            <p className="text-sm font-semibold text-ecommerce-text-primary">{t('wishlist.empty')}</p>
             <p className="text-xs text-ecommerce-text-muted mt-1 text-center">
-              Save items you love for later
+              {t('wishlist.emptyDesc')}
             </p>
           </div>
         ) : (
@@ -86,14 +88,14 @@ export function WishlistDrawer({ open, onClose }: { open: boolean; onClose: () =
                     <button
                       onClick={() => handleMoveToCart(item)}
                       className="w-8 h-8 rounded-lg bg-ecommerce-red/10 text-ecommerce-red flex items-center justify-center hover:bg-ecommerce-red hover:text-white transition-colors"
-                      aria-label="Move to cart"
+                      aria-label={t('wishlist.moveToCart')}
                     >
                       <ShoppingCart size={14} />
                     </button>
                     <button
                       onClick={() => handleRemove(item.id, item.name)}
                       className="w-8 h-8 rounded-lg bg-ecommerce-surface text-ecommerce-text-muted flex items-center justify-center hover:bg-ecommerce-red/10 hover:text-ecommerce-red transition-colors"
-                      aria-label="Remove"
+                      aria-label={t('wishlist.remove')}
                     >
                       <Trash2 size={14} />
                     </button>
@@ -115,13 +117,13 @@ export function WishlistDrawer({ open, onClose }: { open: boolean; onClose: () =
                       category: item.category,
                     });
                   });
-                  toast.success(`${items.length} items added to cart!`);
+                  toast.success(t('cart.itemAdded', { name: `${items.length} ${t('wishlist.items')}` }));
                   onClose();
                 }}
                 className="w-full h-11 bg-ecommerce-red hover:bg-ecommerce-red/90 text-white rounded-xl font-semibold text-sm gap-2"
               >
                 <ShoppingCart size={16} />
-                Add All to Cart
+                {t('common.addToCart')}
               </Button>
             </div>
           </div>

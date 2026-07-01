@@ -1,13 +1,15 @@
 'use client';
 
 import { Star, ShoppingCart, Heart, Eye, GitCompareArrows, Check } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { useWishlistStore, useUIStore, useCompareStore } from '@/lib/store';
+import { Button } from '../ui/button';
+import { Badge } from '../ui/badge';
+import { useWishlistStore, useUIStore, useCompareStore } from '../../lib/store';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useState, useRef, useEffect, useCallback } from 'react';
 import { toast } from 'sonner';
-import { useFlyToCart } from '@/hooks/use-fly-to-cart';
+import { useFlyToCart } from '../../hooks/use-fly-to-cart';
+import { useTranslations } from 'next-intl';
+import { useCategoryTranslations } from '../../lib/category-translations';
 
 interface ProductCardProps {
   id: string;
@@ -29,6 +31,8 @@ interface ProductCardProps {
 export function ProductCard({
   id, name, price, comparePrice, image, rating, reviewCount, category, shortDesc, description, tags, stock, sku, index = 0
 }: ProductCardProps) {
+  const t = useTranslations();
+  const catTrans = useCategoryTranslations();
   const { toggleItem, isInWishlist } = useWishlistStore();
   const { setQuickViewProduct } = useUIStore();
   const { addItem: addCompareItem, isInCompare } = useCompareStore();
@@ -104,7 +108,7 @@ export function ProductCard({
       image,
       category: category.name,
     });
-    toast.success(wishlisted ? 'Removed from wishlist' : 'Added to wishlist!');
+    toast.success(wishlisted ? t('common.removeFromWishlist') : t('common.addToWishlist'));
     setHeartBurst(true);
     setTimeout(() => setHeartBurst(false), 600);
   };
@@ -114,14 +118,14 @@ export function ProductCard({
     e.stopPropagation();
     if (inCompare) {
       addCompareItem({ id, name, price, comparePrice, image, rating, reviewCount, category, stock: stock || 0, description: description || '', sku });
-      toast.success('Removed from comparison');
+      toast.success(t('compare.remove'));
     } else {
       if (useCompareStore.getState().items.length >= 4) {
-        toast.warning('You can compare up to 4 products');
+        toast.warning(t('compare.maxWarning'));
         return;
       }
       addCompareItem({ id, name, price, comparePrice, image, rating, reviewCount, category, stock: stock || 0, description: description || '', sku });
-      toast.success('Added to comparison!');
+      toast.success(t('common.compare'));
     }
   };
 
@@ -197,7 +201,7 @@ export function ProductCard({
               <button
                 onClick={handleWishlist}
                 className={`w-9 h-9 rounded-lg bg-white/80 dark:bg-ecommerce-surface/80 flex items-center justify-center hover:scale-110 transition-transform duration-200 hover:bg-ecommerce-red hover:text-white ${heartBurst && wishlisted ? 'scale-125' : ''}`}
-                aria-label={wishlisted ? 'Remove from wishlist' : 'Add to wishlist'}
+                aria-label={wishlisted ? t('common.removeFromWishlist') : t('common.addToWishlist')}
               >
                 <Heart size={15} className={`transition-colors duration-200 ${wishlisted ? 'fill-ecommerce-red text-ecommerce-red' : 'text-ecommerce-text-secondary'}`} />
               </button>
@@ -205,21 +209,21 @@ export function ProductCard({
             <button
               onClick={handleCompare}
               className={`w-9 h-9 rounded-lg bg-white/80 dark:bg-ecommerce-surface/80 flex items-center justify-center hover:scale-110 transition-all ${inCompare ? 'bg-ecommerce-teal/10 dark:bg-ecommerce-teal/10' : 'hover:bg-ecommerce-teal hover:text-white'}`}
-              aria-label={inCompare ? 'Remove from comparison' : 'Add to comparison'}
+              aria-label={inCompare ? t('compare.remove') : t('common.compare')}
             >
               <GitCompareArrows size={15} className={inCompare ? 'text-ecommerce-teal' : 'text-ecommerce-text-secondary'} />
             </button>
             <button
               onClick={handleQuickView}
               className="w-9 h-9 rounded-lg bg-white/80 dark:bg-ecommerce-surface/80 flex items-center justify-center hover:scale-110 transition-all hover:bg-ecommerce-purple hover:text-white"
-              aria-label="Quick view"
+              aria-label={t('common.quickView')}
             >
               <Eye size={15} className="text-ecommerce-text-secondary" />
             </button>
             <button
               onClick={handleAddToCart}
               className="w-9 h-9 rounded-lg bg-white/80 dark:bg-ecommerce-surface/80 flex items-center justify-center hover:scale-110 transition-all hover:bg-ecommerce-red hover:text-white sm:hidden"
-              aria-label="Add to cart"
+              aria-label={t('common.addToCart')}
             >
               <ShoppingCart size={15} />
             </button>
@@ -228,51 +232,51 @@ export function ProductCard({
 
         {/* Stock indicator */}
         {stock !== undefined && stock < 10 && stock > 0 && (
-          <div className="absolute bottom-2.5 left-2.5 z-10">
+          <div className="absolute bottom-2.5 start-2.5 z-10">
             <span className="text-[10px] font-bold px-2 py-0.5 rounded-md bg-ecommerce-amber/90 text-white shadow-sm">
-              Only {stock} left
+              {t('common.onlyLeft', { count: stock })}
             </span>
           </div>
         )}
         {stock === 0 && (
           <div className="absolute inset-0 bg-black/40 z-10 flex items-center justify-center">
-            <span className="text-sm font-bold text-white bg-black/60 px-4 py-2 rounded-xl">Out of Stock</span>
+            <span className="text-sm font-bold text-white bg-black/60 px-4 py-2 rounded-xl">{t('common.outOfStock')}</span>
           </div>
         )}
 
         {/* Badges */}
-        <div className="absolute top-2.5 left-2.5 flex flex-col gap-1">
+        <div className="absolute top-2.5 start-2.5 flex flex-col gap-1">
           {discount > 0 && (
             <Badge className="bg-gradient-to-r from-ecommerce-red to-rose-500 text-white border-0 text-[10px] font-bold px-1.5 py-0.5 rounded-md shadow-sm">
-              -{discount}%
+              {t('common.off', { percent: discount })}
             </Badge>
           )}
           {parsedTags.includes('new') && (
             <Badge className="bg-ecommerce-teal text-white border-0 text-[10px] font-bold px-1.5 py-0.5 rounded-md shadow-sm">
-              NEW
+              {t('common.newBadge')}
             </Badge>
           )}
           {parsedTags.includes('trending') && (
             <Badge className="bg-ecommerce-amber text-ecommerce-text-primary border-0 text-[10px] font-bold px-1.5 py-0.5 rounded-md shadow-sm">
-              TRENDING
+              {t('common.trendingBadge')}
             </Badge>
           )}
           {parsedTags.includes('bestseller') && (
             <Badge className="bg-ecommerce-purple text-white border-0 text-[10px] font-bold px-1.5 py-0.5 rounded-md shadow-sm">
-              BEST
+              {t('common.bestBadge')}
             </Badge>
           )}
         </div>
 
         {/* Quick add on image hover (desktop) */}
         <motion.div
-          className="absolute bottom-3 right-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300 hidden sm:block"
+          className="absolute bottom-3 end-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300 hidden sm:block"
           whileTap={{ scale: 0.9 }}
         >
           <button
             onClick={handleAddToCart}
             className="w-10 h-10 rounded-full bg-ecommerce-red text-white shadow-lg shadow-ecommerce-red/30 flex items-center justify-center hover:bg-ecommerce-red/90 transition-colors hover:scale-110"
-            aria-label="Add to cart"
+            aria-label={t('common.addToCart')}
           >
             <ShoppingCart size={16} />
           </button>
@@ -284,7 +288,7 @@ export function ProductCard({
         {/* Category */}
         <div className="flex items-center gap-1.5 mb-1.5">
           <span className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: category.color }} />
-          <span className="text-[11px] font-medium text-ecommerce-text-muted uppercase tracking-wider">{category.name}</span>
+          <span className="text-[11px] font-medium text-ecommerce-text-muted uppercase tracking-wider">{catTrans[category.name] || category.name}</span>
         </div>
 
         {/* Name */}
@@ -323,7 +327,7 @@ export function ProductCard({
               )}
             </div>
             {savings > 0 && (
-              <span className="text-ecommerce-emerald text-[10px] font-medium">Save ${savings.toFixed(2)}</span>
+              <span className="text-ecommerce-emerald text-[10px] font-medium">{t('common.saveAmount', { amount: savings.toFixed(2) })}</span>
             )}
           </div>
           <Button
@@ -332,7 +336,7 @@ export function ProductCard({
             className={`h-8 px-2.5 sm:px-3 rounded-lg text-xs font-medium gap-1.5 transition-all duration-300 active:scale-95 ripple btn-shine ${justAdded ? 'bg-ecommerce-emerald hover:bg-ecommerce-emerald text-white scale-105' : 'bg-ecommerce-red hover:bg-ecommerce-red/90 text-white hover:scale-105'}`}
           >
             {justAdded ? <Check size={13} /> : <ShoppingCart size={13} />}
-            <span className="hidden sm:inline">{justAdded ? 'Added!' : 'Add'}</span>
+            <span className="hidden sm:inline">{justAdded ? t('quickView.added') : t('common.addToCart')}</span>
           </Button>
         </div>
       </div>

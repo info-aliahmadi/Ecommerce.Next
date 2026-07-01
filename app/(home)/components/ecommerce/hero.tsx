@@ -1,19 +1,23 @@
 'use client';
 
 import { ArrowRight, Truck, Shield, RotateCcw, Headphones, Sparkles, Zap, Clock } from 'lucide-react';
-import { Button } from '@/components/ui/button';
+import { Button } from '../ui/button';
 import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useState, useEffect, useCallback, useRef } from 'react';
+import { useTranslations } from 'next-intl';
 
-const features = [
-  { icon: Truck, title: 'Free Shipping', desc: 'On orders over $50' },
-  { icon: Shield, title: 'Secure Payment', desc: '100% protected' },
-  { icon: RotateCcw, title: 'Easy Returns', desc: '30-day return policy' },
-  { icon: Headphones, title: '24/7 Support', desc: 'Dedicated help center' },
+const liveActivities = [
+  { name: 'Sarah', city: 'NY', product: 'Wireless Headphones', color: '#E63946' },
+  { name: 'Michael', city: 'LA', product: 'Smart Watch Pro', color: '#6A5ACD' },
+  { name: 'Emily', city: 'Chicago', product: 'Leather Jacket', color: '#20B2AA' },
+  { name: 'David', city: 'Houston', product: 'Running Shoes', color: '#FFC107' },
+  { name: 'Lisa', city: 'Miami', product: 'Skincare Kit', color: '#FF69B4' },
+  { name: 'James', city: 'Seattle', product: 'Bluetooth Speaker', color: '#10B981' },
 ];
 
 function CountdownTimer() {
+  const t = useTranslations();
   const [timeLeft, setTimeLeft] = useState(() => {
     const now = new Date();
     const endOfDay = new Date(now);
@@ -52,12 +56,12 @@ function CountdownTimer() {
   return (
     <div className="flex items-center gap-2 mt-6">
       <Clock size={14} className="text-ecommerce-amber" />
-      <span className="text-sm text-white/80">Flash Sale ends in</span>
-      <div className="flex items-center gap-1.5 ml-1">
+      <span className="text-sm text-white/80">{t('hero.flashSaleEnds')}</span>
+      <div className="flex items-center gap-1.5 ms-1">
         {[
-          { value: pad(timeLeft.hours), label: 'HRS' },
-          { value: pad(timeLeft.minutes), label: 'MIN' },
-          { value: pad(timeLeft.seconds), label: 'SEC' },
+          { value: pad(timeLeft.hours), label: t('hero.hrs') },
+          { value: pad(timeLeft.minutes), label: t('hero.min') },
+          { value: pad(timeLeft.seconds), label: t('hero.sec') },
         ].map((unit, i) => (
           <div key={unit.label} className="flex items-center gap-1.5">
             <div className="bg-white/15 backdrop-blur-sm rounded-lg px-2.5 py-1.5 min-w-[44px] text-center border border-white/10">
@@ -128,23 +132,15 @@ function MeshBackground() {
         <rect width="100%" height="100%" fill="url(#mesh)" />
       </svg>
       {/* Gradient orbs for depth */}
-      <div className="absolute -top-40 -right-40 w-[500px] h-[500px] rounded-full bg-purple-500/10 blur-[100px]" />
-      <div className="absolute -bottom-40 -left-40 w-[400px] h-[400px] rounded-full bg-rose-500/10 blur-[100px]" />
+      <div className="absolute -top-40 -end-40 w-[500px] h-[500px] rounded-full bg-purple-500/10 blur-[100px]" />
+      <div className="absolute -bottom-40 -start-40 w-[400px] h-[400px] rounded-full bg-rose-500/10 blur-[100px]" />
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full bg-teal-500/5 blur-[120px]" />
     </div>
   );
 }
 
-const liveActivities = [
-  { name: 'Sarah', city: 'NY', product: 'Wireless Headphones', color: '#E63946' },
-  { name: 'Michael', city: 'LA', product: 'Smart Watch Pro', color: '#6A5ACD' },
-  { name: 'Emily', city: 'Chicago', product: 'Leather Jacket', color: '#20B2AA' },
-  { name: 'David', city: 'Houston', product: 'Running Shoes', color: '#FFC107' },
-  { name: 'Lisa', city: 'Miami', product: 'Skincare Kit', color: '#FF69B4' },
-  { name: 'James', city: 'Seattle', product: 'Bluetooth Speaker', color: '#10B981' },
-];
-
 function LiveActivityStrip() {
+  const t = useTranslations();
   const [currentIndex, setCurrentIndex] = useState(0);
 
   const cycle = useCallback(() => {
@@ -161,7 +157,8 @@ function LiveActivityStrip() {
   return (
     <div className="mt-8 pt-6 border-t border-white/10">
       <div className="flex items-center gap-2 mb-3">
-        <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />\n        <span className="text-xs font-medium text-emerald-400 uppercase tracking-wider">Live</span>
+        <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+        <span className="text-xs font-medium text-emerald-400 uppercase tracking-wider">{t('hero.live')}</span>
       </div>
       <AnimatePresence mode="wait">
         <motion.div
@@ -179,8 +176,7 @@ function LiveActivityStrip() {
             {activity.name[0]}
           </div>
           <p className="text-xs sm:text-sm text-white/70">
-            <span className="text-white/90 font-medium">{activity.name}</span> from {activity.city} just purchased{' '}
-            <span className="text-white/90 font-medium">{activity.product}</span>
+            {t('hero.justPurchased', { name: activity.name, city: activity.city, product: activity.product })}
           </p>
         </motion.div>
       </AnimatePresence>
@@ -198,6 +194,7 @@ const socialProofAvatars = [
 ];
 
 function SocialProofAvatars() {
+  const t = useTranslations();
   return (
     <div className="mt-6 flex items-center gap-3 justify-center lg:justify-start">
       <div className="flex -space-x-2">
@@ -211,80 +208,81 @@ function SocialProofAvatars() {
         ))}
       </div>
       <p className="text-xs sm:text-sm text-white/60">
-        Join <span className="text-white/80 font-medium">50,000+</span> happy shoppers
+        {t('hero.joinShoppers', { count: '50,000' })}
       </p>
     </div>
   );
 }
 
-const heroSlides = [
-  {
-    image: 'https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=600&h=500&fit=crop',
-    alt: 'Hot Deals collection',
-    badgeEmoji: '🔥',
-    badgeTitle: 'Hot Deals',
-    badgeSub: 'Up to 60% OFF',
-    badgeBg: 'bg-ecommerce-amber/20',
-    badgePos: 'absolute -bottom-2 left-6',
-    floatAnim: { y: [0, -8, 0] },
-    floatDur: 3,
-    badgeSize: 'w-12 h-12 rounded-xl',
-    textSize: 'text-2xl',
-    titleSize: 'text-sm',
-    subSize: 'text-xs',
-    padding: 'p-4 gap-3 rounded-2xl',
-  },
-  {
-    image: 'https://images.unsplash.com/photo-1483985988355-763728e1935b?w=600&h=500&fit=crop',
-    alt: 'New Arrivals collection',
-    badgeEmoji: '✨',
-    badgeTitle: 'New Arrivals',
-    badgeSub: 'Spring 2025',
-    badgeBg: 'bg-ecommerce-emerald/20',
-    badgePos: 'absolute -top-3 -right-3',
-    floatAnim: { y: [0, 6, 0] },
-    floatDur: 4,
-    badgeSize: 'w-10 h-10 rounded-xl',
-    textSize: 'text-xl',
-    titleSize: 'text-xs',
-    subSize: 'text-[10px]',
-    padding: 'p-3 gap-2.5 rounded-2xl',
-  },
-  {
-    image: 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=600&h=500&fit=crop',
-    alt: 'Premium Watches collection',
-    badgeEmoji: '⌚',
-    badgeTitle: 'Premium Watches',
-    badgeSub: 'Limited Edition',
-    badgeBg: 'bg-ecommerce-purple/20',
-    badgePos: 'absolute top-1/3 -left-5',
-    floatAnim: { y: [0, -5, 0] },
-    floatDur: 3.5,
-    badgeSize: 'w-8 h-8 rounded-lg',
-    textSize: 'text-sm',
-    titleSize: 'text-[11px]',
-    subSize: 'text-[9px]',
-    padding: 'p-2.5 gap-2 rounded-xl',
-  },
-  {
-    image: 'https://images.unsplash.com/photo-1572635196237-14b3f281503f?w=600&h=500&fit=crop',
-    alt: 'Athletic Gear collection',
-    badgeEmoji: '👟',
-    badgeTitle: 'Athletic Gear',
-    badgeSub: 'Performance Series',
-    badgeBg: 'bg-ecommerce-teal/20',
-    badgePos: 'absolute -bottom-2 right-6',
-    floatAnim: { y: [0, -7, 0] },
-    floatDur: 3.8,
-    badgeSize: 'w-11 h-11 rounded-xl',
-    textSize: 'text-lg',
-    titleSize: 'text-xs',
-    subSize: 'text-[10px]',
-    padding: 'p-3.5 gap-2.5 rounded-2xl',
-  },
-];
-
 function HeroCarousel() {
+  const t = useTranslations();
+
+  const heroSlides = [
+    {
+      image: 'https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=600&h=500&fit=crop',
+      alt: 'Hot Deals collection',
+      badgeEmoji: '🔥',
+      badgeTitle: t('hero.slideHotDeals'),
+      badgeSub: t('hero.slideHotDealsSub'),
+      badgeBg: 'bg-ecommerce-amber/20',
+      badgePos: 'absolute -bottom-2 start-6',
+      floatAnim: { y: [0, -8, 0] },
+      floatDur: 3,
+      badgeSize: 'w-12 h-12 rounded-xl',
+      textSize: 'text-2xl',
+      titleSize: 'text-sm',
+      subSize: 'text-xs',
+      padding: 'p-4 gap-3 rounded-2xl',
+    },
+    {
+      image: 'https://images.unsplash.com/photo-1483985988355-763728e1935b?w=600&h=500&fit=crop',
+      alt: 'New Arrivals collection',
+      badgeEmoji: '✨',
+      badgeTitle: t('hero.slideNewArrivals'),
+      badgeSub: t('hero.slideNewArrivalsSub'),
+      badgeBg: 'bg-ecommerce-emerald/20',
+      badgePos: 'absolute -top-3 -end-3',
+      floatAnim: { y: [0, 6, 0] },
+      floatDur: 4,
+      badgeSize: 'w-10 h-10 rounded-xl',
+      textSize: 'text-xl',
+      titleSize: 'text-xs',
+      subSize: 'text-[10px]',
+      padding: 'p-3 gap-2.5 rounded-2xl',
+    },
+    {
+      image: 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=600&h=500&fit=crop',
+      alt: 'Premium Watches collection',
+      badgeEmoji: '⌚',
+      badgeTitle: t('hero.slidePremium'),
+      badgeSub: t('hero.slidePremiumSub'),
+      badgeBg: 'bg-ecommerce-purple/20',
+      badgePos: 'absolute top-1/3 -start-5',
+      floatAnim: { y: [0, -5, 0] },
+      floatDur: 3.5,
+      badgeSize: 'w-8 h-8 rounded-lg',
+      textSize: 'text-sm',
+      titleSize: 'text-[11px]',
+      subSize: 'text-[9px]',
+      padding: 'p-2.5 gap-2 rounded-xl',
+    },
+    {
+      image: 'https://images.unsplash.com/photo-1572635196237-14b3f281503f?w=600&h=500&fit=crop',
+      alt: 'Athletic Gear collection',
+      badgeEmoji: '👟',
+      badgeTitle: t('hero.slideAthletic'),
+      badgeSub: t('hero.slideAthleticSub'),
+      badgeBg: 'bg-ecommerce-teal/20',
+      badgePos: 'absolute -bottom-2 end-6',
+      floatAnim: { y: [0, -7, 0] },
+      floatDur: 3.8,
+      badgeSize: 'w-11 h-11 rounded-xl',
+      textSize: 'text-lg',
+      titleSize: 'text-xs',
+      subSize: 'text-[10px]',
+      padding: 'p-3.5 gap-2.5 rounded-2xl',
+    },
+  ];
   const [activeIndex, setActiveIndex] = useState(0);
   const pauseRef = useRef(false);
 
@@ -369,6 +367,21 @@ function HeroCarousel() {
 }
 
 export function HeroSection() {
+  const t = useTranslations();
+
+  const features = [
+    { icon: Truck, title: t('hero.freeShipping'), desc: t('hero.onOrders') },
+    { icon: Shield, title: t('hero.securePayment'), desc: t('hero.protected') },
+    { icon: RotateCcw, title: t('hero.easyReturns'), desc: t('hero.returnPolicy') },
+    { icon: Headphones, title: t('hero.support247'), desc: t('hero.helpCenter') },
+  ];
+
+  const stats = [
+    { value: '10K+', label: t('hero.productsCount') },
+    { value: '50K+', label: t('hero.customersCount') },
+    { value: '99%', label: t('hero.satisfactionCount') },
+  ];
+
   return (
     <section className="relative overflow-hidden">
       {/* Main Hero */}
@@ -383,7 +396,7 @@ export function HeroSection() {
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6 }}
-              className="text-center lg:text-left"
+              className="text-center lg:text-start"
             >
               <motion.span
                 initial={{ opacity: 0, scale: 0.8 }}
@@ -392,23 +405,23 @@ export function HeroSection() {
                 className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/15 text-white text-sm font-medium mb-6 backdrop-blur-sm border border-white/10"
               >
                 <Zap size={14} className="text-ecommerce-amber" />
-                New Collection 2025
+                {t('hero.badge')}
                 <span className="w-2 h-2 rounded-full bg-ecommerce-amber badge-pulse" />
               </motion.span>
               <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white leading-tight tracking-tight">
-                Discover Your
+                {t('hero.title1')}
                 <span className="block mt-1">
-                  Perfect{' '}
+                  {t('hero.title2')}{' '}
                   <span className="relative inline-block">
                     Style
-                    <svg className="absolute -bottom-1 left-0 w-full" viewBox="0 0 100 10" preserveAspectRatio="none">
+                    <svg className="absolute -bottom-1 start-0 w-full" viewBox="0 0 100 10" preserveAspectRatio="none">
                       <path d="M0 8 Q25 0, 50 5 Q75 10, 100 3" fill="none" stroke="rgba(255,255,255,0.4)" strokeWidth="2.5" strokeLinecap="round" />
                     </svg>
                   </span>
                 </span>
               </h1>
               <p className="mt-6 text-lg text-white/80 max-w-lg mx-auto lg:mx-0 leading-relaxed">
-                Explore curated collections of premium products. From tech to fashion, find everything you need with exclusive deals.
+                {t('hero.subtitle')}
               </p>
 
               {/* Countdown Timer */}
@@ -421,8 +434,8 @@ export function HeroSection() {
                   className="bg-white text-ecommerce-red hover:bg-white/90 rounded-xl px-8 h-12 text-base font-semibold shadow-lg shadow-black/10 transition-all hover:shadow-xl hover:scale-[1.02] active:scale-[0.98] glow-red"
                 >
                   <Link href="#products">
-                    Shop Now
-                    <ArrowRight size={18} className="ml-2 group-hover:translate-x-1 transition-transform" />
+                    {t('hero.shopNow')}
+                    <ArrowRight size={18} className="ms-2 group-hover:translate-x-1 transition-transform" />
                   </Link>
                 </Button>
                 <Button
@@ -431,16 +444,12 @@ export function HeroSection() {
                   size="lg"
                   className="border-white/25 text-white hover:bg-white/10 rounded-xl px-8 h-12 text-base font-semibold backdrop-blur-sm hover:border-white/40 transition-all"
                 >
-                  <Link href="#categories">View Categories</Link>
+                  <Link href="#categories">{t('hero.viewCategories')}</Link>
                 </Button>
               </div>
               {/* Stats */}
               <div className="mt-10 flex items-center gap-8 justify-center lg:justify-start">
-                {[
-                  { value: '10K+', label: 'Products' },
-                  { value: '50K+', label: 'Customers' },
-                  { value: '99%', label: 'Satisfaction' },
-                ].map((stat, i) => (
+                {stats.map((stat, i) => (
                   <motion.div
                     key={stat.label}
                     initial={{ opacity: 0, y: 15 }}
@@ -476,7 +485,7 @@ export function HeroSection() {
       {/* Trust Badges */}
       <div className="bg-white dark:bg-ecommerce-surface border-b border-ecommerce-border relative">
         {/* Subtle top shadow */}
-        <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-ecommerce-red/20 to-transparent" />
+        <div className="absolute top-0 start-0 end-0 h-px bg-gradient-to-r from-transparent via-ecommerce-red/20 to-transparent" />
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-0 md:divide-x divide-ecommerce-border">
             {features.map((f, i) => (
@@ -486,7 +495,7 @@ export function HeroSection() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.4, delay: i * 0.1 }}
-                className="flex items-center gap-3 justify-center md:justify-start md:px-6 first:md:pl-0 group cursor-default"
+                className="flex items-center gap-3 justify-center md:justify-start md:px-6 first:md:ps-0 group cursor-default"
               >
                 <div className="w-10 h-10 rounded-xl bg-ecommerce-red/10 flex items-center justify-center shrink-0 group-hover:bg-ecommerce-red/15 transition-colors">
                   <f.icon size={18} className="text-ecommerce-red" />

@@ -3,6 +3,7 @@
 import { useState, useCallback, useSyncExternalStore } from 'react';
 import { Cookie } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useTranslations } from 'next-intl';
 
 const STORAGE_KEY = 'cookie-consent-granted';
 
@@ -20,6 +21,7 @@ function getServerSnapshot(): string {
 }
 
 export function CookieBanner() {
+  const t = useTranslations();
   const consent = useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
   const hasConsented = consent !== '';
   const [dismissed, setDismissed] = useState(false);
@@ -47,7 +49,7 @@ export function CookieBanner() {
             animate={{ y: 0, opacity: 1 }}
             exit={{ y: 100, opacity: 0 }}
             transition={{ duration: 0.4, ease: 'easeOut' }}
-            className="fixed bottom-0 left-0 right-0 z-40 p-3 sm:p-4"
+            className="fixed bottom-0 start-0 end-0 z-40 p-3 sm:p-4"
           >
             <div className="bg-white/95 dark:bg-ecommerce-surface/95 backdrop-blur-xl border border-ecommerce-border shadow-2xl rounded-t-2xl max-w-2xl mx-auto p-5 sm:p-6">
               <div className="flex flex-col sm:flex-row sm:items-center gap-4 sm:gap-6">
@@ -56,9 +58,9 @@ export function CookieBanner() {
                     <Cookie size={20} className="text-ecommerce-red" />
                   </div>
                   <div className="min-w-0">
-                    <h3 className="text-sm font-semibold text-ecommerce-text-primary">We value your privacy</h3>
+                    <h3 className="text-sm font-semibold text-ecommerce-text-primary">{t('cookie.title')}</h3>
                     <p className="text-xs sm:text-sm text-ecommerce-text-secondary mt-1 leading-relaxed">
-                      We use cookies to enhance your browsing experience, serve personalized content, and analyze our traffic.
+                      {t('cookie.desc')}
                     </p>
                   </div>
                 </div>
@@ -67,13 +69,13 @@ export function CookieBanner() {
                     onClick={handleAccept}
                     className="bg-ecommerce-red hover:bg-ecommerce-red/90 text-white rounded-xl h-10 px-5 text-sm font-medium transition-colors cursor-pointer"
                   >
-                    Accept All
+                    {t('cookie.acceptAll')}
                   </button>
                   <button
                     onClick={handleCustomize}
                     className="border border-ecommerce-border hover:bg-ecommerce-surface-hover rounded-xl h-10 px-5 text-sm font-medium text-ecommerce-text-primary transition-colors cursor-pointer"
                   >
-                    Customize
+                    {t('cookie.customize')}
                   </button>
                 </div>
               </div>
@@ -88,8 +90,8 @@ export function CookieBanner() {
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.2 }}
           onClick={handleReopen}
-          className="fixed bottom-20 lg:bottom-4 right-4 z-30 w-10 h-10 rounded-full bg-white/95 dark:bg-ecommerce-surface/95 backdrop-blur-xl border border-ecommerce-border shadow-lg flex items-center justify-center hover:bg-ecommerce-surface-hover transition-colors cursor-pointer"
-          aria-label="Cookie settings"
+          className="fixed bottom-20 lg:bottom-4 end-4 z-30 w-10 h-10 rounded-full bg-white/95 dark:bg-ecommerce-surface/95 backdrop-blur-xl border border-ecommerce-border shadow-lg flex items-center justify-center hover:bg-ecommerce-surface-hover transition-colors cursor-pointer"
+          aria-label={t('cookie.settings')}
         >
           <Cookie size={18} className="text-ecommerce-text-secondary" />
         </motion.button>

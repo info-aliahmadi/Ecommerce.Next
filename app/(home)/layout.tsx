@@ -1,8 +1,11 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import { Vazirmatn } from "next/font/google";
+import { Cairo } from "next/font/google";
 import "./globals.css";
-import { QueryProvider } from "./components/query-provider";
 import { ThemeProvider } from "next-themes";
+import { I18nScript } from "./i18n/provider";
+import { QueryProvider } from "./components/query-provider";
 import { Toaster } from "./components/ui/toaster";
 
 const geistSans = Geist({
@@ -13,6 +16,18 @@ const geistSans = Geist({
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
+});
+
+const vazirmatn = Vazirmatn({
+  subsets: ["arabic"],
+  variable: "--font-vazirmatn",
+  display: "swap",
+});
+
+const cairo = Cairo({
+  subsets: ["arabic", "latin"],
+  variable: "--font-cairo",
+  display: "swap",
 });
 
 export const metadata: Metadata = {
@@ -30,9 +45,13 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="en" dir="ltr" suppressHydrationWarning>
+      <head>
+        <I18nScript />
+      </head>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-background text-foreground`}
+        className={`${geistSans.variable} ${geistMono.variable} ${vazirmatn.variable} ${cairo.variable} antialiased bg-background text-foreground`}
+        style={{ fontFamily: 'var(--font-locale, var(--font-geist-sans)), sans-serif' }}
       >
         <ThemeProvider
           attribute="class"

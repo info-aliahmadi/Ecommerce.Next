@@ -6,7 +6,8 @@ import {
   DialogContent,
   DialogHeader,
   DialogTitle,
-} from '@/components/ui/dialog';
+} from '../ui/dialog';
+import { useTranslations } from 'next-intl';
 
 const SIZE_DATA = [
   { size: 'XS', chest: '32-34', waist: '24-26', hip: '34-36', length: '26-27' },
@@ -18,9 +19,9 @@ const SIZE_DATA = [
 ];
 
 const MEASUREMENT_STEPS = [
-  { num: 1, title: 'Chest', desc: 'Measure around the fullest part of your chest, keeping the tape horizontal.' },
-  { num: 2, title: 'Waist', desc: 'Measure around your natural waistline, where you normally wear your pants.' },
-  { num: 3, title: 'Hips', desc: 'Stand with feet together and measure around the fullest part of your hips.' },
+  { num: 1, titleKey: 'chest' as const, descKey: 'chestDesc' as const },
+  { num: 2, titleKey: 'waist' as const, descKey: 'waistDesc' as const },
+  { num: 3, titleKey: 'hips' as const, descKey: 'hipsDesc' as const },
 ];
 
 interface SizeGuideModalProps {
@@ -29,6 +30,7 @@ interface SizeGuideModalProps {
 }
 
 export function SizeGuideModal({ open, onClose }: SizeGuideModalProps) {
+  const t = useTranslations();
   return (
     <Dialog open={open} onOpenChange={(v) => !v && onClose()}>
       <DialogContent className="sm:max-w-lg max-h-[85vh] overflow-y-auto scrollbar-thin p-0">
@@ -40,8 +42,8 @@ export function SizeGuideModal({ open, onClose }: SizeGuideModalProps) {
                 <Ruler size={18} className="text-ecommerce-teal" />
               </div>
               <div>
-                <span className="text-lg font-bold">Size Guide</span>
-                <p className="text-xs text-ecommerce-text-muted font-normal mt-0.5">Find your perfect fit</p>
+                <span className="text-lg font-bold">{t('sizeGuide.title')}</span>
+                <p className="text-xs text-ecommerce-text-muted font-normal mt-0.5">{t('sizeGuide.findFit')}</p>
               </div>
             </DialogTitle>
           </DialogHeader>
@@ -79,7 +81,7 @@ export function SizeGuideModal({ open, onClose }: SizeGuideModalProps) {
 
           {/* How to Measure */}
           <div>
-            <h4 className="text-sm font-bold text-ecommerce-text-primary mb-3">How to Measure</h4>
+            <h4 className="text-sm font-bold text-ecommerce-text-primary mb-3">{t('sizeGuide.howToMeasure')}</h4>
             <div className="space-y-3">
               {MEASUREMENT_STEPS.map((step) => (
                 <div key={step.num} className="flex items-start gap-3">
@@ -87,8 +89,8 @@ export function SizeGuideModal({ open, onClose }: SizeGuideModalProps) {
                     <span className="text-xs font-bold text-ecommerce-teal">{step.num}</span>
                   </div>
                   <div>
-                    <p className="text-sm font-medium text-ecommerce-text-primary">{step.title}</p>
-                    <p className="text-xs text-ecommerce-text-muted mt-0.5 leading-relaxed">{step.desc}</p>
+                    <p className="text-sm font-medium text-ecommerce-text-primary">{t(`sizeGuide.${step.titleKey}` as any)}</p>
+                    <p className="text-xs text-ecommerce-text-muted mt-0.5 leading-relaxed">{t(`sizeGuide.${step.descKey}` as any)}</p>
                   </div>
                 </div>
               ))}
@@ -99,7 +101,7 @@ export function SizeGuideModal({ open, onClose }: SizeGuideModalProps) {
           <div className="flex items-start gap-2.5 p-3.5 rounded-xl bg-ecommerce-amber/5 border border-ecommerce-amber/10">
             <span className="text-base shrink-0 mt-0.5">💡</span>
             <p className="text-xs text-ecommerce-text-secondary leading-relaxed">
-              <span className="font-semibold text-ecommerce-text-primary">Pro tip:</span> When in between sizes, we recommend sizing up for a more comfortable fit.
+              <span className="font-semibold text-ecommerce-text-primary">{t('sizeGuide.proTip')}</span> {t('sizeGuide.proTipText')}
             </p>
           </div>
         </div>

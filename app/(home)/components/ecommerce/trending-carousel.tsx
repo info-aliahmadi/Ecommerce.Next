@@ -1,12 +1,14 @@
 'use client';
 
 import { useQuery } from '@tanstack/react-query';
-import { useUIStore } from '@/lib/store';
+import { useUIStore } from '../../lib/store';
 import { Eye, TrendingUp, Star, ChevronLeft, ChevronRight, ShoppingCart } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useRef, useCallback } from 'react';
 import { toast } from 'sonner';
-import { useCartStore } from '@/lib/store';
+import { useCartStore } from '../../lib/store';
+import { useTranslations } from 'next-intl';
+import { useCategoryTranslations } from '../../lib/category-translations';
 
 interface TrendingProduct {
   id: string;
@@ -25,6 +27,8 @@ interface TrendingProduct {
 }
 
 export function TrendingCarousel() {
+  const t = useTranslations();
+  const catTrans = useCategoryTranslations();
   const scrollRef = useRef<HTMLDivElement>(null);
   const { setQuickViewProduct } = useUIStore();
   const addItem = useCartStore((s) => s.addItem);
@@ -71,7 +75,7 @@ export function TrendingCarousel() {
       image: product.image,
       category: product.category.name,
     });
-    toast.success('Added to cart!');
+    toast.success(t('flyToCart.added'));
   };
 
   if (products.length === 0 && !isLoading) return null;
@@ -91,10 +95,10 @@ export function TrendingCarousel() {
             Trending
           </motion.div>
           <h2 className="text-2xl sm:text-3xl font-extrabold text-ecommerce-text-primary tracking-tight">
-            Trending <span className="gradient-text-warm">Now</span>
+            {t('trending.title')}
           </h2>
           <p className="text-sm text-ecommerce-text-muted mt-1">
-            Most popular picks this week
+            {t('trending.subtitle')}
           </p>
           {/* Dot divider */}
           <div className="mt-4 flex items-center justify-center gap-2">
@@ -111,7 +115,7 @@ export function TrendingCarousel() {
         <button
           onClick={() => scroll('left')}
           className="hidden md:flex absolute left-0 top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-full bg-white dark:bg-ecommerce-surface shadow-xl border border-ecommerce-border hover:bg-ecommerce-red hover:text-white items-center justify-center text-ecommerce-text-secondary transition-colors -translate-x-3"
-          aria-label="Scroll left"
+          aria-label={t('trending.scrollLeft')}
         >
           <ChevronLeft size={18} />
         </button>
@@ -120,7 +124,7 @@ export function TrendingCarousel() {
         <button
           onClick={() => scroll('right')}
           className="hidden md:flex absolute right-0 top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-full bg-white dark:bg-ecommerce-surface shadow-xl border border-ecommerce-border hover:bg-ecommerce-red hover:text-white items-center justify-center text-ecommerce-text-secondary transition-colors translate-x-3"
-          aria-label="Scroll right"
+          aria-label={t('trending.scrollRight')}
         >
           <ChevronRight size={18} />
         </button>
@@ -171,7 +175,7 @@ export function TrendingCarousel() {
                       initial={{ scale: 0 }}
                       animate={{ scale: 1 }}
                       transition={{ type: 'spring', stiffness: 300, damping: 20, delay: index * 0.08 }}
-                      className="absolute top-3 left-3 w-8 h-8 rounded-full bg-ecommerce-red text-white flex items-center justify-center text-xs font-bold shadow-lg"
+                      className="absolute top-3 start-3 w-8 h-8 rounded-full bg-ecommerce-red text-white flex items-center justify-center text-xs font-bold shadow-lg"
                     >
                       #{index + 1}
                     </motion.div>
@@ -192,7 +196,7 @@ export function TrendingCarousel() {
                         className="bg-white/20 backdrop-blur-sm hover:bg-white/30 rounded-xl px-4 py-2 text-white text-xs font-medium flex items-center gap-1.5 transition-colors"
                       >
                         <Eye size={13} />
-                        Quick View
+                        {t('common.quickView')}
                       </button>
                     </div>
                   </div>
@@ -206,7 +210,7 @@ export function TrendingCarousel() {
                         style={{ backgroundColor: product.category.color }}
                       />
                       <span className="text-[11px] font-medium text-ecommerce-text-muted uppercase tracking-wider truncate">
-                        {product.category.name}
+                        {catTrans[product.category.name] || product.category.name}
                       </span>
                     </div>
 
@@ -232,8 +236,8 @@ export function TrendingCarousel() {
 
                     {/* Sold count */}
                     <p className="text-[11px] text-ecommerce-text-muted">
-                      <ShoppingCart size={10} className="inline mr-1 -mt-0.5" />
-                      {product.reviewCount} sold
+                      <ShoppingCart size={10} className="inline me-1 -mt-0.5" />
+                      {product.reviewCount} {t('common.sold')}
                     </p>
                   </div>
                 </motion.div>

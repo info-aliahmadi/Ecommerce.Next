@@ -3,7 +3,8 @@
 import { useState, useEffect, useRef, useSyncExternalStore } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { BarChart3, Eye, Heart, ShoppingCart, ChevronUp } from 'lucide-react';
-import { useCartStore, useWishlistStore, useRecentStore } from '@/lib/store';
+import { useCartStore, useWishlistStore, useRecentStore } from '../../lib/store';
+import { useTranslations } from 'next-intl';
 
 const emptySubscribe = () => () => {};
 function useHasMounted() {
@@ -47,6 +48,7 @@ function AnimatedNumber({ value, duration = 600 }: { value: number; duration?: n
 }
 
 export function ProductQuickStats() {
+  const t = useTranslations();
   const [expanded, setExpanded] = useState(false);
   const hasMounted = useHasMounted();
 
@@ -66,7 +68,7 @@ export function ProductQuickStats() {
   if (!hasMounted || totalBadge === 0) return null;
 
   return (
-    <div className="fixed bottom-20 sm:bottom-8 left-4 sm:left-6 z-40">
+    <div className="fixed bottom-20 sm:bottom-8 start-4 sm:start-6 z-40">
       <AnimatePresence>
         {expanded && (
           <motion.div
@@ -81,12 +83,12 @@ export function ProductQuickStats() {
               <div className="flex items-center justify-between px-4 py-2.5 border-b border-ecommerce-border">
                 <div className="flex items-center gap-2">
                   <BarChart3 size={14} className="text-ecommerce-purple" />
-                  <span className="text-xs font-semibold text-ecommerce-text-primary">Quick Stats</span>
+                  <span className="text-xs font-semibold text-ecommerce-text-primary">{t('quickStats.title')}</span>
                 </div>
                 <button
                   onClick={() => setExpanded(false)}
                   className="w-5 h-5 rounded-full flex items-center justify-center text-ecommerce-text-muted hover:text-ecommerce-text-primary hover:bg-ecommerce-surface-hover transition-colors"
-                  aria-label="Collapse stats"
+                  aria-label={t('quickStats.collapseStats')}
                 >
                   <ChevronUp size={12} />
                 </button>
@@ -99,7 +101,7 @@ export function ProductQuickStats() {
                     <Eye size={14} className="text-ecommerce-teal" />
                   </div>
                   <div className="flex-1 min-w-0">
-                    <p className="text-[11px] text-ecommerce-text-muted">Items Viewed</p>
+                    <p className="text-[11px] text-ecommerce-text-muted">{t('quickStats.viewed')}</p>
                     <p className="text-sm font-bold text-ecommerce-text-primary tabular-nums">
                       <AnimatedNumber value={viewedCount} />
                     </p>
@@ -111,7 +113,7 @@ export function ProductQuickStats() {
                     <Heart size={14} className="text-ecommerce-rose" />
                   </div>
                   <div className="flex-1 min-w-0">
-                    <p className="text-[11px] text-ecommerce-text-muted">In Wishlist</p>
+                    <p className="text-[11px] text-ecommerce-text-muted">{t('quickStats.inWishlist')}</p>
                     <p className="text-sm font-bold text-ecommerce-text-primary tabular-nums">
                       <AnimatedNumber value={wishlistCount} />
                     </p>
@@ -123,7 +125,7 @@ export function ProductQuickStats() {
                     <ShoppingCart size={14} className="text-ecommerce-red" />
                   </div>
                   <div className="flex-1 min-w-0">
-                    <p className="text-[11px] text-ecommerce-text-muted">In Cart</p>
+                    <p className="text-[11px] text-ecommerce-text-muted">{t('quickStats.inCart')}</p>
                     <p className="text-sm font-bold text-ecommerce-text-primary tabular-nums">
                       ${totalCartPrice.toFixed(2)}
                     </p>
@@ -141,13 +143,13 @@ export function ProductQuickStats() {
         whileHover={{ scale: 1.05 }}
         whileTap={{ scale: 0.95 }}
         className="relative w-12 h-12 rounded-full bg-white dark:bg-ecommerce-surface shadow-lg border border-ecommerce-border flex items-center justify-center hover:shadow-xl transition-shadow group"
-        aria-label="Quick stats"
+        aria-label={t('quickStats.quickStatsLabel')}
       >
         <BarChart3 size={18} className="text-ecommerce-text-primary group-hover:text-ecommerce-purple transition-colors" />
 
         {/* Count badge */}
         {totalBadge > 0 && (
-          <span className="absolute -top-1 -right-1 min-w-[20px] h-5 px-1 rounded-full bg-ecommerce-purple text-white text-[10px] font-bold flex items-center justify-center shadow-sm">
+          <span className="absolute -top-1 -end-1 min-w-[20px] h-5 px-1 rounded-full bg-ecommerce-purple text-white text-[10px] font-bold flex items-center justify-center shadow-sm">
             <AnimatedNumber value={totalBadge} duration={400} />
           </span>
         )}

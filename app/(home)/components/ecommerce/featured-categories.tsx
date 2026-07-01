@@ -4,8 +4,10 @@ import { useQuery } from '@tanstack/react-query';
 import { ArrowRight, Layers } from 'lucide-react';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
+import { useCategoryTranslations } from '../../lib/category-translations';
 
 export function FeaturedCategories() {
+  const catTrans = useCategoryTranslations();
   const { data: categories = [] } = useQuery({
     queryKey: ['categories'],
     queryFn: () => fetch('/api/categories').then(r => r.json()),
@@ -60,7 +62,7 @@ export function FeaturedCategories() {
               >
                 <img
                   src={cat.image}
-                  alt={cat.name}
+                  alt={catTrans[cat.name] || cat.name}
                   className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                   loading="lazy"
                 />
@@ -75,7 +77,7 @@ export function FeaturedCategories() {
 
                 {/* Content */}
                 <div className="absolute bottom-0 left-0 right-0 p-4">
-                  <h3 className="text-white font-bold text-sm sm:text-base">{cat.name}</h3>
+                  <h3 className="text-white font-bold text-sm sm:text-base">{catTrans[cat.name] || cat.name}</h3>
                   <div className="flex items-center justify-between mt-1.5">
                     <span className="text-white/60 text-xs">{cat._count?.products || 0} items</span>
                     <div className="w-7 h-7 rounded-lg bg-white/10 flex items-center justify-center group-hover:bg-white/20 transition-all group-hover:translate-x-0.5">

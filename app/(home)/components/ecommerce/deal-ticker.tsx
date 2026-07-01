@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { motion } from 'framer-motion';
+import { useTranslations } from 'next-intl';
 
 const deals = [
   { icon: '🔥', text: 'Flash Sale: Up to 60% OFF Electronics', color: '#E63946' },
@@ -15,10 +16,13 @@ const deals = [
 ];
 
 export function DealTicker() {
+  const t = useTranslations();
   const [isPaused, setIsPaused] = useState(false);
 
   return (
     <div
+      role="marquee"
+      aria-label={t('dealTicker.title')}
       className="w-full py-2 bg-ecommerce-surface-hover/60 dark:bg-[#0F1117]/40 border-y border-ecommerce-border/50 relative overflow-hidden"
       onMouseEnter={() => setIsPaused(true)}
       onMouseLeave={() => setIsPaused(false)}
@@ -53,7 +57,7 @@ export function DealTicker() {
               {deal.text}
             </span>
             {/* Separator */}
-            <span className="text-ecommerce-text-muted ml-2 text-xs">•</span>
+            <span className="text-ecommerce-text-muted ms-2 text-xs">•</span>
           </span>
         ))}
       </motion.div>

@@ -1,16 +1,13 @@
 "use client"
 // types
 import { Provider as ReduxProvider } from 'react-redux';
-import DashboardThemeCustomization from '@root/themes/DashboardTheme';
+import DashboardThemeCustomization from '@root/app/dashboard/_theme';
 import DashboardLayout from './_layout/Index';
 import { store } from '@root/store';
 import { Suspense, useEffect, useState } from 'react';
 import Loader from './_components/Loader';
 import { SessionProvider } from 'next-auth/react'
 import AuthorizationProvider from './_components/Authorization/AuthorizationProvider';
-import '@root/public/css/customStyle/dashboard.css'
-
-// Import number extensions globally for the dashboard
 import '@root/utils/extensions/numberExtensions';
 import '@root/public/css/customStyle/dashboard.css'
 

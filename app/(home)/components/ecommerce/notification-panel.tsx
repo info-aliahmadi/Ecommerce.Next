@@ -2,9 +2,10 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import { Bell, CheckCheck, ExternalLink } from 'lucide-react';
-import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sheet';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
+import { Sheet, SheetContent, SheetHeader, SheetTitle } from '../ui/sheet';
+import { Badge } from '../ui/badge';
+import { Button } from '../ui/button';
+import { useTranslations } from 'next-intl';
 
 type Notification = {
   id: number;
@@ -28,8 +29,10 @@ const INITIAL_NOTIFICATIONS: Notification[] = [
 ];
 
 export function NotificationPanel({ open, onClose }: { open: boolean; onClose: () => void }) {
+  const t = useTranslations();
   const [notifications, setNotifications] = useState<Notification[]>(INITIAL_NOTIFICATIONS);
   const [readIds, setReadIds] = useState<Set<number>>(() => new Set(INITIAL_NOTIFICATIONS.slice(3).map((n) => n.id)));
+  const justNowLabel = t('notification.justNow');
 
   const unreadCount = notifications.filter((n) => !readIds.has(n.id)).length;
 
@@ -44,7 +47,7 @@ export function NotificationPanel({ open, onClose }: { open: boolean; onClose: (
         if (prev.length === 0) return prev;
         const last = prev[prev.length - 1];
         const rest = prev.slice(0, -1);
-        return [{ ...last, time: 'Just now' }, ...rest];
+        return [{ ...last, time: justNowLabel }, ...rest];
       });
     }, 15000);
     return () => clearInterval(interval);
@@ -55,22 +58,22 @@ export function NotificationPanel({ open, onClose }: { open: boolean; onClose: (
       <SheetContent side="right" className="sm:max-w-sm p-0 flex flex-col overflow-hidden">
         {/* Header */}
         <SheetHeader className="p-4 pb-3 border-b border-ecommerce-border shrink-0">
-          <div className="flex items-center justify-between pr-6">
+          <div className="flex items-center justify-between pe-6">
             <div className="flex items-center gap-2.5">
               <div className="relative">
                 <Bell size={18} className="text-ecommerce-text-primary" />
                 {unreadCount > 0 && (
-                  <span className="absolute -top-1.5 -right-1.5 flex items-center justify-center">
+                  <span className="absolute -top-1.5 -end-1.5 flex items-center justify-center">
                     <span className="w-4 h-4 rounded-full bg-ecommerce-red text-white text-[9px] font-bold flex items-center justify-center">
                       {unreadCount > 9 ? '9+' : unreadCount}
                     </span>
                   </span>
                 )}
               </div>
-              <SheetTitle className="text-base">Notifications</SheetTitle>
+              <SheetTitle className="text-base">{t('notification.title')}</SheetTitle>
               {unreadCount > 0 && (
                 <Badge variant="secondary" className="text-[10px] px-1.5 py-0 h-4 bg-ecommerce-red/10 text-ecommerce-red border-ecommerce-red/20">
-                  {unreadCount} new
+                  {unreadCount}
                 </Badge>
               )}
             </div>
@@ -81,8 +84,8 @@ export function NotificationPanel({ open, onClose }: { open: boolean; onClose: (
                 onClick={handleMarkAllRead}
                 className="h-7 px-2 text-xs text-ecommerce-text-secondary hover:text-ecommerce-text-primary"
               >
-                <CheckCheck size={13} className="mr-1" />
-                Mark all read
+                <CheckCheck size={13} className="me-1" />
+                {t('notification.markAllRead')}
               </Button>
             )}
           </div>
@@ -101,7 +104,7 @@ export function NotificationPanel({ open, onClose }: { open: boolean; onClose: (
                   {/* Unread indicator dot */}
                   {isUnread && (
                     <span
-                      className="absolute left-1.5 top-1/2 -translate-y-1/2 w-2 h-2 rounded-full shrink-0"
+                      className="absolute start-1.5 top-1/2 -translate-y-1/2 w-2 h-2 rounded-full shrink-0"
                       style={{ backgroundColor: notification.color }}
                     />
                   )}
@@ -117,11 +120,7 @@ export function NotificationPanel({ open, onClose }: { open: boolean; onClose: (
                   {/* Text content */}
                   <div className="flex-1 min-w-0">
                     <p className="text-sm text-ecommerce-text-primary leading-snug">
-                      <span className="font-medium">{notification.name}</span>
-                      <span className="text-ecommerce-text-secondary"> from </span>
-                      <span className="font-medium">{notification.city}</span>
-                      <span className="text-ecommerce-text-secondary"> purchased </span>
-                      <span className="font-medium text-ecommerce-text-primary">{notification.product}</span>
+                      {t('hero.justPurchased', { name: notification.name, city: notification.city, product: notification.product })}
                     </p>
                     <p className={`text-xs mt-0.5 ${isUnread ? 'text-ecommerce-text-secondary font-medium' : 'text-ecommerce-text-muted'}`}>
                       {notification.time}
@@ -149,7 +148,7 @@ export function NotificationPanel({ open, onClose }: { open: boolean; onClose: (
             className="w-full flex items-center justify-center gap-1.5 text-sm font-medium text-ecommerce-text-secondary hover:text-ecommerce-red transition-colors py-2 rounded-lg hover:bg-ecommerce-surface-hover"
           >
             <ExternalLink size={14} />
-            View all activity
+            {t('common.seeAll')}
           </button>
         </div>
       </SheetContent>

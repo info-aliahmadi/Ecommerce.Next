@@ -1,39 +1,41 @@
 'use client';
 
-import { Header } from '@/components/ecommerce/header';
-import { HeroSection } from '@/components/ecommerce/hero';
-import { BrandMarquee } from '@/components/ecommerce/brand-marquee';
-import { FeaturedCategories } from '@/components/ecommerce/featured-categories';
-import { FeaturedProducts } from '@/components/ecommerce/featured-products';
-import { DealsSection } from '@/components/ecommerce/deals-section';
-import { TestimonialsSection } from '@/components/ecommerce/testimonials';
-import { RecentlyViewed } from '@/components/ecommerce/recently-viewed';
-import { ProductGrid } from '@/components/ecommerce/product-grid';
-import { NewsletterSection } from '@/components/ecommerce/newsletter';
-import { Footer } from '@/components/ecommerce/footer';
-import { CartDrawer } from '@/components/ecommerce/cart-drawer';
-import { QuickViewModal } from '@/components/ecommerce/quick-view-modal';
-import { BackToTop } from '@/components/ecommerce/back-to-top';
-import { MobileBottomNav } from '@/components/ecommerce/mobile-bottom-nav';
-import { WaveDivider } from '@/components/ecommerce/wave-divider';
-import { ScrollProgress } from '@/components/ecommerce/scroll-progress';
-import { FlyToCart } from '@/components/ecommerce/fly-to-cart';
-import { CompareBar } from '@/components/ecommerce/compare-bar';
-import { CompareDrawer } from '@/components/ecommerce/compare-drawer';
-import { WelcomeToast } from '@/components/ecommerce/welcome-toast';
-import { TrustSection } from '@/components/ecommerce/trust-section';
-import { TrendingCarousel } from '@/components/ecommerce/trending-carousel';
-import { DealTicker } from '@/components/ecommerce/deal-ticker';
-import { CookieBanner } from '@/components/ecommerce/cookie-banner';
-import { ShopTheLook } from '@/components/ecommerce/shop-the-look';
-import { StickyCategoryNav, CategoryNavSentinel } from '@/components/ecommerce/sticky-category-nav';
-import { PageSkeleton } from '@/components/ecommerce/page-skeleton';
-import { ImageComparison } from '@/components/ecommerce/image-comparison';
-import { ProductBundles } from '@/components/ecommerce/product-bundles';
-import { StockAlert } from '@/components/ecommerce/stock-alert';
-import { ProductQuickStats } from '@/components/ecommerce/product-quick-stats';
-import { useCompareStore } from '@/lib/store';
-import { useScrollReveal } from '@/hooks/use-scroll-reveal';
+import { HeroSection } from './components/ecommerce/hero';
+import { BrandMarquee } from './components/ecommerce/brand-marquee';
+import { FeaturedCategories } from './components/ecommerce/featured-categories';
+import { FeaturedProducts } from './components/ecommerce/featured-products';
+import { DealsSection } from './components/ecommerce/deals-section';
+import { TestimonialsSection } from './components/ecommerce/testimonials';
+import { RecentlyViewed } from './components/ecommerce/recently-viewed';
+import { ProductGrid } from './components/ecommerce/product-grid';
+import { NewsletterSection } from './components/ecommerce/newsletter';
+import { Footer } from './components/ecommerce/footer';
+import { CartDrawer } from './components/ecommerce/cart-drawer';
+import { QuickViewModal } from './components/ecommerce/quick-view-modal';
+import { BackToTop } from './components/ecommerce/back-to-top';
+import { MobileBottomNav } from './components/ecommerce/mobile-bottom-nav';
+import { WaveDivider } from './components/ecommerce/wave-divider';
+import { ScrollProgress } from './components/ecommerce/scroll-progress';
+import { FlyToCart } from './components/ecommerce/fly-to-cart';
+import { CompareBar } from './components/ecommerce/compare-bar';
+import { CompareDrawer } from './components/ecommerce/compare-drawer';
+import { WelcomeToast } from './components/ecommerce/welcome-toast';
+import { TrustSection } from './components/ecommerce/trust-section';
+import { TrendingCarousel } from './components/ecommerce/trending-carousel';
+import { DealTicker } from './components/ecommerce/deal-ticker';
+import { CookieBanner } from './components/ecommerce/cookie-banner';
+import { ShopTheLook } from './components/ecommerce/shop-the-look';
+import { StickyCategoryNav, CategoryNavSentinel } from './components/ecommerce/sticky-category-nav';
+import { PageSkeleton } from './components/ecommerce/page-skeleton';
+import { ImageComparison } from './components/ecommerce/image-comparison';
+import { ProductBundles } from './components/ecommerce/product-bundles';
+import { StockAlert } from './components/ecommerce/stock-alert';
+import { ProductQuickStats } from './components/ecommerce/product-quick-stats';
+import { ProductCatalog } from './components/ecommerce/product-catalog';
+import { I18nProvider } from './i18n/provider';
+import { useCompareStore } from './lib/store';
+import { useScrollReveal } from './hooks/use-scroll-reveal';
+import { Header } from './components/ecommerce/header';
 
 export default function Home() {
   const scrollRef = useScrollReveal();
@@ -41,6 +43,7 @@ export default function Home() {
   const setCompareOpen = useCompareStore((s) => s.setCompareOpen);
 
   return (
+    <I18nProvider>
     <div className="min-h-screen flex flex-col pb-16 lg:pb-0" ref={scrollRef}>
       <ScrollProgress />
       <WelcomeToast />
@@ -80,6 +83,8 @@ export default function Home() {
       <CookieBanner />
       <StockAlert />
       <ProductQuickStats />
+      <ProductCatalog />
     </div>
+    </I18nProvider>
   );
 }

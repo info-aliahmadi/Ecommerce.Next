@@ -1,6 +1,7 @@
 'use client';
 
 import { motion } from 'framer-motion';
+import { useTranslations } from 'next-intl';
 
 const brands = [
   { name: 'TechVision', color: '#E63946', category: 'Electronics' },
@@ -14,11 +15,12 @@ const brands = [
 ];
 
 export function BrandMarquee() {
+  const t = useTranslations();
   return (
     <section className="py-8 sm:py-10 bg-white dark:bg-ecommerce-surface border-y border-ecommerce-border overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-6">
         <p className="text-center text-[11px] font-semibold uppercase tracking-[0.2em] text-ecommerce-text-muted">
-          Trusted by leading brands worldwide
+          {t('brandMarquee.subtitle')}
         </p>
       </div>
 
@@ -27,8 +29,8 @@ export function BrandMarquee() {
 
       <div className="relative">
         {/* Fade edges - smoother with w-24 and subtle top/bottom border effect */}
-        <div className="absolute left-0 top-0 bottom-0 w-24 bg-gradient-to-r from-white dark:from-ecommerce-surface to-transparent z-10 border-t border-b border-ecommerce-border/30" />
-        <div className="absolute right-0 top-0 bottom-0 w-24 bg-gradient-to-l from-white dark:from-ecommerce-surface to-transparent z-10 border-t border-b border-ecommerce-border/30" />
+        <div className="absolute start-0 top-0 bottom-0 w-24 bg-gradient-to-e from-white dark:from-ecommerce-surface to-transparent z-10 border-t border-b border-ecommerce-border/30" />
+        <div className="absolute end-0 top-0 bottom-0 w-24 bg-gradient-to-s from-white dark:from-ecommerce-surface to-transparent z-10 border-t border-b border-ecommerce-border/30" />
 
         <motion.div
           animate={{ x: ['0%', '-50%'] }}

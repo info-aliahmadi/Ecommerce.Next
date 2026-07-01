@@ -2,9 +2,10 @@
 
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { Search, Clock, TrendingUp, ArrowRight, AlertCircle } from 'lucide-react';
-import { useUIStore } from '@/lib/store';
+import { useUIStore } from '../../lib/store';
 import { useQuery } from '@tanstack/react-query';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useTranslations } from 'next-intl';
 
 interface RecentSearch {
   query: string;
@@ -26,6 +27,7 @@ const STORAGE_KEY = 'ecommerce-recent-searches';
 const POPULAR_TERMS = ['Headphones', 'T-Shirt', 'Lamp', 'Yoga', 'Perfume', 'Keyboard'];
 
 export function SearchSuggestions({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) {
+  const t = useTranslations();
   const { searchQuery, setSearchQuery, setSelectedCategory } = useUIStore();
   const [recentSearches, setRecentSearches] = useState<RecentSearch[]>([]);
   const [activeIndex, setActiveIndex] = useState(-1);
@@ -183,21 +185,21 @@ export function SearchSuggestions({ isOpen, onClose }: { isOpen: boolean; onClos
     <div
       ref={containerRef}
       onKeyDown={handleKeyDown}
-      className="search-dropdown absolute top-full left-0 right-0 mt-2 bg-white dark:bg-ecommerce-surface rounded-xl shadow-xl border border-ecommerce-border overflow-hidden z-50"
+      className="search-dropdown absolute top-full start-0 end-0 mt-2 bg-white dark:bg-ecommerce-surface rounded-xl shadow-xl border border-ecommerce-border overflow-hidden z-50"
     >
       {/* Search suggestions from API + local */}
       {showSuggestions && (
         <div className="py-2 max-h-96 overflow-y-auto scrollbar-thin">
           <div className="px-4 py-1.5">
             <p className="text-[10px] font-semibold text-ecommerce-text-muted uppercase tracking-wider">
-              {isApiLoading ? 'Searching...' : `Results (${mergedResults.length})`}
+              {isApiLoading ? `${t('common.searchPlaceholder').split(' ')[0]}...` : `${t('common.searchPlaceholder').split(' ')[0]} (${mergedResults.length})`}
             </p>
           </div>
           {mergedResults.map((item, index) => (
             <button
               key={item.id}
               onClick={() => handleProductClick(item)}
-              className={`w-full flex items-center gap-3 px-4 py-2.5 ${index === activeIndex ? 'bg-ecommerce-surface-hover ring-1 ring-ecommerce-red/20 ring-inset' : ''} hover:bg-ecommerce-surface-hover transition-colors text-left group`}
+              className={`w-full flex items-center gap-3 px-4 py-2.5 ${index === activeIndex ? 'bg-ecommerce-surface-hover ring-1 ring-ecommerce-red/20 ring-inset' : ''} hover:bg-ecommerce-surface-hover transition-colors text-start group`}
             >
               <img
                 src={item.image}
@@ -215,11 +217,11 @@ export function SearchSuggestions({ isOpen, onClose }: { isOpen: boolean; onClos
           {hasSearchLink && (
             <button
               onClick={handleSearchForQuery}
-              className={`w-full flex items-center gap-3 px-4 py-2.5 border-t border-ecommerce-border ${activeIndex === suggestionCount ? 'bg-ecommerce-surface-hover ring-1 ring-ecommerce-red/20 ring-inset' : ''} hover:bg-ecommerce-surface-hover transition-colors text-left group`}
+              className={`w-full flex items-center gap-3 px-4 py-2.5 border-t border-ecommerce-border ${activeIndex === suggestionCount ? 'bg-ecommerce-surface-hover ring-1 ring-ecommerce-red/20 ring-inset' : ''} hover:bg-ecommerce-surface-hover transition-colors text-start group`}
             >
               <Search size={14} className="text-ecommerce-text-muted shrink-0" />
               <span className="text-sm text-ecommerce-red font-medium flex items-center gap-1">
-                Search for &apos;{searchQuery}&apos;
+                {t('searchSuggestions.searchFor', { query: searchQuery })}
                 <ArrowRight size={12} />
               </span>
             </button>
@@ -239,10 +241,10 @@ export function SearchSuggestions({ isOpen, onClose }: { isOpen: boolean; onClos
           >
             <AlertCircle size={28} className="text-ecommerce-text-muted mx-auto mb-3" />
             <p className="text-sm font-medium text-ecommerce-text-primary mb-1">
-              No results found
+              {t('searchSuggestions.noResults')}
             </p>
             <p className="text-xs text-ecommerce-text-muted max-w-[240px] mx-auto">
-              Try different keywords or browse our popular searches below.
+              {t('searchSuggestions.tryDifferent')}
             </p>
             <div className="flex flex-wrap gap-2 justify-center mt-4">
               {POPULAR_TERMS.slice(0, 4).map((term) => (
@@ -263,19 +265,19 @@ export function SearchSuggestions({ isOpen, onClose }: { isOpen: boolean; onClos
       {showRecent && (
         <div className="py-2">
           <div className="px-4 py-1.5 flex items-center justify-between">
-            <p className="text-[10px] font-semibold text-ecommerce-text-muted uppercase tracking-wider">Recent Searches</p>
+            <p className="text-[10px] font-semibold text-ecommerce-text-muted uppercase tracking-wider">{t('searchSuggestions.recentSearches')}</p>
             <button
               onClick={clearRecent}
               className="text-[10px] text-ecommerce-red hover:underline"
             >
-              Clear
+              {t('common.clear')}
             </button>
           </div>
           {recentSearches.map((recent, index) => (
             <button
               key={recent.query}
               onClick={() => handleSelect(recent.query)}
-              className={`w-full flex items-center gap-3 px-4 py-2.5 ${index === activeIndex ? 'bg-ecommerce-surface-hover' : ''} hover:bg-ecommerce-surface-hover transition-colors text-left`}
+              className={`w-full flex items-center gap-3 px-4 py-2.5 ${index === activeIndex ? 'bg-ecommerce-surface-hover' : ''} hover:bg-ecommerce-surface-hover transition-colors text-start`}
             >
               <Clock size={14} className="text-ecommerce-text-muted shrink-0" />
               <span className="text-sm text-ecommerce-text-secondary">{recent.query}</span>
@@ -288,13 +290,13 @@ export function SearchSuggestions({ isOpen, onClose }: { isOpen: boolean; onClos
       {showPopular && (
         <div className="py-2">
           <div className="px-4 py-1.5">
-            <p className="text-[10px] font-semibold text-ecommerce-text-muted uppercase tracking-wider">Popular Searches</p>
+            <p className="text-[10px] font-semibold text-ecommerce-text-muted uppercase tracking-wider">{t('searchSuggestions.trendingSearches')}</p>
           </div>
           {POPULAR_TERMS.map((term, index) => (
             <button
               key={term}
               onClick={() => handleSelect(term)}
-              className={`w-full flex items-center gap-3 px-4 py-2.5 ${index === activeIndex ? 'bg-ecommerce-surface-hover' : ''} hover:bg-ecommerce-surface-hover transition-colors text-left`}
+              className={`w-full flex items-center gap-3 px-4 py-2.5 ${index === activeIndex ? 'bg-ecommerce-surface-hover' : ''} hover:bg-ecommerce-surface-hover transition-colors text-start`}
             >
               <TrendingUp size={14} className="text-ecommerce-text-muted shrink-0" />
               <span className="text-sm text-ecommerce-text-secondary">{term}</span>
@@ -308,13 +310,13 @@ export function SearchSuggestions({ isOpen, onClose }: { isOpen: boolean; onClos
         <div className="border-t border-ecommerce-border px-4 py-2.5 bg-ecommerce-surface-hover/50">
           <p className="text-[11px] text-ecommerce-text-muted">
             <kbd className="px-1.5 py-0.5 rounded bg-ecommerce-surface border border-ecommerce-border text-[10px] font-mono">↑↓</kbd>
-            {' '}Navigate
+            {' '}{t('common.searchPlaceholder').split(' ')[0]}
             {' · '}
             <kbd className="px-1.5 py-0.5 rounded bg-ecommerce-surface border border-ecommerce-border text-[10px] font-mono">Enter</kbd>
-            {' '}to select
+            {' '}{t('searchSuggestions.pressEnter').split(' ').slice(-2).join(' ')}
             {' · '}
             <kbd className="px-1.5 py-0.5 rounded bg-ecommerce-surface border border-ecommerce-border text-[10px] font-mono">Esc</kbd>
-            {' '}to close
+            {' '}{t('common.close').toLowerCase()}
           </p>
         </div>
       )}

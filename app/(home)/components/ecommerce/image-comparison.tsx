@@ -3,6 +3,7 @@
 import { useCallback, useRef, useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 
 interface ImageComparisonProps {
   beforeImage?: string;
@@ -17,9 +18,12 @@ const AFTER_IMG = 'https://images.unsplash.com/photo-1483985988355-763728e1935b?
 export function ImageComparison({
   beforeImage = BEFORE_IMG,
   afterImage = AFTER_IMG,
-  beforeLabel = 'Before',
-  afterLabel = 'After',
+  beforeLabel,
+  afterLabel,
 }: ImageComparisonProps) {
+  const t = useTranslations();
+  const resolvedBeforeLabel = beforeLabel ?? t('imageComparison.before');
+  const resolvedAfterLabel = afterLabel ?? t('imageComparison.after');
   const containerRef = useRef<HTMLDivElement>(null);
   const [position, setPosition] = useState(50);
   const [isDragging, setIsDragging] = useState(false);
@@ -77,10 +81,10 @@ export function ImageComparison({
           className="text-center mb-8"
         >
           <h2 className="text-2xl md:text-3xl font-bold text-ecommerce-text-primary">
-            See the <span className="gradient-text-warm">Transformation</span>
+            {t('imageComparison.title').split(' ').slice(0, -1).join(' ')} <span className="gradient-text-warm">{t('imageComparison.title').split(' ').slice(-1)}</span>
           </h2>
           <p className="text-ecommerce-text-secondary mt-2 text-sm md:text-base">
-            Drag the slider to compare before &amp; after
+            {t('imageComparison.dragHint')}
           </p>
         </motion.div>
 
@@ -100,7 +104,7 @@ export function ImageComparison({
           <div className="relative aspect-[16/10] md:aspect-[16/9]">
             <img
               src={afterImage}
-              alt={afterLabel}
+              alt={resolvedAfterLabel}
               className="absolute inset-0 w-full h-full object-cover"
               draggable={false}
             />
@@ -112,8 +116,8 @@ export function ImageComparison({
             >
               <img
                 src={beforeImage}
-                alt={beforeLabel}
-                className="absolute top-0 left-0 h-full object-cover"
+                alt={resolvedBeforeLabel}
+                className="absolute top-0 start-0 h-full object-cover"
                 style={{ width: '200vw', maxWidth: 'none' }}
                 draggable={false}
               />
@@ -121,18 +125,18 @@ export function ImageComparison({
 
             {/* Before label */}
             <div
-              className="absolute top-4 left-4 px-3 py-1.5 rounded-full bg-black/50 backdrop-blur-sm text-white text-xs font-semibold uppercase tracking-wider pointer-events-none z-10"
+              className="absolute top-4 start-4 px-3 py-1.5 rounded-full bg-black/50 backdrop-blur-sm text-white text-xs font-semibold uppercase tracking-wider pointer-events-none z-10"
               style={{ opacity: position > 15 ? 1 : 0 }}
             >
-              {beforeLabel}
+              {resolvedBeforeLabel}
             </div>
 
             {/* After label */}
             <div
-              className="absolute top-4 right-4 px-3 py-1.5 rounded-full bg-black/50 backdrop-blur-sm text-white text-xs font-semibold uppercase tracking-wider pointer-events-none z-10"
+              className="absolute top-4 end-4 px-3 py-1.5 rounded-full bg-black/50 backdrop-blur-sm text-white text-xs font-semibold uppercase tracking-wider pointer-events-none z-10"
               style={{ opacity: position < 85 ? 1 : 0 }}
             >
-              {afterLabel}
+              {resolvedAfterLabel}
             </div>
 
             {/* Divider line */}
@@ -149,15 +153,15 @@ export function ImageComparison({
               <div
                 className={`w-10 h-10 md:w-12 md:h-12 rounded-full bg-white shadow-lg flex items-center justify-center gap-0.5 transition-transform duration-150 ${isDragging ? 'scale-110' : 'scale-100'}`}
               >
-                <ChevronLeft size={16} className="text-ecommerce-text-primary -ml-0.5" />
-                <ChevronRight size={16} className="text-ecommerce-text-primary -mr-0.5" />
+                <ChevronLeft size={16} className="text-ecommerce-text-primary -ms-0.5" />
+                <ChevronRight size={16} className="text-ecommerce-text-primary -me-0.5" />
               </div>
             </div>
 
             {/* Overlay gradient edges for polish */}
             <div className="absolute inset-0 pointer-events-none z-10">
-              <div className="absolute left-0 top-0 bottom-0 w-8 bg-gradient-to-r from-black/10 to-transparent" />
-              <div className="absolute right-0 top-0 bottom-0 w-8 bg-gradient-to-l from-black/10 to-transparent" />
+              <div className="absolute start-0 top-0 bottom-0 w-8 bg-gradient-to-e from-black/10 to-transparent" />
+              <div className="absolute end-0 top-0 bottom-0 w-8 bg-gradient-to-s from-black/10 to-transparent" />
             </div>
           </div>
         </motion.div>
