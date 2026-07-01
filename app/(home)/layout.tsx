@@ -5,8 +5,8 @@ import { Cairo } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "next-themes";
 import { I18nScript } from "./i18n/provider";
-import { QueryProvider } from "./components/query-provider";
-import { Toaster } from "./components/ui/toaster";
+import { QueryProvider } from "./_components/query-provider";
+import { Toaster } from "./_components/ui/toaster";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",

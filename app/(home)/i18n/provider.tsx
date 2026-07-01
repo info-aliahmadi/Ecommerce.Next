@@ -2,7 +2,7 @@
 
 import { useEffect, useCallback, useRef } from 'react';
 import { NextIntlClientProvider } from 'next-intl';
-import { useLocaleStore, LOCALE_CONFIG, type Locale } from '../lib/store';
+import { useLocaleStore, LOCALE_CONFIG, type Locale } from '../_lib/store';
 
 // Import all message files
 import enMessages from './locales/en.json';
