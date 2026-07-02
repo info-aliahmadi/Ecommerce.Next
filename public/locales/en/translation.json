@@ -78,6 +78,7 @@
     "subscribes": "Subscribes",
     "countries": "Countries",
     "product": "Products",
+    "categories": "Categories",
     "orders": "Orders",
     "deliveryDates": "Delivery Dates",
     "manufacturers": "Manufacturers",
@@ -223,9 +224,9 @@
     "menu": {
       "title": "Title",
       "url": "Url Address",
-      "imagePreviewId": "Image Icon",
       "order": "Order",
-      "parent": "Parent Topic"
+      "parent": "Parent Menu",
+      "previewImageId": "Image Icon"
     },
     "slideshow": {
       "header": "Header",
@@ -244,7 +245,6 @@
       "title": "Title",
       "url": "Url",
       "description": "Description",
-      "imagePreview": "Image Preview",
       "imagePreviewId": "Image Preview",
       "userName": "Created By"
     },
@@ -407,7 +407,7 @@
       "metaTitle": "Meta Title",
       "description": "Description",
       "metaDescription": "Meta Description",
-      "pictureId": "Picture Id",
+      "pictureId": "Preview",
       "parentCategoryId": "Parent Category Id",
       "parentCategory": "Parent Category",
       "displayOrder": "Display Order",
@@ -677,6 +677,13 @@
       "draft": "Save as Draft",
       "delete": "Delete Product",
       "saveOrder": "Save Order"
+    },
+    "category": {
+      "save": "Save",
+      "addSubCategory": "New Sub Category",
+      "addMainCategory": "New Main Category",
+      "edit": "Edit Category",
+      "delete": "Delete Category"
     },
     "stateProvince": {
       "save": "Save",

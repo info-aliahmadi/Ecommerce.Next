@@ -232,14 +232,14 @@
     "menu": {
       "title": "عنوان",
       "url": "آدرس URL",
-      "imagePreviewId": "آیکون تصویر",
+      "previewImageId": "پیشنمایش تصویر",
       "order": "ترتیب",
       "parent": "موضوع والد"
     },
     "slideshow": {
       "header": "هدر",
       "description": "توضیحات",
-      "previewImage": "پیش‌نمایش رسانه",
+      "previewImage": "پیشنمایش رسانه",
       "previewImageUrl": "آدرس رسانه",
       "order": "ترتیب",
       "createDate": "تاریخ ایجاد",

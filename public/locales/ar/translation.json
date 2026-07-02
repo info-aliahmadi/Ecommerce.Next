@@ -223,7 +223,7 @@
     "menu": {
       "title": "عنوان",
       "url": "آدرس URL",
-      "imagePreviewId": "آیکون تصویر",
+      "previewImageId": "پیش‌نمایش تصویر",
       "order": "ترتیب",
       "parent": "موضوع والد"
     },

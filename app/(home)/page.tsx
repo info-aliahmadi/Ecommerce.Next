@@ -48,7 +48,7 @@ export default function Home() {
       <ScrollProgress />
       <WelcomeToast />
       <Header />
-      <StickyCategoryNav />
+      {/* <StickyCategoryNav /> */}
       <main className="flex-1">
         <HeroSection />
         <WaveDivider variant="subtle" color="#E63946" />

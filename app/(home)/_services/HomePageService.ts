@@ -12,6 +12,8 @@ import TopicModel from "@root/app/dashboard/(cms)/_types/Topic/TopicModel";
 import TagModel from "@root/app/dashboard/(cms)/_types/Tag/TagModel";
 import LinkModel from "@root/app/dashboard/(cms)/_types/Link/LinkModel";
 import SlideshowModel from "@root/app/dashboard/(cms)/_types/Slideshow/SlideshowModel";
+import SiteSettingsModel from "@root/app/dashboard/(cms)/_types/SiteSetting/SiteSettingsModel";
+import MenuModel from "@root/app/dashboard/(cms)/_types/Menu/MenuModel";
 
 export default class HomePageService {
 
@@ -35,6 +37,11 @@ export default class HomePageService {
    * /GetManufacturers
    */
 
+  async getProducts(filter: ProductFilterModel): Promise<Result<ProductModel[]>> {
+    let result = await Fetch.Post<Result<ProductModel[]>>(`${this.baseUrl}/Product/GetProducts`, filter, this.config);
+    return result;
+  }
+
   /**
    * Get all categories for display
    */
@@ -50,16 +57,12 @@ export default class HomePageService {
     let result = await Fetch.Get<Result<ProductTagModel[]>>(`${CONFIG.API_BASEPATH}/Product/GetProductTags`, this.config);
     return result;
   }
+
   /*
     * Get all manufacturers for display
 */
   async getAllManufacturers(): Promise<Result<ManufacturerModel[]>> {
     let result = await Fetch.Get<Result<ManufacturerModel[]>>(`${CONFIG.API_BASEPATH}/Product/GetManufacturers`, this.config);
-    return result;
-  }
-
-  async getProducts(filter: ProductFilterModel): Promise<Result<ProductModel[]>> {
-    let result = await Fetch.Post<Result<ProductModel[]>>(`${this.baseUrl}/Product/GetProducts`, filter, this.config);
     return result;
   }
 
@@ -105,14 +108,7 @@ export default class HomePageService {
   /**
    * Search products by query
    */
-  async searchProducts(query: string, pageIndex: number = 1, pageSize: number = 10): Promise<Result<ProductModel[]>> {
-    let filter: ProductFilterModel = {
-      pageIndex: pageIndex,
-      pageSize: pageSize,
-      searchInput: query,
-      categoryIds: [],
-      manufacturerIds: []
-    }
+  async searchProducts(filter: ProductFilterModel): Promise<Result<ProductModel[]>> {
     const response = await this.getProducts(filter);
     return response;
   }
@@ -120,32 +116,32 @@ export default class HomePageService {
   /**
    * Get site settings
    */
-  async getSettings(): Promise<Result<any>> {
-    let result = await Fetch.Get<Result<any>>(`${this.baseUrl}/Cms/GetSettings`, this.config);
+  async getSettings(): Promise<Result<SiteSettingsModel>> {
+    let result = await Fetch.Get<Result<SiteSettingsModel>>(`${this.baseUrl}/Cms/GetSettings`, this.config);
     return result;
   }
 
   /**
    * Get site menu
    */
-  async getMenu(): Promise<Result<any>> {
-    let result = await Fetch.Get<Result<any>>(`${this.baseUrl}/Cms/GetMenu`, this.config);
+  async getMenu(): Promise<Result<MenuModel>> {
+    let result = await Fetch.Get<Result<MenuModel>>(`${this.baseUrl}/Cms/GetMenu`, this.config);
     return result;
   }
 
   /**
    * Get articles list for visitors
    */
-  async getArticlesList(pageIndex: number = 0, pageSize: number = 10): Promise<Result<any[]>> {
-    let result = await Fetch.Get<Result<any[]>>(`${this.baseUrl}/Cms/GetArticles?pageIndex=${pageIndex}&pageSize=${pageSize}`, this.config);
+  async getArticlesList(pageIndex: number = 0, pageSize: number = 10): Promise<Result<ArticleModel[]>> {
+    let result = await Fetch.Get<Result<ArticleModel[]>>(`${this.baseUrl}/Cms/GetArticles?pageIndex=${pageIndex}&pageSize=${pageSize}`, this.config);
     return result;
   }
 
   /**
    * Get related articles for visitors
    */
-  async getRelatedArticlesList(articleId: number): Promise<Result<any[]>> {
-    let result = await Fetch.Get<Result<any[]>>(`${this.baseUrl}/Cms/GetRelatedArticles?articleId=${articleId}`, this.config);
+  async getRelatedArticlesList(articleId: number): Promise<Result<ArticleModel[]>> {
+    let result = await Fetch.Get<Result<ArticleModel[]>>(`${this.baseUrl}/Cms/GetRelatedArticles?articleId=${articleId}`, this.config);
     return result;
   }
 
@@ -192,9 +188,8 @@ export default class HomePageService {
   /**
    * Get links by key list
    */
-  async getLinksByKeyList(keys: string[]): Promise<Result<LinkModel[]>> {
-    const keysParam = keys.map(k => `keys=${encodeURIComponent(k)}`).join('&');
-    let result = await Fetch.Get<Result<LinkModel[]>>(`${this.baseUrl}/Cms/GetLinksByKey?${keysParam}`, this.config);
+  async getLinksByKeyList(key: string): Promise<Result<LinkModel[]>> {
+    let result = await Fetch.Get<Result<LinkModel[]>>(`${this.baseUrl}/Cms/GetLinksByKey?key=${encodeURIComponent(key)}`, this.config);
     return result;
   }
   /**
