@@ -15,6 +15,11 @@ export default interface CategoryModel {
     name: string;
   
     /**
+     * The name of the category.
+     */
+    key: string;
+  
+    /**
      * Meta keywords for SEO.
      */
     metaKeywords: string;
@@ -33,6 +38,10 @@ export default interface CategoryModel {
      * Meta description for SEO.
      */
     metaDescription: string;
+    /**
+     * Meta description for SEO.
+     */
+    color?: string;
   
     /**
      * The ID of the parent category (nullable).

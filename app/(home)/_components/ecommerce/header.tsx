@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect, useRef, useSyncExternalStore, useCallback } from 'react';
-import { Search, ShoppingCart, Menu, X, User, Heart, ChevronDown, Sun, Moon, Bell, SlidersHorizontal } from 'lucide-react';
+import { Search, ShoppingCart, Menu, X, User, Heart, ChevronDown, Sun, Moon, Bell } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { Button } from '../ui/button';
 import { Input } from '../ui/input';
@@ -15,6 +15,29 @@ import { SearchSuggestions } from './search-suggestions';
 import { WishlistDrawer } from './wishlist-drawer';
 import { NotificationPanel } from './notification-panel';
 import { LanguageSwitcher } from './language-switcher';
+import HomePageService from '../../_services/HomePageService';
+import MenuModel from '@root/app/dashboard/(cms)/_types/Menu/MenuModel';
+import CategoryModel from '@root/app/dashboard/(ecommerce)/_types/Product/CategoryModel';
+
+function buildMenuTree(items: MenuModel[]) : MenuModel[] {
+  const map = new Map<number, any>();
+  const roots: any[] = [];
+
+  items.forEach((item) => {
+    map.set(item.id, { ...item, childs: [] });
+  });
+
+  items.forEach((item) => {
+    const node = map.get(item.id)!;
+    if (item.parentId && map.has(item.parentId)) {
+      map.get(item.parentId)!.childs.push(node);
+    } else {
+      roots.push(node);
+    }
+  });
+
+  return roots.sort((a, b) => a.order - b.order);
+}
 
 function useMounted() {
   return useSyncExternalStore(
@@ -137,8 +160,25 @@ export function Header() {
 
   const { data: categories = [] } = useQuery({
     queryKey: ['categories'],
-    queryFn: () => fetch('/api/categories').then(r => r.json()),
+    queryFn: async () => {
+      const service = new HomePageService();
+      const result = await service.getAllCategories();
+      const items = result.succeeded ? result.data : [];
+      return items;
+    },
   });
+
+  const { data: menuData } = useQuery({
+    queryKey: ['menu'],
+    queryFn: async () => {
+      const service = new HomePageService();
+      const result = await service.getMenu();
+      const items = Array.isArray(result.data) ? result.data : [];
+      return buildMenuTree(items);
+    },
+  });
+
+  const navItems = menuData ?? [];
 
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 10);
@@ -151,13 +191,6 @@ export function Header() {
       setIsSearchFocused(false);
     }
   }, []);
-
-  const navItems = [
-    { label: t('header.home'), href: '/' },
-    { label: t('header.shop'), href: '/products', hasDropdown: true },
-    { label: t('header.categories'), href: '/#categories' },
-    { label: t('header.deals'), href: '/#deals' },
-  ];
 
   return (
     <>
@@ -193,48 +226,39 @@ export function Header() {
             {/* Logo */}
             <Link href="/" className="flex items-center gap-2.5 shrink-0 group">
               <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-ecommerce-red to-rose-500 flex items-center justify-center shadow-sm shadow-ecommerce-red/20 group-hover:shadow-md group-hover:shadow-ecommerce-red/30 transition-shadow">
-                <span className="text-white font-bold text-sm">S</span>
+                <span className="text-white font-bold text-sm">H</span>
               </div>
               <span className="text-xl font-bold tracking-tight hidden sm:block">
-                <span className="text-ecommerce-red">Shop</span>
-                <span className="text-ecommerce-text-primary">Sphere</span>
+                <span className="text-ecommerce-red">Hydra</span>
+                <span className="text-ecommerce-text-primary">Shop</span>
               </span>
             </Link>
 
             {/* Desktop Nav */}
             <nav className="hidden lg:flex items-center gap-1">
-              {navItems.map((item : any) => (
-                <div key={item.label} className="relative group">
+              {navItems.map((item) => (
+                <div key={item.id} className="relative group">
                   <Link
-                    href={item.href}
-                    onClick={item.onClick || (() => {})}
+                    href={item.url}
                     className="px-4 py-2 text-sm font-medium text-ecommerce-text-secondary hover:text-ecommerce-text-primary transition-colors rounded-lg hover:bg-ecommerce-surface-hover flex items-center gap-1 animated-underline cursor-pointer"
                   >
-                    {item.label}
-                    {item.hasDropdown && <ChevronDown size={14} className="transition-transform group-hover:rotate-180 duration-200" />}
+                    {item.title}
+                    {item.childs && item.childs.length > 0 && <ChevronDown size={14} className="transition-transform group-hover:rotate-180 duration-200" />}
                   </Link>
-                  {item.hasDropdown && categories.length > 0 && (
+                  {item.childs && item.childs.length > 0 && (
                     <div className="absolute top-full start-0 pt-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200">
                       <div className="bg-white dark:bg-ecommerce-surface rounded-xl shadow-xl border border-ecommerce-border py-2 min-w-[220px]">
-                        <Link
-                          href="/products"
-                          className="w-full text-start px-4 py-2.5 text-sm hover:bg-ecommerce-surface-hover transition-colors flex items-center gap-2 text-ecommerce-red font-medium bg-ecommerce-red/5 rounded-t-lg"
-                        >
-                          <SlidersHorizontal size={14} />
-                          {t('catalog.openCatalog')}
-                        </Link>
-                        <div className="my-1 border-t border-ecommerce-border" />
-                        {categories.map((cat: { slug: string; name: string; color: string; _count?: { products: number } }) => (
+                        {item.childs.sort((a, b) => a.order - b.order).map((child) => (
                           <Link
-                            key={cat.slug}
-                            href={`/products?category=${cat.slug}`}
-                            className="w-full text-start px-4 py-2.5 text-sm hover:bg-ecommerce-surface-hover transition-colors flex items-center justify-between text-ecommerce-text-secondary"
+                            key={child.id}
+                            href={child.url}
+                            className="w-full text-start px-4 py-2.5 text-sm hover:bg-ecommerce-surface-hover transition-colors  flex items-center justify-between text-ecommerce-text-secondary"
                           >
-                            <span className="flex items-center gap-2">
-                              <span className="w-2 h-2 rounded-full" style={{ backgroundColor: cat.color }} />
-                              {cat.name}
+                              <span className="flex items-center gap-2">
+                              <span className="w-2 h-2 rounded-full" style={{ backgroundColor: child.color }} />
+                              {child.title}
                             </span>
-                            <span className="text-xs text-ecommerce-text-muted">{cat._count?.products || 0}</span>
+                            
                           </Link>
                         ))}
                       </div>
@@ -382,31 +406,28 @@ export function Header() {
               className="lg:hidden border-t border-ecommerce-border bg-white dark:bg-ecommerce-surface max-h-[60vh] overflow-y-auto scrollbar-thin"
             >
               <nav className="max-w-7xl mx-auto px-4 py-3 space-y-1">
-                {navItems.map((item : any, i) => (
+                {navItems.map((item, i) => (
                   <motion.div
-                    key={item.label}
+                    key={item.id}
                     initial={{ x: -20, opacity: 0 }}
                     animate={{ x: 0, opacity: 1 }}
                     transition={{ delay: i * 0.05 }}
                   >
                     <Link
-                      href={item.href}
-                      onClick={() => {
-                        if (item.onClick) item.onClick();
-                        setMobileMenuOpen(false);
-                      }}
+                      href={item.url}
+                      onClick={() => setMobileMenuOpen(false)}
                       className="block px-4 py-2.5 text-sm font-medium text-ecommerce-text-secondary hover:text-ecommerce-text-primary hover:bg-ecommerce-surface-hover rounded-lg transition-colors"
                     >
-                      {item.label}
+                      {item.title}
                     </Link>
                   </motion.div>
                 ))}
                 <div className="pt-2 border-t border-ecommerce-border mt-2">
                   <p className="px-4 py-1 text-xs font-semibold text-ecommerce-text-muted uppercase tracking-wider">{t('header.categories')}</p>
-                  {categories.map((cat: { slug: string; name: string; color: string }) => (
+                  {categories.map((cat) => (
                     <Link
-                      key={cat.slug}
-                      href={`/products?category=${cat.slug}`}
+                      key={cat.id}
+                      href={`/products?category=${cat.key}`}
                       onClick={() => setMobileMenuOpen(false)}
                       className="w-full text-start px-4 py-2 text-sm rounded-lg flex items-center gap-2 transition-colors text-ecommerce-text-secondary hover:bg-ecommerce-surface-hover"
                     >
