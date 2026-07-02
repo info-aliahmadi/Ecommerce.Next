@@ -232,6 +232,7 @@
     "menu": {
       "title": "عنوان",
       "url": "آدرس URL",
+      "color": "رنگ",
       "previewImageId": "پیشنمایش تصویر",
       "order": "ترتیب",
       "parent": "موضوع والد"
@@ -412,6 +413,7 @@
     "category": {
       "id": "شناسه",
       "name": "نام",
+      "key": "کلید دسترسی",
       "metaKeywords": "کلمات کلیدی متا",
       "metaTitle": "عنوان متا",
       "description": "توضیحات",
@@ -422,7 +424,8 @@
       "displayOrder": "ترتیب نمایش",
       "published": "منتشر شده",
       "deleted": "حذف شده",
-      "showOnHomepage": "نمایش در صفحه اصلی"
+      "showOnHomepage": "نمایش در صفحه اصلی",
+      "color": "رنگ"
     },
     "product": {
       "id": "شناسه",

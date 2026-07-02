@@ -29,7 +29,7 @@ import { FileOrigin, FilePondFile, FilePondInitialFile } from 'filepond';
 import FileUploadModel from '../../(filestorage)/_types/FileUploadModel';
 
 interface ImageUploadProps {
-  id: string;
+  name: string;
   setFieldValue?: (field: string, value: any) => void;
   value: any;
   minFileSize?: string;
@@ -40,7 +40,7 @@ interface ImageUploadProps {
 }
 
 export default function ImageUpload({
-  id,
+  name,
   setFieldValue,
   value,
   minFileSize,
@@ -201,20 +201,23 @@ export default function ImageUpload({
   };
   function beforeRemoveFile(file: FilePondFile): boolean | Promise<boolean> {
     if (setFieldValue != undefined && file != undefined) {
-
       let fileId: number | undefined = parseInt(file.serverId) ?? undefined;
       if (fileId != undefined) {
         fileUploadService.deleteFile(fileId).then((result) => {
+          if(result.succeeded) {
+            setFieldValue(name, undefined);
+            setValues([]);
+          }
           return result.succeeded;
         });
         if (allowMultiple) {
           let newValue = values;
           const index = newValue.indexOf(fileId);
           newValue.splice(index, 1);
-          setFieldValue(id, newValue);
+          setFieldValue(name, newValue);
           setValues(newValue);
         } else {
-          setFieldValue(id, fileId);
+          setFieldValue(name, fileId);
         }
       }
     } return false;
@@ -229,11 +232,11 @@ export default function ImageUpload({
           newValues.push(fileInfo?.id);
 
           if (setFieldValue != undefined)
-            setFieldValue(id, newValues);
+            setFieldValue(name, newValues);
           setValues((old) => [...old, fileInfo?.id]);
         } else {
           if (setFieldValue != undefined)
-            setFieldValue(id, fileInfo?.id);
+            setFieldValue(name, fileInfo?.id);
         }
       }
     }
@@ -265,11 +268,11 @@ export default function ImageUpload({
   return (
     <FilePond
       disabled={disabled}
-      id={id || 'fileId'}
+      id={name || 'fileId'}
       allowImagePreview={true}
       filePosterMaxHeight={filePosterMaxHeight ?? undefined}
       allowDownloadByUrl={true}
-      //downloadFunction={downloadFunction}
+      // downloadFunction={downloadFunction}
       beforeRemoveFile={beforeRemoveFile}
       allowFilePoster={true}
       allowFileTypeValidation={true}

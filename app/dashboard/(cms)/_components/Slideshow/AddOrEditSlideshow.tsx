@@ -200,7 +200,7 @@ export default function AddOrEditSlideshow({ row, isNew, open, setOpen, refetch 
                       <InputLabel htmlFor="previewImageId">{t(fieldsName + 'previewImage')}</InputLabel>
                       <ImageUpload
                         key={'previewImageId' + values?.previewImageId || 'new'}
-                        id="previewImageId"
+                        name="previewImageId"
                         setFieldValue={setFieldValue}
                         value={values?.previewImageId || ''}
                         filePosterMaxHeight={400}

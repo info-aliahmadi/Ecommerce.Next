@@ -25,8 +25,8 @@ import { AdapterMoment } from '@mui/x-date-pickers/AdapterMoment';
 import { useSession } from 'next-auth/react';
 import Loader from '@dashboard/_components/Loader';
 import { Options } from '@emotion/cache';
-import { persianCalendar, rtlLocales } from '@root/locales/i18nHomepage';
 import nextIntlService from '@root/locales/nextIntlService';
+import { PERSIAN_CALENDAR, RTL_LOCALES } from '@root/app/(home)/_lib/store';
 // ==============================|| DEFAULT THEME - MAIN  ||============================== //
 export default function DashboardThemeCustomization({ children }: { children: any }) {
 
@@ -55,9 +55,9 @@ export default function DashboardThemeCustomization({ children }: { children: an
 
     let locale: string = session?.user?.defaultLanguage ?? CONFIG.DEFAULT_LANGUAGE;
     nextIntlService.setNextIntlLocale(locale);
-    const dir = rtlLocales.includes(locale as any) == true ? 'rtl' : 'ltr';
+    const dir = RTL_LOCALES.includes(locale as any) == true ? 'rtl' : 'ltr';
     setDirection(dir)
-    setIsPersianCalendar(persianCalendar.includes(locale as any) == true ? true : false);
+    setIsPersianCalendar(PERSIAN_CALENDAR.includes(locale as any) == true ? true : false);
 
   }, [session]);
 

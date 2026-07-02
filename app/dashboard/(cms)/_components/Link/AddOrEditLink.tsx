@@ -242,7 +242,7 @@ const AddOrEditLink = ({ row, linkSection, data, setData, isNew, open, setOpen, 
                     <Stack spacing={1}>
                       <InputLabel htmlFor="imagePreviewId">{t(fieldsName + 'imagePreviewId')}</InputLabel>
                       <ImageUpload
-                        id="imagePreviewId"
+                        name="imagePreviewId"
                         setFieldValue={setFieldValue}
                         value={values?.imagePreviewId || ''}
                         filePosterMaxHeight={400}

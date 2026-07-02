@@ -224,6 +224,7 @@
     "menu": {
       "title": "Title",
       "url": "Url Address",
+      "color": "Color",
       "order": "Order",
       "parent": "Parent Menu",
       "previewImageId": "Image Icon"
@@ -403,6 +404,7 @@
     "category": {
       "id": "Id",
       "name": "Name",
+      "key": "Access Key",
       "metaKeywords": "Meta Keywords",
       "metaTitle": "Meta Title",
       "description": "Description",
@@ -413,7 +415,8 @@
       "displayOrder": "Display Order",
       "published": "Published",
       "deleted": "Deleted",
-      "showOnHomepage": "Show On Homepage"
+      "showOnHomepage": "Show On Homepage",
+      "color": "Color"
     },
     "product": {
       "id": "Id",

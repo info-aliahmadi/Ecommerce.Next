@@ -59,8 +59,8 @@ import { useTheme } from "@mui/material";
 import { useTranslations } from "next-intl";
 import { useSession } from "next-auth/react";
 import CONFIG from "@root/config";
-import { rtlLocales } from "@root/locales/i18nHomepage";
 import FileStorageService from "@dashboard/(filestorage)/_service/FileStorageService";
+import { RTL_LOCALES } from "@root/app/(home)/_lib/store";
 
 type TableConfig = {
   rows?: number;
@@ -527,7 +527,7 @@ function EditorContent({
   placeholder: string;
   locale: string;
 }) {
-  const dir = rtlLocales.includes(locale as any) == true ? 'rtl' : 'ltr';
+  const dir = RTL_LOCALES.includes(locale as any) == true ? 'rtl' : 'ltr';
   const { commands, hasExtension, activeStates, lexical: editor } = useEditor();
   const [mode, setMode] = useState<EditorMode>("visual");
   const [content, setContent] = useState({ html: "", markdown: "" });

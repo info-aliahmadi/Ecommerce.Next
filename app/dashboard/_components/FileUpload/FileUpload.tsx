@@ -204,6 +204,10 @@ export default function FileUpload({
       let fileId: number | undefined = parseInt(file.serverId) ?? undefined;
       if (fileId != undefined) {
         fileUploadService.deleteFile(fileId).then((result) => {
+             if(result.succeeded) {
+            setFieldValue(name, undefined);
+            setValues([]);
+          }
           return result.succeeded;
         });
         if (allowMultiple) {

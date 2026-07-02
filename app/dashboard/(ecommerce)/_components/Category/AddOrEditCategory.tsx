@@ -119,6 +119,8 @@ const AddOrEditCategory = ({ row, isNew, open, setOpen, refetch }: AddOrEditCate
   const initialValues: CategoryModel = {
     id: category?.id ?? 0,
     name: category?.name ?? '',
+    key: category?.key ?? '',
+    color: category?.color ?? '',
     metaKeywords: category?.metaKeywords ?? '',
     metaTitle: category?.metaTitle ?? '',
     description: category?.description ?? '',
@@ -196,7 +198,27 @@ const AddOrEditCategory = ({ row, isNew, open, setOpen, refetch }: AddOrEditCate
                       )}
                     </Stack>
                   </Grid>
-
+                  <Grid size={12}>
+                    <Stack spacing={1}>
+                      <InputLabel htmlFor="key">{t(fieldsName + 'key')}</InputLabel>
+                      <OutlinedInput
+                        id="key"
+                        type="text"
+                        value={values?.key || ''}
+                        name="key"
+                        onBlur={handleBlur}
+                        onChange={handleChange}
+                        placeholder={t(fieldsName + 'key')}
+                        fullWidth
+                        error={Boolean(touched.key && errors.key)}
+                      />
+                      {touched.key && errors.key && (
+                        <FormHelperText error id="helper-text-key">
+                          {errors.key}
+                        </FormHelperText>
+                      )}
+                    </Stack>
+                  </Grid>
                   <Grid size={12}>
                     <Stack spacing={1}>
                       <InputLabel htmlFor="metaKeywords">{t(fieldsName + 'metaKeywords')}</InputLabel>
@@ -289,7 +311,7 @@ const AddOrEditCategory = ({ row, isNew, open, setOpen, refetch }: AddOrEditCate
                     <Stack spacing={1}>
                       <InputLabel htmlFor="pictureId">{t(fieldsName + 'pictureId')}</InputLabel>
                       <ImageUpload
-                        id="pictureId"
+                        name="pictureId"
                         setFieldValue={setFieldValue}
                         value={values?.pictureId ?? ''}
                         filePosterMaxHeight={400}
@@ -297,6 +319,27 @@ const AddOrEditCategory = ({ row, isNew, open, setOpen, refetch }: AddOrEditCate
                     </Stack>
                   </Grid>
 
+                  <Grid size={12}>
+                    <Stack spacing={1}>
+                      <InputLabel htmlFor="color">{t(fieldsName + 'color')}</InputLabel>
+                      <OutlinedInput
+                        id="color"
+                        type="text"
+                        value={values?.color || ''}
+                        name="color"
+                        onBlur={handleBlur}
+                        onChange={handleChange}
+                        placeholder={t(fieldsName + 'color')}
+                        fullWidth
+                        error={Boolean(touched.color && errors.color)}
+                      />
+                      {touched.color && errors.color && (
+                        <FormHelperText error id="helper-text-color">
+                          {errors.color}
+                        </FormHelperText>
+                      )}
+                    </Stack>
+                  </Grid>
                   <Grid size={12}>
                     <Stack spacing={1}>
                       <FormControlLabel

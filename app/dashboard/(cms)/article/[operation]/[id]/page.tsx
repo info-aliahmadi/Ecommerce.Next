@@ -237,7 +237,7 @@ export default function AddOrEditArticle({ params }: { readonly params: Promise<
                           <Stack spacing={1}>
                             <InputLabel htmlFor="previewImageId">{t(fieldsName + 'previewImageId')}</InputLabel>
                             <ImageUpload
-                              id="previewImageId"
+                              name="previewImageId"
                               setFieldValue={setFieldValue}
                               value={values?.previewImageId ?? ''}
                               filePosterMaxHeight={400}

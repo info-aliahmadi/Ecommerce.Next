@@ -6,13 +6,13 @@ import { DatePicker } from '@mui/x-date-pickers';
 import moment from 'moment-jalaali';
 import { DateTimeViewer, DateViewer } from '@root/utils/DateViewer';
 import { useTheme } from '@mui/material/styles';
-import { rtlLocales } from '@root/locales/i18nHomepage';
 import nextIntlService from '@root/locales/nextIntlService';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { MobileGrid } from './MobileGrid';
 import GridDataBound from '@root/app/types/GridDataBound';
 import { MRT_Column } from '@root/app/types/MRT_Column';
 import { GridDataBoundFilter } from '@root/app/types/GridDataBoundFilter';
+import { RTL_LOCALES } from '@root/app/(home)/_lib/store';
 
 // Components
 const dateFilter = ({ header, rangeFilterIndex }: { header: any, rangeFilterIndex: any }) => {
@@ -86,7 +86,7 @@ function MaterialTable({
 
   let currentLanguage = nextIntlService.getNextIntlLocale();
 
-  const dir = rtlLocales.includes(currentLanguage as any) == true ? 'rtl' : 'ltr';
+  const dir = RTL_LOCALES.includes(currentLanguage as any) == true ? 'rtl' : 'ltr';
 
   //let timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
   //data and fetching state

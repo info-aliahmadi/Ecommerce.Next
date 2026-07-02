@@ -22,7 +22,7 @@ export default function ArticleDetail({ row }: Readonly<{ row: MRT_Row<ArticleMo
       <Grid container spacing={3} size={{ xs: 12, sm: 6, md: 3, lg: 3, xl: 3 }} direction="row" sx={{ justifyContent: "center", alignItems: "center" }}>
         <Grid size={{ xs: 12, sm: 12, md: 12, lg: 12, xl: 12}}>
           <Stack>
-            {row.original.previewImageId && <ImageUpload value={row.original.previewImageId} id={"previewImageId"} disabled={true} filePosterMaxHeight={300} />}
+            {row.original.previewImageId && <ImageUpload value={row.original.previewImageId} name={"previewImageId"} disabled={true} filePosterMaxHeight={300} />}
             {row.original.previewImageUrl && (
               <Box
                 sx={{

@@ -344,6 +344,8 @@ export const useStockAlertStore = create<StockAlertStore>()(
 // ── Locale Store ──────────────────────────────────────────────
 export type Locale = 'en' | 'fa' | 'ar';
 
+export const PERSIAN_CALENDAR: Locale[] = ['fa'];
+
 export const RTL_LOCALES: Locale[] = ['fa', 'ar'];
 
 export const LOCALE_CONFIG: Record<Locale, { name: string; dir: 'ltr' | 'rtl'; nativeName: string }> = {

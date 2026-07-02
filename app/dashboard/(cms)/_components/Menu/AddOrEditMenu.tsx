@@ -116,6 +116,7 @@ const AddOrEditMenu = ({ row, isNew, open, setOpen, refetch }:
     id: menu?.id ?? 0,
     title: menu?.title ?? '',
     url: menu?.url ?? '',
+    color: menu?.color ?? '',
     previewImageId: menu?.previewImageId,
     parentId: row && isNew == true ? row?.original?.id : menu?.parentId,
     isEdited : false,
@@ -204,9 +205,30 @@ const AddOrEditMenu = ({ row, isNew, open, setOpen, refetch }:
                   </Grid>
                   <Grid size={12}>
                     <Stack spacing={1}>
+                      <InputLabel htmlFor="color">{t(fieldsName + 'color')}</InputLabel>
+                      <OutlinedInput
+                        id="color"
+                        type="text"
+                        value={values?.color || ''}
+                        name="color"
+                        onBlur={handleBlur}
+                        onChange={handleChange}
+                        placeholder={t(fieldsName + 'color')}
+                        fullWidth
+                        error={Boolean(touched.color && errors.color)}
+                      />
+                      {touched.color && errors.color && (
+                        <FormHelperText error id="helper-text-color">
+                          {errors.color}
+                        </FormHelperText>
+                      )}
+                    </Stack>
+                  </Grid>
+                  <Grid size={12}>
+                    <Stack spacing={1}>
                       <InputLabel htmlFor="previewImageId">{t(fieldsName + 'previewImageId')}</InputLabel>
                       <ImageUpload
-                        id="previewImageId"
+                        name="previewImageId"
                         setFieldValue={setFieldValue}
                         value={values?.previewImageId || ''}
                         filePosterMaxHeight={400}

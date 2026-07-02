@@ -319,7 +319,7 @@ export default function ProductBaseInfo({
         <Stack>
           <InputLabel htmlFor="picturePreviewId" sx={{ textAlign: 'center', mb: '5px' }}>{t(fieldsName + 'picturePreviewId')}</InputLabel>
           <ImageUpload
-            id="picturePreviewId"
+            name="picturePreviewId"
             setFieldValue={setFieldValue}
             value={values?.picturePreviewId || null}
             filePosterMaxHeight={200}
@@ -334,7 +334,7 @@ export default function ProductBaseInfo({
         <Stack>
           <InputLabel htmlFor="pictureIds" sx={{ textAlign: 'center', mb: '5px' }}>{t(fieldsName + 'pictureIds')}</InputLabel>
           <ImageUpload
-            id="pictureIds"
+            name="pictureIds"
             setFieldValue={setFieldValue}
             value={values?.pictureIds || []}
             filePosterMaxHeight={200}

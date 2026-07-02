@@ -270,7 +270,7 @@ export default function AddOrEditProductAttribute({ productAttributeId, isNew, o
                     <Stack spacing={1}>
                       <InputLabel htmlFor="pictureId">{t(fieldsName + 'pictureId')}</InputLabel>
                       <ImageUpload
-                        id="pictureId"
+                        name="pictureId"
                         setFieldValue={setFieldValue}
                         value={values?.pictureId ?? ''}
                         filePosterMaxHeight={400}
