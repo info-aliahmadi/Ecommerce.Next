@@ -1,10 +1,9 @@
 import type { Metadata } from "next";
 import "./globals.css";
-// import { ThemeProvider } from "next-themes";
+import { ThemeProvider } from "next-themes";
 import { QueryProvider } from "./_components/query-provider";
 import { Toaster } from "./_components/ui/toaster";
 import CONFIG from "@root/config";
-import { ThemeProvider } from "./_components/theme-provider";
 
 export const metadata: Metadata = {
   title: "ShopSphere — Discover Your Perfect Style",

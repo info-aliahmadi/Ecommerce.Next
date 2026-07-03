@@ -425,7 +425,9 @@
     "viewed": "منتجات تمت مشاهدتها",
     "inWishlist": "في المفضلة",
     "inCart": "في السلة",
-    "cartValue": "في السلة"
+    "cartValue": "في السلة",
+    "collapseStats": "إغلاق الإحصائيات",
+    "quickStatsLabel": "إحصائيات سريعة"
   },
   "languageSwitcher": {
     "title": "اللغة"

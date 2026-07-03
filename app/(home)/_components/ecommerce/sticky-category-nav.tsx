@@ -7,6 +7,7 @@ import { X } from 'lucide-react';
 import { useUIStore } from '../../_lib/store';
 import { useTranslations } from 'next-intl';
 import { useCategoryTranslations } from '../../_lib/category-translations';
+import HomePageService from '../../_services/HomePageService';
 
 interface Category {
   id: string;
@@ -70,9 +71,14 @@ export function StickyCategoryNav() {
   const catTrans = useCategoryTranslations();
   const isVisible = useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
 
-  const { data: categories = [] } = useQuery<Category[]>({
+  const { data: categories = [] } = useQuery({
     queryKey: ['categories'],
-    queryFn: () => fetch('/api/categories').then((r) => r.json()),
+    queryFn: async () => {
+      const service = new HomePageService();
+      const result = await service.getAllCategories();
+      const items = result.succeeded ? result.data : [];
+      return items;
+    },
     staleTime: 60000,
   });
 
@@ -114,18 +120,17 @@ export function StickyCategoryNav() {
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ delay: 0.05, duration: 0.2 }}
                 onClick={() => handleCategoryClick(null)}
-                className={`shrink-0 px-4 py-1.5 rounded-full text-sm font-medium transition-colors cursor-pointer ${
-                  selectedCategory === null
+                className={`shrink-0 px-4 py-1.5 rounded-full text-sm font-medium transition-colors cursor-pointer ${selectedCategory === null
                     ? 'bg-ecommerce-red text-white'
                     : 'bg-ecommerce-surface-hover text-ecommerce-text-secondary hover:bg-ecommerce-surface-hover/80'
-                }`}
+                  }`}
               >
                 {t('homepage.common.allCategories')}
               </motion.button>
 
               {/* Category pills with staggered entrance */}
               {categories.map((cat, index) => {
-                const isActive = selectedCategory === cat.slug;
+                const isActive = selectedCategory === cat.key;
                 return (
                   <motion.button
                     key={cat.id}
@@ -135,12 +140,11 @@ export function StickyCategoryNav() {
                       delay: 0.05 + (index + 1) * 0.03,
                       duration: 0.2,
                     }}
-                    onClick={() => handleCategoryClick(cat.slug)}
-                    className={`shrink-0 flex items-center gap-2 px-4 py-1.5 rounded-full text-sm font-medium transition-colors cursor-pointer ${
-                      isActive
+                    onClick={() => handleCategoryClick(cat.key)}
+                    className={`shrink-0 flex items-center gap-2 px-4 py-1.5 rounded-full text-sm font-medium transition-colors cursor-pointer ${isActive
                         ? 'bg-ecommerce-red/10 text-ecommerce-red border border-ecommerce-red/20'
                         : 'text-ecommerce-text-secondary hover:bg-ecommerce-surface-hover'
-                    }`}
+                      }`}
                   >
                     <span
                       className="w-2 h-2 rounded-full shrink-0"
@@ -148,7 +152,7 @@ export function StickyCategoryNav() {
                     />
                     <span>{catTrans[cat.name] || cat.name}</span>
                     <span className="text-ecommerce-text-muted text-xs">
-                      {cat._count.products}
+                      {cat.productsCount}
                     </span>
                   </motion.button>
                 );

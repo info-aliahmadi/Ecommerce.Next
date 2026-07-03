@@ -9,5 +9,6 @@ export default interface FileUploadModel {
     alt?: string;
     uploadDate: Date;
     userName: string;
+    fullPath : string;
     userId: number;
 }

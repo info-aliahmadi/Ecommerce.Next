@@ -4,9 +4,6 @@ import { useEffect, useCallback, useRef } from 'react';
 import { NextIntlClientProvider } from 'next-intl';
 import { useLocaleStore, LOCALE_CONFIG, type Locale } from '../_lib/store';
 
-
-
-
 // Inline script to set dir/lang before hydration to prevent flash
 const LOCALE_INIT_SCRIPT = `
 (function() {

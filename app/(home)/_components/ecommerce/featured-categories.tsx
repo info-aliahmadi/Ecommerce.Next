@@ -5,15 +5,22 @@ import { ArrowRight, Layers } from 'lucide-react';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
 import { useCategoryTranslations } from '../../_lib/category-translations';
+import HomePageService from '../../_services/HomePageService';
+import CONFIG from '@root/config';
 
 export function FeaturedCategories() {
   const catTrans = useCategoryTranslations();
   const { data: categories = [] } = useQuery({
     queryKey: ['categories'],
-    queryFn: () => fetch('/api/categories').then(r => r.json()),
+    queryFn: async () => {
+      const service = new HomePageService();
+      const result = await service.getAllCategories();
+      const items = result.succeeded ? result.data : [];
+      return items;
+    },
   });
 
-  const featured = categories.filter((c: { featured: boolean }) => c.featured);
+  const featured = categories;//.filter((c: { featured: boolean }) => c.featured);
 
   return (
     <section id="categories" className="py-12 sm:py-16 relative overflow-hidden">
@@ -48,27 +55,27 @@ export function FeaturedCategories() {
 
         {/* Categories Grid */}
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4 sm:gap-6">
-          {featured.map((cat: { id: string; name: string; slug: string; image: string; color: string; _count: { products: number } }, index: number) => (
+          {featured.map((cat, index: number) => (
             <motion.div
-              key={cat.id}
+              key={"cat-" + cat.id}
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.4, delay: index * 0.08 }}
             >
               <Link
-                href="#products"
-                className="group block relative rounded-2xl overflow-hidden aspect-[4/3] bg-ecommerce-surface-hover dark:bg-[#252836] scroll-reveal"
+                href={`/products?category=${cat.key}`}
+                className="group block relative rounded-2xl overflow-hidden aspect-[4/3] bg-ecommerce-surface-hover dark:bg-[#252836]"
               >
                 <img
-                  src={cat.image}
+                  src={ CONFIG.API_BASEPATH + (cat.pictureInfo?.fullPath || '/images/placeholder-category.png')}
                   alt={catTrans[cat.name] || cat.name}
                   className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                   loading="lazy"
                 />
                 {/* Gradient Overlay */}
                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent" />
-                
+
                 {/* Color accent line */}
                 <div
                   className="absolute top-0 left-0 right-0 h-1 transition-all duration-300 group-hover:h-1.5"
@@ -79,7 +86,7 @@ export function FeaturedCategories() {
                 <div className="absolute bottom-0 left-0 right-0 p-4">
                   <h3 className="text-white font-bold text-sm sm:text-base">{catTrans[cat.name] || cat.name}</h3>
                   <div className="flex items-center justify-between mt-1.5">
-                    <span className="text-white/60 text-xs">{cat._count?.products || 0} items</span>
+                    <span className="text-white/60 text-xs">{cat.productsCount || 0} items</span>
                     <div className="w-7 h-7 rounded-lg bg-white/10 flex items-center justify-center group-hover:bg-white/20 transition-all group-hover:translate-x-0.5">
                       <ArrowRight size={13} className="text-white/70 group-hover:text-white transition-colors" />
                     </div>

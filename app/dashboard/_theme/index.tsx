@@ -35,7 +35,7 @@ export default function DashboardThemeCustomization({ children }: { children: an
   let themeMode: 'light' | 'dark' | undefined = session?.user?.defaultTheme;
 
   if (session != undefined && themeMode == undefined) {
-    themeMode = CONFIG.DASHBOARD_DEFAULT_THEME_MODE as 'light' | 'dark';
+    themeMode = CONFIG.DEFAULT_THEME as 'light' | 'dark';
   }
 
   const [direction, setDirection] = useState<'ltr' | 'rtl'>('ltr'); // Default to LTR

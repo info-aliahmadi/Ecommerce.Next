@@ -33,17 +33,36 @@ import { StockAlert } from './_components/ecommerce/stock-alert';
 import { ProductQuickStats } from './_components/ecommerce/product-quick-stats';
 import { ProductCatalog } from './_components/ecommerce/product-catalog';
 // import { I18nProvider } from './i18n/provider';
-import { useCompareStore } from './_lib/store';
+import { useCompareStore, useUIStore } from './_lib/store';
 import { useScrollReveal } from './_hooks/use-scroll-reveal';
 import { Header } from './_components/ecommerce/header';
+import { AnimatePresence, motion } from 'framer-motion';
+import ProductsPage from './products/page';
+import CheckoutPage from './checkout/page';
+import { I18nProvider } from './i18n/provider';
 
-export default function Home() {
-  const scrollRef = useScrollReveal();
+/* ─── Shared overlays (cart, quick-view, etc.) ──────────────── */
+function SharedOverlays() {
   const isCompareOpen = useCompareStore((s) => s.isCompareOpen);
   const setCompareOpen = useCompareStore((s) => s.setCompareOpen);
-
   return (
-    // <I18nProvider>
+    <>
+      <CartDrawer />
+      <QuickViewModal />
+      <BackToTop />
+      <MobileBottomNav />
+      <FlyToCart />
+      <CompareBar />
+      <CompareDrawer open={isCompareOpen} onClose={() => setCompareOpen(false)} />
+      <CookieBanner />
+    </>
+  );
+}
+
+/* ─── Home page ─────────────────────────────────────────────── */
+function HomePage() {
+  const scrollRef = useScrollReveal();
+  return (
     <div className="min-h-screen flex flex-col pb-16 lg:pb-0" ref={scrollRef}>
       <ScrollProgress />
       <WelcomeToast />
@@ -53,7 +72,7 @@ export default function Home() {
         <HeroSection />
         <WaveDivider variant="subtle" color="#E63946" />
         <BrandMarquee />
-        <CategoryNavSentinel />
+        {/* <CategoryNavSentinel /> */} 
         <FeaturedCategories />
         <WaveDivider variant="gradient" color="#6A5ACD" />
         <ImageComparison />
@@ -73,18 +92,60 @@ export default function Home() {
         <NewsletterSection />
       </main>
       <Footer />
-      <CartDrawer />
-      <QuickViewModal />
-      <BackToTop />
-      <MobileBottomNav />
-      <FlyToCart />
-      <CompareBar />
-      <CompareDrawer open={isCompareOpen} onClose={() => setCompareOpen(false)} />
-      <CookieBanner />
+      <SharedOverlays />
       <StockAlert />
       <ProductQuickStats />
       <ProductCatalog />
     </div>
-    // </I18nProvider>
+  );
+}
+
+/* ─── Inner page shell (header + main + footer + overlays) ──── */
+function PageShell({ children }: { children: React.ReactNode }) {
+  return (
+    <div className="min-h-screen flex flex-col pb-16 lg:pb-0">
+      <ScrollProgress />
+      <Header />
+      <main className="flex-1">{children}</main>
+      <Footer />
+      <SharedOverlays />
+    </div>
+  );
+}
+
+/* ─── Client-side page router ───────────────────────────────── */
+function PageRouter() {
+  const currentPage = useUIStore((s) => s.currentPage);
+
+  return (
+    <AnimatePresence mode="wait">
+      {currentPage === 'home' && (
+        <motion.div key="home" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.15 }}>
+          <HomePage />
+        </motion.div>
+      )}
+      {currentPage === 'products' && (
+        <motion.div key="products" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }} transition={{ duration: 0.2 }}>
+          <PageShell>
+            <ProductsPage />
+          </PageShell>
+        </motion.div>
+      )}
+      {currentPage === 'checkout' && (
+        <motion.div key="checkout" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }} transition={{ duration: 0.2 }}>
+          <PageShell>
+            <CheckoutPage />
+          </PageShell>
+        </motion.div>
+      )}
+    </AnimatePresence>
+  );
+}
+
+export default function Home() {
+  return (
+    <I18nProvider>
+      <PageRouter />
+    </I18nProvider>
   );
 }

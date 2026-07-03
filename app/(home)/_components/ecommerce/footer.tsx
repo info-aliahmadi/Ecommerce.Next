@@ -18,12 +18,12 @@ export function Footer() {
 
   const { data: categories = [] } = useQuery({
     queryKey: ['categories'],
-     queryFn: async () => {
-          const service = new HomePageService();
-          const result = await service.getAllCategories();
-          const items = result.succeeded ? result.data : [];
-          return items;
-        },
+    queryFn: async () => {
+      const service = new HomePageService();
+      const result = await service.getAllCategories();
+      const items = result.succeeded ? result.data : [];
+      return items;
+    },
   });
 
   const handleMiniSubscribe = (e: React.FormEvent) => {

@@ -28,7 +28,7 @@ export const options: NextAuthOptions = {
           userName: user.userName,
           email: user.email,
           defaultLanguage: user.defaultLanguage || CONFIG.DEFAULT_LANGUAGE,
-          defaultTheme: user.defaultTheme || CONFIG.DASHBOARD_DEFAULT_THEME_MODE,
+          defaultTheme: user.defaultTheme || CONFIG.DEFAULT_THEME,
           avatar: user.avatar,
           roles: user.roles,
         };
@@ -42,7 +42,7 @@ export const options: NextAuthOptions = {
           userName: session.user.userName,
           email: session.user.email,
           defaultLanguage: session.user.defaultLanguage || CONFIG.DEFAULT_LANGUAGE,
-          defaultTheme: session.user.defaultTheme || CONFIG.DASHBOARD_DEFAULT_THEME_MODE,
+          defaultTheme: session.user.defaultTheme || CONFIG.DEFAULT_THEME,
           avatar: session.user.avatar,
           roles: session.user.roles,
         };

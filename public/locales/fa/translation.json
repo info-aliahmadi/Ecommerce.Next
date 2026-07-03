@@ -425,7 +425,9 @@
     "viewed": "محصول دیده شده",
     "inWishlist": "در علاقه‌مندی",
     "inCart": "در سبد خرید",
-    "cartValue": "در سبد خرید"
+    "cartValue": "در سبد خرید",
+    "collapseStats": "بستن آمار",
+    "quickStatsLabel": "آمار سریع"
   },
   "languageSwitcher": {
     "title": "زبان"
