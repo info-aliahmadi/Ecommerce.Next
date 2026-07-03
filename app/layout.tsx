@@ -37,7 +37,6 @@ export default async function RootLayout({
       <body
         className={`font-sans ${fontlocaleCssClass} antialiased`}
         style={{ fontFamily: 'var(--font-locale, var(--font-geist-sans)), sans-serif' }}
-        suppressHydrationWarning
       >
         <NextIntlClientProvider locale={locale ?? CONFIG.DEFAULT_LANGUAGE} messages={messages}>
           <DirectionProvider>

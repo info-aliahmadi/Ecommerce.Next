@@ -1134,11 +1134,11 @@
     "new-password": "New Password",
     "role": {
       "name": "Name",
-      "normalizedname": "Normalized Name"
+      "normalizedName": "Normalized Name"
     },
     "permission": {
       "name": "Name",
-      "normalizedname": "Normalized Name"
+      "normalizedName": "Normalized Name"
     },
     "siteSetting": {
       "siteTitle": "Site Title",

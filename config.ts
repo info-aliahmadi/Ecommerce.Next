@@ -8,7 +8,7 @@ const CONFIG = {
   DEFAULT_PATH: '/',
   MINIDRAWER: true,
   CONTAINER: true,
-  DASHBOARD_DEFAULT_THEME_MODE: 'light',
+  DEFAULT_THEME: 'light',
   DASHBOARD_THEME_MODE_STORAGE_NAME: 'HydraThemeMode',
   PRESET_COLOR: 'default',
   DOMAIN: process.env.NEXT_PUBLIC_FRONT_URL,

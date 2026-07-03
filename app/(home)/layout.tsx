@@ -1,34 +1,10 @@
 import type { Metadata } from "next";
-// import { Geist, Geist_Mono } from "next/font/google";
-// import { Vazirmatn } from "next/font/google";
-// import { Cairo } from "next/font/google";
 import "./globals.css";
-import { ThemeProvider } from "next-themes";
-// import { I18nScript } from "./i18n/provider";
+// import { ThemeProvider } from "next-themes";
 import { QueryProvider } from "./_components/query-provider";
 import { Toaster } from "./_components/ui/toaster";
-
-// const geistSans = Geist({
-//   variable: "--font-geist-sans",
-//   subsets: ["latin"],
-// });
-
-// const geistMono = Geist_Mono({
-//   variable: "--font-geist-mono",
-//   subsets: ["latin"],
-// });
-
-// const vazirmatn = Vazirmatn({
-//   subsets: ["arabic"],
-//   variable: "--font-vazirmatn",
-//   display: "swap",
-// });
-
-// const cairo = Cairo({
-//   subsets: ["arabic", "latin"],
-//   variable: "--font-cairo",
-//   display: "swap",
-// });
+import CONFIG from "@root/config";
+import { ThemeProvider } from "./_components/theme-provider";
 
 export const metadata: Metadata = {
   title: "ShopSphere — Discover Your Perfect Style",
@@ -42,24 +18,16 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    // <html lang="en" dir="ltr" suppressHydrationWarning>
-
-      // <body
-      //   className={`${geistSans.variable} ${geistMono.variable} ${vazirmatn.variable} ${cairo.variable} antialiased bg-background text-foreground`}
-      //   style={{ fontFamily: 'var(--font-locale, var(--font-geist-sans)), sans-serif' }}
-      // >
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="light"
-          enableSystem={false}
-          disableTransitionOnChange={false}
-        >
-          <QueryProvider>
-            {children}
-            <Toaster />
-          </QueryProvider>
-        </ThemeProvider>
-      // </body>
-    // </html>
+    <ThemeProvider
+      attribute="class"
+      defaultTheme={CONFIG.DEFAULT_THEME}
+      enableSystem={false}
+      disableTransitionOnChange={false}
+    >
+      <QueryProvider>
+        {children}
+        <Toaster />
+      </QueryProvider>
+    </ThemeProvider>
   );
 }
