@@ -81,30 +81,30 @@ export function CheckoutPage() {
   const total = price + shippingCost + tax;
 
   const steps = [
-    { label: t('checkoutPage.shipping'), icon: MapPin },
-    { label: t('checkoutPage.payment'), icon: CreditCard },
-    { label: t('checkoutPage.review'), icon: CheckCircle2 },
+    { label: t('homepage.checkoutPage.shipping'), icon: MapPin },
+    { label: t('homepage.checkoutPage.payment'), icon: CreditCard },
+    { label: t('homepage.checkoutPage.review'), icon: CheckCircle2 },
   ];
 
   const validateShipping = (): boolean => {
     if (!shipping.firstName.trim() || !shipping.lastName.trim()) {
-      toast.error(t('checkoutPage.nameRequired'));
+      toast.error(t('homepage.checkoutPage.nameRequired'));
       return false;
     }
     if (!shipping.email.trim() || !shipping.email.includes('@')) {
-      toast.error(t('checkoutPage.emailRequired'));
+      toast.error(t('homepage.checkoutPage.emailRequired'));
       return false;
     }
     if (!shipping.street.trim()) {
-      toast.error(t('checkoutPage.addressRequired'));
+      toast.error(t('homepage.checkoutPage.addressRequired'));
       return false;
     }
     if (!shipping.city.trim() || !shipping.state.trim() || !shipping.zip.trim()) {
-      toast.error(t('checkoutPage.cityStateZip'));
+      toast.error(t('homepage.checkoutPage.cityStateZip'));
       return false;
     }
     if (!shipping.phone.trim()) {
-      toast.error(t('checkoutPage.phoneRequired'));
+      toast.error(t('homepage.checkoutPage.phoneRequired'));
       return false;
     }
     return true;
@@ -113,19 +113,19 @@ export function CheckoutPage() {
   const validatePayment = (): boolean => {
     if (payment.method === 'card') {
       if (payment.cardNumber.replace(/\s/g, '').length < 16) {
-        toast.error(t('checkoutPage.cardNumberInvalid'));
+        toast.error(t('homepage.checkoutPage.cardNumberInvalid'));
         return false;
       }
       if (!payment.cardName.trim()) {
-        toast.error(t('checkoutPage.cardNameRequired'));
+        toast.error(t('homepage.checkoutPage.cardNameRequired'));
         return false;
       }
       if (payment.expiry.length < 5) {
-        toast.error(t('checkoutPage.expiryInvalid'));
+        toast.error(t('homepage.checkoutPage.expiryInvalid'));
         return false;
       }
       if (payment.cvc.length < 3) {
-        toast.error(t('checkoutPage.cvcInvalid'));
+        toast.error(t('homepage.checkoutPage.cvcInvalid'));
         return false;
       }
     }
@@ -168,14 +168,14 @@ export function CheckoutPage() {
         <div className="w-24 h-24 rounded-full bg-ecommerce-surface-hover flex items-center justify-center mb-6">
           <ShoppingCart size={40} className="text-ecommerce-text-muted" />
         </div>
-        <h2 className="text-2xl font-bold text-ecommerce-text-primary mb-2">{t('checkoutPage.emptyCart')}</h2>
-        <p className="text-ecommerce-text-muted mb-8 max-w-sm">{t('checkoutPage.emptyCartDesc')}</p>
+        <h2 className="text-2xl font-bold text-ecommerce-text-primary mb-2">{t('homepage.checkoutPage.emptyCart')}</h2>
+        <p className="text-ecommerce-text-muted mb-8 max-w-sm">{t('homepage.checkoutPage.emptyCartDesc')}</p>
         <Button
           onClick={goHome}
           className="bg-ecommerce-red hover:bg-ecommerce-red/90 text-white rounded-xl px-8 h-12 font-semibold text-sm gap-2 transition-all hover:scale-105 active:scale-95"
         >
           <Sparkles size={16} className={isRTL ? 'order-last' : ''} />
-          {t('checkout.continueShopping')}
+          {t('homepage.checkout.continueShopping')}
         </Button>
       </div>
     );
@@ -210,7 +210,7 @@ export function CheckoutPage() {
             transition={{ delay: 0.3 }}
             className="text-3xl font-extrabold text-ecommerce-text-primary mb-3"
           >
-            {t('checkoutPage.orderSuccessTitle')}
+            {t('homepage.checkoutPage.orderSuccessTitle')}
           </motion.h2>
           <motion.p
             initial={{ y: 10, opacity: 0 }}
@@ -218,7 +218,7 @@ export function CheckoutPage() {
             transition={{ delay: 0.4 }}
             className="text-ecommerce-text-muted mb-8 max-w-sm mx-auto leading-relaxed"
           >
-            {t('checkout.orderSuccessDesc')}
+            {t('homepage.checkout.orderSuccessDesc')}
           </motion.p>
           <motion.div
             initial={{ y: 10, opacity: 0 }}
@@ -226,7 +226,7 @@ export function CheckoutPage() {
             transition={{ delay: 0.5 }}
             className="bg-ecommerce-surface-hover rounded-2xl p-5 mb-6 inline-block"
           >
-            <p className="text-sm text-ecommerce-text-muted mb-1">{t('checkoutPage.orderNumber')}</p>
+            <p className="text-sm text-ecommerce-text-muted mb-1">{t('homepage.checkoutPage.orderNumber')}</p>
             <p className="text-xl font-extrabold text-ecommerce-text-primary font-mono tracking-wider">{orderNumber}</p>
           </motion.div>
           <motion.div
@@ -237,8 +237,8 @@ export function CheckoutPage() {
           >
             <Package size={20} className="text-ecommerce-emerald shrink-0" />
             <div className="text-start">
-              <p className="text-sm font-semibold text-ecommerce-emerald">{t('checkout.estimatedDelivery')}</p>
-              <p className="text-xs text-ecommerce-emerald/70">{t('checkout.orderConfirmationEmail')}</p>
+              <p className="text-sm font-semibold text-ecommerce-emerald">{t('homepage.checkout.estimatedDelivery')}</p>
+              <p className="text-xs text-ecommerce-emerald/70">{t('homepage.checkout.orderConfirmationEmail')}</p>
             </div>
           </motion.div>
           <motion.div
@@ -252,7 +252,7 @@ export function CheckoutPage() {
               className="bg-ecommerce-red hover:bg-ecommerce-red/90 text-white rounded-xl px-8 h-12 font-semibold text-sm gap-2 transition-all hover:scale-105 active:scale-95"
             >
               <Sparkles size={16} className={isRTL ? 'order-last' : ''} />
-              {t('checkout.continueShopping')}
+              {t('homepage.checkout.continueShopping')}
             </Button>
           </motion.div>
         </motion.div>
@@ -266,10 +266,10 @@ export function CheckoutPage() {
       <nav className="flex items-center gap-2 text-sm text-ecommerce-text-muted mb-6">
         <button onClick={goHome} className="hover:text-ecommerce-text-primary transition-colors flex items-center gap-1">
           <Home size={14} />
-          {t('checkoutPage.home')}
+          {t('homepage.checkoutPage.home')}
         </button>
         <ChevronRight size={14} className={isRTL ? 'rotate-180' : ''} />
-        <span className="text-ecommerce-text-primary font-medium">{t('checkout.title')}</span>
+        <span className="text-ecommerce-text-primary font-medium">{t('homepage.checkout.title')}</span>
       </nav>
 
       {/* Step indicator - desktop */}
@@ -333,21 +333,21 @@ export function CheckoutPage() {
                 <div className="space-y-6">
                   <div>
                     <h2 className="text-xl sm:text-2xl font-bold text-ecommerce-text-primary mb-1">
-                      {t('checkoutPage.shippingInfo')}
+                      {t('homepage.checkoutPage.shippingInfo')}
                     </h2>
-                    <p className="text-sm text-ecommerce-text-muted">{t('checkout.enterAddress')}</p>
+                    <p className="text-sm text-ecommerce-text-muted">{t('homepage.checkout.enterAddress')}</p>
                   </div>
 
                   {/* Contact info */}
                   <div className="bg-white dark:bg-ecommerce-surface rounded-2xl border border-ecommerce-border p-5 sm:p-6 space-y-5">
                     <div className="flex items-center gap-2 mb-1">
                       <Mail size={16} className="text-ecommerce-purple" />
-                      <h3 className="text-sm font-semibold text-ecommerce-text-primary">{t('checkoutPage.contactInfo')}</h3>
+                      <h3 className="text-sm font-semibold text-ecommerce-text-primary">{t('homepage.checkoutPage.contactInfo')}</h3>
                     </div>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                       <div>
                         <Label className="text-xs font-medium text-ecommerce-text-secondary mb-1.5 block">
-                          {t('checkout.firstName')} *
+                          {t('homepage.checkout.firstName')} *
                         </Label>
                         <Input
                           value={shipping.firstName}
@@ -358,7 +358,7 @@ export function CheckoutPage() {
                       </div>
                       <div>
                         <Label className="text-xs font-medium text-ecommerce-text-secondary mb-1.5 block">
-                          {t('checkout.lastName')} *
+                          {t('homepage.checkout.lastName')} *
                         </Label>
                         <Input
                           value={shipping.lastName}
@@ -371,7 +371,7 @@ export function CheckoutPage() {
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                       <div>
                         <Label className="text-xs font-medium text-ecommerce-text-secondary mb-1.5 block">
-                          {t('checkout.email')} *
+                          {t('homepage.checkout.email')} *
                         </Label>
                         <Input
                           type="email"
@@ -383,7 +383,7 @@ export function CheckoutPage() {
                       </div>
                       <div>
                         <Label className="text-xs font-medium text-ecommerce-text-secondary mb-1.5 block">
-                          {t('checkout.phone')} *
+                          {t('homepage.checkout.phone')} *
                         </Label>
                         <Input
                           type="tel"
@@ -400,11 +400,11 @@ export function CheckoutPage() {
                   <div className="bg-white dark:bg-ecommerce-surface rounded-2xl border border-ecommerce-border p-5 sm:p-6 space-y-5">
                     <div className="flex items-center gap-2 mb-1">
                       <MapPin size={16} className="text-ecommerce-purple" />
-                      <h3 className="text-sm font-semibold text-ecommerce-text-primary">{t('checkoutPage.shippingAddress')}</h3>
+                      <h3 className="text-sm font-semibold text-ecommerce-text-primary">{t('homepage.checkoutPage.shippingAddress')}</h3>
                     </div>
                     <div>
                       <Label className="text-xs font-medium text-ecommerce-text-secondary mb-1.5 block">
-                        {t('checkout.streetAddress')} *
+                        {t('homepage.checkout.streetAddress')} *
                       </Label>
                       <Input
                         value={shipping.street}
@@ -415,7 +415,7 @@ export function CheckoutPage() {
                     </div>
                     <div>
                       <Label className="text-xs font-medium text-ecommerce-text-secondary mb-1.5 block">
-                        {t('checkoutPage.apartment')}
+                        {t('homepage.checkoutPage.apartment')}
                       </Label>
                       <Input
                         value={shipping.apartment}
@@ -427,7 +427,7 @@ export function CheckoutPage() {
                     <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
                       <div>
                         <Label className="text-xs font-medium text-ecommerce-text-secondary mb-1.5 block">
-                          {t('checkout.city')} *
+                          {t('homepage.checkout.city')} *
                         </Label>
                         <Input
                           value={shipping.city}
@@ -438,7 +438,7 @@ export function CheckoutPage() {
                       </div>
                       <div>
                         <Label className="text-xs font-medium text-ecommerce-text-secondary mb-1.5 block">
-                          {t('checkout.state')} *
+                          {t('homepage.checkout.state')} *
                         </Label>
                         <Input
                           value={shipping.state}
@@ -449,7 +449,7 @@ export function CheckoutPage() {
                       </div>
                       <div className="col-span-2 sm:col-span-1">
                         <Label className="text-xs font-medium text-ecommerce-text-secondary mb-1.5 block">
-                          {t('checkout.zipCode')} *
+                          {t('homepage.checkout.zipCode')} *
                         </Label>
                         <Input
                           value={shipping.zip}
@@ -461,7 +461,7 @@ export function CheckoutPage() {
                     </div>
                     <div>
                       <Label className="text-xs font-medium text-ecommerce-text-secondary mb-1.5 block">
-                        {t('checkoutPage.country')}
+                        {t('homepage.checkoutPage.country')}
                       </Label>
                       <div className="relative">
                         <Globe size={16} className="absolute start-3 top-1/2 -translate-y-1/2 text-ecommerce-text-muted" />
@@ -481,7 +481,7 @@ export function CheckoutPage() {
                         className="data-[state=checked]:bg-ecommerce-purple data-[state=checked]:border-ecommerce-purple"
                       />
                       <Label htmlFor="saveAddress" className="text-sm text-ecommerce-text-secondary cursor-pointer">
-                        {t('checkoutPage.saveAddress')}
+                        {t('homepage.checkoutPage.saveAddress')}
                       </Label>
                     </div>
                   </div>
@@ -490,7 +490,7 @@ export function CheckoutPage() {
                   <div className="bg-white dark:bg-ecommerce-surface rounded-2xl border border-ecommerce-border p-5 sm:p-6 space-y-4">
                     <div className="flex items-center gap-2 mb-1">
                       <Truck size={16} className="text-ecommerce-purple" />
-                      <h3 className="text-sm font-semibold text-ecommerce-text-primary">{t('checkoutPage.shippingMethod')}</h3>
+                      <h3 className="text-sm font-semibold text-ecommerce-text-primary">{t('homepage.checkoutPage.shippingMethod')}</h3>
                     </div>
                     <RadioGroup value={shippingMethod} onValueChange={(v) => setShippingMethod(v as 'standard' | 'express')} className="space-y-3">
                       <label className={`flex items-center gap-4 p-4 rounded-xl border-2 cursor-pointer transition-all ${
@@ -500,13 +500,13 @@ export function CheckoutPage() {
                         <div className="flex-1">
                           <div className="flex items-center gap-2">
                             <Truck size={16} className="text-ecommerce-text-secondary" />
-                            <span className="text-sm font-semibold text-ecommerce-text-primary">{t('checkoutPage.standardShipping')}</span>
+                            <span className="text-sm font-semibold text-ecommerce-text-primary">{t('homepage.checkoutPage.standardShipping')}</span>
                           </div>
-                          <p className="text-xs text-ecommerce-text-muted mt-0.5">{t('checkoutPage.standardShippingDesc')}</p>
+                          <p className="text-xs text-ecommerce-text-muted mt-0.5">{t('homepage.checkoutPage.standardShippingDesc')}</p>
                         </div>
                         <span className="text-sm font-bold text-ecommerce-text-primary">
                           {price >= 50 ? (
-                            <span className="text-ecommerce-emerald">{t('common.free')}</span>
+                            <span className="text-ecommerce-emerald">{t('homepage.common.free')}</span>
                           ) : '$5.99'}
                         </span>
                       </label>
@@ -517,9 +517,9 @@ export function CheckoutPage() {
                         <div className="flex-1">
                           <div className="flex items-center gap-2">
                             <Clock size={16} className="text-ecommerce-text-secondary" />
-                            <span className="text-sm font-semibold text-ecommerce-text-primary">{t('quickView.shippingInfo.express')}</span>
+                            <span className="text-sm font-semibold text-ecommerce-text-primary">{t('homepage.quickView.shippingInfo.express')}</span>
                           </div>
-                          <p className="text-xs text-ecommerce-text-muted mt-0.5">{t('checkoutPage.expressShippingDesc')}</p>
+                          <p className="text-xs text-ecommerce-text-muted mt-0.5">{t('homepage.checkoutPage.expressShippingDesc')}</p>
                         </div>
                         <span className="text-sm font-bold text-ecommerce-text-primary">$9.99</span>
                       </label>
@@ -534,13 +534,13 @@ export function CheckoutPage() {
                       className="text-ecommerce-text-muted hover:text-ecommerce-text-primary gap-1"
                     >
                       <ArrowLeft size={16} className={isRTL ? 'rotate-180' : ''} />
-                      {t('checkoutPage.backToShopping')}
+                      {t('homepage.checkoutPage.backToShopping')}
                     </Button>
                     <Button
                       onClick={handleNext}
                       className="bg-ecommerce-red hover:bg-ecommerce-red/90 text-white rounded-xl px-6 h-11 font-semibold text-sm gap-2 transition-all hover:scale-[1.02] active:scale-95"
                     >
-                      {t('checkoutPage.continueToPayment')}
+                      {t('homepage.checkoutPage.continueToPayment')}
                       <ChevronRight size={16} className={isRTL ? 'rotate-180' : ''} />
                     </Button>
                   </div>
@@ -556,9 +556,9 @@ export function CheckoutPage() {
                     </button>
                     <div>
                       <h2 className="text-xl sm:text-2xl font-bold text-ecommerce-text-primary mb-1">
-                        {t('checkout.paymentStep')}
+                        {t('homepage.checkout.paymentStep')}
                       </h2>
-                      <p className="text-sm text-ecommerce-text-muted">{t('checkout.choosePayment')}</p>
+                      <p className="text-sm text-ecommerce-text-muted">{t('homepage.checkout.choosePayment')}</p>
                     </div>
                   </div>
 
@@ -573,8 +573,8 @@ export function CheckoutPage() {
                           <CreditCardIcon size={20} className="text-ecommerce-text-secondary" />
                         </div>
                         <div className="flex-1">
-                          <p className="text-sm font-semibold text-ecommerce-text-primary">{t('checkout.creditDebitCard')}</p>
-                          <p className="text-xs text-ecommerce-text-muted">{t('checkout.cardNetworks')}</p>
+                          <p className="text-sm font-semibold text-ecommerce-text-primary">{t('homepage.checkout.creditDebitCard')}</p>
+                          <p className="text-xs text-ecommerce-text-muted">{t('homepage.checkout.cardNetworks')}</p>
                         </div>
                         {payment.method === 'card' && (
                           <BadgeCheck size={16} className="text-ecommerce-purple" />
@@ -588,8 +588,8 @@ export function CheckoutPage() {
                           <Shield size={20} className="text-[#0070ba]" />
                         </div>
                         <div className="flex-1">
-                          <p className="text-sm font-semibold text-ecommerce-text-primary">{t('checkout.paypal')}</p>
-                          <p className="text-xs text-ecommerce-text-muted">{t('checkout.paypalDesc')}</p>
+                          <p className="text-sm font-semibold text-ecommerce-text-primary">{t('homepage.checkout.paypal')}</p>
+                          <p className="text-xs text-ecommerce-text-muted">{t('homepage.checkout.paypalDesc')}</p>
                         </div>
                         {payment.method === 'paypal' && (
                           <BadgeCheck size={16} className="text-ecommerce-purple" />
@@ -603,8 +603,8 @@ export function CheckoutPage() {
                           <Banknote size={20} className="text-ecommerce-text-secondary" />
                         </div>
                         <div className="flex-1">
-                          <p className="text-sm font-semibold text-ecommerce-text-primary">{t('checkout.cashOnDelivery')}</p>
-                          <p className="text-xs text-ecommerce-text-muted">{t('checkout.codDesc')}</p>
+                          <p className="text-sm font-semibold text-ecommerce-text-primary">{t('homepage.checkout.cashOnDelivery')}</p>
+                          <p className="text-xs text-ecommerce-text-muted">{t('homepage.checkout.codDesc')}</p>
                         </div>
                         {payment.method === 'cod' && (
                           <BadgeCheck size={16} className="text-ecommerce-purple" />
@@ -623,11 +623,11 @@ export function CheckoutPage() {
                     >
                       <h3 className="text-sm font-semibold text-ecommerce-text-primary flex items-center gap-2">
                         <CreditCard size={16} className="text-ecommerce-purple" />
-                        {t('checkoutPage.cardDetails')}
+                        {t('homepage.checkoutPage.cardDetails')}
                       </h3>
                       <div>
                         <Label className="text-xs font-medium text-ecommerce-text-secondary mb-1.5 block">
-                          {t('checkout.cardNumber')} *
+                          {t('homepage.checkout.cardNumber')} *
                         </Label>
                         <div className="relative">
                           <CreditCardIcon size={16} className="absolute start-3 top-1/2 -translate-y-1/2 text-ecommerce-text-muted" />
@@ -642,7 +642,7 @@ export function CheckoutPage() {
                       </div>
                       <div>
                         <Label className="text-xs font-medium text-ecommerce-text-secondary mb-1.5 block">
-                          {t('checkoutPage.cardholderName')} *
+                          {t('homepage.checkoutPage.cardholderName')} *
                         </Label>
                         <Input
                           value={payment.cardName}
@@ -654,7 +654,7 @@ export function CheckoutPage() {
                       <div className="grid grid-cols-2 gap-4">
                         <div>
                           <Label className="text-xs font-medium text-ecommerce-text-secondary mb-1.5 block">
-                            {t('checkout.expiryDate')} *
+                            {t('homepage.checkout.expiryDate')} *
                           </Label>
                           <Input
                             value={payment.expiry}
@@ -666,7 +666,7 @@ export function CheckoutPage() {
                         </div>
                         <div>
                           <Label className="text-xs font-medium text-ecommerce-text-secondary mb-1.5 block">
-                            {t('checkout.cvc')} *
+                            {t('homepage.checkout.cvc')} *
                           </Label>
                           <Input
                             value={payment.cvc}
@@ -688,8 +688,8 @@ export function CheckoutPage() {
                       className="bg-[#0070ba]/5 border border-[#0070ba]/15 rounded-2xl p-5 sm:p-6 text-center"
                     >
                       <Shield size={32} className="mx-auto mb-3 text-[#0070ba]" />
-                      <p className="text-sm font-semibold text-ecommerce-text-primary mb-1">{t('checkoutPage.paypalRedirect')}</p>
-                      <p className="text-xs text-ecommerce-text-muted">{t('checkoutPage.paypalRedirectDesc')}</p>
+                      <p className="text-sm font-semibold text-ecommerce-text-primary mb-1">{t('homepage.checkoutPage.paypalRedirect')}</p>
+                      <p className="text-xs text-ecommerce-text-muted">{t('homepage.checkoutPage.paypalRedirectDesc')}</p>
                     </motion.div>
                   )}
 
@@ -700,8 +700,8 @@ export function CheckoutPage() {
                       className="bg-ecommerce-amber/5 border border-ecommerce-amber/15 rounded-2xl p-5 sm:p-6 text-center"
                     >
                       <Banknote size={32} className="mx-auto mb-3 text-ecommerce-amber" />
-                      <p className="text-sm font-semibold text-ecommerce-text-primary mb-1">{t('checkoutPage.codNote')}</p>
-                      <p className="text-xs text-ecommerce-text-muted">{t('checkoutPage.codNoteDesc')}</p>
+                      <p className="text-sm font-semibold text-ecommerce-text-primary mb-1">{t('homepage.checkoutPage.codNote')}</p>
+                      <p className="text-xs text-ecommerce-text-muted">{t('homepage.checkoutPage.codNoteDesc')}</p>
                     </motion.div>
                   )}
 
@@ -709,8 +709,8 @@ export function CheckoutPage() {
                   <div className="flex items-start gap-3 p-4 rounded-xl bg-ecommerce-surface-hover">
                     <Lock size={16} className="text-ecommerce-emerald mt-0.5 shrink-0" />
                     <div>
-                      <p className="text-xs font-semibold text-ecommerce-text-primary">{t('checkoutPage.secureCheckout')}</p>
-                      <p className="text-[11px] text-ecommerce-text-muted mt-0.5">{t('checkoutPage.secureCheckoutDesc')}</p>
+                      <p className="text-xs font-semibold text-ecommerce-text-primary">{t('homepage.checkoutPage.secureCheckout')}</p>
+                      <p className="text-[11px] text-ecommerce-text-muted mt-0.5">{t('homepage.checkoutPage.secureCheckoutDesc')}</p>
                     </div>
                   </div>
 
@@ -722,13 +722,13 @@ export function CheckoutPage() {
                       className="text-ecommerce-text-muted hover:text-ecommerce-text-primary gap-1"
                     >
                       <ArrowLeft size={16} className={isRTL ? 'rotate-180' : ''} />
-                      {t('checkoutPage.backToShipping')}
+                      {t('homepage.checkoutPage.backToShipping')}
                     </Button>
                     <Button
                       onClick={handleNext}
                       className="bg-ecommerce-red hover:bg-ecommerce-red/90 text-white rounded-xl px-6 h-11 font-semibold text-sm gap-2 transition-all hover:scale-[1.02] active:scale-95"
                     >
-                      {t('checkoutPage.reviewOrder')}
+                      {t('homepage.checkoutPage.reviewOrder')}
                       <ChevronRight size={16} className={isRTL ? 'rotate-180' : ''} />
                     </Button>
                   </div>
@@ -744,9 +744,9 @@ export function CheckoutPage() {
                     </button>
                     <div>
                       <h2 className="text-xl sm:text-2xl font-bold text-ecommerce-text-primary mb-1">
-                        {t('checkoutPage.reviewOrderTitle')}
+                        {t('homepage.checkoutPage.reviewOrderTitle')}
                       </h2>
-                      <p className="text-sm text-ecommerce-text-muted">{t('checkout.confirmDetails')}</p>
+                      <p className="text-sm text-ecommerce-text-muted">{t('homepage.checkout.confirmDetails')}</p>
                     </div>
                   </div>
 
@@ -755,13 +755,13 @@ export function CheckoutPage() {
                     <div className="flex items-center justify-between mb-3">
                       <h3 className="text-sm font-semibold text-ecommerce-text-primary flex items-center gap-2">
                         <MapPin size={16} className="text-ecommerce-purple" />
-                        {t('checkoutPage.shippingInfo')}
+                        {t('homepage.checkoutPage.shippingInfo')}
                       </h3>
                       <button
                         onClick={() => setStep(0)}
                         className="text-xs text-ecommerce-purple hover:text-ecommerce-purple/80 font-medium"
                       >
-                        {t('common.edit')}
+                        {t('homepage.common.edit')}
                       </button>
                     </div>
                     <div className="text-sm text-ecommerce-text-secondary space-y-1">
@@ -772,7 +772,7 @@ export function CheckoutPage() {
                       <div className="flex items-center gap-1.5 pt-1">
                         <Truck size={13} className="text-ecommerce-text-muted" />
                         <span className="text-xs font-medium">
-                          {shippingMethod === 'express' ? t('quickView.shippingInfo.express') : t('checkoutPage.standardShipping')}
+                          {shippingMethod === 'express' ? t('homepage.quickView.shippingInfo.express') : t('homepage.checkoutPage.standardShipping')}
                         </span>
                       </div>
                     </div>
@@ -783,13 +783,13 @@ export function CheckoutPage() {
                     <div className="flex items-center justify-between mb-3">
                       <h3 className="text-sm font-semibold text-ecommerce-text-primary flex items-center gap-2">
                         <CreditCard size={16} className="text-ecommerce-purple" />
-                        {t('checkoutPage.paymentInfo')}
+                        {t('homepage.checkoutPage.paymentInfo')}
                       </h3>
                       <button
                         onClick={() => setStep(1)}
                         className="text-xs text-ecommerce-purple hover:text-ecommerce-purple/80 font-medium"
                       >
-                        {t('common.edit')}
+                        {t('homepage.common.edit')}
                       </button>
                     </div>
                     <div className="text-sm text-ecommerce-text-secondary">
@@ -799,7 +799,7 @@ export function CheckoutPage() {
                             <CreditCardIcon size={16} className="text-ecommerce-text-muted" />
                           </div>
                           <div>
-                            <p className="font-medium text-ecommerce-text-primary">{t('checkout.creditDebitCard')}</p>
+                            <p className="font-medium text-ecommerce-text-primary">{t('homepage.checkout.creditDebitCard')}</p>
                             <p className="text-xs text-ecommerce-text-muted font-mono">
                               **** **** **** {payment.cardNumber.replace(/\s/g, '').slice(-4) || '****'}
                             </p>
@@ -811,7 +811,7 @@ export function CheckoutPage() {
                           <div className="w-10 h-7 rounded-md bg-[#0070ba]/10 flex items-center justify-center">
                             <Shield size={16} className="text-[#0070ba]" />
                           </div>
-                          <p className="font-medium text-ecommerce-text-primary">{t('checkout.paypal')}</p>
+                          <p className="font-medium text-ecommerce-text-primary">{t('homepage.checkout.paypal')}</p>
                         </div>
                       )}
                       {payment.method === 'cod' && (
@@ -819,7 +819,7 @@ export function CheckoutPage() {
                           <div className="w-10 h-7 rounded-md bg-ecommerce-amber/10 flex items-center justify-center">
                             <Banknote size={16} className="text-ecommerce-amber" />
                           </div>
-                          <p className="font-medium text-ecommerce-text-primary">{t('checkout.cashOnDelivery')}</p>
+                          <p className="font-medium text-ecommerce-text-primary">{t('homepage.checkout.cashOnDelivery')}</p>
                         </div>
                       )}
                     </div>
@@ -829,7 +829,7 @@ export function CheckoutPage() {
                   <div className="bg-white dark:bg-ecommerce-surface rounded-2xl border border-ecommerce-border p-5 sm:p-6">
                     <h3 className="text-sm font-semibold text-ecommerce-text-primary mb-4 flex items-center gap-2">
                       <ShoppingCart size={16} className="text-ecommerce-purple" />
-                      {t('cart.orderSummary')} ({items.length} {t('common.products').toLowerCase()})
+                      {t('homepage.cart.orderSummary')} ({items.length} {t('homepage.common.products').toLowerCase()})
                     </h3>
                     <div className="space-y-3 max-h-72 overflow-y-auto scrollbar-thin pe-1">
                       {items.map((item) => (
@@ -837,7 +837,7 @@ export function CheckoutPage() {
                           <img src={item.image} alt={item.name} className="w-14 h-14 rounded-lg object-cover shrink-0" />
                           <div className="flex-1 min-w-0">
                             <p className="text-sm font-medium text-ecommerce-text-primary truncate">{item.name}</p>
-                            <p className="text-xs text-ecommerce-text-muted">{item.category} &middot; {t('cart.quantity')}: {item.quantity}</p>
+                            <p className="text-xs text-ecommerce-text-muted">{item.category} &middot; {t('homepage.cart.quantity')}: {item.quantity}</p>
                           </div>
                           <span className="text-sm font-bold text-ecommerce-text-primary shrink-0">
                             ${(item.price * item.quantity).toFixed(2)}
@@ -855,7 +855,7 @@ export function CheckoutPage() {
                       className="text-ecommerce-text-muted hover:text-ecommerce-text-primary gap-1"
                     >
                       <ArrowLeft size={16} className={isRTL ? 'rotate-180' : ''} />
-                      {t('checkoutPage.backToPayment')}
+                      {t('homepage.checkoutPage.backToPayment')}
                     </Button>
                     <Button
                       onClick={handlePlaceOrder}
@@ -865,12 +865,12 @@ export function CheckoutPage() {
                       {isProcessing ? (
                         <>
                           <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                          {t('checkoutPage.processing')}
+                          {t('homepage.checkoutPage.processing')}
                         </>
                       ) : (
                         <>
                           <Lock size={16} />
-                          {t('checkoutPage.placeOrder')} — ${total.toFixed(2)}
+                          {t('homepage.checkoutPage.placeOrder')} — ${total.toFixed(2)}
                         </>
                       )}
                     </Button>
@@ -887,7 +887,7 @@ export function CheckoutPage() {
             <div className="bg-white dark:bg-ecommerce-surface rounded-2xl border border-ecommerce-border p-5 sm:p-6">
               <h3 className="text-base font-bold text-ecommerce-text-primary mb-4 flex items-center gap-2">
                 <ShoppingCart size={16} className="text-ecommerce-red" />
-                {t('cart.orderSummary')}
+                {t('homepage.cart.orderSummary')}
               </h3>
 
               {/* Items preview */}
@@ -913,30 +913,30 @@ export function CheckoutPage() {
               {/* Price breakdown */}
               <div className="space-y-2.5">
                 <div className="flex justify-between text-sm">
-                  <span className="text-ecommerce-text-secondary">{t('cart.subtotal')}</span>
+                  <span className="text-ecommerce-text-secondary">{t('homepage.cart.subtotal')}</span>
                   <span className="font-medium">${price.toFixed(2)}</span>
                 </div>
                 {savings > 0 && (
                   <div className="flex justify-between text-sm">
-                    <span className="text-ecommerce-emerald">{t('cart.savings')}</span>
+                    <span className="text-ecommerce-emerald">{t('homepage.cart.savings')}</span>
                     <span className="font-medium text-ecommerce-emerald">-${savings.toFixed(2)}</span>
                   </div>
                 )}
                 <div className="flex justify-between text-sm">
-                  <span className="text-ecommerce-text-secondary">{t('cart.shipping')}</span>
+                  <span className="text-ecommerce-text-secondary">{t('homepage.cart.shipping')}</span>
                   <span className="font-medium">
                     {shippingCost === 0 ? (
-                      <span className="text-ecommerce-emerald">{t('common.free')}</span>
+                      <span className="text-ecommerce-emerald">{t('homepage.common.free')}</span>
                     ) : `$${shippingCost.toFixed(2)}`}
                   </span>
                 </div>
                 <div className="flex justify-between text-sm">
-                  <span className="text-ecommerce-text-secondary">{t('checkout.estimatedTax')}</span>
+                  <span className="text-ecommerce-text-secondary">{t('homepage.checkout.estimatedTax')}</span>
                   <span className="font-medium">${tax.toFixed(2)}</span>
                 </div>
                 <Separator />
                 <div className="flex justify-between items-center">
-                  <span className="text-base font-bold text-ecommerce-text-primary">{t('cart.total')}</span>
+                  <span className="text-base font-bold text-ecommerce-text-primary">{t('homepage.cart.total')}</span>
                   <span className="text-xl font-extrabold text-ecommerce-red">${total.toFixed(2)}</span>
                 </div>
               </div>
@@ -946,9 +946,9 @@ export function CheckoutPage() {
                 <Package size={16} className="text-ecommerce-emerald shrink-0" />
                 <div>
                   <p className="text-xs font-semibold text-ecommerce-emerald">
-                    {shippingMethod === 'express' ? t('checkoutPage.expressDelivery') : t('checkout.estimatedDelivery')}
+                    {shippingMethod === 'express' ? t('homepage.checkoutPage.expressDelivery') : t('homepage.checkout.estimatedDelivery')}
                   </p>
-                  <p className="text-[10px] text-ecommerce-emerald/70">{t('checkout.orderConfirmationEmail')}</p>
+                  <p className="text-[10px] text-ecommerce-emerald/70">{t('homepage.checkout.orderConfirmationEmail')}</p>
                 </div>
               </div>
             </div>
@@ -957,11 +957,11 @@ export function CheckoutPage() {
             <div className="mt-4 grid grid-cols-2 gap-3">
               <div className="flex items-center gap-2 p-3 rounded-xl bg-ecommerce-surface-hover">
                 <Shield size={14} className="text-ecommerce-emerald shrink-0" />
-                <span className="text-[11px] text-ecommerce-text-muted font-medium">{t('checkout.sslEncrypted')}</span>
+                <span className="text-[11px] text-ecommerce-text-muted font-medium">{t('homepage.checkout.sslEncrypted')}</span>
               </div>
               <div className="flex items-center gap-2 p-3 rounded-xl bg-ecommerce-surface-hover">
                 <Lock size={14} className="text-ecommerce-emerald shrink-0" />
-                <span className="text-[11px] text-ecommerce-text-muted font-medium">{t('hero.securePayment')}</span>
+                <span className="text-[11px] text-ecommerce-text-muted font-medium">{t('homepage.hero.securePayment')}</span>
               </div>
             </div>
           </div>

@@ -22,7 +22,7 @@ export function DealTicker() {
   return (
     <div
       role="marquee"
-      aria-label={t('dealTicker.title')}
+      aria-label={t('homepage.dealTicker.title')}
       className="w-full py-2 bg-ecommerce-surface-hover/60 dark:bg-[#0F1117]/40 border-y border-ecommerce-border/50 relative overflow-hidden"
       onMouseEnter={() => setIsPaused(true)}
       onMouseLeave={() => setIsPaused(false)}

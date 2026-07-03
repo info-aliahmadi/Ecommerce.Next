@@ -26,18 +26,18 @@ export function CheckoutSheet() {
             onClick={startCheckout}
             className="w-full h-12 bg-ecommerce-red hover:bg-ecommerce-red/90 text-white rounded-xl font-semibold text-sm gap-2 transition-all hover:scale-[1.01] active:scale-95"
           >
-            {t('cart.checkout')}
+            {t('homepage.cart.checkout')}
             <ChevronRight size={16} />
           </Button>
           <div className="flex items-center justify-center gap-3 mt-2">
             <div className="flex items-center gap-1 text-[10px] text-ecommerce-text-muted">
-              <Lock size={10} /> {t('checkout.sslEncrypted')}
+              <Lock size={10} /> {t('homepage.checkout.sslEncrypted')}
             </div>
             <div className="flex items-center gap-1 text-[10px] text-ecommerce-text-muted">
-              <Shield size={10} /> {t('hero.securePayment')}
+              <Shield size={10} /> {t('homepage.hero.securePayment')}
             </div>
             <div className="flex items-center gap-1 text-[10px] text-ecommerce-text-muted">
-              <Truck size={10} /> {t('hero.onOrders')}
+              <Truck size={10} /> {t('homepage.hero.onOrders')}
             </div>
           </div>
         </div>

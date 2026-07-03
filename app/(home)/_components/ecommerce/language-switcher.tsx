@@ -1,14 +1,13 @@
 'use client';
 
-import { useI18n } from '../../i18n/provider';
+// import { useI18n } from '../../i18n/provider';
 import { Globe, ChevronDown } from 'lucide-react';
-import { LOCALE_CONFIG, type Locale } from '../../_lib/store';
-import { useEffect, useRef } from 'react';
-
-const locales: Locale[] = ['en', 'fa', 'ar'];
+import { LOCALE_CONFIG, LOCALES, type Locale } from '../../_lib/store';
+import { useEffect, useRef, useState } from 'react';
+import nextIntlService from '@root/locales/nextIntlService';
 
 export function LanguageSwitcher() {
-  const { locale, setLocale } = useI18n();
+  const [locale, setLocale] = useState<Locale>(nextIntlService.getNextIntlLocale() as Locale);
   const ref = useRef<HTMLDivElement>(null);
 
   // Close on outside click
@@ -28,8 +27,11 @@ export function LanguageSwitcher() {
   };
 
   const handleSelect = (loc: Locale) => {
+    nextIntlService.setNextIntlLocale(loc);
     setLocale(loc);
     ref.current?.classList.remove('lang-open');
+    // Refresh the page to apply the new locale
+    window.location.reload();
   };
 
   return (
@@ -49,7 +51,7 @@ export function LanguageSwitcher() {
       </button>
 
       <div className="lang-menu absolute end-0 top-full mt-1.5 bg-ecommerce-surface border border-ecommerce-border rounded-xl shadow-xl z-[999] min-w-[180px] py-1">
-        {locales.map((loc) => {
+        {LOCALES.map((loc) => {
           const cfg = LOCALE_CONFIG[loc];
           const isActive = locale === loc;
           return (
@@ -59,11 +61,10 @@ export function LanguageSwitcher() {
                 e.stopPropagation();
                 handleSelect(loc);
               }}
-              className={`w-full flex items-center gap-3 px-4 py-2.5 text-sm transition-colors cursor-pointer text-start ${
-                isActive
+              className={`w-full flex items-center gap-3 px-4 py-2.5 text-sm transition-colors cursor-pointer text-start ${isActive
                   ? 'bg-ecommerce-red/10 text-ecommerce-red font-semibold'
                   : 'text-ecommerce-text-secondary hover:bg-ecommerce-surface-hover hover:text-ecommerce-text-primary'
-              }`}
+                }`}
             >
               <span className="text-lg">{loc === 'en' ? '🇺🇸' : loc === 'fa' ? '🇮🇷' : '🇸🇦'}</span>
               <span>{cfg.nativeName}</span>

@@ -22,8 +22,8 @@ export function WelcomeToast() {
     const timer = setTimeout(() => {
       const welcomed = localStorage.getItem('shopsphere-welcomed');
       if (!welcomed) {
-        toast(t('welcome.title'), {
-          description: t('welcome.message'),
+        toast(t('homepage.welcome.title'), {
+          description: t('homepage.welcome.message'),
           duration: 6000,
         });
         localStorage.setItem('shopsphere-welcomed', 'true');

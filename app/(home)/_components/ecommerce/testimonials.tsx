@@ -106,10 +106,10 @@ export function TestimonialsSection() {
             Testimonials
           </div>
           <h2 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-ecommerce-text-primary tracking-tight">
-            {t('testimonials.title')}
+            {t('homepage.testimonials.title')}
           </h2>
           <p className="text-sm text-ecommerce-text-muted mt-3 max-w-lg mx-auto">
-            {t('testimonials.subtitle')}
+            {t('homepage.testimonials.subtitle')}
           </p>
           {/* Decorative line */}
           <div className="mt-6 flex items-center justify-center gap-2">
@@ -125,7 +125,7 @@ export function TestimonialsSection() {
             onClick={prev}
             disabled={currentIndex === 0}
             className="absolute -start-2 lg:-start-5 top-1/2 -translate-y-1/2 z-10 w-11 h-11 rounded-full bg-white dark:bg-ecommerce-surface shadow-xl border border-ecommerce-border flex items-center justify-center hover:bg-ecommerce-red hover:text-white hover:border-ecommerce-red hover:shadow-lg hover:shadow-ecommerce-red/20 transition-all duration-200 disabled:opacity-20 disabled:cursor-not-allowed disabled:hover:bg-white disabled:hover:text-ecommerce-text-primary disabled:hover:border-ecommerce-border disabled:hover:shadow-xl hidden md:flex"
-            aria-label={t('testimonials.prev')}
+            aria-label={t('homepage.testimonials.prev')}
           >
             <ChevronLeft size={18} />
           </button>
@@ -133,7 +133,7 @@ export function TestimonialsSection() {
             onClick={next}
             disabled={currentIndex >= maxIndex}
             className="absolute -end-2 lg:-end-5 top-1/2 -translate-y-1/2 z-10 w-11 h-11 rounded-full bg-white dark:bg-ecommerce-surface shadow-xl border border-ecommerce-border flex items-center justify-center hover:bg-ecommerce-red hover:text-white hover:border-ecommerce-red hover:shadow-lg hover:shadow-ecommerce-red/20 transition-all duration-200 disabled:opacity-20 disabled:cursor-not-allowed disabled:hover:bg-white disabled:hover:text-ecommerce-text-primary disabled:hover:border-ecommerce-border disabled:hover:shadow-xl hidden md:flex"
-            aria-label={t('testimonials.next')}
+            aria-label={t('homepage.testimonials.next')}
           >
             <ChevronRight size={18} />
           </button>

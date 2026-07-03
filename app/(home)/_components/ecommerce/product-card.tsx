@@ -108,7 +108,7 @@ export function ProductCard({
       image,
       category: category.name,
     });
-    toast.success(wishlisted ? t('common.removeFromWishlist') : t('common.addToWishlist'));
+    toast.success(wishlisted ? t('homepage.common.removeFromWishlist') : t('homepage.common.addToWishlist'));
     setHeartBurst(true);
     setTimeout(() => setHeartBurst(false), 600);
   };
@@ -118,14 +118,14 @@ export function ProductCard({
     e.stopPropagation();
     if (inCompare) {
       addCompareItem({ id, name, price, comparePrice, image, rating, reviewCount, category, stock: stock || 0, description: description || '', sku });
-      toast.success(t('compare.remove'));
+      toast.success(t('homepage.compare.remove'));
     } else {
       if (useCompareStore.getState().items.length >= 4) {
-        toast.warning(t('compare.maxWarning'));
+        toast.warning(t('homepage.compare.maxWarning'));
         return;
       }
       addCompareItem({ id, name, price, comparePrice, image, rating, reviewCount, category, stock: stock || 0, description: description || '', sku });
-      toast.success(t('common.compare'));
+      toast.success(t('homepage.common.compare'));
     }
   };
 
@@ -201,7 +201,7 @@ export function ProductCard({
               <button
                 onClick={handleWishlist}
                 className={`w-9 h-9 rounded-lg bg-white/80 dark:bg-ecommerce-surface/80 flex items-center justify-center hover:scale-110 transition-transform duration-200 hover:bg-ecommerce-red hover:text-white ${heartBurst && wishlisted ? 'scale-125' : ''}`}
-                aria-label={wishlisted ? t('common.removeFromWishlist') : t('common.addToWishlist')}
+                aria-label={wishlisted ? t('homepage.common.removeFromWishlist') : t('homepage.common.addToWishlist')}
               >
                 <Heart size={15} className={`transition-colors duration-200 ${wishlisted ? 'fill-ecommerce-red text-ecommerce-red' : 'text-ecommerce-text-secondary'}`} />
               </button>
@@ -209,21 +209,21 @@ export function ProductCard({
             <button
               onClick={handleCompare}
               className={`w-9 h-9 rounded-lg bg-white/80 dark:bg-ecommerce-surface/80 flex items-center justify-center hover:scale-110 transition-all ${inCompare ? 'bg-ecommerce-teal/10 dark:bg-ecommerce-teal/10' : 'hover:bg-ecommerce-teal hover:text-white'}`}
-              aria-label={inCompare ? t('compare.remove') : t('common.compare')}
+              aria-label={inCompare ? t('homepage.compare.remove') : t('homepage.common.compare')}
             >
               <GitCompareArrows size={15} className={inCompare ? 'text-ecommerce-teal' : 'text-ecommerce-text-secondary'} />
             </button>
             <button
               onClick={handleQuickView}
               className="w-9 h-9 rounded-lg bg-white/80 dark:bg-ecommerce-surface/80 flex items-center justify-center hover:scale-110 transition-all hover:bg-ecommerce-purple hover:text-white"
-              aria-label={t('common.quickView')}
+              aria-label={t('homepage.common.quickView')}
             >
               <Eye size={15} className="text-ecommerce-text-secondary" />
             </button>
             <button
               onClick={handleAddToCart}
               className="w-9 h-9 rounded-lg bg-white/80 dark:bg-ecommerce-surface/80 flex items-center justify-center hover:scale-110 transition-all hover:bg-ecommerce-red hover:text-white sm:hidden"
-              aria-label={t('common.addToCart')}
+              aria-label={t('homepage.common.addToCart')}
             >
               <ShoppingCart size={15} />
             </button>
@@ -234,13 +234,13 @@ export function ProductCard({
         {stock !== undefined && stock < 10 && stock > 0 && (
           <div className="absolute bottom-2.5 start-2.5 z-10">
             <span className="text-[10px] font-bold px-2 py-0.5 rounded-md bg-ecommerce-amber/90 text-white shadow-sm">
-              {t('common.onlyLeft', { count: stock })}
+              {t('homepage.common.onlyLeft', { count: stock })}
             </span>
           </div>
         )}
         {stock === 0 && (
           <div className="absolute inset-0 bg-black/40 z-10 flex items-center justify-center">
-            <span className="text-sm font-bold text-white bg-black/60 px-4 py-2 rounded-xl">{t('common.outOfStock')}</span>
+            <span className="text-sm font-bold text-white bg-black/60 px-4 py-2 rounded-xl">{t('homepage.common.outOfStock')}</span>
           </div>
         )}
 
@@ -248,22 +248,22 @@ export function ProductCard({
         <div className="absolute top-2.5 start-2.5 flex flex-col gap-1">
           {discount > 0 && (
             <Badge className="bg-gradient-to-r from-ecommerce-red to-rose-500 text-white border-0 text-[10px] font-bold px-1.5 py-0.5 rounded-md shadow-sm">
-              {t('common.off', { percent: discount })}
+              {t('homepage.common.off', { percent: discount })}
             </Badge>
           )}
           {parsedTags.includes('new') && (
             <Badge className="bg-ecommerce-teal text-white border-0 text-[10px] font-bold px-1.5 py-0.5 rounded-md shadow-sm">
-              {t('common.newBadge')}
+              {t('homepage.common.newBadge')}
             </Badge>
           )}
           {parsedTags.includes('trending') && (
             <Badge className="bg-ecommerce-amber text-ecommerce-text-primary border-0 text-[10px] font-bold px-1.5 py-0.5 rounded-md shadow-sm">
-              {t('common.trendingBadge')}
+              {t('homepage.common.trendingBadge')}
             </Badge>
           )}
           {parsedTags.includes('bestseller') && (
             <Badge className="bg-ecommerce-purple text-white border-0 text-[10px] font-bold px-1.5 py-0.5 rounded-md shadow-sm">
-              {t('common.bestBadge')}
+              {t('homepage.common.bestBadge')}
             </Badge>
           )}
         </div>
@@ -276,7 +276,7 @@ export function ProductCard({
           <button
             onClick={handleAddToCart}
             className="w-10 h-10 rounded-full bg-ecommerce-red text-white shadow-lg shadow-ecommerce-red/30 flex items-center justify-center hover:bg-ecommerce-red/90 transition-colors hover:scale-110"
-            aria-label={t('common.addToCart')}
+            aria-label={t('homepage.common.addToCart')}
           >
             <ShoppingCart size={16} />
           </button>
@@ -327,7 +327,7 @@ export function ProductCard({
               )}
             </div>
             {savings > 0 && (
-              <span className="text-ecommerce-emerald text-[10px] font-medium">{t('common.saveAmount', { amount: savings.toFixed(2) })}</span>
+              <span className="text-ecommerce-emerald text-[10px] font-medium">{t('homepage.common.saveAmount', { amount: savings.toFixed(2) })}</span>
             )}
           </div>
           <Button
@@ -336,7 +336,7 @@ export function ProductCard({
             className={`h-8 px-2.5 sm:px-3 rounded-lg text-xs font-medium gap-1.5 transition-all duration-300 active:scale-95 ripple btn-shine ${justAdded ? 'bg-ecommerce-emerald hover:bg-ecommerce-emerald text-white scale-105' : 'bg-ecommerce-red hover:bg-ecommerce-red/90 text-white hover:scale-105'}`}
           >
             {justAdded ? <Check size={13} /> : <ShoppingCart size={13} />}
-            <span className="hidden sm:inline">{justAdded ? t('quickView.added') : t('common.addToCart')}</span>
+            <span className="hidden sm:inline">{justAdded ? t('homepage.quickView.added') : t('homepage.common.addToCart')}</span>
           </Button>
         </div>
       </div>

@@ -88,9 +88,9 @@ export default interface CategoryModel {
     updatedOnUtc: Date;
   
     /**
-     * The number of product categories associated with this category.
+     * The number of products associated with this category.
      */
-    productCategories: number;
+    productsCount: number;
   
     /**
      * The number of discounts associated with this category.

@@ -343,7 +343,7 @@ function ProductDetailPageContent() {
       description: product.description,
       sku: product.sku ?? undefined,
     });
-    toast.success(t('common.compare'));
+    toast.success(t('homepage.common.compare'));
   }, [product, addCompareItem, t]);
 
   const handleZoomMove = useCallback(
@@ -539,7 +539,7 @@ function ProductDetailPageContent() {
                   {/* Discount badge */}
                   {discount > 0 && (
                     <Badge className="absolute top-4 start-4 bg-gradient-to-r from-ecommerce-red to-rose-500 text-white border-0 text-sm font-bold px-3 py-1 rounded-lg shadow-lg z-10">
-                      {t('common.off', { percent: discount })}
+                      {t('homepage.common.off', { percent: discount })}
                     </Badge>
                   )}
 
@@ -746,7 +746,7 @@ function ProductDetailPageContent() {
                       </Button>
                       {product.stock > 0 && (
                         <span className="ms-2 text-xs text-ecommerce-text-muted">
-                          {product.stock} {t('common.remaining')}
+                          {product.stock} {t('homepage.common.remaining')}
                         </span>
                       )}
                     </div>
@@ -785,7 +785,7 @@ function ProductDetailPageContent() {
                         }`}
                     >
                       <Heart size={15} className={wishlisted ? 'fill-ecommerce-red' : ''} />
-                      {wishlisted ? t('common.removeFromWishlist') : t('common.addToWishlist')}
+                      {wishlisted ? t('homepage.common.removeFromWishlist') : t('homepage.common.addToWishlist')}
                     </Button>
                     <Button
                       variant="outline"
@@ -801,7 +801,7 @@ function ProductDetailPageContent() {
                       size="icon"
                       onClick={handleAddToCompare}
                       className="h-10 w-10 rounded-lg border-ecommerce-border text-ecommerce-text-secondary hover:border-ecommerce-purple hover:text-ecommerce-purple transition-all"
-                      aria-label={t('common.compare')}
+                      aria-label={t('homepage.common.compare')}
                     >
                       <GitCompare size={15} />
                     </Button>

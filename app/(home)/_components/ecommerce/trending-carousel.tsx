@@ -75,7 +75,7 @@ export function TrendingCarousel() {
       image: product.image,
       category: product.category.name,
     });
-    toast.success(t('flyToCart.added'));
+    toast.success(t('homepage.flyToCart.added'));
   };
 
   if (products.length === 0 && !isLoading) return null;
@@ -95,10 +95,10 @@ export function TrendingCarousel() {
             Trending
           </motion.div>
           <h2 className="text-2xl sm:text-3xl font-extrabold text-ecommerce-text-primary tracking-tight">
-            {t('trending.title')}
+            {t('homepage.trending.title')}
           </h2>
           <p className="text-sm text-ecommerce-text-muted mt-1">
-            {t('trending.subtitle')}
+            {t('homepage.trending.subtitle')}
           </p>
           {/* Dot divider */}
           <div className="mt-4 flex items-center justify-center gap-2">
@@ -115,7 +115,7 @@ export function TrendingCarousel() {
         <button
           onClick={() => scroll('left')}
           className="hidden md:flex absolute left-0 top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-full bg-white dark:bg-ecommerce-surface shadow-xl border border-ecommerce-border hover:bg-ecommerce-red hover:text-white items-center justify-center text-ecommerce-text-secondary transition-colors -translate-x-3"
-          aria-label={t('trending.scrollLeft')}
+          aria-label={t('homepage.trending.scrollLeft')}
         >
           <ChevronLeft size={18} />
         </button>
@@ -124,7 +124,7 @@ export function TrendingCarousel() {
         <button
           onClick={() => scroll('right')}
           className="hidden md:flex absolute right-0 top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-full bg-white dark:bg-ecommerce-surface shadow-xl border border-ecommerce-border hover:bg-ecommerce-red hover:text-white items-center justify-center text-ecommerce-text-secondary transition-colors translate-x-3"
-          aria-label={t('trending.scrollRight')}
+          aria-label={t('homepage.trending.scrollRight')}
         >
           <ChevronRight size={18} />
         </button>
@@ -196,7 +196,7 @@ export function TrendingCarousel() {
                         className="bg-white/20 backdrop-blur-sm hover:bg-white/30 rounded-xl px-4 py-2 text-white text-xs font-medium flex items-center gap-1.5 transition-colors"
                       >
                         <Eye size={13} />
-                        {t('common.quickView')}
+                        {t('homepage.common.quickView')}
                       </button>
                     </div>
                   </div>
@@ -237,7 +237,7 @@ export function TrendingCarousel() {
                     {/* Sold count */}
                     <p className="text-[11px] text-ecommerce-text-muted">
                       <ShoppingCart size={10} className="inline me-1 -mt-0.5" />
-                      {product.reviewCount} {t('common.sold')}
+                      {product.reviewCount} {t('homepage.common.sold')}
                     </p>
                   </div>
                 </motion.div>

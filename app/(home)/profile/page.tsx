@@ -252,11 +252,11 @@ function ProfilePageContent() {
   // Activity messages use translations with params
   const activities: ActivityItem[] = INITIAL_ACTIVITIES.map((a, i) => {
     switch (a.type) {
-      case 'order': return { ...a, message: t('profile.orderPlaced', { number: 1275 - i * 7 }) };
-      case 'review': return { ...a, message: t('profile.reviewWritten', { product: i === 1 ? 'Wireless Headphones' : 'Smart Watch' }) };
-      case 'address': return { ...a, message: t('profile.addressAdded') };
-      case 'password': return { ...a, message: t('profile.passwordChanged') };
-      default: return { ...a, message: t('profile.profilePictureUpdated') };
+      case 'order': return { ...a, message: t('homepage.profile.orderPlaced', { number: 1275 - i * 7 }) };
+      case 'review': return { ...a, message: t('homepage.profile.reviewWritten', { product: i === 1 ? 'Wireless Headphones' : 'Smart Watch' }) };
+      case 'address': return { ...a, message: t('homepage.profile.addressAdded') };
+      case 'password': return { ...a, message: t('homepage.profile.passwordChanged') };
+      default: return { ...a, message: t('homepage.profile.profilePictureUpdated') };
     }
   });
 
@@ -270,7 +270,7 @@ function ProfilePageContent() {
     try {
       localStorage.setItem('shopsphere-user', JSON.stringify({ name: editName, email: editEmail, phone: editPhone }));
     } catch {}
-    toast.success(t('profile.profileUpdated'));
+    toast.success(t('homepage.profile.profileUpdated'));
   };
 
   const handleCancelEdit = () => {
@@ -289,7 +289,7 @@ function ProfilePageContent() {
     setCurrentPw('');
     setNewPw('');
     setConfirmPw('');
-    toast.success(t('profile.passwordUpdated'));
+    toast.success(t('homepage.profile.passwordUpdated'));
   };
 
   const openAddAddress = () => {
@@ -329,12 +329,12 @@ function ProfilePageContent() {
       setAddresses((prev) => [...prev, newAddr]);
     }
     setAddressDialogOpen(false);
-    toast.success(editingAddress ? t('common.save') : t('profile.addressAdded'));
+    toast.success(editingAddress ? t('homepage.common.save') : t('homepage.profile.addressAdded'));
   };
 
   const handleDeleteAddress = (id: string) => {
     setAddresses((prev) => prev.filter((a) => a.id !== id));
-    toast.success(t('common.delete'));
+    toast.success(t('homepage.common.delete'));
   };
 
   const handleSetDefault = (id: string) => {
@@ -343,15 +343,15 @@ function ProfilePageContent() {
 
   const handleWishlistAddToCart = (item: typeof wishlistItems[0]) => {
     addToCart({ id: item.id, name: item.name, price: item.price, comparePrice: item.comparePrice, image: item.image, category: item.category });
-    toast.success(t('common.addToCart'));
+    toast.success(t('homepage.common.addToCart'));
   };
 
   // ─── Stat Cards Data ──────────────────────────────────────────
   const stats = [
-    { icon: Package, label: t('profile.statsTotalOrders'), value: '12', color: 'text-ecommerce-red', bg: 'bg-ecommerce-red/10' },
-    { icon: DollarSign, label: t('profile.statsTotalSpent'), value: '$1,249.00', color: 'text-ecommerce-emerald', bg: 'bg-ecommerce-emerald/10' },
-    { icon: Heart, label: t('profile.statsWishlistItems'), value: String(wishlistCount), color: 'text-ecommerce-rose', bg: 'bg-ecommerce-rose/10' },
-    { icon: Star, label: t('profile.statsReviews'), value: '8', color: 'text-ecommerce-amber', bg: 'bg-ecommerce-amber/10' },
+    { icon: Package, label: t('homepage.profile.statsTotalOrders'), value: '12', color: 'text-ecommerce-red', bg: 'bg-ecommerce-red/10' },
+    { icon: DollarSign, label: t('homepage.profile.statsTotalSpent'), value: '$1,249.00', color: 'text-ecommerce-emerald', bg: 'bg-ecommerce-emerald/10' },
+    { icon: Heart, label: t('homepage.profile.statsWishlistItems'), value: String(wishlistCount), color: 'text-ecommerce-rose', bg: 'bg-ecommerce-rose/10' },
+    { icon: Star, label: t('homepage.profile.statsReviews'), value: '8', color: 'text-ecommerce-amber', bg: 'bg-ecommerce-amber/10' },
   ];
 
   return (
@@ -363,12 +363,12 @@ function ProfilePageContent() {
             <Link href="/" className="text-ecommerce-text-secondary hover:text-ecommerce-text-primary transition-colors">
               <ChevronRight className="w-5 h-5 rtl:rotate-180" />
             </Link>
-            <h1 className="text-lg font-bold text-ecommerce-text-primary">{t('profile.title')}</h1>
+            <h1 className="text-lg font-bold text-ecommerce-text-primary">{t('homepage.profile.title')}</h1>
           </div>
           <div className="hidden md:flex items-center gap-2">
             <Button variant="ghost" size="sm" className="text-ecommerce-text-secondary hover:text-ecommerce-red" onClick={() => toast.info('Coming soon!')}>
               <LogOut className="w-4 h-4" />
-              <span className="ms-2">{t('profile.logout')}</span>
+              <span className="ms-2">{t('homepage.profile.logout')}</span>
             </Button>
           </div>
         </div>
@@ -409,13 +409,13 @@ function ProfilePageContent() {
                 <div className="px-5 pb-5 -mt-8">
                   <Avatar className="w-16 h-16 border-4 border-ecommerce-surface shadow-lg">
                     <AvatarFallback className="bg-ecommerce-red/10 text-ecommerce-red font-bold text-lg">
-                      {userName.split(' ').map((n : any) => n[0]).join('').slice(0, 2).toUpperCase()}
+                      {userName.split('homepage. ').map((n : any) => n[0]).join('').slice(0, 2).toUpperCase()}
                     </AvatarFallback>
                   </Avatar>
                   <h3 className="mt-3 font-bold text-ecommerce-text-primary">{userName}</h3>
                   <p className="text-sm text-ecommerce-text-muted mt-0.5">{userEmail}</p>
                   <p className="text-xs text-ecommerce-text-muted mt-1">
-                    {t('profile.memberSince')}: {memberSince}
+                    {t('homepage.profile.memberSince')}: {memberSince}
                   </p>
                 </div>
               </Card>
@@ -453,7 +453,7 @@ function ProfilePageContent() {
                   className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-ecommerce-text-secondary hover:bg-red-50 dark:hover:bg-red-500/10 hover:text-red-500 transition-all duration-200 w-full"
                 >
                   <LogOut className="w-4.5 h-4.5" />
-                  {t('profile.logout')}
+                  {t('homepage.profile.logout')}
                 </button>
               </Card>
             </div>
@@ -574,10 +574,10 @@ function DashboardTab({
       {/* Welcome */}
       <motion.div variants={staggerItem} initial="initial" animate="animate">
         <h2 className="text-2xl font-bold text-ecommerce-text-primary">
-          {t('profile.welcomeBack', { name: userName.split(' ')[0] })}
+          {t('homepage.profile.welcomeBack', { name: userName.split('homepage. ')[0] })}
         </h2>
         <p className="text-sm text-ecommerce-text-muted mt-1">
-          {t('profile.memberSince')}: {memberSince}
+          {t('homepage.profile.memberSince')}: {memberSince}
         </p>
       </motion.div>
 
@@ -607,7 +607,7 @@ function DashboardTab({
           <CardContent className="p-4 flex items-center gap-4">
             <Avatar className="w-14 h-14">
               <AvatarFallback className="bg-ecommerce-red/10 text-ecommerce-red font-bold">
-                {userName.split(' ').map((n) => n[0]).join('').slice(0, 2).toUpperCase()}
+                {userName.split('homepage. ').map((n) => n[0]).join('').slice(0, 2).toUpperCase()}
               </AvatarFallback>
             </Avatar>
             <div className="flex-1 min-w-0">
@@ -632,7 +632,7 @@ function DashboardTab({
                 onClick={() => setActiveTab('orders')}
               >
                 <Package className="w-5 h-5" />
-                <span className="text-xs font-medium">{t('profile.viewOrders')}</span>
+                <span className="text-xs font-medium">{t('homepage.profile.viewOrders')}</span>
               </Button>
               <Button
                 variant="outline"
@@ -641,7 +641,7 @@ function DashboardTab({
               >
                 <Link href="/">
                   <ShoppingBag className="w-5 h-5" />
-                  <span className="text-xs font-medium">{t('profile.browseProducts')}</span>
+                  <span className="text-xs font-medium">{t('homepage.profile.browseProducts')}</span>
                 </Link>
               </Button>
               <Button
@@ -650,7 +650,7 @@ function DashboardTab({
                 onClick={() => setActiveTab('orders')}
               >
                 <Truck className="w-5 h-5" />
-                <span className="text-xs font-medium">{t('profile.trackOrder')}</span>
+                <span className="text-xs font-medium">{t('homepage.profile.trackOrder')}</span>
               </Button>
             </div>
           </CardContent>
@@ -661,7 +661,7 @@ function DashboardTab({
       <motion.div variants={staggerItem} initial="initial" animate="animate">
         <Card className="bg-ecommerce-surface border-ecommerce-border">
           <CardHeader className="pb-3">
-            <CardTitle className="text-base font-semibold text-ecommerce-text-primary">{t('profile.recentActivity')}</CardTitle>
+            <CardTitle className="text-base font-semibold text-ecommerce-text-primary">{t('homepage.profile.recentActivity')}</CardTitle>
           </CardHeader>
           <CardContent className="pt-0">
             <div className="space-y-3 max-h-72 overflow-y-auto">
@@ -702,7 +702,7 @@ function OrdersTab({ t }: { t: ReturnType<typeof useTranslations> }) {
 
   return (
     <div className="space-y-4">
-      <h2 className="text-xl font-bold text-ecommerce-text-primary">{t('profile.orderHistory')}</h2>
+      <h2 className="text-xl font-bold text-ecommerce-text-primary">{t('homepage.profile.orderHistory')}</h2>
 
       {MOCK_ORDERS.length === 0 ? (
         <Card className="bg-ecommerce-surface border-ecommerce-border">
@@ -710,10 +710,10 @@ function OrdersTab({ t }: { t: ReturnType<typeof useTranslations> }) {
             <div className="w-16 h-16 rounded-full bg-ecommerce-surface-hover flex items-center justify-center mb-4">
               <Package className="w-8 h-8 text-ecommerce-text-muted" />
             </div>
-            <h3 className="font-semibold text-ecommerce-text-primary">{t('profile.noOrders')}</h3>
-            <p className="text-sm text-ecommerce-text-muted mt-1 max-w-sm">{t('profile.noOrdersDesc')}</p>
+            <h3 className="font-semibold text-ecommerce-text-primary">{t('homepage.profile.noOrders')}</h3>
+            <p className="text-sm text-ecommerce-text-muted mt-1 max-w-sm">{t('homepage.profile.noOrdersDesc')}</p>
             <Button asChild className="mt-4 bg-ecommerce-red hover:bg-ecommerce-red/90 text-white">
-              <Link href="/">{t('profile.startShopping')}</Link>
+              <Link href="/">{t('homepage.profile.startShopping')}</Link>
             </Button>
           </CardContent>
         </Card>
@@ -727,22 +727,22 @@ function OrdersTab({ t }: { t: ReturnType<typeof useTranslations> }) {
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-3 flex-wrap">
                         <h3 className="font-semibold text-ecommerce-text-primary">
-                          {t('profile.orderNumber', { number: order.orderNum })}
+                          {t('homepage.profile.orderNumber', { number: order.orderNum })}
                         </h3>
                         {statusBadge(order.status)}
                       </div>
                       <div className="flex items-center gap-4 mt-1.5 text-sm text-ecommerce-text-muted">
-                        <span>{t('profile.orderDate', { date: order.date })}</span>
+                        <span>{t('homepage.profile.orderDate', { date: order.date })}</span>
                         <span className="hidden sm:inline">·</span>
-                        <span>{t('profile.itemsLabel', { count: order.items })}</span>
+                        <span>{t('homepage.profile.itemsLabel', { count: order.items })}</span>
                       </div>
                     </div>
                     <div className="flex items-center gap-4">
                       <span className="text-base font-bold text-ecommerce-text-primary">
-                        {t('profile.orderTotal', { amount: order.total.toFixed(2) })}
+                        {t('homepage.profile.orderTotal', { amount: order.total.toFixed(2) })}
                       </span>
                       <Button variant="outline" size="sm" className="border-ecommerce-border hover:border-ecommerce-red hover:text-ecommerce-red transition-colors shrink-0">
-                        {t('profile.viewOrder')}
+                        {t('homepage.profile.viewOrder')}
                         <ChevronRight className="w-3.5 h-3.5 ms-1 rtl:rotate-180" />
                       </Button>
                     </div>
@@ -772,18 +772,18 @@ function WishlistTab({
   if (items.length === 0) {
     return (
       <div className="space-y-4">
-        <h2 className="text-xl font-bold text-ecommerce-text-primary">{t('profile.wishlist')}</h2>
+        <h2 className="text-xl font-bold text-ecommerce-text-primary">{t('homepage.profile.wishlist')}</h2>
         <Card className="bg-ecommerce-surface border-ecommerce-border">
           <CardContent className="py-16 flex flex-col items-center text-center">
             <div className="w-16 h-16 rounded-full bg-ecommerce-rose/10 flex items-center justify-center mb-4">
               <Heart className="w-8 h-8 text-ecommerce-rose" />
             </div>
-            <h3 className="font-semibold text-ecommerce-text-primary">{t('common.noProductsFound')}</h3>
+            <h3 className="font-semibold text-ecommerce-text-primary">{t('homepage.common.noProductsFound')}</h3>
             <p className="text-sm text-ecommerce-text-muted mt-1 max-w-sm">
-              {t('profile.noOrdersDesc')}
+              {t('homepage.profile.noOrdersDesc')}
             </p>
             <Button asChild className="mt-4 bg-ecommerce-red hover:bg-ecommerce-red/90 text-white">
-              <Link href="/">{t('profile.startShopping')}</Link>
+              <Link href="/">{t('homepage.profile.startShopping')}</Link>
             </Button>
           </CardContent>
         </Card>
@@ -793,7 +793,7 @@ function WishlistTab({
 
   return (
     <div className="space-y-4">
-      <h2 className="text-xl font-bold text-ecommerce-text-primary">{t('profile.wishlist')}</h2>
+      <h2 className="text-xl font-bold text-ecommerce-text-primary">{t('homepage.profile.wishlist')}</h2>
       <motion.div variants={staggerContainer} initial="initial" animate="animate" className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4">
         {items.map((item, i) => (
           <motion.div key={item.id} variants={staggerItem} className="group relative">
@@ -813,10 +813,10 @@ function WishlistTab({
               onClick={(e) => {
                 e.preventDefault();
                 onRemove(item.id);
-                toast.success(t('common.removeFromWishlist'));
+                toast.success(t('homepage.common.removeFromWishlist'));
               }}
               className="absolute top-2.5 end-2.5 z-20 w-8 h-8 rounded-full bg-white dark:bg-ecommerce-surface shadow-lg flex items-center justify-center text-ecommerce-text-secondary hover:text-ecommerce-red hover:scale-110 transition-all opacity-0 group-hover:opacity-100"
-              aria-label={t('common.removeFromWishlist')}
+              aria-label={t('homepage.common.removeFromWishlist')}
             >
               <X className="w-4 h-4" />
             </button>
@@ -858,10 +858,10 @@ function AddressesTab({
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between">
-        <h2 className="text-xl font-bold text-ecommerce-text-primary">{t('profile.myAddresses')}</h2>
+        <h2 className="text-xl font-bold text-ecommerce-text-primary">{t('homepage.profile.myAddresses')}</h2>
         <Button size="sm" className="bg-ecommerce-red hover:bg-ecommerce-red/90 text-white" onClick={onAdd}>
           <Plus className="w-4 h-4" />
-          <span className="ms-1.5">{t('profile.addNewAddress')}</span>
+          <span className="ms-1.5">{t('homepage.profile.addNewAddress')}</span>
         </Button>
       </div>
 
@@ -871,11 +871,11 @@ function AddressesTab({
             <div className="w-16 h-16 rounded-full bg-ecommerce-surface-hover flex items-center justify-center mb-4">
               <MapPin className="w-8 h-8 text-ecommerce-text-muted" />
             </div>
-            <h3 className="font-semibold text-ecommerce-text-primary">{t('profile.noAddresses')}</h3>
-            <p className="text-sm text-ecommerce-text-muted mt-1 max-w-sm">{t('profile.noAddressesDesc')}</p>
+            <h3 className="font-semibold text-ecommerce-text-primary">{t('homepage.profile.noAddresses')}</h3>
+            <p className="text-sm text-ecommerce-text-muted mt-1 max-w-sm">{t('homepage.profile.noAddressesDesc')}</p>
             <Button className="mt-4 bg-ecommerce-red hover:bg-ecommerce-red/90 text-white" onClick={onAdd}>
               <Plus className="w-4 h-4" />
-              <span className="ms-1.5">{t('profile.addNewAddress')}</span>
+              <span className="ms-1.5">{t('homepage.profile.addNewAddress')}</span>
             </Button>
           </CardContent>
         </Card>
@@ -891,7 +891,7 @@ function AddressesTab({
                         <h3 className="font-semibold text-ecommerce-text-primary truncate">{addr.name}</h3>
                         {addr.isDefault && (
                           <Badge className="bg-ecommerce-emerald/10 text-ecommerce-emerald border-0 text-[10px] font-semibold px-1.5 py-0">
-                            {t('profile.defaultBadge')}
+                            {t('homepage.profile.defaultBadge')}
                           </Badge>
                         )}
                       </div>
@@ -910,7 +910,7 @@ function AddressesTab({
                   <div className="flex items-center gap-2 mt-4 pt-3 border-t border-ecommerce-border">
                     {!addr.isDefault && (
                       <Button variant="ghost" size="sm" className="text-xs text-ecommerce-text-muted hover:text-ecommerce-emerald" onClick={() => onSetDefault(addr.id)}>
-                        {t('profile.setAsDefault')}
+                        {t('homepage.profile.setAsDefault')}
                       </Button>
                     )}
                     <div className="ms-auto flex items-center gap-1">
@@ -934,52 +934,52 @@ function AddressesTab({
         <DialogContent className="bg-ecommerce-surface border-ecommerce-border sm:max-w-lg">
           <DialogHeader>
             <DialogTitle className="text-ecommerce-text-primary">
-              {editingAddress ? t('profile.editAddress') : t('profile.addNewAddress')}
+              {editingAddress ? t('homepage.profile.editAddress') : t('homepage.profile.addNewAddress')}
             </DialogTitle>
             <DialogDescription className="text-ecommerce-text-muted">
-              {editingAddress ? t('profile.editAddress') : t('profile.addNewAddress')}
+              {editingAddress ? t('homepage.profile.editAddress') : t('homepage.profile.addNewAddress')}
             </DialogDescription>
           </DialogHeader>
           <div className="space-y-4 py-2">
             <div className="space-y-2">
-              <Label className="text-ecommerce-text-primary text-sm">{t('profile.addressName')}</Label>
+              <Label className="text-ecommerce-text-primary text-sm">{t('homepage.profile.addressName')}</Label>
               <Input value={addrForm.name} onChange={(e) => setAddrForm({ ...addrForm, name: e.target.value })} placeholder="Home, Office, etc." className="bg-ecommerce-surface-hover border-ecommerce-border text-ecommerce-text-primary" />
             </div>
             <div className="space-y-2">
-              <Label className="text-ecommerce-text-primary text-sm">{t('profile.addressLine1')}</Label>
+              <Label className="text-ecommerce-text-primary text-sm">{t('homepage.profile.addressLine1')}</Label>
               <Input value={addrForm.line1} onChange={(e) => setAddrForm({ ...addrForm, line1: e.target.value })} className="bg-ecommerce-surface-hover border-ecommerce-border text-ecommerce-text-primary" />
             </div>
             <div className="space-y-2">
-              <Label className="text-ecommerce-text-primary text-sm">{t('profile.addressLine2')}</Label>
+              <Label className="text-ecommerce-text-primary text-sm">{t('homepage.profile.addressLine2')}</Label>
               <Input value={addrForm.line2} onChange={(e) => setAddrForm({ ...addrForm, line2: e.target.value })} className="bg-ecommerce-surface-hover border-ecommerce-border text-ecommerce-text-primary" />
             </div>
             <div className="grid grid-cols-2 gap-3">
               <div className="space-y-2">
-                <Label className="text-ecommerce-text-primary text-sm">{t('profile.city')}</Label>
+                <Label className="text-ecommerce-text-primary text-sm">{t('homepage.profile.city')}</Label>
                 <Input value={addrForm.city} onChange={(e) => setAddrForm({ ...addrForm, city: e.target.value })} className="bg-ecommerce-surface-hover border-ecommerce-border text-ecommerce-text-primary" />
               </div>
               <div className="space-y-2">
-                <Label className="text-ecommerce-text-primary text-sm">{t('profile.state')}</Label>
+                <Label className="text-ecommerce-text-primary text-sm">{t('homepage.profile.state')}</Label>
                 <Input value={addrForm.state} onChange={(e) => setAddrForm({ ...addrForm, state: e.target.value })} className="bg-ecommerce-surface-hover border-ecommerce-border text-ecommerce-text-primary" />
               </div>
             </div>
             <div className="grid grid-cols-2 gap-3">
               <div className="space-y-2">
-                <Label className="text-ecommerce-text-primary text-sm">{t('profile.zipCode')}</Label>
+                <Label className="text-ecommerce-text-primary text-sm">{t('homepage.profile.zipCode')}</Label>
                 <Input value={addrForm.zip} onChange={(e) => setAddrForm({ ...addrForm, zip: e.target.value })} className="bg-ecommerce-surface-hover border-ecommerce-border text-ecommerce-text-primary" />
               </div>
               <div className="space-y-2">
-                <Label className="text-ecommerce-text-primary text-sm">{t('profile.country')}</Label>
+                <Label className="text-ecommerce-text-primary text-sm">{t('homepage.profile.country')}</Label>
                 <Input value={addrForm.country} onChange={(e) => setAddrForm({ ...addrForm, country: e.target.value })} className="bg-ecommerce-surface-hover border-ecommerce-border text-ecommerce-text-primary" />
               </div>
             </div>
           </div>
           <DialogFooter>
             <Button variant="outline" onClick={() => setDialogOpen(false)} className="border-ecommerce-border text-ecommerce-text-secondary">
-              {t('common.cancel')}
+              {t('homepage.common.cancel')}
             </Button>
             <Button onClick={onSave} className="bg-ecommerce-red hover:bg-ecommerce-red/90 text-white">
-              {t('profile.saveAddress')}
+              {t('homepage.profile.saveAddress')}
             </Button>
           </DialogFooter>
         </DialogContent>
@@ -1034,17 +1034,17 @@ function SettingsTab({
 }) {
   return (
     <div className="space-y-6">
-      <h2 className="text-xl font-bold text-ecommerce-text-primary">{t('profile.accountSettings')}</h2>
+      <h2 className="text-xl font-bold text-ecommerce-text-primary">{t('homepage.profile.accountSettings')}</h2>
 
       {/* Personal Information */}
       <Card className="bg-ecommerce-surface border-ecommerce-border">
         <CardHeader className="pb-3">
           <div className="flex items-center justify-between">
-            <CardTitle className="text-base font-semibold text-ecommerce-text-primary">{t('profile.personalInfo')}</CardTitle>
+            <CardTitle className="text-base font-semibold text-ecommerce-text-primary">{t('homepage.profile.personalInfo')}</CardTitle>
             {!isEditing && (
               <Button variant="outline" size="sm" className="border-ecommerce-border text-ecommerce-text-secondary hover:text-ecommerce-red hover:border-ecommerce-red transition-colors" onClick={onEdit}>
                 <Pencil className="w-3.5 h-3.5 me-1.5" />
-                {t('profile.editProfile')}
+                {t('homepage.profile.editProfile')}
               </Button>
             )}
           </div>
@@ -1054,40 +1054,40 @@ function SettingsTab({
             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-4">
               <div className="grid gap-4 sm:grid-cols-2">
                 <div className="space-y-2">
-                  <Label className="text-sm text-ecommerce-text-primary">{t('profile.fullName')}</Label>
+                  <Label className="text-sm text-ecommerce-text-primary">{t('homepage.profile.fullName')}</Label>
                   <Input value={editName} onChange={(e) => setEditName(e.target.value)} className="bg-ecommerce-surface-hover border-ecommerce-border text-ecommerce-text-primary" />
                 </div>
                 <div className="space-y-2">
-                  <Label className="text-sm text-ecommerce-text-primary">{t('profile.email')}</Label>
+                  <Label className="text-sm text-ecommerce-text-primary">{t('homepage.profile.email')}</Label>
                   <Input type="email" value={editEmail} onChange={(e) => setEditEmail(e.target.value)} className="bg-ecommerce-surface-hover border-ecommerce-border text-ecommerce-text-primary" />
                 </div>
               </div>
               <div className="space-y-2 max-w-sm">
-                <Label className="text-sm text-ecommerce-text-primary">{t('profile.phone')}</Label>
+                <Label className="text-sm text-ecommerce-text-primary">{t('homepage.profile.phone')}</Label>
                 <Input value={editPhone} onChange={(e) => setEditPhone(e.target.value)} className="bg-ecommerce-surface-hover border-ecommerce-border text-ecommerce-text-primary" />
               </div>
               <div className="flex gap-2">
                 <Button size="sm" className="bg-ecommerce-red hover:bg-ecommerce-red/90 text-white" onClick={onSave}>
                   <Check className="w-3.5 h-3.5 me-1.5" />
-                  {t('profile.saveChanges')}
+                  {t('homepage.profile.saveChanges')}
                 </Button>
                 <Button size="sm" variant="outline" className="border-ecommerce-border text-ecommerce-text-secondary" onClick={onCancel}>
-                  {t('profile.cancelEdit')}
+                  {t('homepage.profile.cancelEdit')}
                 </Button>
               </div>
             </motion.div>
           ) : (
             <div className="grid gap-4 sm:grid-cols-2">
               <div>
-                <p className="text-xs text-ecommerce-text-muted mb-1">{t('profile.fullName')}</p>
+                <p className="text-xs text-ecommerce-text-muted mb-1">{t('homepage.profile.fullName')}</p>
                 <p className="text-sm font-medium text-ecommerce-text-primary">{editName}</p>
               </div>
               <div>
-                <p className="text-xs text-ecommerce-text-muted mb-1">{t('profile.email')}</p>
+                <p className="text-xs text-ecommerce-text-muted mb-1">{t('homepage.profile.email')}</p>
                 <p className="text-sm font-medium text-ecommerce-text-primary">{editEmail}</p>
               </div>
               <div>
-                <p className="text-xs text-ecommerce-text-muted mb-1">{t('profile.phone')}</p>
+                <p className="text-xs text-ecommerce-text-muted mb-1">{t('homepage.profile.phone')}</p>
                 <p className="text-sm font-medium text-ecommerce-text-primary">{editPhone}</p>
               </div>
             </div>
@@ -1098,25 +1098,25 @@ function SettingsTab({
       {/* Change Password */}
       <Card className="bg-ecommerce-surface border-ecommerce-border">
         <CardHeader className="pb-3">
-          <CardTitle className="text-base font-semibold text-ecommerce-text-primary">{t('profile.changePassword')}</CardTitle>
+          <CardTitle className="text-base font-semibold text-ecommerce-text-primary">{t('homepage.profile.changePassword')}</CardTitle>
         </CardHeader>
         <CardContent className="pt-0 space-y-4">
           <div className="space-y-2 max-w-sm">
-            <Label className="text-sm text-ecommerce-text-primary">{t('profile.currentPassword')}</Label>
+            <Label className="text-sm text-ecommerce-text-primary">{t('homepage.profile.currentPassword')}</Label>
             <Input type="password" value={currentPw} onChange={(e) => setCurrentPw(e.target.value)} className="bg-ecommerce-surface-hover border-ecommerce-border text-ecommerce-text-primary" />
           </div>
           <div className="grid gap-4 sm:grid-cols-2 max-w-lg">
             <div className="space-y-2">
-              <Label className="text-sm text-ecommerce-text-primary">{t('profile.newPassword')}</Label>
+              <Label className="text-sm text-ecommerce-text-primary">{t('homepage.profile.newPassword')}</Label>
               <Input type="password" value={newPw} onChange={(e) => setNewPw(e.target.value)} className="bg-ecommerce-surface-hover border-ecommerce-border text-ecommerce-text-primary" />
             </div>
             <div className="space-y-2">
-              <Label className="text-sm text-ecommerce-text-primary">{t('profile.confirmPassword')}</Label>
+              <Label className="text-sm text-ecommerce-text-primary">{t('homepage.profile.confirmPassword')}</Label>
               <Input type="password" value={confirmPw} onChange={(e) => setConfirmPw(e.target.value)} className="bg-ecommerce-surface-hover border-ecommerce-border text-ecommerce-text-primary" />
             </div>
           </div>
           <Button size="sm" className="bg-ecommerce-red hover:bg-ecommerce-red/90 text-white" onClick={onUpdatePassword}>
-            {t('profile.updatePassword')}
+            {t('homepage.profile.updatePassword')}
           </Button>
         </CardContent>
       </Card>
@@ -1124,14 +1124,14 @@ function SettingsTab({
       {/* Notification Preferences */}
       <Card className="bg-ecommerce-surface border-ecommerce-border">
         <CardHeader className="pb-3">
-          <CardTitle className="text-base font-semibold text-ecommerce-text-primary">{t('profile.notificationPrefs')}</CardTitle>
+          <CardTitle className="text-base font-semibold text-ecommerce-text-primary">{t('homepage.profile.notificationPrefs')}</CardTitle>
         </CardHeader>
         <CardContent className="pt-0">
           <div className="space-y-4">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-ecommerce-text-primary">{t('profile.orderUpdates')}</p>
-                <p className="text-xs text-ecommerce-text-muted">{t('profile.emailNotifications')}</p>
+                <p className="text-sm font-medium text-ecommerce-text-primary">{t('homepage.profile.orderUpdates')}</p>
+                <p className="text-xs text-ecommerce-text-muted">{t('homepage.profile.emailNotifications')}</p>
               </div>
               <Switch
                 checked={notifs.orderUpdates}
@@ -1141,8 +1141,8 @@ function SettingsTab({
             <Separator className="bg-ecommerce-border" />
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-ecommerce-text-primary">{t('profile.promotions')}</p>
-                <p className="text-xs text-ecommerce-text-muted">{t('profile.emailNotifications')}</p>
+                <p className="text-sm font-medium text-ecommerce-text-primary">{t('homepage.profile.promotions')}</p>
+                <p className="text-xs text-ecommerce-text-muted">{t('homepage.profile.emailNotifications')}</p>
               </div>
               <Switch
                 checked={notifs.promotions}
@@ -1152,8 +1152,8 @@ function SettingsTab({
             <Separator className="bg-ecommerce-border" />
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-ecommerce-text-primary">{t('profile.newsletter')}</p>
-                <p className="text-xs text-ecommerce-text-muted">{t('profile.emailNotifications')}</p>
+                <p className="text-sm font-medium text-ecommerce-text-primary">{t('homepage.profile.newsletter')}</p>
+                <p className="text-xs text-ecommerce-text-muted">{t('homepage.profile.emailNotifications')}</p>
               </div>
               <Switch
                 checked={notifs.newsletter}
@@ -1163,8 +1163,8 @@ function SettingsTab({
             <Separator className="bg-ecommerce-border" />
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-ecommerce-text-primary">{t('profile.pushNotifications')}</p>
-                <p className="text-xs text-ecommerce-text-muted">{t('profile.pushNotifications')}</p>
+                <p className="text-sm font-medium text-ecommerce-text-primary">{t('homepage.profile.pushNotifications')}</p>
+                <p className="text-xs text-ecommerce-text-muted">{t('homepage.profile.pushNotifications')}</p>
               </div>
               <Switch
                 checked={notifs.push}
@@ -1178,9 +1178,9 @@ function SettingsTab({
       {/* Danger Zone */}
       <Card className="bg-ecommerce-surface border-red-200 dark:border-red-900/50">
         <CardHeader className="pb-3">
-          <CardTitle className="text-base font-semibold text-red-500">{t('profile.deleteAccount')}</CardTitle>
+          <CardTitle className="text-base font-semibold text-red-500">{t('homepage.profile.deleteAccount')}</CardTitle>
           <CardDescription className="text-ecommerce-text-muted text-sm">
-            {t('profile.deleteAccountDesc')}
+            {t('homepage.profile.deleteAccountDesc')}
           </CardDescription>
         </CardHeader>
         <CardContent className="pt-0">
@@ -1188,22 +1188,22 @@ function SettingsTab({
             <AlertDialogTrigger asChild>
               <Button variant="outline" className="border-red-200 text-red-500 hover:bg-red-50 hover:text-red-600 dark:border-red-900/50 dark:hover:bg-red-900/20">
                 <Trash2 className="w-4 h-4 me-1.5" />
-                {t('profile.deleteAccount')}
+                {t('homepage.profile.deleteAccount')}
               </Button>
             </AlertDialogTrigger>
             <AlertDialogContent className="bg-ecommerce-surface border-ecommerce-border">
               <AlertDialogHeader>
-                <AlertDialogTitle className="text-ecommerce-text-primary">{t('profile.deleteAccount')}</AlertDialogTitle>
+                <AlertDialogTitle className="text-ecommerce-text-primary">{t('homepage.profile.deleteAccount')}</AlertDialogTitle>
                 <AlertDialogDescription className="text-ecommerce-text-muted">
-                  {t('profile.deleteAccountConfirm')}
+                  {t('homepage.profile.deleteAccountConfirm')}
                 </AlertDialogDescription>
               </AlertDialogHeader>
               <AlertDialogFooter>
                 <AlertDialogCancel className="border-ecommerce-border text-ecommerce-text-secondary">
-                  {t('common.cancel')}
+                  {t('homepage.common.cancel')}
                 </AlertDialogCancel>
                 <AlertDialogAction className="bg-red-500 hover:bg-red-600 text-white">
-                  {t('common.delete')}
+                  {t('homepage.common.delete')}
                 </AlertDialogAction>
               </AlertDialogFooter>
             </AlertDialogContent>

@@ -126,20 +126,20 @@ export function ProductCatalog() {
   // Build API query params from filters
   const queryParams = useMemo(() => {
     const params = new URLSearchParams();
-    params.set('limit', '100');
-    if (filters.search) params.set('search', filters.search);
-    if (filters.categories.length > 0) params.set('categories', filters.categories.join(','));
-    if (filters.minPrice > 0) params.set('minPrice', String(filters.minPrice));
-    if (filters.maxPrice < 2000) params.set('maxPrice', String(filters.maxPrice));
-    if (filters.discount === 'withDiscount') params.set('hasDiscount', 'true');
-    if (filters.discount === 'withoutDiscount') params.set('hasDiscount', 'false');
-    if (filters.stock === 'inStock') params.set('inStock', 'true');
-    if (filters.stock === 'outOfStock') params.set('inStock', 'false');
-    if (filters.minRating > 0) params.set('rating', String(filters.minRating));
-    if (filters.sort) params.set('sort', filters.sort);
+    params.set('homepage.limit', '100');
+    if (filters.search) params.set('homepage.search', filters.search);
+    if (filters.categories.length > 0) params.set('homepage.categories', filters.categories.join(','));
+    if (filters.minPrice > 0) params.set('homepage.minPrice', String(filters.minPrice));
+    if (filters.maxPrice < 2000) params.set('homepage.maxPrice', String(filters.maxPrice));
+    if (filters.discount === 'withDiscount') params.set('homepage.hasDiscount', 'true');
+    if (filters.discount === 'withoutDiscount') params.set('homepage.hasDiscount', 'false');
+    if (filters.stock === 'inStock') params.set('homepage.inStock', 'true');
+    if (filters.stock === 'outOfStock') params.set('homepage.inStock', 'false');
+    if (filters.minRating > 0) params.set('homepage.rating', String(filters.minRating));
+    if (filters.sort) params.set('homepage.sort', filters.sort);
     const dateRange = getDateRange(filters.dateAdded);
-    if (dateRange.from) params.set('dateFrom', dateRange.from);
-    if (dateRange.to) params.set('dateTo', dateRange.to);
+    if (dateRange.from) params.set('homepage.dateFrom', dateRange.from);
+    if (dateRange.to) params.set('homepage.dateTo', dateRange.to);
     return params.toString();
   }, [filters]);
 
@@ -200,19 +200,19 @@ export function ProductCatalog() {
       chips.push({ key: 'price', label: `$${filters.minPrice} – $${filters.maxPrice}`, onRemove: () => setFilters(p => ({ ...p, minPrice: 0, maxPrice: 2000 })) });
     }
     if (filters.discount !== 'all') {
-      const label = filters.discount === 'withDiscount' ? t('catalog.filterWithDiscount') : t('catalog.filterWithoutDiscount');
+      const label = filters.discount === 'withDiscount' ? t('homepage.catalog.filterWithDiscount') : t('homepage.catalog.filterWithoutDiscount');
       chips.push({ key: 'discount', label, onRemove: () => updateFilter('discount', 'all') });
     }
     if (filters.stock !== 'all') {
-      const label = filters.stock === 'inStock' ? t('catalog.filterInStock') : t('catalog.filterOutOfStock');
+      const label = filters.stock === 'inStock' ? t('homepage.catalog.filterInStock') : t('homepage.catalog.filterOutOfStock');
       chips.push({ key: 'stock', label, onRemove: () => updateFilter('stock', 'all') });
     }
     if (filters.dateAdded !== 'all') {
       const labels: Record<string, string> = {
-        today: t('catalog.filterDateToday'),
-        thisWeek: t('catalog.filterDateThisWeek'),
-        thisMonth: t('catalog.filterDateThisMonth'),
-        last3Months: t('catalog.filterDateLast3Months'),
+        today: t('homepage.catalog.filterDateToday'),
+        thisWeek: t('homepage.catalog.filterDateThisWeek'),
+        thisMonth: t('homepage.catalog.filterDateThisMonth'),
+        last3Months: t('homepage.catalog.filterDateLast3Months'),
       };
       chips.push({ key: 'date', label: labels[filters.dateAdded], onRemove: () => updateFilter('dateAdded', 'all') });
     }
@@ -226,14 +226,14 @@ export function ProductCatalog() {
 
   // Sort options
   const sortOptions: { value: SortOption; label: string }[] = [
-    { value: 'newest', label: t('catalog.sortNewest') },
-    { value: 'oldest', label: t('catalog.sortOldest') },
-    { value: 'price-asc', label: t('catalog.sortPriceAsc') },
-    { value: 'price-desc', label: t('catalog.sortPriceDesc') },
-    { value: 'popular', label: t('catalog.sortPopular') },
-    { value: 'rating', label: t('catalog.sortRating') },
-    { value: 'name-asc', label: t('catalog.sortNameAsc') },
-    { value: 'name-desc', label: t('catalog.sortNameDesc') },
+    { value: 'newest', label: t('homepage.catalog.sortNewest') },
+    { value: 'oldest', label: t('homepage.catalog.sortOldest') },
+    { value: 'price-asc', label: t('homepage.catalog.sortPriceAsc') },
+    { value: 'price-desc', label: t('homepage.catalog.sortPriceDesc') },
+    { value: 'popular', label: t('homepage.catalog.sortPopular') },
+    { value: 'rating', label: t('homepage.catalog.sortRating') },
+    { value: 'name-asc', label: t('homepage.catalog.sortNameAsc') },
+    { value: 'name-desc', label: t('homepage.catalog.sortNameDesc') },
   ];
 
   // Fetch categories for filter sidebar
@@ -254,7 +254,7 @@ export function ProductCatalog() {
           type="text"
           value={filters.search}
           onChange={e => updateFilter('search', e.target.value)}
-          placeholder={t('common.searchPlaceholder')}
+          placeholder={t('homepage.common.searchPlaceholder')}
           className="w-full h-10 ps-9 pe-3 rounded-xl bg-ecommerce-surface border border-ecommerce-border text-sm text-ecommerce-text-primary placeholder:text-ecommerce-text-muted focus:outline-none focus:ring-2 focus:ring-ecommerce-red/30 focus:border-ecommerce-red/50 transition-all"
         />
         {filters.search && (
@@ -270,7 +270,7 @@ export function ProductCatalog() {
           onClick={() => toggleSection('category')}
           className="w-full flex items-center justify-between px-4 py-3 text-sm font-semibold text-ecommerce-text-primary hover:bg-ecommerce-surface-hover transition-colors"
         >
-          {t('catalog.filterCategory')}
+          {t('homepage.catalog.filterCategory')}
           {expandedSections.category ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
         </button>
         <AnimatePresence>
@@ -290,7 +290,7 @@ export function ProductCatalog() {
                     className="rounded-md data-[state=checked]:bg-ecommerce-red data-[state=checked]:border-ecommerce-red"
                   />
                   <span className="text-sm text-ecommerce-text-secondary group-hover:text-ecommerce-text-primary transition-colors">
-                    {t('catalog.filterCategoryAll')}
+                    {t('homepage.catalog.filterCategoryAll')}
                   </span>
                   <span className="ms-auto text-xs text-ecommerce-text-muted">{total}</span>
                 </label>
@@ -319,7 +319,7 @@ export function ProductCatalog() {
           onClick={() => toggleSection('price')}
           className="w-full flex items-center justify-between px-4 py-3 text-sm font-semibold text-ecommerce-text-primary hover:bg-ecommerce-surface-hover transition-colors"
         >
-          {t('catalog.filterPrice')}
+          {t('homepage.catalog.filterPrice')}
           {expandedSections.price ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
         </button>
         <AnimatePresence>
@@ -345,7 +345,7 @@ export function ProductCatalog() {
                 />
                 <div className="flex items-center gap-2">
                   <div className="flex-1">
-                    <label className="text-[10px] text-ecommerce-text-muted uppercase tracking-wider mb-1 block">{t('catalog.priceMin')}</label>
+                    <label className="text-[10px] text-ecommerce-text-muted uppercase tracking-wider mb-1 block">{t('homepage.catalog.priceMin')}</label>
                     <div className="relative">
                       <span className="absolute start-2.5 top-1/2 -translate-y-1/2 text-xs text-ecommerce-text-muted">$</span>
                       <input
@@ -359,7 +359,7 @@ export function ProductCatalog() {
                   </div>
                   <span className="text-ecommerce-text-muted mt-4">–</span>
                   <div className="flex-1">
-                    <label className="text-[10px] text-ecommerce-text-muted uppercase tracking-wider mb-1 block">{t('catalog.priceMax')}</label>
+                    <label className="text-[10px] text-ecommerce-text-muted uppercase tracking-wider mb-1 block">{t('homepage.catalog.priceMax')}</label>
                     <div className="relative">
                       <span className="absolute start-2.5 top-1/2 -translate-y-1/2 text-xs text-ecommerce-text-muted">$</span>
                       <input
@@ -384,7 +384,7 @@ export function ProductCatalog() {
           onClick={() => toggleSection('discount')}
           className="w-full flex items-center justify-between px-4 py-3 text-sm font-semibold text-ecommerce-text-primary hover:bg-ecommerce-surface-hover transition-colors"
         >
-          {t('catalog.filterDiscount')}
+          {t('homepage.catalog.filterDiscount')}
           {expandedSections.discount ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
         </button>
         <AnimatePresence>
@@ -399,9 +399,9 @@ export function ProductCatalog() {
               <div className="px-4 pb-3 space-y-1.5">
                 {(['all', 'withDiscount', 'withoutDiscount'] as DiscountFilter[]).map(val => {
                   const labelMap: Record<string, string> = {
-                    all: t('catalog.filterDiscountAll'),
-                    withDiscount: t('catalog.filterWithDiscount'),
-                    withoutDiscount: t('catalog.filterWithoutDiscount'),
+                    all: t('homepage.catalog.filterDiscountAll'),
+                    withDiscount: t('homepage.catalog.filterWithDiscount'),
+                    withoutDiscount: t('homepage.catalog.filterWithoutDiscount'),
                   };
                   return (
                     <label key={val} className="flex items-center gap-2.5 cursor-pointer group py-1">
@@ -430,7 +430,7 @@ export function ProductCatalog() {
           onClick={() => toggleSection('stock')}
           className="w-full flex items-center justify-between px-4 py-3 text-sm font-semibold text-ecommerce-text-primary hover:bg-ecommerce-surface-hover transition-colors"
         >
-          {t('catalog.filterStock')}
+          {t('homepage.catalog.filterStock')}
           {expandedSections.stock ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
         </button>
         <AnimatePresence>
@@ -457,7 +457,7 @@ export function ProductCatalog() {
                       {filters.stock === val && <div className="w-1.5 h-1.5 rounded-full bg-white" />}
                     </div>
                     <span className="text-sm text-ecommerce-text-secondary group-hover:text-ecommerce-text-primary transition-colors">
-                      {t(`catalog.${label}`)}
+                      {t(`homepage.catalog.${label}`)}
                     </span>
                   </label>
                 ))}
@@ -473,7 +473,7 @@ export function ProductCatalog() {
           onClick={() => toggleSection('date')}
           className="w-full flex items-center justify-between px-4 py-3 text-sm font-semibold text-ecommerce-text-primary hover:bg-ecommerce-surface-hover transition-colors"
         >
-          {t('catalog.filterDate')}
+          {t('homepage.catalog.filterDate')}
           {expandedSections.date ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
         </button>
         <AnimatePresence>
@@ -502,7 +502,7 @@ export function ProductCatalog() {
                       {filters.dateAdded === val && <div className="w-1.5 h-1.5 rounded-full bg-white" />}
                     </div>
                     <span className="text-sm text-ecommerce-text-secondary group-hover:text-ecommerce-text-primary transition-colors">
-                      {t(`catalog.${label}`)}
+                      {t(`homepage.catalog.${label}`)}
                     </span>
                   </label>
                 ))}
@@ -518,7 +518,7 @@ export function ProductCatalog() {
           onClick={() => toggleSection('rating')}
           className="w-full flex items-center justify-between px-4 py-3 text-sm font-semibold text-ecommerce-text-primary hover:bg-ecommerce-surface-hover transition-colors"
         >
-          {t('catalog.filterRating')}
+          {t('homepage.catalog.filterRating')}
           {expandedSections.rating ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
         </button>
         <AnimatePresence>
@@ -542,7 +542,7 @@ export function ProductCatalog() {
                     </div>
                     <div className="flex items-center gap-1">
                       {r === 0 ? (
-                        <span className="text-sm text-ecommerce-text-secondary group-hover:text-ecommerce-text-primary">{t('catalog.filterRatingAll')}</span>
+                        <span className="text-sm text-ecommerce-text-secondary group-hover:text-ecommerce-text-primary">{t('homepage.catalog.filterRatingAll')}</span>
                       ) : (
                         <>
                           <div className="flex items-center">
@@ -574,7 +574,7 @@ export function ProductCatalog() {
           className="w-full rounded-xl border-ecommerce-border text-ecommerce-text-secondary hover:text-ecommerce-red hover:border-ecommerce-red/50 hover:bg-ecommerce-red/5 gap-2"
         >
           <RotateCcw size={14} />
-          {t('catalog.resetAll')}
+          {t('homepage.catalog.resetAll')}
         </Button>
       )}
     </div>
@@ -603,12 +603,12 @@ export function ProductCatalog() {
                 className="shrink-0 rounded-xl hover:bg-ecommerce-surface-hover gap-2 text-ecommerce-text-secondary hover:text-ecommerce-text-primary"
               >
                 <ArrowLeft size={18} />
-                <span className="hidden sm:inline">{t('catalog.backToHome')}</span>
+                <span className="hidden sm:inline">{t('homepage.catalog.backToHome')}</span>
               </Button>
 
               {/* Title */}
               <h1 className="text-lg font-bold text-ecommerce-text-primary hidden md:block">
-                {t('catalog.title')}
+                {t('homepage.catalog.title')}
               </h1>
 
               {/* Search (desktop) */}
@@ -618,7 +618,7 @@ export function ProductCatalog() {
                   type="text"
                   value={filters.search}
                   onChange={e => updateFilter('search', e.target.value)}
-                  placeholder={t('common.searchPlaceholder')}
+                  placeholder={t('homepage.common.searchPlaceholder')}
                   className="w-full h-10 ps-9 pe-3 rounded-xl bg-ecommerce-surface border border-ecommerce-border text-sm text-ecommerce-text-primary placeholder:text-ecommerce-text-muted focus:outline-none focus:ring-2 focus:ring-ecommerce-red/30 focus:border-ecommerce-red/50 transition-all"
                 />
                 {filters.search && (
@@ -646,14 +646,14 @@ export function ProductCatalog() {
                 <button
                   onClick={() => updateFilter('viewMode', 'grid')}
                   className={`p-2 rounded-lg transition-all ${filters.viewMode === 'grid' ? 'bg-ecommerce-red text-white shadow-sm' : 'text-ecommerce-text-muted hover:text-ecommerce-text-primary'}`}
-                  aria-label={t('catalog.gridView')}
+                  aria-label={t('homepage.catalog.gridView')}
                 >
                   <Grid3X3 size={16} />
                 </button>
                 <button
                   onClick={() => updateFilter('viewMode', 'list')}
                   className={`p-2 rounded-lg transition-all ${filters.viewMode === 'list' ? 'bg-ecommerce-red text-white shadow-sm' : 'text-ecommerce-text-muted hover:text-ecommerce-text-primary'}`}
-                  aria-label={t('catalog.listView')}
+                  aria-label={t('homepage.catalog.listView')}
                 >
                   <LayoutList size={16} />
                 </button>
@@ -667,7 +667,7 @@ export function ProductCatalog() {
                 className="md:hidden shrink-0 rounded-xl border-ecommerce-border gap-2 relative"
               >
                 <Filter size={16} />
-                {t('catalog.filters')}
+                {t('homepage.catalog.filters')}
                 {activeFilterCount > 0 && (
                   <span className="absolute -top-1.5 -end-1.5 w-5 h-5 rounded-full bg-ecommerce-red text-white text-[10px] font-bold flex items-center justify-center">
                     {activeFilterCount}
@@ -686,7 +686,7 @@ export function ProductCatalog() {
                   className="border-t border-ecommerce-border overflow-hidden"
                 >
                   <div className="max-w-[1600px] mx-auto px-4 sm:px-6 py-2 flex items-center gap-2 overflow-x-auto no-scrollbar">
-                    <span className="text-xs font-semibold text-ecommerce-text-muted shrink-0">{t('catalog.activeFilters')}:</span>
+                    <span className="text-xs font-semibold text-ecommerce-text-muted shrink-0">{t('homepage.catalog.activeFilters')}:</span>
                     {activeFilterChips.map(chip => (
                       <Badge
                         key={chip.key}
@@ -702,7 +702,7 @@ export function ProductCatalog() {
                       onClick={resetFilters}
                       className="text-xs text-ecommerce-text-muted hover:text-ecommerce-red shrink-0 font-medium transition-colors"
                     >
-                      {t('catalog.clearAllFilters')}
+                      {t('homepage.catalog.clearAllFilters')}
                     </button>
                   </div>
                 </motion.div>
@@ -715,7 +715,7 @@ export function ProductCatalog() {
             {/* Desktop Sidebar */}
             <aside className="hidden md:block w-72 shrink-0 border-e border-ecommerce-border p-4 overflow-y-auto max-h-[calc(100vh-4rem)] sticky top-16 custom-scrollbar">
               <div className="flex items-center justify-between mb-4">
-                <h2 className="text-sm font-bold text-ecommerce-text-primary">{t('catalog.filters')}</h2>
+                <h2 className="text-sm font-bold text-ecommerce-text-primary">{t('homepage.catalog.filters')}</h2>
                 {activeFilterCount > 0 && (
                   <Badge variant="secondary" className="bg-ecommerce-red text-white rounded-full px-2 text-[10px]">
                     {activeFilterCount}
@@ -733,7 +733,7 @@ export function ProductCatalog() {
                   {isLoading ? (
                     <Skeleton className="h-4 w-40" />
                   ) : (
-                    t('catalog.showingResults', { shown: visibleProducts.length, total })
+                    t('homepage.catalog.showingResults', { shown: visibleProducts.length, total })
                   )}
                 </p>
                 {/* Mobile view toggle & search */}
@@ -774,14 +774,14 @@ export function ProductCatalog() {
                   <div className="w-20 h-20 rounded-full bg-ecommerce-surface flex items-center justify-center mb-5">
                     <PackageSearch size={36} className="text-ecommerce-text-muted" />
                   </div>
-                  <h3 className="text-lg font-bold text-ecommerce-text-primary mb-2">{t('catalog.noResults')}</h3>
-                  <p className="text-sm text-ecommerce-text-muted max-w-sm mb-5">{t('catalog.noResultsDesc')}</p>
+                  <h3 className="text-lg font-bold text-ecommerce-text-primary mb-2">{t('homepage.catalog.noResults')}</h3>
+                  <p className="text-sm text-ecommerce-text-muted max-w-sm mb-5">{t('homepage.catalog.noResultsDesc')}</p>
                   <Button
                     onClick={resetFilters}
                     className="rounded-xl bg-ecommerce-red hover:bg-ecommerce-red/90 text-white gap-2"
                   >
                     <RotateCcw size={14} />
-                    {t('catalog.resetAll')}
+                    {t('homepage.catalog.resetAll')}
                   </Button>
                 </div>
               ) : (
@@ -828,9 +828,9 @@ export function ProductCatalog() {
                         onClick={() => setVisibleCount(prev => prev + PAGE_SIZE)}
                         className="rounded-xl border-ecommerce-red text-ecommerce-red hover:bg-ecommerce-red/5 px-8 gap-2 h-11"
                       >
-                        {t('common.loadMore')}
+                        {t('homepage.common.loadMore')}
                         <span className="text-xs text-ecommerce-text-muted">
-                          ({products.length - visibleCount} {t('common.remaining')})
+                          ({products.length - visibleCount} {t('homepage.common.remaining')})
                         </span>
                       </Button>
                     </div>
@@ -861,7 +861,7 @@ export function ProductCatalog() {
                   {/* Sheet Header */}
                   <div className="sticky top-0 bg-background/95 backdrop-blur-sm border-b border-ecommerce-border px-5 py-4 flex items-center justify-between">
                     <div className="flex items-center gap-2">
-                      <h2 className="text-base font-bold text-ecommerce-text-primary">{t('catalog.filters')}</h2>
+                      <h2 className="text-base font-bold text-ecommerce-text-primary">{t('homepage.catalog.filters')}</h2>
                       {activeFilterCount > 0 && (
                         <Badge className="bg-ecommerce-red text-white rounded-full px-2 text-[10px]">{activeFilterCount}</Badge>
                       )}
@@ -869,7 +869,7 @@ export function ProductCatalog() {
                     <div className="flex items-center gap-2">
                       {activeFilterCount > 0 && (
                         <button onClick={resetFilters} className="text-xs text-ecommerce-red font-medium">
-                          {t('catalog.resetAll')}
+                          {t('homepage.catalog.resetAll')}
                         </button>
                       )}
                       <button onClick={() => setShowMobileFilters(false)} className="p-1.5 rounded-lg hover:bg-ecommerce-surface-hover">
@@ -886,7 +886,7 @@ export function ProductCatalog() {
                         type="text"
                         value={filters.search}
                         onChange={e => updateFilter('search', e.target.value)}
-                        placeholder={t('common.searchPlaceholder')}
+                        placeholder={t('homepage.common.searchPlaceholder')}
                         className="w-full h-10 ps-9 pe-3 rounded-xl bg-ecommerce-surface border border-ecommerce-border text-sm text-ecommerce-text-primary placeholder:text-ecommerce-text-muted focus:outline-none focus:ring-2 focus:ring-ecommerce-red/30 focus:border-ecommerce-red/50 transition-all"
                       />
                     </div>
@@ -903,7 +903,7 @@ export function ProductCatalog() {
                       onClick={() => setShowMobileFilters(false)}
                       className="w-full h-12 rounded-xl bg-ecommerce-red hover:bg-ecommerce-red/90 text-white font-semibold text-sm"
                     >
-                      {t('catalog.showingResults', { shown: visibleProducts.length, total })} — {t('catalog.closeFilters')}
+                      {t('homepage.catalog.showingResults', { shown: visibleProducts.length, total })} — {t('homepage.catalog.closeFilters')}
                     </Button>
                   </div>
                 </motion.div>

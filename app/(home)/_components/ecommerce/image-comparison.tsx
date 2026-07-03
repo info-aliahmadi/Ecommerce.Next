@@ -22,8 +22,8 @@ export function ImageComparison({
   afterLabel,
 }: ImageComparisonProps) {
   const t = useTranslations();
-  const resolvedBeforeLabel = beforeLabel ?? t('imageComparison.before');
-  const resolvedAfterLabel = afterLabel ?? t('imageComparison.after');
+  const resolvedBeforeLabel = beforeLabel ?? t('homepage.imageComparison.before');
+  const resolvedAfterLabel = afterLabel ?? t('homepage.imageComparison.after');
   const containerRef = useRef<HTMLDivElement>(null);
   const [position, setPosition] = useState(50);
   const [isDragging, setIsDragging] = useState(false);
@@ -81,10 +81,10 @@ export function ImageComparison({
           className="text-center mb-8"
         >
           <h2 className="text-2xl md:text-3xl font-bold text-ecommerce-text-primary">
-            {t('imageComparison.title').split(' ').slice(0, -1).join(' ')} <span className="gradient-text-warm">{t('imageComparison.title').split(' ').slice(-1)}</span>
+            {t('homepage.imageComparison.title').split('homepage. ').slice(0, -1).join(' ')} <span className="gradient-text-warm">{t('homepage.imageComparison.title').split('homepage. ').slice(-1)}</span>
           </h2>
           <p className="text-ecommerce-text-secondary mt-2 text-sm md:text-base">
-            {t('imageComparison.dragHint')}
+            {t('homepage.imageComparison.dragHint')}
           </p>
         </motion.div>
 

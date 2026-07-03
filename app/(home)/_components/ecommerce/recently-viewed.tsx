@@ -34,13 +34,13 @@ export function RecentlyViewed() {
         <div className="flex flex-col items-center text-center mb-8">
           <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-ecommerce-purple/10 text-ecommerce-purple text-xs font-semibold uppercase tracking-widest mb-4">
             <Eye size={12} />
-            {t('recentlyViewed.history')}
+            {t('homepage.recentlyViewed.history')}
           </span>
           <h2 className="text-2xl sm:text-3xl font-extrabold text-ecommerce-text-primary tracking-tight">
-            {t('recentlyViewed.title')}
+            {t('homepage.recentlyViewed.title')}
           </h2>
           <p className="text-sm text-ecommerce-text-muted mt-2">
-            {t('recentlyViewed.pickUp')}
+            {t('homepage.recentlyViewed.pickUp')}
           </p>
           <div className="flex items-center gap-2 mt-4">
             <div className="h-px w-8 bg-ecommerce-border" />
@@ -55,7 +55,7 @@ export function RecentlyViewed() {
           <button
             onClick={() => handleScroll('left')}
             className="hidden md:flex absolute start-0 top-1/2 -translate-y-1/2 -translate-x-4 z-10 w-9 h-9 rounded-full bg-white dark:bg-ecommerce-surface shadow-lg border border-ecommerce-border items-center justify-center text-ecommerce-text-primary hover:bg-ecommerce-surface-hover transition-colors"
-            aria-label={t('trending.scrollLeft')}
+            aria-label={t('homepage.trending.scrollLeft')}
           >
             <ChevronLeft size={16} />
           </button>
@@ -64,7 +64,7 @@ export function RecentlyViewed() {
           <button
             onClick={() => handleScroll('right')}
             className="hidden md:flex absolute end-0 top-1/2 -translate-y-1/2 translate-x-4 z-10 w-9 h-9 rounded-full bg-white dark:bg-ecommerce-surface shadow-lg border border-ecommerce-border items-center justify-center text-ecommerce-text-primary hover:bg-ecommerce-surface-hover transition-colors"
-            aria-label={t('trending.scrollRight')}
+            aria-label={t('homepage.trending.scrollRight')}
           >
             <ChevronRight size={16} />
           </button>
@@ -96,7 +96,7 @@ export function RecentlyViewed() {
                       <button
                         onClick={() => setQuickViewProduct(item.id)}
                         className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white/90 dark:bg-ecommerce-surface/90 text-ecommerce-text-primary flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 hover:bg-white hover:scale-110 shadow-lg"
-                        aria-label={t('common.quickView')}
+                        aria-label={t('homepage.common.quickView')}
                       >
                         <Eye size={18} />
                       </button>
@@ -107,7 +107,7 @@ export function RecentlyViewed() {
                           store.items = store.items.filter((i: RecentItem) => i.id !== item.id);
                         }}
                         className="absolute top-1.5 end-1.5 w-6 h-6 rounded-full bg-black/40 backdrop-blur-sm text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity hover:bg-black/60"
-                        aria-label={t('cart.remove')}
+                        aria-label={t('homepage.cart.remove')}
                       >
                         <X size={10} />
                       </button>
@@ -119,12 +119,12 @@ export function RecentlyViewed() {
                       <button
                         onClick={() => {
                           addItem({ id: item.id, name: item.name, price: item.price, comparePrice: item.comparePrice, image: item.image, category: item.category });
-                          toast.success(t('cart.itemAdded', { name: item.name }));
+                          toast.success(t('homepage.cart.itemAdded', { name: item.name }));
                         }}
                         className="mt-3 w-full h-9 rounded-lg bg-ecommerce-red/10 text-ecommerce-red text-xs font-semibold flex items-center justify-center gap-1.5 hover:bg-ecommerce-red hover:text-white transition-all duration-200"
                       >
                         <ShoppingCart size={13} />
-                        {t('common.addToCart')}
+                        {t('homepage.common.addToCart')}
                       </button>
                     </div>
                   </div>

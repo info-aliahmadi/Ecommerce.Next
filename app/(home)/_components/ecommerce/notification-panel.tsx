@@ -32,7 +32,7 @@ export function NotificationPanel({ open, onClose }: { open: boolean; onClose: (
   const t = useTranslations();
   const [notifications, setNotifications] = useState<Notification[]>(INITIAL_NOTIFICATIONS);
   const [readIds, setReadIds] = useState<Set<number>>(() => new Set(INITIAL_NOTIFICATIONS.slice(3).map((n) => n.id)));
-  const justNowLabel = t('notification.justNow');
+  const justNowLabel = t('homepage.notification.justNow');
 
   const unreadCount = notifications.filter((n) => !readIds.has(n.id)).length;
 
@@ -70,7 +70,7 @@ export function NotificationPanel({ open, onClose }: { open: boolean; onClose: (
                   </span>
                 )}
               </div>
-              <SheetTitle className="text-base">{t('notification.title')}</SheetTitle>
+              <SheetTitle className="text-base">{t('homepage.notification.title')}</SheetTitle>
               {unreadCount > 0 && (
                 <Badge variant="secondary" className="text-[10px] px-1.5 py-0 h-4 bg-ecommerce-red/10 text-ecommerce-red border-ecommerce-red/20">
                   {unreadCount}
@@ -85,7 +85,7 @@ export function NotificationPanel({ open, onClose }: { open: boolean; onClose: (
                 className="h-7 px-2 text-xs text-ecommerce-text-secondary hover:text-ecommerce-text-primary"
               >
                 <CheckCheck size={13} className="me-1" />
-                {t('notification.markAllRead')}
+                {t('homepage.notification.markAllRead')}
               </Button>
             )}
           </div>
@@ -120,7 +120,7 @@ export function NotificationPanel({ open, onClose }: { open: boolean; onClose: (
                   {/* Text content */}
                   <div className="flex-1 min-w-0">
                     <p className="text-sm text-ecommerce-text-primary leading-snug">
-                      {t('hero.justPurchased', { name: notification.name, city: notification.city, product: notification.product })}
+                      {t('homepage.hero.justPurchased', { name: notification.name, city: notification.city, product: notification.product })}
                     </p>
                     <p className={`text-xs mt-0.5 ${isUnread ? 'text-ecommerce-text-secondary font-medium' : 'text-ecommerce-text-muted'}`}>
                       {notification.time}
@@ -148,7 +148,7 @@ export function NotificationPanel({ open, onClose }: { open: boolean; onClose: (
             className="w-full flex items-center justify-center gap-1.5 text-sm font-medium text-ecommerce-text-secondary hover:text-ecommerce-red transition-colors py-2 rounded-lg hover:bg-ecommerce-surface-hover"
           >
             <ExternalLink size={14} />
-            {t('common.seeAll')}
+            {t('homepage.common.seeAll')}
           </button>
         </div>
       </SheetContent>

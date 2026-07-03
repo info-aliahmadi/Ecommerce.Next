@@ -39,7 +39,7 @@ function AlertCard({ alert, onDismiss }: { alert: StockAlert; onDismiss: () => v
           </div>
           <div className="flex-1 min-w-0">
             <p className="text-sm font-semibold text-ecommerce-text-primary leading-snug">
-              🔥 {t('stockAlert.message', { count: alert.stock })}
+              🔥 {t('homepage.stockAlert.message', { count: alert.stock })}
             </p>
             <p className="text-xs text-ecommerce-text-muted mt-0.5 truncate">
               {alert.productName}
@@ -48,7 +48,7 @@ function AlertCard({ alert, onDismiss }: { alert: StockAlert; onDismiss: () => v
           <button
             onClick={onDismiss}
             className="absolute top-2.5 end-2.5 w-6 h-6 rounded-full flex items-center justify-center text-ecommerce-text-muted hover:text-ecommerce-text-primary hover:bg-ecommerce-surface-hover transition-colors"
-            aria-label={t('stockAlert.dismiss')}
+            aria-label={t('homepage.stockAlert.dismiss')}
           >
             <X size={14} />
           </button>

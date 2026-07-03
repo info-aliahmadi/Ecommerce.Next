@@ -24,12 +24,12 @@ export function WishlistDrawer({ open, onClose }: { open: boolean; onClose: () =
       category: item.category,
     });
     removeItem(item.id);
-    toast.success(t('cart.itemAdded', { name: item.name }));
+    toast.success(t('homepage.cart.itemAdded', { name: item.name }));
   };
 
   const handleRemove = (id: string, name: string) => {
     removeItem(id);
-    toast.success(t('common.removeFromWishlist'));
+    toast.success(t('homepage.common.removeFromWishlist'));
   };
 
   return (
@@ -38,7 +38,7 @@ export function WishlistDrawer({ open, onClose }: { open: boolean; onClose: () =
         <SheetHeader className="px-6 py-4 border-b border-ecommerce-border">
           <SheetTitle className="flex items-center gap-2 text-ecommerce-text-primary">
             <Heart size={20} className="text-ecommerce-rose" />
-            {t('wishlist.title')}
+            {t('homepage.wishlist.title')}
             {totalCount() > 0 && (
               <Badge className="bg-ecommerce-rose text-white border-0 text-xs px-2 py-0">
                 {totalCount()}
@@ -52,9 +52,9 @@ export function WishlistDrawer({ open, onClose }: { open: boolean; onClose: () =
             <div className="w-16 h-16 rounded-full bg-ecommerce-rose/10 flex items-center justify-center mb-4">
               <Heart size={24} className="text-ecommerce-rose/50" />
             </div>
-            <p className="text-sm font-semibold text-ecommerce-text-primary">{t('wishlist.empty')}</p>
+            <p className="text-sm font-semibold text-ecommerce-text-primary">{t('homepage.wishlist.empty')}</p>
             <p className="text-xs text-ecommerce-text-muted mt-1 text-center">
-              {t('wishlist.emptyDesc')}
+              {t('homepage.wishlist.emptyDesc')}
             </p>
           </div>
         ) : (
@@ -88,14 +88,14 @@ export function WishlistDrawer({ open, onClose }: { open: boolean; onClose: () =
                     <button
                       onClick={() => handleMoveToCart(item)}
                       className="w-8 h-8 rounded-lg bg-ecommerce-red/10 text-ecommerce-red flex items-center justify-center hover:bg-ecommerce-red hover:text-white transition-colors"
-                      aria-label={t('wishlist.moveToCart')}
+                      aria-label={t('homepage.wishlist.moveToCart')}
                     >
                       <ShoppingCart size={14} />
                     </button>
                     <button
                       onClick={() => handleRemove(item.id, item.name)}
                       className="w-8 h-8 rounded-lg bg-ecommerce-surface text-ecommerce-text-muted flex items-center justify-center hover:bg-ecommerce-red/10 hover:text-ecommerce-red transition-colors"
-                      aria-label={t('wishlist.remove')}
+                      aria-label={t('homepage.wishlist.remove')}
                     >
                       <Trash2 size={14} />
                     </button>
@@ -117,13 +117,13 @@ export function WishlistDrawer({ open, onClose }: { open: boolean; onClose: () =
                       category: item.category,
                     });
                   });
-                  toast.success(t('cart.itemAdded', { name: `${items.length} ${t('wishlist.items')}` }));
+                  toast.success(t('homepage.cart.itemAdded', { name: `${items.length} ${t('homepage.wishlist.items')}` }));
                   onClose();
                 }}
                 className="w-full h-11 bg-ecommerce-red hover:bg-ecommerce-red/90 text-white rounded-xl font-semibold text-sm gap-2"
               >
                 <ShoppingCart size={16} />
-                {t('common.addToCart')}
+                {t('homepage.common.addToCart')}
               </Button>
             </div>
           </div>

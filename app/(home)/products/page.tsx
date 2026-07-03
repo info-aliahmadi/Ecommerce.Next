@@ -200,22 +200,22 @@ function ProductsPageContent() {
   // ── Build API query params ──────────────────────────
   const queryParams = useMemo(() => {
     const params = new URLSearchParams();
-    params.set('limit', String(filters.perPage));
-    params.set('offset', String((filters.page - 1) * filters.perPage));
-    if (filters.search) params.set('search', filters.search);
-    if (filters.categories.length > 0) params.set('categories', filters.categories.join(','));
-    if (filters.appliedMinPrice) params.set('minPrice', filters.appliedMinPrice);
-    if (filters.appliedMaxPrice) params.set('maxPrice', filters.appliedMaxPrice);
-    if (filters.discount === 'withDiscount') params.set('hasDiscount', 'true');
-    if (filters.discount === 'withoutDiscount') params.set('hasDiscount', 'false');
-    if (filters.stock === 'inStock') params.set('inStock', 'true');
-    if (filters.stock === 'outOfStock') params.set('inStock', 'false');
-    if (filters.minRating > 0) params.set('rating', String(filters.minRating));
-    if (filters.sort) params.set('sort', filters.sort);
-    if (filters.tags.length > 0) params.set('tags', filters.tags.join(','));
+    params.set('homepage.limit', String(filters.perPage));
+    params.set('homepage.offset', String((filters.page - 1) * filters.perPage));
+    if (filters.search) params.set('homepage.search', filters.search);
+    if (filters.categories.length > 0) params.set('homepage.categories', filters.categories.join(','));
+    if (filters.appliedMinPrice) params.set('homepage.minPrice', filters.appliedMinPrice);
+    if (filters.appliedMaxPrice) params.set('homepage.maxPrice', filters.appliedMaxPrice);
+    if (filters.discount === 'withDiscount') params.set('homepage.hasDiscount', 'true');
+    if (filters.discount === 'withoutDiscount') params.set('homepage.hasDiscount', 'false');
+    if (filters.stock === 'inStock') params.set('homepage.inStock', 'true');
+    if (filters.stock === 'outOfStock') params.set('homepage.inStock', 'false');
+    if (filters.minRating > 0) params.set('homepage.rating', String(filters.minRating));
+    if (filters.sort) params.set('homepage.sort', filters.sort);
+    if (filters.tags.length > 0) params.set('homepage.tags', filters.tags.join(','));
     const dateRange = getDateRange(filters.dateAdded);
-    if (dateRange.from) params.set('dateFrom', dateRange.from);
-    if (dateRange.to) params.set('dateTo', dateRange.to);
+    if (dateRange.from) params.set('homepage.dateFrom', dateRange.from);
+    if (dateRange.to) params.set('homepage.dateTo', dateRange.to);
     return params.toString();
   }, [filters]);
 
@@ -319,8 +319,8 @@ function ProductsPageContent() {
     if (filters.discount !== 'all') {
       const label =
         filters.discount === 'withDiscount'
-          ? t('shopPage.withDiscount')
-          : t('shopPage.withoutDiscount');
+          ? t('homepage.shopPage.withDiscount')
+          : t('homepage.shopPage.withoutDiscount');
       chips.push({
         key: 'discount',
         label,
@@ -330,8 +330,8 @@ function ProductsPageContent() {
     if (filters.stock !== 'all') {
       const label =
         filters.stock === 'inStock'
-          ? t('shopPage.inStockOnly')
-          : t('shopPage.outOfStockOnly');
+          ? t('homepage.shopPage.inStockOnly')
+          : t('homepage.shopPage.outOfStockOnly');
       chips.push({
         key: 'stock',
         label,
@@ -340,12 +340,12 @@ function ProductsPageContent() {
     }
     if (filters.dateAdded !== 'all') {
       const dateLabels: Record<string, string> = {
-        today: t('shopPage.today'),
-        thisWeek: t('shopPage.thisWeek'),
-        thisMonth: t('shopPage.thisMonth'),
-        last3Months: t('shopPage.last3Months'),
-        last6Months: t('shopPage.last6Months'),
-        thisYear: t('shopPage.thisYear'),
+        today: t('homepage.shopPage.today'),
+        thisWeek: t('homepage.shopPage.thisWeek'),
+        thisMonth: t('homepage.shopPage.thisMonth'),
+        last3Months: t('homepage.shopPage.last3Months'),
+        last6Months: t('homepage.shopPage.last6Months'),
+        thisYear: t('homepage.shopPage.thisYear'),
       };
       chips.push({
         key: 'date',
@@ -375,14 +375,14 @@ function ProductsPageContent() {
 
   // ── Sort options ────────────────────────────────────
   const sortOptions: { value: SortOption; label: string }[] = [
-    { value: 'newest', label: t('shopPage.sortNewest') },
-    { value: 'oldest', label: t('shopPage.sortOldest') },
-    { value: 'price-asc', label: t('shopPage.sortPriceAsc') },
-    { value: 'price-desc', label: t('shopPage.sortPriceDesc') },
-    { value: 'popular', label: t('shopPage.sortPopular') },
-    { value: 'rating', label: t('shopPage.sortRating') },
-    { value: 'name-asc', label: t('shopPage.sortNameAsc') },
-    { value: 'name-desc', label: t('shopPage.sortNameDesc') },
+    { value: 'newest', label: t('homepage.shopPage.sortNewest') },
+    { value: 'oldest', label: t('homepage.shopPage.sortOldest') },
+    { value: 'price-asc', label: t('homepage.shopPage.sortPriceAsc') },
+    { value: 'price-desc', label: t('homepage.shopPage.sortPriceDesc') },
+    { value: 'popular', label: t('homepage.shopPage.sortPopular') },
+    { value: 'rating', label: t('homepage.shopPage.sortRating') },
+    { value: 'name-asc', label: t('homepage.shopPage.sortNameAsc') },
+    { value: 'name-desc', label: t('homepage.shopPage.sortNameDesc') },
   ];
 
   // ── Date filter options ─────────────────────────────
@@ -405,7 +405,7 @@ function ProductsPageContent() {
           onClick={() => toggleSection('category')}
           className="w-full flex items-center justify-between px-4 py-3 text-sm font-semibold text-ecommerce-text-primary hover:bg-ecommerce-surface-hover transition-colors"
         >
-          {t('shopPage.categoriesFilter')}
+          {t('homepage.shopPage.categoriesFilter')}
           {expandedSections.category ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
         </button>
         <AnimatePresence>
@@ -427,7 +427,7 @@ function ProductsPageContent() {
                     className="rounded-md data-[state=checked]:bg-ecommerce-red data-[state=checked]:border-ecommerce-red"
                   />
                   <span className="text-sm text-ecommerce-text-secondary group-hover:text-ecommerce-text-primary transition-colors">
-                    {t('shopPage.allCategories')}
+                    {t('homepage.shopPage.allCategories')}
                   </span>
                   <span className="ms-auto text-xs text-ecommerce-text-muted">{total}</span>
                 </label>
@@ -458,7 +458,7 @@ function ProductsPageContent() {
           onClick={() => toggleSection('price')}
           className="w-full flex items-center justify-between px-4 py-3 text-sm font-semibold text-ecommerce-text-primary hover:bg-ecommerce-surface-hover transition-colors"
         >
-          {t('shopPage.priceRange')}
+          {t('homepage.shopPage.priceRange')}
           {expandedSections.price ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
         </button>
         <AnimatePresence>
@@ -474,7 +474,7 @@ function ProductsPageContent() {
                 <div className="flex items-center gap-2">
                   <div className="flex-1">
                     <Label className="text-[10px] text-ecommerce-text-muted uppercase tracking-wider mb-1.5 block">
-                      {t('shopPage.minPrice')}
+                      {t('homepage.shopPage.minPrice')}
                     </Label>
                     <Input
                       type="number"
@@ -490,7 +490,7 @@ function ProductsPageContent() {
                   <span className="text-ecommerce-text-muted mt-5">–</span>
                   <div className="flex-1">
                     <Label className="text-[10px] text-ecommerce-text-muted uppercase tracking-wider mb-1.5 block">
-                      {t('shopPage.maxPrice')}
+                      {t('homepage.shopPage.maxPrice')}
                     </Label>
                     <Input
                       type="number"
@@ -509,7 +509,7 @@ function ProductsPageContent() {
                   onClick={applyPriceRange}
                   className="w-full rounded-lg bg-ecommerce-red hover:bg-ecommerce-red/90 text-white text-xs font-medium h-9"
                 >
-                  {t('shopPage.apply')}
+                  {t('homepage.shopPage.apply')}
                 </Button>
               </div>
             </motion.div>
@@ -523,7 +523,7 @@ function ProductsPageContent() {
           onClick={() => toggleSection('discount')}
           className="w-full flex items-center justify-between px-4 py-3 text-sm font-semibold text-ecommerce-text-primary hover:bg-ecommerce-surface-hover transition-colors"
         >
-          {t('shopPage.discountFilter')}
+          {t('homepage.shopPage.discountFilter')}
           {expandedSections.discount ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
         </button>
         <AnimatePresence>
@@ -542,9 +542,9 @@ function ProductsPageContent() {
                   className="space-y-2"
                 >
                   {[
-                    { val: 'all', label: t('shopPage.all') },
-                    { val: 'withDiscount', label: t('shopPage.withDiscount') },
-                    { val: 'withoutDiscount', label: t('shopPage.withoutDiscount') },
+                    { val: 'all', label: t('homepage.shopPage.all') },
+                    { val: 'withDiscount', label: t('homepage.shopPage.withDiscount') },
+                    { val: 'withoutDiscount', label: t('homepage.shopPage.withoutDiscount') },
                   ].map(({ val, label }) => (
                     <div key={val} className="flex items-center gap-2.5 cursor-pointer group">
                       <RadioGroupItem value={val} id={`discount-${val}`} className="border-ecommerce-border data-[state=checked]:border-ecommerce-red data-[state=checked]:bg-ecommerce-red" />
@@ -569,7 +569,7 @@ function ProductsPageContent() {
           onClick={() => toggleSection('stock')}
           className="w-full flex items-center justify-between px-4 py-3 text-sm font-semibold text-ecommerce-text-primary hover:bg-ecommerce-surface-hover transition-colors"
         >
-          {t('shopPage.availabilityFilter')}
+          {t('homepage.shopPage.availabilityFilter')}
           {expandedSections.stock ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
         </button>
         <AnimatePresence>
@@ -588,9 +588,9 @@ function ProductsPageContent() {
                   className="space-y-2"
                 >
                   {[
-                    { val: 'all', label: t('shopPage.all') },
-                    { val: 'inStock', label: t('shopPage.inStockOnly') },
-                    { val: 'outOfStock', label: t('shopPage.outOfStockOnly') },
+                    { val: 'all', label: t('homepage.shopPage.all') },
+                    { val: 'inStock', label: t('homepage.shopPage.inStockOnly') },
+                    { val: 'outOfStock', label: t('homepage.shopPage.outOfStockOnly') },
                   ].map(({ val, label }) => (
                     <div key={val} className="flex items-center gap-2.5 cursor-pointer group">
                       <RadioGroupItem value={val} id={`stock-${val}`} className="border-ecommerce-border data-[state=checked]:border-ecommerce-red data-[state=checked]:bg-ecommerce-red" />
@@ -615,7 +615,7 @@ function ProductsPageContent() {
           onClick={() => toggleSection('date')}
           className="w-full flex items-center justify-between px-4 py-3 text-sm font-semibold text-ecommerce-text-primary hover:bg-ecommerce-surface-hover transition-colors"
         >
-          {t('shopPage.dateFilter')}
+          {t('homepage.shopPage.dateFilter')}
           {expandedSections.date ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
         </button>
         <AnimatePresence>
@@ -644,7 +644,7 @@ function ProductsPageContent() {
                         htmlFor={`date-${value}`}
                         className="text-sm text-ecommerce-text-secondary group-hover:text-ecommerce-text-primary cursor-pointer transition-colors"
                       >
-                        {t(`shopPage.${labelKey}`)}
+                        {t(`homepage.shopPage.${labelKey}`)}
                       </Label>
                     </div>
                   ))}
@@ -661,7 +661,7 @@ function ProductsPageContent() {
           onClick={() => toggleSection('rating')}
           className="w-full flex items-center justify-between px-4 py-3 text-sm font-semibold text-ecommerce-text-primary hover:bg-ecommerce-surface-hover transition-colors"
         >
-          {t('shopPage.ratingFilter')}
+          {t('homepage.shopPage.ratingFilter')}
           {expandedSections.rating ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
         </button>
         <AnimatePresence>
@@ -680,7 +680,7 @@ function ProductsPageContent() {
                   className="space-y-2"
                 >
                   {[
-                    { val: '0', label: t('shopPage.allRatings') },
+                    { val: '0', label: t('homepage.shopPage.allRatings') },
                     { val: '4', stars: 4 },
                     { val: '3', stars: 3 },
                     { val: '2', stars: 2 },
@@ -731,7 +731,7 @@ function ProductsPageContent() {
             onClick={() => toggleSection('tags')}
             className="w-full flex items-center justify-between px-4 py-3 text-sm font-semibold text-ecommerce-text-primary hover:bg-ecommerce-surface-hover transition-colors"
           >
-            {t('shopPage.tagsFilter')}
+            {t('homepage.shopPage.tagsFilter')}
             {expandedSections.tags ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
           </button>
           <AnimatePresence>
@@ -771,7 +771,7 @@ function ProductsPageContent() {
           className="w-full rounded-xl border-ecommerce-border text-ecommerce-text-secondary hover:text-ecommerce-red hover:border-ecommerce-red/50 hover:bg-ecommerce-red/5 gap-2 mt-2"
         >
           <RotateCcw size={14} />
-          {t('shopPage.resetFilters')}
+          {t('homepage.shopPage.resetFilters')}
         </Button>
       )}
     </div>
@@ -797,13 +797,13 @@ function ProductsPageContent() {
                   <BreadcrumbItem>
                     <BreadcrumbLink href="/" className="text-ecommerce-text-muted hover:text-ecommerce-text-primary text-sm flex items-center gap-1.5">
                       <Home size={14} />
-                      {t('shopPage.breadcrumbHome')}
+                      {t('homepage.shopPage.breadcrumbHome')}
                     </BreadcrumbLink>
                   </BreadcrumbItem>
                   <BreadcrumbSeparator />
                   <BreadcrumbItem>
                     <BreadcrumbPage className="text-ecommerce-text-primary font-medium text-sm">
-                      {t('shopPage.breadcrumbShop')}
+                      {t('homepage.shopPage.breadcrumbShop')}
                     </BreadcrumbPage>
                   </BreadcrumbItem>
                 </BreadcrumbList>
@@ -812,10 +812,10 @@ function ProductsPageContent() {
               {/* Title & Description */}
               <div className="mb-5">
                 <h1 className="text-2xl sm:text-3xl font-bold text-ecommerce-text-primary">
-                  {t('shopPage.title')}
+                  {t('homepage.shopPage.title')}
                 </h1>
                 <p className="text-sm text-ecommerce-text-muted mt-1">
-                  {t('shopPage.subtitle')}
+                  {t('homepage.shopPage.subtitle')}
                 </p>
               </div>
 
@@ -829,7 +829,7 @@ function ProductsPageContent() {
                   type="text"
                   value={filters.search}
                   onChange={(e) => updateFilter('search', e.target.value)}
-                  placeholder={t('shopPage.searchProducts')}
+                  placeholder={t('homepage.shopPage.searchProducts')}
                   className="h-11 ps-11 pe-10 rounded-xl bg-white dark:bg-ecommerce-surface border-ecommerce-border text-sm text-ecommerce-text-primary placeholder:text-ecommerce-text-muted focus-visible:ring-ecommerce-red/30 focus-visible:border-ecommerce-red/50 transition-all"
                 />
                 {filters.search && (
@@ -857,7 +857,7 @@ function ProductsPageContent() {
                   className="lg:hidden shrink-0 rounded-xl border-ecommerce-border gap-2 relative h-9"
                 >
                   <SlidersHorizontal size={15} />
-                  {t('shopPage.openFilters')}
+                  {t('homepage.shopPage.openFilters')}
                   {activeFilterCount > 0 && (
                     <span className="absolute -top-1.5 -end-1.5 w-5 h-5 rounded-full bg-ecommerce-red text-white text-[10px] font-bold flex items-center justify-center">
                       {activeFilterCount}
@@ -869,7 +869,7 @@ function ProductsPageContent() {
                     <Skeleton className="h-4 w-40 inline-block" />
                   ) : (
                     <span>
-                      {t('shopPage.showingResults', {
+                      {t('homepage.shopPage.showingResults', {
                         shown: total === 0 ? 0 : `${showingStart}-${showingEnd}`,
                         total,
                       })}
@@ -924,7 +924,7 @@ function ProductsPageContent() {
                         ? 'bg-ecommerce-red text-white shadow-sm'
                         : 'text-ecommerce-text-muted hover:text-ecommerce-text-primary'
                     }`}
-                    aria-label={t('shopPage.gridView')}
+                    aria-label={t('homepage.shopPage.gridView')}
                   >
                     <Grid3X3 size={16} />
                   </button>
@@ -935,7 +935,7 @@ function ProductsPageContent() {
                         ? 'bg-ecommerce-red text-white shadow-sm'
                         : 'text-ecommerce-text-muted hover:text-ecommerce-text-primary'
                     }`}
-                    aria-label={t('shopPage.listView')}
+                    aria-label={t('homepage.shopPage.listView')}
                   >
                     <LayoutList size={16} />
                   </button>
@@ -954,7 +954,7 @@ function ProductsPageContent() {
                 >
                   <div className="flex items-center gap-2 flex-wrap">
                     <span className="text-xs font-semibold text-ecommerce-text-muted shrink-0">
-                      {t('shopPage.activeFilters')}:
+                      {t('homepage.shopPage.activeFilters')}:
                     </span>
                     {activeFilterChips.map((chip) => (
                       <Badge
@@ -971,7 +971,7 @@ function ProductsPageContent() {
                       onClick={resetFilters}
                       className="text-xs text-ecommerce-text-muted hover:text-ecommerce-red shrink-0 font-medium transition-colors"
                     >
-                      {t('shopPage.clearAll')}
+                      {t('homepage.shopPage.clearAll')}
                     </button>
                   </div>
                 </motion.div>
@@ -985,14 +985,14 @@ function ProductsPageContent() {
                 <div className="sticky top-24">
                   <div className="flex items-center justify-between mb-4">
                     <h2 className="text-sm font-bold text-ecommerce-text-primary">
-                      {t('shopPage.filterBy')}
+                      {t('homepage.shopPage.filterBy')}
                     </h2>
                     {activeFilterCount > 0 && (
                       <Badge
                         variant="secondary"
                         className="bg-ecommerce-red text-white rounded-full px-2 text-[10px]"
                       >
-                        {t('shopPage.filtersCount', { count: activeFilterCount })}
+                        {t('homepage.shopPage.filtersCount', { count: activeFilterCount })}
                       </Badge>
                     )}
                   </div>
@@ -1032,17 +1032,17 @@ function ProductsPageContent() {
                       <PackageSearch size={36} className="text-ecommerce-text-muted" />
                     </div>
                     <h3 className="text-lg font-bold text-ecommerce-text-primary mb-2">
-                      {t('shopPage.noResults')}
+                      {t('homepage.shopPage.noResults')}
                     </h3>
                     <p className="text-sm text-ecommerce-text-muted max-w-sm mb-3">
-                      {t('shopPage.noResultsDesc')}
+                      {t('homepage.shopPage.noResultsDesc')}
                     </p>
                     <div className="text-sm text-ecommerce-text-muted space-y-1 mb-5">
-                      <p>{t('shopPage.noResultsSuggestion')}</p>
+                      <p>{t('homepage.shopPage.noResultsSuggestion')}</p>
                       <ul className="list-disc list-inside space-y-0.5 text-xs">
-                        <li>{t('shopPage.tryBroadening')}</li>
-                        <li>{t('shopPage.clearFilters')}</li>
-                        <li>{t('shopPage.checkSpelling')}</li>
+                        <li>{t('homepage.shopPage.tryBroadening')}</li>
+                        <li>{t('homepage.shopPage.clearFilters')}</li>
+                        <li>{t('homepage.shopPage.checkSpelling')}</li>
                       </ul>
                     </div>
                     <Button
@@ -1050,7 +1050,7 @@ function ProductsPageContent() {
                       className="rounded-xl bg-ecommerce-red hover:bg-ecommerce-red/90 text-white gap-2"
                     >
                       <RotateCcw size={14} />
-                      {t('shopPage.resetFilters')}
+                      {t('homepage.shopPage.resetFilters')}
                     </Button>
                   </div>
                 ) : (
@@ -1121,7 +1121,7 @@ function ProductsPageContent() {
                           className="h-9 rounded-lg border-ecommerce-border gap-1.5 text-sm disabled:opacity-40"
                         >
                           <ChevronLeft size={15} />
-                          {t('shopPage.previousPage')}
+                          {t('homepage.shopPage.previousPage')}
                         </Button>
 
                         {/* Page Numbers */}
@@ -1181,7 +1181,7 @@ function ProductsPageContent() {
                           }
                           className="h-9 rounded-lg border-ecommerce-border gap-1.5 text-sm disabled:opacity-40"
                         >
-                          {t('shopPage.nextPage')}
+                          {t('homepage.shopPage.nextPage')}
                           <ChevronRight size={15} />
                         </Button>
                       </div>
@@ -1205,7 +1205,7 @@ function ProductsPageContent() {
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
                   <SheetTitle className="text-base font-bold text-ecommerce-text-primary">
-                    {t('shopPage.filterBy')}
+                    {t('homepage.shopPage.filterBy')}
                   </SheetTitle>
                   {activeFilterCount > 0 && (
                     <Badge className="bg-ecommerce-red text-white rounded-full px-2 text-[10px]">
@@ -1218,12 +1218,12 @@ function ProductsPageContent() {
                     onClick={resetFilters}
                     className="text-xs text-ecommerce-red font-medium hover:underline"
                   >
-                    {t('shopPage.clearAll')}
+                    {t('homepage.shopPage.clearAll')}
                   </button>
                 )}
               </div>
               <SheetDescription className="sr-only">
-                {t('shopPage.filterBy')}
+                {t('homepage.shopPage.filterBy')}
               </SheetDescription>
             </SheetHeader>
             <div className="px-4 py-4">{filterSidebarContent}</div>

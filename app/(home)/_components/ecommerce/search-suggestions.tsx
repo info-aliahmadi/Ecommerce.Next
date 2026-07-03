@@ -192,7 +192,7 @@ export function SearchSuggestions({ isOpen, onClose }: { isOpen: boolean; onClos
         <div className="py-2 max-h-96 overflow-y-auto scrollbar-thin">
           <div className="px-4 py-1.5">
             <p className="text-[10px] font-semibold text-ecommerce-text-muted uppercase tracking-wider">
-              {isApiLoading ? `${t('common.searchPlaceholder').split(' ')[0]}...` : `${t('common.searchPlaceholder').split(' ')[0]} (${mergedResults.length})`}
+              {isApiLoading ? `${t('homepage.common.searchPlaceholder').split('homepage. ')[0]}...` : `${t('homepage.common.searchPlaceholder').split('homepage. ')[0]} (${mergedResults.length})`}
             </p>
           </div>
           {mergedResults.map((item, index) => (
@@ -221,7 +221,7 @@ export function SearchSuggestions({ isOpen, onClose }: { isOpen: boolean; onClos
             >
               <Search size={14} className="text-ecommerce-text-muted shrink-0" />
               <span className="text-sm text-ecommerce-red font-medium flex items-center gap-1">
-                {t('searchSuggestions.searchFor', { query: searchQuery })}
+                {t('homepage.searchSuggestions.searchFor', { query: searchQuery })}
                 <ArrowRight size={12} />
               </span>
             </button>
@@ -241,10 +241,10 @@ export function SearchSuggestions({ isOpen, onClose }: { isOpen: boolean; onClos
           >
             <AlertCircle size={28} className="text-ecommerce-text-muted mx-auto mb-3" />
             <p className="text-sm font-medium text-ecommerce-text-primary mb-1">
-              {t('searchSuggestions.noResults')}
+              {t('homepage.searchSuggestions.noResults')}
             </p>
             <p className="text-xs text-ecommerce-text-muted max-w-[240px] mx-auto">
-              {t('searchSuggestions.tryDifferent')}
+              {t('homepage.searchSuggestions.tryDifferent')}
             </p>
             <div className="flex flex-wrap gap-2 justify-center mt-4">
               {POPULAR_TERMS.slice(0, 4).map((term) => (
@@ -265,12 +265,12 @@ export function SearchSuggestions({ isOpen, onClose }: { isOpen: boolean; onClos
       {showRecent && (
         <div className="py-2">
           <div className="px-4 py-1.5 flex items-center justify-between">
-            <p className="text-[10px] font-semibold text-ecommerce-text-muted uppercase tracking-wider">{t('searchSuggestions.recentSearches')}</p>
+            <p className="text-[10px] font-semibold text-ecommerce-text-muted uppercase tracking-wider">{t('homepage.searchSuggestions.recentSearches')}</p>
             <button
               onClick={clearRecent}
               className="text-[10px] text-ecommerce-red hover:underline"
             >
-              {t('common.clear')}
+              {t('homepage.common.clear')}
             </button>
           </div>
           {recentSearches.map((recent, index) => (
@@ -290,7 +290,7 @@ export function SearchSuggestions({ isOpen, onClose }: { isOpen: boolean; onClos
       {showPopular && (
         <div className="py-2">
           <div className="px-4 py-1.5">
-            <p className="text-[10px] font-semibold text-ecommerce-text-muted uppercase tracking-wider">{t('searchSuggestions.trendingSearches')}</p>
+            <p className="text-[10px] font-semibold text-ecommerce-text-muted uppercase tracking-wider">{t('homepage.searchSuggestions.trendingSearches')}</p>
           </div>
           {POPULAR_TERMS.map((term, index) => (
             <button
@@ -310,13 +310,13 @@ export function SearchSuggestions({ isOpen, onClose }: { isOpen: boolean; onClos
         <div className="border-t border-ecommerce-border px-4 py-2.5 bg-ecommerce-surface-hover/50">
           <p className="text-[11px] text-ecommerce-text-muted">
             <kbd className="px-1.5 py-0.5 rounded bg-ecommerce-surface border border-ecommerce-border text-[10px] font-mono">↑↓</kbd>
-            {' '}{t('common.searchPlaceholder').split(' ')[0]}
+            {' '}{t('homepage.common.searchPlaceholder').split('homepage. ')[0]}
             {' · '}
             <kbd className="px-1.5 py-0.5 rounded bg-ecommerce-surface border border-ecommerce-border text-[10px] font-mono">Enter</kbd>
-            {' '}{t('searchSuggestions.pressEnter').split(' ').slice(-2).join(' ')}
+            {' '}{t('homepage.searchSuggestions.pressEnter').split('homepage. ').slice(-2).join(' ')}
             {' · '}
             <kbd className="px-1.5 py-0.5 rounded bg-ecommerce-surface border border-ecommerce-border text-[10px] font-mono">Esc</kbd>
-            {' '}{t('common.close').toLowerCase()}
+            {' '}{t('homepage.common.close').toLowerCase()}
           </p>
         </div>
       )}

@@ -135,8 +135,8 @@ export function ProductBundles() {
         category: p.category,
       });
     });
-    toast.success(t('cart.itemAdded', { name: bundle.title }), {
-      description: t('bundles.itemsAtSpecialPrice', { count: bundle.products.length }),
+    toast.success(t('homepage.cart.itemAdded', { name: bundle.title }), {
+      description: t('homepage.bundles.itemsAtSpecialPrice', { count: bundle.products.length }),
     });
   };
 
@@ -152,13 +152,13 @@ export function ProductBundles() {
         >
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-ecommerce-amber/10 text-ecommerce-amber text-xs font-semibold mb-4">
             <Sparkles size={14} />
-            {t('bundles.curated')}
+            {t('homepage.bundles.curated')}
           </div>
           <h2 className="text-2xl md:text-3xl font-bold text-ecommerce-text-primary">
-            {t('bundles.title').split(' ').slice(0, -1).join(' ')} <span className="gradient-text">{t('bundles.title').split(' ').slice(-1)}</span>
+            {t('homepage.bundles.title').split('homepage. ').slice(0, -1).join(' ')} <span className="gradient-text">{t('homepage.bundles.title').split('homepage. ').slice(-1)}</span>
           </h2>
           <p className="text-ecommerce-text-secondary mt-2 text-sm md:text-base max-w-lg mx-auto">
-            {t('bundles.subtitleFull')}
+            {t('homepage.bundles.subtitleFull')}
           </p>
         </motion.div>
 
@@ -181,7 +181,7 @@ export function ProductBundles() {
                     <div className="absolute top-3 end-3 z-10">
                       <Badge className="bg-ecommerce-red text-white text-[10px] font-bold px-2 py-0.5 hover:bg-ecommerce-red gap-1">
                         <Percent size={10} />
-                        {t('bundles.save', { percent: percentage })}
+                        {t('homepage.bundles.save', { percent: percentage })}
                       </Badge>
                     </div>
 
@@ -229,7 +229,7 @@ export function ProductBundles() {
                       <div className="mt-5 pt-4 border-t border-ecommerce-border">
                         <div className="flex items-center justify-between mb-3">
                           <div>
-                            <p className="text-xs text-ecommerce-text-muted">{t('bundles.bundlePrice')}</p>
+                            <p className="text-xs text-ecommerce-text-muted">{t('homepage.bundles.bundlePrice')}</p>
                             <div className="flex items-baseline gap-2">
                               <span className="text-xl font-bold text-ecommerce-text-primary">
                                 ${totalPrice.toFixed(2)}
@@ -241,7 +241,7 @@ export function ProductBundles() {
                           </div>
                           <div className="text-right">
                             <p className="text-xs text-ecommerce-emerald font-semibold">
-                              {t('bundles.youSave', { amount: savings.toFixed(2) })}
+                              {t('homepage.bundles.youSave', { amount: savings.toFixed(2) })}
                             </p>
                           </div>
                         </div>
@@ -251,7 +251,7 @@ export function ProductBundles() {
                           className="w-full btn-shine bg-ecommerce-red hover:bg-ecommerce-red/90 text-white rounded-xl h-11 gap-2 font-semibold"
                         >
                           <ShoppingCart size={16} />
-                          {t('bundles.addToCart')}
+                          {t('homepage.bundles.addToCart')}
                         </Button>
                       </div>
                     </div>

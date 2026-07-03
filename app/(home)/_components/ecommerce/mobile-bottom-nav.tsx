@@ -31,11 +31,11 @@ export function MobileBottomNav() {
   ];
 
   const labels: Record<string, string> = {
-    home: t('mobileNav.home'),
-    search: t('common.searchPlaceholder').split(' ')[0],
-    cart: t('mobileNav.cart'),
-    wishlist: t('mobileNav.wishlist'),
-    account: t('mobileNav.account'),
+    home: t('homepage.mobileNav.home'),
+    search: t('homepage.common.searchPlaceholder').split('homepage. ')[0],
+    cart: t('homepage.mobileNav.cart'),
+    wishlist: t('homepage.mobileNav.wishlist'),
+    account: t('homepage.mobileNav.account'),
   };
 
   const handleClick = (item: NavItem, e: React.MouseEvent) => {

@@ -32,7 +32,7 @@ import { ProductBundles } from './_components/ecommerce/product-bundles';
 import { StockAlert } from './_components/ecommerce/stock-alert';
 import { ProductQuickStats } from './_components/ecommerce/product-quick-stats';
 import { ProductCatalog } from './_components/ecommerce/product-catalog';
-import { I18nProvider } from './i18n/provider';
+// import { I18nProvider } from './i18n/provider';
 import { useCompareStore } from './_lib/store';
 import { useScrollReveal } from './_hooks/use-scroll-reveal';
 import { Header } from './_components/ecommerce/header';
@@ -43,7 +43,7 @@ export default function Home() {
   const setCompareOpen = useCompareStore((s) => s.setCompareOpen);
 
   return (
-    <I18nProvider>
+    // <I18nProvider>
     <div className="min-h-screen flex flex-col pb-16 lg:pb-0" ref={scrollRef}>
       <ScrollProgress />
       <WelcomeToast />
@@ -85,6 +85,6 @@ export default function Home() {
       <ProductQuickStats />
       <ProductCatalog />
     </div>
-    </I18nProvider>
+    // </I18nProvider>
   );
 }

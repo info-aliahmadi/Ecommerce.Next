@@ -17,9 +17,9 @@ function StockBar({ stock, maxStock = 50 }: { stock: number; maxStock?: number }
     <div className="mt-2">
       <div className="flex items-center justify-between mb-1">
         <span className={`text-[10px] font-semibold ${isLow ? 'text-ecommerce-red' : 'text-ecommerce-text-muted'}`}>
-          {isLow ? t('common.onlyLeft', { count: stock }) : `${stock} ${t('common.inStock').toLowerCase()}`}
+          {isLow ? t('homepage.common.onlyLeft', { count: stock }) : `${stock} ${t('homepage.common.inStock').toLowerCase()}`}
         </span>
-        <span className="text-[10px] text-ecommerce-text-muted">{Math.round(percentage)}% {t('deals.available')}</span>
+        <span className="text-[10px] text-ecommerce-text-muted">{Math.round(percentage)}% {t('homepage.deals.available')}</span>
       </div>
       <div className="h-1.5 bg-ecommerce-surface-hover dark:bg-[#252836] rounded-full overflow-hidden">
         <motion.div
@@ -50,18 +50,18 @@ function DealUrgencyBanner() {
             <Flame size={22} className="text-ecommerce-red" />
           </div>
           <div>
-            <h3 className="font-bold text-ecommerce-text-primary text-sm">{t('deals.flashSaleLive')}</h3>
-            <p className="text-xs text-ecommerce-text-muted mt-0.5">{t('deals.flashSaleDesc')}</p>
+            <h3 className="font-bold text-ecommerce-text-primary text-sm">{t('homepage.deals.flashSaleLive')}</h3>
+            <p className="text-xs text-ecommerce-text-muted mt-0.5">{t('homepage.deals.flashSaleDesc')}</p>
           </div>
         </div>
         <div className="flex items-center gap-4 shrink-0">
           <div className="hidden sm:flex items-center gap-2 text-xs text-ecommerce-text-muted">
             <Clock size={14} className="text-ecommerce-red" />
-            <span>{t('deals.endsToday')}</span>
+            <span>{t('homepage.deals.endsToday')}</span>
           </div>
           <div className="flex items-center gap-1.5 text-xs font-medium">
             <TrendingDown size={14} className="text-ecommerce-emerald" />
-            <span className="text-ecommerce-emerald">{t('deals.upToOff')}</span>
+            <span className="text-ecommerce-emerald">{t('homepage.deals.upToOff')}</span>
           </div>
         </div>
       </div>
@@ -91,10 +91,10 @@ export function DealsSection() {
         <div className="flex flex-col sm:flex-row items-start sm:items-end justify-between gap-4 mb-6">
           <div>
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-ecommerce-teal/10 text-ecommerce-teal text-xs font-semibold uppercase tracking-widest mb-3">
-              <span className="badge-pulse">⏰</span> {t('deals.limitedTime')}
+              <span className="badge-pulse">⏰</span> {t('homepage.deals.limitedTime')}
             </div>
-            <h2 className="text-2xl sm:text-3xl font-extrabold text-ecommerce-text-primary tracking-tight">{t('deals.title')}</h2>
-            <p className="text-sm text-ecommerce-text-muted mt-1">{t('deals.subtitle')}</p>
+            <h2 className="text-2xl sm:text-3xl font-extrabold text-ecommerce-text-primary tracking-tight">{t('homepage.deals.title')}</h2>
+            <p className="text-sm text-ecommerce-text-muted mt-1">{t('homepage.deals.subtitle')}</p>
           </div>
           <Button
             asChild
@@ -102,7 +102,7 @@ export function DealsSection() {
             className="hidden sm:flex text-ecommerce-red hover:text-ecommerce-red/80 hover:bg-ecommerce-red/5 rounded-xl gap-1.5"
           >
             <Link href="#products">
-              {t('deals.shopDeals')} <ArrowRight size={16} />
+              {t('homepage.deals.shopDeals')} <ArrowRight size={16} />
             </Link>
           </Button>
         </div>
@@ -117,7 +117,7 @@ export function DealsSection() {
               <span className="text-base">🏷️</span>
             </div>
             <div>
-              <p className="text-xs text-ecommerce-text-muted">{t('deals.maxDiscount')}</p>
+              <p className="text-xs text-ecommerce-text-muted">{t('homepage.deals.maxDiscount')}</p>
               <p className="text-sm font-bold text-ecommerce-red">{maxDiscount}% OFF</p>
             </div>
           </div>
@@ -126,7 +126,7 @@ export function DealsSection() {
               <span className="text-base">💰</span>
             </div>
             <div>
-              <p className="text-xs text-ecommerce-text-muted">{t('deals.totalSavings')}</p>
+              <p className="text-xs text-ecommerce-text-muted">{t('homepage.deals.totalSavings')}</p>
               <p className="text-sm font-bold text-ecommerce-emerald">${totalSavings.toFixed(2)}</p>
             </div>
           </div>
@@ -135,8 +135,8 @@ export function DealsSection() {
               <span className="text-base">📦</span>
             </div>
             <div>
-              <p className="text-xs text-ecommerce-text-muted">{t('deals.dealsAvailable')}</p>
-              <p className="text-sm font-bold text-ecommerce-text-primary">{deals.length} {t('common.products')}</p>
+              <p className="text-xs text-ecommerce-text-muted">{t('homepage.deals.dealsAvailable')}</p>
+              <p className="text-sm font-bold text-ecommerce-text-primary">{deals.length} {t('homepage.common.products')}</p>
             </div>
           </div>
         </div>
@@ -181,7 +181,7 @@ export function DealsSection() {
             className="rounded-xl border-ecommerce-red text-ecommerce-red hover:bg-ecommerce-red/5 gap-1.5"
           >
             <Link href="#products">
-              {t('deals.shopDeals')} <ArrowRight size={16} />
+              {t('homepage.deals.shopDeals')} <ArrowRight size={16} />
             </Link>
           </Button>
         </div>

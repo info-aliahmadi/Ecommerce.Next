@@ -50,7 +50,7 @@ function RatingBreakdown({ rating, reviewCount }: { rating: number; reviewCount:
             <Star key={i} size={10} className={i < Math.floor(rating) ? 'fill-ecommerce-amber text-ecommerce-amber' : 'text-ecommerce-border'} />
           ))}
         </div>
-        <p className="text-[10px] text-ecommerce-text-muted mt-1">{t('quickView.reviews', { count: reviewCount })}</p>
+        <p className="text-[10px] text-ecommerce-text-muted mt-1">{t('homepage.quickView.reviews', { count: reviewCount })}</p>
       </div>
 
       {/* Breakdown Bars */}
@@ -90,20 +90,20 @@ function ReviewForm({ productId, productName }: { productId: string; productName
         body: JSON.stringify(data),
       });
       const json = await res.json();
-      if (!json.success) throw new Error(json.error || t('quickView.reviewForm.error'));
+      if (!json.success) throw new Error(json.error || t('homepage.quickView.reviewForm.error'));
       return json;
     },
     onSuccess: () => {
-      toast.success(t('quickView.reviewForm.success'));
+      toast.success(t('homepage.quickView.reviewForm.success'));
       setRating(0);
       setHoveredRating(0);
       setTitle('');
       setAuthor('');
-      setReviewText('');
+      setReviewText('homepage.');
       queryClient.invalidateQueries({ queryKey: ['reviews', productId] });
     },
     onError: (error) => {
-      toast.error(t('quickView.reviewForm.error'), { description: error.message });
+      toast.error(t('homepage.quickView.reviewForm.error'), { description: error.message });
     },
   });
 
@@ -122,29 +122,29 @@ function ReviewForm({ productId, productName }: { productId: string; productName
     <div className="space-y-3">
       {/* Author */}
       <div>
-        <label className="text-xs text-ecommerce-text-muted mb-1 block">{t('quickView.reviewForm.name')}</label>
+        <label className="text-xs text-ecommerce-text-muted mb-1 block">{t('homepage.quickView.reviewForm.name')}</label>
         <input
           value={author}
           onChange={(e) => setAuthor(e.target.value)}
-          placeholder={t('quickView.reviewForm.namePlaceholder')}
+          placeholder={t('homepage.quickView.reviewForm.namePlaceholder')}
           maxLength={50}
           className="w-full px-3 py-2 rounded-xl bg-ecommerce-surface-hover border border-ecommerce-border text-sm text-ecommerce-text-primary placeholder:text-ecommerce-text-muted focus:outline-none focus:border-ecommerce-purple/40 transition-colors"
         />
       </div>
       {/* Title */}
       <div>
-        <label className="text-xs text-ecommerce-text-muted mb-1 block">{t('quickView.reviewForm.reviewTitle')}</label>
+        <label className="text-xs text-ecommerce-text-muted mb-1 block">{t('homepage.quickView.reviewForm.reviewTitle')}</label>
         <input
           value={title}
           onChange={(e) => setTitle(e.target.value)}
-          placeholder={t('quickView.reviewForm.titlePlaceholder')}
+          placeholder={t('homepage.quickView.reviewForm.titlePlaceholder')}
           maxLength={100}
           className="w-full px-3 py-2 rounded-xl bg-ecommerce-surface-hover border border-ecommerce-border text-sm text-ecommerce-text-primary placeholder:text-ecommerce-text-muted focus:outline-none focus:border-ecommerce-purple/40 transition-colors"
         />
       </div>
       {/* Rating */}
       <div className="flex items-center gap-1">
-        <span className="text-xs text-ecommerce-text-muted me-1">{t('quickView.ratingBreakdown').replace(' Breakdown', '')}:</span>
+        <span className="text-xs text-ecommerce-text-muted me-1">{t('homepage.quickView.ratingBreakdown').replace(' Breakdown', '')}:</span>
         {Array.from({ length: 5 }).map((_, i) => (
           <button
             key={i}
@@ -170,7 +170,7 @@ function ReviewForm({ productId, productName }: { productId: string; productName
       <textarea
         value={reviewText}
         onChange={(e) => setReviewText(e.target.value)}
-        placeholder={t('quickView.reviewForm.commentPlaceholder')}
+        placeholder={t('homepage.quickView.reviewForm.commentPlaceholder')}
         rows={3}
         className="w-full px-3 py-2.5 rounded-xl bg-ecommerce-surface-hover border border-ecommerce-border text-sm text-ecommerce-text-primary placeholder:text-ecommerce-text-muted resize-none focus:outline-none focus:border-ecommerce-purple/40 transition-colors"
       />
@@ -182,7 +182,7 @@ function ReviewForm({ productId, productName }: { productId: string; productName
           className="h-8 px-4 bg-ecommerce-purple hover:bg-ecommerce-purple/90 text-white rounded-lg text-xs font-medium gap-1.5 transition-all"
         >
           {mutation.isPending ? <Loader2 size={12} className="animate-spin" /> : <Send size={12} />}
-          {mutation.isPending ? '...' : t('quickView.reviewForm.submit')}
+          {mutation.isPending ? '...' : t('homepage.quickView.reviewForm.submit')}
         </Button>
       </div>
     </div>
@@ -254,23 +254,23 @@ function ShippingTab() {
   const items = [
     {
       icon: Truck,
-      title: t('quickView.shippingInfo.freeShipping'),
-      desc: t('quickView.shippingInfo.freeShippingDesc'),
+      title: t('homepage.quickView.shippingInfo.freeShipping'),
+      desc: t('homepage.quickView.shippingInfo.freeShippingDesc'),
     },
     {
       icon: Clock,
-      title: t('quickView.shippingInfo.express'),
-      desc: t('quickView.shippingInfo.expressDesc'),
+      title: t('homepage.quickView.shippingInfo.express'),
+      desc: t('homepage.quickView.shippingInfo.expressDesc'),
     },
     {
       icon: Undo2,
-      title: t('quickView.shippingInfo.returns'),
-      desc: t('quickView.shippingInfo.returnsDesc'),
+      title: t('homepage.quickView.shippingInfo.returns'),
+      desc: t('homepage.quickView.shippingInfo.returnsDesc'),
     },
     {
       icon: Package,
-      title: t('quickView.shippingInfo.support'),
-      desc: t('quickView.shippingInfo.supportDesc'),
+      title: t('homepage.quickView.shippingInfo.support'),
+      desc: t('homepage.quickView.shippingInfo.supportDesc'),
     },
   ];
 
@@ -430,9 +430,9 @@ function QuickViewContent({ product, onClose }: { product: QuickViewProduct; onC
         category: product.category.name,
       });
     }
-    toast.success(t('cart.itemAdded', { name: product.name }), {
-      description: `${t('quickView.quantity')}: ${quantity} × $${product.price.toFixed(2)}`,
-      action: { label: t('common.addToCart'), onClick: () => useCartStore.getState().setCartOpen(true) },
+    toast.success(t('homepage.cart.itemAdded', { name: product.name }), {
+      description: `${t('homepage.quickView.quantity')}: ${quantity} × $${product.price.toFixed(2)}`,
+      action: { label: t('homepage.common.addToCart'), onClick: () => useCartStore.getState().setCartOpen(true) },
     });
     // Show checkmark animation
     setAddedToCart(true);
@@ -450,13 +450,13 @@ function QuickViewContent({ product, onClose }: { product: QuickViewProduct; onC
       image: product.image,
       category: product.category.name,
     });
-    toast.success(wishlisted ? t('common.removeFromWishlist') : t('common.addToWishlist'));
+    toast.success(wishlisted ? t('homepage.common.removeFromWishlist') : t('homepage.common.addToWishlist'));
   };
 
   const tabs = [
-    { key: 'description' as const, label: t('quickView.description') },
-    { key: 'reviews' as const, label: t('quickView.reviews', { count: reviewCount || product.reviewCount }) },
-    { key: 'shipping' as const, label: t('quickView.shipping') },
+    { key: 'description' as const, label: t('homepage.quickView.description') },
+    { key: 'reviews' as const, label: t('homepage.quickView.reviews', { count: reviewCount || product.reviewCount }) },
+    { key: 'shipping' as const, label: t('homepage.quickView.shipping') },
   ];
 
   return (
@@ -521,7 +521,7 @@ function QuickViewContent({ product, onClose }: { product: QuickViewProduct; onC
           <div className="absolute top-4 start-4 flex items-center gap-1.5 glass rounded-lg px-2.5 py-1 z-10">
             <ZoomIn size={12} className="text-white/70" />
             <span className="text-[10px] text-white/70 font-medium">
-              {isZoomed ? t('quickView.moveToPan') : t('quickView.hoverToZoom')}
+              {isZoomed ? t('homepage.quickView.moveToPan') : t('homepage.quickView.hoverToZoom')}
             </span>
           </div>
 
@@ -529,12 +529,12 @@ function QuickViewContent({ product, onClose }: { product: QuickViewProduct; onC
           <div className="absolute top-4 end-12 flex flex-col gap-1.5 z-10">
             {discount > 0 && (
               <Badge className="bg-ecommerce-red text-white border-0 text-xs font-bold px-2.5 py-1 rounded-lg shadow-sm">
-                -{discount}% {t('common.off', { percent: discount })}
+                -{discount}% {t('homepage.common.off', { percent: discount })}
               </Badge>
             )}
             {product.stock > 0 && product.stock < 10 && (
               <Badge className="bg-ecommerce-amber text-ecommerce-text-primary border-0 text-xs font-bold px-2.5 py-1 rounded-lg shadow-sm">
-                {t('common.onlyLeft', { count: product.stock })}
+                {t('homepage.common.onlyLeft', { count: product.stock })}
               </Badge>
             )}
           </div>
@@ -543,7 +543,7 @@ function QuickViewContent({ product, onClose }: { product: QuickViewProduct; onC
           <button
             onClick={handleWishlist}
             className="absolute top-4 end-4 w-10 h-10 rounded-xl glass shadow-md flex items-center justify-center hover:scale-110 transition-transform z-10"
-            aria-label={t('common.addToWishlist')}
+            aria-label={t('homepage.common.addToWishlist')}
           >
             <Heart size={18} className={wishlisted ? 'fill-ecommerce-red text-ecommerce-red' : 'text-white'} />
           </button>
@@ -556,7 +556,7 @@ function QuickViewContent({ product, onClose }: { product: QuickViewProduct; onC
                 className={`absolute start-3 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-white/90 dark:bg-ecommerce-surface/90 shadow-lg flex items-center justify-center hover:bg-white transition-all z-10 ${
                   showNavArrows ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-2'
                 }`}
-                aria-label={t('common.previous')}
+                aria-label={t('homepage.common.previous')}
               >
                 <ChevronLeft size={16} className="text-ecommerce-text-primary" />
               </button>
@@ -565,7 +565,7 @@ function QuickViewContent({ product, onClose }: { product: QuickViewProduct; onC
                 className={`absolute end-3 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-white/90 dark:bg-ecommerce-surface/90 shadow-lg flex items-center justify-center hover:bg-white transition-all z-10 ${
                   showNavArrows ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-2'
                 }`}
-                aria-label={t('common.next')}
+                aria-label={t('homepage.common.next')}
               >
                 <ChevronRight size={16} className="text-ecommerce-text-primary" />
               </button>
@@ -604,7 +604,7 @@ function QuickViewContent({ product, onClose }: { product: QuickViewProduct; onC
         <button
           onClick={onClose}
           className="absolute top-4 end-4 md:top-3 md:end-3 w-8 h-8 rounded-lg bg-ecommerce-surface-hover flex items-center justify-center hover:bg-ecommerce-border transition-colors z-10"
-          aria-label={t('common.close')}
+          aria-label={t('homepage.common.close')}
         >
           <X size={16} />
         </button>
@@ -614,7 +614,7 @@ function QuickViewContent({ product, onClose }: { product: QuickViewProduct; onC
           <span className="w-2 h-2 rounded-full" style={{ backgroundColor: product.category.color }} />
           <span className="text-xs font-medium text-ecommerce-text-muted uppercase tracking-wider">{product.category.name}</span>
           {product.sku && (
-            <span className="text-xs text-ecommerce-text-muted ms-auto">{t('common.sku')}: {product.sku}</span>
+            <span className="text-xs text-ecommerce-text-muted ms-auto">{t('homepage.common.sku')}: {product.sku}</span>
           )}
         </div>
 
@@ -652,7 +652,7 @@ function QuickViewContent({ product, onClose }: { product: QuickViewProduct; onC
             <>
               <span className="text-lg text-ecommerce-text-muted line-through">${product.comparePrice.toFixed(2)}</span>
               <Badge className="bg-ecommerce-emerald/10 text-ecommerce-emerald border-0 text-xs font-semibold">
-                {t('cart.savings')} ${(product.comparePrice - product.price).toFixed(2)}
+                {t('homepage.cart.savings')} ${(product.comparePrice - product.price).toFixed(2)}
               </Badge>
             </>
           )}
@@ -670,20 +670,20 @@ function QuickViewContent({ product, onClose }: { product: QuickViewProduct; onC
           {product.stock > 0 ? (
             <>
               <Check size={14} className="text-ecommerce-emerald" />
-              <span className="text-sm text-ecommerce-emerald font-medium">{t('common.inStock')}</span>
+              <span className="text-sm text-ecommerce-emerald font-medium">{t('homepage.common.inStock')}</span>
               {product.stock < 20 && (
-                <span className="text-xs text-ecommerce-amber font-medium">— {t('common.onlyLeft', { count: product.stock })}</span>
+                <span className="text-xs text-ecommerce-amber font-medium">— {t('homepage.common.onlyLeft', { count: product.stock })}</span>
               )}
             </>
           ) : (
-            <span className="text-sm text-ecommerce-red font-medium">{t('common.outOfStock')}</span>
+            <span className="text-sm text-ecommerce-red font-medium">{t('homepage.common.outOfStock')}</span>
           )}
         </div>
 
         {/* Color Variants */}
         <div className="mt-5">
           <div className="flex items-center gap-2 mb-2.5">
-            <span className="text-sm font-medium text-ecommerce-text-primary">{t('quickView.color')}</span>
+            <span className="text-sm font-medium text-ecommerce-text-primary">{t('homepage.quickView.color')}</span>
             <span className="text-xs text-ecommerce-text-muted">:</span>
             <span className="text-sm text-ecommerce-text-secondary">{selectedColor.name}</span>
           </div>
@@ -705,7 +705,7 @@ function QuickViewContent({ product, onClose }: { product: QuickViewProduct; onC
         <div className="mt-4">
           <div className="flex items-center justify-between mb-2.5">
             <div className="flex items-center gap-2">
-              <span className="text-sm font-medium text-ecommerce-text-primary">{t('quickView.size')}</span>
+              <span className="text-sm font-medium text-ecommerce-text-primary">{t('homepage.quickView.size')}</span>
               <span className="text-xs text-ecommerce-text-muted">:</span>
               <span className="text-sm text-ecommerce-text-secondary">{selectedSize}</span>
             </div>
@@ -714,7 +714,7 @@ function QuickViewContent({ product, onClose }: { product: QuickViewProduct; onC
               className="text-xs text-ecommerce-purple hover:text-ecommerce-purple/80 hover:underline cursor-pointer flex items-center gap-1"
             >
               <Ruler size={12} />
-              {t('quickView.sizeGuide')}
+              {t('homepage.quickView.sizeGuide')}
             </button>
           </div>
           <div className="flex gap-2 flex-wrap">
@@ -732,12 +732,12 @@ function QuickViewContent({ product, onClose }: { product: QuickViewProduct; onC
 
         {/* Quantity */}
         <div className="flex items-center gap-4 mt-5">
-          <span className="text-sm font-medium text-ecommerce-text-primary">{t('quickView.quantity')}</span>
+          <span className="text-sm font-medium text-ecommerce-text-primary">{t('homepage.quickView.quantity')}</span>
           <div className="flex items-center border border-ecommerce-border rounded-xl overflow-hidden">
             <button
               onClick={() => setQuantity(Math.max(1, quantity - 1))}
               className="w-10 h-10 flex items-center justify-center hover:bg-ecommerce-surface-hover transition-colors"
-              aria-label={t('common.previous')}
+              aria-label={t('homepage.common.previous')}
             >
               <Minus size={14} />
             </button>
@@ -745,19 +745,19 @@ function QuickViewContent({ product, onClose }: { product: QuickViewProduct; onC
             <button
               onClick={() => setQuantity(Math.min(product.stock || 99, quantity + 1))}
               className="w-10 h-10 flex items-center justify-center hover:bg-ecommerce-surface-hover transition-colors"
-              aria-label={t('common.next')}
+              aria-label={t('homepage.common.next')}
             >
               <Plus size={14} />
             </button>
           </div>
           <span className="text-sm text-ecommerce-text-muted">
-            {t('cart.total')}: <span className="font-bold text-ecommerce-text-primary">${(product.price * quantity).toFixed(2)}</span>
+            {t('homepage.cart.total')}: <span className="font-bold text-ecommerce-text-primary">${(product.price * quantity).toFixed(2)}</span>
           </span>
         </div>
 
         {/* Selected options summary */}
         <div className="mt-3 px-3 py-2 rounded-lg bg-ecommerce-surface-hover/60 border border-ecommerce-border/40">
-          <span className="text-xs text-ecommerce-text-muted">{t('quickView.selected', { value: '' }).replace(/:\s*$/, '')} </span>
+          <span className="text-xs text-ecommerce-text-muted">{t('homepage.quickView.selected', { value: '' }).replace(/:\s*$/, '')} </span>
           <span className="text-xs text-ecommerce-text-secondary font-medium">{selectedColor.name}</span>
           <span className="text-xs text-ecommerce-text-muted"> / </span>
           <span className="text-xs text-ecommerce-text-secondary font-medium">{selectedSize}</span>
@@ -782,7 +782,7 @@ function QuickViewContent({ product, onClose }: { product: QuickViewProduct; onC
                   className="flex items-center gap-2"
                 >
                   <Check size={18} />
-                  {t('quickView.added')}
+                  {t('homepage.quickView.added')}
                 </motion.span>
               ) : (
                 <motion.span
@@ -792,7 +792,7 @@ function QuickViewContent({ product, onClose }: { product: QuickViewProduct; onC
                   className="flex items-center gap-2"
                 >
                   <ShoppingCart size={16} />
-                  {t('quickView.addToCart')}
+                  {t('homepage.quickView.addToCart')}
                 </motion.span>
               )}
             </AnimatePresence>
@@ -811,39 +811,39 @@ function QuickViewContent({ product, onClose }: { product: QuickViewProduct; onC
         <div className="flex items-center gap-3 mt-4 pt-4 border-t border-ecommerce-border">
           <span className="text-xs font-medium text-ecommerce-text-muted flex items-center gap-1.5">
             <Share2 size={13} />
-            {t('common.share')}
+            {t('homepage.common.share')}
           </span>
           <div className="flex items-center gap-2">
             <button
               onClick={() => {
                 navigator.clipboard.writeText(window.location.href + '#product-' + product.id);
                 setCopied(true);
-                toast.success(t('common.linkCopied'));
+                toast.success(t('homepage.common.linkCopied'));
                 setTimeout(() => setCopied(false), 2000);
               }}
               className="w-9 h-9 rounded-xl flex items-center justify-center transition-all hover:scale-110 bg-ecommerce-surface-hover hover:bg-ecommerce-purple/10 text-ecommerce-text-secondary hover:text-ecommerce-purple"
-              title={t('common.copyLink')}
+              title={t('homepage.common.copyLink')}
             >
               {copied ? <Check size={15} className="text-green-500" /> : <Link2 size={15} />}
             </button>
             <button
               onClick={() => window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(product.name)}&url=${encodeURIComponent(window.location.href)}`, '_blank')}
               className="w-9 h-9 rounded-xl flex items-center justify-center transition-all hover:scale-110 bg-[#1DA1F2]/10 hover:bg-[#1DA1F2]/20 text-[#1DA1F2]"
-              title={t('common.shareOn', { platform: 'Twitter' })}
+              title={t('homepage.common.shareOn', { platform: 'Twitter' })}
             >
               <svg viewBox="0 0 24 24" fill="currentColor" width="15" height="15"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
             </button>
             <button
               onClick={() => window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(window.location.href)}`, '_blank')}
               className="w-9 h-9 rounded-xl flex items-center justify-center transition-all hover:scale-110 bg-[#1877F2]/10 hover:bg-[#1877F2]/20 text-[#1877F2]"
-              title={t('common.shareOn', { platform: 'Facebook' })}
+              title={t('homepage.common.shareOn', { platform: 'Facebook' })}
             >
               <svg viewBox="0 0 24 24" fill="currentColor" width="15" height="15"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
             </button>
             <button
               onClick={() => window.open(`https://pinterest.com/pin/create/button/?url=${encodeURIComponent(window.location.href)}&description=${encodeURIComponent(product.name)}`, '_blank')}
               className="w-9 h-9 rounded-xl flex items-center justify-center transition-all hover:scale-110 bg-[#E60023]/10 hover:bg-[#E60023]/20 text-[#E60023]"
-              title={t('common.shareOn', { platform: 'Pinterest' })}
+              title={t('homepage.common.shareOn', { platform: 'Pinterest' })}
             >
               <svg viewBox="0 0 24 24" fill="currentColor" width="15" height="15"><path d="M12.017 0C5.396 0 .029 5.367.029 11.987c0 5.079 3.158 9.417 7.618 11.162-.105-.949-.199-2.403.041-3.439.219-.937 1.406-5.957 1.406-5.957s-.359-.72-.359-1.781c0-1.668.967-2.914 2.171-2.914 1.023 0 1.518.769 1.518 1.69 0 1.029-.655 2.568-.994 3.995-.283 1.194.599 2.169 1.777 2.169 2.133 0 3.772-2.249 3.772-5.495 0-2.873-2.064-4.882-5.012-4.882-3.414 0-5.418 2.561-5.418 5.207 0 1.031.397 2.138.893 2.738a.36.36 0 01.083.345l-.333 1.36c-.053.22-.174.267-.402.161-1.499-.698-2.436-2.889-2.436-4.649 0-3.785 2.75-7.262 7.929-7.262 4.163 0 7.398 2.967 7.398 6.931 0 4.136-2.607 7.464-6.227 7.464-1.216 0-2.359-.631-2.75-1.378l-.748 2.853c-.271 1.043-1.002 2.35-1.492 3.146C9.57 23.812 10.763 24 12.017 24c6.624 0 11.99-5.367 11.99-11.988C24.007 5.367 18.641 0 12.017 0z"/></svg>
             </button>
@@ -853,9 +853,9 @@ function QuickViewContent({ product, onClose }: { product: QuickViewProduct; onC
         {/* Trust badges */}
         <div className="grid grid-cols-3 gap-2 mt-5 pt-5 border-t border-ecommerce-border">
           {[
-            { icon: Truck, label: t('hero.freeShipping') },
-            { icon: Shield, label: t('hero.securePayment') },
-            { icon: RotateCcw, label: t('hero.easyReturns') },
+            { icon: Truck, label: t('homepage.hero.freeShipping') },
+            { icon: Shield, label: t('homepage.hero.securePayment') },
+            { icon: RotateCcw, label: t('homepage.hero.easyReturns') },
           ].map((item) => (
             <div key={item.label} className="flex flex-col items-center gap-1 text-center">
               <item.icon size={16} className="text-ecommerce-text-muted" />
@@ -902,14 +902,14 @@ function QuickViewContent({ product, onClose }: { product: QuickViewProduct; onC
 
                   {/* Write a Review Form */}
                   <div className="pt-4 border-t border-ecommerce-border/50">
-                    <h4 className="text-sm font-semibold text-ecommerce-text-primary mb-3">{t('quickView.reviewForm.title')}</h4>
+                    <h4 className="text-sm font-semibold text-ecommerce-text-primary mb-3">{t('homepage.quickView.reviewForm.title')}</h4>
                     <ReviewForm productId={product.id} productName={product.name} />
                   </div>
 
                   {/* Reviews list from API */}
                   <div className="pt-4 border-t border-ecommerce-border/50">
                     <h4 className="text-sm font-semibold text-ecommerce-text-primary mb-3">
-                      {t('quickView.customerReviews')} {reviews.length > 0 && `(${reviews.length})`}
+                      {t('homepage.quickView.customerReviews')} {reviews.length > 0 && `(${reviews.length})`}
                     </h4>
 
                     {reviewsLoading ? (
@@ -925,8 +925,8 @@ function QuickViewContent({ product, onClose }: { product: QuickViewProduct; onC
                         <div className="w-12 h-12 rounded-full bg-ecommerce-surface-hover flex items-center justify-center mx-auto mb-3">
                           <BarChart3 size={20} className="text-ecommerce-text-muted" />
                         </div>
-                        <p className="text-sm text-ecommerce-text-secondary font-medium">{t('quickView.reviewForm.beFirst')}</p>
-                        <p className="text-xs text-ecommerce-text-muted mt-1">{t('quickView.reviewForm.commentPlaceholder')}</p>
+                        <p className="text-sm text-ecommerce-text-secondary font-medium">{t('homepage.quickView.reviewForm.beFirst')}</p>
+                        <p className="text-xs text-ecommerce-text-muted mt-1">{t('homepage.quickView.reviewForm.commentPlaceholder')}</p>
                       </div>
                     )}
                   </div>

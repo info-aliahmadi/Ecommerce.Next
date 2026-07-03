@@ -1,17 +1,15 @@
 // export { default } from "next-auth/middleware"
-import { NextRequestWithAuth, withAuth } from 'next-auth/middleware';
-import createIntlMiddleware from 'next-intl/middleware';
-import { locales, defaultLocale } from './locales/i18nHomepage';
+import {  withAuth } from 'next-auth/middleware';
 import AllRoutes from './app/dashboard/_lib/routes';
 import CONFIG from './config';
 import { NextRequest, NextResponse } from 'next/server';
 
-const intlHomepageMiddleware = createIntlMiddleware({
-  locales,
-  defaultLocale,
-  localePrefix: 'as-needed',
-  localeDetection: true
-});
+// const intlHomepageMiddleware = createIntlMiddleware({
+//   LOCALES,
+//   DEFAULT_LOCALE,
+//   localePrefix: 'as-needed',
+//   localeDetection: true
+// });
 
 export default withAuth(
   // function middleware(request: NextRequestWithAuth) {
@@ -25,11 +23,12 @@ export default withAuth(
   // },
 
   {
-    pages : {
-      signIn : CONFIG.LOGIN_PATH
+    pages: {
+      signIn: CONFIG.LOGIN_PATH
     },
     callbacks: {
       authorized: async ({ token, req }: { token: any; req: NextRequest }) => {
+
         if (req.nextUrl.pathname.startsWith('/dashboard')) {
           if (token) {
             const path = req.nextUrl.pathname;

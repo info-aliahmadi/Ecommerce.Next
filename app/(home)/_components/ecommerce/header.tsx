@@ -54,9 +54,9 @@ export function PromoBar() {
   const mounted = useMounted();
 
   const PROMO_MESSAGES = [
-    { full: t('header.promo1'), short: t('header.promo1Short') },
-    { full: t('header.promo2'), short: t('header.promo2Short') },
-    { full: t('header.promo3'), short: t('header.promo3Short') },
+    { full: t('homepage.header.promo1'), short: t('homepage.header.promo1Short') },
+    { full: t('homepage.header.promo2'), short: t('homepage.header.promo2Short') },
+    { full: t('homepage.header.promo3'), short: t('homepage.header.promo3Short') },
   ];
 
   useEffect(() => {
@@ -93,7 +93,7 @@ export function PromoBar() {
       <button
         onClick={() => setIsVisible(false)}
         className="absolute end-3 top-1/2 -translate-y-1/2 text-white/60 hover:text-white transition-colors p-1 hover:rotate-90 transition-transform duration-200 z-10"
-        aria-label={t('common.close')}
+        aria-label={t('homepage.common.close')}
       >
         <X size={14} />
       </button>
@@ -114,7 +114,7 @@ function ThemeToggle() {
     <button
       onClick={() => setTheme(isDark ? 'light' : 'dark')}
       className="p-2 rounded-lg hover:bg-ecommerce-surface-hover transition-colors relative group"
-      aria-label={t('header.toggleTheme')}
+      aria-label={t('homepage.header.toggleTheme')}
     >
       <AnimatePresence mode="wait">
         {isDark ? (
@@ -208,7 +208,7 @@ export function Header() {
             <button
               onClick={() => setMobileMenuOpen(!isMobileMenuOpen)}
               className="lg:hidden p-2 rounded-lg hover:bg-ecommerce-surface-hover transition-colors"
-              aria-label={isMobileMenuOpen ? t('header.closeMenu') : t('header.menu')}
+              aria-label={isMobileMenuOpen ? t('homepage.header.closeMenu') : t('homepage.header.menu')}
             >
               <AnimatePresence mode="wait">
                 {isMobileMenuOpen ? (
@@ -273,7 +273,7 @@ export function Header() {
               <div className="relative w-64 focus-within:w-80 transition-all duration-300 group">
                 <Search size={16} className="absolute start-3.5 top-1/2 -translate-y-1/2 text-ecommerce-text-muted group-focus-within:text-ecommerce-purple transition-colors" />
                 <Input
-                  placeholder={t('common.searchPlaceholder')}
+                  placeholder={t('homepage.common.searchPlaceholder')}
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   onFocus={() => setIsSearchFocused(true)}
@@ -284,7 +284,7 @@ export function Header() {
                   <button
                     onClick={() => { setSearchQuery(''); setIsSearchFocused(false); }}
                     className="absolute end-3 top-1/2 -translate-y-1/2 text-ecommerce-text-muted hover:text-ecommerce-text-primary transition-colors"
-                    aria-label={t('common.clear')}
+                    aria-label={t('homepage.common.clear')}
                   >
                     <X size={14} />
                   </button>
@@ -303,7 +303,7 @@ export function Header() {
               <button
                 onClick={() => setIsSearchOpen(!isSearchOpen)}
                 className="md:hidden p-2 rounded-lg hover:bg-ecommerce-surface-hover transition-colors"
-                aria-label={t('common.searchPlaceholder').replace('...', '')}
+                aria-label={t('homepage.common.searchPlaceholder').replace('...', '')}
               >
                 <Search size={20} className="text-ecommerce-text-secondary" />
               </button>
@@ -318,7 +318,7 @@ export function Header() {
               <button
                 onClick={() => setIsNotifOpen(true)}
                 className="relative p-2 rounded-lg hover:bg-ecommerce-surface-hover transition-colors group"
-                aria-label={t('header.notifications')}
+                aria-label={t('homepage.header.notifications')}
               >
                 <Bell size={18} className="text-ecommerce-text-secondary group-hover:text-ecommerce-amber transition-colors duration-200" />
                 {/* Unread dot */}
@@ -329,7 +329,7 @@ export function Header() {
               <button
                 onClick={() => setWishlistOpen(true)}
                 className="relative p-2 rounded-lg hover:bg-ecommerce-surface-hover transition-colors duration-200 group"
-                aria-label={t('mobileNav.wishlist')}
+                aria-label={t('homepage.mobileNav.wishlist')}
               >
                 <Heart size={18} className="text-ecommerce-text-secondary group-hover:text-ecommerce-rose transition-colors duration-200" />
                 {wishCount > 0 && (
@@ -346,7 +346,7 @@ export function Header() {
               </button>
 
               {/* Account */}
-              <Link href="/profile" className="hidden sm:flex p-2 rounded-lg hover:bg-ecommerce-surface-hover transition-colors duration-200" aria-label={t('header.account')}>
+              <Link href="/profile" className="hidden sm:flex p-2 rounded-lg hover:bg-ecommerce-surface-hover transition-colors duration-200" aria-label={t('homepage.header.account')}>
                 <User size={18} className="text-ecommerce-text-secondary" />
               </Link>
 
@@ -354,7 +354,7 @@ export function Header() {
               <button
                 onClick={toggleCart}
                 className="relative p-2 rounded-lg hover:bg-ecommerce-surface-hover transition-colors duration-200 group"
-                aria-label={t('header.cart')}
+                aria-label={t('homepage.header.cart')}
               >
                 <ShoppingCart size={18} className="text-ecommerce-text-secondary" />
                 {total > 0 && (
@@ -384,7 +384,7 @@ export function Header() {
                 <div className="pb-3 relative">
                   <Search size={16} className="absolute start-3.5 top-1/2 -translate-y-1/2 text-ecommerce-text-muted" />
                   <Input
-                    placeholder={t('common.searchPlaceholder')}
+                    placeholder={t('homepage.common.searchPlaceholder')}
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                     className="ps-10 pe-4 h-10 bg-ecommerce-surface-hover border-ecommerce-border rounded-xl text-sm"
@@ -423,7 +423,7 @@ export function Header() {
                   </motion.div>
                 ))}
                 <div className="pt-2 border-t border-ecommerce-border mt-2">
-                  <p className="px-4 py-1 text-xs font-semibold text-ecommerce-text-muted uppercase tracking-wider">{t('header.categories')}</p>
+                  <p className="px-4 py-1 text-xs font-semibold text-ecommerce-text-muted uppercase tracking-wider">{t('homepage.header.categories')}</p>
                   {categories.map((cat) => (
                     <Link
                       key={cat.id}

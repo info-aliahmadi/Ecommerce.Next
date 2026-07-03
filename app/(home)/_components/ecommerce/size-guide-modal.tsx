@@ -42,8 +42,8 @@ export function SizeGuideModal({ open, onClose }: SizeGuideModalProps) {
                 <Ruler size={18} className="text-ecommerce-teal" />
               </div>
               <div>
-                <span className="text-lg font-bold">{t('sizeGuide.title')}</span>
-                <p className="text-xs text-ecommerce-text-muted font-normal mt-0.5">{t('sizeGuide.findFit')}</p>
+                <span className="text-lg font-bold">{t('homepage.sizeGuide.title')}</span>
+                <p className="text-xs text-ecommerce-text-muted font-normal mt-0.5">{t('homepage.sizeGuide.findFit')}</p>
               </div>
             </DialogTitle>
           </DialogHeader>
@@ -81,7 +81,7 @@ export function SizeGuideModal({ open, onClose }: SizeGuideModalProps) {
 
           {/* How to Measure */}
           <div>
-            <h4 className="text-sm font-bold text-ecommerce-text-primary mb-3">{t('sizeGuide.howToMeasure')}</h4>
+            <h4 className="text-sm font-bold text-ecommerce-text-primary mb-3">{t('homepage.sizeGuide.howToMeasure')}</h4>
             <div className="space-y-3">
               {MEASUREMENT_STEPS.map((step) => (
                 <div key={step.num} className="flex items-start gap-3">
@@ -89,8 +89,8 @@ export function SizeGuideModal({ open, onClose }: SizeGuideModalProps) {
                     <span className="text-xs font-bold text-ecommerce-teal">{step.num}</span>
                   </div>
                   <div>
-                    <p className="text-sm font-medium text-ecommerce-text-primary">{t(`sizeGuide.${step.titleKey}` as any)}</p>
-                    <p className="text-xs text-ecommerce-text-muted mt-0.5 leading-relaxed">{t(`sizeGuide.${step.descKey}` as any)}</p>
+                    <p className="text-sm font-medium text-ecommerce-text-primary">{t(`homepage.sizeGuide.${step.titleKey}` as any)}</p>
+                    <p className="text-xs text-ecommerce-text-muted mt-0.5 leading-relaxed">{t(`homepage.sizeGuide.${step.descKey}` as any)}</p>
                   </div>
                 </div>
               ))}
@@ -101,7 +101,7 @@ export function SizeGuideModal({ open, onClose }: SizeGuideModalProps) {
           <div className="flex items-start gap-2.5 p-3.5 rounded-xl bg-ecommerce-amber/5 border border-ecommerce-amber/10">
             <span className="text-base shrink-0 mt-0.5">💡</span>
             <p className="text-xs text-ecommerce-text-secondary leading-relaxed">
-              <span className="font-semibold text-ecommerce-text-primary">{t('sizeGuide.proTip')}</span> {t('sizeGuide.proTipText')}
+              <span className="font-semibold text-ecommerce-text-primary">{t('homepage.sizeGuide.proTip')}</span> {t('homepage.sizeGuide.proTipText')}
             </p>
           </div>
         </div>

@@ -20,7 +20,7 @@ export function BrandMarquee() {
     <section className="py-8 sm:py-10 bg-white dark:bg-ecommerce-surface border-y border-ecommerce-border overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-6">
         <p className="text-center text-[11px] font-semibold uppercase tracking-[0.2em] text-ecommerce-text-muted">
-          {t('brandMarquee.subtitle')}
+          {t('homepage.brandMarquee.subtitle')}
         </p>
       </div>
 

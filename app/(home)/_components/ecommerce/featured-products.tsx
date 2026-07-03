@@ -55,10 +55,10 @@ export function FeaturedProducts() {
               className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-ecommerce-amber/10 text-ecommerce-amber text-xs font-semibold uppercase tracking-widest mb-3"
             >
               <Sparkles size={12} />
-              {t('featuredProducts.handpicked')}
+              {t('homepage.featuredProducts.handpicked')}
             </motion.div>
-            <h2 className="text-2xl sm:text-3xl font-extrabold text-ecommerce-text-primary tracking-tight">{t('featuredProducts.title')}</h2>
-            <p className="text-sm text-ecommerce-text-muted mt-1">{t('featuredProducts.subtitle')}</p>
+            <h2 className="text-2xl sm:text-3xl font-extrabold text-ecommerce-text-primary tracking-tight">{t('homepage.featuredProducts.title')}</h2>
+            <p className="text-sm text-ecommerce-text-muted mt-1">{t('homepage.featuredProducts.subtitle')}</p>
             {/* Decorative dot divider */}
             <div className="mt-4 flex items-center gap-2">
               <div className="h-px w-8 bg-ecommerce-border" />
@@ -71,7 +71,7 @@ export function FeaturedProducts() {
             variant="ghost"
             className="hidden sm:flex text-ecommerce-red hover:text-ecommerce-red/80 hover:bg-ecommerce-red/5 rounded-xl gap-1.5"
           >
-            <a href="#products">{t('common.viewAll')} <ArrowRight size={16} /></a>
+            <a href="#products">{t('homepage.common.viewAll')} <ArrowRight size={16} /></a>
           </Button>
         </div>
 

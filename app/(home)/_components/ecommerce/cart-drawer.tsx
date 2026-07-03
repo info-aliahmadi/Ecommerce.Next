@@ -35,7 +35,7 @@ function YouMightAlsoLike() {
     <div className="mt-6 pt-4 border-t border-ecommerce-border">
       <div className="flex items-center gap-1.5 mb-3">
         <Sparkles size={12} className="text-ecommerce-amber" />
-        <p className="text-xs font-semibold text-ecommerce-text-muted uppercase tracking-wider">{t('cart.suggestions')}</p>
+        <p className="text-xs font-semibold text-ecommerce-text-muted uppercase tracking-wider">{t('homepage.cart.suggestions')}</p>
       </div>
       <div className="space-y-2">
         {suggestions.map((item) => (
@@ -49,7 +49,7 @@ function YouMightAlsoLike() {
                 id: item.id, name: item.name, price: item.price,
                 comparePrice: item.comparePrice, image: item.image, category: item.category,
               });
-              toast.success(t('cart.itemAdded', { name: item.name }));
+              toast.success(t('homepage.cart.itemAdded', { name: item.name }));
             }}
           >
             <div className="w-11 h-11 rounded-lg overflow-hidden shrink-0 bg-muted">
@@ -96,7 +96,7 @@ export function CartDrawer() {
 
     const promo = PROMO_CODES[code];
     if (!promo) {
-      setPromoError(t('cart.invalidCoupon'));
+      setPromoError(t('homepage.cart.invalidCoupon'));
       return;
     }
 
@@ -138,7 +138,7 @@ export function CartDrawer() {
               <ShoppingBag size={16} className="text-ecommerce-red" />
             </div>
             <div className="flex items-center gap-2">
-              {t('cart.title')}
+              {t('homepage.cart.title')}
               {total > 0 && (
                 <span className="text-xs font-semibold text-white bg-ecommerce-red rounded-full px-2 py-0.5">{total}</span>
               )}
@@ -152,13 +152,13 @@ export function CartDrawer() {
             <div className="w-20 h-20 rounded-full bg-ecommerce-surface-hover dark:bg-[#252836] flex items-center justify-center mb-4">
               <ShoppingBag size={32} className="text-ecommerce-text-muted" />
             </div>
-            <h3 className="font-semibold text-ecommerce-text-primary text-lg">{t('cart.empty')}</h3>
-            <p className="text-sm text-ecommerce-text-muted mt-1.5">{t('cart.emptyDesc')}</p>
+            <h3 className="font-semibold text-ecommerce-text-primary text-lg">{t('homepage.cart.empty')}</h3>
+            <p className="text-sm text-ecommerce-text-muted mt-1.5">{t('homepage.cart.emptyDesc')}</p>
             <Button
               className="mt-6 bg-ecommerce-red hover:bg-ecommerce-red/90 rounded-xl px-6 h-11 font-medium transition-all hover:scale-105 active:scale-95"
               onClick={() => setCartOpen(false)}
             >
-              {t('cart.startShopping')}
+              {t('homepage.cart.startShopping')}
             </Button>
           </div>
         ) : (
@@ -167,7 +167,7 @@ export function CartDrawer() {
             {price < freeShippingThreshold && (
               <div className="px-6 py-3 bg-ecommerce-amber/5 border-b border-ecommerce-border">
                 <p className="text-xs text-ecommerce-text-secondary mb-1.5">
-                  {t('cart.awayFromFree', { amount: `$${remainingForFreeShipping.toFixed(2)}` })}
+                  {t('homepage.cart.awayFromFree', { amount: `$${remainingForFreeShipping.toFixed(2)}` })}
                 </p>
                 <div className="h-1.5 bg-ecommerce-border/50 rounded-full overflow-hidden">
                   <motion.div
@@ -182,7 +182,7 @@ export function CartDrawer() {
             {price >= freeShippingThreshold && (
               <div className="px-6 py-2.5 bg-ecommerce-emerald/5 border-b border-ecommerce-border">
                 <p className="text-xs text-ecommerce-emerald font-medium text-center">
-                  🎉 {t('cart.freeShippingMsg')}
+                  🎉 {t('homepage.cart.freeShippingMsg')}
                 </p>
               </div>
             )}
@@ -211,7 +211,7 @@ export function CartDrawer() {
                         <p className="text-xs text-ecommerce-text-muted mt-0.5">{item.category}</p>
                         {item.comparePrice && item.comparePrice > item.price && (
                           <p className="text-[10px] text-ecommerce-emerald font-medium mt-0.5">
-                            {t('cart.couponApplied', { amount: `$${(item.comparePrice - item.price).toFixed(2)}` })}
+                            {t('homepage.cart.couponApplied', { amount: `$${(item.comparePrice - item.price).toFixed(2)}` })}
                           </p>
                         )}
 
@@ -221,7 +221,7 @@ export function CartDrawer() {
                             <button
                               onClick={() => updateQuantity(item.id, item.quantity - 1)}
                               className="w-7 h-7 flex items-center justify-center hover:bg-ecommerce-surface-hover rounded-s-lg transition-colors"
-                              aria-label={t('common.previous')}
+                              aria-label={t('homepage.common.previous')}
                             >
                               <Minus size={12} />
                             </button>
@@ -229,7 +229,7 @@ export function CartDrawer() {
                             <button
                               onClick={() => updateQuantity(item.id, item.quantity + 1)}
                               className="w-7 h-7 flex items-center justify-center hover:bg-ecommerce-surface-hover rounded-e-lg transition-colors"
-                              aria-label={t('common.next')}
+                              aria-label={t('homepage.common.next')}
                             >
                               <Plus size={12} />
                             </button>
@@ -253,7 +253,7 @@ export function CartDrawer() {
                       <button
                         onClick={() => removeItem(item.id)}
                         className="self-start p-1 text-ecommerce-text-muted hover:text-ecommerce-red transition-colors"
-                        aria-label={t('cart.remove')}
+                        aria-label={t('homepage.cart.remove')}
                       >
                         <X size={14} />
                       </button>
@@ -283,7 +283,7 @@ export function CartDrawer() {
                       <button
                         onClick={handleRemovePromo}
                         className="ms-0.5 hover:text-red-500 transition-colors"
-                        aria-label={t('cart.remove')}
+                        aria-label={t('homepage.cart.remove')}
                       >
                         <X size={12} />
                       </button>
@@ -300,7 +300,7 @@ export function CartDrawer() {
                     }}
                     className="text-xs text-ecommerce-purple hover:text-ecommerce-purple/80 font-medium cursor-pointer flex items-center gap-1"
                   >
-                    {t('cart.promoCode')}
+                    {t('homepage.cart.promoCode')}
                     {isPromoOpen ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
                   </button>
                 )}
@@ -324,14 +324,14 @@ export function CartDrawer() {
                             setPromoError('');
                           }}
                           onKeyDown={handlePromoKeyDown}
-                          placeholder={t('cart.promoCode')}
+                          placeholder={t('homepage.cart.promoCode')}
                           className="h-10 rounded-xl bg-ecommerce-surface-hover border border-ecommerce-border text-sm px-3 flex-1 outline-none focus:ring-2 focus:ring-ecommerce-purple/30 placeholder:text-ecommerce-text-muted text-ecommerce-text-primary"
                         />
                         <button
                           onClick={handleApplyPromo}
                           className="h-10 px-4 bg-ecommerce-purple hover:bg-ecommerce-purple/90 text-white rounded-xl text-sm font-medium transition-colors shrink-0"
                         >
-                          {t('cart.applyCode')}
+                          {t('homepage.cart.applyCode')}
                         </button>
                       </div>
                       {promoError && (
@@ -348,26 +348,26 @@ export function CartDrawer() {
               <div className="border-t border-ecommerce-border px-6 py-4 shrink-0 bg-white dark:bg-ecommerce-surface space-y-3">
                 {savings > 0 && (
                   <div className="flex items-center justify-between px-3 py-2 rounded-xl bg-ecommerce-emerald/10 border border-ecommerce-emerald/10">
-                    <span className="text-sm text-ecommerce-emerald font-medium">🎉 {t('cart.savings')}</span>
+                    <span className="text-sm text-ecommerce-emerald font-medium">🎉 {t('homepage.cart.savings')}</span>
                     <span className="text-sm font-bold text-ecommerce-emerald">-${savings.toFixed(2)}</span>
                   </div>
                 )}
 
                 <div className="flex items-center justify-between">
-                  <span className="text-sm text-ecommerce-text-secondary">{t('cart.subtotal')}</span>
+                  <span className="text-sm text-ecommerce-text-secondary">{t('homepage.cart.subtotal')}</span>
                   <span className="text-xl font-bold text-ecommerce-text-primary">${price.toFixed(2)}</span>
                 </div>
 
                 {discount > 0 && (
                   <div className="flex items-center justify-between">
-                    <span className="text-sm text-ecommerce-emerald font-medium">{t('cart.savings')}</span>
+                    <span className="text-sm text-ecommerce-emerald font-medium">{t('homepage.cart.savings')}</span>
                     <span className="text-sm font-bold text-ecommerce-emerald">-${discount.toFixed(2)}</span>
                   </div>
                 )}
 
                 <p className="text-xs text-ecommerce-text-muted">
                   {(price >= freeShippingThreshold || appliedCode === 'FREESHIP')
-                    ? `✅ ${t('cart.freeShippingMsg')}`
+                    ? `✅ ${t('homepage.cart.freeShippingMsg')}`
                     : ''}
                 </p>
 

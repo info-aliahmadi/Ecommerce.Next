@@ -29,7 +29,7 @@ export function CookieBanner() {
 
   const handleAccept = useCallback(() => {
     localStorage.setItem(STORAGE_KEY, 'all');
-    window.dispatchEvent(new Event('storage'));
+    window.dispatchEvent(new Event('homepage.storage'));
   }, []);
 
   const handleCustomize = useCallback(() => {
@@ -58,9 +58,9 @@ export function CookieBanner() {
                     <Cookie size={20} className="text-ecommerce-red" />
                   </div>
                   <div className="min-w-0">
-                    <h3 className="text-sm font-semibold text-ecommerce-text-primary">{t('cookie.title')}</h3>
+                    <h3 className="text-sm font-semibold text-ecommerce-text-primary">{t('homepage.cookie.title')}</h3>
                     <p className="text-xs sm:text-sm text-ecommerce-text-secondary mt-1 leading-relaxed">
-                      {t('cookie.desc')}
+                      {t('homepage.cookie.desc')}
                     </p>
                   </div>
                 </div>
@@ -69,13 +69,13 @@ export function CookieBanner() {
                     onClick={handleAccept}
                     className="bg-ecommerce-red hover:bg-ecommerce-red/90 text-white rounded-xl h-10 px-5 text-sm font-medium transition-colors cursor-pointer"
                   >
-                    {t('cookie.acceptAll')}
+                    {t('homepage.cookie.acceptAll')}
                   </button>
                   <button
                     onClick={handleCustomize}
                     className="border border-ecommerce-border hover:bg-ecommerce-surface-hover rounded-xl h-10 px-5 text-sm font-medium text-ecommerce-text-primary transition-colors cursor-pointer"
                   >
-                    {t('cookie.customize')}
+                    {t('homepage.cookie.customize')}
                   </button>
                 </div>
               </div>
@@ -91,7 +91,7 @@ export function CookieBanner() {
           transition={{ duration: 0.2 }}
           onClick={handleReopen}
           className="fixed bottom-20 lg:bottom-4 end-4 z-30 w-10 h-10 rounded-full bg-white/95 dark:bg-ecommerce-surface/95 backdrop-blur-xl border border-ecommerce-border shadow-lg flex items-center justify-center hover:bg-ecommerce-surface-hover transition-colors cursor-pointer"
-          aria-label={t('cookie.settings')}
+          aria-label={t('homepage.cookie.settings')}
         >
           <Cookie size={18} className="text-ecommerce-text-secondary" />
         </motion.button>

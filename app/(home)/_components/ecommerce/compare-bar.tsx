@@ -46,7 +46,7 @@ export function CompareBar() {
 
           {/* Count badge */}
           <span className="text-[11px] font-bold text-ecommerce-text-secondary bg-ecommerce-surface-hover dark:bg-[#252836] px-2.5 py-1 rounded-lg">
-            {items.length} {items.length === 1 ? t('common.product') : t('common.products')}
+            {items.length} {items.length === 1 ? t('homepage.common.product') : t('homepage.common.products')}
           </span>
 
           {/* Compare button */}
@@ -55,7 +55,7 @@ export function CompareBar() {
             className="flex items-center gap-2 h-9 px-4 rounded-xl bg-ecommerce-purple hover:bg-ecommerce-purple/90 text-white text-xs font-semibold transition-all hover:scale-105 active:scale-95 shadow-sm"
           >
             <GitCompareArrows size={14} />
-            {t('common.compare')}
+            {t('homepage.common.compare')}
           </button>
         </div>
       </motion.div>

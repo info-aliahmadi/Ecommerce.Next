@@ -151,7 +151,7 @@ export function TrustSection() {
             transition={{ duration: 0.4, delay: 0.05 }}
             className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-ecommerce-text-primary tracking-tight"
           >
-            {t('trust.title')}
+            {t('homepage.trust.title')}
           </motion.h2>
           <motion.p
             initial={{ opacity: 0, y: 10 }}

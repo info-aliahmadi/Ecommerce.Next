@@ -9,11 +9,11 @@ export function useCategoryTranslations(): CategoryTranslationMap {
   const t = useTranslations();
 
   return useMemo(() => ({
-    'Electronics': t('categories.electronics'),
-    'Fashion': t('categories.fashion'),
-    'Home & Living': t('categories.homeLiving'),
-    'Sports': t('categories.sports'),
-    'Beauty': t('categories.beauty'),
-    'Books': t('categories.books'),
+    'Electronics': t('homepage.categories.electronics'),
+    'Fashion': t('homepage.categories.fashion'),
+    'Home & Living': t('homepage.categories.homeLiving'),
+    'Sports': t('homepage.categories.sports'),
+    'Beauty': t('homepage.categories.beauty'),
+    'Books': t('homepage.categories.books'),
   }), [t]);
 }

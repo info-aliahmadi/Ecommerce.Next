@@ -56,12 +56,12 @@ function CountdownTimer() {
   return (
     <div className="flex items-center gap-2 mt-6">
       <Clock size={14} className="text-ecommerce-amber" />
-      <span className="text-sm text-white/80">{t('hero.flashSaleEnds')}</span>
+      <span className="text-sm text-white/80">{t('homepage.hero.flashSaleEnds')}</span>
       <div className="flex items-center gap-1.5 ms-1">
         {[
-          { value: pad(timeLeft.hours), label: t('hero.hrs') },
-          { value: pad(timeLeft.minutes), label: t('hero.min') },
-          { value: pad(timeLeft.seconds), label: t('hero.sec') },
+          { value: pad(timeLeft.hours), label: t('homepage.hero.hrs') },
+          { value: pad(timeLeft.minutes), label: t('homepage.hero.min') },
+          { value: pad(timeLeft.seconds), label: t('homepage.hero.sec') },
         ].map((unit, i) => (
           <div key={unit.label} className="flex items-center gap-1.5">
             <div className="bg-white/15 backdrop-blur-sm rounded-lg px-2.5 py-1.5 min-w-[44px] text-center border border-white/10">
@@ -158,7 +158,7 @@ function LiveActivityStrip() {
     <div className="mt-8 pt-6 border-t border-white/10">
       <div className="flex items-center gap-2 mb-3">
         <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-        <span className="text-xs font-medium text-emerald-400 uppercase tracking-wider">{t('hero.live')}</span>
+        <span className="text-xs font-medium text-emerald-400 uppercase tracking-wider">{t('homepage.hero.live')}</span>
       </div>
       <AnimatePresence mode="wait">
         <motion.div
@@ -176,7 +176,7 @@ function LiveActivityStrip() {
             {activity.name[0]}
           </div>
           <p className="text-xs sm:text-sm text-white/70">
-            {t('hero.justPurchased', { name: activity.name, city: activity.city, product: activity.product })}
+            {t('homepage.hero.justPurchased', { name: activity.name, city: activity.city, product: activity.product })}
           </p>
         </motion.div>
       </AnimatePresence>
@@ -208,7 +208,7 @@ function SocialProofAvatars() {
         ))}
       </div>
       <p className="text-xs sm:text-sm text-white/60">
-        {t('hero.joinShoppers', { count: '50,000' })}
+        {t('homepage.hero.joinShoppers', { count: '50,000' })}
       </p>
     </div>
   );
@@ -222,8 +222,8 @@ function HeroCarousel() {
       image: 'https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=600&h=500&fit=crop',
       alt: 'Hot Deals collection',
       badgeEmoji: '🔥',
-      badgeTitle: t('hero.slideHotDeals'),
-      badgeSub: t('hero.slideHotDealsSub'),
+      badgeTitle: t('homepage.hero.slideHotDeals'),
+      badgeSub: t('homepage.hero.slideHotDealsSub'),
       badgeBg: 'bg-ecommerce-amber/20',
       badgePos: 'absolute -bottom-2 start-6',
       floatAnim: { y: [0, -8, 0] },
@@ -238,8 +238,8 @@ function HeroCarousel() {
       image: 'https://images.unsplash.com/photo-1483985988355-763728e1935b?w=600&h=500&fit=crop',
       alt: 'New Arrivals collection',
       badgeEmoji: '✨',
-      badgeTitle: t('hero.slideNewArrivals'),
-      badgeSub: t('hero.slideNewArrivalsSub'),
+      badgeTitle: t('homepage.hero.slideNewArrivals'),
+      badgeSub: t('homepage.hero.slideNewArrivalsSub'),
       badgeBg: 'bg-ecommerce-emerald/20',
       badgePos: 'absolute -top-3 -end-3',
       floatAnim: { y: [0, 6, 0] },
@@ -254,8 +254,8 @@ function HeroCarousel() {
       image: 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=600&h=500&fit=crop',
       alt: 'Premium Watches collection',
       badgeEmoji: '⌚',
-      badgeTitle: t('hero.slidePremium'),
-      badgeSub: t('hero.slidePremiumSub'),
+      badgeTitle: t('homepage.hero.slidePremium'),
+      badgeSub: t('homepage.hero.slidePremiumSub'),
       badgeBg: 'bg-ecommerce-purple/20',
       badgePos: 'absolute top-1/3 -start-5',
       floatAnim: { y: [0, -5, 0] },
@@ -270,8 +270,8 @@ function HeroCarousel() {
       image: 'https://images.unsplash.com/photo-1572635196237-14b3f281503f?w=600&h=500&fit=crop',
       alt: 'Athletic Gear collection',
       badgeEmoji: '👟',
-      badgeTitle: t('hero.slideAthletic'),
-      badgeSub: t('hero.slideAthleticSub'),
+      badgeTitle: t('homepage.hero.slideAthletic'),
+      badgeSub: t('homepage.hero.slideAthleticSub'),
       badgeBg: 'bg-ecommerce-teal/20',
       badgePos: 'absolute -bottom-2 end-6',
       floatAnim: { y: [0, -7, 0] },
@@ -370,16 +370,16 @@ export function HeroSection() {
   const t = useTranslations();
 
   const features = [
-    { icon: Truck, title: t('hero.freeShipping'), desc: t('hero.onOrders') },
-    { icon: Shield, title: t('hero.securePayment'), desc: t('hero.protected') },
-    { icon: RotateCcw, title: t('hero.easyReturns'), desc: t('hero.returnPolicy') },
-    { icon: Headphones, title: t('hero.support247'), desc: t('hero.helpCenter') },
+    { icon: Truck, title: t('homepage.hero.freeShipping'), desc: t('homepage.hero.onOrders') },
+    { icon: Shield, title: t('homepage.hero.securePayment'), desc: t('homepage.hero.protected') },
+    { icon: RotateCcw, title: t('homepage.hero.easyReturns'), desc: t('homepage.hero.returnPolicy') },
+    { icon: Headphones, title: t('homepage.hero.support247'), desc: t('homepage.hero.helpCenter') },
   ];
 
   const stats = [
-    { value: '10K+', label: t('hero.productsCount') },
-    { value: '50K+', label: t('hero.customersCount') },
-    { value: '99%', label: t('hero.satisfactionCount') },
+    { value: '10K+', label: t('homepage.hero.productsCount') },
+    { value: '50K+', label: t('homepage.hero.customersCount') },
+    { value: '99%', label: t('homepage.hero.satisfactionCount') },
   ];
 
   return (
@@ -405,13 +405,13 @@ export function HeroSection() {
                 className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/15 text-white text-sm font-medium mb-6 backdrop-blur-sm border border-white/10"
               >
                 <Zap size={14} className="text-ecommerce-amber" />
-                {t('hero.badge')}
+                {t('homepage.hero.badge')}
                 <span className="w-2 h-2 rounded-full bg-ecommerce-amber badge-pulse" />
               </motion.span>
               <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white leading-tight tracking-tight">
-                {t('hero.title1')}
+                {t('homepage.hero.title1')}
                 <span className="block mt-1">
-                  {t('hero.title2')}{' '}
+                  {t('homepage.hero.title2')}{' '}
                   <span className="relative inline-block">
                     Style
                     <svg className="absolute -bottom-1 start-0 w-full" viewBox="0 0 100 10" preserveAspectRatio="none">
@@ -421,7 +421,7 @@ export function HeroSection() {
                 </span>
               </h1>
               <p className="mt-6 text-lg text-white/80 max-w-lg mx-auto lg:mx-0 leading-relaxed">
-                {t('hero.subtitle')}
+                {t('homepage.hero.subtitle')}
               </p>
 
               {/* Countdown Timer */}
@@ -434,7 +434,7 @@ export function HeroSection() {
                   className="bg-white text-ecommerce-red hover:bg-white/90 rounded-xl px-8 h-12 text-base font-semibold shadow-lg shadow-black/10 transition-all hover:shadow-xl hover:scale-[1.02] active:scale-[0.98] glow-red"
                 >
                   <Link href="#products">
-                    {t('hero.shopNow')}
+                    {t('homepage.hero.shopNow')}
                     <ArrowRight size={18} className="ms-2 group-hover:translate-x-1 transition-transform" />
                   </Link>
                 </Button>
@@ -444,7 +444,7 @@ export function HeroSection() {
                   size="lg"
                   className="border-white/25 text-white hover:bg-white/10 rounded-xl px-8 h-12 text-base font-semibold backdrop-blur-sm hover:border-white/40 transition-all"
                 >
-                  <Link href="#categories">{t('hero.viewCategories')}</Link>
+                  <Link href="#categories">{t('homepage.hero.viewCategories')}</Link>
                 </Button>
               </div>
               {/* Stats */}

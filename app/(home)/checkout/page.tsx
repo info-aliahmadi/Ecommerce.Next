@@ -190,18 +190,18 @@ function CheckoutPageInner() {
   const handleApplyPromo = useCallback(() => {
     const code = promoInput.trim().toUpperCase();
     if (!VALID_PROMOS[code]) {
-      setPromoError(t('invalidCode'));
+      setPromoError(t('homepage.invalidCode'));
       return;
     }
     setAppliedPromo(code);
     setPromoError('');
-    setPromoInput('');
+    setPromoInput('homepage.');
     setShowPromoInput(false);
   }, [promoInput, t]);
 
   const handleRemovePromo = useCallback(() => {
     setAppliedPromo(null);
-    setPromoInput('');
+    setPromoInput('homepage.');
   }, []);
 
   /* ── Validation ───────────────────────────────────────────── */
@@ -271,7 +271,7 @@ function CheckoutPageInner() {
     <Card className="border-ecommerce-border bg-white dark:bg-ecommerce-surface overflow-hidden">
       <CardHeader className="pb-3">
         <CardTitle className="text-base font-bold text-ecommerce-text-primary">
-          {t('orderSummary')}
+          {t('homepage.orderSummary')}
         </CardTitle>
       </CardHeader>
       <CardContent className="space-y-4">
@@ -308,7 +308,7 @@ function CheckoutPageInner() {
               onClick={() => setShowPromoInput(true)}
               className="text-xs font-medium text-ecommerce-red hover:underline"
             >
-              {t('havePromoCode')}
+              {t('homepage.havePromoCode')}
             </button>
           )}
           {showPromoInput && !appliedPromo && (
@@ -316,7 +316,7 @@ function CheckoutPageInner() {
               <Input
                 value={promoInput}
                 onChange={(e) => { setPromoInput(e.target.value); setPromoError(''); }}
-                placeholder={t('enterCode')}
+                placeholder={t('homepage.enterCode')}
                 className="h-9 text-xs rounded-lg bg-ecommerce-surface-hover border-ecommerce-border"
                 onKeyDown={(e) => e.key === 'Enter' && handleApplyPromo()}
               />
@@ -325,7 +325,7 @@ function CheckoutPageInner() {
                 size="sm"
                 className="h-9 px-3 bg-ecommerce-red hover:bg-ecommerce-red/90 text-white rounded-lg text-xs shrink-0"
               >
-                {t('applyCode')}
+                {t('homepage.applyCode')}
               </Button>
             </div>
           )}
@@ -349,7 +349,7 @@ function CheckoutPageInner() {
                 onClick={handleRemovePromo}
                 className="text-[11px] font-medium text-red-500 hover:underline"
               >
-                {t('removeCode')}
+                {t('homepage.removeCode')}
               </button>
             </div>
           )}
@@ -360,34 +360,34 @@ function CheckoutPageInner() {
         {/* Totals */}
         <div className="space-y-2.5 text-sm">
           <div className="flex justify-between">
-            <span className="text-ecommerce-text-muted">{t('subtotal')}</span>
+            <span className="text-ecommerce-text-muted">{t('homepage.subtotal')}</span>
             <span className="font-medium text-ecommerce-text-primary">${subtotal.toFixed(2)}</span>
           </div>
           {savings > 0 && (
             <div className="flex justify-between">
-              <span className="text-ecommerce-emerald">{t('youSave')}</span>
+              <span className="text-ecommerce-emerald">{t('homepage.youSave')}</span>
               <span className="font-medium text-ecommerce-emerald">
                 -${savings.toFixed(2)}
               </span>
             </div>
           )}
           <div className="flex justify-between">
-            <span className="text-ecommerce-text-muted">{t('shipping')}</span>
+            <span className="text-ecommerce-text-muted">{t('homepage.shipping')}</span>
             <span className="font-medium text-ecommerce-text-primary">
               {shippingCost === 0 ? (
-                <span className="text-ecommerce-emerald">{t('freeShipping')}</span>
+                <span className="text-ecommerce-emerald">{t('homepage.freeShipping')}</span>
               ) : (
                 `$${shippingCost.toFixed(2)}`
               )}
             </span>
           </div>
           <div className="flex justify-between">
-            <span className="text-ecommerce-text-muted">{t('tax')}</span>
+            <span className="text-ecommerce-text-muted">{t('homepage.tax')}</span>
             <span className="font-medium text-ecommerce-text-primary">${tax.toFixed(2)}</span>
           </div>
           {discountAmount > 0 && (
             <div className="flex justify-between">
-              <span className="text-ecommerce-emerald">{t('discount')}</span>
+              <span className="text-ecommerce-emerald">{t('homepage.discount')}</span>
               <span className="font-medium text-ecommerce-emerald">
                 -${discountAmount.toFixed(2)}
               </span>
@@ -395,7 +395,7 @@ function CheckoutPageInner() {
           )}
           <Separator className="bg-ecommerce-border" />
           <div className="flex justify-between">
-            <span className="text-base font-bold text-ecommerce-text-primary">{t('total')}</span>
+            <span className="text-base font-bold text-ecommerce-text-primary">{t('homepage.total')}</span>
             <span className="text-xl font-extrabold text-ecommerce-red">
               ${total.toFixed(2)}
             </span>
@@ -404,7 +404,7 @@ function CheckoutPageInner() {
 
         {shippingCost > 0 && subtotal > 0 && (
           <p className="text-[11px] text-ecommerce-text-muted text-center">
-            {t('shippingNote')}
+            {t('homepage.shippingNote')}
           </p>
         )}
 
@@ -414,11 +414,11 @@ function CheckoutPageInner() {
         <div className="flex items-center justify-center gap-4 py-2">
           <div className="flex items-center gap-1.5 text-ecommerce-text-muted">
             <Lock size={14} />
-            <span className="text-[11px] font-medium">{t('sslEncrypted')}</span>
+            <span className="text-[11px] font-medium">{t('homepage.sslEncrypted')}</span>
           </div>
           <div className="flex items-center gap-1.5 text-ecommerce-text-muted">
             <Shield size={14} />
-            <span className="text-[11px] font-medium">{t('secureBadge')}</span>
+            <span className="text-[11px] font-medium">{t('homepage.secureBadge')}</span>
           </div>
         </div>
       </CardContent>
@@ -431,7 +431,7 @@ function CheckoutPageInner() {
         <AccordionTrigger className="text-sm font-bold text-ecommerce-text-primary hover:no-underline py-3">
           <div className="flex items-center gap-2">
             <ShoppingBag size={16} />
-            {t('cartSummary')} ({totalItems()} {t('itemsCount', { count: totalItems() })})
+            {t('homepage.cartSummary')} ({totalItems()} {t('homepage.itemsCount', { count: totalItems() })})
           </div>
         </AccordionTrigger>
         <AccordionContent>
@@ -445,11 +445,11 @@ function CheckoutPageInner() {
     <div className="space-y-6">
       {/* Contact Info */}
       <section>
-        <h3 className="text-lg font-bold text-ecommerce-text-primary mb-4">{t('contactInfo')}</h3>
+        <h3 className="text-lg font-bold text-ecommerce-text-primary mb-4">{t('homepage.contactInfo')}</h3>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <FormField
             id="firstName"
-            label={t('firstName')}
+            label={t('homepage.firstName')}
             value={shipping.firstName}
             onChange={(v) => setShippingField('firstName', v)}
             placeholder="John"
@@ -457,7 +457,7 @@ function CheckoutPageInner() {
           />
           <FormField
             id="lastName"
-            label={t('lastName')}
+            label={t('homepage.lastName')}
             value={shipping.lastName}
             onChange={(v) => setShippingField('lastName', v)}
             placeholder="Doe"
@@ -465,7 +465,7 @@ function CheckoutPageInner() {
           />
           <FormField
             id="email"
-            label={t('email')}
+            label={t('homepage.email')}
             value={shipping.email}
             onChange={(v) => setShippingField('email', v)}
             placeholder="john@example.com"
@@ -474,7 +474,7 @@ function CheckoutPageInner() {
           />
           <FormField
             id="phone"
-            label={t('phone')}
+            label={t('homepage.phone')}
             value={shipping.phone}
             onChange={(v) => setShippingField('phone', v)}
             placeholder="+1 (234) 567-890"
@@ -488,11 +488,11 @@ function CheckoutPageInner() {
 
       {/* Delivery Address */}
       <section>
-        <h3 className="text-lg font-bold text-ecommerce-text-primary mb-4">{t('deliveryAddress')}</h3>
+        <h3 className="text-lg font-bold text-ecommerce-text-primary mb-4">{t('homepage.deliveryAddress')}</h3>
         <div className="space-y-4">
           <FormField
             id="address"
-            label={t('address')}
+            label={t('homepage.address')}
             value={shipping.address}
             onChange={(v) => setShippingField('address', v)}
             placeholder="123 Main Street"
@@ -500,7 +500,7 @@ function CheckoutPageInner() {
           />
           <FormField
             id="apartment"
-            label={t('apartment')}
+            label={t('homepage.apartment')}
             value={shipping.apartment}
             onChange={(v) => setShippingField('apartment', v)}
             placeholder="Apt 4B"
@@ -508,7 +508,7 @@ function CheckoutPageInner() {
           <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
             <FormField
               id="city"
-              label={t('city')}
+              label={t('homepage.city')}
               value={shipping.city}
               onChange={(v) => setShippingField('city', v)}
               placeholder="New York"
@@ -516,7 +516,7 @@ function CheckoutPageInner() {
             />
             <FormField
               id="state"
-              label={t('state')}
+              label={t('homepage.state')}
               value={shipping.state}
               onChange={(v) => setShippingField('state', v)}
               placeholder="NY"
@@ -524,7 +524,7 @@ function CheckoutPageInner() {
             />
             <FormField
               id="zipCode"
-              label={t('zipCode')}
+              label={t('homepage.zipCode')}
               value={shipping.zipCode}
               onChange={(v) => setShippingField('zipCode', v)}
               placeholder="10001"
@@ -533,7 +533,7 @@ function CheckoutPageInner() {
           </div>
           <FormField
             id="country"
-            label={t('country')}
+            label={t('homepage.country')}
             value={shipping.country}
             onChange={(v) => setShippingField('country', v)}
             placeholder="United States"
@@ -547,7 +547,7 @@ function CheckoutPageInner() {
               className="border-ecommerce-border data-[state=checked]:bg-ecommerce-red data-[state=checked]:border-ecommerce-red"
             />
             <Label htmlFor="saveAddress" className="text-xs text-ecommerce-text-secondary cursor-pointer select-none">
-              {t('saveAddress')}
+              {t('homepage.saveAddress')}
             </Label>
           </div>
         </div>
@@ -558,7 +558,7 @@ function CheckoutPageInner() {
         onClick={handleContinueShipping}
         className="w-full h-12 bg-ecommerce-red hover:bg-ecommerce-red/90 text-white rounded-xl font-semibold text-sm gap-2 transition-all hover:scale-[1.01] active:scale-95"
       >
-        {t('step2')}
+        {t('homepage.step2')}
         <ChevronRight size={16} />
       </Button>
     </div>
@@ -566,16 +566,16 @@ function CheckoutPageInner() {
 
   const renderStepPayment = useCallback(() => {
     const paymentMethods: { value: PaymentMethod; label: string; icon: typeof CreditCard; desc?: string }[] = [
-      { value: 'card', label: t('creditCard'), icon: CreditCard },
-      { value: 'paypal', label: t('paypal'), icon: Shield },
-      { value: 'cod', label: t('cashOnDelivery'), icon: Truck, desc: t('codNote') },
+      { value: 'card', label: t('homepage.creditCard'), icon: CreditCard },
+      { value: 'paypal', label: t('homepage.paypal'), icon: Shield },
+      { value: 'cod', label: t('homepage.cashOnDelivery'), icon: Truck, desc: t('homepage.codNote') },
     ];
 
     return (
       <div className="space-y-6">
         <section>
-          <h3 className="text-lg font-bold text-ecommerce-text-primary mb-1">{t('selectPayment')}</h3>
-          <p className="text-sm text-ecommerce-text-muted">{t('securePayment')}</p>
+          <h3 className="text-lg font-bold text-ecommerce-text-primary mb-1">{t('homepage.selectPayment')}</h3>
+          <p className="text-sm text-ecommerce-text-muted">{t('homepage.securePayment')}</p>
         </section>
 
         {/* Payment method cards */}
@@ -636,7 +636,7 @@ function CheckoutPageInner() {
               <div className="space-y-4 pt-2">
                 <FormField
                   id="cardholderName"
-                  label={t('cardholderName')}
+                  label={t('homepage.cardholderName')}
                   value={payment.cardholderName}
                   onChange={(v) => setPaymentField('cardholderName', v)}
                   placeholder="John Doe"
@@ -644,7 +644,7 @@ function CheckoutPageInner() {
                 />
                 <FormField
                   id="cardNumber"
-                  label={t('cardNumber')}
+                  label={t('homepage.cardNumber')}
                   value={payment.cardNumber}
                   onChange={(v) => setPaymentField('cardNumber', formatCardNumber(v))}
                   placeholder="4242 4242 4242 4242"
@@ -653,7 +653,7 @@ function CheckoutPageInner() {
                 <div className="grid grid-cols-2 gap-4">
                   <FormField
                     id="expiryDate"
-                    label={t('expiryDate')}
+                    label={t('homepage.expiryDate')}
                     value={payment.expiryDate}
                     onChange={(v) => setPaymentField('expiryDate', formatExpiry(v))}
                     placeholder="MM/YY"
@@ -661,7 +661,7 @@ function CheckoutPageInner() {
                   />
                   <FormField
                     id="cvc"
-                    label={t('cvc')}
+                    label={t('homepage.cvc')}
                     value={payment.cvc}
                     onChange={(v) => setPaymentField('cvc', v.replace(/\D/g, '').slice(0, 4))}
                     placeholder="123"
@@ -681,13 +681,13 @@ function CheckoutPageInner() {
             className="flex-1 h-12 rounded-xl font-semibold text-sm gap-2 border-ecommerce-border text-ecommerce-text-primary hover:bg-ecommerce-surface-hover"
           >
             <ChevronLeft size={16} />
-            {t('step1')}
+            {t('homepage.step1')}
           </Button>
           <Button
             onClick={handleContinuePayment}
             className="flex-1 h-12 bg-ecommerce-red hover:bg-ecommerce-red/90 text-white rounded-xl font-semibold text-sm gap-2 transition-all hover:scale-[1.01] active:scale-95"
           >
-            {t('step3')}
+            {t('homepage.step3')}
             <ChevronRight size={16} />
           </Button>
         </div>
@@ -699,7 +699,7 @@ function CheckoutPageInner() {
     <div className="space-y-6">
       {/* Order Items */}
       <section>
-        <h3 className="text-lg font-bold text-ecommerce-text-primary mb-4">{t('orderItems')}</h3>
+        <h3 className="text-lg font-bold text-ecommerce-text-primary mb-4">{t('homepage.orderItems')}</h3>
         <div className="space-y-3 max-h-96 overflow-y-auto pe-1">
           {items.map((item: CartItem) => (
             <div
@@ -732,13 +732,13 @@ function CheckoutPageInner() {
       {/* Shipping Address Summary */}
       <section>
         <div className="flex items-center justify-between mb-3">
-          <h4 className="text-sm font-bold text-ecommerce-text-primary">{t('deliveryAddress')}</h4>
+          <h4 className="text-sm font-bold text-ecommerce-text-primary">{t('homepage.deliveryAddress')}</h4>
           <button
             onClick={() => goToStep(1, -1)}
             className="text-xs font-medium text-ecommerce-red hover:underline flex items-center gap-1"
           >
             <Edit3 size={12} />
-            {t('editShipping')}
+            {t('homepage.editShipping')}
           </button>
         </div>
         <div className="p-3 rounded-xl bg-ecommerce-surface-hover border border-ecommerce-border text-sm text-ecommerce-text-secondary space-y-1">
@@ -759,13 +759,13 @@ function CheckoutPageInner() {
       {/* Payment Method Summary */}
       <section>
         <div className="flex items-center justify-between mb-3">
-          <h4 className="text-sm font-bold text-ecommerce-text-primary">{t('selectPayment')}</h4>
+          <h4 className="text-sm font-bold text-ecommerce-text-primary">{t('homepage.selectPayment')}</h4>
           <button
             onClick={() => goToStep(2, -1)}
             className="text-xs font-medium text-ecommerce-red hover:underline flex items-center gap-1"
           >
             <Edit3 size={12} />
-            {t('editPayment')}
+            {t('homepage.editPayment')}
           </button>
         </div>
         <div className="p-3 rounded-xl bg-ecommerce-surface-hover border border-ecommerce-border text-sm text-ecommerce-text-secondary">
@@ -782,10 +782,10 @@ function CheckoutPageInner() {
             <div>
               <p className="font-medium text-ecommerce-text-primary">
                 {payment.method === 'card'
-                  ? t('creditCard')
+                  ? t('homepage.creditCard')
                   : payment.method === 'paypal'
-                    ? t('paypal')
-                    : t('cashOnDelivery')}
+                    ? t('homepage.paypal')
+                    : t('homepage.cashOnDelivery')}
               </p>
               {payment.method === 'card' && payment.cardNumber && (
                 <p className="text-xs text-ecommerce-text-muted mt-0.5">
@@ -802,34 +802,34 @@ function CheckoutPageInner() {
       {/* Order Totals */}
       <section className="space-y-2.5 text-sm">
         <div className="flex justify-between">
-          <span className="text-ecommerce-text-muted">{t('subtotal')}</span>
+          <span className="text-ecommerce-text-muted">{t('homepage.subtotal')}</span>
           <span className="font-medium text-ecommerce-text-primary">${subtotal.toFixed(2)}</span>
         </div>
         {savings > 0 && (
           <div className="flex justify-between">
-            <span className="text-ecommerce-emerald">{t('youSave')}</span>
+            <span className="text-ecommerce-emerald">{t('homepage.youSave')}</span>
             <span className="font-medium text-ecommerce-emerald">
               -${savings.toFixed(2)}
             </span>
           </div>
         )}
         <div className="flex justify-between">
-          <span className="text-ecommerce-text-muted">{t('shipping')}</span>
+          <span className="text-ecommerce-text-muted">{t('homepage.shipping')}</span>
           <span className="font-medium text-ecommerce-text-primary">
             {shippingCost === 0 ? (
-              <span className="text-ecommerce-emerald">{t('freeShipping')}</span>
+              <span className="text-ecommerce-emerald">{t('homepage.freeShipping')}</span>
             ) : (
               `$${shippingCost.toFixed(2)}`
             )}
           </span>
         </div>
         <div className="flex justify-between">
-          <span className="text-ecommerce-text-muted">{t('tax')} (8%)</span>
+          <span className="text-ecommerce-text-muted">{t('homepage.tax')} (8%)</span>
           <span className="font-medium text-ecommerce-text-primary">${tax.toFixed(2)}</span>
         </div>
         {discountAmount > 0 && (
           <div className="flex justify-between">
-            <span className="text-ecommerce-emerald">{t('discount')}</span>
+            <span className="text-ecommerce-emerald">{t('homepage.discount')}</span>
             <span className="font-medium text-ecommerce-emerald">
               -${discountAmount.toFixed(2)}
             </span>
@@ -837,7 +837,7 @@ function CheckoutPageInner() {
         )}
         <Separator className="bg-ecommerce-border" />
         <div className="flex justify-between">
-          <span className="text-base font-bold text-ecommerce-text-primary">{t('total')}</span>
+          <span className="text-base font-bold text-ecommerce-text-primary">{t('homepage.total')}</span>
           <span className="text-xl font-extrabold text-ecommerce-red">
             ${total.toFixed(2)}
           </span>
@@ -852,7 +852,7 @@ function CheckoutPageInner() {
             className="text-xs font-medium text-ecommerce-red hover:underline flex items-center gap-1"
           >
             <Tag size={12} />
-            {t('havePromoCode')}
+            {t('homepage.havePromoCode')}
           </button>
         )}
         {showPromoInput && !appliedPromo && (
@@ -860,7 +860,7 @@ function CheckoutPageInner() {
             <Input
               value={promoInput}
               onChange={(e) => { setPromoInput(e.target.value); setPromoError(''); }}
-              placeholder={t('enterCode')}
+              placeholder={t('homepage.enterCode')}
               className="h-10 text-sm rounded-xl bg-ecommerce-surface-hover border-ecommerce-border"
               onKeyDown={(e) => e.key === 'Enter' && handleApplyPromo()}
             />
@@ -868,7 +868,7 @@ function CheckoutPageInner() {
               onClick={handleApplyPromo}
               className="h-10 px-5 bg-ecommerce-red hover:bg-ecommerce-red/90 text-white rounded-xl text-sm font-medium shrink-0"
             >
-              {t('applyCode')}
+              {t('homepage.applyCode')}
             </Button>
           </div>
         )}
@@ -878,14 +878,14 @@ function CheckoutPageInner() {
             <div className="flex items-center gap-2">
               <CheckCircle2 size={14} className="text-ecommerce-emerald" />
               <span className="text-xs font-medium text-ecommerce-emerald">
-                {t('codeApplied')} ({appliedPromo})
+                {t('homepage.codeApplied')} ({appliedPromo})
               </span>
             </div>
             <button
               onClick={handleRemovePromo}
               className="text-[11px] font-medium text-red-500 hover:underline"
             >
-              {t('removeCode')}
+              {t('homepage.removeCode')}
             </button>
           </div>
         )}
@@ -895,11 +895,11 @@ function CheckoutPageInner() {
       <div className="flex items-center justify-center gap-6 py-2">
         <div className="flex items-center gap-1.5 text-ecommerce-text-muted">
           <Lock size={14} />
-          <span className="text-xs font-medium">{t('sslEncrypted')}</span>
+          <span className="text-xs font-medium">{t('homepage.sslEncrypted')}</span>
         </div>
         <div className="flex items-center gap-1.5 text-ecommerce-text-muted">
           <Shield size={14} />
-          <span className="text-xs font-medium">{t('secureBadge')}</span>
+          <span className="text-xs font-medium">{t('homepage.secureBadge')}</span>
         </div>
       </div>
 
@@ -912,12 +912,12 @@ function CheckoutPageInner() {
         {isPlacing ? (
           <>
             <Loader2 size={20} className="animate-spin" />
-            {t('placingOrder')}
+            {t('homepage.placingOrder')}
           </>
         ) : (
           <>
             <Lock size={18} />
-            {t('placeOrder')} — ${total.toFixed(2)}
+            {t('homepage.placeOrder')} — ${total.toFixed(2)}
           </>
         )}
       </Button>
@@ -929,7 +929,7 @@ function CheckoutPageInner() {
         className="w-full h-10 text-ecommerce-text-muted hover:text-ecommerce-text-primary hover:bg-ecommerce-surface-hover rounded-xl text-sm gap-1"
       >
         <ChevronLeft size={14} />
-        {t('step2')}
+        {t('homepage.step2')}
       </Button>
     </div>
   ), [items, shipping, payment, subtotal, savings, shippingCost, tax, discountAmount, total, appliedPromo, showPromoInput, promoInput, promoError, isPlacing, t, goToStep, handleApplyPromo, handleRemovePromo, handlePlaceOrder]);
@@ -958,7 +958,7 @@ function CheckoutPageInner() {
         transition={{ delay: 0.4 }}
         className="text-2xl sm:text-3xl font-extrabold text-ecommerce-text-primary mb-2"
       >
-        {t('orderPlaced')}
+        {t('homepage.orderPlaced')}
       </motion.h1>
 
       <motion.p
@@ -967,7 +967,7 @@ function CheckoutPageInner() {
         transition={{ delay: 0.5 }}
         className="text-sm text-ecommerce-text-muted max-w-md mb-8"
       >
-        {t('orderPlacedDesc')}
+        {t('homepage.orderPlacedDesc')}
       </motion.p>
 
       {/* Order Number */}
@@ -977,7 +977,7 @@ function CheckoutPageInner() {
         transition={{ delay: 0.6 }}
         className="w-full max-w-sm p-4 rounded-xl bg-ecommerce-surface-hover border border-ecommerce-border mb-6"
       >
-        <p className="text-xs text-ecommerce-text-muted mb-1">{t('orderNumber', { number: orderNumber }).replace(`Order #${orderNumber}`, '') || 'Order Number'}</p>
+        <p className="text-xs text-ecommerce-text-muted mb-1">{t('homepage.orderNumber', { number: orderNumber }).replace(`Order #${orderNumber}`, '') || 'Order Number'}</p>
         <p className="text-lg font-bold text-ecommerce-text-primary font-mono">{orderNumber}</p>
       </motion.div>
 
@@ -990,8 +990,8 @@ function CheckoutPageInner() {
       >
         <Package size={20} className="text-ecommerce-emerald shrink-0" />
         <div className="text-start">
-          <p className="text-sm font-semibold text-ecommerce-emerald">{t('estimatedDelivery')}</p>
-          <p className="text-xs text-ecommerce-emerald/70">{t('deliveryDays')}</p>
+          <p className="text-sm font-semibold text-ecommerce-emerald">{t('homepage.estimatedDelivery')}</p>
+          <p className="text-xs text-ecommerce-emerald/70">{t('homepage.deliveryDays')}</p>
         </div>
       </motion.div>
 
@@ -1002,7 +1002,7 @@ function CheckoutPageInner() {
         transition={{ delay: 0.8 }}
         className="text-xs text-ecommerce-text-muted mb-8"
       >
-        {t('emailConfirmation', { email: shipping.email || 'your email' })}
+        {t('homepage.emailConfirmation', { email: shipping.email || 'your email' })}
       </motion.p>
 
       {/* Action buttons */}
@@ -1014,7 +1014,7 @@ function CheckoutPageInner() {
       >
         <Button className="flex-1 h-12 bg-ecommerce-red hover:bg-ecommerce-red/90 text-white rounded-xl font-semibold text-sm gap-2 transition-all hover:scale-105">
           <Truck size={16} />
-          {t('trackOrder')}
+          {t('homepage.trackOrder')}
         </Button>
         <Link href="/products" className="flex-1">
           <Button
@@ -1022,7 +1022,7 @@ function CheckoutPageInner() {
             className="w-full h-12 rounded-xl font-semibold text-sm gap-2 border-ecommerce-border text-ecommerce-text-primary hover:bg-ecommerce-surface-hover transition-all hover:scale-105"
           >
             <ShoppingBag size={16} />
-            {t('continueShopping')}
+            {t('homepage.continueShopping')}
           </Button>
         </Link>
       </motion.div>
@@ -1036,11 +1036,11 @@ function CheckoutPageInner() {
       >
         <button className="flex items-center gap-1.5 text-xs text-ecommerce-text-muted hover:text-ecommerce-red transition-colors">
           <Download size={14} />
-          {t('downloadInvoice')}
+          {t('homepage.downloadInvoice')}
         </button>
         <Separator orientation="vertical" className="h-4 bg-ecommerce-border" />
         <button className="flex items-center gap-1.5 text-xs text-ecommerce-text-muted hover:text-ecommerce-red transition-colors">
-          {t('needHelp')}?
+          {t('homepage.needHelp')}?
         </button>
       </motion.div>
 
@@ -1051,7 +1051,7 @@ function CheckoutPageInner() {
         transition={{ delay: 1.1 }}
         className="text-[11px] text-ecommerce-text-muted mt-6"
       >
-        {t('contactSupport')}
+        {t('homepage.contactSupport')}
       </motion.p>
     </div>
   ), [t, orderNumber, shipping.email]);
@@ -1070,13 +1070,13 @@ function CheckoutPageInner() {
               <ShoppingBag size={40} className="text-ecommerce-text-muted" />
             </div>
             <h1 className="text-2xl font-extrabold text-ecommerce-text-primary mb-2">
-              {t('emptyCart')}
+              {t('homepage.emptyCart')}
             </h1>
-            <p className="text-ecommerce-text-muted mb-8">{t('emptyCartDesc')}</p>
+            <p className="text-ecommerce-text-muted mb-8">{t('homepage.emptyCartDesc')}</p>
             <Link href="/products">
               <Button className="h-12 px-8 bg-ecommerce-red hover:bg-ecommerce-red/90 text-white rounded-xl font-semibold text-sm gap-2 transition-all hover:scale-105">
                 <ShoppingBag size={16} />
-                {t('goShopping')}
+                {t('homepage.goShopping')}
               </Button>
             </Link>
           </motion.div>
@@ -1092,10 +1092,10 @@ function CheckoutPageInner() {
 
   /* ── Step progress data ───────────────────────────────────── */
   const steps = [
-    { num: 1 as const, label: t('step1') },
-    { num: 2 as const, label: t('step2') },
-    { num: 3 as const, label: t('step3') },
-    { num: 4 as const, label: t('step4') },
+    { num: 1 as const, label: t('homepage.step1') },
+    { num: 2 as const, label: t('homepage.step2') },
+    { num: 3 as const, label: t('homepage.step3') },
+    { num: 4 as const, label: t('homepage.step4') },
   ];
 
   /* ── Render ───────────────────────────────────────────────── */
@@ -1109,12 +1109,12 @@ function CheckoutPageInner() {
               href="/products"
               className="text-ecommerce-text-muted hover:text-ecommerce-text-primary transition-colors"
             >
-              {t('breadcrumbHome')}
+              {t('homepage.breadcrumbHome')}
             </Link>
             <ChevronRight size={14} className="text-ecommerce-text-muted" />
-            <span className="text-ecommerce-text-muted">{t('breadcrumbCart')}</span>
+            <span className="text-ecommerce-text-muted">{t('homepage.breadcrumbCart')}</span>
             <ChevronRight size={14} className="text-ecommerce-text-muted" />
-            <span className="font-medium text-ecommerce-text-primary">{t('breadcrumbCheckout')}</span>
+            <span className="font-medium text-ecommerce-text-primary">{t('homepage.breadcrumbCheckout')}</span>
           </nav>
         </div>
       </div>
@@ -1132,10 +1132,10 @@ function CheckoutPageInner() {
             )}
             <div>
               <h1 className="text-xl sm:text-2xl font-extrabold text-ecommerce-text-primary">
-                {currentStep === 4 ? t('orderConfirmed') : t('title')}
+                {currentStep === 4 ? t('homepage.orderConfirmed') : t('homepage.title')}
               </h1>
               <p className="text-xs text-ecommerce-text-muted mt-0.5 hidden sm:block">
-                {t('itemsInCart', { count: totalItems() })}
+                {t('homepage.itemsInCart', { count: totalItems() })}
               </p>
             </div>
           </div>

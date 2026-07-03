@@ -4,16 +4,8 @@ import { useEffect, useCallback, useRef } from 'react';
 import { NextIntlClientProvider } from 'next-intl';
 import { useLocaleStore, LOCALE_CONFIG, type Locale } from '../_lib/store';
 
-// Import all message files
-import enMessages from './locales/en.json';
-import faMessages from './locales/fa.json';
-import arMessages from './locales/ar.json';
 
-const messagesMap: Record<Locale, Record<string, unknown>> = {
-  en: enMessages as unknown as Record<string, unknown>,
-  fa: faMessages as unknown as Record<string, unknown>,
-  ar: arMessages as unknown as Record<string, unknown>,
-};
+
 
 // Inline script to set dir/lang before hydration to prevent flash
 const LOCALE_INIT_SCRIPT = `
@@ -53,7 +45,7 @@ export function I18nProvider({ children }: { children: React.ReactNode }) {
     document.documentElement.setAttribute('dir', dir);
     document.documentElement.setAttribute('lang', locale);
     if (locale === 'fa') {
-      document.documentElement.style.setProperty('--font-locale', "'Vazirmatn', 'Segoe UI', Tahoma, sans-serif");
+      document.documentElement.style.setProperty('--font-locale', "' Iran Sans, 'Segoe UI', Tahoma, sans-serif");
     } else if (locale === 'ar') {
       document.documentElement.style.setProperty('--font-locale', "'Cairo', 'Segoe UI', Tahoma, sans-serif");
     } else {
@@ -65,7 +57,7 @@ export function I18nProvider({ children }: { children: React.ReactNode }) {
   return (
     <NextIntlClientProvider
       locale={locale}
-      messages={messagesMap[locale]}
+      // messages={messagesMap[locale]}
       timeZone="Asia/Tehran"
     >
       <I18nContext.Provider value={{ locale, setLocale: handleLocaleChange, dir: config.dir }}>

@@ -83,12 +83,12 @@ export function ProductQuickStats() {
               <div className="flex items-center justify-between px-4 py-2.5 border-b border-ecommerce-border">
                 <div className="flex items-center gap-2">
                   <BarChart3 size={14} className="text-ecommerce-purple" />
-                  <span className="text-xs font-semibold text-ecommerce-text-primary">{t('quickStats.title')}</span>
+                  <span className="text-xs font-semibold text-ecommerce-text-primary">{t('homepage.quickStats.title')}</span>
                 </div>
                 <button
                   onClick={() => setExpanded(false)}
                   className="w-5 h-5 rounded-full flex items-center justify-center text-ecommerce-text-muted hover:text-ecommerce-text-primary hover:bg-ecommerce-surface-hover transition-colors"
-                  aria-label={t('quickStats.collapseStats')}
+                  aria-label={t('homepage.quickStats.collapseStats')}
                 >
                   <ChevronUp size={12} />
                 </button>
@@ -101,7 +101,7 @@ export function ProductQuickStats() {
                     <Eye size={14} className="text-ecommerce-teal" />
                   </div>
                   <div className="flex-1 min-w-0">
-                    <p className="text-[11px] text-ecommerce-text-muted">{t('quickStats.viewed')}</p>
+                    <p className="text-[11px] text-ecommerce-text-muted">{t('homepage.quickStats.viewed')}</p>
                     <p className="text-sm font-bold text-ecommerce-text-primary tabular-nums">
                       <AnimatedNumber value={viewedCount} />
                     </p>
@@ -113,7 +113,7 @@ export function ProductQuickStats() {
                     <Heart size={14} className="text-ecommerce-rose" />
                   </div>
                   <div className="flex-1 min-w-0">
-                    <p className="text-[11px] text-ecommerce-text-muted">{t('quickStats.inWishlist')}</p>
+                    <p className="text-[11px] text-ecommerce-text-muted">{t('homepage.quickStats.inWishlist')}</p>
                     <p className="text-sm font-bold text-ecommerce-text-primary tabular-nums">
                       <AnimatedNumber value={wishlistCount} />
                     </p>
@@ -125,7 +125,7 @@ export function ProductQuickStats() {
                     <ShoppingCart size={14} className="text-ecommerce-red" />
                   </div>
                   <div className="flex-1 min-w-0">
-                    <p className="text-[11px] text-ecommerce-text-muted">{t('quickStats.inCart')}</p>
+                    <p className="text-[11px] text-ecommerce-text-muted">{t('homepage.quickStats.inCart')}</p>
                     <p className="text-sm font-bold text-ecommerce-text-primary tabular-nums">
                       ${totalCartPrice.toFixed(2)}
                     </p>
@@ -143,7 +143,7 @@ export function ProductQuickStats() {
         whileHover={{ scale: 1.05 }}
         whileTap={{ scale: 0.95 }}
         className="relative w-12 h-12 rounded-full bg-white dark:bg-ecommerce-surface shadow-lg border border-ecommerce-border flex items-center justify-center hover:shadow-xl transition-shadow group"
-        aria-label={t('quickStats.quickStatsLabel')}
+        aria-label={t('homepage.quickStats.quickStatsLabel')}
       >
         <BarChart3 size={18} className="text-ecommerce-text-primary group-hover:text-ecommerce-purple transition-colors" />
 

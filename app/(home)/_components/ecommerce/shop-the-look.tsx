@@ -172,7 +172,7 @@ function ProductThumbnails({ products }: { products: LookProduct[] }) {
       </div>
       {extraCount > 0 && (
         <span className="ms-3 text-xs font-medium text-ecommerce-text-muted">
-          +{extraCount} {t('common.seeMore').toLowerCase()}
+          +{extraCount} {t('homepage.common.seeMore').toLowerCase()}
         </span>
       )}
     </div>
@@ -202,7 +202,7 @@ function LookCard({
         category: product.category,
       });
     });
-    toast.success(t('cart.itemAdded', { name: look.name }));
+    toast.success(t('homepage.cart.itemAdded', { name: look.name }));
   };
 
   if (isFirst) {
@@ -225,7 +225,7 @@ function LookCard({
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
             <span className="absolute top-3 end-3 px-3 py-1 rounded-full bg-white/80 dark:bg-black/40 backdrop-blur-sm text-xs font-bold text-ecommerce-text-primary">
-              From {t('shopTheLook.from')} ${Math.round(totalPrice)}
+              From {t('homepage.shopTheLook.from')} ${Math.round(totalPrice)}
             </span>
             <h3 className="absolute bottom-3 start-3 text-lg font-bold text-white drop-shadow-lg md:bottom-4 md:start-4 md:text-xl">
               {look.name}
@@ -238,11 +238,11 @@ function LookCard({
                 {look.name}
               </h3>
               <p className="text-sm text-ecommerce-text-muted mb-4">
-                {t('shopTheLook.outfitDesc', { name: look.name.toLowerCase(), count: look.products.length })}
+                {t('homepage.shopTheLook.outfitDesc', { name: look.name.toLowerCase(), count: look.products.length })}
               </p>
               <div className="mb-4">
                 <p className="text-xs font-medium text-ecommerce-text-muted mb-2">
-                  {t('shopTheLook.includedPieces')}
+                  {t('homepage.shopTheLook.includedPieces')}
                 </p>
                 <div className="flex flex-wrap gap-1.5">
                   {look.products.map((p) => (
@@ -263,7 +263,7 @@ function LookCard({
                 className="inline-flex items-center gap-2 px-4 py-2.5 bg-ecommerce-red hover:bg-ecommerce-red/90 text-white text-sm font-semibold rounded-xl transition-all duration-200 hover:scale-[1.02] active:scale-95 shrink-0"
               >
                 <ShoppingCart size={15} />
-                {t('shopTheLook.getTheLook')}
+                {t('homepage.shopTheLook.getTheLook')}
               </button>
             </div>
           </div>
@@ -290,7 +290,7 @@ function LookCard({
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
         <span className="absolute top-3 end-3 px-3 py-1 rounded-full bg-white/80 dark:bg-black/40 backdrop-blur-sm text-xs font-bold text-ecommerce-text-primary">
-          {t('shopTheLook.from')} ${Math.round(totalPrice)}
+          {t('homepage.shopTheLook.from')} ${Math.round(totalPrice)}
         </span>
         <h3 className="absolute bottom-3 start-3 text-lg font-bold text-white drop-shadow-lg">
           {look.name}
@@ -300,7 +300,7 @@ function LookCard({
       {/* Card content */}
       <div className="p-4 sm:p-5">
         <p className="text-sm text-ecommerce-text-muted mb-4">
-          {t('shopTheLook.piecesDesc', { count: look.products.length })}
+          {t('homepage.shopTheLook.piecesDesc', { count: look.products.length })}
         </p>
         <div className="flex items-center justify-between gap-3">
           <ProductThumbnails products={look.products} />
@@ -309,7 +309,7 @@ function LookCard({
             className="inline-flex items-center gap-2 px-4 py-2.5 bg-ecommerce-red hover:bg-ecommerce-red/90 text-white text-sm font-semibold rounded-xl transition-all duration-200 hover:scale-[1.02] active:scale-95 shrink-0"
           >
             <ShoppingCart size={15} />
-            {t('shopTheLook.getTheLook')}
+            {t('homepage.shopTheLook.getTheLook')}
           </button>
         </div>
       </div>
@@ -336,13 +336,13 @@ export function ShopTheLook() {
             className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-ecommerce-rose/10 text-ecommerce-rose text-xs font-semibold uppercase tracking-widest mb-3"
           >
             <Sparkles size={12} />
-            {t('shopTheLook.curated')}
+            {t('homepage.shopTheLook.curated')}
           </motion.div>
           <h2 className="text-2xl sm:text-3xl font-extrabold text-ecommerce-text-primary tracking-tight">
-            {t('shopTheLook.title')}
+            {t('homepage.shopTheLook.title')}
           </h2>
           <p className="text-sm text-ecommerce-text-muted mt-2 max-w-md mx-auto">
-            {t('shopTheLook.subtitle')}
+            {t('homepage.shopTheLook.subtitle')}
           </p>
           {/* Decorative dot-line divider */}
           <div className="mt-4 flex items-center justify-center gap-2">

@@ -120,7 +120,7 @@ export function StickyCategoryNav() {
                     : 'bg-ecommerce-surface-hover text-ecommerce-text-secondary hover:bg-ecommerce-surface-hover/80'
                 }`}
               >
-                {t('common.allCategories')}
+                {t('homepage.common.allCategories')}
               </motion.button>
 
               {/* Category pills with staggered entrance */}
@@ -167,7 +167,7 @@ export function StickyCategoryNav() {
                 <button
                   onClick={handleClearSearch}
                   className="p-0.5 rounded-full hover:bg-ecommerce-border/50 transition-colors cursor-pointer"
-                  aria-label={t('common.clear')}
+                  aria-label={t('homepage.common.clear')}
                 >
                   <X size={12} />
                 </button>

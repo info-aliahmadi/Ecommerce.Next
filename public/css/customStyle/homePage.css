@@ -1,3 +1,5 @@
+
+
 :root {
   --blue: #a1d4f8;
   --white: #eaeefd;
@@ -8,6 +10,18 @@
 }
 html {
   scroll-behavior: smooth;
+}
+.farsi-font {
+  --font-locale:  Iran Sans, "Segoe UI", Tahoma, sans-serif, sans-serif;
+  font-family: 'var(--font-locale, var(--font-geist-sans)), sans-serif'
+}
+.arabic-font {
+  --font-locale: Cairo, "Segoe UI", Tahoma, sans-serif, sans-serif;
+  font-family: 'var(--font-locale, var(--font-geist-sans)), sans-serif'
+}
+.english-font {
+  --font-locale: 'Geist', "Geist Fallback", sans-serif;
+  font-family: 'var(--font-locale, var(--font-geist-sans)), sans-serif'
 }
 .bg-blue {
   background-color: var(--blue);

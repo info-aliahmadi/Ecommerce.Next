@@ -1,3 +1,4 @@
+import CONFIG from '@root/config';
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
@@ -343,6 +344,10 @@ export const useStockAlertStore = create<StockAlertStore>()(
 
 // ── Locale Store ──────────────────────────────────────────────
 export type Locale = 'en' | 'fa' | 'ar';
+
+export const LOCALES = ['en', 'ar', 'fa'] as const;
+
+export const DEFAULT_LOCALE = CONFIG.DEFAULT_LANGUAGE as Locale;
 
 export const PERSIAN_CALENDAR: Locale[] = ['fa'];
 

@@ -91,7 +91,7 @@ export function NewsletterSection() {
     setEmail('');
     setIsSubscribed(true);
 
-    toast.success(t('newsletter.success'));
+    toast.success(t('homepage.newsletter.success'));
 
     // Revert to form after 3 seconds
     if (revertTimerRef.current) clearTimeout(revertTimerRef.current);
@@ -188,10 +188,10 @@ export function NewsletterSection() {
                 Exclusive Access
               </motion.div>
               <h2 className="text-2xl sm:text-3xl font-bold text-white tracking-tight">
-                {t('newsletter.title')}
+                {t('homepage.newsletter.title')}
               </h2>
               <p className="text-white/70 mt-2 max-w-md mx-auto lg:mx-0 text-sm">
-                {t('newsletter.subtitle')}
+                {t('homepage.newsletter.subtitle')}
               </p>
               {/* Subscriber count with count-up animation */}
               <div className="flex items-center gap-2 mt-4 justify-center lg:justify-start">
@@ -211,7 +211,7 @@ export function NewsletterSection() {
                   </div>
                 </div>
                 <span className="text-xs text-white/60">
-                  {t('newsletter.subscribers', { count: '15,000' })}
+                  {t('homepage.newsletter.subscribers', { count: '15,000' })}
                 </span>
               </div>
 
@@ -332,7 +332,7 @@ export function NewsletterSection() {
                         />
                         <Input
                           type="email"
-                          placeholder={t('newsletter.placeholder')}
+                          placeholder={t('homepage.newsletter.placeholder')}
                           value={email}
                           onChange={(e) => setEmail(e.target.value)}
                           required
@@ -348,7 +348,7 @@ export function NewsletterSection() {
                           <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
                         ) : (
                           <>
-                            {t('newsletter.subscribe')}
+                            {t('homepage.newsletter.subscribe')}
                             <Send size={16} className="ms-2" />
                           </>
                         )}
@@ -358,7 +358,7 @@ export function NewsletterSection() {
                     {/* No spam + unsubscribe row */}
                     <div className="flex items-center justify-center gap-1.5 mt-2.5 lg:justify-start">
                       <CheckCircle2 size={12} className="text-white/40" />
-                      <span className="text-white/40 text-xs">{t('newsletter.privacyNote')}</span>
+                      <span className="text-white/40 text-xs">{t('homepage.newsletter.privacyNote')}</span>
                     </div>
                   </motion.form>
                 )}

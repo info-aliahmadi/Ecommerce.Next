@@ -38,7 +38,7 @@ export function BackToTop() {
           transition={{ duration: 0.2 }}
           onClick={scrollToTop}
           className="fixed bottom-20 sm:bottom-8 end-4 sm:end-6 z-40 group"
-          aria-label={t('backToTop.label')}
+          aria-label={t('homepage.backToTop.label')}
         >
           {/* Progress ring */}
           <div className="relative w-12 h-12">

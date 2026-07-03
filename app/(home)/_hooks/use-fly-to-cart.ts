@@ -24,7 +24,7 @@ export function useFlyToCart() {
 
       // Find the closest button or clickable element for source position
       const target = e.currentTarget as HTMLElement;
-      const sourceElement = target.closest('button') || target;
+      const sourceElement = target.closest('homepage.button') || target;
 
       // Add item to cart store
       addItem(cartItem);
