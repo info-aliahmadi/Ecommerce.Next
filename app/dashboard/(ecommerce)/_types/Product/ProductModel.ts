@@ -91,7 +91,7 @@ export default interface ProductModel {
   /**
    * The ID of the tax category.
    */
-  taxCategoryId: number| null ;
+  taxCategoryId: number | null;
 
   /**
    * The name of the tax category.
@@ -303,7 +303,7 @@ export default interface ProductModel {
    * The product inventories.
    */
   inventories: InventoryModel[];
-  
+
   /**
    * The IDs of the categories the product belongs to.
    */
@@ -336,9 +336,9 @@ export default interface ProductModel {
 
 
   /**
-   * The IDs of the images associated with the product.
+   * The images associated with the product.
    */
-  imageIds: number[];
+  images: ProductImageModel[];
 
   /**
    * The IDs of the reviews associated with the product.
@@ -351,12 +351,23 @@ export default interface ProductModel {
   relatedProductIds: number[];
 
   /**
-   * The product tags.
+   * The IDs of tags associated with the product.
    */
-  productTags: string[];
+  tagIds: number[];
 }
 
 export enum StockType {
   Total = 0,
   PerAttribute = 1
+}
+export interface ProductImageModel {
+  /**
+   * File id of the image.
+   */
+  imageId: number;
+
+  /**
+   *  Display order for this image; lower values show first.
+   */
+  displayOrder: number;
 }

@@ -28,8 +28,8 @@ export const createProductValidationSchema = (t: (key: string) => string) => {
         .required(t(validation + 'requiredOrderMaximumQuantity')),
       sellUnitPrice: Yup.number().min(1, t(validation + 'requiredSellUnitPrice'))
         .required(t(validation + 'requiredSellUnitPrice')),
-      picturePreviewId: Yup.number().min(1, t(validation + 'requiredPicturePreviewId'))
-        .required(t(validation + 'requiredPicturePreviewId')),
+      imagePreviewId: Yup.number().min(1, t(validation + 'requiredImagePreviewId'))
+        .required(t(validation + 'requiredImagePreviewId')),
       measureType: Yup.number()
         .required(t(validation + 'requiredMeasureType')),
       availableStartDateTimeUtc: Yup.date()

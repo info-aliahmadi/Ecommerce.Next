@@ -7,7 +7,7 @@ import CONFIG from "@root/config";
 type EditorProps = {
   id?: string;
   name?: string;
-  defaultValue?: string;
+  value?: string;
   setFieldValue?: (field: string, value: string) => void;
   onChange?: (value: string) => void;
   placeholder?: string,
@@ -18,7 +18,7 @@ type EditorProps = {
 export default function Editor({
   id,
   name,
-  defaultValue = "",
+  value = "",
   setFieldValue,
   onChange,
   placeholder = "",
@@ -41,13 +41,13 @@ export default function Editor({
 
   const handleReady = useCallback(
     (methods: DefaultTemplateRef) => {
-      if (initialValueLoadedRef.current || !defaultValue) return;
+      if (initialValueLoadedRef.current || !value) return;
 
       initialValueLoadedRef.current = true;
-      methods.injectHTML(defaultValue);
-      updateValue(defaultValue);
+      methods.injectHTML(value);
+      updateValue(value);
     },
-    [defaultValue, updateValue],
+    [value, updateValue],
   );
 
   return (

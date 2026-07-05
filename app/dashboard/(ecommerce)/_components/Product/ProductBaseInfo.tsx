@@ -84,6 +84,7 @@ export default function ProductBaseInfo({
             <Editor
               name='fullDescription'
               setFieldValue={setFieldValue}
+              value={values?.fullDescription || ''}
               placeholder={t("fields.product.fullDescription")}
               locale={language}
             />
@@ -284,16 +285,16 @@ export default function ProductBaseInfo({
         <Grid size={{ xs: 12, sm: 12, md: 6, lg: 6, xl: 4 }}>
           <Stack>
             <SelectProductTag
-              defaultValues={values?.productTags || []}
-              id="productTags"
-              name="productTags"
-              label={t(fieldsName + 'productTags')}
+              defaultValues={values?.tagIds || []}
+              id="tagIds"
+              name="tagIds"
+              label={t(fieldsName + 'tagIds')}
               setFieldValue={setFieldValue}
-              error={Boolean(errors.productTags)}
+              error={Boolean(errors.tagIds)}
             />
-            {errors.productTags && (
+            {errors.tagIds && (
               <FormHelperText error id="helper-tagIds">
-                {errors.productTags}
+                {errors.tagIds}
               </FormHelperText>
             )}
           </Stack>
@@ -354,9 +355,10 @@ export default function ProductBaseInfo({
           <ImageUpload
             name="imageIds"
             setFieldValue={setFieldValue}
-            value={values?.imageIds || []}
+            value={values?.images || []}
             filePosterMaxHeight={200}
             allowMultiple={true}
+            allowReorder={true}  
           />
         </Stack>
       </Grid>

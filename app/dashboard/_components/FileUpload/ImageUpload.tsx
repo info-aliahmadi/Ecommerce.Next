@@ -36,6 +36,7 @@ interface ImageUploadProps {
   disabled?: boolean;
   filePosterMaxHeight?: number;
   allowMultiple?: boolean;
+  allowReorder?: boolean;
 }
 
 function buildInitialFile(fileInfo: FileUploadModel): FilePondInitialFile {
@@ -85,7 +86,8 @@ export default function ImageUpload({
   maxFileSize,
   disabled,
   filePosterMaxHeight,
-  allowMultiple
+  allowMultiple,
+  allowReorder
 }: Readonly<ImageUploadProps>) {
   const [files, setFiles] = useState<Array<FilePondInitialFile | Blob | string>>([]);
   const { data: session } = useSession();
@@ -187,6 +189,7 @@ export default function ImageUpload({
       disabled={disabled}
       id={name || 'fileId'}
       allowImagePreview
+      allowReorder={allowReorder}
       filePosterMaxHeight={filePosterMaxHeight}
       allowDownloadByUrl
       allowFilePoster

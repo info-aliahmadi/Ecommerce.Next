@@ -1,4 +1,3 @@
-import * as React from 'react';
 import ManufacturerService from '@dashboard/(ecommerce)/_service/ManufacturerService';
 import MultiSelect from '@dashboard/_components/Select/MultiSelect';
 import { useSession } from 'next-auth/react';

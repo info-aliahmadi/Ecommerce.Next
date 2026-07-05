@@ -34,7 +34,6 @@ import { useSession } from 'next-auth/react';
 import ProductModel, { StockType } from '@dashboard/(ecommerce)/_types/Product/ProductModel';
 import DeliveryDate from '@root/app/types/enums/DeliveryDateType';
 import CONFIG from '@root/config';
-import MeasureType from '@root/app/types/enums/MeasureType';
 function TabPanel(props: any) {
   const { children, value, index, ...other } = props;
 
@@ -113,13 +112,13 @@ export default function AddOrEditProduct({ params }: Readonly<{ params: Promise<
     updateUser: null,
     categoryIds: [],
     manufacturerIds: [],
-    pictureIds: [],
+    imageIds: [],
     relatedProductIds: [],
     attributeIds: [],
     inventories: [],
-    productTags: [],
+    tagIds: [],
     createUserId: 0,
-    picturePreviewId: 0,
+    imagePreviewId: 0,
     deliveryDateName: '',
     taxCategoryName: '',
     weight: 0,
@@ -217,7 +216,6 @@ export default function AddOrEditProduct({ params }: Readonly<{ params: Promise<
     e.preventDefault();
     product.published = !isDraft; // Set published based on isDraft flag
     setIsSubmitting(true);
-    alert('Submitting product: ' + product.picturePreviewId);
     try {
       await validationSchema.validate(product, { abortEarly: false });
       setErrors({});
