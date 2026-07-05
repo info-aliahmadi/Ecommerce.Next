@@ -132,14 +132,14 @@ const AddOrEditProductTag = ({
             <Dialog open={open} onClose={handleClose} aria-labelledby="scroll-dialog-title" aria-describedby="scroll-dialog-description" maxWidth="md">
                 <form onSubmit={formik.handleSubmit}>
                     <DialogTitle id="scroll-dialog-title">
-                        <Typography component="div" variant="h4">{isNew ? t('dialog.product-tag.add') : t('dialog.product-tag.edit')}</Typography>
+                        <Typography component="div" variant="h4">{isNew ? t('dialog.productTag.add') : t('dialog.productTag.edit')}</Typography>
                         <CloseDialog onClose={handleClose} />
                     </DialogTitle>
                     <DialogContent>
                         <Grid container spacing={3} sx={{ mt: 0.25 }}>
                             <Grid size={12}>
                                 <Stack spacing={1}>
-                                    <InputLabel htmlFor="name">{t('fields.product-tag.name')}</InputLabel>
+                                    <InputLabel htmlFor="name">{t('fields.productTag.name')}</InputLabel>
                                     <OutlinedInput
                                         id="name"
                                         type="text"
@@ -147,7 +147,7 @@ const AddOrEditProductTag = ({
                                         name="name"
                                         onBlur={formik.handleBlur}
                                         onChange={formik.handleChange}
-                                        placeholder={t('fields.product-tag.name')}
+                                        placeholder={t('fields.productTag.name')}
                                         fullWidth
                                         error={Boolean(formik.touched.name && formik.errors.name)}
                                     />
@@ -163,7 +163,7 @@ const AddOrEditProductTag = ({
                     <DialogActions sx={{ p: '1.25rem' }}>
                         <Button onClick={handleClose}>{t('buttons.cancel')}</Button>
                         <Button disableElevation disabled={formik.isSubmitting} fullWidth size="large" type="submit" variant="contained" color="primary">
-                            {isNew ? t('buttons.product-tag.add') : t('buttons.product-tag.save')}
+                            {isNew ? t('buttons.productTag.add') : t('buttons.productTag.save')}
                         </Button>
                     </DialogActions>
                 </form>

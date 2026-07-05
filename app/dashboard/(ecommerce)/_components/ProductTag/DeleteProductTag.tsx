@@ -58,7 +58,7 @@ const DeleteProductTag = ({ row, open, setOpen, refetch }: { row?: MRT_Row<Produ
       <Dialog open={open} onClose={onClose} aria-labelledby="alert-dialog-title" aria-describedby="alert-dialog-description">
         <DialogTitle id="alert-dialog-title">
           <Typography variant="caption" sx={{ fontSize: 17, fontWeight: 600 }}>
-            {t('buttons.product-tag.delete')}
+            {t('buttons.productTag.delete')}
           </Typography>
           <CloseDialog onClose={onClose} />
         </DialogTitle>

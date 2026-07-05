@@ -1,3 +1,5 @@
+import AttributeType from "@root/app/types/enums/AttributeType";
+
 /**
  * Represents a product attribute.
  */
@@ -23,9 +25,9 @@ export default interface ProductAttributeModel {
     attributeType: AttributeType; // Assuming AttributeType is defined elsewhere
   
     /**
-     * The ID of the associated picture (nullable).
+     * The ID of the associated image (nullable).
      */
-    pictureId: number | null;
+    imagePreviewId: number | null;
   
     /**
      * The display order of the product attribute.
@@ -38,19 +40,3 @@ export default interface ProductAttributeModel {
     description: string | null;
   }
   
-  // Example Enum Definition (If not defined elsewhere)
-  export enum AttributeType {
-    Color = 0,
-    Size = 1,
-    Weight = 2,
-    Length = 3,
-    Width = 4,
-    Height = 5,
-    Material = 6,
-    Style = 7,
-    Pattern = 8,
-    Brand = 9,
-    Model = 10,
-   
-    // ... your enum values
-  }

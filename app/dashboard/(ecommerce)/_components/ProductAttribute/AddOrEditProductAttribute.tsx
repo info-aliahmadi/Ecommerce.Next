@@ -31,30 +31,18 @@ import Notify from '@dashboard/_components/@extended/Notify';
 import setServerErrors from '@root/utils/setServerErrors';
 import AddIcon from '@mui/icons-material/Add';
 
-import ProductAttributeModel, { AttributeType } from '../../_types/Product/ProductAttributeModel';
+import ProductAttributeModel from '../../_types/Product/ProductAttributeModel';
 import ProductAttributeService from '../../_service/ProductAttributeService';
 import ImageUpload from '@dashboard/_components/FileUpload/ImageUpload';
+import SelectAttributeType from './SelectAttributeType';
+import AttributeType from '@root/app/types/enums/AttributeType';
 
-// Create array of AttributeType enum options for the select
-const attributeTypeOptions = [
-  { value: AttributeType.Color, label: 'Color' },
-  { value: AttributeType.Size, label: 'Size' },
-  { value: AttributeType.Weight, label: 'Weight' },
-  { value: AttributeType.Length, label: 'Length' },
-  { value: AttributeType.Width, label: 'Width' },
-  { value: AttributeType.Height, label: 'Height' },
-  { value: AttributeType.Material, label: 'Material' },
-  { value: AttributeType.Style, label: 'Style' },
-  { value: AttributeType.Pattern, label: 'Pattern' },
-  { value: AttributeType.Brand, label: 'Brand' },
-  { value: AttributeType.Model, label: 'Model' }
-];
 
 export default function AddOrEditProductAttribute({ productAttributeId, isNew, open, setOpen, refetch }:
   { productAttributeId: number, isNew: boolean, open: boolean, setOpen: (open: boolean) => void, refetch: () => void }) {
   const t = useTranslations("");
-  const [fieldsName, validation, buttonName] = ['fields.product-attribute.', 'validation.product-attribute.', 'buttons.product-attribute.'];
-  const dialogName = t('pages.product-attribute');
+  const [fieldsName, validation, buttonName] = ['fields.productAttribute.', 'validation.productAttribute.', 'buttons.productAttribute.'];
+  const dialogName = t('pages.productAttribute');
   const [productAttribute, setProductAttribute] = useState<ProductAttributeModel>();
   const [notify, setNotify] = useState<NotifyProps>({ open: false });
   const { data: session } = useSession();
@@ -135,8 +123,8 @@ export default function AddOrEditProductAttribute({ productAttributeId, isNew, o
     id: productAttribute?.id ?? 0,
     name: productAttribute?.name ?? '',
     value: productAttribute?.value ?? '',
-    attributeType: productAttribute?.attributeType ?? AttributeType.Weight,
-    pictureId: productAttribute?.pictureId ?? null,
+    attributeType: productAttribute?.attributeType,
+    imagePreviewId: productAttribute?.imagePreviewId ?? null,
     displayOrder: productAttribute?.displayOrder ?? 0,
     description: productAttribute?.description ?? ''
   };
@@ -221,20 +209,14 @@ export default function AddOrEditProductAttribute({ productAttributeId, isNew, o
                     <Stack spacing={1}>
                       <InputLabel htmlFor="attributeType">{t(fieldsName + 'attributeType')}</InputLabel>
                       <FormControl fullWidth error={Boolean(touched.attributeType && errors.attributeType)}>
-                        <Select
-                          id="attributeType"
-                          value={values?.attributeType ?? AttributeType.Color}
+                        <SelectAttributeType
                           name="attributeType"
-                          onBlur={handleBlur}
-                          onChange={handleChange}
-                          displayEmpty
-                        >
-                          {attributeTypeOptions.map((option) => (
-                            <MenuItem key={option.value} value={option.value}>
-                              {option.label}
-                            </MenuItem>
-                          ))}
-                        </Select>
+                          defaultValue={values?.attributeType ?? AttributeType.Color}
+                          setFieldValue={setFieldValue}
+                          label={t("fields.productAttribute.attributeType")}
+                          error={Boolean(touched.attributeType && errors.attributeType)}
+                          showNoneOption={true}
+                        />
                         {touched.attributeType && errors.attributeType && (
                           <FormHelperText error id="helper-text-attributeType">
                             {errors.attributeType}
@@ -268,11 +250,11 @@ export default function AddOrEditProductAttribute({ productAttributeId, isNew, o
 
                   <Grid size={12}>
                     <Stack spacing={1}>
-                      <InputLabel htmlFor="pictureId">{t(fieldsName + 'pictureId')}</InputLabel>
+                      <InputLabel htmlFor="imagePreviewId">{t(fieldsName + 'imagePreviewId')}</InputLabel>
                       <ImageUpload
-                        name="pictureId"
+                        name="imagePreviewId"
                         setFieldValue={setFieldValue}
-                        value={values?.pictureId ?? ''}
+                        value={values?.imagePreviewId ?? ''}
                         filePosterMaxHeight={400}
                       />
                     </Stack>

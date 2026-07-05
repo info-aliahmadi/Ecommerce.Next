@@ -7,67 +7,68 @@ import TableCard from '@dashboard/_components/TableCard';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslations } from 'next-intl';
 import MaterialTable from '@dashboard/_components/MaterialTable/MaterialTable';
-import { Delete } from '@mui/icons-material';
-import { Edit } from '@mui/icons-material';
+import { Delete, Edit } from '@mui/icons-material';
 import AddIcon from '@mui/icons-material/Add';
 import DeleteProductAttribute from './DeleteProductAttribute';
 import AddOrEditProductAttribute from './AddOrEditProductAttribute';
 import { useSession } from 'next-auth/react';
 import ProductAttributeService from '../../_service/ProductAttributeService';
-import ProductAttributeModel, { AttributeType } from '../../_types/Product/ProductAttributeModel';
+import ProductAttributeModel from '../../_types/Product/ProductAttributeModel';
 import { MRT_Column } from '@root/app/types/MRT_Column';
 
 import { MRT_Row } from 'material-react-table';
+import AttributeType from '@root/app/types/enums/AttributeType';
 
 // Mapping function for AttributeType to get descriptive names and colors
 const getAttributeTypeConfig = (type: AttributeType): { label: string; color: 'primary' | 'secondary' | 'error' | 'info' | 'success' | 'warning' | 'default' } => {
+  const t = useTranslations("fields.productAttribute.attributeTypes");
   const attributeTypeMap = {
-    [AttributeType.Color]: { 
-      label: 'Color', 
-      color: 'primary' as const 
+    [AttributeType.Color]: {
+      label: t('Color'),
+      color: 'primary' as const
     },
-    [AttributeType.Size]: { 
-      label: 'Size', 
-      color: 'secondary' as const 
+    [AttributeType.Size]: {
+      label: t('Size'),
+      color: 'secondary' as const
     },
-    [AttributeType.Weight]: { 
-      label: 'Weight', 
-      color: 'info' as const 
+    [AttributeType.Weight]: {
+      label: t('Weight'),
+      color: 'info' as const
     },
-    [AttributeType.Length]: { 
-      label: 'Length', 
-      color: 'success' as const 
+    [AttributeType.Length]: {
+      label: t('Length'),
+      color: 'success' as const
     },
-    [AttributeType.Width]: { 
-      label: 'Width', 
-      color: 'warning' as const 
+    [AttributeType.Width]: {
+      label: t('Width'),
+      color: 'warning' as const
     },
-    [AttributeType.Height]: { 
-      label: 'Height', 
-      color: 'error' as const 
+    [AttributeType.Height]: {
+      label: t('Height'),
+      color: 'error' as const
     },
-    [AttributeType.Material]: { 
-      label: 'Material', 
-      color: 'primary' as const 
+    [AttributeType.Material]: {
+      label: t('Material'),
+      color: 'primary' as const
     },
-    [AttributeType.Style]: { 
-      label: 'Style', 
-      color: 'secondary' as const 
+    [AttributeType.Style]: {
+      label: t('Style'),
+      color: 'secondary' as const
     },
-    [AttributeType.Pattern]: { 
-      label: 'Pattern', 
-      color: 'info' as const 
+    [AttributeType.Pattern]: {
+      label: t('Pattern'),
+      color: 'info' as const
     },
-    [AttributeType.Brand]: { 
-      label: 'Brand', 
-      color: 'success' as const 
+    [AttributeType.Brand]: {
+      label: t('Brand'),
+      color: 'success' as const
     },
-    [AttributeType.Model]: { 
-      label: 'Model', 
-      color: 'warning' as const 
+    [AttributeType.Model]: {
+      label: t('Model'),
+      color: 'warning' as const
     }
   };
-  
+
   return attributeTypeMap[type] || { label: `Unknown Type (${type})`, color: 'default' as const };
 };
 
@@ -85,7 +86,7 @@ export default function ProductAttributeDataGrid() {
   const [row, setRow] = useState<MRT_Row<ProductAttributeModel>>();
   const [productAttributeList, setProductAttributeList] = useState<ProductAttributeModel[]>([]);
   const [refetch, setRefetch] = useState<number | undefined>(undefined);
-  const [fieldsName, buttonName] = ['fields.product-attribute.', 'buttons.product-attribute.'];
+  const [fieldsName, buttonName] = ['fields.productAttribute.', 'buttons.productAttribute.'];
 
   const columns = useMemo<MRT_Column<ProductAttributeModel>[]>(
     () => [
@@ -114,7 +115,7 @@ export default function ProductAttributeDataGrid() {
               color={config.color}
               size="small"
               variant="outlined"
-              sx={{ 
+              sx={{
                 fontWeight: 'medium',
                 minWidth: '80px'
               }}
@@ -131,29 +132,29 @@ export default function ProductAttributeDataGrid() {
     ],
     []
   );
-  
+
   useEffect(() => {
     handleProductAttributeList();
   }, []);
-  
+
   const handleNewRow = () => {
     setIsNew(true);
     setRowId(0);
     setOpen(true);
   };
-  
+
   const handleEditRow = (row: MRT_Row<ProductAttributeModel>) => {
     let productAttributeId = row.original.id;
     setIsNew(false);
     setRowId(productAttributeId);
     setOpen(true);
   };
-  
+
   const handleDeleteRow = (row: MRT_Row<ProductAttributeModel>) => {
     setRow(row);
     setOpenDelete(true);
   };
-  
+
   const handleRefetch = () => {
     setRefetch(Date.now());
   };
@@ -165,7 +166,7 @@ export default function ProductAttributeDataGrid() {
     }
     return result;
   };
-  
+
   const AddRow = useCallback(
     () => (
       <Button color="primary" onClick={handleNewRow} variant="contained" startIcon={<AddIcon />}>
@@ -192,7 +193,7 @@ export default function ProductAttributeDataGrid() {
     ),
     []
   );
-  
+
   return (
     <>
       <MainCard title={<AddRow />}>

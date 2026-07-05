@@ -30,7 +30,7 @@ const SelectCurrency: React.FC<SelectCurrencyProps> = ({
   };
 
   // Create filtered enum object with only Cash and Debit
-  const currencyLabels = {
+  const currencyLabels: Record<string, string> = {
     Rial: t("fields.siteSetting.currencyTypes.Rial"),
     Toman: t("fields.siteSetting.currencyTypes.Toman"),
     Dollar: t("fields.siteSetting.currencyTypes.Dollar"),

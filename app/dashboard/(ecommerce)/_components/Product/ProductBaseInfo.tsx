@@ -317,26 +317,26 @@ export default function ProductBaseInfo({
       </Grid>
       <Grid size={{ xs: 12, sm: 12, md: 12, lg: 4, xl: 4 }}>
         <Stack>
-          <InputLabel htmlFor="picturePreviewId" sx={{ textAlign: 'center', mb: '5px' }}>{t(fieldsName + 'picturePreviewId')}</InputLabel>
+          <InputLabel htmlFor="imagePreviewId" sx={{ textAlign: 'center', mb: '5px' }}>{t(fieldsName + 'imagePreviewId')}</InputLabel>
           <ImageUpload
-            name="picturePreviewId"
+            name="imagePreviewId"
             setFieldValue={setFieldValue}
-            value={values?.picturePreviewId || null}
+            value={values?.imagePreviewId || null}
             filePosterMaxHeight={200}
             allowMultiple={false}
           />
-          {errors.picturePreviewId && (
+          {errors.imagePreviewId && (
             <FormHelperText error id="helper-text">
-              {errors.picturePreviewId}
+              {errors.imagePreviewId}
             </FormHelperText>
           )}
         </Stack>
         <Stack>
-          <InputLabel htmlFor="pictureIds" sx={{ textAlign: 'center', mb: '5px' }}>{t(fieldsName + 'pictureIds')}</InputLabel>
+          <InputLabel htmlFor="imageIds" sx={{ textAlign: 'center', mb: '5px' }}>{t(fieldsName + 'imageIds')}</InputLabel>
           <ImageUpload
-            name="pictureIds"
+            name="imageIds"
             setFieldValue={setFieldValue}
-            value={values?.pictureIds || []}
+            value={values?.imageIds || []}
             filePosterMaxHeight={200}
             allowMultiple={true}
           />

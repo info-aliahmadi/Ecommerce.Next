@@ -117,6 +117,8 @@ const AddOrEditManufacturer = ({ manufacturerId, isNew, open, setOpen, refetch }
             metaTitle: manufacturer?.metaTitle,
             description: manufacturer?.description,
             metaDescription: manufacturer?.metaDescription,
+            imagePreviewId: manufacturer?.imagePreviewId,
+            imagePreview: manufacturer?.imagePreview,
             //published: manufacturer?.published,
             //pictureId: manufacturer?.pictureId,
             displayOrder: manufacturer?.displayOrder

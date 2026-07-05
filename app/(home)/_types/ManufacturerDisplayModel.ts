@@ -1,9 +1,7 @@
-import FileUploadModel from "@root/app/dashboard/(filestorage)/_types/FileUploadModel";
-
 /**
  * Represents a manufacturer.
  */
-export default interface ManufacturerModel {
+export default interface ManufacturerDisplayModel {
     /**
      * The ID of the manufacturer.
      */
@@ -35,14 +33,9 @@ export default interface ManufacturerModel {
     metaDescription: string;
   
     /**
-     * The ID of the associated image (nullable).
+     * The ID of the associated picture (nullable).
      */
-    imagePreviewId: number | null;
-  
-    /**
-     * The associated image (nullable).
-     */
-    imagePreview: FileUploadModel | null;
+    pictureId: number | null;
   
     /**
      * Indicates whether the manufacturer is published.
@@ -68,7 +61,12 @@ export default interface ManufacturerModel {
      * The date and time the manufacturer was last updated (in UTC).
      */
     updatedOnUtc: Date;
-    
+  
+    /**
+     * The number of product manufacturers associated with this manufacturer.
+     */
+    productManufacturers: number;
+  
     /**
      * The number of discounts associated with this manufacturer.
      */

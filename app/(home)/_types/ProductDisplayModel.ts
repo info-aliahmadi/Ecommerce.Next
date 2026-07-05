@@ -1,13 +1,13 @@
 import AuthorModel from "@root/app/dashboard/(cms)/_types/Article/AuthorModel";
 import FileUploadModel from "@root/app/dashboard/(filestorage)/_types/FileUploadModel";
-import InventoryModel from "./InventoryModel";
 import DeliveryDateType from "@root/app/types/enums/DeliveryDateType";
 import CurrencyTypes from "@root/app/types/enums/CurrencyTypes";
 import MeasureType from "@root/app/types/enums/MeasureType";
+import InventoryDisplayModel from "./InventoryDisplayModel";
 /**
  * Represents a product.
  */
-export default interface ProductModel {
+export default interface ProductDisplayModel {
   /**
    * The ID of the product.
    */
@@ -41,12 +41,12 @@ export default interface ProductModel {
   /**
    * The ID of the preview image (nullable).
    */
-  imagePreviewId?: number | null;
+  picturePreviewId?: number | null;
 
   /**
    * The preview image (nullable).
    */
-  imagePreview?: FileUploadModel | null;
+  picturePreview?: FileUploadModel | null;
 
   /**
    * Meta keywords for SEO.
@@ -302,7 +302,7 @@ export default interface ProductModel {
   /**
    * The product inventories.
    */
-  inventories: InventoryModel[];
+  inventories: InventoryDisplayModel[];
   
   /**
    * The IDs of the categories the product belongs to.
@@ -336,9 +336,9 @@ export default interface ProductModel {
 
 
   /**
-   * The IDs of the images associated with the product.
+   * The IDs of the pictures associated with the product.
    */
-  imageIds: number[];
+  pictureIds: number[];
 
   /**
    * The IDs of the reviews associated with the product.

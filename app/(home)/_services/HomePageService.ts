@@ -2,10 +2,7 @@ import CONFIG from "@root/config";
 import Fetch from "@root/utils/Fetch";
 import Result from "@root/app/types/Result";
 import ProductTagModel from "@root/app/dashboard/(ecommerce)/_types/Product/ProductTagModel";
-import ManufacturerModel from "@root/app/dashboard/(ecommerce)/_types/Product/ManufacturerModel";
-import CategoryModel from "@root/app/dashboard/(ecommerce)/_types/Product/CategoryModel";
 import ProductFilterModel from "../_types/ProductFilterModel";
-import ProductModel from "@root/app/dashboard/(ecommerce)/_types/Product/ProductModel";
 import ArticleModel from "@root/app/dashboard/(cms)/_types/Article/ArticleMode";
 import PageModel from "@root/app/dashboard/(cms)/_types/Page/PageModel";
 import TopicModel from "@root/app/dashboard/(cms)/_types/Topic/TopicModel";
@@ -14,6 +11,9 @@ import LinkModel from "@root/app/dashboard/(cms)/_types/Link/LinkModel";
 import SlideshowModel from "@root/app/dashboard/(cms)/_types/Slideshow/SlideshowModel";
 import SiteSettingsModel from "@root/app/dashboard/(cms)/_types/SiteSetting/SiteSettingsModel";
 import MenuModel from "@root/app/dashboard/(cms)/_types/Menu/MenuModel";
+import ProductDisplayModel from "../_types/ProductDisplayModel";
+import CategoryDisplayModel from "../_types/CategoryDisplayModel";
+import ManufacturerDisplayModel from "../_types/ManufacturerDisplayModel";
 
 export default class HomePageService {
 
@@ -37,16 +37,21 @@ export default class HomePageService {
    * /GetManufacturers
    */
 
-  async getProducts(filter: ProductFilterModel): Promise<Result<ProductModel[]>> {
-    let result = await Fetch.Post<Result<ProductModel[]>>(`${this.baseUrl}/Product/GetProducts`, filter, this.config);
+  async getProducts(filter: ProductFilterModel): Promise<Result<ProductDisplayModel[]>> {
+    let result = await Fetch.Post<Result<ProductDisplayModel[]>>(`${this.baseUrl}/Product/GetProducts`, filter, this.config);
+    return result;
+  }
+
+  async getCuratedProducts(): Promise<Result<ProductDisplayModel[]>> {
+    let result = await Fetch.Get<Result<ProductDisplayModel[]>>(`${this.baseUrl}/Product/GetCuratedProducts`, this.config);
     return result;
   }
 
   /**
    * Get all categories for display
    */
-  async getAllCategories(): Promise<Result<CategoryModel[]>> {
-    let result = await Fetch.Get<Result<CategoryModel[]>>(`${CONFIG.API_BASEPATH}/Product/GetCategories`, this.config);
+  async getAllCategories(): Promise<Result<CategoryDisplayModel[]>> {
+    let result = await Fetch.Get<Result<CategoryDisplayModel[]>>(`${CONFIG.API_BASEPATH}/Product/GetCategories`, this.config);
     return result;
   }
 
@@ -61,12 +66,12 @@ export default class HomePageService {
   /*
     * Get all manufacturers for display
 */
-  async getAllManufacturers(): Promise<Result<ManufacturerModel[]>> {
-    let result = await Fetch.Get<Result<ManufacturerModel[]>>(`${CONFIG.API_BASEPATH}/Product/GetManufacturers`, this.config);
+  async getAllManufacturers(): Promise<Result<ManufacturerDisplayModel[]>> {
+    let result = await Fetch.Get<Result<ManufacturerDisplayModel[]>>(`${CONFIG.API_BASEPATH}/Product/GetManufacturers`, this.config);
     return result;
   }
 
-  async getFeaturedProducts(): Promise<Result<ProductModel[]>> {
+  async getFeaturedProducts(): Promise<Result<ProductDisplayModel[]>> {
     let filter: ProductFilterModel = {
       pageIndex: 1,
       pageSize: 8,
@@ -78,7 +83,7 @@ export default class HomePageService {
     return result;
   }
 
-  async getBestSellingProducts(): Promise<Result<ProductModel[]>> {
+  async getBestSellingProducts(): Promise<Result<ProductDisplayModel[]>> {
     let filter: ProductFilterModel = {
       pageIndex: 1,
       pageSize: 8,
@@ -92,7 +97,7 @@ export default class HomePageService {
   /**
    * Get latest products
    */
-  async getLatestProducts(): Promise<Result<ProductModel[]>> {
+  async getLatestProducts(): Promise<Result<ProductDisplayModel[]>> {
     let filter: ProductFilterModel = {
       pageIndex: 1,
       pageSize: 8,
@@ -108,7 +113,7 @@ export default class HomePageService {
   /**
    * Search products by query
    */
-  async searchProducts(filter: ProductFilterModel): Promise<Result<ProductModel[]>> {
+  async searchProducts(filter: ProductFilterModel): Promise<Result<ProductDisplayModel[]>> {
     const response = await this.getProducts(filter);
     return response;
   }

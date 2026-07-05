@@ -10,7 +10,7 @@ interface EnumDropdownProps {
   onChange: (newValue: number | null) => void;
   showNoneOption?: boolean;
   noneOptionLabel?: string;
-  customLabels?: any | null;
+  customLabels?: { [key: string]: string } | null;
 }
 
 const EnumDropdown: React.FC<EnumDropdownProps> = ({
@@ -42,6 +42,7 @@ const EnumDropdown: React.FC<EnumDropdownProps> = ({
 
   const getDisplayLabel = useMemo(() => {
     return (customLabel: any | null, key: string) => {
+      debugger
       // Use the enum key directly to look up in customLabels
       let label = customLabel ? customLabel[key] : key;
       return label;

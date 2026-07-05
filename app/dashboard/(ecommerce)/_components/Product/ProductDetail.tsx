@@ -53,12 +53,12 @@ export default function ProductDetail({ row }: { row: MRT_Row<ProductModel> }) {
                                 margin: '10px'
                             }}
                         >
-                            {row.original.previewImage ? <Avatar
+                            {row.original.imagePreview ? <Avatar
                                 component="img"
                                 variant="rounded"
                                 loading="lazy"
                                 alt="product Preview"
-                                src={CONFIG.UPLOAD_BASEPATH + row.original.previewImage.directory + row.original.previewImage?.fileName}
+                                src={CONFIG.UPLOAD_BASEPATH + row.original.imagePreview.directory + row.original.imagePreview?.fileName}
                                 sx={{ width: 200, height: 200 }}
                             ></Avatar> : <Avatar variant="rounded" sx={{ width: 200, height: 200 }}>
                                 <ImageNotSupported />
@@ -126,13 +126,13 @@ export default function ProductDetail({ row }: { row: MRT_Row<ProductModel> }) {
                             <Grid size={{ xs: 12, sm: 12, md: 4, lg: 4, xl: 4 }}>
                                 <Stack spacing={1}>
                                     <InputLabel htmlFor="price">{t(fieldsName + 'price')}</InputLabel>
-                                    <OutlinedInput id="price" type="text" value={row.original.price.toCurrency(row.original.currencyCode)} fullWidth disabled />
+                                    <OutlinedInput id="price" type="text" value={row.original.sellUnitPrice.toCurrency(row.original.currencyType)} fullWidth disabled />
                                 </Stack>
                             </Grid>
                             <Grid size={{ xs: 12, sm: 12, md: 4, lg: 4, xl: 4 }}>
                                 <Stack spacing={1}>
                                     <InputLabel htmlFor="oldPrice">{t(fieldsName + 'oldPrice')}</InputLabel>
-                                    <OutlinedInput id="oldPrice" type="text" value={row.original.oldPrice.toCurrency(row.original.currencyCode)} fullWidth disabled />
+                                    <OutlinedInput id="oldPrice" type="text" value={row.original.oldSellUnitPrice.toCurrency(row.original.currencyType)} fullWidth disabled />
                                 </Stack>
                             </Grid>
                             <Grid size={{ xs: 12, sm: 12, md: 4, lg: 4, xl: 4 }}>
@@ -290,12 +290,11 @@ export default function ProductDetail({ row }: { row: MRT_Row<ProductModel> }) {
                             </Grid>
                             <Grid size={{ xs: 12, sm: 12, md: 3, lg: 3, xl: 3 }}>
                                 <Stack>
-
                                     <InputLabel htmlFor="orderMaximumQuantity">{t(fieldsName + 'orderMaximumQuantity')}</InputLabel>
                                     <OutlinedInput id="orderMaximumQuantity" type="text" value={row.original.orderMaximumQuantity} fullWidth disabled />
                                 </Stack>
                             </Grid>
-                            <Grid size={{ xs: 12, sm: 12, md: 12, lg: 12, xl: 12 }}>
+                            {/* <Grid size={{ xs: 12, sm: 12, md: 12, lg: 12, xl: 12 }}>
                                 <Stack>
                                     <SelectProductAttribute
                                         id="attributeIds"
@@ -313,8 +312,7 @@ export default function ProductDetail({ row }: { row: MRT_Row<ProductModel> }) {
                                         {row.original?.inventories?.filter(x => x.stockType == 1).map((item, index) => <AttributeInventory key={index} invenroty={item} />)}
                                     </Grid>
                                 </Stack>
-
-                            </Grid>
+                            </Grid> */}
 
                             <Grid size={{ xs: 12, sm: 12, md: 4, lg: 4, xl: 4 }}>
                                 <Stack>

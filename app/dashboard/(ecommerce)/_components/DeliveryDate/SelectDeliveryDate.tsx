@@ -29,7 +29,7 @@ const SelectDeliveryDate: React.FC<SelectDeliveryDateProps> = ({
     setFieldValue(id, newValue);
   };
 
-  const deliveryDateLabels = {
+  const deliveryDateLabels: Record<string, string> = {
     OneDay: t("fields.order.deliveryDate.OneDay"),
     ThreeDays: t("fields.order.deliveryDate.ThreeDays"),
     OneWeek: t("fields.order.deliveryDate.OneWeek"),

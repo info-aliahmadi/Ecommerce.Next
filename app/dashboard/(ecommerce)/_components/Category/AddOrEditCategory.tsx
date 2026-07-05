@@ -126,15 +126,14 @@ const AddOrEditCategory = ({ row, isNew, open, setOpen, refetch }: AddOrEditCate
     description: category?.description ?? '',
     metaDescription: category?.metaDescription ?? '',
     parentCategoryId: row && isNew == true ? row?.original?.id : category?.parentCategoryId ?? null,
-    pictureId: category?.pictureId ?? null,
-    pictureInfo: category?.pictureInfo ?? null,
+    imagePreviewId: category?.imagePreviewId ?? null,
+    imagePreview: category?.imagePreview ?? null,
     showOnHomepage: category?.showOnHomepage ?? false,
     published: category?.published ?? true,
     displayOrder: category?.displayOrder ?? 0,
     deleted: category?.deleted ?? false,
     createdOnUtc: category?.createdOnUtc ?? new Date(),
     updatedOnUtc: category?.updatedOnUtc ?? new Date(),
-    productCategories: 0,
     discounts: 0,
     isEdited: false,
     childs: [],
@@ -309,11 +308,11 @@ const AddOrEditCategory = ({ row, isNew, open, setOpen, refetch }: AddOrEditCate
 
                   <Grid size={12}>
                     <Stack spacing={1}>
-                      <InputLabel htmlFor="pictureId">{t(fieldsName + 'pictureId')}</InputLabel>
+                      <InputLabel htmlFor="imagePreviewId">{t(fieldsName + 'imagePreviewId')}</InputLabel>
                       <ImageUpload
-                        name="pictureId"
+                        name="imagePreviewId"
                         setFieldValue={setFieldValue}
-                        value={values?.pictureId ?? ''}
+                        value={values?.imagePreviewId ?? ''}
                         filePosterMaxHeight={400}
                       />
                     </Stack>

@@ -76,8 +76,8 @@ export default function ProductDataGrid() {
         type: 'number'
         // filterVariant: 'text' | 'select' | 'multi-select' | 'range' | 'range-slider' | 'checkbox',
       }, {
-        accessorKey: 'previewImage',
-        header: t(fieldsName + 'previewImage'),
+        accessorKey: 'imagePreviewId',
+        header: t(fieldsName + 'imagePreviewId'),
         type: 'string',
         Cell: ({ renderedCellValue, row }) => <ImagePreviewRow renderedCellValue={renderedCellValue} row={row} />
       }, {

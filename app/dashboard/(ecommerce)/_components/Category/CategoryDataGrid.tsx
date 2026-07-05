@@ -41,8 +41,8 @@ function CategoryDataGrid() {
   const columns = useMemo<MRT_Column<CategoryModel>[]>(
     () => [
       {
-        accessorKey: 'pictureInfo',
-        header: t('fields.category.pictureId'),
+        accessorKey: 'imagePreview',
+        header: t('fields.category.imagePreviewId'),
         type: 'string',
         Cell: ({ row } : { row: MRT_Row<CategoryModel> }) => <Box
           sx={{
@@ -51,8 +51,8 @@ function CategoryDataGrid() {
             gap: '1rem'
           }}
         >
-          {row.original.pictureInfo != null ? (
-            <img alt="ImagePreview" src={ CONFIG.UPLOAD_BASEPATH + row.original.pictureInfo?.directory + row.original.pictureInfo?.thumbnail} height={'80px'} />
+          {row.original.imagePreview != null ? (
+            <img alt="ImagePreview" src={ CONFIG.UPLOAD_BASEPATH + row.original.imagePreview?.directory + row.original.imagePreview?.thumbnail} height={'80px'} />
           ) : (
             <Avatar variant="rounded">
               <ImageNotSupported />

@@ -1,5 +1,5 @@
 // material-ui
-import { Box, Button, IconButton, Tooltip, Typography } from '@mui/material';
+import { Avatar, Box, Button, IconButton, Tooltip, Typography } from '@mui/material';
 
 // project import
 import MainCard from '@dashboard/_components/MainCard';
@@ -7,7 +7,7 @@ import TableCard from '@dashboard/_components/TableCard';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslations } from 'next-intl';
 import MaterialTable from '@dashboard/_components/MaterialTable/MaterialTable';
-import { Delete } from '@mui/icons-material';
+import { Delete, ImageNotSupported } from '@mui/icons-material';
 import { Edit } from '@mui/icons-material';
 import AddIcon from '@mui/icons-material/Add';
 import DeleteManufacturer from './DeleteManufacturer';
@@ -17,6 +17,7 @@ import ManufacturerService from '../../_service/ManufacturerService';
 import ManufacturerModel from '../../_types/Product/ManufacturerModel';
 import { MRT_Row } from 'material-react-table';
 import { MRT_Column } from '@root/app/types/MRT_Column';
+import CONFIG from '@root/config';
 
 
 // ===============================|| COLOR BOX ||=============================== //
@@ -37,6 +38,27 @@ function ManufacturerDataGrid() {
 
   const columns = useMemo<MRT_Column<ManufacturerModel>[]>(
     () => [
+      {
+        accessorKey: 'imagePreview',
+        header: t('fields.manufacturer.imagePreviewId'),
+        type: 'string',
+        Cell: ({ row }: { row: MRT_Row<ManufacturerModel> }) =>
+          <Box
+            sx={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '1rem'
+            }}
+          >
+            {row.original.imagePreview != null ? (
+              <img alt="ImagePreview" src={CONFIG.UPLOAD_BASEPATH + row.original.imagePreview?.directory + row.original.imagePreview?.thumbnail} height={'80px'} />
+            ) : (
+              <Avatar variant="rounded">
+                <ImageNotSupported />
+              </Avatar>
+            )}
+          </Box>
+      },
       {
         accessorKey: 'name',
         header: t(fieldsName + 'name'),
@@ -75,14 +97,14 @@ function ManufacturerDataGrid() {
       setData(result.data ?? []);
     }
     return result;
-  };  
+  };
 
   const handleNewRow = () => {
     setIsNew(true);
     setRowId(0);
     setOpen(true);
   };
-  const handleEditRow = (row : MRT_Row<ManufacturerModel>) => {
+  const handleEditRow = (row: MRT_Row<ManufacturerModel>) => {
     let manufacturerId = row.original.id;
     setIsNew(false);
     setRowId(manufacturerId);
