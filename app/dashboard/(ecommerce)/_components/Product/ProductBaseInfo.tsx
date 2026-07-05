@@ -19,6 +19,7 @@ import ProductsAutoComplete from './ProductAutoComplete';
 import ProductModel from '../../_types/Product/ProductModel';
 import nextIntlService from '@root/locales/nextIntlService';
 import CurrencyInput from '@root/app/dashboard/_components/Currency/CurrencyInput';
+import SelectProductTag from '../ProductTag/SelectProductTag';
 
 export default function ProductBaseInfo({
   operation,
@@ -276,6 +277,23 @@ export default function ProductBaseInfo({
             {errors.availableEndDateTimeUtc && (
               <FormHelperText error id="helper-text">
                 {errors.availableEndDateTimeUtc}
+              </FormHelperText>
+            )}
+          </Stack>
+        </Grid>
+        <Grid size={{ xs: 12, sm: 12, md: 6, lg: 6, xl: 4 }}>
+          <Stack>
+            <SelectProductTag
+              defaultValues={values?.productTags || []}
+              id="productTags"
+              name="productTags"
+              label={t(fieldsName + 'productTags')}
+              setFieldValue={setFieldValue}
+              error={Boolean(errors.productTags)}
+            />
+            {errors.productTags && (
+              <FormHelperText error id="helper-tagIds">
+                {errors.productTags}
               </FormHelperText>
             )}
           </Stack>

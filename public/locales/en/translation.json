@@ -1736,6 +1736,15 @@
       "requiredavailableStartDateTimeUtc": "Available Start Date is require",
       "requiredInventories": "Inventories is require",
       "requiredManufacturerIds": "ManufacturerIds is require"
+    },
+    "category": {
+      "requiredName": "Category name is require",
+      "MaxLengthName": "The max of Category name length is 70 Characters",
+      "maxLengthMetaKeywords": "The max of Category Meta Keywords length is 250 Characters",
+      "maxLengthMetaTitle": "The max of Category Meta Title length is 250 Characters",
+      "maxLengthMetaDescription": "The max of Category Meta Description length is 300 Characters",
+      "maxLengthDescription": "The max of Category Description length is 300 Characters",
+      "requiredDisplayOrder": "Display Order is require"
     }
   },
   "tooltips": {
@@ -1791,6 +1800,9 @@
     },
     "payment": {
       "title": "Payment Details"
+    },
+    "productTag": {
+      "add": "Add New Product Tag"
     }
   }
 }

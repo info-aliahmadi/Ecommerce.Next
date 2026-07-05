@@ -18,6 +18,7 @@ import ProductTagService from '../../_service/ProductTagService';
 import ProductTagModel from '../../_types/Product/ProductTagModel';
 import { MRT_Row } from 'material-react-table';
 import { MRT_Column } from '@root/app/types/MRT_Column';
+import GridDataBound from '@root/app/types/GridDataBound';
 
 // ===============================|| PRODUCT TAG DATA GRID ||=============================== //
 

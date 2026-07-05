@@ -25,23 +25,7 @@ export default function ProductSEO({
   return (
     <Grid container columnSpacing={3}>
       <Grid container spacing={3} size={{ xs: 12, sm: 12, md: 12, lg: 8, xl: 8 }}>
-        <Grid size={{ xs: 12, sm: 12, md: 6, lg: 4, xl: 4 }}>
-          <Stack>
-            <SelectProductTag
-              defaultValues={values?.productTags || []}
-              id="productTags"
-              name="productTags"
-              label={t(fieldsName + 'productTags')}
-              setFieldValue={setFieldValue}
-              error={Boolean(errors.productTags)}
-            />
-            {errors.productTags && (
-              <FormHelperText error id="helper-tagIds">
-                {errors.productTags}
-              </FormHelperText>
-            )}
-          </Stack>
-        </Grid>
+     
         <Grid size={{ xs: 12, sm: 12, md: 6, lg: 4, xl: 4 }}>
           <Stack>
             <TextField

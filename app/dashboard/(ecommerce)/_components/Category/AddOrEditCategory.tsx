@@ -146,12 +146,12 @@ const AddOrEditCategory = ({ row, isNew, open, setOpen, refetch }: AddOrEditCate
           initialValues={initialValues}
           enableReinitialize={true}
           validationSchema={Yup.object().shape({
-            name: Yup.string().max(70).required('Name is required'),
-            metaKeywords: Yup.string().max(250).required('MetaKeywords is required'),
-            metaTitle: Yup.string().max(250).required('MetaTitle is required'),
-            description: Yup.string().max(300).required('Description is required'),
-            metaDescription: Yup.string().max(300).required('MetaDescription is required'),
-            displayOrder: Yup.number().required('DisplayOrder is required')
+            name: Yup.string().max(70, t("validation.category.maxLengthName")).required(t("validation.category.requiredName")),
+            metaKeywords: Yup.string().max(250, t("validation.category.maxLengthMetaKeywords")),
+            metaTitle: Yup.string().max(250, t("validation.category.maxLengthMetaTitle")),
+            metaDescription: Yup.string().max(300, t("validation.category.maxLengthMetaDescription")),
+            description: Yup.string().max(300, t("validation.category.maxLengthDescription")),
+            displayOrder: Yup.number().required(t("validation.category.requiredDisplayOrder"))
           })}
           onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
             try {
@@ -169,7 +169,7 @@ const AddOrEditCategory = ({ row, isNew, open, setOpen, refetch }: AddOrEditCate
               <DialogTitle>
                 {isNew == true
                   ? row
-                    ? t('dialog.category.addSub', { parentTitle: '"' + row?.original?.name + '"' })
+                    ? t('dialog.category.addSub', { parentTitle: `"${row?.original?.name}"` })
                     : t('dialog.category.addMain')
                   : t('dialog.edit.title', { item: values.name })}
                 <CloseDialog onClose={onClose} />

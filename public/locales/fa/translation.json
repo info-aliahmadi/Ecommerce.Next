@@ -1736,6 +1736,15 @@
       "requiredavailableStartDateTimeUtc": "تاریخ انتشار الزامی است",
       "requiredInventories": "موجودی محصول الزامی است",
       "requiredManufacturerIds": "تولیدکننده الزامی است"
+    },
+    "category": {
+      "requiredName": "نام دسته‌بندی الزامی است",
+      "MaxLengthName": "حداکثر طول نام دسته‌بندی 70 کاراکتر است",
+      "maxLengthMetaKeywords": "حداکثر طول کلمات کلیدی متا 250 کاراکتر است",
+      "maxLengthMetaTitle": "حداکثر طول عنوان متا 250 کاراکتر است",
+      "maxLengthMetaDescription": "حداکثر طول توضیحات متا 300 کاراکتر است",
+      "maxLengthDescription": "حداکثر طول توضیحات 300 کاراکتر است",
+      "requiredDisplayOrder": "ترتیب نمایش الزامی است"
     }
   },
   "tooltips": {

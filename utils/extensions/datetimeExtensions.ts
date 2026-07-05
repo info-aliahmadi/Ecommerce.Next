@@ -19,12 +19,12 @@ Date.prototype.toDistanceToNow = function (): string {
 };
 
 Date.prototype.toLocalDatetime = function (currentLanguage: string): string {
-    debugger
+    
     return DateTimeViewer(currentLanguage, this);
 };
 
 Date.prototype.toLocalDate = function (currentLanguage: string): string {
-    debugger
+    
     return DateViewer(currentLanguage, this);
 };
 

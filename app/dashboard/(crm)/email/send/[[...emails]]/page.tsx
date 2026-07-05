@@ -58,7 +58,7 @@ export default function SendEmailOutbox({ params }: { readonly params: Promise<{
       service
         .saveDraftEmailOutbox(emailOutbox)
         .then((result) => {
-          debugger
+          
           resetForm(undefined);
           setEmailOutbox(undefined);
           setNotify({ open: true });

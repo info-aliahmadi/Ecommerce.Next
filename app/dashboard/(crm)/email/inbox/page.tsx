@@ -17,7 +17,7 @@ import { useState } from 'react';
 // ===============================|| COLOR BOX ||=============================== //
 
 function EmailInboxsInbox() {
-  debugger
+  
   const t = useTranslations("");
   const { data: session } = useSession();
   const jwt = session?.accessToken;

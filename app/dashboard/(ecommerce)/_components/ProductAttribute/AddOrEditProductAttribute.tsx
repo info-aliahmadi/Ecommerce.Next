@@ -143,7 +143,7 @@ export default function AddOrEditProductAttribute({ productAttributeId, isNew, o
           })}
           onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
             try {
-              debugger
+              
               setSubmitting(true);
               handleSubmit(values as ProductAttributeModel, setErrors, setSubmitting);
             } catch (err) {

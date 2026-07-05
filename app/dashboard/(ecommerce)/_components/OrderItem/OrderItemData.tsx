@@ -33,7 +33,7 @@ export default function OrderItemData({ orderId, currency }: { orderId: number; 
   const loadOrderItems = () => {
     if (orderId > 0) {
       //setLoading(true);
-      debugger
+      
 
       service.getOrderItemList(orderId).then((result ) => {
         setValues(result.data?.[0] ?? []);

@@ -51,7 +51,7 @@ const AddOrEditProductTag = ({
     const { data: session } = useSession();
     const jwt = session?.accessToken;
     let productTagService = new ProductTagService(jwt ?? '');
-    
+
     const formik = useFormik({
         initialValues: {
             id: 0,
@@ -132,7 +132,7 @@ const AddOrEditProductTag = ({
             <Dialog open={open} onClose={handleClose} aria-labelledby="scroll-dialog-title" aria-describedby="scroll-dialog-description" maxWidth="md">
                 <form onSubmit={formik.handleSubmit}>
                     <DialogTitle id="scroll-dialog-title">
-                        <Typography component="div" variant="h4">{isNew ? t('dialog.productTag.add') : t('dialog.productTag.edit')}</Typography>
+                        <Typography component="div" variant="h4">{isNew ? t(`dialog.productTag.add`) : t(`dialog.edit.title`, { item: `"${row?.original?.name}"` })}</Typography>
                         <CloseDialog onClose={handleClose} />
                     </DialogTitle>
                     <DialogContent>

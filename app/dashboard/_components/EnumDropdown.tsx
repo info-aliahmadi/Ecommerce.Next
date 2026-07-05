@@ -42,7 +42,7 @@ const EnumDropdown: React.FC<EnumDropdownProps> = ({
 
   const getDisplayLabel = useMemo(() => {
     return (customLabel: any | null, key: string) => {
-      debugger
+      
       // Use the enum key directly to look up in customLabels
       let label = customLabel ? customLabel[key] : key;
       return label;

@@ -17,7 +17,7 @@ import { MRT_Column } from '@root/app/types/MRT_Column';
 // ===============================|| COLOR BOX ||=============================== //
 
 export default function EmailInboxDataGrid({ reloadCall }: { reloadCall: any }) {
-  debugger
+  
   const t = useTranslations("");
   const { data: session } = useSession();
   const jwt = session?.accessToken;

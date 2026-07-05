@@ -1,32 +1,31 @@
-'use client'
-// Import React FilePond
+'use client';
+
+import { useEffect, useMemo, useState, useCallback } from 'react';
 import { FilePond, registerPlugin } from 'react-filepond';
-// Import the plugin code
 import FilePondPluginFileValidateSize from 'filepond-plugin-file-validate-size';
 import FilePondPluginFileValidateType from 'filepond-plugin-file-validate-type';
 import FilePondPluginImagePreview from 'filepond-plugin-image-preview';
 import FilePondPluginFilePoster from 'filepond-plugin-file-poster';
 import FilePondPluginGetFile from 'filepond-plugin-get-file';
-registerPlugin(
-  FilePondPluginFileValidateSize,
-  FilePondPluginFileValidateType, // Image editor
-  FilePondPluginImagePreview,
-  FilePondPluginFilePoster,
-  FilePondPluginGetFile
-);
-// Import FilePond styles
 import 'filepond/dist/filepond.min.css';
 import 'filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css';
 import 'filepond-plugin-file-poster/dist/filepond-plugin-file-poster.css';
 import 'filepond-plugin-get-file/dist/filepond-plugin-get-file.css';
 
-import { useEffect, useState } from 'react';
 import { useTranslations } from 'next-intl';
 import CONFIG from '@root/config';
-import FileStorageService from '@dashboard/(filestorage)/_service/FileStorageService';
 import { useSession } from 'next-auth/react';
 import { FileOrigin, FilePondFile, FilePondInitialFile } from 'filepond';
-import FileUploadModel from '../../(filestorage)/_types/FileUploadModel';
+import FileStorageService from '@dashboard/(filestorage)/_service/FileStorageService';
+import FileUploadModel from '@dashboard/(filestorage)/_types/FileUploadModel';
+
+registerPlugin(
+  FilePondPluginFileValidateSize,
+  FilePondPluginFileValidateType,
+  FilePondPluginImagePreview,
+  FilePondPluginFilePoster,
+  FilePondPluginGetFile
+);
 
 interface ImageUploadProps {
   name: string;
@@ -37,6 +36,45 @@ interface ImageUploadProps {
   disabled?: boolean;
   filePosterMaxHeight?: number;
   allowMultiple?: boolean;
+}
+
+function buildInitialFile(fileInfo: FileUploadModel): FilePondInitialFile {
+  const fileUrl = CONFIG.UPLOAD_BASEPATH + fileInfo.directory + fileInfo.fileName;
+  const isVideo = CONFIG.VIDEOS_EXTENSIONS.includes(fileInfo.extension);
+  const posterUrl = isVideo
+    ? CONFIG.UPLOAD_BASEPATH + fileInfo.directory + fileInfo.thumbnail
+    : CONFIG.UPLOAD_BASEPATH + fileInfo.directory + fileInfo.fileName;
+
+  return {
+    source: fileInfo.id.toString(),
+    options: {
+      type: 'local',
+      file: {
+        name: fileInfo.fileName,
+        type: isVideo ? 'video/*' : 'image/*',
+        size: fileInfo.size
+      },
+      metadata: {
+        poster: posterUrl,
+        url: fileUrl
+      }
+    }
+  };
+}
+
+function getError(errorCode: number): string {
+  switch (errorCode) {
+    case 401: return 'Is Not Authorized';
+    case 404: return 'Not Found';
+    case 500: return 'Operation Failed';
+    case 501: return 'Invalid Validation';
+    case 502: return 'File Type Is Not Allowed';
+    case 503: return 'It"s Duplicate';
+    case 504: return 'Exception Throwed';
+    case 505: return 'File Is Too Large';
+    case 506: return 'File Is Too Small';
+    default: return 'Error During Upload';
+  }
 }
 
 export default function ImageUpload({
@@ -50,92 +88,28 @@ export default function ImageUpload({
   allowMultiple
 }: Readonly<ImageUploadProps>) {
   const [files, setFiles] = useState<Array<FilePondInitialFile | Blob | string>>([]);
-  const [values, setValues] = useState<any[]>([]);
-  const t = useTranslations("");
-
   const { data: session } = useSession();
   const jwt = session?.accessToken;
 
-  const uploadUrl = CONFIG.API_BASEPATH + '/FileStorage/UploadFile';
+  const fileService = useMemo(() => new FileStorageService(jwt ?? ''), [jwt]);
 
-  let fileUploadService = new FileStorageService(jwt ?? '');
+  const loadFiles = useCallback(async (fileIds: number[]) => {
+    const result = await fileService.getFilesInfoById(fileIds);
+    if (result.data) {
+      setFiles(result.data.map(buildInitialFile));
+    }
+  }, [fileService]);
 
-  const loadFiles = async (fileIds: number[]) => {
-    fileUploadService.getFilesInfoById(fileIds).then((fileInfos) => {
-      let fileInfosData: FilePondInitialFile[] = [];
-      fileInfos.data?.forEach((fileInfo: FileUploadModel) => {
-        let fileUrl = CONFIG.UPLOAD_BASEPATH + fileInfo.directory + fileInfo.fileName;
-        let imagePosterUrl = CONFIG.UPLOAD_BASEPATH + fileInfo.directory;
-        let isVideo = CONFIG.VIDEOS_EXTENSIONS.some((extension) => extension == fileInfo.extension);
-        imagePosterUrl += fileInfo.thumbnail;
-
-        fileInfosData.push({
-          // the server file reference
-          source: fileInfo.id.toString(),
-          // set type to local to indicate an already uploaded file
-          options: {
-            type: 'local',
-            // optional stub file information
-            file: {
-              name: fileInfo.fileName,
-              type: isVideo ? 'video/*' : 'image/*',
-              size: fileInfo.size
-            },
-            // pass poster property
-            metadata: {
-              poster: imagePosterUrl,
-              url: fileUrl
-            }
-          }
-        });
-      });
-      setFiles(fileInfosData);
-    });
-  };
-  const loadFile = async (fileId: number) => {
-    fileUploadService.getFileInfoById(fileId).then((result) => {
-      let fileInfo = result.data;
-      if (fileInfo != undefined) {
-
-        let fileUrl = CONFIG.UPLOAD_BASEPATH + fileInfo.directory + fileInfo.fileName;
-        let imagePosterUrl = CONFIG.UPLOAD_BASEPATH + fileInfo.directory;
-        let isVideo = CONFIG.VIDEOS_EXTENSIONS.some((extension) => extension == fileInfo.extension);
-        if (isVideo) {
-          imagePosterUrl += fileInfo.thumbnail;
-        } else {
-          imagePosterUrl += fileInfo.fileName;
-        }
-
-        setFiles([
-          {
-            // the server file reference
-            source: fileInfo.id.toString(),
-            // set type to local to indicate an already uploaded file
-            options: {
-              type: 'local',
-              // optional stub file information
-              file: {
-                name: fileInfo.fileName,
-                type: isVideo ? 'video/*' : 'image/*',
-                size: fileInfo.size
-              },
-              // pass poster property
-              metadata: {
-                poster: imagePosterUrl,
-                url: fileUrl
-              }
-            }
-          }
-        ]);
-      }
-    });
-
-  };
+  const loadFile = useCallback(async (fileId: number) => {
+    const result = await fileService.getFileInfoById(fileId);
+    if (result.data) {
+      setFiles([buildInitialFile(result.data)]);
+    }
+  }, [fileService]);
 
   useEffect(() => {
-
     if (allowMultiple) {
-      if (value != undefined && value.length > 0) {
+      if (value?.length > 0) {
         loadFiles(value);
       } else {
         setFiles([]);
@@ -147,159 +121,100 @@ export default function ImageUpload({
         setFiles([]);
       }
     }
-  }, [value]);
+  }, [value, allowMultiple, loadFiles, loadFile]);
 
-  function downloadFunction(item: any) {
-    // create a temporary hyperlink to force the browser to download the file
-    const a = document.createElement('a');
-    let url;
-    if (item.source > 0) {
-      window.open(item.file.url);
-      return;
-      // url = item.file.url;
-    } else {
-      url = window.URL.createObjectURL(item.file);
-    }
-    document.body.appendChild(a);
-    a.style.display = 'none';
-    a.href = url;
-    a.download = item.file.name;
-    a.click();
-    window.URL.revokeObjectURL(url);
-    a.remove();
-  }
-
-
-  const onupdatefiles = async (fileItems: FilePondFile[]) => {
-    let fileInfosData: Array<FilePondInitialFile | Blob | string> = [];
-    fileItems.forEach(fileInfo => {
+  const handleUpdateFiles = useCallback((fileItems: FilePondFile[]) => {
+    const fileInfosData: Array<FilePondInitialFile | Blob | string> = fileItems.map(fileInfo => {
       if (fileInfo.origin === FileOrigin.LOCAL) {
-        fileInfosData.push({
-          // the server file reference
+        return {
           source: fileInfo.source.toString(),
-          // set type to local to indicate an already uploaded file
           options: {
             type: 'local',
-            // optional stub file information
             file: {
               name: fileInfo.filename,
               type: fileInfo.fileType,
               size: fileInfo.fileSize
             },
-            // pass poster property
             metadata: {
               poster: fileInfo.getMetadata('poster'),
               url: fileInfo.getMetadata('url')
             }
           }
-        });
-      } else {
-        fileInfosData.push(fileInfo.file);
+        };
       }
+      return fileInfo.file;
     });
     setFiles(fileInfosData);
-  };
-  function beforeRemoveFile(file: FilePondFile): boolean | Promise<boolean> {
-    if (setFieldValue != undefined && file != undefined) {
-      let fileId: number | undefined = parseInt(file.serverId) ?? undefined;
-      if (fileId != undefined) {
-        fileUploadService.deleteFile(fileId).then((result) => {
-          if(result.succeeded) {
-            setFieldValue(name, undefined);
-            setValues([]);
-          }
-          return result.succeeded;
-        });
-        if (allowMultiple) {
-          let newValue = values;
-          const index = newValue.indexOf(fileId);
-          newValue.splice(index, 1);
-          setFieldValue(name, newValue);
-          setValues(newValue);
-        } else {
-          setFieldValue(name, fileId);
-        }
-      }
-    } return false;
-  }
-  function onprocessfile(error: any, file: FilePondFile) {
-    if (setFieldValue != undefined && file != undefined) {
-      let response = JSON.parse(file?.serverId);
-      if (response?.succeeded) {
-        let fileInfo = response?.data;
-        if (allowMultiple) {
-          let newValues = values;
-          newValues.push(fileInfo?.id);
+  }, []);
 
-          if (setFieldValue != undefined)
-            setFieldValue(name, newValues);
-          setValues((old) => [...old, fileInfo?.id]);
-        } else {
-          if (setFieldValue != undefined)
-            setFieldValue(name, fileInfo?.id);
-        }
+  const handleBeforeRemoveFile = useCallback(async (file: FilePondFile): Promise<boolean> => {
+    if (!setFieldValue || !file) return false;
+
+    const fileId = parseInt(file.serverId);
+    if (isNaN(fileId)) return false;
+
+    const result = await fileService.deleteFile(fileId);
+    if (result.succeeded) {
+      if (allowMultiple) {
+        const currentIds = Array.isArray(value) ? [...value] : [];
+        setFieldValue(name, currentIds.filter(id => id !== fileId));
+      } else {
+        setFieldValue(name, undefined);
       }
+      return true;
     }
-  }
-  const getError = (errorCode: number) => {
-    switch (errorCode) {
-      case 500:
-        return 'Operation Failed';
-      case 501:
-        return 'Invalid Validation';
-      case 404:
-        return 'Not Found';
-      case 401:
-        return 'Is Not Authorized';
-      case 502:
-        return 'File Type Is Not Allowed';
-      case 503:
-        return 'It"s Duplicate';
-      case 504:
-        return 'Exception Throwed';
-      case 505:
-        return 'File Is Too Large';
-      case 506:
-        return 'File Is Too Small';
-      default:
-        return 'Error During Upload';
+    return false;
+  }, [fileService, setFieldValue, allowMultiple, value, name]);
+
+  const handleProcessFile = useCallback((error: any, file: FilePondFile) => {
+    if (!setFieldValue || error) return;
+
+    const response = JSON.parse(file.serverId);
+    if (!response?.succeeded) return;
+
+    const fileInfo = response.data;
+    if (allowMultiple) {
+      const currentIds = Array.isArray(value) ? [...value] : [];
+      currentIds.push(fileInfo.id);
+      setFieldValue(name, currentIds);
+    } else {
+      setFieldValue(name, fileInfo.id);
     }
-  };
+  }, [setFieldValue, allowMultiple, value, name]);
+
   return (
     <FilePond
       disabled={disabled}
       id={name || 'fileId'}
-      allowImagePreview={true}
-      filePosterMaxHeight={filePosterMaxHeight ?? undefined}
-      allowDownloadByUrl={true}
-      // downloadFunction={downloadFunction}
-      beforeRemoveFile={beforeRemoveFile}
-      allowFilePoster={true}
-      allowFileTypeValidation={true}
+      allowImagePreview
+      filePosterMaxHeight={filePosterMaxHeight}
+      allowDownloadByUrl
+      allowFilePoster
+      allowFileTypeValidation
       acceptedFileTypes={['image/png', 'image/jpeg', 'video/*']}
-      // labelFileTypeNotAllowed={t('validation.fileUpload.labelFileTypeNotAllowed')}
       labelFileTypeNotAllowed={"نوع فایل مجاز نیست"}
       fileValidateTypeLabelExpectedTypes={"انتظار می‌رود {allButLastType} یا {lastType}"}
-      allowFileSizeValidation={true}
-      minFileSize={minFileSize ? minFileSize : '5KB'}
-      maxFileSize={maxFileSize ? maxFileSize : '200MB'}
+      allowFileSizeValidation
+      minFileSize={minFileSize ?? '5KB'}
+      maxFileSize={maxFileSize ?? '200MB'}
       labelMaxFileSizeExceeded={"فایل خیلی بزرگ است"}
       labelMaxFileSize={"حداکثر اندازه فایل {filesize} است"}
       labelMinFileSizeExceeded={"فایل خیلی کوچک است"}
       labelMinFileSize={"حداقل اندازه فایل {filesize} است"}
       labelIdle={"فایل‌های خود را بکشید و رها کنید یا <span class='filepond--label-action'>مرور کنید</span>"}
-      allowReplace={true}
-      instantUpload={true}
-      allowMultiple={(allowMultiple && true) ?? false}
+      allowReplace
+      instantUpload
+      allowMultiple={allowMultiple ?? false}
       credits={false}
-      name="file" /* sets the file input name, it's filepond by default */
+      name="file"
       files={files}
-      onupdatefiles={onupdatefiles}
+      onupdatefiles={handleUpdateFiles}
+      beforeRemoveFile={handleBeforeRemoveFile}
       server={{
-        url: uploadUrl,
-        headers: { Authorization: 'Bearer ' + jwt, UploadAction: 'Rename' }
+        url: CONFIG.API_BASEPATH + '/FileStorage/UploadFile',
+        headers: { Authorization: `Bearer ${jwt}`, UploadAction: 'Rename' }
       }}
-      onprocessfile={onprocessfile}
+      onprocessfile={handleProcessFile}
       labelFileProcessingError={(error: any) => getError(error.code)}
     />
   );
