@@ -132,7 +132,7 @@ export default function ImageUpload({
   useEffect(() => {
     if (allowMultiple) {
       if (valueType == 'FileImageModel') {
-        loadMultipleFilesByModels(value  as FileImageModel[]);
+        loadMultipleFilesByModels(value as FileImageModel[]);
       } else if (valueType == 'number') {
         loadMultipleFilesByIds(value as number[]);
       } else {
@@ -223,13 +223,11 @@ export default function ImageUpload({
     if (!setFieldValue || !allowMultiple) return;
 
     const reorderedIds = newOrderedFiles.map(f => parseInt(f.serverId)).filter(id => !isNaN(id));
-
+    debugger
     if (valueType == 'FileImageModel') {
-      const existingModels = new Map((value as FileImageModel[]).map(img => [img.imageId, img]));
       const updatedImages = reorderedIds.map((id, index) => ({
         imageId: id,
-        displayOrder: index,
-        ...existingModels.get(id)
+        displayOrder: index
       }));
       setFieldValue(name, updatedImages);
     } else if (valueType == 'number') {
