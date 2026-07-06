@@ -34,6 +34,7 @@ import { useSession } from 'next-auth/react';
 import ProductModel, { StockType } from '@dashboard/(ecommerce)/_types/Product/ProductModel';
 import DeliveryDate from '@root/app/types/enums/DeliveryDateType';
 import CONFIG from '@root/config';
+import FileImageModel from '@root/app/types/FileImageModel';
 function TabPanel(props: any) {
   const { children, value, index, ...other } = props;
 
@@ -112,7 +113,7 @@ export default function AddOrEditProduct({ params }: Readonly<{ params: Promise<
     updateUser: null,
     categoryIds: [],
     manufacturerIds: [],
-    imageIds: [],
+    images: [],
     relatedProductIds: [],
     attributeIds: [],
     inventories: [],
@@ -213,6 +214,9 @@ export default function AddOrEditProduct({ params }: Readonly<{ params: Promise<
   };
 
   const handleSubmit = async (e: any, isDraft: boolean) => {
+
+    alert('images ' + JSON.stringify(product.images) );
+    return; // Prevent form submission for debugging
     e.preventDefault();
     product.published = !isDraft; // Set published based on isDraft flag
     setIsSubmitting(true);

@@ -1335,7 +1335,7 @@
       "updatedOnUtc": "به‌روزرسانی شده در",
       "categoryIds": "دسته‌بندی‌ها",
       "manufacturerIds": "تولیدکنندگان",
-      "imageIds": "تصاویر محصول",
+      "images": "تصاویر محصول",
       "discountIds": "تخفیف‌ها",
       "imagePreviewId": "پیش‌نمایش محصول",
       "relatedProductIds": "محصولات مرتبط",

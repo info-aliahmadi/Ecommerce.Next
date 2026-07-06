@@ -351,14 +351,15 @@ export default function ProductBaseInfo({
           )}
         </Stack>
         <Stack>
-          <InputLabel htmlFor="imageIds" sx={{ textAlign: 'center', mb: '5px' }}>{t(fieldsName + 'imageIds')}</InputLabel>
+          <InputLabel htmlFor="images" sx={{ textAlign: 'center', mb: '5px' }}>{t(fieldsName + 'images')}</InputLabel>
           <ImageUpload
-            name="imageIds"
+            name="images"
             setFieldValue={setFieldValue}
-            value={values?.images || []}
+            value={values?.images}
             filePosterMaxHeight={200}
             allowMultiple={true}
-            allowReorder={true}  
+            valueType="FileImageModel"
+            allowReorder={true}
           />
         </Stack>
       </Grid>

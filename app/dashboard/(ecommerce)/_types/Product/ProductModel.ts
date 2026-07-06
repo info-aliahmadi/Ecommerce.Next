@@ -4,6 +4,7 @@ import InventoryModel from "./InventoryModel";
 import DeliveryDateType from "@root/app/types/enums/DeliveryDateType";
 import CurrencyTypes from "@root/app/types/enums/CurrencyTypes";
 import MeasureType from "@root/app/types/enums/MeasureType";
+import FileImageModel from "@root/app/types/FileImageModel";
 /**
  * Represents a product.
  */
@@ -338,7 +339,7 @@ export default interface ProductModel {
   /**
    * The images associated with the product.
    */
-  images: ProductImageModel[];
+  images: FileImageModel[];
 
   /**
    * The IDs of the reviews associated with the product.
@@ -359,15 +360,4 @@ export default interface ProductModel {
 export enum StockType {
   Total = 0,
   PerAttribute = 1
-}
-export interface ProductImageModel {
-  /**
-   * File id of the image.
-   */
-  imageId: number;
-
-  /**
-   *  Display order for this image; lower values show first.
-   */
-  displayOrder: number;
 }

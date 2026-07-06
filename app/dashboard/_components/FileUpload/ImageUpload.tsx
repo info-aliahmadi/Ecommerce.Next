@@ -12,12 +12,12 @@ import 'filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css';
 import 'filepond-plugin-file-poster/dist/filepond-plugin-file-poster.css';
 import 'filepond-plugin-get-file/dist/filepond-plugin-get-file.css';
 
-import { useTranslations } from 'next-intl';
 import CONFIG from '@root/config';
 import { useSession } from 'next-auth/react';
 import { FileOrigin, FilePondFile, FilePondInitialFile } from 'filepond';
 import FileStorageService from '@dashboard/(filestorage)/_service/FileStorageService';
 import FileUploadModel from '@dashboard/(filestorage)/_types/FileUploadModel';
+import FileImageModel from '@root/app/types/FileImageModel';
 
 registerPlugin(
   FilePondPluginFileValidateSize,
@@ -27,16 +27,19 @@ registerPlugin(
   FilePondPluginGetFile
 );
 
+
+
 interface ImageUploadProps {
   name: string;
   setFieldValue?: (field: string, value: any) => void;
-  value: any;
+  value: FileImageModel | FileImageModel[] | number | number[] | null;
   minFileSize?: string;
   maxFileSize?: string;
   disabled?: boolean;
   filePosterMaxHeight?: number;
   allowMultiple?: boolean;
   allowReorder?: boolean;
+  valueType?: 'FileImageModel' | 'number';
 }
 
 function buildInitialFile(fileInfo: FileUploadModel): FilePondInitialFile {
@@ -87,7 +90,8 @@ export default function ImageUpload({
   disabled,
   filePosterMaxHeight,
   allowMultiple,
-  allowReorder
+  allowReorder,
+  valueType = 'number'
 }: Readonly<ImageUploadProps>) {
   const [files, setFiles] = useState<Array<FilePondInitialFile | Blob | string>>([]);
   const { data: session } = useSession();
@@ -95,14 +99,30 @@ export default function ImageUpload({
 
   const fileService = useMemo(() => new FileStorageService(jwt ?? ''), [jwt]);
 
-  const loadFiles = useCallback(async (fileIds: number[]) => {
+  const loadMultipleFilesByIds = useCallback(async (fileIds: number[]) => {
     const result = await fileService.getFilesInfoById(fileIds);
     if (result.data) {
       setFiles(result.data.map(buildInitialFile));
     }
   }, [fileService]);
 
-  const loadFile = useCallback(async (fileId: number) => {
+  const loadMultipleFilesByModels = useCallback(async (imageModels: FileImageModel[]) => {
+    const fileIds = imageModels.map(img => img.imageId);
+    const result = await fileService.getFilesInfoById(fileIds);
+    if (result.data) {
+      const sortedFiles = imageModels
+        .map(img => {
+          const fileInfo = result.data?.find(f => f.id === img.imageId);
+          return fileInfo ? { initialFile: buildInitialFile(fileInfo), displayOrder: img.displayOrder } : null;
+        })
+        .filter(Boolean)
+        .sort((a, b) => a!.displayOrder - b!.displayOrder)
+        .map(item => item!.initialFile);
+      setFiles(sortedFiles);
+    }
+  }, [fileService]);
+
+  const loadSingleFile = useCallback(async (fileId: number) => {
     const result = await fileService.getFileInfoById(fileId);
     if (result.data) {
       setFiles([buildInitialFile(result.data)]);
@@ -111,19 +131,22 @@ export default function ImageUpload({
 
   useEffect(() => {
     if (allowMultiple) {
-      if (value?.length > 0) {
-        loadFiles(value);
+      if (valueType == 'FileImageModel') {
+        loadMultipleFilesByModels(value  as FileImageModel[]);
+      } else if (valueType == 'number') {
+        loadMultipleFilesByIds(value as number[]);
       } else {
         setFiles([]);
       }
     } else {
-      if (value > 0) {
-        loadFile(value);
+      const fileId = valueType === 'FileImageModel' ? (value as FileImageModel).imageId : value as number;
+      if (fileId && fileId > 0) {
+        loadSingleFile(fileId);
       } else {
         setFiles([]);
       }
     }
-  }, [value, allowMultiple, loadFiles, loadFile]);
+  }, [value, allowMultiple, valueType, loadMultipleFilesByModels, loadMultipleFilesByIds, loadSingleFile]);
 
   const handleUpdateFiles = useCallback((fileItems: FilePondFile[]) => {
     const fileInfosData: Array<FilePondInitialFile | Blob | string> = fileItems.map(fileInfo => {
@@ -156,16 +179,20 @@ export default function ImageUpload({
     if (isNaN(fileId)) return false;
 
     const result = await fileService.deleteFile(fileId);
-    if (result.succeeded) {
-      if (allowMultiple) {
-        const currentIds = Array.isArray(value) ? [...value] : [];
-        setFieldValue(name, currentIds.filter(id => id !== fileId));
+    if (!result.succeeded) return false;
+
+    if (allowMultiple) {
+      if (valueType == 'FileImageModel') {
+        setFieldValue(name, (value as FileImageModel[]).filter(img => img.imageId !== fileId));
+      } else if (valueType == 'number') {
+        setFieldValue(name, (value as number[]).filter(id => id !== fileId));
       } else {
-        setFieldValue(name, undefined);
+        setFieldValue(name, []);
       }
-      return true;
+    } else {
+      setFieldValue(name, null);
     }
-    return false;
+    return true;
   }, [fileService, setFieldValue, allowMultiple, value, name]);
 
   const handleProcessFile = useCallback((error: any, file: FilePondFile) => {
@@ -176,11 +203,37 @@ export default function ImageUpload({
 
     const fileInfo = response.data;
     if (allowMultiple) {
-      const currentIds = Array.isArray(value) ? [...value] : [];
-      currentIds.push(fileInfo.id);
-      setFieldValue(name, currentIds);
+      if (valueType == 'FileImageModel') {
+        const newImage: FileImageModel = {
+          imageId: fileInfo.id,
+          displayOrder: (value as FileImageModel[]).length
+        };
+        setFieldValue(name, [...(value as FileImageModel[]), newImage]);
+      } else if (valueType == 'number') {
+        setFieldValue(name, [...(value as number[]), fileInfo.id]);
+      } else {
+        setFieldValue(name, [fileInfo.id]);
+      }
     } else {
       setFieldValue(name, fileInfo.id);
+    }
+  }, [setFieldValue, allowMultiple, value, name]);
+
+  const handleReorder = useCallback((newOrderedFiles: FilePondFile[]) => {
+    if (!setFieldValue || !allowMultiple) return;
+
+    const reorderedIds = newOrderedFiles.map(f => parseInt(f.serverId)).filter(id => !isNaN(id));
+
+    if (valueType == 'FileImageModel') {
+      const existingModels = new Map((value as FileImageModel[]).map(img => [img.imageId, img]));
+      const updatedImages = reorderedIds.map((id, index) => ({
+        imageId: id,
+        displayOrder: index,
+        ...existingModels.get(id)
+      }));
+      setFieldValue(name, updatedImages);
+    } else if (valueType == 'number') {
+      setFieldValue(name, reorderedIds);
     }
   }, [setFieldValue, allowMultiple, value, name]);
 
@@ -190,6 +243,7 @@ export default function ImageUpload({
       id={name || 'fileId'}
       allowImagePreview
       allowReorder={allowReorder}
+      onreorderfiles={handleReorder}
       filePosterMaxHeight={filePosterMaxHeight}
       allowDownloadByUrl
       allowFilePoster
