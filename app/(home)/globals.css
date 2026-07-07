@@ -103,6 +103,12 @@
   --sidebar-accent-foreground: #212529;
   --sidebar-border: #E9ECEF;
   --sidebar-ring: #6A5ACD;
+  
+  --container-xs: 20rem;
+  --container-sm: 24rem;
+  --container-md: 35rem;
+  --container-lg: 64rem;
+  --container-xl: 70rem;
 }
 
 .dark {

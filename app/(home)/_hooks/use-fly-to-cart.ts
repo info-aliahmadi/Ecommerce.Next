@@ -4,21 +4,14 @@ import { useCallback } from 'react';
 import { triggerFlyToCart } from '../_components/ecommerce/fly-to-cart';
 import { useCartStore } from '../_lib/store';
 import { toast } from 'sonner';
+import CartItem from '../_types/CartItem';
 
-interface CartItemData {
-  id: string;
-  name: string;
-  price: number;
-  comparePrice?: number;
-  image: string;
-  category: string;
-}
 
 export function useFlyToCart() {
   const { addItem } = useCartStore();
 
   const handleAddToCartWithAnimation = useCallback(
-    (e: React.MouseEvent, imageUrl: string, cartItem: CartItemData) => {
+    (e: React.MouseEvent, imageUrl : string, cartItem: CartItem) => {
       e.preventDefault();
       e.stopPropagation();
 
@@ -39,7 +32,7 @@ export function useFlyToCart() {
       });
 
       // Trigger fly-to-cart animation
-      triggerFlyToCart(imageUrl, sourceElement);
+      triggerFlyToCart(imageUrl , sourceElement as HTMLElement);
     },
     [addItem],
   );

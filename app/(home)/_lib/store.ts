@@ -1,17 +1,14 @@
 import CONFIG from '@root/config';
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import CategoryDisplayModel from '../_types/CategoryDisplayModel';
+import ProductDisplayModel from '../_types/ProductDisplayModel';
+import CartItem from '../_types/CartItem';
+import WishlistItem from '../_types/WishlistItem';
+import RecentItem from '../_types/RecentItem';
+import CompareItem from '../_types/CompareItem';
+import StockAlert from '../_types/StockAlert';
 
-export interface CartItem {
-  id: string;
-  name: string;
-  price: number;
-  comparePrice?: number;
-  image: string;
-  quantity: number;
-  category: string;
-}
+
 
 interface CartStore {
   items: CartItem[];
@@ -19,8 +16,8 @@ interface CartStore {
   setCartOpen: (open: boolean) => void;
   toggleCart: () => void;
   addItem: (item: Omit<CartItem, 'quantity'>) => void;
-  removeItem: (id: string) => void;
-  updateQuantity: (id: string, quantity: number) => void;
+  removeItem: (id: number) => void;
+  updateQuantity: (id: number, quantity: number) => void;
   clearCart: () => void;
   totalItems: () => number;
   totalPrice: () => number;
@@ -90,21 +87,13 @@ export const useCartStore = create<CartStore>()(
   )
 );
 
-export interface WishlistItem {
-  id: string;
-  name: string;
-  price: number;
-  comparePrice?: number;
-  image: string;
-  category: string;
-}
 
 interface WishlistStore {
   items: WishlistItem[];
   addItem: (item: WishlistItem) => void;
-  removeItem: (id: string) => void;
+  removeItem: (id: number) => void;
   toggleItem: (item: WishlistItem) => void;
-  isInWishlist: (id: string) => boolean;
+  isInWishlist: (id: number) => boolean;
   totalCount: () => number;
 }
 
@@ -145,23 +134,6 @@ export const useWishlistStore = create<WishlistStore>()(
   )
 );
 
-export interface QuickViewProduct {
-  id: string;
-  name: string;
-  description: string;
-  shortDesc?: string;
-  price: number;
-  comparePrice?: number;
-  image: string;
-  images?: string;
-  rating: number;
-  reviewCount: number;
-  category: { name: string; color: string };
-  stock: number;
-  sku?: string;
-  tags?: string;
-}
-
 export type PageName = 'home' | 'checkout' | 'products' | 'product-detail' | 'profile';
 
 export interface PageParams {
@@ -180,8 +152,8 @@ interface UIStore {
   setMobileMenuOpen: (open: boolean) => void;
   isWishlistOpen: boolean;
   setWishlistOpen: (open: boolean) => void;
-  quickViewProduct: QuickViewProduct | null;
-  setQuickViewProduct: (product: QuickViewProduct | null) => void;
+  quickViewProduct: ProductDisplayModel | null;
+  setQuickViewProduct: (product: ProductDisplayModel | null) => void;
   isCatalogOpen: boolean;
   setCatalogOpen: (open: boolean) => void;
   currentPage: PageName;
@@ -211,15 +183,7 @@ export const useUIStore = create<UIStore>((set) => ({
   goHome: () => set({ currentPage: 'home', pageParams: {} }),
 }));
 
-export interface RecentItem {
-  id: string;
-  name: string;
-  price: number;
-  comparePrice?: number;
-  image: string;
-  category: string;
-  viewedAt: number;
-}
+
 
 interface RecentStore {
   items: RecentItem[];
@@ -243,28 +207,16 @@ export const useRecentStore = create<RecentStore>()(
   )
 );
 
-export interface CompareItem {
-  id: string;
-  name: string;
-  price: number;
-  comparePrice?: number;
-  image: string;
-  rating: number;
-  reviewCount: number;
-  category: CategoryDisplayModel;
-  stock: number;
-  description: string;
-  sku?: string;
-}
+
 
 interface CompareStore {
   items: CompareItem[];
   isCompareOpen: boolean;
   setCompareOpen: (open: boolean) => void;
   addItem: (item: CompareItem) => void;
-  removeItem: (id: string) => void;
+  removeItem: (id: number) => void;
   clearAll: () => void;
-  isInCompare: (id: string) => boolean;
+  isInCompare: (id: number) => boolean;
   totalCount: () => number;
 }
 
@@ -299,12 +251,7 @@ export const useCompareStore = create<CompareStore>((set, get) => ({
   totalCount: () => get().items.length,
 }));
 
-export interface StockAlert {
-  id: string;
-  productName: string;
-  stock: number;
-  timestamp: number;
-}
+
 
 interface StockAlertStore {
   alerts: StockAlert[];

@@ -12,4 +12,5 @@ export default interface FileUploadModel {
     userId: number;
     fullPath : string;
     thumbnailPath : string;
+    
 }

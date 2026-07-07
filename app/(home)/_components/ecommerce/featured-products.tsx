@@ -9,24 +9,11 @@ import { useTranslations } from 'next-intl';
 import HomePageService from '../../_services/HomePageService';
 import ProductDisplayModel from '../../_types/ProductDisplayModel';
 
-function ProductCardWrapper({ product }: { product: ProductDisplayModel }) {
+function ProductCardWrapper({ product,key }: Readonly<{ product: ProductDisplayModel, key: number }>) {
   return (
     <ProductCard
-      key={product.id}
-      id={product.id as unknown as string }
-      name={product.name}
-      price={product.sellUnitPrice}
-      comparePrice={product.oldSellUnitPrice || undefined}
-      image={product.imagePreview?.fullPath || ''}
-      rating={product.approvedRatingSum}
-      reviewCount={product.approvedTotalReviews}
-      category={product.categories}
-      shortDesc={product.shortDescription || undefined}
-      description={product.fullDescription || undefined}
-      stock={product.stockQuantity || undefined}
-      sku={product.sku || undefined}
-      tags={product.productTags || undefined}
-      index={product.id}
+      product={product}
+      index={key}
     />
   );
 }
@@ -84,7 +71,7 @@ export function FeaturedProducts() {
 
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
           {featured?.map((product) => (
-            <ProductCardWrapper key={product.id as unknown as string} product={product} />
+            <ProductCardWrapper key={product.id} product={product} />
           ))}
         </div>
       </div>

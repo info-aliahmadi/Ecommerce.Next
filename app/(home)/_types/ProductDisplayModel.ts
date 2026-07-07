@@ -297,7 +297,7 @@ export default interface ProductDisplayModel {
   /**
    * The quantity of stock.
    */
-  stockQuantity: number | null;
+  stockQuantity: number;
 
   /**
    * The minimum stock quantity.
