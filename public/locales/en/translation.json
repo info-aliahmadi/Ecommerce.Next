@@ -1320,6 +1320,7 @@
     "product": {
       "id": "Id",
       "name": "Name",
+      "sku": "SKU",
       "metaKeywords": "Meta Keywords",
       "metaTitle": "Meta Title",
       "metaDescription": "Meta Description",
@@ -1721,6 +1722,7 @@
     "product": {
       "error": "Validation Errors",
       "maxName": "The max of Product name length is 250 Characters",
+      "maxSku": "The max of Product SKU length is 70 Characters",
       "requiredName": "Product name is require",
       "requiredFullDescription": "Full Description is require",
       "requiredCategoryIds": "Category is require",
@@ -1739,7 +1741,7 @@
     },
     "category": {
       "requiredName": "Category name is require",
-      "MaxLengthName": "The max of Category name length is 70 Characters",
+      "maxLengthName": "The max of Category name length is 70 Characters",
       "maxLengthMetaKeywords": "The max of Category Meta Keywords length is 250 Characters",
       "maxLengthMetaTitle": "The max of Category Meta Title length is 250 Characters",
       "maxLengthMetaDescription": "The max of Category Meta Description length is 300 Characters",

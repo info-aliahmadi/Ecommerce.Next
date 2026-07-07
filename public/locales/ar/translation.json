@@ -1297,6 +1297,7 @@
     "product": {
       "id": "شناسه",
       "name": "نام",
+      "sku": "SKU",
       "metaKeywords": "کلمات کلیدی متا",
       "metaTitle": "عنوان متا",
       "metaDescription": "توضیحات متا",
@@ -1671,6 +1672,7 @@
     "product": {
       "error": "خطا در اعتبارسنجی محصول",
       "maxName": "The max of Product name length is 250 Characters",
+      "maxSku": "شناسه محصول (SKU) حداکثر 70 کاراکتر است",
       "requiredName": "نام محصول الزامی است",
       "requiredFullDescription": "توضیحات کامل الزامی است",
       "requiredCategoryIds": "دسته‌بندی الزامی است",
@@ -1689,7 +1691,7 @@
     },
     "category": {
       "requiredName": "نام دسته‌بندی الزامی است",
-      "MaxLengthName": "حداکثر طول نام دسته‌بندی 70 کاراکتر است",
+      "maxLengthName": "حداکثر طول نام دسته‌بندی 70 کاراکتر است",
       "maxLengthMetaKeywords": "حداکثر طول کلمات کلیدی متا 250 کاراکتر است",
       "maxLengthMetaTitle": "حداکثر طول عنوان متا 250 کاراکتر است",
       "maxLengthMetaDescription": "حداکثر طول توضیحات متا 300 کاراکتر است",

@@ -1,6 +1,7 @@
 import CONFIG from '@root/config';
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
+import CategoryDisplayModel from '../_types/CategoryDisplayModel';
 
 export interface CartItem {
   id: string;
@@ -250,7 +251,7 @@ export interface CompareItem {
   image: string;
   rating: number;
   reviewCount: number;
-  category: { name: string; color: string };
+  category: CategoryDisplayModel;
   stock: number;
   description: string;
   sku?: string;

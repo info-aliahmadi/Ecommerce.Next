@@ -51,11 +51,7 @@ export default interface CategoryDisplayModel {
     /**
      * The ID of the associated picture (nullable).
      */
-    pictureId: number | null;
-    /**
-     * The ID of the associated picture (nullable).
-     */
-    pictureInfo: FileUploadModel | null;
+    imagePreview?: FileUploadModel | null;
   
     /**
      * Indicates whether the category is shown on the homepage.

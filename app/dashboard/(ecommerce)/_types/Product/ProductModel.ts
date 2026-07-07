@@ -13,6 +13,14 @@ export default interface ProductModel {
    * The ID of the product.
    */
   id: number;
+  /**
+   * The name of the product.
+   */
+  name: string;
+  /**
+   * The name of the product.
+   */
+  sku: string;
 
   /**
    * The ID of the user who created the product.
@@ -34,10 +42,6 @@ export default interface ProductModel {
    */
   updateUser?: AuthorModel | null;
 
-  /**
-   * The name of the product.
-   */
-  name: string;
 
   /**
    * The ID of the preview image (nullable).

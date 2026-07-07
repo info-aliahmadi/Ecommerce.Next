@@ -29,20 +29,6 @@ const SelectAttributeType: React.FC<SelectAttributeTypeProps> = ({
     setFieldValue(name, newValue);
   };
 
-  // Create filtered enum object with only Cash and Debit
-  /*   
-   Color = 0,
-    Size = 1,
-    Weight = 2,
-    Length = 3,
-    Width = 4,
-    Height = 5,
-    Material = 6,
-    Style = 7,
-    Pattern = 8,
-    Brand = 9,
-    Model = 10,
-    */ 
   const attributeLabels: Record<string, string> = {
     Color: t('fields.productAttribute.attributeTypes.Color'),
     Size: t('fields.productAttribute.attributeTypes.Size'),
@@ -60,7 +46,7 @@ const SelectAttributeType: React.FC<SelectAttributeTypeProps> = ({
     <FormControl error={error} key={name} fullWidth>
       <InputLabel id={`${name}-label`}>{label}</InputLabel>
       <EnumDropdown
-        defaultValue={defaultValue || null}
+        defaultValue={defaultValue ?? undefined}
         enumObject={AttributeTypes}
         customLabels={attributeLabels}
         onChange={handleChange}

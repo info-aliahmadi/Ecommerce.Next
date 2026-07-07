@@ -38,8 +38,20 @@ import SelectAttributeType from './SelectAttributeType';
 import AttributeType from '@root/app/types/enums/AttributeType';
 
 
-export default function AddOrEditProductAttribute({ productAttributeId, isNew, open, setOpen, refetch }:
-  { productAttributeId: number, isNew: boolean, open: boolean, setOpen: (open: boolean) => void, refetch: () => void }) {
+export default function AddOrEditProductAttribute(
+  { productAttributeId,
+    isNew,
+    open,
+    setOpen,
+    refetch
+  }:
+    Readonly<{
+      productAttributeId: number,
+      isNew: boolean,
+      open: boolean,
+      setOpen: (open: boolean) => void,
+      refetch: () => void
+    }>) {
   const t = useTranslations("");
   const [fieldsName, validation, buttonName] = ['fields.productAttribute.', 'validation.productAttribute.', 'buttons.productAttribute.'];
   const dialogName = t('pages.productAttribute');
@@ -123,7 +135,7 @@ export default function AddOrEditProductAttribute({ productAttributeId, isNew, o
     id: productAttribute?.id ?? 0,
     name: productAttribute?.name ?? '',
     value: productAttribute?.value ?? '',
-    attributeType: productAttribute?.attributeType,
+    attributeType: productAttribute?.attributeType ?? AttributeType.Color,
     imagePreviewId: productAttribute?.imagePreviewId ?? null,
     displayOrder: productAttribute?.displayOrder ?? 0,
     description: productAttribute?.description ?? ''
@@ -143,7 +155,7 @@ export default function AddOrEditProductAttribute({ productAttributeId, isNew, o
           })}
           onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
             try {
-              
+
               setSubmitting(true);
               handleSubmit(values as ProductAttributeModel, setErrors, setSubmitting);
             } catch (err) {
@@ -211,7 +223,7 @@ export default function AddOrEditProductAttribute({ productAttributeId, isNew, o
                       <FormControl fullWidth error={Boolean(touched.attributeType && errors.attributeType)}>
                         <SelectAttributeType
                           name="attributeType"
-                          defaultValue={values?.attributeType ?? AttributeType.Color}
+                          defaultValue={values?.attributeType}
                           setFieldValue={setFieldValue}
                           label={t("fields.productAttribute.attributeType")}
                           error={Boolean(touched.attributeType && errors.attributeType)}
@@ -254,7 +266,7 @@ export default function AddOrEditProductAttribute({ productAttributeId, isNew, o
                       <ImageUpload
                         name="imagePreviewId"
                         setFieldValue={setFieldValue}
-                        value={values?.imagePreviewId ?? ''}
+                        value={values?.imagePreviewId ?? 0}
                         filePosterMaxHeight={400}
                       />
                     </Stack>

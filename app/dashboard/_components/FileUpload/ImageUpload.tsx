@@ -87,10 +87,10 @@ export default function ImageUpload({
   value,
   minFileSize,
   maxFileSize,
-  disabled,
-  filePosterMaxHeight,
-  allowMultiple,
-  allowReorder,
+  disabled = false,
+  filePosterMaxHeight = 300,
+  allowMultiple = false,
+  allowReorder = false,
   valueType = 'number'
 }: Readonly<ImageUploadProps>) {
   const [files, setFiles] = useState<Array<FilePondInitialFile | Blob | string>>([]);
@@ -223,7 +223,6 @@ export default function ImageUpload({
     if (!setFieldValue || !allowMultiple) return;
 
     const reorderedIds = newOrderedFiles.map(f => parseInt(f.serverId)).filter(id => !isNaN(id));
-    debugger
     if (valueType == 'FileImageModel') {
       const updatedImages = reorderedIds.map((id, index) => ({
         imageId: id,

@@ -10,6 +10,7 @@ import { toast } from 'sonner';
 import { useFlyToCart } from '../../_hooks/use-fly-to-cart';
 import { useTranslations } from 'next-intl';
 import { useCategoryTranslations } from '../../_lib/category-translations';
+import CategoryDisplayModel from '../../_types/CategoryDisplayModel';
 
 interface ProductCardProps {
   id: string;
@@ -19,10 +20,10 @@ interface ProductCardProps {
   image: string;
   rating: number;
   reviewCount: number;
-  category: { name: string; color: string };
+  category: CategoryDisplayModel[];
   shortDesc?: string;
   description?: string;
-  tags?: string;
+  tags?: string[];
   stock?: number;
   sku?: string;
   index?: number;
@@ -82,7 +83,7 @@ export function ProductCard({
   const inCompare = isInCompare(id);
   const discount = comparePrice ? Math.round(((comparePrice - price) / comparePrice) * 100) : 0;
   const savings = comparePrice && comparePrice > price ? comparePrice - price : 0;
-  const parsedTags: string[] = tags ? JSON.parse(tags) : [];
+  const parsedTags: string[] = tags ? JSON.parse(tags[0]) : [];
 
   const handleAddToCart = (e: React.MouseEvent) => {
     handleAddToCartWithAnimation(e, image, {
@@ -91,7 +92,7 @@ export function ProductCard({
       price,
       comparePrice,
       image,
-      category: category.name,
+      category: category[0].name,
     });
     setJustAdded(true);
     setTimeout(() => setJustAdded(false), 1200);
@@ -106,7 +107,7 @@ export function ProductCard({
       price,
       comparePrice,
       image,
-      category: category.name,
+      category: category[0].name,
     });
     toast.success(wishlisted ? t('homepage.common.removeFromWishlist') : t('homepage.common.addToWishlist'));
     setHeartBurst(true);
@@ -117,14 +118,14 @@ export function ProductCard({
     e.preventDefault();
     e.stopPropagation();
     if (inCompare) {
-      addCompareItem({ id, name, price, comparePrice, image, rating, reviewCount, category, stock: stock || 0, description: description || '', sku });
+      addCompareItem({ id, name, price, comparePrice, image, rating, reviewCount, category[0], stock: stock || 0, description: description || '', sku });
       toast.success(t('homepage.compare.remove'));
     } else {
       if (useCompareStore.getState().items.length >= 4) {
         toast.warning(t('homepage.compare.maxWarning'));
         return;
       }
-      addCompareItem({ id, name, price, comparePrice, image, rating, reviewCount, category, stock: stock || 0, description: description || '', sku });
+      addCompareItem({ id, name, price, comparePrice, image, rating, reviewCount, category[0], stock: stock || 0, description: description || '', sku });
       toast.success(t('homepage.common.compare'));
     }
   };

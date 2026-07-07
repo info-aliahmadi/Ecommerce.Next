@@ -14,6 +14,7 @@ import MenuModel from "@root/app/dashboard/(cms)/_types/Menu/MenuModel";
 import ProductDisplayModel from "../_types/ProductDisplayModel";
 import CategoryDisplayModel from "../_types/CategoryDisplayModel";
 import ManufacturerDisplayModel from "../_types/ManufacturerDisplayModel";
+import PaginatedDisplayList from "../_types/PaginatedList";
 
 export default class HomePageService {
 
@@ -37,8 +38,8 @@ export default class HomePageService {
    * /GetManufacturers
    */
 
-  async getProducts(filter: ProductFilterModel): Promise<Result<ProductDisplayModel[]>> {
-    let result = await Fetch.Post<Result<ProductDisplayModel[]>>(`${this.baseUrl}/Product/GetProducts`, filter, this.config);
+  async getProducts(filter: ProductFilterModel): Promise<Result<PaginatedDisplayList<ProductDisplayModel>>> {
+    let result = await Fetch.Post<Result<PaginatedDisplayList<ProductDisplayModel>>>(`${this.baseUrl}/Product/GetProducts`, filter, this.config);
     return result;
   }
 
@@ -71,7 +72,7 @@ export default class HomePageService {
     return result;
   }
 
-  async getFeaturedProducts(): Promise<Result<ProductDisplayModel[]>> {
+  async getFeaturedProducts(): Promise<Result<PaginatedDisplayList<ProductDisplayModel>>> {
     let filter: ProductFilterModel = {
       pageIndex: 1,
       pageSize: 8,
@@ -83,7 +84,7 @@ export default class HomePageService {
     return result;
   }
 
-  async getBestSellingProducts(): Promise<Result<ProductDisplayModel[]>> {
+  async getBestSellingProducts(): Promise<Result<PaginatedDisplayList<ProductDisplayModel>>> {
     let filter: ProductFilterModel = {
       pageIndex: 1,
       pageSize: 8,
@@ -97,7 +98,7 @@ export default class HomePageService {
   /**
    * Get latest products
    */
-  async getLatestProducts(): Promise<Result<ProductDisplayModel[]>> {
+  async getLatestProducts(): Promise<Result<PaginatedDisplayList<ProductDisplayModel>>> {
     let filter: ProductFilterModel = {
       pageIndex: 1,
       pageSize: 8,
@@ -113,7 +114,7 @@ export default class HomePageService {
   /**
    * Search products by query
    */
-  async searchProducts(filter: ProductFilterModel): Promise<Result<ProductDisplayModel[]>> {
+  async searchProducts(filter: ProductFilterModel): Promise<Result<PaginatedDisplayList<ProductDisplayModel>>> {
     const response = await this.getProducts(filter);
     return response;
   }

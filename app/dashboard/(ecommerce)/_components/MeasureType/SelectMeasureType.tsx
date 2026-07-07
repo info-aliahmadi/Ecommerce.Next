@@ -42,7 +42,7 @@ const SelectMeasureType: React.FC<SelectMeasureTypeProps> = ({
     <FormControl error={error} key={id} fullWidth>
       <InputLabel id={`${id}-label`}>{label}</InputLabel>
       <EnumDropdown
-        defaultValue={defaultValue ?? null}
+        defaultValue={defaultValue ?? undefined}
         enumObject={MeasureType}
         disabled={disabled}
         customLabels={measureTypeLabels}

@@ -13,6 +13,9 @@ export const createProductValidationSchema = (t: (key: string) => string) => {
       name: Yup.string()
         .max(250, t(validation + 'maxName'))
         .required(t(validation + 'requiredName')),
+      sku: Yup.string()
+        .max(250, t(validation + 'maxSku'))
+        .required(t(validation + 'requiredSku')),
       fullDescription: Yup.string()
         .min(77, t(validation + 'requiredFullDescription'))
         .required(t(validation + 'requiredFullDescription')),

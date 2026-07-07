@@ -4,6 +4,7 @@ import DeliveryDateType from "@root/app/types/enums/DeliveryDateType";
 import CurrencyTypes from "@root/app/types/enums/CurrencyTypes";
 import MeasureType from "@root/app/types/enums/MeasureType";
 import InventoryDisplayModel from "./InventoryDisplayModel";
+import CategoryDisplayModel from "./CategoryDisplayModel";
 /**
  * Represents a product.
  */
@@ -12,6 +13,14 @@ export default interface ProductDisplayModel {
    * The ID of the product.
    */
   id: number;
+  /**
+   * The name of the product.
+   */
+  name: string;
+  /**
+   * The name of the product.
+   */
+  sku: string;
 
   /**
    * The ID of the user who created the product.
@@ -33,20 +42,15 @@ export default interface ProductDisplayModel {
    */
   updateUser?: AuthorModel | null;
 
-  /**
-   * The name of the product.
-   */
-  name: string;
 
   /**
-   * The ID of the preview image (nullable).
+   * The ID of the associated picture (nullable).
    */
-  picturePreviewId?: number | null;
-
+  imagePreviewId?: number | null;
   /**
-   * The preview image (nullable).
+   * The ID of the associated picture (nullable).
    */
-  picturePreview?: FileUploadModel | null;
+  imagePreview?: FileUploadModel | null;
 
   /**
    * Meta keywords for SEO.
@@ -307,12 +311,7 @@ export default interface ProductDisplayModel {
   /**
    * The IDs of the categories the product belongs to.
    */
-  categoryIds: number[];
-
-  /**
-   * The names of the categories the product belongs to.
-   */
-  categoryNames: string[];
+  categories: CategoryDisplayModel[];
 
   /**
    * The IDs of the manufacturers the product belongs to.
@@ -333,6 +332,11 @@ export default interface ProductDisplayModel {
    * The names of the attributes the product has.
    */
   attributeNames: string[];
+
+  /**
+   * The paths to the images associated with the product.
+   */
+  imagePaths: string[];
 
 
   /**

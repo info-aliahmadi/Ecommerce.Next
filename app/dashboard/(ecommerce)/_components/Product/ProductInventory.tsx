@@ -38,7 +38,6 @@ export default function ProductInventory({ operation, values, setFieldValue, han
   const handleViewToggle = (event: React.ChangeEvent<HTMLInputElement>) => {
     setIsAttributeView(event.target.checked);
     setFieldValue('stockType', event.target.checked ? StockType.PerAttribute : StockType.Total);
-    setFieldValue('inventories', []);
   }
 
   // Function to render Total Inventory fields
@@ -48,18 +47,18 @@ export default function ProductInventory({ operation, values, setFieldValue, han
 
       let updatedInventories: InventoryModel[] = [];
 
-      if (!values.inventories || values.inventories.length === 0) {
+      if (!values?.inventories || values?.inventories.length === 0) {
         // Case 1: Initial creation of the inventory item array
         updatedInventories = [{
           id: 0,
-          productId: values.id || 0,
+          productId: values?.id || 0,
           attributeId: undefined,
           attributeName: undefined,
           [field]: value
         } as InventoryModel];
       } else {
         // Case 2: Update existing inventory item immutably
-        const currentInventories = values.inventories;
+        const currentInventories = values?.inventories;
         updatedInventories = [
           {
             ...currentInventories[0], // Copy all properties of the first item
@@ -78,7 +77,7 @@ export default function ProductInventory({ operation, values, setFieldValue, han
               id="stockQuantity"
               name="stockQuantity"
               type="number"
-              value={values.inventories[0]?.stockQuantity || ''}
+              value={values?.inventories[0]?.stockQuantity || ''}
               label={t(fieldsName + 'inventory.stockQuantity')}
               onChange={(event) => handleInventoryFieldChange('stockQuantity', parseFloat(event.target.value) || 0)}
               placeholder={t(fieldsName + 'inventory.stockQuantity')}
@@ -93,7 +92,7 @@ export default function ProductInventory({ operation, values, setFieldValue, han
               id="reservedQuantity"
               name="reservedQuantity"
               type="number"
-              value={values.inventories[0]?.reservedQuantity || 0}
+              value={values?.inventories[0]?.reservedQuantity || 0}
               label={t(fieldsName + 'inventory.reservedQuantity')}
               onBlur={handleBlur}
               onChange={(event) => handleInventoryFieldChange('reservedQuantity', parseFloat(event.target.value) || 0)}
@@ -108,7 +107,7 @@ export default function ProductInventory({ operation, values, setFieldValue, han
             <CurrencyInput
               id="buyUnitPrice"
               name="buyUnitPrice"
-              value={values.inventories[0]?.buyUnitPrice || 0}
+              value={values?.inventories[0]?.buyUnitPrice || 0}
               label={t(fieldsName + 'inventory.buyUnitPrice')}
               fullWidth
               currencyType={CONFIG.DEFAULT_CURRENCY}
@@ -138,7 +137,7 @@ export default function ProductInventory({ operation, values, setFieldValue, han
               <FormControlLabel
                 control={
                   <Switch
-                    id="isAttributeViewToggle"
+                    id="stockType"
                     checked={isAttributeView}
                     onChange={handleViewToggle}
                   />

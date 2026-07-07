@@ -44,15 +44,15 @@ function CategoryDataGrid() {
         accessorKey: 'imagePreview',
         header: t('fields.category.imagePreviewId'),
         type: 'string',
-        Cell: ({ row } : { row: MRT_Row<CategoryModel> }) => <Box
+        Cell: ({ row }: { row: MRT_Row<CategoryModel> }) => <Box
           sx={{
             display: 'flex',
             alignItems: 'center',
             gap: '1rem'
           }}
         >
-          {row.original.imagePreview != null ? (
-            <img alt="ImagePreview" src={ CONFIG.UPLOAD_BASEPATH + row.original.imagePreview?.directory + row.original.imagePreview?.thumbnail} height={'80px'} />
+          {row.original.imagePreview ? (
+            <img alt="ImagePreview" src={CONFIG.UPLOAD_BASEPATH + row.original.imagePreview?.directory + row.original.imagePreview?.fileName} height={'80px'} />
           ) : (
             <Avatar variant="rounded">
               <ImageNotSupported />
@@ -93,7 +93,7 @@ function CategoryDataGrid() {
     ],
     []
   );
-  
+
   const handleCategoryList = () => {
     service.getCategoryList().then((result) => {
       setCategories(result.data ?? []);
@@ -219,7 +219,7 @@ function CategoryDataGrid() {
       const parentOfItemToReplace = findItemParent(idToReplace, categories);
       const parentOfItemBeside = findItemParent(idToReplaceBeside, categories);
       if (parentOfItemToReplace && parentOfItemBeside) {
-        
+
         if (!parentOfItemToReplace || !parentOfItemBeside) {
           return categories;
         }
@@ -244,7 +244,7 @@ function CategoryDataGrid() {
         categories.splice(indexBeside, 0, itemToReplace);
       }
 
-    } 
+    }
 
     // Sort by order
     const sortRecursive = (categories: CategoryModel[]) => {

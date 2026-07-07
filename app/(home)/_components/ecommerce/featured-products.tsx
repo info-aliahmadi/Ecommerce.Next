@@ -6,38 +6,45 @@ import { ArrowRight, Sparkles } from 'lucide-react';
 import { Button } from '../ui/button';
 import { motion } from 'framer-motion';
 import { useTranslations } from 'next-intl';
+import HomePageService from '../../_services/HomePageService';
+import ProductDisplayModel from '../../_types/ProductDisplayModel';
 
-function ProductCardWrapper({ product, index }: { product: Record<string, unknown>; index: number }) {
+function ProductCardWrapper({ product }: { product: ProductDisplayModel }) {
   return (
     <ProductCard
-      key={product.id as string}
-      id={product.id as string}
-      name={product.name as string}
-      price={product.price as number}
-      comparePrice={product.comparePrice as number | undefined}
-      image={product.image as string}
-      rating={product.rating as number}
-      reviewCount={product.reviewCount as number}
-      category={product.category as { name: string; color: string }}
-      shortDesc={product.shortDesc as string | undefined}
-      description={product.description as string | undefined}
-      stock={product.stock as number | undefined}
-      sku={product.sku as string | undefined}
-      tags={product.tags as string | undefined}
-      index={index}
+      key={product.id}
+      id={product.id as unknown as string }
+      name={product.name}
+      price={product.sellUnitPrice}
+      comparePrice={product.oldSellUnitPrice || undefined}
+      image={product.imagePreview?.fullPath || ''}
+      rating={product.approvedRatingSum}
+      reviewCount={product.approvedTotalReviews}
+      category={product.categories}
+      shortDesc={product.shortDescription || undefined}
+      description={product.fullDescription || undefined}
+      stock={product.stockQuantity || undefined}
+      sku={product.sku || undefined}
+      tags={product.productTags || undefined}
+      index={product.id}
     />
   );
 }
 
 export function FeaturedProducts() {
   const t = useTranslations();
-  const { data } = useQuery({
+  const { data: featuredProduct } = useQuery({
     queryKey: ['products', 'featured'],
-    queryFn: () => fetch('/api/products?featured=true&limit=4').then(r => r.json()),
+    queryFn: async () => {
+      const service = new HomePageService();
+      const result = await service.getFeaturedProducts();
+      const data = result.succeeded ? result.data : undefined;
+      return data;
+    }
   });
 
-  const featured = data?.products || [];
-  if (featured.length === 0) return null;
+  const featured = featuredProduct?.items;
+  if (featured?.length === 0) return null;
 
   return (
     <section className="py-12 sm:py-16 bg-white dark:bg-ecommerce-surface relative overflow-hidden">
@@ -76,8 +83,8 @@ export function FeaturedProducts() {
         </div>
 
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
-          {featured.map((product: Record<string, unknown>, index: number) => (
-            <ProductCardWrapper key={product.id as string} product={product} index={index} />
+          {featured?.map((product) => (
+            <ProductCardWrapper key={product.id as unknown as string} product={product} />
           ))}
         </div>
       </div>

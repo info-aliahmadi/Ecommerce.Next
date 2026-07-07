@@ -26,6 +26,7 @@ import { MRT_Row } from 'material-react-table';
 import ProductModel from '../../_types/Product/ProductModel';
 import { MRT_Column } from '@root/app/types/MRT_Column';
 import GridDataBound from '@root/app/types/GridDataBound';
+import FileUploadModel from '@root/app/dashboard/(filestorage)/_types/FileUploadModel';
 
 // ===============================|| COLOR BOX ||=============================== //
 
@@ -44,8 +45,8 @@ export default function ProductDataGrid() {
 
   const [fieldsName, buttonName] = ['fields.product.', 'buttons.product.'];
 
-  const ImagePreviewRow = (({ renderedCellValue, row } : { renderedCellValue: any, row : MRT_Row<ProductModel> }) => {
-    let src = renderedCellValue ? CONFIG.UPLOAD_BASEPATH + renderedCellValue.directory + renderedCellValue?.thumbnail : null;
+  const ImagePreviewRow = (({ renderedCellValue, row }: { renderedCellValue: any, row: MRT_Row<ProductModel> }) => {
+    let src = row.original.imagePreview ? CONFIG.UPLOAD_BASEPATH + row.original.imagePreview?.directory + row.original.imagePreview?.fileName : null;
 
     return (
       <Box
@@ -55,31 +56,38 @@ export default function ProductDataGrid() {
           gap: '1rem'
         }}
       >
-        {src != null ? (
-          <Avatar alt="ImagePreview" variant="rounded" src={src} sx={{ width: 50, height: 50 }}></Avatar>
+        {src ? (
+          <Avatar alt="ImagePreview" variant="rounded" src={src} sx={{ width: 70, height: 70 }}></Avatar>
         ) : (
-          <Avatar variant="rounded" sx={{ width: 50, height: 50 }}>
+          <Avatar variant="rounded" sx={{ width: 70, height: 70 }}>
             <ImageNotSupported />
           </Avatar>
         )}
       </Box>
     );
   });
-  
+
   const columns = useMemo<MRT_Column<ProductModel>[]>(
     () => [
       {
-        accessorKey: 'id',
-        header: t(fieldsName + 'id'),
-        enableClickToCopy: true,
-        size: 70,
-        type: 'number'
-        // filterVariant: 'text' | 'select' | 'multi-select' | 'range' | 'range-slider' | 'checkbox',
-      }, {
-        accessorKey: 'imagePreviewId',
+        accessorKey: 'imagePreview',
         header: t(fieldsName + 'imagePreviewId'),
-        type: 'string',
-        Cell: ({ renderedCellValue, row }) => <ImagePreviewRow renderedCellValue={renderedCellValue} row={row} />
+        type: 'object',
+        Cell: ({ row }: { row: MRT_Row<ProductModel> }) => <Box
+          sx={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: '1rem'
+          }}
+        >
+          {row.original.imagePreview ? (
+            <img alt="ImagePreview" src={CONFIG.UPLOAD_BASEPATH + row.original.imagePreview?.directory + row.original.imagePreview?.fileName} height={'80px'} />
+          ) : (
+            <Avatar variant="rounded">
+              <ImageNotSupported />
+            </Avatar>
+          )}
+        </Box>
       }, {
         accessorKey: 'name',
         header: t(fieldsName + 'name'),
@@ -157,7 +165,7 @@ export default function ProductDataGrid() {
   );
 
   const DeleteOrEdit = useCallback(
-      ({ row }: { row: MRT_Row<ProductModel> }) => (
+    ({ row }: { row: MRT_Row<ProductModel> }) => (
       <Box sx={{ display: 'flex', gap: '1rem' }}>
         <Tooltip arrow placement="top-start" title={t(buttonName + 'delete')}>
           <IconButton color="error" onClick={() => handleDeleteRow(row)}>

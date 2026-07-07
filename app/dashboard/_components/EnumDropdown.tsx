@@ -1,10 +1,8 @@
 import React, { useMemo } from 'react';
-import { Select, MenuItem } from '@mui/material';
-import { SelectChangeEvent } from '@mui/material';
-import { useTranslations } from 'next-intl';
+import { Select, MenuItem, SelectChangeEvent } from '@mui/material';
 
 interface EnumDropdownProps {
-  defaultValue: number | null;
+  defaultValue: number | undefined;
   enumObject: any;
   disabled?: boolean;
   onChange: (newValue: number | null) => void;
@@ -22,7 +20,6 @@ const EnumDropdown: React.FC<EnumDropdownProps> = ({
   noneOptionLabel = '-',
   customLabels = null,
 }) => {
-  const t = useTranslations('');
   const handleChange = (event: SelectChangeEvent<string>) => {
     const selectedKey = event.target.value as string;
 
@@ -38,11 +35,10 @@ const EnumDropdown: React.FC<EnumDropdownProps> = ({
   const enumKeys = Object.keys(enumObject).filter((key) => isNaN(Number(key)));
 
   // Map defaultValue number to corresponding enum key
-  const defaultKey = defaultValue !== null ? enumKeys.find((key) => enumObject[key] === defaultValue) : undefined;
-
+  const defaultKey = defaultValue !== undefined ? enumKeys.find((key) => enumObject[key] === defaultValue) : undefined;
   const getDisplayLabel = useMemo(() => {
     return (customLabel: any | null, key: string) => {
-      
+
       // Use the enum key directly to look up in customLabels
       let label = customLabel ? customLabel[key] : key;
       return label;

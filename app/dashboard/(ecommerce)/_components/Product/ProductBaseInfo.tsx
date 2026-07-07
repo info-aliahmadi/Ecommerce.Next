@@ -45,7 +45,7 @@ export default function ProductBaseInfo({
   return (
     <Grid container columnSpacing={3} sx={{ alignItems: "flex-start" }} >
       <Grid container spacing={3} size={{ xs: 12, sm: 12, md: 12, lg: 8, xl: 8 }}>
-        <Grid size={{ xs: 12, sm: 12, md: 12, lg: 12, xl: 12 }}>
+        <Grid size={{ xs: 12, sm: 12, md: 10, lg: 10, xl: 10 }}>
           <Stack>
             <TextField
               id="name"
@@ -61,6 +61,26 @@ export default function ProductBaseInfo({
             {errors.name && (
               <FormHelperText error id="helper-text">
                 {errors.name}
+              </FormHelperText>
+            )}
+          </Stack>
+        </Grid>
+        <Grid size={{ xs: 12, sm: 12, md: 2, lg: 2, xl: 2 }}>
+          <Stack>
+            <TextField
+              id="sku"
+              type="text"
+              value={values?.sku || ''}
+              label={t(fieldsName + 'sku')}
+              name="sku"
+              onBlur={handleBlur}
+              onChange={handleChange}
+              fullWidth
+              error={Boolean(errors.sku)}
+            />
+            {errors.sku && (
+              <FormHelperText error id="helper-text">
+                {errors.sku}
               </FormHelperText>
             )}
           </Stack>
@@ -116,7 +136,7 @@ export default function ProductBaseInfo({
                   <span>
                     {t(fieldsName + 'editedBy') + ' : '}
                     <Chip
-                      title={t(fieldsName + 'editor')}
+                      title={t(fieldsName + 'editedBy')}
                       avatar={<Avatar src={CONFIG.AVATAR_BASEPATH + values.updateUser?.avatar} />}
                       label={values.updateUser?.userName}
                       variant="filled"

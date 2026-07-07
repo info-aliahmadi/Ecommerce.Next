@@ -71,6 +71,7 @@ export default function AddOrEditProduct({ params }: Readonly<{ params: Promise<
   const initProduct: ProductModel = {
     id: 0,
     name: '',
+    sku: '',
     metaTitle: '',
     metaKeywords: '',
     metaDescription: '',
@@ -152,7 +153,7 @@ export default function AddOrEditProduct({ params }: Readonly<{ params: Promise<
         setProduct(result.data ?? product);
       });
     }
-  }, [operation, id, productService]);
+  }, [operation, id]);
 
   const handleTabChange = (event: any, newValue: any) => {
     setTab(newValue);
@@ -163,6 +164,7 @@ export default function AddOrEditProduct({ params }: Readonly<{ params: Promise<
   const validationSchema = createProductValidationSchema(t);
 
   const handleChange = (e: any) => {
+    debugger
     const { name, value } = e.target;
 
 
@@ -182,11 +184,16 @@ export default function AddOrEditProduct({ params }: Readonly<{ params: Promise<
     }
   };
   const setFieldValue = (field: string, value: any): void => {
+    debugger
     // fill the field in product
     const updatedProduct: ProductModel = {
       ...product,       // Override with existing product data
       [field]: value     // Add the new field value
     };
+
+    if (field === 'stockType' && product.stockType !== value) {
+      updatedProduct.inventories = []; // Clear inventories if stockType changes
+    }
 
     setProduct(updatedProduct);
 
@@ -214,9 +221,6 @@ export default function AddOrEditProduct({ params }: Readonly<{ params: Promise<
   };
 
   const handleSubmit = async (e: any, isDraft: boolean) => {
-
-    alert('images ' + JSON.stringify(product.images) );
-    return; // Prevent form submission for debugging
     e.preventDefault();
     product.published = !isDraft; // Set published based on isDraft flag
     setIsSubmitting(true);
@@ -228,8 +232,11 @@ export default function AddOrEditProduct({ params }: Readonly<{ params: Promise<
         productService
           .addProduct(product)
           .then(() => {
-            setProduct(product);
             setNotify({ open: true });
+            // add timer after 4 seconds redirect to product list page
+            setTimeout(() => {
+              router.push('/dashboard/product');
+            }, 4000);
           })
           .catch((error) => {
             setNotify({ open: true, type: 'error', description: error });

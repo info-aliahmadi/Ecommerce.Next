@@ -33,7 +33,7 @@ const CONFIG = {
   AUTHORIZATION_STORAGE_NAME: 'HydraAuthorizationStorage',
   LANGUAGE_STORAGE_NAME: 'NEXT_LOCALE',
   DEFAULT_LANGUAGE: 'fa',
-  DEFAULT_CURRENCY: CurrencyTypes.Toman,
+  DEFAULT_CURRENCY: CurrencyTypes.Dollar,
   DEFAULT_MEASURETYPE: MeasureType.Number,
   DATE_STYLE: "short", // "full" | "long" | "medium" | "short",
   TIME_STYLE: 'short', // "full" | "long" | "medium" | "short"

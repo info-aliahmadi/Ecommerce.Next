@@ -68,7 +68,7 @@ export function FeaturedCategories() {
                 className="group block relative rounded-2xl overflow-hidden aspect-[4/3] bg-ecommerce-surface-hover dark:bg-[#252836]"
               >
                 <img
-                  src={ CONFIG.API_BASEPATH + (cat.pictureInfo?.fullPath || '/images/placeholder-category.png')}
+                  src={cat.imagePreview ? CONFIG.API_BASEPATH + cat.imagePreview?.thumbnailPath : CONFIG.UNKNOWN_IMAGE_BASEPATH}
                   alt={catTrans[cat.name] || cat.name}
                   className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                   loading="lazy"
