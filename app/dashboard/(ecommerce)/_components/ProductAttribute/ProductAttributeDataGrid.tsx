@@ -128,6 +128,12 @@ export default function ProductAttributeDataGrid() {
         header: t(fieldsName + 'description'),
         enableClickToCopy: true,
         type: 'string'
+      },
+      {
+        accessorKey: 'showOnHomepage',
+        header: t(fieldsName + 'showOnHomepage'),
+        enableClickToCopy: false,
+        type: 'boolean'
       }
     ],
     []

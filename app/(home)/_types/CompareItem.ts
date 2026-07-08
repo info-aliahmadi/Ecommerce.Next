@@ -8,7 +8,7 @@ export default interface CompareItem {
   image: string;
   rating: number;
   reviewCount: number;
-  category: CategoryDisplayModel[];
+  categories: CategoryDisplayModel[];
   stock: number;
   description: string;
   sku?: string;

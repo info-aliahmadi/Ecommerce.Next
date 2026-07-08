@@ -1404,6 +1404,7 @@
       "description": "Description",
       "displayOrder": "Display Order",
       "imagePreviewId": "Image Preview",
+      "showOnHomepage" : "Show On Homepage",
       "attributeTypes": {
         "Color": "Color",
         "Size": "Size",
@@ -1723,6 +1724,7 @@
       "error": "Validation Errors",
       "maxName": "The max of Product name length is 250 Characters",
       "maxSku": "The max of Product SKU length is 70 Characters",
+      "requiredSku": "SKU is require",
       "requiredName": "Product name is require",
       "requiredFullDescription": "Full Description is require",
       "requiredCategoryIds": "Category is require",

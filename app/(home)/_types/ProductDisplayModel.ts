@@ -5,6 +5,7 @@ import CurrencyTypes from "@root/app/types/enums/CurrencyTypes";
 import MeasureType from "@root/app/types/enums/MeasureType";
 import InventoryDisplayModel from "./InventoryDisplayModel";
 import CategoryDisplayModel from "./CategoryDisplayModel";
+import ProductAttributeDisplayModel from "./ProductAttributeDisplayModel";
 /**
  * Represents a product.
  */
@@ -313,10 +314,6 @@ export default interface ProductDisplayModel {
    */
   categories: CategoryDisplayModel[];
 
-  /**
-   * The IDs of the manufacturers the product belongs to.
-   */
-  manufacturerIds: number[];
 
   /**
    * The names of the manufacturers the product belongs to.
@@ -326,24 +323,13 @@ export default interface ProductDisplayModel {
   /**
    * The IDs of the attributes the product has.
    */
-  attributeIds: number[];
-
-  /**
-   * The names of the attributes the product has.
-   */
-  attributeNames: string[];
+  attributes: ProductAttributeDisplayModel[];
 
   /**
    * The paths to the images associated with the product.
    */
   imagePaths: string[];
-
-
-  /**
-   * The IDs of the pictures associated with the product.
-   */
-  pictureIds: number[];
-
+  
   /**
    * The IDs of the reviews associated with the product.
    */

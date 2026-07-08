@@ -15,6 +15,9 @@ import ProductDisplayModel from "../_types/ProductDisplayModel";
 import CategoryDisplayModel from "../_types/CategoryDisplayModel";
 import ManufacturerDisplayModel from "../_types/ManufacturerDisplayModel";
 import PaginatedDisplayList from "../_types/PaginatedList";
+import ProductTags from "@root/app/types/enums/ProductTags";
+import SortingType from "@root/app/types/enums/SortingType";
+import CuratedStyleProductModel from "../_types/CuratedStyleProductModel";
 
 export default class HomePageService {
 
@@ -43,8 +46,8 @@ export default class HomePageService {
     return result;
   }
 
-  async getCuratedProducts(): Promise<Result<ProductDisplayModel[]>> {
-    let result = await Fetch.Get<Result<ProductDisplayModel[]>>(`${this.baseUrl}/Product/GetCuratedProducts`, this.config);
+  async getCuratedStyleProducts(): Promise<Result<CuratedStyleProductModel[]>> {
+    let result = await Fetch.Get<Result<CuratedStyleProductModel[]>>(`${this.baseUrl}/Product/GetCuratedStyleProducts`, this.config);
     return result;
   }
 
@@ -76,9 +79,17 @@ export default class HomePageService {
     let filter: ProductFilterModel = {
       pageIndex: 1,
       pageSize: 8,
-      hasDiscounts: true,
-      categoryIds: [],
-      manufacturerIds: []
+      productTagIds : [ProductTags.Featured]
+    }
+    let result = await this.getProducts(filter);
+    return result;
+  }
+
+  async getTrendProducts(): Promise<Result<PaginatedDisplayList<ProductDisplayModel>>> {
+    let filter: ProductFilterModel = {
+      pageIndex: 1,
+      pageSize: 8,
+      productTagIds : [ProductTags.Trending]
     }
     let result = await this.getProducts(filter);
     return result;
@@ -88,8 +99,7 @@ export default class HomePageService {
     let filter: ProductFilterModel = {
       pageIndex: 1,
       pageSize: 8,
-      categoryIds: [],
-      manufacturerIds: []
+      productTagIds : [ProductTags.Bestseller]
     }
     const response = await this.getProducts(filter);
     return response;
@@ -102,9 +112,7 @@ export default class HomePageService {
     let filter: ProductFilterModel = {
       pageIndex: 1,
       pageSize: 8,
-      sorting: { id: 'availableStartDateTimeUtc', desc: true },
-      categoryIds: [],
-      manufacturerIds: []
+      sorting: SortingType.SortNewest
     }
     const response = await this.getProducts(filter);
     return response;

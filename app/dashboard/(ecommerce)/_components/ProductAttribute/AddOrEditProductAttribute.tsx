@@ -14,7 +14,9 @@ import {
   Stack,
   Select,
   MenuItem,
-  FormControl
+  FormControl,
+  FormControlLabel,
+  Checkbox
 } from '@mui/material';
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
@@ -138,7 +140,8 @@ export default function AddOrEditProductAttribute(
     attributeType: productAttribute?.attributeType ?? AttributeType.Color,
     imagePreviewId: productAttribute?.imagePreviewId ?? null,
     displayOrder: productAttribute?.displayOrder ?? 0,
-    description: productAttribute?.description ?? ''
+    description: productAttribute?.description ?? '',
+    showOnHomepage: productAttribute?.showOnHomepage ?? false
   };
 
   return (
@@ -260,6 +263,42 @@ export default function AddOrEditProductAttribute(
                     </Stack>
                   </Grid>
 
+                  <Grid size={12}>
+                    <Stack spacing={1}>
+                      <InputLabel htmlFor="description">{t(fieldsName + 'description')}</InputLabel>
+                      <OutlinedInput
+                        id="description"
+                        type="text"
+                        value={values?.description || ''}
+                        name="description"
+                        onBlur={handleBlur}
+                        onChange={handleChange}
+                        placeholder={t(fieldsName + 'description')}
+                        fullWidth
+                        error={Boolean(touched.description && errors.description)}
+                      />
+                      {touched.description && errors.description && (
+                        <FormHelperText error id="helper-text-description">
+                          {errors.description}
+                        </FormHelperText>
+                      )}
+                    </Stack>
+                  </Grid>
+                  <Grid size={12}>
+                    <Stack spacing={1}>
+                      <FormControlLabel
+                        control={
+                          <Checkbox
+                            checked={values?.showOnHomepage || false}
+                            onChange={handleChange}
+                            name="showOnHomepage"
+                            color="primary"
+                          />
+                        }
+                        label={t(fieldsName + 'showOnHomepage')}
+                      />
+                    </Stack>
+                  </Grid>
                   <Grid size={12}>
                     <Stack spacing={1}>
                       <InputLabel htmlFor="imagePreviewId">{t(fieldsName + 'imagePreviewId')}</InputLabel>

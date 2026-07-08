@@ -9,22 +9,10 @@ import { toast } from 'sonner';
 import { useCartStore } from '../../_lib/store';
 import { useTranslations } from 'next-intl';
 import { useCategoryTranslations } from '../../_lib/category-translations';
-
-interface TrendingProduct {
-  id: string;
-  name: string;
-  price: number;
-  comparePrice?: number;
-  image: string;
-  rating: number;
-  reviewCount: number;
-  category: { name: string; color: string };
-  shortDesc?: string;
-  description?: string;
-  stock?: number;
-  sku?: string;
-  tags?: string;
-}
+import HomePageService from '../../_services/HomePageService';
+import ProductDisplayModel from '../../_types/ProductDisplayModel';
+import CartItem from '../../_types/CartItem';
+import { GetImage } from '../../_lib/utils';
 
 export function TrendingCarousel() {
   const t = useTranslations();
@@ -35,11 +23,15 @@ export function TrendingCarousel() {
 
   const { data, isLoading } = useQuery({
     queryKey: ['products', 'trending'],
-    queryFn: () =>
-      fetch('/api/products?sort=popular&limit=8').then((r) => r.json()),
+    queryFn: async () => {
+      const service = new HomePageService();
+      const result = await service.getTrendProducts();
+      const data = result.succeeded ? result.data : undefined;
+      return data;
+    }
   });
 
-  const products: TrendingProduct[] = data?.products || [];
+  const products: ProductDisplayModel[] = data?.items || [];
 
   const scroll = useCallback((direction: 'left' | 'right') => {
     if (!scrollRef.current) return;
@@ -47,34 +39,20 @@ export function TrendingCarousel() {
     scrollRef.current.scrollBy({ left: amount, behavior: 'smooth' });
   }, []);
 
-  const handleQuickView = (product: TrendingProduct) => {
-    setQuickViewProduct({
-      id: product.id,
-      name: product.name,
-      price: product.price,
-      comparePrice: product.comparePrice,
-      image: product.image,
-      rating: product.rating,
-      reviewCount: product.reviewCount,
-      category: product.category,
-      shortDesc: product.shortDesc,
-      description: product.description || '',
-      stock: product.stock || 0,
-      sku: product.sku,
-      tags: product.tags,
-    });
+  const handleQuickView = (product: ProductDisplayModel) => {
+    setQuickViewProduct(product);
   };
 
-  const handleAddToCart = (e: React.MouseEvent, product: TrendingProduct) => {
+  const handleAddToCart = (e: React.MouseEvent, product: ProductDisplayModel) => {
     e.stopPropagation();
     addItem({
       id: product.id,
       name: product.name,
-      price: product.price,
-      comparePrice: product.comparePrice,
-      image: product.image,
-      category: product.category.name,
-    });
+      price: product.sellUnitPrice,
+      comparePrice: product.oldSellUnitPrice,
+      image: GetImage(product.imagePreview, true),
+      categories: product.categories
+    } as CartItem);
     toast.success(t('homepage.flyToCart.added'));
   };
 
@@ -136,112 +114,114 @@ export function TrendingCarousel() {
         >
           {isLoading
             ? Array.from({ length: 4 }).map((_, i) => (
-                <div
-                  key={`skeleton-${i}`}
-                  className="w-64 sm:w-72 shrink-0 snap-start bg-white dark:bg-ecommerce-surface rounded-2xl border border-ecommerce-border overflow-hidden"
-                >
-                  <div className="aspect-[4/5] bg-muted shimmer" />
-                  <div className="p-4 space-y-3">
-                    <div className="h-3 w-16 bg-muted rounded shimmer" />
-                    <div className="h-4 w-full bg-muted rounded shimmer" />
-                    <div className="h-3 w-20 bg-muted rounded shimmer" />
+              <div
+                key={`skeleton-${i}`}
+                className="w-64 sm:w-72 shrink-0 snap-start bg-white dark:bg-ecommerce-surface rounded-2xl border border-ecommerce-border overflow-hidden"
+              >
+                <div className="aspect-[4/5] bg-muted shimmer" />
+                <div className="p-4 space-y-3">
+                  <div className="h-3 w-16 bg-muted rounded shimmer" />
+                  <div className="h-4 w-full bg-muted rounded shimmer" />
+                  <div className="h-3 w-20 bg-muted rounded shimmer" />
+                </div>
+              </div>
+            ))
+            : products.map((product, index) => (
+              <motion.div
+                key={product.id}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.4, delay: index * 0.05 }}
+                className="w-64 sm:w-72 shrink-0 snap-start bg-white dark:bg-ecommerce-surface rounded-2xl border border-ecommerce-border overflow-hidden card-lift group cursor-pointer"
+                onClick={() => handleQuickView(product)}
+              >
+                {/* Image Container */}
+                <div className="relative aspect-[4/5] overflow-hidden bg-ecommerce-surface-hover dark:bg-[#252836]">
+                  <img
+                    src={GetImage(product.imagePreview, true)}
+                    alt={product.name}
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                    loading="lazy"
+                  />
+
+                  {/* Gradient overlay on hover */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+
+                  {/* Ranking Badge */}
+                  <motion.div
+                    initial={{ scale: 0 }}
+                    animate={{ scale: 1 }}
+                    transition={{ type: 'spring', stiffness: 300, damping: 20, delay: index * 0.08 }}
+                    className="absolute top-3 start-3 w-8 h-8 rounded-full bg-ecommerce-red text-white flex items-center justify-center text-xs font-bold shadow-lg"
+                  >
+                    #{index + 1}
+                  </motion.div>
+
+                  {/* Overlay content on hover */}
+                  <div className="absolute inset-x-0 bottom-0 flex flex-col items-center justify-end p-4 opacity-0 group-hover:opacity-100 translate-y-3 group-hover:translate-y-0 transition-all duration-300">
+                    <p className="text-white font-bold text-sm text-center line-clamp-2 mb-1">
+                      {product.name}
+                    </p>
+                    <p className="text-white font-semibold text-base mb-3">
+                      ${product.sellUnitPrice.toFixed(2)}
+                    </p>
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleQuickView(product);
+                      }}
+                      className="bg-white/20 backdrop-blur-sm hover:bg-white/30 rounded-xl px-4 py-2 text-white text-xs font-medium flex items-center gap-1.5 transition-colors"
+                    >
+                      <Eye size={13} />
+                      {t('homepage.common.quickView')}
+                    </button>
                   </div>
                 </div>
-              ))
-            : products.map((product, index) => (
-                <motion.div
-                  key={product.id}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.4, delay: index * 0.05 }}
-                  className="w-64 sm:w-72 shrink-0 snap-start bg-white dark:bg-ecommerce-surface rounded-2xl border border-ecommerce-border overflow-hidden card-lift group cursor-pointer"
-                  onClick={() => handleQuickView(product)}
-                >
-                  {/* Image Container */}
-                  <div className="relative aspect-[4/5] overflow-hidden bg-ecommerce-surface-hover dark:bg-[#252836]">
-                    <img
-                      src={product.image}
-                      alt={product.name}
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
-                      loading="lazy"
-                    />
 
-                    {/* Gradient overlay on hover */}
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-
-                    {/* Ranking Badge */}
-                    <motion.div
-                      initial={{ scale: 0 }}
-                      animate={{ scale: 1 }}
-                      transition={{ type: 'spring', stiffness: 300, damping: 20, delay: index * 0.08 }}
-                      className="absolute top-3 start-3 w-8 h-8 rounded-full bg-ecommerce-red text-white flex items-center justify-center text-xs font-bold shadow-lg"
-                    >
-                      #{index + 1}
-                    </motion.div>
-
-                    {/* Overlay content on hover */}
-                    <div className="absolute inset-x-0 bottom-0 flex flex-col items-center justify-end p-4 opacity-0 group-hover:opacity-100 translate-y-3 group-hover:translate-y-0 transition-all duration-300">
-                      <p className="text-white font-bold text-sm text-center line-clamp-2 mb-1">
-                        {product.name}
-                      </p>
-                      <p className="text-white font-semibold text-base mb-3">
-                        ${product.price.toFixed(2)}
-                      </p>
-                      <button
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          handleQuickView(product);
-                        }}
-                        className="bg-white/20 backdrop-blur-sm hover:bg-white/30 rounded-xl px-4 py-2 text-white text-xs font-medium flex items-center gap-1.5 transition-colors"
-                      >
-                        <Eye size={13} />
-                        {t('homepage.common.quickView')}
-                      </button>
-                    </div>
-                  </div>
-
-                  {/* Card Content Below Image */}
-                  <div className="p-4">
-                    {/* Category with colored dot */}
-                    <div className="flex items-center gap-1.5 mb-2">
+                {/* Card Content Below Image */}
+                <div className="p-4">
+                  {/* Category with colored dot */}
+                  {product.categories.map(category => (category &&
+                    <div key={category.id} className="flex items-center gap-1.5 mb-2">
                       <span
                         className="w-2 h-2 rounded-full shrink-0"
-                        style={{ backgroundColor: product.category.color }}
+                        style={{ backgroundColor: category.color }}
                       />
                       <span className="text-[11px] font-medium text-ecommerce-text-muted uppercase tracking-wider truncate">
-                        {catTrans[product.category.name] || product.category.name}
+                        {catTrans[category.name] || category.name}
                       </span>
-                    </div>
 
-                    {/* Rating stars */}
-                    <div className="flex items-center gap-1.5 mb-1.5">
-                      <div className="flex items-center gap-px">
-                        {Array.from({ length: 5 }).map((_, i) => (
-                          <Star
-                            key={i}
-                            size={11}
-                            className={
-                              i < Math.floor(product.rating)
-                                ? 'fill-ecommerce-amber text-ecommerce-amber'
-                                : 'text-ecommerce-border'
-                            }
-                          />
-                        ))}
-                      </div>
-                      <span className="text-[11px] text-ecommerce-text-muted">
-                        {product.rating}
-                      </span>
-                    </div>
+                    </div>))}
 
-                    {/* Sold count */}
-                    <p className="text-[11px] text-ecommerce-text-muted">
-                      <ShoppingCart size={10} className="inline me-1 -mt-0.5" />
-                      {product.reviewCount} {t('homepage.common.sold')}
-                    </p>
+                  {/* Rating stars */}
+                  < div className="flex items-center gap-1.5 mb-1.5" >
+                    <div className="flex items-center gap-px">
+                      {Array.from({ length: 5 }).map((_, i) => (
+                        <Star
+                          key={i}
+                          size={11}
+                          className={
+                            i < Math.floor(product.approvedRatingSum)
+                              ? 'fill-ecommerce-amber text-ecommerce-amber'
+                              : 'text-ecommerce-border'
+                          }
+                        />
+                      ))}
+                    </div>
+                    <span className="text-[11px] text-ecommerce-text-muted">
+                      {product.approvedRatingSum}
+                    </span>
                   </div>
-                </motion.div>
-              ))}
+
+                  {/* Sold count */}
+                  <p className="text-[11px] text-ecommerce-text-muted">
+                    <ShoppingCart size={10} className="inline me-1 -mt-0.5" />
+                    {product.approvedTotalReviews} {t('homepage.common.sold')}
+                  </p>
+                </div>
+              </motion.div>
+            ))}
         </div>
       </div>
     </section>

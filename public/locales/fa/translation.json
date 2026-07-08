@@ -1392,6 +1392,7 @@
       "description": "توضیحات",
       "displayOrder": "ترتیب نمایش",
       "imagePreviewId": " تصویر پیش‌نمایش",
+      "showOnHomepage" : "نمایش در صفحه اصلی",
       "attributeTypes": {
         "Color": "رنگ",
         "Size": "اندازه",
@@ -1404,6 +1405,7 @@
         "Pattern": "الگو",
         "Brand": "برند",
         "Model": "مدل"
+
       }
     },
     "stateProvince": {
@@ -1723,6 +1725,7 @@
       "error": "خطا در اعتبارسنجی محصول",
       "maxName": "نام محصول حداکثر 250 کاراکتر است",
       "maxSku": "شناسه محصول (SKU) حداکثر 70 کاراکتر است",
+      "requiredSku": "شناسه Sku الزامی است",
       "requiredName": "نام محصول الزامی است",
       "requiredFullDescription": "توضیحات کامل الزامی است",
       "requiredCategoryIds": "دسته‌بندی الزامی است",

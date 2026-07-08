@@ -1,14 +1,11 @@
-import ProductModel from "@root/app/dashboard/(ecommerce)/_types/Product/ProductModel";
-
-export interface Sort {
-  id: keyof ProductModel;
-  desc: boolean;
-}
+import AttributeType from "@root/app/types/enums/AttributeType";
+import ProductTags from "@root/app/types/enums/ProductTags";
+import SortingType from "@root/app/types/enums/SortingType";
 
 export default interface ProductFilterModel {
   pageIndex: number;
   pageSize: number;
-  sorting?: Sort | null;
+  sorting?: SortingType | null;
   searchInput?: string | null;
   topRate?: boolean | null;
   topSell?: boolean | null;
@@ -20,4 +17,6 @@ export default interface ProductFilterModel {
   hasDiscounts?: boolean | null;
   categoryIds?: number[];
   manufacturerIds?: number[];
+  attributeTypes?: AttributeType[];
+  productTagIds?: ProductTags[];
 }

@@ -1,14 +1,11 @@
+import FileUploadModel from "@root/app/dashboard/(filestorage)/_types/FileUploadModel";
 import AttributeType from "@root/app/types/enums/AttributeType";
 
-/**
- * Represents a product attribute.
- */
-export default interface ProductAttributeModel {
-    /**
+export default interface ProductAttributeDisplayModel {
+   /**
      * The ID of the product attribute.
      */
     id: number;
-  
     /**
      * The name of the product attribute.
      */
@@ -27,7 +24,7 @@ export default interface ProductAttributeModel {
     /**
      * The ID of the associated image (nullable).
      */
-    imagePreviewId: number | null;
+    imagePreview?: FileUploadModel;
   
     /**
      * The display order of the product attribute.
@@ -42,5 +39,4 @@ export default interface ProductAttributeModel {
      * The display order of the product attribute.
      */
     showOnHomepage: boolean;
-  }
-  
+}

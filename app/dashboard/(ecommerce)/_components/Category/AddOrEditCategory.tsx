@@ -312,7 +312,7 @@ const AddOrEditCategory = ({ row, isNew, open, setOpen, refetch }: AddOrEditCate
                       <ImageUpload
                         name="imagePreviewId"
                         setFieldValue={setFieldValue}
-                        value={values?.imagePreviewId ?? ''}
+                        value={values?.imagePreviewId || 0}
                         filePosterMaxHeight={400}
                       />
                     </Stack>

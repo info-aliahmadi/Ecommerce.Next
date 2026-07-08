@@ -9,11 +9,11 @@ import { useTranslations } from 'next-intl';
 import HomePageService from '../../_services/HomePageService';
 import ProductDisplayModel from '../../_types/ProductDisplayModel';
 
-function ProductCardWrapper({ product,key }: Readonly<{ product: ProductDisplayModel, key: number }>) {
+function ProductCardWrapper({ product, index }: Readonly<{ product: ProductDisplayModel, index: number }>) {
   return (
     <ProductCard
       product={product}
-      index={key}
+      index={index}
     />
   );
 }
@@ -70,8 +70,8 @@ export function FeaturedProducts() {
         </div>
 
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
-          {featured?.map((product) => (
-            <ProductCardWrapper key={product.id} product={product} />
+          {featured?.map((product, index) => (
+            <ProductCardWrapper index={index} key={"pro" + product.id} product={product} />
           ))}
         </div>
       </div>

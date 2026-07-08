@@ -21,7 +21,7 @@ interface ProductCardProps {
   index?: number;
 }
 
-export function ProductCard({ product, index = 0 }: ProductCardProps) {
+export function ProductCard({ product, index = 0 }: Readonly<ProductCardProps>) {
   const category = product.categories?.[0];
   // make a method to get the image url from the product object, if the product has a thumbnailPath, use that, otherwise use the fullPath, if neither exists, use a placeholder image
   const image = GetImage(product.imagePreview , true);
@@ -120,7 +120,7 @@ export function ProductCard({ product, index = 0 }: ProductCardProps) {
         image: image,
         rating: rating,
         reviewCount: product.approvedTotalReviews,
-        category: product.categories || [],
+        categories: product.categories || [],
         stock: product.stockQuantity || 0,
         description: product.fullDescription || '',
         sku: product.sku || ''
@@ -139,7 +139,7 @@ export function ProductCard({ product, index = 0 }: ProductCardProps) {
         image: image,
         rating: rating,
         reviewCount: product.approvedTotalReviews,
-        category: product.categories || [],
+        categories: product.categories || [],
         stock: product.stockQuantity || 0,
         description: product.fullDescription || '',
         sku: product.sku || ''

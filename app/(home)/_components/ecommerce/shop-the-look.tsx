@@ -6,124 +6,15 @@ import { Sparkles, ShoppingCart, Plus } from 'lucide-react';
 import { toast } from 'sonner';
 import { useCartStore, useUIStore } from '../../_lib/store';
 import { useTranslations } from 'next-intl';
+import ProductDisplayModel from '../../_types/ProductDisplayModel';
+import { GetImage } from '../../_lib/utils';
+import CuratedStyleProductModel from '../../_types/CuratedStyleProductModel';
+import CartItem from '../../_types/CartItem';
+import { useQuery } from '@tanstack/react-query';
+import HomePageService from '../../_services/HomePageService';
 
-interface LookProduct {
-  id: string;
-  name: string;
-  price: number;
-  image: string;
-  category: string;
-}
 
-interface Look {
-  id: string;
-  name: string;
-  image: string;
-  products: LookProduct[];
-}
-
-const looks: Look[] = [
-  {
-    id: 'weekend-casual',
-    name: 'Weekend Casual',
-    image: 'https://images.unsplash.com/photo-1487222477894-8943e31ef7b2?w=500&h=650&fit=crop',
-    products: [
-      {
-        id: 'look-wc-1',
-        name: 'Denim Jacket',
-        price: 89.99,
-        image: 'https://images.unsplash.com/photo-1576995853123-5a10305d93c0?w=100&h=100&fit=crop',
-        category: 'Outerwear',
-      },
-      {
-        id: 'look-wc-2',
-        name: 'White Sneakers',
-        price: 64.99,
-        image: 'https://images.unsplash.com/photo-1549298916-b41d501d3772?w=100&h=100&fit=crop',
-        category: 'Footwear',
-      },
-      {
-        id: 'look-wc-3',
-        name: 'Cotton Tee',
-        price: 29.99,
-        image: 'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=100&h=100&fit=crop',
-        category: 'Tops',
-      },
-      {
-        id: 'look-wc-4',
-        name: 'Sunglasses',
-        price: 39.99,
-        image: 'https://images.unsplash.com/photo-1572635196237-14b3f281503f?w=100&h=100&fit=crop',
-        category: 'Accessories',
-      },
-    ],
-  },
-  {
-    id: 'office-professional',
-    name: 'Office Professional',
-    image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=500&h=650&fit=crop',
-    products: [
-      {
-        id: 'look-op-1',
-        name: 'Blazer',
-        price: 149.99,
-        image: 'https://images.unsplash.com/photo-1507679799987-c73779587ccf?w=100&h=100&fit=crop',
-        category: 'Outerwear',
-      },
-      {
-        id: 'look-op-2',
-        name: 'Oxford Shoes',
-        price: 89.99,
-        image: 'https://images.unsplash.com/photo-1614252369475-531eba835eb1?w=100&h=100&fit=crop',
-        category: 'Footwear',
-      },
-      {
-        id: 'look-op-3',
-        name: 'Leather Watch',
-        price: 119.99,
-        image: 'https://images.unsplash.com/photo-1524592094714-0f0654e20314?w=100&h=100&fit=crop',
-        category: 'Accessories',
-      },
-    ],
-  },
-  {
-    id: 'evening-elegance',
-    name: 'Evening Elegance',
-    image: 'https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=500&h=650&fit=crop',
-    products: [
-      {
-        id: 'look-ee-1',
-        name: 'Silk Dress',
-        price: 129.99,
-        image: 'https://images.unsplash.com/photo-1595777457583-95e059d581b8?w=100&h=100&fit=crop',
-        category: 'Dresses',
-      },
-      {
-        id: 'look-ee-2',
-        name: 'Heels',
-        price: 79.99,
-        image: 'https://images.unsplash.com/photo-1543163521-1bf539c55dd2?w=100&h=100&fit=crop',
-        category: 'Footwear',
-      },
-      {
-        id: 'look-ee-3',
-        name: 'Clutch Bag',
-        price: 49.99,
-        image: 'https://images.unsplash.com/photo-1584917865442-de89df76afd3?w=100&h=100&fit=crop',
-        category: 'Accessories',
-      },
-      {
-        id: 'look-ee-4',
-        name: 'Pearl Necklace',
-        price: 59.99,
-        image: 'https://images.unsplash.com/photo-1515562141589-67f0d569b4b2?w=100&h=100&fit=crop',
-        category: 'Jewelry',
-      },
-    ],
-  },
-];
-
-function ProductThumbnails({ products }: { products: LookProduct[] }) {
+  function ProductThumbnails({ products }: { products: ProductDisplayModel[] }) {
   const t = useTranslations();
   const setQuickViewProduct = useUIStore((s) => s.setQuickViewProduct);
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
@@ -131,6 +22,7 @@ function ProductThumbnails({ products }: { products: LookProduct[] }) {
   const visibleProducts = products.slice(0, 3);
   const extraCount = products.length - 3;
 
+  
   return (
     <div className="flex items-center">
       <div className="flex items-center" style={{ marginInlineStart: '-12px' }}>
@@ -138,17 +30,7 @@ function ProductThumbnails({ products }: { products: LookProduct[] }) {
           <button
             key={product.id}
             onClick={() =>
-              setQuickViewProduct({
-                id: product.id,
-                name: product.name,
-                description: '',
-                price: product.price,
-                image: product.image,
-                rating: 0,
-                reviewCount: 0,
-                category: { name: product.category, color: '#E63946' },
-                stock: 10,
-              })
+              setQuickViewProduct(product)
             }
             onMouseEnter={() => setHoveredIndex(i)}
             onMouseLeave={() => setHoveredIndex(null)}
@@ -157,7 +39,7 @@ function ProductThumbnails({ products }: { products: LookProduct[] }) {
             aria-label={`View ${product.name}`}
           >
             <img
-              src={product.image}
+              src={GetImage(product.imagePreview, true)}
               alt={product.name}
               className="w-full h-full rounded-full object-cover"
               loading="lazy"
@@ -183,94 +65,28 @@ function LookCard({
   look,
   index,
   isFirst,
-}: {
-  look: Look;
+}: Readonly<{
+  look: CuratedStyleProductModel;
   index: number;
   isFirst: boolean;
-}) {
+}>) {
   const t = useTranslations();
   const addItem = useCartStore((s) => s.addItem);
-  const totalPrice = look.products.reduce((sum, p) => sum + p.price, 0);
+  const totalPrice = look.products.reduce((sum, p) => sum + p.sellUnitPrice, 0);
 
   const handleGetTheLook = () => {
     look.products.forEach((product) => {
       addItem({
         id: product.id,
         name: product.name,
-        price: product.price,
-        image: product.image,
-        category: product.category,
-      });
+        price: product.sellUnitPrice,
+        image: GetImage(product.imagePreview, true),
+        categories: product.categories,
+      } as CartItem);
     });
-    toast.success(t('homepage.cart.itemAdded', { name: look.name }));
+    toast.success(t('homepage.cart.itemAdded', { name: look.attributeName }));
   };
 
-  if (isFirst) {
-    return (
-      <motion.div
-        initial={{ opacity: 0, y: 30 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-        transition={{ duration: 0.6, delay: index * 0.1 }}
-        className="scroll-reveal md:col-span-2 lg:col-span-1 group relative bg-white dark:bg-ecommerce-surface rounded-2xl border border-ecommerce-border overflow-hidden hover:shadow-xl transition-all duration-300"
-      >
-        <div className="flex flex-col md:flex-row md:aspect-[16/9]">
-          {/* Main image */}
-          <div className="relative md:w-1/2 overflow-hidden">
-            <img
-              src={look.image}
-              alt={look.name}
-              className="w-full h-64 md:h-full object-cover transition-transform duration-500 group-hover:scale-105"
-              loading="lazy"
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-            <span className="absolute top-3 end-3 px-3 py-1 rounded-full bg-white/80 dark:bg-black/40 backdrop-blur-sm text-xs font-bold text-ecommerce-text-primary">
-              From {t('homepage.shopTheLook.from')} ${Math.round(totalPrice)}
-            </span>
-            <h3 className="absolute bottom-3 start-3 text-lg font-bold text-white drop-shadow-lg md:bottom-4 md:start-4 md:text-xl">
-              {look.name}
-            </h3>
-          </div>
-          {/* Content */}
-          <div className="flex flex-col justify-between p-5 md:p-6 md:w-1/2">
-            <div>
-              <h3 className="text-lg font-bold text-ecommerce-text-primary mb-1 md:hidden">
-                {look.name}
-              </h3>
-              <p className="text-sm text-ecommerce-text-muted mb-4">
-                {t('homepage.shopTheLook.outfitDesc', { name: look.name.toLowerCase(), count: look.products.length })}
-              </p>
-              <div className="mb-4">
-                <p className="text-xs font-medium text-ecommerce-text-muted mb-2">
-                  {t('homepage.shopTheLook.includedPieces')}
-                </p>
-                <div className="flex flex-wrap gap-1.5">
-                  {look.products.map((p) => (
-                    <span
-                      key={p.id}
-                      className="inline-flex items-center px-2 py-0.5 rounded-md bg-ecommerce-surface-hover dark:bg-[#252836] text-[11px] font-medium text-ecommerce-text-secondary"
-                    >
-                      {p.name}
-                    </span>
-                  ))}
-                </div>
-              </div>
-            </div>
-            <div className="flex items-center justify-between gap-3">
-              <ProductThumbnails products={look.products} />
-              <button
-                onClick={handleGetTheLook}
-                className="inline-flex items-center gap-2 px-4 py-2.5 bg-ecommerce-red hover:bg-ecommerce-red/90 text-white text-sm font-semibold rounded-xl transition-all duration-200 hover:scale-[1.02] active:scale-95 shrink-0"
-              >
-                <ShoppingCart size={15} />
-                {t('homepage.shopTheLook.getTheLook')}
-              </button>
-            </div>
-          </div>
-        </div>
-      </motion.div>
-    );
-  }
 
   return (
     <motion.div
@@ -283,8 +99,8 @@ function LookCard({
       {/* Main image */}
       <div className="relative aspect-[3/4] overflow-hidden">
         <img
-          src={look.image}
-          alt={look.name}
+          src={GetImage(look.imagePreview)}
+          alt={look.attributeName}
           className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
           loading="lazy"
         />
@@ -293,7 +109,7 @@ function LookCard({
           {t('homepage.shopTheLook.from')} ${Math.round(totalPrice)}
         </span>
         <h3 className="absolute bottom-3 start-3 text-lg font-bold text-white drop-shadow-lg">
-          {look.name}
+          {look.attributeName}
         </h3>
       </div>
 
@@ -319,6 +135,17 @@ function LookCard({
 
 export function ShopTheLook() {
   const t = useTranslations();
+
+
+  const { data : looks, isLoading } = useQuery({
+    queryKey: ['products', 'curatedstyle'],
+    queryFn: async () => {
+      const service = new HomePageService();
+      const result = await service.getCuratedStyleProducts();
+      const data = result.succeeded ? result.data : undefined;
+      return data;
+    }
+  });
 
   return (
     <section className="py-12 sm:py-16 bg-white dark:bg-ecommerce-surface relative overflow-hidden">
@@ -354,9 +181,23 @@ export function ShopTheLook() {
 
         {/* Look Cards Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
-          {looks.map((look, index) => (
+          {isLoading
+            ? Array.from({ length: 3 }).map((_, i) => (
+              <div
+                key={`skeleton-${i}`}
+                className="w-64 sm:w-72 shrink-0 snap-start bg-white dark:bg-ecommerce-surface rounded-2xl border border-ecommerce-border overflow-hidden"
+              >
+                <div className="aspect-[4/5] bg-muted shimmer" />
+                <div className="p-4 space-y-3">
+                  <div className="h-3 w-16 bg-muted rounded shimmer" />
+                  <div className="h-4 w-full bg-muted rounded shimmer" />
+                  <div className="h-3 w-20 bg-muted rounded shimmer" />
+                </div>
+              </div>
+            ))
+            : looks?.map((look, index) => (
             <LookCard
-              key={look.id}
+              key={look.attributeId}
               look={look}
               index={index}
               isFirst={index === 0}
