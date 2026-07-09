@@ -8,6 +8,7 @@ import CartItem from '../_types/CartItem';
 
 
 export function useFlyToCart() {
+  
   const { addItem } = useCartStore();
 
   const handleAddToCartWithAnimation = useCallback(

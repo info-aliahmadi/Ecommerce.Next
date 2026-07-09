@@ -7,114 +7,16 @@ import { Badge } from '../ui/badge';
 import { useCartStore } from '../../_lib/store';
 import { toast } from 'sonner';
 import { useTranslations } from 'next-intl';
+import ProductDisplayModel from '../../_types/ProductDisplayModel';
+import HomePageService from '../../_services/HomePageService';
+import { useQuery } from '@tanstack/react-query';
+import BundleDisplayModel from '../../_types/BundleDisplayModel';
+import { GetImage } from '../../_lib/utils';
 
-interface BundleProduct {
-  id: string;
-  name: string;
-  price: number;
-  comparePrice?: number;
-  image: string;
-  category: string;
-}
 
-interface Bundle {
-  id: string;
-  title: string;
-  description: string;
-  products: BundleProduct[];
-}
-
-const BUNDLES: Bundle[] = [
-  {
-    id: 'summer-essentials',
-    title: 'Summer Essentials Bundle',
-    description: 'Everything you need for the perfect summer',
-    products: [
-      {
-        id: 'bundle-summer-1',
-        name: 'Premium Sunglasses',
-        price: 79.99,
-        comparePrice: 129.99,
-        image: 'https://images.unsplash.com/photo-1572635196237-14b3f281503f?w=200&h=200&fit=crop',
-        category: 'Accessories',
-      },
-      {
-        id: 'bundle-summer-2',
-        name: 'Linen Summer Shirt',
-        price: 49.99,
-        comparePrice: 79.99,
-        image: 'https://images.unsplash.com/photo-1596755094514-f87e34085b2c?w=200&h=200&fit=crop',
-        category: 'Clothing',
-      },
-      {
-        id: 'bundle-summer-3',
-        name: 'Canvas Tote Bag',
-        price: 34.99,
-        comparePrice: 54.99,
-        image: 'https://images.unsplash.com/photo-1597633425046-08f5110420b5?w=200&h=200&fit=crop',
-        category: 'Bags',
-      },
-    ],
-  },
-  {
-    id: 'tech-workspace',
-    title: 'Tech Workspace Bundle',
-    description: 'Level up your home office setup',
-    products: [
-      {
-        id: 'bundle-tech-1',
-        name: 'Wireless Headphones',
-        price: 149.99,
-        comparePrice: 249.99,
-        image: 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=200&h=200&fit=crop',
-        category: 'Electronics',
-      },
-      {
-        id: 'bundle-tech-2',
-        name: 'Mechanical Keyboard',
-        price: 89.99,
-        comparePrice: 139.99,
-        image: 'https://images.unsplash.com/photo-1541140532154-b024d705b90a?w=200&h=200&fit=crop',
-        category: 'Electronics',
-      },
-    ],
-  },
-  {
-    id: 'self-care',
-    title: 'Self-Care Ritual Bundle',
-    description: 'Treat yourself to a spa experience at home',
-    products: [
-      {
-        id: 'bundle-care-1',
-        name: 'Luxury Perfume Set',
-        price: 69.99,
-        comparePrice: 109.99,
-        image: 'https://images.unsplash.com/photo-1541643600914-78b084683601?w=200&h=200&fit=crop',
-        category: 'Beauty',
-      },
-      {
-        id: 'bundle-care-2',
-        name: 'Aromatherapy Candle',
-        price: 24.99,
-        comparePrice: 39.99,
-        image: 'https://images.unsplash.com/photo-1602607742212-519978d4cfab?w=200&h=200&fit=crop',
-        category: 'Home',
-      },
-      {
-        id: 'bundle-care-3',
-        name: 'Silk Sleep Mask',
-        price: 19.99,
-        comparePrice: 34.99,
-        image: 'https://images.unsplash.com/photo-1596462502278-27bfdc403348?w=200&h=200&fit=crop',
-        category: 'Accessories',
-      },
-    ],
-  },
-];
-
-function getBundleSavings(products: BundleProduct[]) {
-  const totalPrice = products.reduce((s, p) => s + p.price, 0);
-  const compareTotal = products.reduce((s, p) => s + (p.comparePrice || p.price), 0);
+function getBundleSavings(products: ProductDisplayModel[]) {
+  const totalPrice = products.reduce((s, p) => s + p.sellUnitPrice, 0);
+  const compareTotal = products.reduce((s, p) => s + (p.oldSellUnitPrice || p.sellUnitPrice), 0);
   const savings = compareTotal - totalPrice;
   const percentage = compareTotal > 0 ? Math.round((savings / compareTotal) * 100) : 0;
   return { totalPrice, compareTotal, savings, percentage };
@@ -124,19 +26,30 @@ export function ProductBundles() {
   const t = useTranslations();
   const addItem = useCartStore((s) => s.addItem);
 
-  const handleAddBundle = (bundle: Bundle) => {
-    bundle.products.forEach((p) => {
+  const { data: bundles } = useQuery({
+    queryKey: ['products', 'bundles'],
+    queryFn: async () => {
+      const service = new HomePageService();
+      const result = await service.getBundles();
+      const data = result.succeeded ? result.data : undefined;
+      return data;
+    }
+  });
+
+
+  const handleAddBundle = (bundle: BundleDisplayModel) => {
+    bundle.products?.forEach((p) => {
       addItem({
         id: p.id,
         name: p.name,
-        price: p.price,
-        comparePrice: p.comparePrice,
-        image: p.image,
-        category: p.category,
+        price: p.sellUnitPrice,
+        comparePrice: p.oldSellUnitPrice,
+        image: p.imagePreview,
+        categories: p.categories,
       });
     });
-    toast.success(t('homepage.cart.itemAdded', { name: bundle.title }), {
-      description: t('homepage.bundles.itemsAtSpecialPrice', { count: bundle.products.length }),
+    toast.success(t('homepage.cart.itemAdded', { name: bundle.name }), {
+      description: t('homepage.bundles.itemsAtSpecialPrice', { count: bundle.products?.length ?? 0 }),
     });
   };
 
@@ -163,8 +76,8 @@ export function ProductBundles() {
         </motion.div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {BUNDLES.map((bundle, idx) => {
-            const { totalPrice, compareTotal, savings, percentage } = getBundleSavings(bundle.products);
+          {bundles?.map((bundle, idx) => {
+            const { totalPrice, compareTotal, savings, percentage } = getBundleSavings(bundle.products ?? []);
             return (
               <motion.div
                 key={bundle.id}
@@ -188,7 +101,7 @@ export function ProductBundles() {
                     {/* Content */}
                     <div className="p-5 flex-1 flex flex-col">
                       <h3 className="font-bold text-ecommerce-text-primary text-base mb-1 pe-16">
-                        {bundle.title}
+                        {bundle.name}
                       </h3>
                       <p className="text-xs text-ecommerce-text-muted mb-4">
                         {bundle.description}
@@ -196,13 +109,13 @@ export function ProductBundles() {
 
                       {/* Product thumbnails */}
                       <div className="flex-1 space-y-3">
-                        {bundle.products.map((product) => (
+                        {bundle.products?.map((product) => (
                           <div
                             key={product.id}
                             className="flex items-center gap-3 p-2 rounded-xl bg-ecommerce-surface-hover/60 hover:bg-ecommerce-surface-hover transition-colors"
                           >
                             <img
-                              src={product.image}
+                              src={GetImage(product.imagePreview)}
                               alt={product.name}
                               className="w-12 h-12 rounded-lg object-cover shrink-0"
                             />
@@ -212,11 +125,11 @@ export function ProductBundles() {
                               </p>
                               <div className="flex items-center gap-2">
                                 <span className="text-sm font-semibold text-ecommerce-red">
-                                  ${product.price.toFixed(2)}
+                                  ${product.sellUnitPrice.toFixed(2)}
                                 </span>
-                                {product.comparePrice && (
+                                {product.oldSellUnitPrice != 0 && (
                                   <span className="text-[11px] text-ecommerce-text-muted line-through">
-                                    ${product.comparePrice.toFixed(2)}
+                                    ${product.oldSellUnitPrice.toFixed(2)}
                                   </span>
                                 )}
                               </div>

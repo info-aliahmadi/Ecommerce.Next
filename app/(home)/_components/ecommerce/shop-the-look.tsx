@@ -3,18 +3,16 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Sparkles, ShoppingCart, Plus } from 'lucide-react';
-import { toast } from 'sonner';
-import { useCartStore, useUIStore } from '../../_lib/store';
 import { useTranslations } from 'next-intl';
 import ProductDisplayModel from '../../_types/ProductDisplayModel';
 import { GetImage } from '../../_lib/utils';
 import CuratedStyleProductModel from '../../_types/CuratedStyleProductModel';
-import CartItem from '../../_types/CartItem';
 import { useQuery } from '@tanstack/react-query';
 import HomePageService from '../../_services/HomePageService';
+import Link from 'next/link';
+import { useUIStore } from '../../_lib/store';
 
-
-  function ProductThumbnails({ products }: { products: ProductDisplayModel[] }) {
+function ProductThumbnails({ products }: { products: ProductDisplayModel[] }) {
   const t = useTranslations();
   const setQuickViewProduct = useUIStore((s) => s.setQuickViewProduct);
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
@@ -22,7 +20,7 @@ import HomePageService from '../../_services/HomePageService';
   const visibleProducts = products.slice(0, 3);
   const extraCount = products.length - 3;
 
-  
+
   return (
     <div className="flex items-center">
       <div className="flex items-center" style={{ marginInlineStart: '-12px' }}>
@@ -71,22 +69,7 @@ function LookCard({
   isFirst: boolean;
 }>) {
   const t = useTranslations();
-  const addItem = useCartStore((s) => s.addItem);
   const totalPrice = look.products.reduce((sum, p) => sum + p.sellUnitPrice, 0);
-
-  const handleGetTheLook = () => {
-    look.products.forEach((product) => {
-      addItem({
-        id: product.id,
-        name: product.name,
-        price: product.sellUnitPrice,
-        image: GetImage(product.imagePreview, true),
-        categories: product.categories,
-      } as CartItem);
-    });
-    toast.success(t('homepage.cart.itemAdded', { name: look.attributeName }));
-  };
-
 
   return (
     <motion.div
@@ -120,13 +103,13 @@ function LookCard({
         </p>
         <div className="flex items-center justify-between gap-3">
           <ProductThumbnails products={look.products} />
-          <button
-            onClick={handleGetTheLook}
+          <Link
+            href={`/products?attributeid=${look.attributeId}`}
             className="inline-flex items-center gap-2 px-4 py-2.5 bg-ecommerce-red hover:bg-ecommerce-red/90 text-white text-sm font-semibold rounded-xl transition-all duration-200 hover:scale-[1.02] active:scale-95 shrink-0"
           >
             <ShoppingCart size={15} />
             {t('homepage.shopTheLook.getTheLook')}
-          </button>
+          </Link>
         </div>
       </div>
     </motion.div>
@@ -137,7 +120,7 @@ export function ShopTheLook() {
   const t = useTranslations();
 
 
-  const { data : looks, isLoading } = useQuery({
+  const { data: looks, isLoading } = useQuery({
     queryKey: ['products', 'curatedstyle'],
     queryFn: async () => {
       const service = new HomePageService();
@@ -196,13 +179,13 @@ export function ShopTheLook() {
               </div>
             ))
             : looks?.map((look, index) => (
-            <LookCard
-              key={look.attributeId}
-              look={look}
-              index={index}
-              isFirst={index === 0}
-            />
-          ))}
+              <LookCard
+                key={look.attributeId}
+                look={look}
+                index={index}
+                isFirst={index === 0}
+              />
+            ))}
         </div>
       </div>
     </section>

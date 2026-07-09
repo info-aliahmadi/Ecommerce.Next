@@ -11,6 +11,7 @@ import { useQuery } from '@tanstack/react-query';
 import { toast } from 'sonner';
 import { useState, useCallback } from 'react';
 import { useTranslations } from 'next-intl';
+import { GetImage } from '../../_lib/utils';
 
 const PROMO_CODES: Record<string, { type: 'percentage' | 'freeship'; value: number; label: string }> = {
   WELCOME15: { type: 'percentage', value: 15, label: '15% off' },
@@ -46,18 +47,18 @@ function YouMightAlsoLike() {
             className="flex items-center gap-2.5 p-2 rounded-xl bg-ecommerce-surface-hover/60 hover:bg-ecommerce-surface-hover transition-colors cursor-pointer group"
             onClick={() => {
               useCartStore.getState().addItem({
-                id: item.id, name: item.name, price: item.price,
-                comparePrice: item.comparePrice, image: item.image, category: item.category,
+                id: item.id, name: item.name, price: item.sellUnitPrice,
+                comparePrice: item.oldSellUnitPrice, image: item.imagePreview, categories: item.categories,
               });
               toast.success(t('homepage.cart.itemAdded', { name: item.name }));
             }}
           >
             <div className="w-11 h-11 rounded-lg overflow-hidden shrink-0 bg-muted">
-              <img src={item.image} alt={item.name} className="w-full h-full object-cover" />
+              <img src={GetImage(item.imagePreview)} alt={item.name} className="w-full h-full object-cover" />
             </div>
             <div className="flex-1 min-w-0">
               <p className="text-xs font-medium text-ecommerce-text-primary line-clamp-1">{item.name}</p>
-              <p className="text-xs font-bold text-ecommerce-text-primary mt-0.5">${item.price.toFixed(2)}</p>
+              <p className="text-xs font-bold text-ecommerce-text-primary mt-0.5">${item.sellUnitPrice.toFixed(2)}</p>
             </div>
             <div className="w-7 h-7 rounded-lg bg-ecommerce-red/10 text-ecommerce-red flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity shrink-0">
               <ShoppingCart size={12} />
@@ -202,13 +203,14 @@ export function CartDrawer() {
                     <div className="flex gap-3 bg-ecommerce-surface-hover dark:bg-[#252836] rounded-xl p-3 hover:ring-1 hover:ring-ecommerce-border transition-all">
                       {/* Product Image */}
                       <div className="w-16 h-16 rounded-lg overflow-hidden shrink-0 bg-muted">
-                        <img src={item.image} alt={item.name} className="w-full h-full object-cover" />
+                        <img src={GetImage(item.image, true)} alt={item.name} className="w-full h-full object-cover" />
                       </div>
 
                       {/* Details */}
                       <div className="flex-1 min-w-0">
                         <h4 className="text-sm font-medium text-ecommerce-text-primary line-clamp-1">{item.name}</h4>
-                        <p className="text-xs text-ecommerce-text-muted mt-0.5">{item.category}</p>
+
+                        <p className="text-xs text-ecommerce-text-muted mt-0.5">{item.categories.map(x => x.name + ",")}</p>
                         {item.comparePrice && item.comparePrice > item.price && (
                           <p className="text-[10px] text-ecommerce-emerald font-medium mt-0.5">
                             {t('homepage.cart.couponApplied', { amount: `$${(item.comparePrice - item.price).toFixed(2)}` })}

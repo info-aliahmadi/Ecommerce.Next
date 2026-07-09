@@ -46,6 +46,7 @@ export function ProductCard({ product, index = 0 }: Readonly<ProductCardProps>) 
   }, []);
 
   const handleTiltMove = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
+    
     if (!isDesktopRef.current || !tiltRef.current) return;
     const card = tiltRef.current;
     const rect = card.getBoundingClientRect();
@@ -80,12 +81,12 @@ export function ProductCard({ product, index = 0 }: Readonly<ProductCardProps>) 
   const savings = product.oldSellUnitPrice && product.oldSellUnitPrice > product.sellUnitPrice ? product.oldSellUnitPrice - product.sellUnitPrice : 0;
 
   const handleAddToCart = (e: React.MouseEvent) => {
-    handleAddToCartWithAnimation(e, image, {
+    handleAddToCartWithAnimation(e,GetImage(product.imagePreview), {
       id: product.id,
       name: product.name,
       price: product.sellUnitPrice,
       comparePrice: product.oldSellUnitPrice,
-      image: image,
+      image: product.imagePreview,
       categories: product.categories || [],
     } as CartItem);
     setJustAdded(true);

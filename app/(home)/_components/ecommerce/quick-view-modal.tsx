@@ -13,7 +13,6 @@ import { SizeGuideModal } from './size-guide-modal';
 import { useTranslations } from 'next-intl';
 import ProductDisplayModel from '../../_types/ProductDisplayModel';
 import { GetImage } from '../../_lib/utils';
-import RecentItem from '../../_types/RecentItem';
 import CartItem from '../../_types/CartItem';
 import CONFIG from '@root/config';
 
@@ -358,7 +357,7 @@ function QuickViewContent({ product, onClose }: { product: ProductDisplayModel; 
       images = [
         base];
     }
-    return images.map(x=>CONFIG.API_BASEPATH + x);
+    return images.map(x => CONFIG.API_BASEPATH + x);
   }, [product.imagePaths]);
 
   // Detect touch device on mount
@@ -382,15 +381,8 @@ function QuickViewContent({ product, onClose }: { product: ProductDisplayModel; 
 
   // Track recently viewed
   useEffect(() => {
-    addRecent({
-      id: product.id,
-      name: product.name,
-      price: product.sellUnitPrice,
-      comparePrice: product.oldSellUnitPrice,
-      image: GetImage(product.imagePreview, true),
-      categories: product.categories,
-    } as RecentItem);
-  }, [product.id, product.name, product.sellUnitPrice, product.oldSellUnitPrice, product.imagePreview, product.categories, addRecent]);
+    addRecent(product);
+  }, [product, addRecent]);
 
   const handleMouseMove = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
     if (!isZoomed || isTouchDevice) return;
@@ -415,7 +407,7 @@ function QuickViewContent({ product, onClose }: { product: ProductDisplayModel; 
         name: product.name,
         price: product.sellUnitPrice,
         comparePrice: product.oldSellUnitPrice,
-        image: GetImage(product.imagePreview, true),
+        image: product.imagePreview,
         categories: product.categories,
       } as CartItem);
     }
@@ -518,10 +510,10 @@ function QuickViewContent({ product, onClose }: { product: ProductDisplayModel; 
             <div className="absolute top-4 end-12 flex flex-col gap-1.5 z-10">
               {discount > 0 && (
                 <Badge className="bg-ecommerce-red text-white border-0 text-xs font-bold px-2.5 py-1 rounded-lg shadow-sm">
-                  -{discount}% {t('homepage.common.off', { percent: discount })}
+                  {t('homepage.common.off', { percent: discount })}
                 </Badge>
               )}
-              {product.stockQuantity > 0 && product.stockQuantity < 10 && (
+              {product.stockQuantity > 0 && product.stockQuantity < product.minStockQuantity && (
                 <Badge className="bg-ecommerce-amber text-ecommerce-text-primary border-0 text-xs font-bold px-2.5 py-1 rounded-lg shadow-sm">
                   {t('homepage.common.onlyLeft', { count: product.stockQuantity })}
                 </Badge>
@@ -648,9 +640,10 @@ function QuickViewContent({ product, onClose }: { product: ProductDisplayModel; 
 
           {/* Short description */}
           {product.shortDescription && (
-            <p className="text-sm text-ecommerce-text-secondary mt-3 px-3 py-2.5 rounded-xl bg-ecommerce-surface-hover border border-ecommerce-border/50 leading-relaxed">
-              {product.shortDescription}
-            </p>
+            <div
+              className="text-sm text-ecommerce-text-secondary mt-3 px-3 py-2.5 rounded-xl bg-ecommerce-surface-hover border border-ecommerce-border/50 leading-relaxed"
+              dangerouslySetInnerHTML={{ __html: product.shortDescription }}
+            />
           )}
 
           {/* Stock status */}
@@ -882,7 +875,10 @@ function QuickViewContent({ product, onClose }: { product: ProductDisplayModel; 
                 className="min-h-[120px]"
               >
                 {activeTab === 'description' ? (
-                  <p className="text-sm text-ecommerce-text-secondary leading-relaxed">{product.fullDescription}</p>
+                  <div
+                    className="text-sm text-ecommerce-text-secondary leading-relaxed"
+                    dangerouslySetInnerHTML={{ __html: product.fullDescription }}
+                  />
                 ) : activeTab === 'reviews' ? (
                   <div className="space-y-4">
                     <RatingBreakdown rating={product.approvedRatingSum} reviewCount={product.approvedTotalReviews} />

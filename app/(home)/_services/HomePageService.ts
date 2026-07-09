@@ -99,8 +99,19 @@ export default class HomePageService {
   async getBestSellingProducts(): Promise<Result<PaginatedDisplayList<ProductDisplayModel>>> {
     let filter: ProductFilterModel = {
       pageIndex: 1,
-      pageSize: 8,
+      pageSize: 4,
       productTagIds : [ProductTags.Bestseller]
+    }
+    const response = await this.getProducts(filter);
+    return response;
+  }
+
+  async getBestDealProducts(): Promise<Result<PaginatedDisplayList<ProductDisplayModel>>> {
+    let filter: ProductFilterModel = {
+      pageIndex: 1,
+      pageSize: 4,
+      hasDiscounts : true,
+      sorting : SortingType.SortPriceAsc
     }
     const response = await this.getProducts(filter);
     return response;

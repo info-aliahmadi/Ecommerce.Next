@@ -4,7 +4,6 @@ import { persist } from 'zustand/middleware';
 import ProductDisplayModel from '../_types/ProductDisplayModel';
 import CartItem from '../_types/CartItem';
 import WishlistItem from '../_types/WishlistItem';
-import RecentItem from '../_types/RecentItem';
 import CompareItem from '../_types/CompareItem';
 import StockAlert from '../_types/StockAlert';
 
@@ -186,8 +185,8 @@ export const useUIStore = create<UIStore>((set) => ({
 
 
 interface RecentStore {
-  items: RecentItem[];
-  addItem: (item: Omit<RecentItem, 'viewedAt'>) => void;
+  items: ProductDisplayModel[];
+  addItem: (item: Omit<ProductDisplayModel, 'viewedAt'>) => void;
 }
 
 const MAX_RECENT = 10;

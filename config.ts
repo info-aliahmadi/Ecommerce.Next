@@ -32,7 +32,7 @@ const CONFIG = {
   AUTHENTICATION_STORAGE_NAME: 'HydraAuthenticationStorage',
   AUTHORIZATION_STORAGE_NAME: 'HydraAuthorizationStorage',
   LANGUAGE_STORAGE_NAME: 'NEXT_LOCALE',
-  DEFAULT_LANGUAGE: 'fa',
+  DEFAULT_LANGUAGE: 'en',
   DEFAULT_CURRENCY: CurrencyTypes.Dollar,
   DEFAULT_MEASURETYPE: MeasureType.Number,
   DATE_STYLE: "short", // "full" | "long" | "medium" | "short",

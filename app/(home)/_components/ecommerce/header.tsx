@@ -3,7 +3,6 @@
 import { useState, useEffect, useRef, useSyncExternalStore, useCallback } from 'react';
 import { Search, ShoppingCart, Menu, X, User, Heart, ChevronDown, Sun, Moon, Bell } from 'lucide-react';
 import { useTranslations } from 'next-intl';
-import { Button } from '../ui/button';
 import { Input } from '../ui/input';
 import { Badge } from '../ui/badge';
 import { useCartStore, useWishlistStore, useUIStore } from '../../_lib/store';
@@ -17,7 +16,6 @@ import { NotificationPanel } from './notification-panel';
 import { LanguageSwitcher } from './language-switcher';
 import HomePageService from '../../_services/HomePageService';
 import MenuModel from '@root/app/dashboard/(cms)/_types/Menu/MenuModel';
-import CategoryModel from '@root/app/dashboard/(ecommerce)/_types/Product/CategoryModel';
 
 function buildMenuTree(items: MenuModel[]) : MenuModel[] {
   const map = new Map<number, any>();

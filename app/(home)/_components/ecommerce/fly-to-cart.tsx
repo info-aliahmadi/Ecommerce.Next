@@ -54,7 +54,7 @@ export function triggerFlyToCart(imageUrl: string, sourceElement: HTMLElement) {
     endY,
   };
 
-  window.dispatchEvent(new CustomEvent('homepage.fly-to-cart', { detail }));
+  window.dispatchEvent(new CustomEvent('fly-to-cart', { detail }));
 }
 
 export function FlyToCart() {

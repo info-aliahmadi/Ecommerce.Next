@@ -7,6 +7,7 @@ import { Button } from '../ui/button';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { useTranslations } from 'next-intl';
+import HomePageService from '../../_services/HomePageService';
 
 function StockBar({ stock, maxStock = 50 }: { stock: number; maxStock?: number }) {
   const t = useTranslations();
@@ -74,15 +75,22 @@ export function DealsSection() {
 
   const { data } = useQuery({
     queryKey: ['products', 'deals'],
-    queryFn: () => fetch('/api/products?sort=price-asc&limit=4').then(r => r.json()),
+    queryFn: async () => {
+      const service = new HomePageService();
+      const result = await service.getBestDealProducts();
+      const data = result.succeeded ? result.data : undefined;
+      return data;
+    }
   });
 
-  const deals = (data?.products || []).filter((p: { comparePrice: number | null; price: number }) => p.comparePrice && p.comparePrice > p.price);
+  //const deals = (data?.products || []).filter((p: { comparePrice: number | null; price: number }) => p.comparePrice && p.comparePrice > p.price);
+
+   const deals = data?.items || [];
 
   if (deals.length === 0) return null;
 
-  const totalSavings = deals.reduce((sum: number, p: { comparePrice: number; price: number }) => sum + (p.comparePrice - p.price), 0);
-  const maxDiscount = Math.max(...deals.map((p: { comparePrice: number; price: number }) => Math.round(((p.comparePrice - p.price) / p.comparePrice) * 100)));
+  const totalSavings = deals.reduce((sum: number, p: { oldSellUnitPrice: number; sellUnitPrice: number }) => sum + (p.oldSellUnitPrice - p.sellUnitPrice), 0);
+  const maxDiscount = Math.max(...deals.map((p: { oldSellUnitPrice: number; sellUnitPrice: number }) => Math.round(((p.oldSellUnitPrice - p.sellUnitPrice) / p.oldSellUnitPrice) * 100)));
 
   return (
     <section id="deals" className="py-12 sm:py-16 bg-ecommerce-surface-hover/40 dark:bg-[#0F1117]/20">
@@ -143,24 +151,12 @@ export function DealsSection() {
 
         {/* Deals Grid */}
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
-          {deals.map((product: Record<string, unknown>, index: number) => {
-            const stock = (product.stock as number) || 0;
+          {deals.map((product, index: number) => {
+            const stock = (product.stockQuantity as number) || 0;
             return (
-              <div key={product.id as string} className="relative hover:scale-[1.02] transition-transform duration-300">
+              <div key={"pros-" + product.id as string} className="relative hover:scale-[1.02] transition-transform duration-300">
                 <ProductCard
-                  id={product.id as string}
-                  name={product.name as string}
-                  price={product.price as number}
-                  comparePrice={product.comparePrice as number | undefined}
-                  image={product.image as string}
-                  rating={product.rating as number}
-                  reviewCount={product.reviewCount as number}
-                  category={product.category as { name: string; color: string }}
-                  shortDesc={product.shortDesc as string | undefined}
-                  description={product.description as string | undefined}
-                  stock={product.stock as number | undefined}
-                  sku={product.sku as string | undefined}
-                  tags={product.tags as string | undefined}
+                  product={product}
                   index={index}
                 />
                 {stock > 0 && (

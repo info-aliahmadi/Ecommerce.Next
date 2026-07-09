@@ -40,6 +40,7 @@ export function TrendingCarousel() {
   }, []);
 
   const handleQuickView = (product: ProductDisplayModel) => {
+    debugger
     setQuickViewProduct(product);
   };
 
@@ -50,7 +51,7 @@ export function TrendingCarousel() {
       name: product.name,
       price: product.sellUnitPrice,
       comparePrice: product.oldSellUnitPrice,
-      image: GetImage(product.imagePreview, true),
+      image: product.imagePreview,
       categories: product.categories
     } as CartItem);
     toast.success(t('homepage.flyToCart.added'));
@@ -128,7 +129,7 @@ export function TrendingCarousel() {
             ))
             : products.map((product, index) => (
               <motion.div
-                key={product.id}
+                key={"pro-" + product.id}
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}

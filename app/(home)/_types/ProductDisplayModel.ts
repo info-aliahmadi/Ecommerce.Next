@@ -51,7 +51,7 @@ export default interface ProductDisplayModel {
   /**
    * The ID of the associated picture (nullable).
    */
-  imagePreview?: FileUploadModel | null;
+  imagePreview?: FileUploadModel | undefined;
 
   /**
    * Meta keywords for SEO.

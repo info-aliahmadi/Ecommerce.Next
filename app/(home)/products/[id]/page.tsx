@@ -182,7 +182,7 @@ function ProductDetailPageContent() {
   const tPd = useTranslations('productDetail');
   const catTrans = useCategoryTranslations();
 
-  const id = params.id as string;
+  const id = params.id as unknown as number;
 
   const [selectedImage, setSelectedImage] = useState(0);
   const [quantity, setQuantity] = useState(1);
@@ -260,14 +260,7 @@ function ProductDetailPageContent() {
   // Add to recently viewed on mount
   useEffect(() => {
     if (product && mounted) {
-      addRecentItem({
-        id: product.id,
-        name: product.name,
-        price: product.price,
-        comparePrice: product.comparePrice ?? undefined,
-        image: product.image,
-        category: product.category.name,
-      });
+      addRecentItem(product);
     }
   }, [product, mounted, addRecentItem]);
 

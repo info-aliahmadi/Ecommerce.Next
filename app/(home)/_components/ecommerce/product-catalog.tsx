@@ -294,7 +294,7 @@ export function ProductCatalog() {
                   </span>
                   <span className="ms-auto text-xs text-ecommerce-text-muted">{total}</span>
                 </label>
-                {categories.map((cat : any) => (
+                {categories.map((cat: any) => (
                   <label key={cat.id} className="flex items-center gap-2.5 cursor-pointer group py-1">
                     <Checkbox
                       checked={filters.categories.includes(cat.slug)}
@@ -405,17 +405,16 @@ export function ProductCatalog() {
                   };
                   return (
                     <label key={val} className="flex items-center gap-2.5 cursor-pointer group py-1">
-                    <div className={`w-4 h-4 rounded-full border-2 flex items-center justify-center transition-colors ${
-                      filters.discount === val
-                        ? 'border-ecommerce-red bg-ecommerce-red'
-                        : 'border-ecommerce-border group-hover:border-ecommerce-text-muted'
-                    }`}>
-                      {filters.discount === val && <div className="w-1.5 h-1.5 rounded-full bg-white" />}
-                    </div>
-                    <span className="text-sm text-ecommerce-text-secondary group-hover:text-ecommerce-text-primary transition-colors">
-                      {labelMap[val]}
-                    </span>
-                  </label>
+                      <div className={`w-4 h-4 rounded-full border-2 flex items-center justify-center transition-colors ${filters.discount === val
+                          ? 'border-ecommerce-red bg-ecommerce-red'
+                          : 'border-ecommerce-border group-hover:border-ecommerce-text-muted'
+                        }`}>
+                        {filters.discount === val && <div className="w-1.5 h-1.5 rounded-full bg-white" />}
+                      </div>
+                      <span className="text-sm text-ecommerce-text-secondary group-hover:text-ecommerce-text-primary transition-colors">
+                        {labelMap[val]}
+                      </span>
+                    </label>
                   );
                 })}
               </div>
@@ -449,11 +448,10 @@ export function ProductCatalog() {
                   { val: 'outOfStock' as StockFilter, label: 'filterOutOfStock' },
                 ]).map(({ val, label }) => (
                   <label key={val} className="flex items-center gap-2.5 cursor-pointer group py-1">
-                    <div className={`w-4 h-4 rounded-full border-2 flex items-center justify-center transition-colors ${
-                      filters.stock === val
+                    <div className={`w-4 h-4 rounded-full border-2 flex items-center justify-center transition-colors ${filters.stock === val
                         ? 'border-ecommerce-red bg-ecommerce-red'
                         : 'border-ecommerce-border group-hover:border-ecommerce-text-muted'
-                    }`}>
+                      }`}>
                       {filters.stock === val && <div className="w-1.5 h-1.5 rounded-full bg-white" />}
                     </div>
                     <span className="text-sm text-ecommerce-text-secondary group-hover:text-ecommerce-text-primary transition-colors">
@@ -494,11 +492,10 @@ export function ProductCatalog() {
                   { val: 'last3Months' as DateFilter, label: 'filterDateLast3Months' },
                 ]).map(({ val, label }) => (
                   <label key={val} className="flex items-center gap-2.5 cursor-pointer group py-1">
-                    <div className={`w-4 h-4 rounded-full border-2 flex items-center justify-center transition-colors ${
-                      filters.dateAdded === val
+                    <div className={`w-4 h-4 rounded-full border-2 flex items-center justify-center transition-colors ${filters.dateAdded === val
                         ? 'border-ecommerce-red bg-ecommerce-red'
                         : 'border-ecommerce-border group-hover:border-ecommerce-text-muted'
-                    }`}>
+                      }`}>
                       {filters.dateAdded === val && <div className="w-1.5 h-1.5 rounded-full bg-white" />}
                     </div>
                     <span className="text-sm text-ecommerce-text-secondary group-hover:text-ecommerce-text-primary transition-colors">
@@ -533,11 +530,10 @@ export function ProductCatalog() {
               <div className="px-4 pb-3 space-y-1.5">
                 {[0, 4, 4.5, 3, 2].map(r => (
                   <label key={r} className="flex items-center gap-2.5 cursor-pointer group py-1">
-                    <div className={`w-4 h-4 rounded-full border-2 flex items-center justify-center transition-colors ${
-                      filters.minRating === r
+                    <div className={`w-4 h-4 rounded-full border-2 flex items-center justify-center transition-colors ${filters.minRating === r
                         ? 'border-ecommerce-red bg-ecommerce-red'
                         : 'border-ecommerce-border group-hover:border-ecommerce-text-muted'
-                    }`}>
+                      }`}>
                       {filters.minRating === r && <div className="w-1.5 h-1.5 rounded-full bg-white" />}
                     </div>
                     <div className="flex items-center gap-1">
@@ -801,19 +797,7 @@ export function ProductCatalog() {
                         transition={{ duration: 0.3, delay: Math.min(index * 0.03, 0.3) }}
                       >
                         <ProductCard
-                          id={product.id as string}
-                          name={product.name as string}
-                          price={product.price as number}
-                          comparePrice={product.comparePrice as number | undefined}
-                          image={product.image as string}
-                          rating={product.rating as number}
-                          reviewCount={product.reviewCount as number}
-                          category={product.category as { name: string; color: string }}
-                          shortDesc={product.shortDesc as string | undefined}
-                          description={product.description as string | undefined}
-                          stock={product.stock as number | undefined}
-                          sku={product.sku as string | undefined}
-                          tags={product.tags as string | undefined}
+                          product={product}
                           index={index}
                         />
                       </motion.div>
