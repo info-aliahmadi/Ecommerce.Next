@@ -1,12 +1,12 @@
 'use client';
 
-import { useQuery } from '@tanstack/react-query';
+import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
 import { ProductCard } from './product-card';
 import { useUIStore, useWishlistStore, useCompareStore } from '../../_lib/store';
 import { useFlyToCart } from '../../_hooks/use-fly-to-cart';
 import { Button } from '../ui/button';
 import { Skeleton } from '../ui/skeleton';
-import { SlidersHorizontal, Grid3X3, LayoutList, X, Filter, Star, ShoppingCart, Heart, Eye, GitCompareArrows, ArrowDown, PackageSearch, ArrowRight } from 'lucide-react';
+import { SlidersHorizontal, Grid3X3, LayoutList, X, Filter, Star, ShoppingCart, Heart, Eye, GitCompareArrows, ArrowDown, PackageSearch, ArrowRight, Loader2 } from 'lucide-react';
 import {
   Select,
   SelectContent,
@@ -25,6 +25,7 @@ import ProductDisplayModel from '../../_types/ProductDisplayModel';
 import ProductFilterModel from '../../_types/ProductFilterModel';
 import SortingType from '@root/app/types/enums/SortingType';
 import { GetImage } from '../../_lib/utils';
+import Link from 'next/link';
 
 const PAGE_SIZE = 8;
 
@@ -40,7 +41,6 @@ export function ProductGrid() {
   const catTrans = useCategoryTranslations();
   const { searchQuery, selectedCategory, sortBy, setSortBy, setSelectedCategory, setCatalogOpen } = useUIStore();
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
-  const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
   const [priceRange, setPriceRange] = useState<[number, number]>([0, 9999]);
   const [showFilters, setShowFilters] = useState(false);
   const [tempPriceMin, setTempPriceMin] = useState('');
@@ -68,9 +68,8 @@ export function ProductGrid() {
     return cat?.id ?? null;
   }, [selectedCategory, categories]);
 
-  const filter = useMemo((): ProductFilterModel => ({
-    pageIndex: 1,
-    pageSize: 20,
+  const filter = useMemo((): Omit<ProductFilterModel, 'pageIndex'> => ({
+    pageSize: PAGE_SIZE,
     searchInput: searchQuery || null,
     categoryIds: selectedCategoryId ? [selectedCategoryId] : undefined,
     sorting: SORT_MAP[sortBy] ?? SortingType.SortNewest,
@@ -78,46 +77,36 @@ export function ProductGrid() {
     toSellUnitPrice: priceRange[1] < 9999 ? priceRange[1] : null,
   }), [searchQuery, selectedCategoryId, sortBy, priceRange]);
 
-  const { data, isLoading, isError } = useQuery({
+  const { data, isLoading, isError, fetchNextPage, hasNextPage, isFetchingNextPage } = useInfiniteQuery({
     queryKey: ['products', filter],
-    queryFn: async () => {
+    queryFn: async ({ pageParam }) => {
       const service = new HomePageService();
-      const result = await service.getProducts(filter);
+      const result = await service.getProducts({ ...filter, pageIndex: pageParam } as ProductFilterModel);
       if (!result.succeeded) throw new Error(result.message ?? 'Failed to load products');
       return result.data;
     },
+    initialPageParam: 1,
+    getNextPageParam: (lastPage) => {
+      if (!lastPage) return undefined;
+      const currentPage = lastPage.pageIndex ?? 1;
+      const totalPages = lastPage.totalPages ?? 1;
+      return currentPage < totalPages ? currentPage + 1 : undefined;
+    },
   });
 
-  // Reset visible count when filters change
-  const filterKey = `${selectedCategory}-${searchQuery}-${sortBy}-${priceRange[0]}-${priceRange[1]}`;
-  const [prevFilterKey, setPrevFilterKey] = useState(filterKey);
-  if (prevFilterKey !== filterKey) {
-    setPrevFilterKey(filterKey);
-    setVisibleCount(PAGE_SIZE);
-  }
-
-  const products = data?.items ?? [];
-  const total = data?.totalItems ?? 0;
-
-  const visibleProducts = products.slice(0, visibleCount);
-  const hasMore = visibleCount < total;
-
-  const handleLoadMore = () => {
-    setVisibleCount((prev) => Math.min(prev + PAGE_SIZE, products.length));
-  };
+  const products = data?.pages.flatMap((page) => page?.items ?? []) ?? [];
+  const total = data?.pages[0]?.totalItems ?? 0;
 
   const handleApplyPrice = useCallback(() => {
     const min = tempPriceMin ? parseInt(tempPriceMin) : 0;
     const max = tempPriceMax ? parseInt(tempPriceMax) : 9999;
     setPriceRange([min, max]);
-    setVisibleCount(PAGE_SIZE);
   }, [tempPriceMin, tempPriceMax]);
 
   const handleClearPrice = useCallback(() => {
     setPriceRange([0, 9999]);
     setTempPriceMin('');
     setTempPriceMax('');
-    setVisibleCount(PAGE_SIZE);
   }, []);
 
   const handleCategoryClick = useCallback((slug: string | null) => {
@@ -140,7 +129,6 @@ export function ProductGrid() {
     setPriceRange([0, 9999]);
     setTempPriceMin('');
     setTempPriceMax('');
-    setVisibleCount(PAGE_SIZE);
   }, [setSelectedCategory, setSortBy]);
 
   return (
@@ -169,15 +157,16 @@ export function ProductGrid() {
               <div className="h-px w-8 bg-ecommerce-border" />
             </div>
           </div>
-          <Button
-            onClick={() => setCatalogOpen(true)}
-            variant="outline"
-            className="shrink-0 rounded-xl border-ecommerce-purple text-ecommerce-purple hover:bg-ecommerce-purple/5 gap-2 h-10"
+          <Link
+            href={"/products"}
+            className="inline-flex items-center justify-center whitespace-nowrap text-sm font-medium transition-all disabled:pointer-events-none 
+            disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 [&_svg]:shrink-0 outline-none focus-visible:border-ring 
+            focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive border bg-background shadow-xs hover:text-accent-foreground dark:bg-input/30 dark:border-input dark:hover:bg-input/50 px-4 py-2 has-[>svg]:px-3 shrink-0 rounded-xl border-ecommerce-purple text-ecommerce-purple hover:bg-ecommerce-purple/5 gap-2 h-10"
           >
             <SlidersHorizontal size={16} />
             {t('homepage.catalog.openCatalog')}
             <ArrowRight size={14} />
-          </Button>
+          </Link>
         </div>
 
         {/* Active Filter Chips */}
@@ -228,8 +217,8 @@ export function ProductGrid() {
         {/* Toolbar: Controls Row */}
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6">
           <div className="flex items-center gap-2 text-sm text-ecommerce-text-muted">
-            <span>{t('homepage.common.showing')} <strong className="text-ecommerce-text-primary">{visibleProducts.length}</strong> {visibleProducts.length !== 1 ? t('homepage.common.products') : t('homepage.common.product')}</span>
-            {hasMore && <span>{t('homepage.common.of')} {total}</span>}
+            <span>{t('homepage.common.showing')} <strong className="text-ecommerce-text-primary">{products.length}</strong> {products.length !== 1 ? t('homepage.common.products') : t('homepage.common.product')}</span>
+            {hasNextPage && <span>{t('homepage.common.of')} {total}</span>}
           </div>
 
           <div className="flex items-center gap-3 w-full sm:w-auto">
@@ -407,7 +396,7 @@ export function ProductGrid() {
                 ? 'grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6'
                 : 'grid grid-cols-1 sm:grid-cols-2 gap-4'
             }>
-              {visibleProducts.map((product, index) => (
+              {products.map((product, index) => (
                 viewMode === 'list' ? (
                   <ProductListCard
                     key={"product-" + product.id}
@@ -425,18 +414,26 @@ export function ProductGrid() {
             </div>
 
             {/* Load More Button */}
-            {hasMore && (
+            {hasNextPage && (
               <div className="flex flex-col items-center mt-10 gap-3">
                 <p className="text-xs text-ecommerce-text-muted">
-                  {t('homepage.common.showing')} {visibleProducts.length} {t('homepage.common.of')} {total} {t('homepage.common.products')}
+                  {t('homepage.common.showing')} {products.length} {t('homepage.common.of')} {total} {t('homepage.common.products')}
                 </p>
                 <Button
-                  onClick={handleLoadMore}
+                  onClick={() => fetchNextPage()}
+                  disabled={isFetchingNextPage}
                   variant="outline"
-                  className="h-11 px-8 rounded-xl border-ecommerce-border text-ecommerce-text-secondary hover:border-ecommerce-red hover:text-ecommerce-red font-medium gap-2 transition-all hover:scale-[1.02] active:scale-95"
+                  className="h-11 px-8 rounded-xl border-ecommerce-border text-ecommerce-text-secondary hover:border-ecommerce-red hover:text-ecommerce-red font-medium gap-2 transition-all hover:scale-[1.02] active:scale-95 disabled:opacity-50"
                 >
-                  <ArrowDown size={16} />
-                  {t('homepage.common.loadMore')} ({total - visibleProducts.length} {t('homepage.common.remaining')})
+                  {isFetchingNextPage ? (
+                    <Loader2 size={16} className="animate-spin" />
+                  ) : (
+                    <ArrowDown size={16} />
+                  )}
+                  {isFetchingNextPage
+                    ? t('homepage.common.loading')
+                    : `${t('homepage.common.loadMore')} (${total - products.length} ${t('homepage.common.remaining')})`
+                  }
                 </Button>
               </div>
             )}
@@ -479,7 +476,7 @@ interface ProductListCardProps {
   index?: number;
 }
 
-function ProductListCard({ product, index = 0 }: ProductListCardProps) {
+function ProductListCard({ product, index = 0 }: Readonly<ProductListCardProps>) {
   const t = useTranslations();
   const catTrans = useCategoryTranslations();
   const { toggleItem, isInWishlist } = useWishlistStore();

@@ -31,7 +31,7 @@ import { ImageComparison } from './_components/ecommerce/image-comparison';
 import { ProductBundles } from './_components/ecommerce/product-bundles';
 import { StockAlert } from './_components/ecommerce/stock-alert';
 import { ProductQuickStats } from './_components/ecommerce/product-quick-stats';
-import { ProductCatalog } from './_components/ecommerce/product-catalog';
+// import { ProductCatalog } from './_components/ecommerce/product-catalog';
 // import { I18nProvider } from './i18n/provider';
 import { useCompareStore, useUIStore } from './_lib/store';
 import { useScrollReveal } from './_hooks/use-scroll-reveal';
@@ -95,7 +95,7 @@ function HomePage() {
       <SharedOverlays />
       <StockAlert />
       <ProductQuickStats />
-      <ProductCatalog />
+      {/* <ProductCatalog /> */}
     </div>
   );
 }
