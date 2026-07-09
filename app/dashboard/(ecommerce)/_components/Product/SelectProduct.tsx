@@ -3,7 +3,7 @@ import ProductService from '@dashboard/(ecommerce)/_service/ProductService';
 import MultiAutocomplete from '@dashboard/_components/Select/MultiAutocomplete';
 import { useSession } from 'next-auth/react';
 
-interface ProductsAutoCompleteProps {
+interface SelectProductProps {
   id: string;
   name: string;
   defaultValues: any;
@@ -12,14 +12,14 @@ interface ProductsAutoCompleteProps {
 
 }
 
-export default function ProductsAutoComplete(
+export default function SelectProduct(
   { id,
     name,
     defaultValues,
     setFieldValue,
     label
   }:
-    Readonly<ProductsAutoCompleteProps>) {
+    Readonly<SelectProductProps>) {
 
   const { data: session } = useSession();
   const jwt = session?.accessToken;

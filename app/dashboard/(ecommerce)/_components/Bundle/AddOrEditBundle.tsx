@@ -11,7 +11,9 @@ import {
   Grid,
   InputLabel,
   OutlinedInput,
-  Stack
+  Stack,
+  FormControlLabel,
+  Checkbox
 } from '@mui/material';
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
@@ -27,46 +29,53 @@ import { useTranslations } from 'next-intl';
 import Notify from '@dashboard/_components/@extended/Notify';
 import setServerErrors from '@root/utils/setServerErrors';
 import AddIcon from '@mui/icons-material/Add';
-import ManufacturerService from '../../_service/ManufacturerService';
-import ManufacturerModel from '../../_types/Product/ManufacturerModel';
+import BundleService from '../../_service/BundleService';
+import BundleModel from '../../_types/Product/BundleModel';
+import ProductBundleEditor from './ProductBundleEditor';
 
 
-const AddOrEditManufacturer = ({ manufacturerId, isNew, open, setOpen, refetch }: { manufacturerId: number, isNew: boolean, open: boolean, setOpen: (open: boolean) => void, refetch: () => void }) => {
+const AddOrEditBundle = ({ bundleId, isNew, open, setOpen, refetch }:
+  {
+    bundleId: number,
+    isNew: boolean,
+    open: boolean,
+    setOpen: (open: boolean) => void,
+    refetch: () => void
+  }) => {
   const t = useTranslations("");
-  const [fieldsName, validation, buttonName] = ['fields.manufacturer.', 'validation.manufacturer.', 'buttons.manufacturer.'];
-  const [manufacturer, setManufacturer] = useState<ManufacturerModel | undefined>(undefined);
+  const [fieldsName, buttonName] = ['fields.bundle.', 'buttons.bundle.'];
+  const [bundle, setBundle] = useState<BundleModel | undefined>(undefined);
   const [notify, setNotify] = useState<NotifyProps>({ open: false });
   const { data: session } = useSession();
   const jwt = session?.accessToken;
-  let manufacturerService = new ManufacturerService(jwt ?? '');
+  let bundleService = new BundleService(jwt ?? '');
 
-  const loadManufacturer = () => {
-    manufacturerService.getManufacturerById(manufacturerId).then((result) => {
-      setManufacturer(result.data);
+  const loadBundle = () => {
+    bundleService.getBundleById(bundleId).then((result) => {
+      setBundle(result.data);
     });
   };
 
-
   useEffect(() => {
-    if (isNew == false && manufacturerId > 0) {
-      loadManufacturer();
+    if (isNew == false && bundleId > 0) {
+      loadBundle();
     } else {
-      setManufacturer(undefined);
+      setBundle(undefined);
     }
-  }, [manufacturerId, isNew, open]);
+  }, [bundleId, isNew, open]);
 
   const onClose = () => {
     setOpen(false);
-    setManufacturer(undefined);
+    setBundle(undefined);
   };
 
-  const handleSubmit = (Manufacturer: ManufacturerModel, setErrors: (errors: any) => void) => {
+  const handleSubmit = (Bundle: BundleModel, setErrors: (errors: any) => void) => {
     if (isNew == true) {
-      manufacturerService
-        .addManufacturer(Manufacturer)
+      bundleService
+        .addBundle(Bundle)
         .then(() => {
           onClose();
-          setManufacturer(undefined);
+          setBundle(undefined);
           setNotify({ open: true });
           refetch();
         })
@@ -75,11 +84,11 @@ const AddOrEditManufacturer = ({ manufacturerId, isNew, open, setOpen, refetch }
           setErrors(setServerErrors(error));
         });
     } else {
-      manufacturerService
-        .updateManufacturer(Manufacturer)
+      bundleService
+        .updateBundle(Bundle)
         .then(() => {
           onClose();
-          setManufacturer(undefined);
+          setBundle(undefined);
           setNotify({ open: true });
           refetch();
         })
@@ -110,36 +119,26 @@ const AddOrEditManufacturer = ({ manufacturerId, isNew, open, setOpen, refetch }
       <Dialog open={open} fullWidth>
         <Formik
           initialValues={{
-            id: manufacturer?.id,
-            name: manufacturer?.name,
-            metaKeywords: manufacturer?.metaKeywords,
-            metaTitle: manufacturer?.metaTitle,
-            description: manufacturer?.description,
-            metaDescription: manufacturer?.metaDescription,
-            imagePreviewId: manufacturer?.imagePreviewId,
-            imagePreview: manufacturer?.imagePreview,
-            //published: manufacturer?.published,
-            //pictureId: manufacturer?.pictureId,
-            displayOrder: manufacturer?.displayOrder
+            id: bundle?.id,
+            name: bundle?.name,
+            description: bundle?.description,
+            showOnHomepage: bundle?.showOnHomepage ?? false,
+            displayOrder: bundle?.displayOrder,
+            products: bundle?.products ?? []
           }}
           enableReinitialize={true}
           validationSchema={Yup.object().shape({
             name: Yup.string().max(70).required('Name is required'),
-            metaKeywords: Yup.string().max(250).required('MetaKeywords is required'),
-            metaTitle: Yup.string().max(250).required('MetaTitle is required'),
             description: Yup.string().max(300).required('Description is required'),
-            metaDescription: Yup.string().max(300).required('MetaDescription is required'),
-            //published: Yup.bool().required('Published is required'),
-            //pictureId: Yup.strin.max()g().required('PictureId is required'),
+            showOnHomepage: Yup.boolean(),
             displayOrder: Yup.number().required('DisplayOrder is required')
           })}
           onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
             try {
-              handleSubmit(values as ManufacturerModel, setErrors);
+              handleSubmit(values as BundleModel, setErrors);
             } catch (err) {
               console.error(err);
               setStatus({ success: false });
-              
               setSubmitting(false);
             }
           }}
@@ -147,7 +146,7 @@ const AddOrEditManufacturer = ({ manufacturerId, isNew, open, setOpen, refetch }
           {({ errors, handleBlur, handleChange, setFieldValue, handleSubmit, isSubmitting, touched, values }) => (
             <form noValidate onSubmit={handleSubmit}>
               <DialogTitle>
-                 {isNew === true ? t('buttons.manufacturer.add') : t('dialog.edit.title', { item: `"${values.name}"` })}
+                {isNew === true ? t('buttons.bundle.add') : t('dialog.edit.title', { item: `"${values.name}"` })}
                 <CloseDialog onClose={onClose} />
               </DialogTitle>
               <DialogContent>
@@ -176,48 +175,6 @@ const AddOrEditManufacturer = ({ manufacturerId, isNew, open, setOpen, refetch }
 
                   <Grid size={12}>
                     <Stack spacing={1}>
-                      <InputLabel htmlFor="metaKeywords">{t(fieldsName + 'metaKeywords')}</InputLabel>
-                      <OutlinedInput
-                        id="metaKeywords"
-                        type="text"
-                        value={values?.metaKeywords || ''}
-                        onBlur={handleBlur}
-                        onChange={handleChange}
-                        placeholder={t(fieldsName + 'metaKeywords')}
-                        fullWidth
-                        error={Boolean(touched.metaKeywords && errors.metaKeywords)}
-                      />
-                      {touched.metaKeywords && errors.metaKeywords && (
-                        <FormHelperText error id="helper-text-metaKeywords">
-                          {errors.metaKeywords}
-                        </FormHelperText>
-                      )}
-                    </Stack>
-                  </Grid>
-
-                  <Grid size={12}>
-                    <Stack spacing={1}>
-                      <InputLabel htmlFor="metaTitle">{t(fieldsName + 'metaTitle')}</InputLabel>
-                      <OutlinedInput
-                        id="metaTitle"
-                        type="text"
-                        value={values?.metaTitle || ''}
-                        onBlur={handleBlur}
-                        onChange={handleChange}
-                        placeholder={t(fieldsName + 'metaTitle')}
-                        fullWidth
-                        error={Boolean(touched.metaTitle && errors.metaTitle)}
-                      />
-                      {touched.metaTitle && errors.metaTitle && (
-                        <FormHelperText error id="helper-text-metaTitle">
-                          {errors.metaTitle}
-                        </FormHelperText>
-                      )}
-                    </Stack>
-                  </Grid>
-
-                  <Grid size={12}>
-                    <Stack spacing={1}>
                       <InputLabel htmlFor="description">{t(fieldsName + 'description')}</InputLabel>
                       <OutlinedInput
                         id="description"
@@ -239,22 +196,16 @@ const AddOrEditManufacturer = ({ manufacturerId, isNew, open, setOpen, refetch }
 
                   <Grid size={12}>
                     <Stack spacing={1}>
-                      <InputLabel htmlFor="metaDescription">{t(fieldsName + 'metaDescription')}</InputLabel>
-                      <OutlinedInput
-                        id="metaDescription"
-                        type="text"
-                        value={values?.metaDescription || ''}
-                        onBlur={handleBlur}
-                        onChange={handleChange}
-                        placeholder={t(fieldsName + 'metaDescription')}
-                        fullWidth
-                        error={Boolean(touched.metaDescription && errors.metaDescription)}
+                      <FormControlLabel
+                        control={
+                          <Checkbox
+                            checked={values?.showOnHomepage ?? false}
+                            onChange={handleChange}
+                            name="showOnHomepage"
+                          />
+                        }
+                        label={t(fieldsName + 'showOnHomepage')}
                       />
-                      {touched.metaDescription && errors.metaDescription && (
-                        <FormHelperText error id="helper-text-metaDescription">
-                          {errors.metaDescription}
-                        </FormHelperText>
-                      )}
                     </Stack>
                   </Grid>
 
@@ -278,6 +229,13 @@ const AddOrEditManufacturer = ({ manufacturerId, isNew, open, setOpen, refetch }
                       )}
                     </Stack>
                   </Grid>
+                  <Grid size={12}>
+                    <ProductBundleEditor
+                      products={values?.products ?? []}
+                      setFieldValue={setFieldValue}
+                    />
+                  </Grid>
+
                 </Grid>
               </DialogContent>
               <DialogActions sx={{ p: '1.25rem' }}>
@@ -307,4 +265,4 @@ const AddOrEditManufacturer = ({ manufacturerId, isNew, open, setOpen, refetch }
   );
 };
 
-export default AddOrEditManufacturer;
+export default AddOrEditBundle;

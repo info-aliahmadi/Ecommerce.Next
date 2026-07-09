@@ -920,6 +920,7 @@
     "product": "محصولات",
     "order": "سفارشات",
     "manufacturer": "تولیدکنندگان",
+    "bundles": "ست های منتخب",
     "category": "دسته‌بندی‌ها",
     "product-tag": "برچسب‌ها",
     "product-attribute": "خصوصیات محصول",
@@ -957,6 +958,7 @@
     "orders": "سفارش‌ها",
     "deliveryDates": "تاریخ‌های تحویل",
     "manufacturers": "تولیدکنندگان",
+    "bundles": "ست های منتخب",
     "productAttributes": "خصوصیات محصول",
     "productTags": "برچسب‌ها",
     "categories": "دسته‌بندی‌ها",
@@ -1251,6 +1253,15 @@
       "published": "منتشر شده",
       "displayOrder": "ترتیب نمایش"
     },
+    "bundle": {
+      "id": "شناسه",
+      "name": "نام",
+      "description": "توضیحات",
+      "showOnHomepage": "نمایش در صفحه اصلی",
+      "displayOrder": "ترتیب نمایش",
+      "addProduct": "جستجو و افزودن محصولات...",
+      "selectedProducts": "محصولات در بسته"
+    },
     "discount": {
       "id": "شناسه",
       "name": "نام",
@@ -1307,7 +1318,7 @@
       "id": "شناسه",
       "name": "نام",
       "sku": "شناسه (SKU)",
-      "previewImageId": "تصویر پیش‌نمایش",
+      "imagePreviewId": "تصویر پیش‌نمایش",
       "metaKeywords": "کلمات کلیدی متا",
       "metaTitle": "عنوان متا",
       "metaDescription": "توضیحات متا",
@@ -1592,6 +1603,12 @@
       "delete": "حذف تولیدکننده",
       "saveManufacturer": "ذخیره تولیدکننده",
       "cancel": "لغو"
+    },
+    "bundle": {
+      "add": "ست جدید",
+      "edit": "ویرایش ست",
+      "delete": "حذف ست",
+      "saveBundle": "ذخیره ست"
     },
     "discount": {
       "add": "تخفیف جدید",

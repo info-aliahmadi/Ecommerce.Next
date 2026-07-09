@@ -924,6 +924,7 @@
     "category": "Category",
     "order": "Orders",
     "manufacturer": "Manufacturers",
+    "bundles": "باقة المنتج",
     "common": "Common Information"
   },
   "pages": {
@@ -958,6 +959,7 @@
     "orders": "سفارش‌ها",
     "deliveryDates": "تاریخ‌های تحویل",
     "manufacturers": "تولیدکنندگان",
+    "bundles": "باقات المنتجات",
     "common": "اطلاعات عمومی",
     "discount": "تخفیف‌ها",
     "productAttribute": "خصوصیات محصول",
@@ -1244,6 +1246,15 @@
       "published": "منتشر شده",
       "displayOrder": "ترتیب نمایش"
     },
+    "bundle": {
+      "id": "المعرف",
+      "name": "الاسم",
+      "description": "الوصف",
+      "showOnHomepage": "عرض في الصفحة الرئيسية",
+      "displayOrder": "ترتيب العرض",
+      "addProduct": "ابحث وأضف منتجات...",
+      "selectedProducts": "المنتجات في الباقة"
+    },
     "discount": {
       "id": "شناسه",
       "name": "نام",
@@ -1450,6 +1461,12 @@
       "edit": "ویرایش تولیدکننده",
       "delete": "حذف تولیدکننده",
       "saveManufacturer": "ذخیره تولیدکننده"
+    },
+    "bundle": {
+      "add": "باقة جديدة",
+      "edit": "تعديل الباقة",
+      "delete": "حذف الباقة",
+      "saveBundle": "حفظ الباقة"
     },
     "role": {
       "add": "افزودن نقش جدید",

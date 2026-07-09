@@ -944,6 +944,7 @@
     "category": "Category",
     "order": "Orders",
     "manufacturer": "Manufacturers",
+    "bundles": "Bundles",
     "common": "Common Information"
   },
   "pages": {
@@ -975,6 +976,7 @@
     "subscribes": "Subscribes",
     "countries": "Countries",
     "product": "Products",
+    "bundles": "Bundles",
     "categories": "Categories",
     "orders": "Orders",
     "deliveryDates": "Delivery Dates",
@@ -1265,6 +1267,15 @@
       "published": "Published",
       "displayOrder": "Display Order"
     },
+    "bundle": {
+      "id": "Id",
+      "name": "Name",
+      "description": "Description",
+      "showOnHomepage": "Show On Homepage",
+      "displayOrder": "Display Order",
+      "addProduct": "Search and add products...",
+      "selectedProducts": "Products in Bundle"
+    },
     "discount": {
       "id": "Id",
       "name": "Name",
@@ -1472,6 +1483,12 @@
       "edit": "Edit Manufacturer",
       "delete": "Delete Manufacturer",
       "saveManufacturer": "Save Manufacturer"
+    },
+    "bundle": {
+      "add": "New Bundle",
+      "edit": "Edit Bundle",
+      "delete": "Delete Bundle",
+      "saveBundle": "Save Bundle"
     },
     "discount": {
       "add": "New Discount",

@@ -18,6 +18,7 @@ import PaginatedDisplayList from "../_types/PaginatedList";
 import ProductTags from "@root/app/types/enums/ProductTags";
 import SortingType from "@root/app/types/enums/SortingType";
 import CuratedStyleProductModel from "../_types/CuratedStyleProductModel";
+import BundleDisplayModel from "../_types/BundleDisplayModel";
 
 export default class HomePageService {
 
@@ -55,7 +56,7 @@ export default class HomePageService {
    * Get all categories for display
    */
   async getAllCategories(): Promise<Result<CategoryDisplayModel[]>> {
-    let result = await Fetch.Get<Result<CategoryDisplayModel[]>>(`${CONFIG.API_BASEPATH}/Product/GetCategories`, this.config);
+    let result = await Fetch.Get<Result<CategoryDisplayModel[]>>(`${this.baseUrl}/Product/GetCategories`, this.config);
     return result;
   }
 
@@ -63,7 +64,7 @@ export default class HomePageService {
    * Get all product tags for display
    */
   async getAllProductTags(): Promise<Result<ProductTagModel[]>> {
-    let result = await Fetch.Get<Result<ProductTagModel[]>>(`${CONFIG.API_BASEPATH}/Product/GetProductTags`, this.config);
+    let result = await Fetch.Get<Result<ProductTagModel[]>>(`${this.baseUrl}/Product/GetProductTags`, this.config);
     return result;
   }
 
@@ -71,7 +72,7 @@ export default class HomePageService {
     * Get all manufacturers for display
 */
   async getAllManufacturers(): Promise<Result<ManufacturerDisplayModel[]>> {
-    let result = await Fetch.Get<Result<ManufacturerDisplayModel[]>>(`${CONFIG.API_BASEPATH}/Product/GetManufacturers`, this.config);
+    let result = await Fetch.Get<Result<ManufacturerDisplayModel[]>>(`${this.baseUrl}/Product/GetManufacturers`, this.config);
     return result;
   }
 
@@ -127,6 +128,13 @@ export default class HomePageService {
     return response;
   }
 
+  /**
+   * Get site settings
+   */
+  async getBundles(): Promise<Result<BundleDisplayModel[]>> {
+    let result = await Fetch.Get<Result<BundleDisplayModel[]>>(`${this.baseUrl}/Product/GetPublishedBundles`, this.config);
+    return result;
+  }
   /**
    * Get site settings
    */

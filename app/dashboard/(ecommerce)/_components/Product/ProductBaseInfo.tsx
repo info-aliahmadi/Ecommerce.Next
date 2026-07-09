@@ -15,7 +15,7 @@ import SelectProductAttribute from '../ProductAttribute/SelectProductAttribute';
 import SelectCategory from '../Category/SelectCategory';
 import SelectManufacturer from '../Manufacturer/SelectManufacturer';
 import Editor from '@root/app/dashboard/_components/Editor/Editor';
-import ProductsAutoComplete from './ProductAutoComplete';
+import ProductsAutoComplete from './SelectProduct';
 import ProductModel from '../../_types/Product/ProductModel';
 import nextIntlService from '@root/locales/nextIntlService';
 import CurrencyInput from '@root/app/dashboard/_components/Currency/CurrencyInput';
