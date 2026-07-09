@@ -6,7 +6,7 @@ import { useUIStore, useWishlistStore, useCompareStore } from '../../_lib/store'
 import { useFlyToCart } from '../../_hooks/use-fly-to-cart';
 import { Button } from '../ui/button';
 import { Skeleton } from '../ui/skeleton';
-import { SlidersHorizontal, Grid3X3, LayoutList, X, Filter, Loader2, Star, ShoppingCart, Heart, Eye, GitCompareArrows, ArrowDown, PackageSearch, ArrowRight } from 'lucide-react';
+import { SlidersHorizontal, Grid3X3, LayoutList, X, Filter, Star, ShoppingCart, Heart, Eye, GitCompareArrows, ArrowDown, PackageSearch, ArrowRight } from 'lucide-react';
 import {
   Select,
   SelectContent,
@@ -21,8 +21,19 @@ import { toast } from 'sonner';
 import { useTranslations } from 'next-intl';
 import { useCategoryTranslations } from '../../_lib/category-translations';
 import HomePageService from '../../_services/HomePageService';
+import ProductDisplayModel from '../../_types/ProductDisplayModel';
+import ProductFilterModel from '../../_types/ProductFilterModel';
+import SortingType from '@root/app/types/enums/SortingType';
+import { GetImage } from '../../_lib/utils';
 
 const PAGE_SIZE = 8;
+
+const SORT_MAP: Record<string, SortingType> = {
+  'newest': SortingType.SortNewest,
+  'price-asc': SortingType.SortPriceAsc,
+  'price-desc': SortingType.SortPriceDesc,
+  'popular': SortingType.SortPopular,
+};
 
 export function ProductGrid() {
   const t = useTranslations();
@@ -42,48 +53,57 @@ export function ProductGrid() {
     'popular': t('homepage.common.popular'),
   };
 
+  const { data: categories = [] } = useQuery({
+    queryKey: ['categories'],
+    queryFn: async () => {
+      const service = new HomePageService();
+      const result = await service.getAllCategories();
+      return result.succeeded ? result.data ?? [] : [];
+    },
+  });
+
+  const selectedCategoryId = useMemo(() => {
+    if (!selectedCategory) return null;
+    const cat = categories.find((c) => c.key === selectedCategory);
+    return cat?.id ?? null;
+  }, [selectedCategory, categories]);
+
+  const filter = useMemo((): ProductFilterModel => ({
+    pageIndex: 1,
+    pageSize: 20,
+    searchInput: searchQuery || null,
+    categoryIds: selectedCategoryId ? [selectedCategoryId] : undefined,
+    sorting: SORT_MAP[sortBy] ?? SortingType.SortNewest,
+    fromSellUnitPrice: priceRange[0] > 0 ? priceRange[0] : null,
+    toSellUnitPrice: priceRange[1] < 9999 ? priceRange[1] : null,
+  }), [searchQuery, selectedCategoryId, sortBy, priceRange]);
+
   const { data, isLoading, isError } = useQuery({
-    queryKey: ['products', selectedCategory, searchQuery, sortBy],
-    queryFn: () => {
-      const params = new URLSearchParams();
-      if (selectedCategory) params.set('homepage.category', selectedCategory);
-      if (searchQuery) params.set('homepage.search', searchQuery);
-      if (sortBy) params.set('homepage.sort', sortBy);
-      return fetch(`/api/products?${params}`).then(r => r.json());
+    queryKey: ['products', filter],
+    queryFn: async () => {
+      const service = new HomePageService();
+      const result = await service.getProducts(filter);
+      if (!result.succeeded) throw new Error(result.message ?? 'Failed to load products');
+      return result.data;
     },
   });
 
   // Reset visible count when filters change
-  const filterKey = `${selectedCategory}-${searchQuery}-${sortBy}`;
+  const filterKey = `${selectedCategory}-${searchQuery}-${sortBy}-${priceRange[0]}-${priceRange[1]}`;
   const [prevFilterKey, setPrevFilterKey] = useState(filterKey);
   if (prevFilterKey !== filterKey) {
     setPrevFilterKey(filterKey);
     setVisibleCount(PAGE_SIZE);
   }
 
-  const products = data?.products || [];
-  const total = data?.total || 0;
+  const products = data?.items ?? [];
+  const total = data?.totalItems ?? 0;
 
-  // Filter by price range
-  const filteredProducts = useMemo(() => {
-    return products.filter((p: { price: number }) => p.price >= priceRange[0] && p.price <= priceRange[1]);
-  }, [products, priceRange]);
-
-  const visibleProducts = filteredProducts.slice(0, visibleCount);
-  const hasMore = visibleCount < filteredProducts.length;
-
-  const { data: categories = [] } = useQuery({
-    queryKey: ['categories'],
-    queryFn: async () => {
-      const service = new HomePageService();
-      const result = await service.getAllCategories();
-      const items = result.succeeded ? result.data : [];
-      return items;
-    },
-  });
+  const visibleProducts = products.slice(0, visibleCount);
+  const hasMore = visibleCount < products.length;
 
   const handleLoadMore = () => {
-    setVisibleCount(prev => Math.min(prev + PAGE_SIZE, filteredProducts.length));
+    setVisibleCount((prev) => Math.min(prev + PAGE_SIZE, products.length));
   };
 
   const handleApplyPrice = useCallback(() => {
@@ -209,7 +229,7 @@ export function ProductGrid() {
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6">
           <div className="flex items-center gap-2 text-sm text-ecommerce-text-muted">
             <span>{t('homepage.common.showing')} <strong className="text-ecommerce-text-primary">{visibleProducts.length}</strong> {visibleProducts.length !== 1 ? t('homepage.common.products') : t('homepage.common.product')}</span>
-            {hasMore && <span>{t('homepage.common.of')} {filteredProducts.length}</span>}
+            {hasMore && <span>{t('homepage.common.of')} {total}</span>}
           </div>
 
           <div className="flex items-center gap-3 w-full sm:w-auto">
@@ -380,48 +400,24 @@ export function ProductGrid() {
         )}
 
         {/* Products Grid/List */}
-        {!isLoading && !isError && filteredProducts.length > 0 && (
+        {!isLoading && !isError && products.length > 0 && (
           <>
             <div className={
               viewMode === 'grid'
                 ? 'grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6'
                 : 'grid grid-cols-1 sm:grid-cols-2 gap-4'
             }>
-              {visibleProducts.map((product: Record<string, unknown>, index: number) => (
+              {visibleProducts.map((product, index) => (
                 viewMode === 'list' ? (
                   <ProductListCard
                     key={"product-" + product.id}
-                    id={product.id as string}
-                    name={product.name as string}
-                    price={product.price as number}
-                    comparePrice={product.comparePrice as number | undefined}
-                    image={product.image as string}
-                    rating={product.rating as number}
-                    reviewCount={product.reviewCount as number}
-                    category={product.category as { name: string; color: string }}
-                    shortDesc={product.shortDesc as string | undefined}
-                    description={product.description as string | undefined}
-                    stock={product.stock as number | undefined}
-                    sku={product.sku as string | undefined}
-                    tags={product.tags as string | undefined}
+                    product={product}
                     index={index}
                   />
                 ) : (
                   <ProductCard
                     key={"product-" + product.id}
-                    id={product.id as string}
-                    name={product.name as string}
-                    price={product.price as number}
-                    comparePrice={product.comparePrice as number | undefined}
-                    image={product.image as string}
-                    rating={product.rating as number}
-                    reviewCount={product.reviewCount as number}
-                    category={product.category as { name: string; color: string }}
-                    shortDesc={product.shortDesc as string | undefined}
-                    description={product.description as string | undefined}
-                    stock={product.stock as number | undefined}
-                    sku={product.sku as string | undefined}
-                    tags={product.tags as string | undefined}
+                    product={product}
                     index={index}
                   />
                 )
@@ -432,7 +428,7 @@ export function ProductGrid() {
             {hasMore && (
               <div className="flex flex-col items-center mt-10 gap-3">
                 <p className="text-xs text-ecommerce-text-muted">
-                  {t('homepage.common.showing')} {visibleProducts.length} {t('homepage.common.of')} {filteredProducts.length} {t('homepage.common.products')}
+                  {t('homepage.common.showing')} {visibleProducts.length} {t('homepage.common.of')} {total} {t('homepage.common.products')}
                 </p>
                 <Button
                   onClick={handleLoadMore}
@@ -440,7 +436,7 @@ export function ProductGrid() {
                   className="h-11 px-8 rounded-xl border-ecommerce-border text-ecommerce-text-secondary hover:border-ecommerce-red hover:text-ecommerce-red font-medium gap-2 transition-all hover:scale-[1.02] active:scale-95"
                 >
                   <ArrowDown size={16} />
-                  {t('homepage.common.loadMore')} ({filteredProducts.length - visibleProducts.length} {t('homepage.common.remaining')})
+                  {t('homepage.common.loadMore')} ({total - visibleProducts.length} {t('homepage.common.remaining')})
                 </Button>
               </div>
             )}
@@ -448,7 +444,7 @@ export function ProductGrid() {
         )}
 
         {/* Empty State */}
-        {!isLoading && !isError && filteredProducts.length === 0 && (
+        {!isLoading && !isError && products.length === 0 && (
           <div className="text-center py-16">
             <div className="w-20 h-20 rounded-full bg-ecommerce-surface-hover dark:bg-ecommerce-surface flex items-center justify-center mx-auto mb-5">
               <PackageSearch size={32} className="text-ecommerce-text-muted" />
@@ -479,46 +475,48 @@ export function ProductGrid() {
 /* List View Product Card */
 
 interface ProductListCardProps {
-  id: string;
-  name: string;
-  price: number;
-  comparePrice?: number;
-  image: string;
-  rating: number;
-  reviewCount: number;
-  category: { name: string; color: string };
-  shortDesc?: string;
-  description?: string;
-  tags?: string;
-  stock?: number;
-  sku?: string;
+  product: ProductDisplayModel;
   index?: number;
 }
 
-function ProductListCard({
-  id, name, price, comparePrice, image, rating, reviewCount, category, shortDesc, description, tags, stock, sku, index = 0
-}: ProductListCardProps) {
+function ProductListCard({ product, index = 0 }: ProductListCardProps) {
   const t = useTranslations();
+  const catTrans = useCategoryTranslations();
   const { toggleItem, isInWishlist } = useWishlistStore();
   const { setQuickViewProduct } = useUIStore();
   const { addItem: addCompareItem, isInCompare } = useCompareStore();
   const { handleAddToCartWithAnimation } = useFlyToCart();
 
-  const wishlisted = isInWishlist(id);
-  const inCompare = isInCompare(id);
-  const discount = comparePrice ? Math.round(((comparePrice - price) / comparePrice) * 100) : 0;
-  const parsedTags: string[] = tags ? JSON.parse(tags) : [];
+  const image = GetImage(product.imagePreview, true);
+  const category = product.categories?.[0];
+  const rating = product.approvedTotalReviews > 0 ? product.approvedRatingSum / product.approvedTotalReviews : 0;
+  const wishlisted = isInWishlist(product.id);
+  const inCompare = isInCompare(product.id);
+  const discount = product.oldSellUnitPrice ? Math.round(((product.oldSellUnitPrice - product.sellUnitPrice) / product.oldSellUnitPrice) * 100) : 0;
 
   const handleAddToCart = (e: React.MouseEvent) => {
-    handleAddToCartWithAnimation(e, image, {
-      id, name, price, comparePrice, image, category: category.name,
+    handleAddToCartWithAnimation(e, GetImage(product.imagePreview), {
+      id: product.id,
+      name: product.name,
+      price: product.sellUnitPrice,
+      comparePrice: product.oldSellUnitPrice,
+      image: product.imagePreview,
+      categories: product.categories || [],
+      quantity : 1
     });
   };
 
   const handleWishlist = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
-    toggleItem({ id, name, price, comparePrice, image, category: category.name });
+    toggleItem({
+      id: product.id,
+      name: product.name,
+      price: product.sellUnitPrice,
+      comparePrice: product.oldSellUnitPrice,
+      image: image,
+      categories: product.categories || [],
+    });
     toast.success(wishlisted ? t('homepage.common.removeFromWishlist') : t('homepage.common.addToWishlist'));
   };
 
@@ -526,14 +524,38 @@ function ProductListCard({
     e.preventDefault();
     e.stopPropagation();
     if (inCompare) {
-      addCompareItem({ id, name, price, comparePrice, image, rating, reviewCount, category, stock: stock || 0, description: description || '', sku });
+      addCompareItem({
+        id: product.id,
+        name: product.name,
+        price: product.sellUnitPrice,
+        comparePrice: product.oldSellUnitPrice,
+        image: image,
+        rating: rating,
+        reviewCount: product.approvedTotalReviews,
+        categories: product.categories || [],
+        stock: product.stockQuantity || 0,
+        description: product.fullDescription || '',
+        sku: product.sku || '',
+      });
       toast.success(t('homepage.compare.remove'));
     } else {
       if (useCompareStore.getState().items.length >= 4) {
         toast.warning(t('homepage.compare.maxWarning'));
         return;
       }
-      addCompareItem({ id, name, price, comparePrice, image, rating, reviewCount, category, stock: stock || 0, description: description || '', sku });
+      addCompareItem({
+        id: product.id,
+        name: product.name,
+        price: product.sellUnitPrice,
+        comparePrice: product.oldSellUnitPrice,
+        image: image,
+        rating: rating,
+        reviewCount: product.approvedTotalReviews,
+        categories: product.categories || [],
+        stock: product.stockQuantity || 0,
+        description: product.fullDescription || '',
+        sku: product.sku || '',
+      });
       toast.success(t('homepage.common.compare'));
     }
   };
@@ -541,10 +563,7 @@ function ProductListCard({
   const handleQuickView = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
-    setQuickViewProduct({
-      id, name, price, comparePrice, image, rating, reviewCount, category,
-      shortDesc, description: description || '', stock: stock || 0, sku, tags,
-    });
+    setQuickViewProduct(product);
   };
 
   return (
@@ -559,7 +578,7 @@ function ProductListCard({
         <div className="relative w-full sm:w-48 lg:w-56 aspect-square sm:aspect-auto shrink-0 overflow-hidden bg-ecommerce-surface-hover dark:bg-[#252836]">
           <img
             src={image}
-            alt={name}
+            alt={product.name}
             className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
             loading="lazy"
           />
@@ -568,21 +587,21 @@ function ProductListCard({
               {t('homepage.common.off', { percent: discount })}
             </Badge>
           )}
-          {parsedTags.includes('new') && (
+          {product.markAsNew && (
             <Badge className="absolute top-2.5 start-2.5 bg-ecommerce-teal text-white border-0 text-[10px] font-bold px-1.5 py-0.5 rounded-md">
               {t('homepage.common.newBadge')}
             </Badge>
           )}
           {/* Stock indicator */}
-          {stock !== undefined && (
-            <div className="absolute bottom-2.5 start-2.5">
-              {stock === 0 ? (
-                <span className="text-[10px] font-bold px-2 py-0.5 rounded-md bg-black/50 text-white">{t('homepage.common.outOfStock')}</span>
-              ) : stock < 10 ? (
-                <span className="text-[10px] font-bold px-2 py-0.5 rounded-md bg-ecommerce-amber/90 text-white">{t('homepage.common.onlyLeft', { count: stock })}</span>
-              ) : null}
+          {product.stockQuantity === 0 ? (
+            <div className="absolute inset-0 bg-black/40 z-10 flex items-center justify-center">
+              <span className="text-sm font-bold text-white bg-black/60 px-4 py-2 rounded-xl">{t('homepage.common.outOfStock')}</span>
             </div>
-          )}
+          ) : product.stockQuantity < 10 ? (
+            <div className="absolute bottom-2.5 start-2.5">
+              <span className="text-[10px] font-bold px-2 py-0.5 rounded-md bg-ecommerce-amber/90 text-white">{t('homepage.common.onlyLeft', { count: product.stockQuantity })}</span>
+            </div>
+          ) : null}
         </div>
 
         {/* Content */}
@@ -590,12 +609,12 @@ function ProductListCard({
           <div className="flex items-start justify-between gap-2">
             <div className="flex-1 min-w-0">
               <div className="flex items-center gap-1.5 mb-1">
-                <span className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: category.color }} />
-                <span className="text-[11px] font-medium text-ecommerce-text-muted uppercase tracking-wider">{category.name}</span>
-                {sku && <span className="text-[10px] text-ecommerce-text-muted ms-auto sm:ms-2">{t('homepage.common.sku')}: {sku}</span>}
+                {category && <span className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: category.color }} />}
+                {category && <span className="text-[11px] font-medium text-ecommerce-text-muted uppercase tracking-wider">{catTrans[category.name] || category.name}</span>}
+                {product.sku && <span className="text-[10px] text-ecommerce-text-muted ms-auto sm:ms-2">{t('homepage.common.sku')}: {product.sku}</span>}
               </div>
-              <h3 className="font-semibold text-base text-ecommerce-text-primary line-clamp-1 group-hover:text-ecommerce-red transition-colors">{name}</h3>
-              {shortDesc && <p className="text-xs text-ecommerce-text-muted mt-1 line-clamp-2">{shortDesc}</p>}
+              <h3 className="font-semibold text-base text-ecommerce-text-primary line-clamp-1 group-hover:text-ecommerce-red transition-colors">{product.name}</h3>
+              {product.shortDescription && <p className="text-xs text-ecommerce-text-muted mt-1 line-clamp-2">{product.shortDescription}</p>}
             </div>
           </div>
 
@@ -606,13 +625,13 @@ function ProductListCard({
                 <Star key={"star-" + i} size={12} className={i < Math.floor(rating) ? 'fill-ecommerce-amber text-ecommerce-amber' : 'text-ecommerce-border'} />
               ))}
             </div>
-            <span className="text-xs text-ecommerce-text-muted">{rating} ({reviewCount})</span>
+            <span className="text-xs text-ecommerce-text-muted">{rating.toFixed(1)} ({product.approvedTotalReviews})</span>
           </div>
 
           {/* Tags */}
-          {parsedTags.length > 0 && (
+          {product.productTags && product.productTags.length > 0 && (
             <div className="flex gap-1.5 mt-3">
-              {parsedTags.slice(0, 3).map(tag => (
+              {product.productTags.slice(0, 3).map(tag => (
                 <span key={"tag-" + tag} className="text-[10px] font-medium px-2 py-0.5 rounded-md bg-ecommerce-surface-hover text-ecommerce-text-muted capitalize">{tag}</span>
               ))}
             </div>
@@ -621,9 +640,9 @@ function ProductListCard({
           {/* Bottom: Price + Actions */}
           <div className="flex items-center justify-between mt-auto pt-4 border-t border-ecommerce-border mt-4">
             <div className="flex items-baseline gap-2">
-              <span className="text-xl font-bold text-ecommerce-text-primary">${price.toFixed(2)}</span>
-              {comparePrice && comparePrice > price && (
-                <span className="text-sm text-ecommerce-text-muted line-through">${comparePrice.toFixed(2)}</span>
+              <span className="text-xl font-bold text-ecommerce-text-primary">${product.sellUnitPrice.toFixed(2)}</span>
+              {product.oldSellUnitPrice && product.oldSellUnitPrice > product.sellUnitPrice && (
+                <span className="text-sm text-ecommerce-text-muted line-through">${product.oldSellUnitPrice.toFixed(2)}</span>
               )}
             </div>
             <div className="flex items-center gap-2">
@@ -651,7 +670,7 @@ function ProductListCard({
               <Button
                 onClick={handleAddToCart}
                 size="sm"
-                disabled={stock === 0}
+                disabled={product.stockQuantity === 0}
                 className="h-9 px-4 bg-ecommerce-red hover:bg-ecommerce-red/90 text-white rounded-lg text-xs font-medium gap-1.5 transition-all hover:scale-105 active:scale-95 ripple disabled:opacity-50"
               >
                 <ShoppingCart size={13} />
