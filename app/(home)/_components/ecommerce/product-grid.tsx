@@ -100,7 +100,7 @@ export function ProductGrid() {
   const total = data?.totalItems ?? 0;
 
   const visibleProducts = products.slice(0, visibleCount);
-  const hasMore = visibleCount < products.length;
+  const hasMore = visibleCount < total;
 
   const handleLoadMore = () => {
     setVisibleCount((prev) => Math.min(prev + PAGE_SIZE, products.length));
