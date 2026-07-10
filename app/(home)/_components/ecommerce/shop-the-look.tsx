@@ -104,7 +104,7 @@ function LookCard({
         <div className="flex items-center justify-between gap-3">
           <ProductThumbnails products={look.products} />
           <Link
-            href={`/products?attributeid=${look.attributeId}`}
+            href={`/products?attributes=${look.attributeId}`}
             className="inline-flex items-center gap-2 px-4 py-2.5 bg-ecommerce-red hover:bg-ecommerce-red/90 text-white text-sm font-semibold rounded-xl transition-all duration-200 hover:scale-[1.02] active:scale-95 shrink-0"
           >
             <ShoppingCart size={15} />

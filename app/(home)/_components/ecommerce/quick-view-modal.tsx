@@ -15,7 +15,7 @@ import ProductDisplayModel from '../../_types/ProductDisplayModel';
 import { GetImage } from '../../_lib/utils';
 import CartItem from '../../_types/CartItem';
 import CONFIG from '@root/config';
-
+import { redirect } from 'next/navigation';
 interface ReviewData {
   id: string;
   productId: string;
@@ -428,12 +428,15 @@ function QuickViewContent({ product, onClose }: { product: ProductDisplayModel; 
       name: product.name,
       price: product.sellUnitPrice,
       comparePrice: product.oldSellUnitPrice,
-      image: GetImage(product.imagePreview, true),
+      image: product.imagePreview,
       categories: product.categories,
     });
     toast.success(wishlisted ? t('homepage.common.removeFromWishlist') : t('homepage.common.addToWishlist'));
   };
-
+  const handleNavigateToMoreDetail = (productId: number) => {
+    onClose();
+    redirect('products/' + productId);
+  };
   const tabs = [
     { key: 'description' as const, label: t('homepage.quickView.description') },
     { key: 'reviews' as const, label: t('homepage.quickView.reviews', { count: reviewCount || product.approvedTotalReviews }) },
@@ -599,8 +602,10 @@ function QuickViewContent({ product, onClose }: { product: ProductDisplayModel; 
           </div>
 
           {/* Name */}
-          <h2 className="text-xl font-bold text-ecommerce-text-primary leading-tight">{product.name}</h2>
-
+          <h2
+            onClick={() => handleNavigateToMoreDetail(product.id)}
+            className="text-xl font-bold text-ecommerce-text-primary leading-tight cursor-pointer"
+          >{product.name}</h2>
           {/* Tags */}
           {parsedTags.length > 0 && (
             <div className="flex gap-1.5 mt-2 flex-wrap">

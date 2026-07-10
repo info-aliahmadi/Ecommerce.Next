@@ -6,7 +6,6 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { X } from 'lucide-react';
 import { useUIStore } from '../../_lib/store';
 import { useTranslations } from 'next-intl';
-import { useCategoryTranslations } from '../../_lib/category-translations';
 import HomePageService from '../../_services/HomePageService';
 
 interface Category {
@@ -68,7 +67,6 @@ function getServerSnapshot() {
 
 export function StickyCategoryNav() {
   const t = useTranslations();
-  const catTrans = useCategoryTranslations();
   const isVisible = useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
 
   const { data: categories = [] } = useQuery({
@@ -150,7 +148,7 @@ export function StickyCategoryNav() {
                       className="w-2 h-2 rounded-full shrink-0"
                       style={{ backgroundColor: cat.color }}
                     />
-                    <span>{catTrans[cat.name] || cat.name}</span>
+                    <span>{cat.name}</span>
                     <span className="text-ecommerce-text-muted text-xs">
                       {cat.productsCount}
                     </span>

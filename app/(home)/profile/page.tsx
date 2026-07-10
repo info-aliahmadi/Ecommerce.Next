@@ -28,7 +28,6 @@ import {
   X,
 } from 'lucide-react';
 
-import { I18nProvider } from '../i18n/provider';
 import { Footer } from '../_components/ecommerce/footer';
 import { CartDrawer } from '../_components/ecommerce/cart-drawer';
 import { QuickViewModal } from '../_components/ecommerce/quick-view-modal';
@@ -342,7 +341,7 @@ function ProfilePageContent() {
   };
 
   const handleWishlistAddToCart = (item: typeof wishlistItems[0]) => {
-    addToCart({ id: item.id, name: item.name, price: item.price, comparePrice: item.comparePrice, image: item.image, category: item.category });
+    addToCart({ id: item.id, name: item.name, price: item.price, comparePrice: item.comparePrice, image: item.image, categories: item.categories });
     toast.success(t('homepage.common.addToCart'));
   };
 
@@ -1217,8 +1216,6 @@ function SettingsTab({
 // ─── Page Export ──────────────────────────────────────────────────
 export default function ProfilePage() {
   return (
-    <I18nProvider>
       <ProfilePageContent />
-    </I18nProvider>
   );
 }

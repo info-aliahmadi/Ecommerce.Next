@@ -17,7 +17,6 @@ import {
 import { useState, useMemo, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTranslations } from 'next-intl';
-import { useCategoryTranslations } from '../../_lib/category-translations';
 import HomePageService from '../../_services/HomePageService';
 import ProductFilterModel from '../../_types/ProductFilterModel';
 import SortingType, { SortOption } from '@root/app/types/enums/SortingType';
@@ -38,7 +37,6 @@ const SORT_MAP: Record<SortOption, SortingType> = {
 };
 export function ProductGrid() {
   const t = useTranslations();
-  const catTrans = useCategoryTranslations();
   const { searchQuery, selectedCategory, sortBy, setSortBy, setSelectedCategory, setCatalogOpen } = useUIStore();
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
   const [priceRange, setPriceRange] = useState<[number, number]>([0, 9999]);
@@ -176,7 +174,7 @@ export function ProductGrid() {
               <div className="flex items-center gap-2 flex-wrap">
                 {selectedCategory && (
                   <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-ecommerce-red/10 text-ecommerce-red text-xs font-medium">
-                    {t('homepage.common.category')}: {catTrans[categories.find((c) => c.key === selectedCategory)?.name || ''] || categories.find((c) => c.key === selectedCategory)?.name || selectedCategory}
+                    {t('homepage.common.category')}: {categories.find((c) => c.key === selectedCategory)?.name || selectedCategory}
                     <button onClick={() => setSelectedCategory(null)} className="hover:bg-ecommerce-red/20 rounded-full p-0.5 transition-colors"><X size={12} /></button>
                   </span>
                 )}
@@ -288,7 +286,7 @@ export function ProductGrid() {
                   }`}
               >
                 <span className="w-2 h-2 rounded-full shrink-0" style={{ backgroundColor: cat.color }} />
-                {catTrans[cat.name] || cat.name}
+                {cat.name}
                 <span className={`text-[10px] ${selectedCategory === cat.key ? 'text-white/70' : 'text-ecommerce-text-muted'}`}>
                   {cat.productsCount || 0}
                 </span>
@@ -409,8 +407,8 @@ export function ProductGrid() {
           <>
             <div className={
               viewMode === 'grid'
-                ? 'grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6'
-                : 'grid grid-cols-1 sm:grid-cols-2 gap-4'
+                ? 'grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6'
+                : 'grid grid-cols-1 xl:grid-cols-2 gap-4'
             }>
               {products.map((product, index) => (
                 viewMode === 'list' ? (

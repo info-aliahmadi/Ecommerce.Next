@@ -19,6 +19,8 @@ import SortingType from "@root/app/types/enums/SortingType";
 import CuratedStyleProductModel from "../_types/CuratedStyleProductModel";
 import BundleDisplayModel from "../_types/BundleDisplayModel";
 import ProductTagDisplayModel from "../_types/ProductTagDisplayModel";
+import ProductAttributeDisplayModel from "../_types/ProductAttributeDisplayModel";
+import AttributeType from "@root/app/types/enums/AttributeType";
 
 export default class HomePageService {
 
@@ -49,22 +51,6 @@ export default class HomePageService {
 
   async getCuratedStyleProducts(): Promise<Result<CuratedStyleProductModel[]>> {
     let result = await Fetch.Get<Result<CuratedStyleProductModel[]>>(`${this.baseUrl}/Product/GetCuratedStyleProducts`, this.config);
-    return result;
-  }
-
-  /**
-   * Get all categories for display
-   */
-  async getAllCategories(): Promise<Result<CategoryDisplayModel[]>> {
-    let result = await Fetch.Get<Result<CategoryDisplayModel[]>>(`${this.baseUrl}/Product/GetCategories`, this.config);
-    return result;
-  }
-
-  /*
-    * Get all manufacturers or brands for display
-*/
-  async getAllManufacturers(): Promise<Result<ManufacturerDisplayModel[]>> {
-    let result = await Fetch.Get<Result<ManufacturerDisplayModel[]>>(`${this.baseUrl}/Product/GetManufacturers`, this.config);
     return result;
   }
 
@@ -122,13 +108,17 @@ export default class HomePageService {
     return response;
   }
 
-
   /**
    * Search products by query
    */
   async searchProducts(filter: ProductFilterModel): Promise<Result<PaginatedDisplayList<ProductDisplayModel>>> {
     const response = await this.getProducts(filter);
     return response;
+  }
+
+  async getProductById(productId : number): Promise<Result<ProductDisplayModel>> {
+    let result = await Fetch.Get<Result<ProductDisplayModel>>(`${this.baseUrl}/Product/GetProduct?productId=${productId}`);
+    return result;
   }
 
   /**
@@ -138,11 +128,46 @@ export default class HomePageService {
     let result = await Fetch.Get<Result<BundleDisplayModel[]>>(`${this.baseUrl}/Product/GetPublishedBundles`, this.config);
     return result;
   }
+  
   /**
-   * Get site settings
+   * Get all categories for display
+   */
+  async getAllCategories(): Promise<Result<CategoryDisplayModel[]>> {
+    let result = await Fetch.Get<Result<CategoryDisplayModel[]>>(`${this.baseUrl}/Product/GetCategories`, this.config);
+    return result;
+  }
+
+  /*
+    * Get all manufacturers or brands for display
+*/
+  async getAllManufacturers(): Promise<Result<ManufacturerDisplayModel[]>> {
+    let result = await Fetch.Get<Result<ManufacturerDisplayModel[]>>(`${this.baseUrl}/Product/GetManufacturers`, this.config);
+    return result;
+  }
+
+  /**
+   * Get Product Tags
    */
   async getProductTags(): Promise<Result<ProductTagDisplayModel[]>> {
     let result = await Fetch.Get<Result<ProductTagDisplayModel[]>>(`${this.baseUrl}/Product/GetProductTags`, this.config);
+    return result;
+  }
+
+  /**
+   * Get Product Attributes
+   */
+  async getProductAttributes(): Promise<Result<ProductAttributeDisplayModel[]>> {
+    let result = await Fetch.Get<Result<ProductAttributeDisplayModel[]>>(`${this.baseUrl}/Product/GetProductAttributes`, this.config);
+    return result;
+  }
+
+  /**
+   * Get Product Attributes
+   */
+  async getProductAttributesByType(attributeTypes : AttributeType[]): Promise<Result<ProductAttributeDisplayModel[]>> {
+    // convert the attribute types to joined string
+    let joinedAttributeTypes = attributeTypes.join(',')
+    let result = await Fetch.Get<Result<ProductAttributeDisplayModel[]>>(`${this.baseUrl}/Product/GetProductAttributesByType?attributeTypes=${joinedAttributeTypes}`, this.config);
     return result;
   }
 

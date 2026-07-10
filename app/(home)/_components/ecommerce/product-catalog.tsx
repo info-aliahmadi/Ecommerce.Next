@@ -6,7 +6,6 @@ import { useTranslations } from 'next-intl';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useUIStore, useWishlistStore, useCompareStore, useRecentStore } from '../../_lib/store';
 import { useFlyToCart } from '../../_hooks/use-fly-to-cart';
-import { useCategoryTranslations } from '../../_lib/category-translations';
 import { ProductCard } from './product-card';
 import { Button } from '../ui/button';
 import { Skeleton } from '../ui/skeleton';
@@ -98,7 +97,6 @@ function getDateRange(filter: DateFilter): { from?: string; to?: string } {
 // ── Main Component ────────────────────────────────────
 export function ProductCatalog() {
   const t = useTranslations();
-  const catTrans = useCategoryTranslations();
   const { isCatalogOpen, setCatalogOpen } = useUIStore();
   const [filters, setFilters] = useState<FilterState>(DEFAULT_FILTERS);
   const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
@@ -194,7 +192,7 @@ export function ProductCatalog() {
     const chips: { key: string; label: string; onRemove: () => void }[] = [];
     if (filters.search) chips.push({ key: 'search', label: filters.search, onRemove: () => updateFilter('search', '') });
     filters.categories.forEach(slug => {
-      chips.push({ key: `cat-${slug}`, label: catTrans[slug] || slug, onRemove: () => toggleCategory(slug) });
+      chips.push({ key: `cat-${slug}`, label: slug || slug, onRemove: () => toggleCategory(slug) });
     });
     if (filters.minPrice > 0 || filters.maxPrice < 2000) {
       chips.push({ key: 'price', label: `$${filters.minPrice} – $${filters.maxPrice}`, onRemove: () => setFilters(p => ({ ...p, minPrice: 0, maxPrice: 2000 })) });
@@ -220,7 +218,7 @@ export function ProductCatalog() {
       chips.push({ key: 'rating', label: `${filters.minRating}+ ★`, onRemove: () => updateFilter('minRating', 0) });
     }
     return chips;
-  }, [filters, catTrans, t, toggleCategory, updateFilter]);
+  }, [filters, t, toggleCategory, updateFilter]);
 
   const toggleSection = (key: string) => setExpandedSections(p => ({ ...p, [key]: !p[key] }));
 
@@ -302,7 +300,7 @@ export function ProductCatalog() {
                       className="rounded-md data-[state=checked]:bg-ecommerce-red data-[state=checked]:border-ecommerce-red"
                     />
                     <span className="text-sm text-ecommerce-text-secondary group-hover:text-ecommerce-text-primary transition-colors">
-                      {catTrans[cat.slug] || cat.name}
+                      {cat.name}
                     </span>
                     <span className="ms-auto text-xs text-ecommerce-text-muted">{cat._count?.products || 0}</span>
                   </label>
@@ -789,7 +787,7 @@ export function ProductCatalog() {
                       : 'space-y-3'
                     }
                   >
-                    {visibleProducts.map((product, index: number) => (
+                    {/* {visibleProducts.map((product, index: number) => (
                       <motion.div
                         key={product.id as string}
                         initial={{ opacity: 0, y: 20 }}
@@ -801,7 +799,7 @@ export function ProductCatalog() {
                           index={index}
                         />
                       </motion.div>
-                    ))}
+                    ))} */}
                   </motion.div>
 
                   {/* Load More */}

@@ -8,7 +8,6 @@ import { useRef, useCallback } from 'react';
 import { toast } from 'sonner';
 import { useCartStore } from '../../_lib/store';
 import { useTranslations } from 'next-intl';
-import { useCategoryTranslations } from '../../_lib/category-translations';
 import HomePageService from '../../_services/HomePageService';
 import ProductDisplayModel from '../../_types/ProductDisplayModel';
 import CartItem from '../../_types/CartItem';
@@ -16,7 +15,6 @@ import { GetImage } from '../../_lib/utils';
 
 export function TrendingCarousel() {
   const t = useTranslations();
-  const catTrans = useCategoryTranslations();
   const scrollRef = useRef<HTMLDivElement>(null);
   const { setQuickViewProduct } = useUIStore();
   const addItem = useCartStore((s) => s.addItem);
@@ -190,7 +188,7 @@ export function TrendingCarousel() {
                         style={{ backgroundColor: category.color }}
                       />
                       <span className="text-[11px] font-medium text-ecommerce-text-muted uppercase tracking-wider truncate">
-                        {catTrans[category.name] || category.name}
+                        {category.name}
                       </span>
 
                     </div>))}

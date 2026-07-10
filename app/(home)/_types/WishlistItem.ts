@@ -1,3 +1,4 @@
+import FileUploadModel from "@root/app/dashboard/(filestorage)/_types/FileUploadModel";
 import CategoryDisplayModel from "./CategoryDisplayModel";
 
 export default interface WishlistItem {
@@ -5,6 +6,6 @@ export default interface WishlistItem {
   name: string;
   price: number;
   comparePrice?: number;
-  image: string;
+  image?: FileUploadModel;
   categories: CategoryDisplayModel[];
 }

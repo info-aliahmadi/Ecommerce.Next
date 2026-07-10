@@ -4,12 +4,10 @@ import { useQuery } from '@tanstack/react-query';
 import { ArrowRight, Layers } from 'lucide-react';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
-import { useCategoryTranslations } from '../../_lib/category-translations';
 import HomePageService from '../../_services/HomePageService';
 import CONFIG from '@root/config';
 
 export function FeaturedCategories() {
-  const catTrans = useCategoryTranslations();
   const { data: categories = [] } = useQuery({
     queryKey: ['categories'],
     queryFn: async () => {
@@ -69,7 +67,7 @@ export function FeaturedCategories() {
               >
                 <img
                   src={cat.imagePreview ? CONFIG.API_BASEPATH + cat.imagePreview?.thumbnailPath : CONFIG.UNKNOWN_IMAGE_BASEPATH}
-                  alt={catTrans[cat.name] || cat.name}
+                  alt={cat.name}
                   className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                   loading="lazy"
                 />
@@ -84,7 +82,7 @@ export function FeaturedCategories() {
 
                 {/* Content */}
                 <div className="absolute bottom-0 left-0 right-0 p-4">
-                  <h3 className="text-white font-bold text-sm sm:text-base">{catTrans[cat.name] || cat.name}</h3>
+                  <h3 className="text-white font-bold text-sm sm:text-base">{cat.name}</h3>
                   <div className="flex items-center justify-between mt-1.5">
                     <span className="text-white/60 text-xs">{cat.productsCount || 0} items</span>
                     <div className="w-7 h-7 rounded-lg bg-white/10 flex items-center justify-center group-hover:bg-white/20 transition-all group-hover:translate-x-0.5">

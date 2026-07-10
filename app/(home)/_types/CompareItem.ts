@@ -1,3 +1,4 @@
+import FileUploadModel from "@root/app/dashboard/(filestorage)/_types/FileUploadModel";
 import CategoryDisplayModel from "./CategoryDisplayModel";
 
 export default interface CompareItem {
@@ -5,7 +6,7 @@ export default interface CompareItem {
   name: string;
   price: number;
   comparePrice?: number;
-  image: string;
+  image?: FileUploadModel;
   rating: number;
   reviewCount: number;
   categories: CategoryDisplayModel[];

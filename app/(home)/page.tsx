@@ -25,21 +25,16 @@ import { TrendingCarousel } from './_components/ecommerce/trending-carousel';
 import { DealTicker } from './_components/ecommerce/deal-ticker';
 import { CookieBanner } from './_components/ecommerce/cookie-banner';
 import { ShopTheLook } from './_components/ecommerce/shop-the-look';
-import { StickyCategoryNav, CategoryNavSentinel } from './_components/ecommerce/sticky-category-nav';
-import { PageSkeleton } from './_components/ecommerce/page-skeleton';
 import { ImageComparison } from './_components/ecommerce/image-comparison';
 import { ProductBundles } from './_components/ecommerce/product-bundles';
 import { StockAlert } from './_components/ecommerce/stock-alert';
 import { ProductQuickStats } from './_components/ecommerce/product-quick-stats';
-// import { ProductCatalog } from './_components/ecommerce/product-catalog';
-// import { I18nProvider } from './i18n/provider';
 import { useCompareStore, useUIStore } from './_lib/store';
 import { useScrollReveal } from './_hooks/use-scroll-reveal';
 import { Header } from './_components/ecommerce/header';
 import { AnimatePresence, motion } from 'framer-motion';
 import ProductsPage from './products/page';
 import CheckoutPage from './checkout/page';
-import { I18nProvider } from './i18n/provider';
 
 /* ─── Shared overlays (cart, quick-view, etc.) ──────────────── */
 function SharedOverlays() {
@@ -144,8 +139,6 @@ function PageRouter() {
 
 export default function Home() {
   return (
-    <I18nProvider>
       <PageRouter />
-    </I18nProvider>
   );
 }

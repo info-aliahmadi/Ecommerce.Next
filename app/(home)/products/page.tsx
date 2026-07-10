@@ -6,7 +6,6 @@ import { useTranslations } from 'next-intl';
 import { motion, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
 import { useSearchParams, useRouter, usePathname } from 'next/navigation';
-import { useCategoryTranslations } from '../_lib/category-translations';
 import { ProductCard } from '../_components/ecommerce/product-card';
 import { Header } from '../_components/ecommerce/header';
 import { Footer } from '../_components/ecommerce/footer';
@@ -17,7 +16,6 @@ import { CompareBar } from '../_components/ecommerce/compare-bar';
 import { CompareDrawer } from '../_components/ecommerce/compare-drawer';
 import { FlyToCart } from '../_components/ecommerce/fly-to-cart';
 import { MobileBottomNav } from '../_components/ecommerce/mobile-bottom-nav';
-import { I18nProvider } from '../i18n/provider';
 import HomePageService from '../_services/HomePageService';
 import ProductDisplayModel from '../_types/ProductDisplayModel';
 import ProductFilterModel from '../_types/ProductFilterModel';
@@ -74,6 +72,7 @@ import {
 } from 'lucide-react';
 import { useCompareStore } from '../_lib/store';
 import ProductListCard from '../_components/ecommerce/product-list';
+import AttributeType from '@root/app/types/enums/AttributeType';
 
 // ── Types ──────────────────────────────────────────────
 type StockFilter = 'all' | 'inStock' | 'outOfStock';
@@ -90,6 +89,7 @@ interface FilterState {
   stock: StockFilter;
   dateAdded: DateFilter;
   tags: number[];
+  attributes: number[];
   sort: SortOption;
   viewMode: ViewMode;
   page: number;
@@ -106,6 +106,7 @@ const DEFAULT_FILTERS: FilterState = {
   stock: 'all',
   dateAdded: 'all',
   tags: [],
+  attributes: [],
   sort: 'newest',
   viewMode: 'grid',
   page: 1,
@@ -147,6 +148,7 @@ function filtersToParams(filters: FilterState): URLSearchParams {
   if (filters.stock !== 'all') params.set('stock', filters.stock);
   if (filters.dateAdded !== 'all') params.set('date', filters.dateAdded);
   if (filters.tags.length > 0) params.set('tags', filters.tags.join(','));
+  if (filters.attributes.length > 0) params.set('attributes', filters.attributes.join(','));
   if (filters.sort !== 'newest') params.set('sort', filters.sort);
   if (filters.viewMode !== 'grid') params.set('view', filters.viewMode);
   if (filters.page > 1) params.set('page', String(filters.page));
@@ -173,6 +175,8 @@ function paramsToFilters(params: URLSearchParams): Partial<FilterState> {
   if (date && date !== 'all') partial.dateAdded = date as DateFilter;
   const tags = params.get('tags');
   if (tags) partial.tags = tags.split(',').map(Number).filter(Boolean);
+  const attributes = params.get('attributes');
+  if (attributes) partial.attributes = attributes.split(',').map(Number).filter(Boolean);
   const sort = params.get('sort');
   if (sort) partial.sort = sort as SortOption;
   const view = params.get('view');
@@ -187,7 +191,6 @@ function paramsToFilters(params: URLSearchParams): Partial<FilterState> {
 // ── Main Component ────────────────────────────────────
 function ProductsPageContent() {
   const t = useTranslations();
-  const catTrans = useCategoryTranslations();
   const isCompareOpen = useCompareStore((s) => s.isCompareOpen);
   const setCompareOpen = useCompareStore((s) => s.setCompareOpen);
   const searchParams = useSearchParams();
@@ -216,6 +219,7 @@ function ProductsPageContent() {
     stock: false,
     date: false,
     tags: false,
+    attributes: false,
   });
 
   // Sync filters to URL
@@ -267,7 +271,7 @@ function ProductsPageContent() {
   }, [priceMinInput, priceMaxInput]);
 
   // ── Fetch categories ────────────────────────────────
-  const { data: categories = [] } = useQuery({
+  const { data: categoriesData = [] } = useQuery({
     queryKey: ['categories'],
     queryFn: async () => {
       const service = new HomePageService();
@@ -278,7 +282,7 @@ function ProductsPageContent() {
   });
 
   // ── Fetch all Brands (for tag extraction) ─────────
-  const { data: allBrandsData = [] } = useQuery({
+  const { data: brandsData = [] } = useQuery({
     queryKey: ['all-brands'],
     queryFn: async () => {
       const service = new HomePageService();
@@ -289,8 +293,8 @@ function ProductsPageContent() {
   });
 
 
-  // ── Fetch all products (for tag extraction) ─────────
-  const { data: allProductTags = [] } = useQuery({
+  // ── Fetch all tags (for tag extraction) ─────────
+  const { data: tagsData = [] } = useQuery({
     queryKey: ['all-products-tags'],
     queryFn: async () => {
       const service = new HomePageService();
@@ -301,13 +305,25 @@ function ProductsPageContent() {
   });
 
 
+  // ── Fetch all tags (for tag extraction) ─────────
+  const { data: attributesData = [] } = useQuery({
+    queryKey: ['all-products-style-attributes'],
+    queryFn: async () => {
+      const service = new HomePageService();
+      const result = await service.getProductAttributesByType([AttributeType.Style]);
+      return result.succeeded ? result?.data ?? [] : [];
+    },
+    staleTime: 60_000,
+  });
+
+
   // ── Resolve selected category IDs ───────────────────
   const selectedCategoryIds = useMemo(() => {
     if (filters.categories.length === 0) return undefined;
     return filters.categories
-      .map((slug) => categories.find((c) => c.key === slug)?.id)
+      .map((slug) => categoriesData.find((c) => c.key === slug)?.id)
       .filter((id): id is number => id !== undefined);
-  }, [filters.categories, categories]);
+  }, [filters.categories, categoriesData]);
 
   // ── Build ProductFilterModel ────────────────────────
   const filter = useMemo((): ProductFilterModel => {
@@ -324,6 +340,7 @@ function ProductsPageContent() {
       hasStockQuantity: filters.stock === 'inStock' ? true : filters.stock === 'outOfStock' ? false : undefined,
       dateFilter: DATE_FILTER_MAP[filters.dateAdded],
       productTagIds: filters.tags.length > 0 ? filters.tags as ProductTags[] : undefined,
+      attributeIds: filters.attributes.length > 0 ? filters.attributes : undefined,
     };
   }, [filters, selectedCategoryIds]);
 
@@ -383,6 +400,15 @@ function ProductsPageContent() {
     });
   }, []);
 
+  const toggleAttribute = useCallback((attrId: number) => {
+    setFilters((prev) => {
+      const attributes = prev.attributes.includes(attrId)
+        ? prev.attributes.filter((a) => a !== attrId)
+        : [...prev.attributes, attrId];
+      return { ...prev, attributes, page: 1 };
+    });
+  }, []);
+
   const toggleBrand = useCallback((brandId: number) => {
     setFilters((prev) => {
       const brands = prev.brands.includes(brandId)
@@ -410,6 +436,7 @@ function ProductsPageContent() {
     if (filters.stock !== 'all') count++;
     if (filters.dateAdded !== 'all') count++;
     if (filters.tags.length > 0) count++;
+    if (filters.attributes.length > 0) count++;
     return count;
   }, [filters]);
 
@@ -423,15 +450,15 @@ function ProductsPageContent() {
         onRemove: () => updateFilter('search', ''),
       });
     filters.categories.forEach((slug) => {
-      const cat = categories.find((c) => c.key === slug);
+      const cat = categoriesData.find((c) => c.key === slug);
       chips.push({
-        key: `cat-${slug}`,
-        label: cat ? (catTrans[cat.name] || cat.name) : slug,
+        key: `cat-${cat?.key}`,
+        label: cat ? cat.name : slug,
         onRemove: () => toggleCategory(slug),
       });
     });
     filters.brands.forEach((brandId) => {
-      const brand = allBrandsData?.find((b) => b.id === brandId);
+      const brand = brandsData?.find((b) => b.id === brandId);
       chips.push({
         key: `brand-${brandId}`,
         label: brand?.name ?? String(brandId),
@@ -493,15 +520,23 @@ function ProductsPageContent() {
       });
     }
     filters.tags.forEach((tagId) => {
-      const tag = allProductTags?.find((t) => t.id === tagId);
+      const tag = tagsData?.find((t) => t.id === tagId);
       chips.push({
         key: `tag-${tagId}`,
         label: tag?.name ?? String(tagId),
         onRemove: () => toggleTag(tagId),
       });
     });
+    filters.attributes.forEach((attrId) => {
+      const attr = attributesData?.find((a) => a.id === attrId);
+      chips.push({
+        key: `attr-${attrId}`,
+        label: attr?.name ?? String(attrId),
+        onRemove: () => toggleAttribute(attrId),
+      });
+    });
     return chips;
-  }, [filters, categories, catTrans, allBrandsData, allProductTags, t, toggleCategory, toggleBrand, toggleTag, updateFilter]);
+  }, [filters, categoriesData, brandsData, tagsData, attributesData, t, toggleCategory, toggleBrand, toggleTag, toggleAttribute, updateFilter]);
 
   const toggleSection = (key: string) =>
     setExpandedSections((p) => ({ ...p, [key]: !p[key] }));
@@ -564,7 +599,7 @@ function ProductsPageContent() {
                   </span>
                   <span className="ms-auto text-xs text-ecommerce-text-muted">{total}</span>
                 </label>
-                {categories.map((cat) => (
+                {categoriesData.map((cat) => (
                   <label key={cat.id} className="flex items-center gap-2.5 cursor-pointer group py-1">
                     <Checkbox
                       checked={filters.categories.includes(cat.key)}
@@ -572,7 +607,7 @@ function ProductsPageContent() {
                       className="rounded-md data-[state=checked]:bg-ecommerce-red data-[state=checked]:border-ecommerce-red"
                     />
                     <span className="text-sm text-ecommerce-text-secondary group-hover:text-ecommerce-text-primary transition-colors">
-                      {catTrans[cat.name] || cat.name}
+                      {cat.name}
                     </span>
                     <span className="ms-auto text-xs text-ecommerce-text-muted">
                       {cat.productsCount || 0}
@@ -690,7 +725,7 @@ function ProductsPageContent() {
       </div>
 
       {/* Brand Filter */}
-      {allBrandsData && allBrandsData.length > 0 && (
+      {brandsData && brandsData.length > 0 && (
         <div className="border border-ecommerce-border rounded-xl overflow-hidden">
           <button
             onClick={() => toggleSection('brand')}
@@ -709,7 +744,7 @@ function ProductsPageContent() {
                 className="overflow-hidden"
               >
                 <div className="px-4 pb-3 space-y-1.5 max-h-60 overflow-y-auto custom-scrollbar">
-                  {allBrandsData.map((brand) => (
+                  {brandsData.map((brand) => (
                     <label key={brand.id} className="flex items-center gap-2.5 cursor-pointer group py-1">
                       <Checkbox
                         checked={filters.brands.includes(brand.id)}
@@ -732,7 +767,7 @@ function ProductsPageContent() {
       )}
 
       {/* Tags Filter */}
-      {allProductTags?.length > 0 && (
+      {tagsData?.length > 0 && (
         <div className="border border-ecommerce-border rounded-xl overflow-hidden">
           <button
             onClick={() => toggleSection('tags')}
@@ -751,7 +786,7 @@ function ProductsPageContent() {
                 className="overflow-hidden"
               >
                 <div className="px-4 pb-3 space-y-1.5 max-h-48 overflow-y-auto custom-scrollbar">
-                  {allProductTags?.map((tag) => (
+                  {tagsData?.map((tag) => (
                     <label key={"tag-" + tag.id} className="flex items-center gap-2.5 cursor-pointer group py-1">
                       <Checkbox
                         checked={filters.tags.includes(tag.id)}
@@ -763,6 +798,45 @@ function ProductsPageContent() {
                       </span>
                       <span className="ms-auto text-xs text-ecommerce-text-muted">
                         {tag.productsCount || 0}
+                      </span>
+                    </label>
+                  ))}
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
+      )}
+
+      {/* Attributes Filter */}
+      {attributesData?.length > 0 && (
+        <div className="border border-ecommerce-border rounded-xl overflow-hidden">
+          <button
+            onClick={() => toggleSection('attributes')}
+            className="w-full flex items-center justify-between px-4 py-3 text-sm font-semibold text-ecommerce-text-primary hover:bg-ecommerce-surface-hover transition-colors"
+          >
+            {t('homepage.shopPage.attributesFilter')}
+            {expandedSections.attributes ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
+          </button>
+          <AnimatePresence>
+            {expandedSections.attributes && (
+              <motion.div
+                initial={{ height: 0, opacity: 0 }}
+                animate={{ height: 'auto', opacity: 1 }}
+                exit={{ height: 0, opacity: 0 }}
+                transition={{ duration: 0.2 }}
+                className="overflow-hidden"
+              >
+                <div className="px-4 pb-3 space-y-1.5 max-h-48 overflow-y-auto custom-scrollbar">
+                  {attributesData.map((attr) => (
+                    <label key={"attr-" + attr.id} className="flex items-center gap-2.5 cursor-pointer group py-1">
+                      <Checkbox
+                        checked={filters.attributes.includes(attr.id)}
+                        onCheckedChange={() => toggleAttribute(attr.id)}
+                        className="rounded-md data-[state=checked]:bg-ecommerce-red data-[state=checked]:border-ecommerce-red"
+                      />
+                      <span className="text-sm text-ecommerce-text-secondary group-hover:text-ecommerce-text-primary transition-colors capitalize">
+                        {attr.name}
                       </span>
                     </label>
                   ))}
@@ -883,6 +957,173 @@ function ProductsPageContent() {
   const showingStart = total === 0 ? 0 : (filters.page - 1) * filters.perPage + 1;
   const showingEnd = Math.min(filters.page * filters.perPage, total);
 
+  // ── Product grid content (extracted from nested ternary) ──
+  const gridClass =
+    filters.viewMode === 'grid'
+      ? 'grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6'
+      : 'grid grid-cols-1 xl:grid-cols-2 gap-4';
+
+  let productGridContent: React.ReactNode;
+  if (isLoading) {
+    productGridContent = (
+      <div className={gridClass}>
+        {Array.from({ length: filters.perPage }).map((_, i) => (
+          <div key={"skeleton-" + i} className={`rounded-2xl border border-ecommerce-border overflow-hidden ${filters.viewMode === 'list' ? 'flex' : ''}`}>
+            <Skeleton className={filters.viewMode === 'list' ? 'w-40 h-40 sm:w-48 sm:h-48 shrink-0' : 'aspect-square'} />
+            <div className="p-4 space-y-3 flex-1">
+              <Skeleton className="h-3 w-16" />
+              <Skeleton className="h-4 w-3/4" />
+              <Skeleton className="h-4 w-1/2" />
+              <Skeleton className="h-3 w-24" />
+              <div className="flex justify-between pt-3 border-t border-ecommerce-border">
+                <Skeleton className="h-5 w-16" />
+                <Skeleton className="h-8 w-16 rounded-lg" />
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    );
+  } else if (products.length === 0) {
+    productGridContent = (
+      <div className="flex flex-col items-center justify-center py-20 text-center">
+        <div className="w-20 h-20 rounded-full bg-ecommerce-surface flex items-center justify-center mb-5">
+          <PackageSearch size={36} className="text-ecommerce-text-muted" />
+        </div>
+        <h3 className="text-lg font-bold text-ecommerce-text-primary mb-2">
+          {t('homepage.shopPage.noResults')}
+        </h3>
+        <p className="text-sm text-ecommerce-text-muted max-w-sm mb-3">
+          {t('homepage.shopPage.noResultsDesc')}
+        </p>
+        <div className="text-sm text-ecommerce-text-muted space-y-1 mb-5">
+          <p>{t('homepage.shopPage.noResultsSuggestion')}</p>
+          <ul className="list-disc list-inside space-y-0.5 text-xs">
+            <li>{t('homepage.shopPage.tryBroadening')}</li>
+            <li>{t('homepage.shopPage.clearFilters')}</li>
+            <li>{t('homepage.shopPage.checkSpelling')}</li>
+          </ul>
+        </div>
+        <Button
+          onClick={resetFilters}
+          className="rounded-xl bg-ecommerce-red hover:bg-ecommerce-red/90 text-white gap-2"
+        >
+          <RotateCcw size={14} />
+          {t('homepage.shopPage.resetFilters')}
+        </Button>
+      </div>
+    );
+  } else {
+    productGridContent = (
+      <>
+        <motion.div
+          layout
+          className={gridClass}
+        >
+          {products.map(
+            (product: ProductDisplayModel, index: number) => (
+              <div key={"pdiv-" + product.id} >
+                {filters.viewMode === 'list' ? (
+                  <ProductListCard
+                    product={product}
+                    index={index}
+                  />
+                ) : (
+                  <ProductCard
+                    product={product}
+                    index={index}
+                  />
+                )}
+              </div>
+            ),
+          )}
+        </motion.div>
+
+        {/* Pagination */}
+        {totalPages > 1 && (
+          <div className="flex items-center justify-center gap-2 mt-10">
+            <Button
+              variant="outline"
+              size="sm"
+              disabled={filters.page <= 1}
+              onClick={() =>
+                setFilters((p) => ({
+                  ...p,
+                  page: Math.max(1, p.page - 1),
+                }))
+              }
+              className="h-9 rounded-lg border-ecommerce-border gap-1.5 text-sm disabled:opacity-40"
+            >
+              <ChevronLeft size={15} />
+              {t('homepage.shopPage.previousPage')}
+            </Button>
+
+            {/* Page Numbers */}
+            <div className="hidden sm:flex items-center gap-1">
+              {Array.from(
+                { length: Math.min(totalPages, 7) },
+                (_, i) => {
+                  let pageNum: number;
+                  if (totalPages <= 7) {
+                    pageNum = i + 1;
+                  } else if (filters.page <= 4) {
+                    pageNum = i + 1;
+                  } else if (filters.page >= totalPages - 3) {
+                    pageNum = totalPages - 6 + i;
+                  } else {
+                    pageNum = filters.page - 3 + i;
+                  }
+                  return (
+                    <Button
+                      key={pageNum}
+                      variant={
+                        filters.page === pageNum
+                          ? 'default'
+                          : 'outline'
+                      }
+                      size="sm"
+                      onClick={() =>
+                        setFilters((p) => ({ ...p, page: pageNum }))
+                      }
+                      className={
+                        filters.page === pageNum
+                          ? 'h-9 w-9 p-0 rounded-lg bg-ecommerce-red hover:bg-ecommerce-red/90 text-white'
+                          : 'h-9 w-9 p-0 rounded-lg border-ecommerce-border text-sm'
+                      }
+                    >
+                      {pageNum}
+                    </Button>
+                  );
+                },
+              )}
+            </div>
+
+            {/* Mobile page indicator */}
+            <span className="sm:hidden text-xs text-ecommerce-text-muted px-2">
+              {filters.page} / {totalPages}
+            </span>
+
+            <Button
+              variant="outline"
+              size="sm"
+              disabled={filters.page >= totalPages}
+              onClick={() =>
+                setFilters((p) => ({
+                  ...p,
+                  page: Math.min(totalPages, p.page + 1),
+                }))
+              }
+              className="h-9 rounded-lg border-ecommerce-border gap-1.5 text-sm disabled:opacity-40"
+            >
+              {t('homepage.shopPage.nextPage')}
+              <ChevronRight size={15} />
+            </Button>
+          </div>
+        )}
+      </>
+    );
+  }
+
   // ── Render ──────────────────────────────────────────
   return (
     <div className="min-h-screen flex flex-col pb-16 lg:pb-0 bg-background">
@@ -965,7 +1206,7 @@ function ProductsPageContent() {
                   </span>
                 )}
               </Button>
-              <p className="text-sm text-ecommerce-text-muted">
+              <div className="text-sm text-ecommerce-text-muted">
                 {isLoading ? (
                   <Skeleton className="h-4 w-40 inline-block" />
                 ) : (
@@ -976,7 +1217,7 @@ function ProductsPageContent() {
                     })}
                   </span>
                 )}
-              </p>
+              </div>
             </div>
 
             {/* Right: Sort, Per Page, View Mode */}
@@ -1103,178 +1344,7 @@ function ProductsPageContent() {
 
             {/* Product Grid Area */}
             <div className="flex-1 min-w-0">
-              {isLoading ? (
-                <div
-                  className={
-                    filters.viewMode === 'grid'
-                      ? 'grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-5'
-                      : 'space-y-3'
-                  }
-                >
-                  {Array.from({ length: filters.perPage }).map((_, i) => (
-                    <div
-                      key={i}
-                      className="rounded-2xl border border-ecommerce-border overflow-hidden"
-                    >
-                      <Skeleton className="aspect-square w-full" />
-                      <div className="p-3 space-y-2">
-                        <Skeleton className="h-4 w-3/4" />
-                        <Skeleton className="h-3 w-1/2" />
-                        <Skeleton className="h-5 w-1/3" />
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              ) : products.length === 0 ? (
-                <div className="flex flex-col items-center justify-center py-20 text-center">
-                  <div className="w-20 h-20 rounded-full bg-ecommerce-surface flex items-center justify-center mb-5">
-                    <PackageSearch size={36} className="text-ecommerce-text-muted" />
-                  </div>
-                  <h3 className="text-lg font-bold text-ecommerce-text-primary mb-2">
-                    {t('homepage.shopPage.noResults')}
-                  </h3>
-                  <p className="text-sm text-ecommerce-text-muted max-w-sm mb-3">
-                    {t('homepage.shopPage.noResultsDesc')}
-                  </p>
-                  <div className="text-sm text-ecommerce-text-muted space-y-1 mb-5">
-                    <p>{t('homepage.shopPage.noResultsSuggestion')}</p>
-                    <ul className="list-disc list-inside space-y-0.5 text-xs">
-                      <li>{t('homepage.shopPage.tryBroadening')}</li>
-                      <li>{t('homepage.shopPage.clearFilters')}</li>
-                      <li>{t('homepage.shopPage.checkSpelling')}</li>
-                    </ul>
-                  </div>
-                  <Button
-                    onClick={resetFilters}
-                    className="rounded-xl bg-ecommerce-red hover:bg-ecommerce-red/90 text-white gap-2"
-                  >
-                    <RotateCcw size={14} />
-                    {t('homepage.shopPage.resetFilters')}
-                  </Button>
-                </div>
-              ) : (
-                <>
-                  <motion.div
-                    layout
-                    className={
-                      filters.viewMode === 'grid'
-                        ? 'grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-5'
-                        : 'space-y-3'
-                    }
-                  >
-                    {products.map(
-                      (product: ProductDisplayModel, index: number) => (
-                        <motion.div
-                          key={"pdiv-" + product.id}
-                          initial={{ opacity: 0, y: 20 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          transition={{
-                            duration: 0.3,
-                            delay: Math.min(index * 0.04, 0.4),
-                          }}
-                        >
-                          <Link href={`/products/${product.id}`} className="block">
-                            {filters.viewMode === 'list' ? (
-                              <ProductListCard
-                                product={product}
-                                index={index}
-                              />
-                            ) : (
-                              <ProductCard
-                                product={product}
-                                index={index}
-                              />
-                            )}
-
-                          </Link>
-                        </motion.div>
-                      ),
-                    )}
-                  </motion.div>
-
-                  {/* Pagination */}
-                  {totalPages > 1 && (
-                    <div className="flex items-center justify-center gap-2 mt-10">
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        disabled={filters.page <= 1}
-                        onClick={() =>
-                          setFilters((p) => ({
-                            ...p,
-                            page: Math.max(1, p.page - 1),
-                          }))
-                        }
-                        className="h-9 rounded-lg border-ecommerce-border gap-1.5 text-sm disabled:opacity-40"
-                      >
-                        <ChevronLeft size={15} />
-                        {t('homepage.shopPage.previousPage')}
-                      </Button>
-
-                      {/* Page Numbers */}
-                      <div className="hidden sm:flex items-center gap-1">
-                        {Array.from(
-                          { length: Math.min(totalPages, 7) },
-                          (_, i) => {
-                            let pageNum: number;
-                            if (totalPages <= 7) {
-                              pageNum = i + 1;
-                            } else if (filters.page <= 4) {
-                              pageNum = i + 1;
-                            } else if (filters.page >= totalPages - 3) {
-                              pageNum = totalPages - 6 + i;
-                            } else {
-                              pageNum = filters.page - 3 + i;
-                            }
-                            return (
-                              <Button
-                                key={pageNum}
-                                variant={
-                                  filters.page === pageNum
-                                    ? 'default'
-                                    : 'outline'
-                                }
-                                size="sm"
-                                onClick={() =>
-                                  setFilters((p) => ({ ...p, page: pageNum }))
-                                }
-                                className={
-                                  filters.page === pageNum
-                                    ? 'h-9 w-9 p-0 rounded-lg bg-ecommerce-red hover:bg-ecommerce-red/90 text-white'
-                                    : 'h-9 w-9 p-0 rounded-lg border-ecommerce-border text-sm'
-                                }
-                              >
-                                {pageNum}
-                              </Button>
-                            );
-                          },
-                        )}
-                      </div>
-
-                      {/* Mobile page indicator */}
-                      <span className="sm:hidden text-xs text-ecommerce-text-muted px-2">
-                        {filters.page} / {totalPages}
-                      </span>
-
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        disabled={filters.page >= totalPages}
-                        onClick={() =>
-                          setFilters((p) => ({
-                            ...p,
-                            page: Math.min(totalPages, p.page + 1),
-                          }))
-                        }
-                        className="h-9 rounded-lg border-ecommerce-border gap-1.5 text-sm disabled:opacity-40"
-                      >
-                        {t('homepage.shopPage.nextPage')}
-                        <ChevronRight size={15} />
-                      </Button>
-                    </div>
-                  )}
-                </>
-              )}
+              {productGridContent}
             </div>
           </div>
         </div>

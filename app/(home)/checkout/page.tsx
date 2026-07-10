@@ -10,11 +10,10 @@ import {
   Package, Edit3, Download, Tag, Loader2,
 } from 'lucide-react';
 
-import { I18nProvider } from '../i18n/provider';
 import { Footer } from '../_components/ecommerce/footer';
 import { BackToTop } from '../_components/ecommerce/back-to-top';
 import { MobileBottomNav } from '../_components/ecommerce/mobile-bottom-nav';
-import { useCartStore, type CartItem } from '../_lib/store';
+import { useCartStore } from '../_lib/store';
 
 import { Button } from '../_components/ui/button';
 import { Input } from '../_components/ui/input';
@@ -25,6 +24,8 @@ import { Label } from '../_components/ui/label';
 import {
   Accordion, AccordionItem, AccordionTrigger, AccordionContent,
 } from '../_components/ui/accordion';
+import CartItem from '../_types/CartItem';
+import { GetImage } from '../_lib/utils';
 
 /* ──────────────────────────────────────────────────────────────── */
 
@@ -105,9 +106,8 @@ function FormField({
         value={value}
         onChange={(e) => onChange(e.target.value)}
         placeholder={placeholder}
-        className={`h-11 rounded-xl bg-ecommerce-surface-hover border-ecommerce-border text-sm ${
-          error ? 'border-red-500 focus-visible:ring-red-500/20' : ''
-        }`}
+        className={`h-11 rounded-xl bg-ecommerce-surface-hover border-ecommerce-border text-sm ${error ? 'border-red-500 focus-visible:ring-red-500/20' : ''
+          }`}
       />
       {error && <p className="text-[11px] text-red-500">{error}</p>}
     </div>
@@ -118,9 +118,7 @@ function FormField({
 
 export default function CheckoutPage() {
   return (
-    <I18nProvider>
-      <CheckoutPageInner />
-    </I18nProvider>
+    <CheckoutPageInner />
   );
 }
 
@@ -280,7 +278,7 @@ function CheckoutPageInner() {
           {items.map((item: CartItem) => (
             <div key={item.id} className="flex items-center gap-3">
               <img
-                src={item.image}
+                src={GetImage(item.image)}
                 alt={item.name}
                 className="w-12 h-12 rounded-lg object-cover border border-ecommerce-border shrink-0"
               />
@@ -584,18 +582,16 @@ function CheckoutPageInner() {
             <button
               key={pm.value}
               onClick={() => setPaymentField('method', pm.value)}
-              className={`w-full flex items-center gap-4 p-4 rounded-xl border-2 transition-all text-start group ${
-                payment.method === pm.value
+              className={`w-full flex items-center gap-4 p-4 rounded-xl border-2 transition-all text-start group ${payment.method === pm.value
                   ? 'border-ecommerce-red bg-ecommerce-red/5'
                   : 'border-ecommerce-border hover:border-ecommerce-red/50 hover:bg-ecommerce-surface-hover'
-              }`}
+                }`}
             >
               <div
-                className={`w-11 h-11 rounded-xl flex items-center justify-center transition-colors shrink-0 ${
-                  payment.method === pm.value
+                className={`w-11 h-11 rounded-xl flex items-center justify-center transition-colors shrink-0 ${payment.method === pm.value
                     ? 'bg-ecommerce-red/10'
                     : 'bg-ecommerce-surface-hover group-hover:bg-ecommerce-red/5'
-                }`}
+                  }`}
               >
                 <pm.icon
                   size={20}
@@ -611,11 +607,10 @@ function CheckoutPageInner() {
                 {pm.desc && <p className="text-xs text-ecommerce-text-muted mt-0.5">{pm.desc}</p>}
               </div>
               <div
-                className={`w-5 h-5 rounded-full border-2 flex items-center justify-center transition-colors shrink-0 ${
-                  payment.method === pm.value
+                className={`w-5 h-5 rounded-full border-2 flex items-center justify-center transition-colors shrink-0 ${payment.method === pm.value
                     ? 'border-ecommerce-red bg-ecommerce-red'
                     : 'border-ecommerce-border'
-                }`}
+                  }`}
               >
                 {payment.method === pm.value && <Check size={12} className="text-white" />}
               </div>
@@ -707,7 +702,7 @@ function CheckoutPageInner() {
               className="flex items-center gap-4 p-3 rounded-xl bg-ecommerce-surface-hover border border-ecommerce-border"
             >
               <img
-                src={item.image}
+                src={GetImage(item.image)}
                 alt={item.name}
                 className="w-16 h-16 rounded-lg object-cover border border-ecommerce-border shrink-0"
               />
@@ -1152,33 +1147,30 @@ function CheckoutPageInner() {
                   <div key={s.num} className="flex items-center">
                     <div className="flex flex-col items-center">
                       <div
-                        className={`w-9 h-9 sm:w-10 sm:h-10 rounded-full flex items-center justify-center text-sm font-bold transition-all duration-300 ${
-                          currentStep > s.num
+                        className={`w-9 h-9 sm:w-10 sm:h-10 rounded-full flex items-center justify-center text-sm font-bold transition-all duration-300 ${currentStep > s.num
                             ? 'bg-ecommerce-emerald text-white'
                             : currentStep === s.num
                               ? 'bg-ecommerce-red text-white shadow-lg shadow-ecommerce-red/25'
                               : 'bg-ecommerce-surface-hover text-ecommerce-text-muted border border-ecommerce-border'
-                        }`}
+                          }`}
                       >
                         {currentStep > s.num ? <CheckCircle2 size={16} /> : s.num}
                       </div>
                       <span
-                        className={`text-[11px] sm:text-xs mt-1.5 font-medium whitespace-nowrap ${
-                          currentStep === s.num
+                        className={`text-[11px] sm:text-xs mt-1.5 font-medium whitespace-nowrap ${currentStep === s.num
                             ? 'text-ecommerce-red'
                             : currentStep > s.num
                               ? 'text-ecommerce-emerald'
                               : 'text-ecommerce-text-muted'
-                        }`}
+                          }`}
                       >
                         {s.label}
                       </span>
                     </div>
                     {i < steps.length - 1 && (
                       <div
-                        className={`w-10 sm:w-20 lg:w-28 h-0.5 mx-2 sm:mx-3 mb-5 transition-colors duration-300 ${
-                          currentStep > s.num ? 'bg-ecommerce-emerald' : 'bg-ecommerce-border'
-                        }`}
+                        className={`w-10 sm:w-20 lg:w-28 h-0.5 mx-2 sm:mx-3 mb-5 transition-colors duration-300 ${currentStep > s.num ? 'bg-ecommerce-emerald' : 'bg-ecommerce-border'
+                          }`}
                       />
                     )}
                   </div>

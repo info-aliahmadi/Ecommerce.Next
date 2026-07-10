@@ -610,6 +610,7 @@
       "dateFilter": "تاريخ الإضافة",
       "ratingFilter": "التقييم",
       "tagsFilter": "الوسوم",
+      "attributesFilter": "السمات",
       "allRatings": "جميع التقييمات",
       "allTags": "جميع الوسوم",
       "resultsPerPage": "في كل صفحة",

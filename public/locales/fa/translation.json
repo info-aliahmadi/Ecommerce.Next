@@ -612,6 +612,7 @@
       "dateFilter": "تاریخ افزودن",
       "ratingFilter": "امتیاز",
       "tagsFilter": "برچسب‌ها",
+      "attributesFilter": "ویژگی‌ها",
       "allRatings": "همه امتیازات",
       "allTags": "همه برچسب‌ها",
       "resultsPerPage": "در هر صفحه",
