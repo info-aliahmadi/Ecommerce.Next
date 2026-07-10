@@ -296,66 +296,69 @@ export function ProductGrid() {
         {/* Price Range Filter Row (desktop always visible, mobile toggle) */}
         <div className={`mb-6 ${showFilters ? 'block' : 'hidden md:block'}`}>
           <div className="p-3 rounded-xl bg-ecommerce-surface-hover/60 dark:bg-[#252836]/60 border border-ecommerce-border/60 space-y-3">
-            <div className="flex items-center justify-between">
-              <span className="text-xs font-semibold text-ecommerce-text-muted uppercase tracking-wider">{t('homepage.common.priceRange')}</span>
-              {(priceRange[0] > 0 || priceRange[1] < 9999) && (
-                <button
-                  onClick={handleClearPrice}
-                  className="text-xs text-ecommerce-text-muted hover:text-ecommerce-red transition-colors flex items-center gap-1"
-                >
-                  <X size={12} />
-                  {t('homepage.common.clear')}
-                </button>
-              )}
-            </div>
-            <div className="flex items-center justify-between text-sm">
-              <span className="text-ecommerce-text-primary font-medium">${sliderValue[0]}</span>
-              <span className="text-ecommerce-text-primary font-medium">${sliderValue[1] < 2000 ? sliderValue[1] : '∞'}</span>
-            </div>
-            <Slider
-              value={sliderValue}
-              onValueChange={(value) => setSliderValue(value as [number, number])}
-              onValueCommit={([min, max]) => setPriceRange([min, max])}
-              min={0}
-              max={2000}
-              step={1}
-              className="w-full"
-            />
-            <div className="flex items-center gap-2 ">
-              <div className="relative flex-1 max-w-[120px]">
-                <span className="absolute start-2.5 top-1/2 -translate-y-1/2 text-xs text-ecommerce-text-muted">$</span>
-                <input
-                  type="number"
-                  value={priceRange[0] > 0 ? priceRange[0] : ''}
-                  onChange={(e) => {
-                    const val = e.target.value;
-                    const num = val === '' ? 0 : Math.max(0, Number(val) || 0);
-                    setSliderValue([num, sliderValue[1]]);
-                    setPriceRange([num, priceRange[1]]);
-                  }}
-                  placeholder="0"
-                  className="w-full h-8 ps-6 pe-2 text-xs rounded-lg bg-white dark:bg-ecommerce-surface border border-ecommerce-border focus:outline-none focus:ring-1 focus:ring-ecommerce-red/30 focus:border-ecommerce-red/50 text-ecommerce-text-primary transition-all"
-                  min="0"
-                />
+            <div style={{ maxWidth: "450px" }} className="p-3 rounded-xl space-y-3">
+              <div className="flex items-center justify-between">
+                <span className="text-xs font-semibold text-ecommerce-text-muted uppercase tracking-wider">{t('homepage.common.priceRange')}</span>
+                {(priceRange[0] > 0 || priceRange[1] < 9999) && (
+                  <button
+                    onClick={handleClearPrice}
+                    className="text-xs text-ecommerce-text-muted hover:text-ecommerce-red transition-colors flex items-center gap-1"
+                  >
+                    <X size={12} />
+                    {t('homepage.common.clear')}
+                  </button>
+                )}
               </div>
-              <span className="text-ecommerce-text-muted text-xs">—</span>
-              <div className="relative flex-1 max-w-[120px]">
-                <span className="absolute start-2.5 top-1/2 -translate-y-1/2 text-xs text-ecommerce-text-muted">$</span>
-                <input
-                  type="number"
-                  value={priceRange[1] < 9999 ? priceRange[1] : ''}
-                  onChange={(e) => {
-                    const val = e.target.value;
-                    const num = val === '' ? 9999 : Math.min(9999, Number(val) || 9999);
-                    setSliderValue([sliderValue[0], num]);
-                    setPriceRange([priceRange[0], num]);
-                  }}
-                  placeholder="∞"
-                  className="w-full h-8 ps-6 pe-2 text-xs rounded-lg bg-white dark:bg-ecommerce-surface border border-ecommerce-border focus:outline-none focus:ring-1 focus:ring-ecommerce-red/30 focus:border-ecommerce-red/50 text-ecommerce-text-primary transition-all"
-                  min="0"
-                />
+              <div className="flex items-center justify-between text-sm">
+                <span className="text-ecommerce-text-primary font-medium">${sliderValue[0]}</span>
+                <span className="text-ecommerce-text-primary font-medium">${sliderValue[1] < 2000 ? sliderValue[1] : '∞'}</span>
+              </div>
+              <Slider
+                value={sliderValue}
+                onValueChange={(value) => setSliderValue(value as [number, number])}
+                onValueCommit={([min, max]) => setPriceRange([min, max])}
+                min={0}
+                max={2000}
+                step={1}
+                className="w-full"
+              />
+              <div className="flex items-center gap-2 ">
+                <div className="relative flex-1 max-w-[120px]">
+                  <span className="absolute start-2.5 top-1/2 -translate-y-1/2 text-xs text-ecommerce-text-muted">$</span>
+                  <input
+                    type="number"
+                    value={priceRange[0] > 0 ? priceRange[0] : ''}
+                    onChange={(e) => {
+                      const val = e.target.value;
+                      const num = val === '' ? 0 : Math.max(0, Number(val) || 0);
+                      setSliderValue([num, sliderValue[1]]);
+                      setPriceRange([num, priceRange[1]]);
+                    }}
+                    placeholder="0"
+                    className="w-full h-8 ps-6 pe-2 text-xs rounded-lg bg-white dark:bg-ecommerce-surface border border-ecommerce-border focus:outline-none focus:ring-1 focus:ring-ecommerce-red/30 focus:border-ecommerce-red/50 text-ecommerce-text-primary transition-all"
+                    min="0"
+                  />
+                </div>
+                <span className="text-ecommerce-text-muted text-xs">—</span>
+                <div className="relative flex-1 max-w-[120px]">
+                  <span className="absolute start-2.5 top-1/2 -translate-y-1/2 text-xs text-ecommerce-text-muted">$</span>
+                  <input
+                    type="number"
+                    value={priceRange[1] < 9999 ? priceRange[1] : ''}
+                    onChange={(e) => {
+                      const val = e.target.value;
+                      const num = val === '' ? 9999 : Math.min(9999, Number(val) || 9999);
+                      setSliderValue([sliderValue[0], num]);
+                      setPriceRange([priceRange[0], num]);
+                    }}
+                    placeholder="∞"
+                    className="w-full h-8 ps-6 pe-2 text-xs rounded-lg bg-white dark:bg-ecommerce-surface border border-ecommerce-border focus:outline-none focus:ring-1 focus:ring-ecommerce-red/30 focus:border-ecommerce-red/50 text-ecommerce-text-primary transition-all"
+                    min="0"
+                  />
+                </div>
               </div>
             </div>
+
           </div>
         </div>
 
@@ -508,7 +511,7 @@ function ProductListCard({ product, index = 0 }: Readonly<ProductListCardProps>)
       comparePrice: product.oldSellUnitPrice,
       image: product.imagePreview,
       categories: product.categories || [],
-      quantity : 1
+      quantity: 1
     });
   };
 
