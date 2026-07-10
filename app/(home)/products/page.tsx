@@ -32,6 +32,7 @@ import { RadioGroup, RadioGroupItem } from '../_components/ui/radio-group';
 import { Input } from '../_components/ui/input';
 import { Label } from '../_components/ui/label';
 import { Skeleton } from '../_components/ui/skeleton';
+import { Slider } from '../_components/ui/slider';
 import {
   Select,
   SelectContent,
@@ -83,8 +84,6 @@ interface FilterState {
   search: string;
   categories: string[];
   brands: number[];
-  minPrice: string;
-  maxPrice: string;
   appliedMinPrice: string;
   appliedMaxPrice: string;
   discount?: boolean;
@@ -101,8 +100,6 @@ const DEFAULT_FILTERS: FilterState = {
   search: '',
   categories: [],
   brands: [],
-  minPrice: '',
-  maxPrice: '',
   appliedMinPrice: '',
   appliedMaxPrice: '',
   discount: undefined,
@@ -166,9 +163,9 @@ function paramsToFilters(params: URLSearchParams): Partial<FilterState> {
   const brands = params.get('brands');
   if (brands) partial.brands = brands.split(',').map(Number).filter(Boolean);
   const minPrice = params.get('minPrice');
-  if (minPrice) { partial.appliedMinPrice = minPrice; partial.minPrice = minPrice; }
+  if (minPrice) partial.appliedMinPrice = minPrice;
   const maxPrice = params.get('maxPrice');
-  if (maxPrice) { partial.appliedMaxPrice = maxPrice; partial.maxPrice = maxPrice; }
+  if (maxPrice) partial.appliedMaxPrice = maxPrice;
   if (params.get('discount') === '1') partial.discount = true;
   const stock = params.get('stock');
   if (stock && stock !== 'all') partial.stock = stock as StockFilter;
@@ -202,6 +199,10 @@ function ProductsPageContent() {
     const urlFilters = paramsToFilters(searchParams);
     return { ...DEFAULT_FILTERS, ...urlFilters };
   });
+  const [sliderValue, setSliderValue] = useState<[number, number]>([
+    Number(filters.appliedMinPrice) || 0,
+    Number(filters.appliedMaxPrice) || 2000,
+  ]);
   const [sheetOpen, setSheetOpen] = useState(false);
   const [expandedSections, setExpandedSections] = useState<Record<string, boolean>>({
     category: true,
@@ -223,6 +224,14 @@ function ProductsPageContent() {
     const newUrl = queryString ? `${pathname}?${queryString}` : pathname;
     router.replace(newUrl, { scroll: false });
   }, [filters, pathname, router]);
+
+  // Sync slider when filters change externally (reset, URL change)
+  useEffect(() => {
+    setSliderValue([
+      Number(filters.appliedMinPrice) || 0,
+      Number(filters.appliedMaxPrice) || 2000,
+    ]);
+  }, [filters.appliedMinPrice, filters.appliedMaxPrice]);
 
   // Scroll to top on page change
   useEffect(() => {
@@ -340,15 +349,6 @@ function ProductsPageContent() {
         : [...prev.brands, brandId];
       return { ...prev, brands, page: 1 };
     });
-  }, []);
-
-  const applyPriceRange = useCallback(() => {
-    setFilters((prev) => ({
-      ...prev,
-      appliedMinPrice: prev.minPrice,
-      appliedMaxPrice: prev.maxPrice,
-      page: 1,
-    }));
   }, []);
 
   const resetFilters = useCallback(() => {
@@ -560,46 +560,71 @@ function ProductsPageContent() {
               className="overflow-hidden"
             >
               <div className="px-4 pb-4 space-y-3">
+                <div className="flex items-center justify-between text-sm">
+                  <span className="text-ecommerce-text-primary font-medium">
+                    ${sliderValue[0]}
+                  </span>
+                  <span className="text-ecommerce-text-primary font-medium">
+                    ${sliderValue[1]}
+                  </span>
+                </div>
+                <Slider
+                  value={sliderValue}
+                  onValueChange={(value) => setSliderValue(value as [number, number])}
+                  onValueCommit={([min, max]) => {
+                    setFilters((p) => ({
+                      ...p,
+                      appliedMinPrice: min > 0 ? String(min) : '',
+                      appliedMaxPrice: max < 2000 ? String(max) : '',
+                      page: 1,
+                    }));
+                  }}
+                  min={0}
+                  max={2000}
+                  step={10}
+                  className="w-full"
+                />
                 <div className="flex items-center gap-2">
                   <div className="flex-1">
-                    <Label className="text-[10px] text-ecommerce-text-muted uppercase tracking-wider mb-1.5 block">
-                      {t('homepage.shopPage.minPrice')}
-                    </Label>
-                    <Input
-                      type="number"
-                      value={filters.minPrice}
-                      onChange={(e) =>
-                        setFilters((p) => ({ ...p, minPrice: e.target.value }))
-                      }
-                      placeholder="0"
-                      min={0}
-                      className="h-9 text-sm bg-ecommerce-surface border-ecommerce-border focus-visible:ring-ecommerce-red/30 focus-visible:border-ecommerce-red/50 rounded-lg"
-                    />
+                    <label className="text-[10px] text-ecommerce-text-muted uppercase tracking-wider mb-1 block">{t('homepage.catalog.priceMin')}</label>
+                    <div className="relative">
+                      <span className="absolute start-2.5 top-1/2 -translate-y-1/2 text-xs text-ecommerce-text-muted">$</span>
+                      <input
+                        type="number"
+                        value={filters.appliedMinPrice}
+                        onChange={e => {
+                          const val = e.target.value;
+                          const num = val === '' ? 0 : Math.max(0, Number(val) || 0);
+                          setSliderValue([num, sliderValue[1]]);
+                          setFilters(p => ({ ...p, appliedMinPrice: val === '' ? '' : String(num), page: 1 }));
+                        }}
+                        className="w-full h-9 ps-6 pe-2 rounded-lg bg-ecommerce-surface border border-ecommerce-border text-sm text-ecommerce-text-primary focus:outline-none focus:ring-2 focus:ring-ecommerce-red/30"
+                        min={0}
+                        max={2000}
+                      />
+                    </div>
                   </div>
-                  <span className="text-ecommerce-text-muted mt-5">–</span>
+                  <span className="text-ecommerce-text-muted mt-4">–</span>
                   <div className="flex-1">
-                    <Label className="text-[10px] text-ecommerce-text-muted uppercase tracking-wider mb-1.5 block">
-                      {t('homepage.shopPage.maxPrice')}
-                    </Label>
-                    <Input
-                      type="number"
-                      value={filters.maxPrice}
-                      onChange={(e) =>
-                        setFilters((p) => ({ ...p, maxPrice: e.target.value }))
-                      }
-                      placeholder="2000"
-                      min={0}
-                      className="h-9 text-sm bg-ecommerce-surface border-ecommerce-border focus-visible:ring-ecommerce-red/30 focus-visible:border-ecommerce-red/50 rounded-lg"
-                    />
+                    <label className="text-[10px] text-ecommerce-text-muted uppercase tracking-wider mb-1 block">{t('homepage.catalog.priceMax')}</label>
+                    <div className="relative">
+                      <span className="absolute start-2.5 top-1/2 -translate-y-1/2 text-xs text-ecommerce-text-muted">$</span>
+                      <input
+                        type="number"
+                        value={filters.appliedMaxPrice}
+                        onChange={e => {
+                          const val = e.target.value;
+                          const num = val === '' ? 2000 : Math.min(2000, Number(val) || 2000);
+                          setSliderValue([sliderValue[0], num]);
+                          setFilters(p => ({ ...p, appliedMaxPrice: val === '' ? '' : String(num), page: 1 }));
+                        }}
+                        className="w-full h-9 ps-6 pe-2 rounded-lg bg-ecommerce-surface border border-ecommerce-border text-sm text-ecommerce-text-primary focus:outline-none focus:ring-2 focus:ring-ecommerce-red/30"
+                        min={0}
+                        max={2000}
+                      />
+                    </div>
                   </div>
                 </div>
-                <Button
-                  size="sm"
-                  onClick={applyPriceRange}
-                  className="w-full rounded-lg bg-ecommerce-red hover:bg-ecommerce-red/90 text-white text-xs font-medium h-9"
-                >
-                  {t('homepage.shopPage.apply')}
-                </Button>
                 <label className="flex items-center gap-2.5 cursor-pointer group pt-2">
                   <Checkbox
                     checked={(filters.discount && filters.discount === true) ? true : false}
