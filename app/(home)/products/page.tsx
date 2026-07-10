@@ -199,6 +199,8 @@ function ProductsPageContent() {
     const urlFilters = paramsToFilters(searchParams);
     return { ...DEFAULT_FILTERS, ...urlFilters };
   });
+  const [searchInput, setSearchInput] = useState(filters.search);
+  const searchDebounceRef = useRef<ReturnType<typeof setTimeout>>(undefined);
   const [sliderValue, setSliderValue] = useState<[number, number]>([
     Number(filters.appliedMinPrice) || 0,
     Number(filters.appliedMaxPrice) || 2000,
@@ -229,6 +231,18 @@ function ProductsPageContent() {
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }, [filters.page]);
+
+  // Debounce search input
+  useEffect(() => {
+    clearTimeout(searchDebounceRef.current);
+    searchDebounceRef.current = setTimeout(() => {
+      setFilters((prev) => {
+        if (prev.search === searchInput) return prev;
+        return { ...prev, search: searchInput, page: 1 };
+      });
+    }, 1000);
+    return () => clearTimeout(searchDebounceRef.current);
+  }, [searchInput]);
 
   // ── Fetch categories ────────────────────────────────
   const { data: categories = [] } = useQuery({
@@ -315,7 +329,8 @@ function ProductsPageContent() {
       Number(filters.appliedMinPrice) || 0,
       Number(filters.appliedMaxPrice) || maxPriceRange,
     ]);
-  }, [filters.appliedMinPrice, filters.appliedMaxPrice, maxPriceRange]);
+    setSearchInput(filters.search);
+  }, [filters.appliedMinPrice, filters.appliedMaxPrice, filters.search, maxPriceRange]);
 
   
   // ── Filter helpers ──────────────────────────────────
@@ -355,6 +370,7 @@ function ProductsPageContent() {
 
   const resetFilters = useCallback(() => {
     setFilters(DEFAULT_FILTERS);
+    setSearchInput('');
   }, []);
 
   // ── Active filter count ─────────────────────────────
@@ -883,14 +899,14 @@ function ProductsPageContent() {
                 />
                 <Input
                   type="text"
-                  value={filters.search}
-                  onChange={(e) => updateFilter('search', e.target.value)}
+                  value={searchInput}
+                  onChange={(e) => setSearchInput(e.target.value)}
                   placeholder={t('homepage.shopPage.searchProducts')}
                   className="h-11 ps-11 pe-10 rounded-xl bg-white dark:bg-ecommerce-surface border-ecommerce-border text-sm text-ecommerce-text-primary placeholder:text-ecommerce-text-muted focus-visible:ring-ecommerce-red/30 focus-visible:border-ecommerce-red/50 transition-all"
                 />
-                {filters.search && (
+                {searchInput && (
                   <button
-                    onClick={() => updateFilter('search', '')}
+                    onClick={() => setSearchInput('')}
                     className="absolute end-4 top-1/2 -translate-y-1/2 text-ecommerce-text-muted hover:text-ecommerce-text-primary transition-colors"
                   >
                     <X size={16} />
