@@ -201,6 +201,9 @@ function ProductsPageContent() {
   });
   const [searchInput, setSearchInput] = useState(filters.search);
   const searchDebounceRef = useRef<ReturnType<typeof setTimeout>>(undefined);
+  const [priceMinInput, setPriceMinInput] = useState(filters.appliedMinPrice);
+  const [priceMaxInput, setPriceMaxInput] = useState(filters.appliedMaxPrice);
+  const priceDebounceRef = useRef<ReturnType<typeof setTimeout>>(undefined);
   const [sliderValue, setSliderValue] = useState<[number, number]>([
     Number(filters.appliedMinPrice) || 0,
     Number(filters.appliedMaxPrice) || 2000,
@@ -243,6 +246,25 @@ function ProductsPageContent() {
     }, 1000);
     return () => clearTimeout(searchDebounceRef.current);
   }, [searchInput]);
+
+  // Debounce price inputs
+  useEffect(() => {
+    clearTimeout(priceDebounceRef.current);
+    priceDebounceRef.current = setTimeout(() => {
+      setFilters((prev) => {
+        const minChanged = prev.appliedMinPrice !== priceMinInput;
+        const maxChanged = prev.appliedMaxPrice !== priceMaxInput;
+        if (!minChanged && !maxChanged) return prev;
+        return {
+          ...prev,
+          appliedMinPrice: priceMinInput,
+          appliedMaxPrice: priceMaxInput,
+          page: 1,
+        };
+      });
+    }, 1000);
+    return () => clearTimeout(priceDebounceRef.current);
+  }, [priceMinInput, priceMaxInput]);
 
   // ── Fetch categories ────────────────────────────────
   const { data: categories = [] } = useQuery({
@@ -323,13 +345,15 @@ function ProductsPageContent() {
 
   const products = allProducts;
 
-  // Sync slider when filters change externally (reset, URL change)
+  // Sync slider and inputs when filters change externally (reset, URL change)
   useEffect(() => {
     setSliderValue([
       Number(filters.appliedMinPrice) || 0,
       Number(filters.appliedMaxPrice) || maxPriceRange,
     ]);
     setSearchInput(filters.search);
+    setPriceMinInput(filters.appliedMinPrice);
+    setPriceMaxInput(filters.appliedMaxPrice);
   }, [filters.appliedMinPrice, filters.appliedMaxPrice, filters.search, maxPriceRange]);
 
   
@@ -371,6 +395,8 @@ function ProductsPageContent() {
   const resetFilters = useCallback(() => {
     setFilters(DEFAULT_FILTERS);
     setSearchInput('');
+    setPriceMinInput('');
+    setPriceMaxInput('');
   }, []);
 
   // ── Active filter count ─────────────────────────────
@@ -590,16 +616,20 @@ function ProductsPageContent() {
                   value={sliderValue}
                   onValueChange={(value) => setSliderValue(value as [number, number])}
                   onValueCommit={([min, max]) => {
+                    const minStr = min > 0 ? String(min) : '';
+                    const maxStr = max < maxPriceRange ? String(max) : '';
+                    setPriceMinInput(minStr);
+                    setPriceMaxInput(maxStr);
                     setFilters((p) => ({
                       ...p,
-                      appliedMinPrice: min > 0 ? String(min) : '',
-                      appliedMaxPrice: max < maxPriceRange ? String(max) : '',
+                      appliedMinPrice: minStr,
+                      appliedMaxPrice: maxStr,
                       page: 1,
                     }));
                   }}
                   min={0}
                   max={maxPriceRange}
-                  step={10}
+                  step={1}
                   className="w-full"
                 />
                 <div className="flex items-center gap-2">
@@ -609,12 +639,12 @@ function ProductsPageContent() {
                       <span className="absolute start-2.5 top-1/2 -translate-y-1/2 text-xs text-ecommerce-text-muted">$</span>
                       <input
                         type="number"
-                        value={filters.appliedMinPrice}
+                        value={priceMinInput}
                         onChange={e => {
                           const val = e.target.value;
-                          const num = val === '' ? 0 : Math.max(0, Number(val) || 0);
-                          setSliderValue([num, sliderValue[1]]);
-                          setFilters(p => ({ ...p, appliedMinPrice: val === '' ? '' : String(num), page: 1 }));
+                          const num = val === '' ? '' : String(Math.max(0, Number(val) || 0));
+                          setPriceMinInput(num);
+                          setSliderValue([Number(num) || 0, sliderValue[1]]);
                         }}
                         className="w-full h-9 ps-6 pe-2 rounded-lg bg-ecommerce-surface border border-ecommerce-border text-sm text-ecommerce-text-primary focus:outline-none focus:ring-2 focus:ring-ecommerce-red/30"
                         min={0}
@@ -629,12 +659,12 @@ function ProductsPageContent() {
                       <span className="absolute start-2.5 top-1/2 -translate-y-1/2 text-xs text-ecommerce-text-muted">$</span>
                       <input
                         type="number"
-                        value={filters.appliedMaxPrice}
+                        value={priceMaxInput}
                         onChange={e => {
                           const val = e.target.value;
-                          const num = val === '' ? maxPriceRange : Math.min(maxPriceRange, Number(val) || maxPriceRange);
-                          setSliderValue([sliderValue[0], num]);
-                          setFilters(p => ({ ...p, appliedMaxPrice: val === '' ? '' : String(num), page: 1 }));
+                          const num = val === '' ? '' : String(Math.min(maxPriceRange, Number(val) || maxPriceRange));
+                          setPriceMaxInput(num);
+                          setSliderValue([sliderValue[0], Number(num) || maxPriceRange]);
                         }}
                         className="w-full h-9 ps-6 pe-2 rounded-lg bg-ecommerce-surface border border-ecommerce-border text-sm text-ecommerce-text-primary focus:outline-none focus:ring-2 focus:ring-ecommerce-red/30"
                         min={0}
