@@ -225,14 +225,6 @@ function ProductsPageContent() {
     router.replace(newUrl, { scroll: false });
   }, [filters, pathname, router]);
 
-  // Sync slider when filters change externally (reset, URL change)
-  useEffect(() => {
-    setSliderValue([
-      Number(filters.appliedMinPrice) || 0,
-      Number(filters.appliedMaxPrice) || 2000,
-    ]);
-  }, [filters.appliedMinPrice, filters.appliedMaxPrice]);
-
   // Scroll to top on page change
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -312,10 +304,20 @@ function ProductsPageContent() {
 
   const allProducts = data?.items ?? [];
   const total = data?.totalItems ?? 0;
+  const maxPriceRange = data?.maxRange ?? 0;
   const totalPages = data?.totalPages ?? Math.max(1, Math.ceil(total / filters.perPage));
 
   const products = allProducts;
 
+  // Sync slider when filters change externally (reset, URL change)
+  useEffect(() => {
+    setSliderValue([
+      Number(filters.appliedMinPrice) || 0,
+      Number(filters.appliedMaxPrice) || maxPriceRange,
+    ]);
+  }, [filters.appliedMinPrice, filters.appliedMaxPrice, maxPriceRange]);
+
+  
   // ── Filter helpers ──────────────────────────────────
   const updateFilter = useCallback(
     <K extends keyof FilterState>(key: K, value: FilterState[K]) => {
@@ -575,12 +577,12 @@ function ProductsPageContent() {
                     setFilters((p) => ({
                       ...p,
                       appliedMinPrice: min > 0 ? String(min) : '',
-                      appliedMaxPrice: max < 2000 ? String(max) : '',
+                      appliedMaxPrice: max < maxPriceRange ? String(max) : '',
                       page: 1,
                     }));
                   }}
                   min={0}
-                  max={2000}
+                  max={maxPriceRange}
                   step={10}
                   className="w-full"
                 />
@@ -600,7 +602,7 @@ function ProductsPageContent() {
                         }}
                         className="w-full h-9 ps-6 pe-2 rounded-lg bg-ecommerce-surface border border-ecommerce-border text-sm text-ecommerce-text-primary focus:outline-none focus:ring-2 focus:ring-ecommerce-red/30"
                         min={0}
-                        max={2000}
+                        max={maxPriceRange}
                       />
                     </div>
                   </div>
@@ -614,13 +616,13 @@ function ProductsPageContent() {
                         value={filters.appliedMaxPrice}
                         onChange={e => {
                           const val = e.target.value;
-                          const num = val === '' ? 2000 : Math.min(2000, Number(val) || 2000);
+                          const num = val === '' ? maxPriceRange : Math.min(maxPriceRange, Number(val) || maxPriceRange);
                           setSliderValue([sliderValue[0], num]);
                           setFilters(p => ({ ...p, appliedMaxPrice: val === '' ? '' : String(num), page: 1 }));
                         }}
                         className="w-full h-9 ps-6 pe-2 rounded-lg bg-ecommerce-surface border border-ecommerce-border text-sm text-ecommerce-text-primary focus:outline-none focus:ring-2 focus:ring-ecommerce-red/30"
                         min={0}
-                        max={2000}
+                        max={maxPriceRange}
                       />
                     </div>
                   </div>

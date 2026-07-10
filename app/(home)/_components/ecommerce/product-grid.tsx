@@ -6,6 +6,7 @@ import { useUIStore, useWishlistStore, useCompareStore } from '../../_lib/store'
 import { useFlyToCart } from '../../_hooks/use-fly-to-cart';
 import { Button } from '../ui/button';
 import { Skeleton } from '../ui/skeleton';
+import { Slider } from '../ui/slider';
 import { SlidersHorizontal, Grid3X3, LayoutList, X, Filter, Star, ShoppingCart, Heart, Eye, GitCompareArrows, ArrowDown, PackageSearch, ArrowRight, Loader2 } from 'lucide-react';
 import {
   Select,
@@ -42,9 +43,8 @@ export function ProductGrid() {
   const { searchQuery, selectedCategory, sortBy, setSortBy, setSelectedCategory, setCatalogOpen } = useUIStore();
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
   const [priceRange, setPriceRange] = useState<[number, number]>([0, 9999]);
+  const [sliderValue, setSliderValue] = useState<[number, number]>([0, 9999]);
   const [showFilters, setShowFilters] = useState(false);
-  const [tempPriceMin, setTempPriceMin] = useState('');
-  const [tempPriceMax, setTempPriceMax] = useState('');
 
   const SORT_LABELS: Record<string, string> = {
     'newest': t('homepage.common.newest'),
@@ -70,11 +70,11 @@ export function ProductGrid() {
 
   const filter = useMemo((): Omit<ProductFilterModel, 'pageIndex'> => ({
     pageSize: PAGE_SIZE,
-    searchInput: searchQuery || null,
+    searchInput: searchQuery,
     categoryIds: selectedCategoryId ? [selectedCategoryId] : undefined,
     sorting: SORT_MAP[sortBy] ?? SortingType.SortNewest,
-    fromSellUnitPrice: priceRange[0] > 0 ? priceRange[0] : null,
-    toSellUnitPrice: priceRange[1] < 9999 ? priceRange[1] : null,
+    fromSellUnitPrice: priceRange[0] > 0 ? priceRange[0] : undefined,
+    toSellUnitPrice: priceRange[1] < 9999 ? priceRange[1] : undefined,
   }), [searchQuery, selectedCategoryId, sortBy, priceRange]);
 
   const { data, isLoading, isError, fetchNextPage, hasNextPage, isFetchingNextPage } = useInfiniteQuery({
@@ -97,16 +97,9 @@ export function ProductGrid() {
   const products = data?.pages.flatMap((page) => page?.items ?? []) ?? [];
   const total = data?.pages[0]?.totalItems ?? 0;
 
-  const handleApplyPrice = useCallback(() => {
-    const min = tempPriceMin ? parseInt(tempPriceMin) : 0;
-    const max = tempPriceMax ? parseInt(tempPriceMax) : 9999;
-    setPriceRange([min, max]);
-  }, [tempPriceMin, tempPriceMax]);
-
   const handleClearPrice = useCallback(() => {
     setPriceRange([0, 9999]);
-    setTempPriceMin('');
-    setTempPriceMax('');
+    setSliderValue([0, 9999]);
   }, []);
 
   const handleCategoryClick = useCallback((slug: string | null) => {
@@ -127,8 +120,7 @@ export function ProductGrid() {
     setSortBy('newest');
     useUIStore.getState().setSearchQuery('');
     setPriceRange([0, 9999]);
-    setTempPriceMin('');
-    setTempPriceMax('');
+    setSliderValue([0, 9999]);
   }, [setSelectedCategory, setSortBy]);
 
   return (
@@ -303,17 +295,45 @@ export function ProductGrid() {
 
         {/* Price Range Filter Row (desktop always visible, mobile toggle) */}
         <div className={`mb-6 ${showFilters ? 'block' : 'hidden md:block'}`}>
-          <div className="flex items-center gap-3 p-3 rounded-xl bg-ecommerce-surface-hover/60 dark:bg-[#252836]/60 border border-ecommerce-border/60">
-            <span className="text-xs font-semibold text-ecommerce-text-muted uppercase tracking-wider shrink-0">{t('homepage.common.priceRange')}</span>
-            <div className="flex items-center gap-2 flex-1">
+          <div className="p-3 rounded-xl bg-ecommerce-surface-hover/60 dark:bg-[#252836]/60 border border-ecommerce-border/60 space-y-3">
+            <div className="flex items-center justify-between">
+              <span className="text-xs font-semibold text-ecommerce-text-muted uppercase tracking-wider">{t('homepage.common.priceRange')}</span>
+              {(priceRange[0] > 0 || priceRange[1] < 9999) && (
+                <button
+                  onClick={handleClearPrice}
+                  className="text-xs text-ecommerce-text-muted hover:text-ecommerce-red transition-colors flex items-center gap-1"
+                >
+                  <X size={12} />
+                  {t('homepage.common.clear')}
+                </button>
+              )}
+            </div>
+            <div className="flex items-center justify-between text-sm">
+              <span className="text-ecommerce-text-primary font-medium">${sliderValue[0]}</span>
+              <span className="text-ecommerce-text-primary font-medium">${sliderValue[1] < 2000 ? sliderValue[1] : '∞'}</span>
+            </div>
+            <Slider
+              value={sliderValue}
+              onValueChange={(value) => setSliderValue(value as [number, number])}
+              onValueCommit={([min, max]) => setPriceRange([min, max])}
+              min={0}
+              max={2000}
+              step={1}
+              className="w-full"
+            />
+            <div className="flex items-center gap-2 ">
               <div className="relative flex-1 max-w-[120px]">
                 <span className="absolute start-2.5 top-1/2 -translate-y-1/2 text-xs text-ecommerce-text-muted">$</span>
                 <input
                   type="number"
-                  placeholder={t('homepage.common.minPrice')}
-                  value={tempPriceMin || (priceRange[0] > 0 ? String(priceRange[0]) : '')}
-                  onChange={(e) => setTempPriceMin(e.target.value)}
-                  onKeyDown={(e) => e.key === 'Enter' && handleApplyPrice()}
+                  value={priceRange[0] > 0 ? priceRange[0] : ''}
+                  onChange={(e) => {
+                    const val = e.target.value;
+                    const num = val === '' ? 0 : Math.max(0, Number(val) || 0);
+                    setSliderValue([num, sliderValue[1]]);
+                    setPriceRange([num, priceRange[1]]);
+                  }}
+                  placeholder="0"
                   className="w-full h-8 ps-6 pe-2 text-xs rounded-lg bg-white dark:bg-ecommerce-surface border border-ecommerce-border focus:outline-none focus:ring-1 focus:ring-ecommerce-red/30 focus:border-ecommerce-red/50 text-ecommerce-text-primary transition-all"
                   min="0"
                 />
@@ -323,29 +343,18 @@ export function ProductGrid() {
                 <span className="absolute start-2.5 top-1/2 -translate-y-1/2 text-xs text-ecommerce-text-muted">$</span>
                 <input
                   type="number"
-                  placeholder={t('homepage.common.maxPrice')}
-                  value={tempPriceMax || (priceRange[1] < 9999 ? String(priceRange[1]) : '')}
-                  onChange={(e) => setTempPriceMax(e.target.value)}
-                  onKeyDown={(e) => e.key === 'Enter' && handleApplyPrice()}
+                  value={priceRange[1] < 9999 ? priceRange[1] : ''}
+                  onChange={(e) => {
+                    const val = e.target.value;
+                    const num = val === '' ? 9999 : Math.min(9999, Number(val) || 9999);
+                    setSliderValue([sliderValue[0], num]);
+                    setPriceRange([priceRange[0], num]);
+                  }}
+                  placeholder="∞"
                   className="w-full h-8 ps-6 pe-2 text-xs rounded-lg bg-white dark:bg-ecommerce-surface border border-ecommerce-border focus:outline-none focus:ring-1 focus:ring-ecommerce-red/30 focus:border-ecommerce-red/50 text-ecommerce-text-primary transition-all"
                   min="0"
                 />
               </div>
-              <button
-                onClick={handleApplyPrice}
-                className="h-8 px-3 text-xs font-medium rounded-lg bg-ecommerce-red text-white hover:bg-ecommerce-red/90 transition-colors"
-              >
-                {t('homepage.common.apply')}
-              </button>
-              {(priceRange[0] > 0 || priceRange[1] < 9999) && (
-                <button
-                  onClick={handleClearPrice}
-                  className="h-8 px-2 text-xs text-ecommerce-text-muted hover:text-ecommerce-red transition-colors flex items-center gap-1"
-                >
-                  <X size={12} />
-                  {t('homepage.common.clear')}
-                </button>
-              )}
             </div>
           </div>
         </div>
