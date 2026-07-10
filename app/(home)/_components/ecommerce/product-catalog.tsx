@@ -789,7 +789,7 @@ export function ProductCatalog() {
                       : 'space-y-3'
                     }
                   >
-                    {visibleProducts.map((product: Record<string, unknown>, index: number) => (
+                    {visibleProducts.map((product, index: number) => (
                       <motion.div
                         key={product.id as string}
                         initial={{ opacity: 0, y: 20 }}
