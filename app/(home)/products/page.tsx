@@ -1,10 +1,11 @@
 'use client';
 
-import { useState, useCallback, useMemo, useEffect } from 'react';
+import { useState, useCallback, useMemo, useEffect, useRef } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { useTranslations } from 'next-intl';
 import { motion, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
+import { useSearchParams, useRouter, usePathname } from 'next/navigation';
 import { useCategoryTranslations } from '../_lib/category-translations';
 import { ProductCard } from '../_components/ecommerce/product-card';
 import { Header } from '../_components/ecommerce/header';
@@ -137,14 +138,70 @@ const DATE_FILTER_MAP: Record<DateFilter, DateFilterEnum> = {
   'thisYear': DateFilterEnum.ThisYear,
 };
 
+// ── URL Sync Helpers ──────────────────────────────────
+function filtersToParams(filters: FilterState): URLSearchParams {
+  const params = new URLSearchParams();
+  if (filters.search) params.set('search', filters.search);
+  if (filters.categories.length > 0) params.set('categories', filters.categories.join(','));
+  if (filters.brands.length > 0) params.set('brands', filters.brands.join(','));
+  if (filters.appliedMinPrice) params.set('minPrice', filters.appliedMinPrice);
+  if (filters.appliedMaxPrice) params.set('maxPrice', filters.appliedMaxPrice);
+  if (filters.discount) params.set('discount', '1');
+  if (filters.stock !== 'all') params.set('stock', filters.stock);
+  if (filters.dateAdded !== 'all') params.set('date', filters.dateAdded);
+  if (filters.tags.length > 0) params.set('tags', filters.tags.join(','));
+  if (filters.sort !== 'newest') params.set('sort', filters.sort);
+  if (filters.viewMode !== 'grid') params.set('view', filters.viewMode);
+  if (filters.page > 1) params.set('page', String(filters.page));
+  if (filters.perPage !== 12) params.set('perPage', String(filters.perPage));
+  return params;
+}
+
+function paramsToFilters(params: URLSearchParams): Partial<FilterState> {
+  const partial: Partial<FilterState> = {};
+  const search = params.get('search');
+  if (search) partial.search = search;
+  const categories = params.get('categories');
+  if (categories) partial.categories = categories.split(',').filter(Boolean);
+  const brands = params.get('brands');
+  if (brands) partial.brands = brands.split(',').map(Number).filter(Boolean);
+  const minPrice = params.get('minPrice');
+  if (minPrice) { partial.appliedMinPrice = minPrice; partial.minPrice = minPrice; }
+  const maxPrice = params.get('maxPrice');
+  if (maxPrice) { partial.appliedMaxPrice = maxPrice; partial.maxPrice = maxPrice; }
+  if (params.get('discount') === '1') partial.discount = true;
+  const stock = params.get('stock');
+  if (stock && stock !== 'all') partial.stock = stock as StockFilter;
+  const date = params.get('date');
+  if (date && date !== 'all') partial.dateAdded = date as DateFilter;
+  const tags = params.get('tags');
+  if (tags) partial.tags = tags.split(',').map(Number).filter(Boolean);
+  const sort = params.get('sort');
+  if (sort) partial.sort = sort as SortOption;
+  const view = params.get('view');
+  if (view) partial.viewMode = view as ViewMode;
+  const page = params.get('page');
+  if (page) partial.page = Math.max(1, Number(page));
+  const perPage = params.get('perPage');
+  if (perPage) partial.perPage = Number(perPage);
+  return partial;
+}
+
 // ── Main Component ────────────────────────────────────
 function ProductsPageContent() {
   const t = useTranslations();
   const catTrans = useCategoryTranslations();
   const isCompareOpen = useCompareStore((s) => s.isCompareOpen);
   const setCompareOpen = useCompareStore((s) => s.setCompareOpen);
+  const searchParams = useSearchParams();
+  const router = useRouter();
+  const pathname = usePathname();
+  const initializedRef = useRef(false);
 
-  const [filters, setFilters] = useState<FilterState>(DEFAULT_FILTERS);
+  const [filters, setFilters] = useState<FilterState>(() => {
+    const urlFilters = paramsToFilters(searchParams);
+    return { ...DEFAULT_FILTERS, ...urlFilters };
+  });
   const [sheetOpen, setSheetOpen] = useState(false);
   const [expandedSections, setExpandedSections] = useState<Record<string, boolean>>({
     category: true,
@@ -154,6 +211,18 @@ function ProductsPageContent() {
     date: false,
     tags: false,
   });
+
+  // Sync filters to URL
+  useEffect(() => {
+    if (!initializedRef.current) {
+      initializedRef.current = true;
+      return;
+    }
+    const params = filtersToParams(filters);
+    const queryString = params.toString();
+    const newUrl = queryString ? `${pathname}?${queryString}` : pathname;
+    router.replace(newUrl, { scroll: false });
+  }, [filters, pathname, router]);
 
   // Scroll to top on page change
   useEffect(() => {
