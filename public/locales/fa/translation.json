@@ -606,6 +606,7 @@
       "apply": "اعمال",
       "priceRange": "محدوده قیمت",
       "categoriesFilter": "دسته‌بندی‌ها",
+      "brandFilter": "برندها",
       "availabilityFilter": "موجودی",
       "discountFilter": "تخفیف",
       "dateFilter": "تاریخ افزودن",
@@ -1396,6 +1397,7 @@
     },
     "productTag": {
       "name": "عنوان برچسب",
+      "key": "کلید دسترسی",
       "products": "تعداد محصولات"
     },
     "productAttribute": {

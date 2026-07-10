@@ -42,6 +42,11 @@ function ProductTagDataGrid() {
         header: t('fields.productTag.name'),
         enableClickToCopy: true,
         type: 'string'
+      },{
+        accessorKey: 'key',
+        header: t('fields.productTag.key'),
+        enableClickToCopy: true,
+        type: 'string'
       },
       {
         accessorKey: 'products',

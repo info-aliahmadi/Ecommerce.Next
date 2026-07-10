@@ -11,6 +11,10 @@ export default interface ProductTagModel {
      * The name of the product tag.
      */
     name: string;
+    /**
+     * The key of the product tag.
+     */
+    key: string;
   
     /**
      * The number of products associated with this tag.

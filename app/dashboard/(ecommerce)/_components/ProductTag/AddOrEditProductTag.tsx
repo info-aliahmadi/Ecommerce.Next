@@ -56,6 +56,7 @@ const AddOrEditProductTag = ({
         initialValues: {
             id: 0,
             name: '',
+            key: '',
             products: 0
         },
         validationSchema: validationSchema,
@@ -93,12 +94,14 @@ const AddOrEditProductTag = ({
                 formik.setValues({
                     id: row.original.id,
                     name: row.original.name,
+                    key: row.original.key,
                     products: row.original.products
                 });
             } else {
                 formik.setValues({
                     id: 0,
                     name: '',
+                    key: '',
                     products: 0
                 });
             }
@@ -154,6 +157,26 @@ const AddOrEditProductTag = ({
                                     {formik.touched.name && formik.errors.name && (
                                         <FormHelperText error id="standard-weight-helper-text-name">
                                             {formik.errors.name}
+                                        </FormHelperText>
+                                    )}
+                                </Stack>
+                            </Grid>   <Grid size={12}>
+                                <Stack spacing={1}>
+                                    <InputLabel htmlFor="key">{t('fields.productTag.key')}</InputLabel>
+                                    <OutlinedInput
+                                        id="key"
+                                        type="text"
+                                        value={formik.values.key}
+                                        name="key"
+                                        onBlur={formik.handleBlur}
+                                        onChange={formik.handleChange}
+                                        placeholder={t('fields.productTag.key')}
+                                        fullWidth
+                                        error={Boolean(formik.touched.key && formik.errors.key)}
+                                    />
+                                    {formik.touched.key && formik.errors.key && (
+                                        <FormHelperText error id="standard-weight-helper-text-key">
+                                            {formik.errors.key}
                                         </FormHelperText>
                                     )}
                                 </Stack>

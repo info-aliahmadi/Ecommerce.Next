@@ -1,7 +1,6 @@
 import CONFIG from "@root/config";
 import Fetch from "@root/utils/Fetch";
 import Result from "@root/app/types/Result";
-import ProductTagModel from "@root/app/dashboard/(ecommerce)/_types/Product/ProductTagModel";
 import ProductFilterModel from "../_types/ProductFilterModel";
 import ArticleModel from "@root/app/dashboard/(cms)/_types/Article/ArticleMode";
 import PageModel from "@root/app/dashboard/(cms)/_types/Page/PageModel";
@@ -19,6 +18,7 @@ import ProductTags from "@root/app/types/enums/ProductTags";
 import SortingType from "@root/app/types/enums/SortingType";
 import CuratedStyleProductModel from "../_types/CuratedStyleProductModel";
 import BundleDisplayModel from "../_types/BundleDisplayModel";
+import ProductTagDisplayModel from "../_types/ProductTagDisplayModel";
 
 export default class HomePageService {
 
@@ -60,16 +60,8 @@ export default class HomePageService {
     return result;
   }
 
-  /**
-   * Get all product tags for display
-   */
-  async getAllProductTags(): Promise<Result<ProductTagModel[]>> {
-    let result = await Fetch.Get<Result<ProductTagModel[]>>(`${this.baseUrl}/Product/GetProductTags`, this.config);
-    return result;
-  }
-
   /*
-    * Get all manufacturers for display
+    * Get all manufacturers or brands for display
 */
   async getAllManufacturers(): Promise<Result<ManufacturerDisplayModel[]>> {
     let result = await Fetch.Get<Result<ManufacturerDisplayModel[]>>(`${this.baseUrl}/Product/GetManufacturers`, this.config);
@@ -146,6 +138,15 @@ export default class HomePageService {
     let result = await Fetch.Get<Result<BundleDisplayModel[]>>(`${this.baseUrl}/Product/GetPublishedBundles`, this.config);
     return result;
   }
+  /**
+   * Get site settings
+   */
+  async getProductTags(): Promise<Result<ProductTagDisplayModel[]>> {
+    let result = await Fetch.Get<Result<ProductTagDisplayModel[]>>(`${this.baseUrl}/Product/GetProductTags`, this.config);
+    return result;
+  }
+
+
   /**
    * Get site settings
    */

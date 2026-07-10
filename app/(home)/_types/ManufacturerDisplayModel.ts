@@ -77,4 +77,9 @@ export default interface ManufacturerDisplayModel {
    * The number of discounts associated with this manufacturer.
    */
   discounts: number;
+
+  /**
+   * The number of discounts associated with this manufacturer.
+   */
+  productsCount: number;
 }

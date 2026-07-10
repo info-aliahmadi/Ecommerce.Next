@@ -17,6 +17,12 @@ import { CompareDrawer } from '../_components/ecommerce/compare-drawer';
 import { FlyToCart } from '../_components/ecommerce/fly-to-cart';
 import { MobileBottomNav } from '../_components/ecommerce/mobile-bottom-nav';
 import { I18nProvider } from '../i18n/provider';
+import HomePageService from '../_services/HomePageService';
+import ProductDisplayModel from '../_types/ProductDisplayModel';
+import ProductFilterModel from '../_types/ProductFilterModel';
+import ProductTags from '@root/app/types/enums/ProductTags';
+import SortingType from '@root/app/types/enums/SortingType';
+import DateFilterEnum from '@root/app/types/enums/DateFilter';
 
 import { Button } from '../_components/ui/button';
 import { Badge } from '../_components/ui/badge';
@@ -24,7 +30,6 @@ import { Checkbox } from '../_components/ui/checkbox';
 import { RadioGroup, RadioGroupItem } from '../_components/ui/radio-group';
 import { Input } from '../_components/ui/input';
 import { Label } from '../_components/ui/label';
-import { Separator } from '../_components/ui/separator';
 import { Skeleton } from '../_components/ui/skeleton';
 import {
   Select,
@@ -70,22 +75,21 @@ import { useCompareStore } from '../_lib/store';
 // ── Types ──────────────────────────────────────────────
 type SortOption = 'newest' | 'oldest' | 'price-asc' | 'price-desc' | 'popular' | 'rating' | 'name-asc' | 'name-desc';
 type StockFilter = 'all' | 'inStock' | 'outOfStock';
-type DiscountFilter = 'all' | 'withDiscount' | 'withoutDiscount';
 type DateFilter = 'all' | 'today' | 'thisWeek' | 'thisMonth' | 'last3Months' | 'last6Months' | 'thisYear';
 type ViewMode = 'grid' | 'list';
 
 interface FilterState {
   search: string;
   categories: string[];
+  brands: number[];
   minPrice: string;
   maxPrice: string;
   appliedMinPrice: string;
   appliedMaxPrice: string;
-  discount: DiscountFilter;
+  discount?: boolean;
   stock: StockFilter;
   dateAdded: DateFilter;
-  minRating: number;
-  tags: string[];
+  tags: number[];
   sort: SortOption;
   viewMode: ViewMode;
   page: number;
@@ -95,14 +99,14 @@ interface FilterState {
 const DEFAULT_FILTERS: FilterState = {
   search: '',
   categories: [],
+  brands: [],
   minPrice: '',
   maxPrice: '',
   appliedMinPrice: '',
   appliedMaxPrice: '',
-  discount: 'all',
+  discount: undefined,
   stock: 'all',
   dateAdded: 'all',
-  minRating: 0,
   tags: [],
   sort: 'newest',
   viewMode: 'grid',
@@ -112,37 +116,26 @@ const DEFAULT_FILTERS: FilterState = {
 
 const PER_PAGE_OPTIONS = [12, 24, 36, 48];
 
-// ── Helper: getDateRange ──────────────────────────────
-function getDateRange(filter: DateFilter): { from?: string; to?: string } {
-  const now = new Date();
-  const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-  switch (filter) {
-    case 'today':
-      return { from: today.toISOString() };
-    case 'thisWeek': {
-      const dayOfWeek = today.getDay();
-      const startOfWeek = new Date(today);
-      startOfWeek.setDate(today.getDate() - (dayOfWeek === 0 ? 6 : dayOfWeek - 1));
-      return { from: startOfWeek.toISOString() };
-    }
-    case 'thisMonth':
-      return { from: new Date(today.getFullYear(), today.getMonth(), 1).toISOString() };
-    case 'last3Months': {
-      const threeMonthsAgo = new Date(today);
-      threeMonthsAgo.setMonth(threeMonthsAgo.getMonth() - 3);
-      return { from: threeMonthsAgo.toISOString() };
-    }
-    case 'last6Months': {
-      const sixMonthsAgo = new Date(today);
-      sixMonthsAgo.setMonth(sixMonthsAgo.getMonth() - 6);
-      return { from: sixMonthsAgo.toISOString() };
-    }
-    case 'thisYear':
-      return { from: new Date(today.getFullYear(), 0, 1).toISOString() };
-    default:
-      return {};
-  }
-}
+const SORT_MAP: Record<SortOption, SortingType> = {
+  'newest': SortingType.SortNewest,
+  'oldest': SortingType.SortOldest,
+  'price-asc': SortingType.SortPriceAsc,
+  'price-desc': SortingType.SortPriceDesc,
+  'popular': SortingType.SortPopular,
+  'rating': SortingType.SortRating,
+  'name-asc': SortingType.SortNameAsc,
+  'name-desc': SortingType.SortNameDesc,
+};
+
+const DATE_FILTER_MAP: Record<DateFilter, DateFilterEnum> = {
+  'all': DateFilterEnum.AllTime,
+  'today': DateFilterEnum.Today,
+  'thisWeek': DateFilterEnum.ThisWeek,
+  'thisMonth': DateFilterEnum.ThisMonth,
+  'last3Months': DateFilterEnum.Last3Months,
+  'last6Months': DateFilterEnum.Last6Months,
+  'thisYear': DateFilterEnum.ThisYear,
+};
 
 // ── Main Component ────────────────────────────────────
 function ProductsPageContent() {
@@ -155,11 +148,10 @@ function ProductsPageContent() {
   const [sheetOpen, setSheetOpen] = useState(false);
   const [expandedSections, setExpandedSections] = useState<Record<string, boolean>>({
     category: true,
+    brand: false,
     price: true,
-    discount: false,
     stock: false,
     date: false,
-    rating: false,
     tags: false,
   });
 
@@ -171,63 +163,80 @@ function ProductsPageContent() {
   // ── Fetch categories ────────────────────────────────
   const { data: categories = [] } = useQuery({
     queryKey: ['categories'],
-    queryFn: () => fetch('/api/categories').then((r) => r.json()),
+    queryFn: async () => {
+      const service = new HomePageService();
+      const result = await service.getAllCategories();
+      return result.succeeded ? result.data ?? [] : [];
+    },
     staleTime: 60_000,
   });
+
+  // ── Fetch all Brands (for tag extraction) ─────────
+  const { data: allBrandsData = [] } = useQuery({
+    queryKey: ['all-brands'],
+    queryFn: async () => {
+      const service = new HomePageService();
+      const result = await service.getAllManufacturers();
+      return result.succeeded ? result?.data ?? [] : [];
+    },
+    staleTime: 60_000,
+  });
+
 
   // ── Fetch all products (for tag extraction) ─────────
-  const { data: allProductsData } = useQuery({
+  const { data: allProductTags = [] } = useQuery({
     queryKey: ['all-products-tags'],
-    queryFn: () => fetch('/api/products?limit=100').then((r) => r.json()),
+    queryFn: async () => {
+      const service = new HomePageService();
+      const result = await service.getProductTags();
+      return result.succeeded ? result?.data ?? [] : [];
+    },
     staleTime: 60_000,
   });
 
-  const availableTags = useMemo(() => {
-    const tagSet = new Set<string>();
-    (allProductsData?.products || []).forEach((p: { tags?: string }) => {
-      if (p.tags) {
-        try {
-          const parsed: string[] = JSON.parse(p.tags);
-          parsed.forEach((tag) => tagSet.add(tag));
-        } catch {
-          // ignore malformed tags
-        }
-      }
-    });
-    return Array.from(tagSet).sort();
-  }, [allProductsData]);
 
-  // ── Build API query params ──────────────────────────
-  const queryParams = useMemo(() => {
-    const params = new URLSearchParams();
-    params.set('homepage.limit', String(filters.perPage));
-    params.set('homepage.offset', String((filters.page - 1) * filters.perPage));
-    if (filters.search) params.set('homepage.search', filters.search);
-    if (filters.categories.length > 0) params.set('homepage.categories', filters.categories.join(','));
-    if (filters.appliedMinPrice) params.set('homepage.minPrice', filters.appliedMinPrice);
-    if (filters.appliedMaxPrice) params.set('homepage.maxPrice', filters.appliedMaxPrice);
-    if (filters.discount === 'withDiscount') params.set('homepage.hasDiscount', 'true');
-    if (filters.discount === 'withoutDiscount') params.set('homepage.hasDiscount', 'false');
-    if (filters.stock === 'inStock') params.set('homepage.inStock', 'true');
-    if (filters.stock === 'outOfStock') params.set('homepage.inStock', 'false');
-    if (filters.minRating > 0) params.set('homepage.rating', String(filters.minRating));
-    if (filters.sort) params.set('homepage.sort', filters.sort);
-    if (filters.tags.length > 0) params.set('homepage.tags', filters.tags.join(','));
-    const dateRange = getDateRange(filters.dateAdded);
-    if (dateRange.from) params.set('homepage.dateFrom', dateRange.from);
-    if (dateRange.to) params.set('homepage.dateTo', dateRange.to);
-    return params.toString();
-  }, [filters]);
+  // ── Resolve selected category IDs ───────────────────
+  const selectedCategoryIds = useMemo(() => {
+    if (filters.categories.length === 0) return undefined;
+    return filters.categories
+      .map((slug) => categories.find((c) => c.key === slug)?.id)
+      .filter((id): id is number => id !== undefined);
+  }, [filters.categories, categories]);
+
+  // ── Build ProductFilterModel ────────────────────────
+  const filter = useMemo((): ProductFilterModel => {
+    return {
+      pageIndex: filters.page,
+      pageSize: filters.perPage,
+      searchInput: filters.search,
+      categoryIds: selectedCategoryIds,
+      manufacturerIds: filters.brands.length > 0 ? filters.brands : undefined,
+      sorting: SORT_MAP[filters.sort],
+      fromSellUnitPrice: filters.appliedMinPrice ? Number(filters.appliedMinPrice) : undefined,
+      toSellUnitPrice: filters.appliedMaxPrice ? Number(filters.appliedMaxPrice) : undefined,
+      hasDiscounts: filters.discount ? true : undefined,
+      hasStockQuantity: filters.stock === 'inStock' ? true : filters.stock === 'outOfStock' ? false : undefined,
+      dateFilter: DATE_FILTER_MAP[filters.dateAdded],
+      productTagIds: filters.tags.length > 0 ? filters.tags as ProductTags[] : undefined,
+    };
+  }, [filters, selectedCategoryIds]);
 
   const { data, isLoading } = useQuery({
-    queryKey: ['products', queryParams],
-    queryFn: () => fetch(`/api/products?${queryParams}`).then((r) => r.json()),
+    queryKey: ['products', filter],
+    queryFn: async () => {
+      const service = new HomePageService();
+      const result = await service.getProducts(filter);
+      if (!result.succeeded) throw new Error(result.message ?? 'Failed to load products');
+      return result.data;
+    },
     staleTime: 30_000,
   });
 
-  const products = data?.products || [];
-  const total = data?.total || 0;
-  const totalPages = Math.max(1, Math.ceil(total / filters.perPage));
+  const allProducts = data?.items ?? [];
+  const total = data?.totalItems ?? 0;
+  const totalPages = data?.totalPages ?? Math.max(1, Math.ceil(total / filters.perPage));
+
+  const products = allProducts;
 
   // ── Filter helpers ──────────────────────────────────
   const updateFilter = useCallback(
@@ -246,12 +255,21 @@ function ProductsPageContent() {
     });
   }, []);
 
-  const toggleTag = useCallback((tag: string) => {
+  const toggleTag = useCallback((tagId: number) => {
     setFilters((prev) => {
-      const tags = prev.tags.includes(tag)
-        ? prev.tags.filter((t) => t !== tag)
-        : [...prev.tags, tag];
+      const tags = prev.tags.includes(tagId)
+        ? prev.tags.filter((t) => t !== tagId)
+        : [...prev.tags, tagId];
       return { ...prev, tags, page: 1 };
+    });
+  }, []);
+
+  const toggleBrand = useCallback((brandId: number) => {
+    setFilters((prev) => {
+      const brands = prev.brands.includes(brandId)
+        ? prev.brands.filter((b) => b !== brandId)
+        : [...prev.brands, brandId];
+      return { ...prev, brands, page: 1 };
     });
   }, []);
 
@@ -273,11 +291,11 @@ function ProductsPageContent() {
     let count = 0;
     if (filters.search) count++;
     if (filters.categories.length > 0) count++;
+    if (filters.brands.length > 0) count++;
     if (filters.appliedMinPrice || filters.appliedMaxPrice) count++;
-    if (filters.discount !== 'all') count++;
+    if (filters.discount) count++;
     if (filters.stock !== 'all') count++;
     if (filters.dateAdded !== 'all') count++;
-    if (filters.minRating > 0) count++;
     if (filters.tags.length > 0) count++;
     return count;
   }, [filters]);
@@ -292,11 +310,19 @@ function ProductsPageContent() {
         onRemove: () => updateFilter('search', ''),
       });
     filters.categories.forEach((slug) => {
-      const cat = categories.find((c: { slug: string }) => c.slug === slug);
+      const cat = categories.find((c) => c.key === slug);
       chips.push({
         key: `cat-${slug}`,
-        label: cat ? (catTrans[cat.slug] || cat.name) : slug,
+        label: cat ? (catTrans[cat.name] || cat.name) : slug,
         onRemove: () => toggleCategory(slug),
+      });
+    });
+    filters.brands.forEach((brandId) => {
+      const brand = allBrandsData?.find((b) => b.id === brandId);
+      chips.push({
+        key: `brand-${brandId}`,
+        label: brand?.name ?? String(brandId),
+        onRemove: () => toggleBrand(brandId),
       });
     });
     if (filters.appliedMinPrice || filters.appliedMaxPrice) {
@@ -316,15 +342,15 @@ function ProductsPageContent() {
           })),
       });
     }
-    if (filters.discount !== 'all') {
+    if (filters.discount && filters.discount === true) {
       const label =
-        filters.discount === 'withDiscount'
+        filters.discount === true
           ? t('homepage.shopPage.withDiscount')
-          : t('homepage.shopPage.withoutDiscount');
+          : '';
       chips.push({
         key: 'discount',
         label,
-        onRemove: () => updateFilter('discount', 'all'),
+        onRemove: () => updateFilter('discount', true),
       });
     }
     if (filters.stock !== 'all') {
@@ -353,22 +379,16 @@ function ProductsPageContent() {
         onRemove: () => updateFilter('dateAdded', 'all'),
       });
     }
-    if (filters.minRating > 0) {
+    filters.tags.forEach((tagId) => {
+      const tag = allProductTags?.find((t) => t.id === tagId);
       chips.push({
-        key: 'rating',
-        label: `${filters.minRating}+ ★`,
-        onRemove: () => updateFilter('minRating', 0),
-      });
-    }
-    filters.tags.forEach((tag) => {
-      chips.push({
-        key: `tag-${tag}`,
-        label: tag,
-        onRemove: () => toggleTag(tag),
+        key: `tag-${tagId}`,
+        label: tag?.name ?? String(tagId),
+        onRemove: () => toggleTag(tagId),
       });
     });
     return chips;
-  }, [filters, categories, catTrans, t, toggleCategory, toggleTag, updateFilter]);
+  }, [filters, categories, catTrans, allBrandsData, allProductTags, t, toggleCategory, toggleBrand, toggleTag, updateFilter]);
 
   const toggleSection = (key: string) =>
     setExpandedSections((p) => ({ ...p, [key]: !p[key] }));
@@ -431,18 +451,18 @@ function ProductsPageContent() {
                   </span>
                   <span className="ms-auto text-xs text-ecommerce-text-muted">{total}</span>
                 </label>
-                {categories.map((cat: { id: string; slug: string; name: string; _count?: { products: number } }) => (
+                {categories.map((cat) => (
                   <label key={cat.id} className="flex items-center gap-2.5 cursor-pointer group py-1">
                     <Checkbox
-                      checked={filters.categories.includes(cat.slug)}
-                      onCheckedChange={() => toggleCategory(cat.slug)}
+                      checked={filters.categories.includes(cat.key)}
+                      onCheckedChange={() => toggleCategory(cat.key)}
                       className="rounded-md data-[state=checked]:bg-ecommerce-red data-[state=checked]:border-ecommerce-red"
                     />
                     <span className="text-sm text-ecommerce-text-secondary group-hover:text-ecommerce-text-primary transition-colors">
-                      {catTrans[cat.slug] || cat.name}
+                      {catTrans[cat.name] || cat.name}
                     </span>
                     <span className="ms-auto text-xs text-ecommerce-text-muted">
-                      {cat._count?.products || 0}
+                      {cat.productsCount || 0}
                     </span>
                   </label>
                 ))}
@@ -511,57 +531,105 @@ function ProductsPageContent() {
                 >
                   {t('homepage.shopPage.apply')}
                 </Button>
+                <label className="flex items-center gap-2.5 cursor-pointer group pt-2">
+                  <Checkbox
+                    checked={(filters.discount && filters.discount === true) ? true : false}
+                    onCheckedChange={(checked) => updateFilter('discount', checked ? true : undefined)}
+                    className="rounded-md data-[state=checked]:bg-ecommerce-red data-[state=checked]:border-ecommerce-red"
+                  />
+                  <span className="text-sm text-ecommerce-text-secondary group-hover:text-ecommerce-text-primary transition-colors">
+                    {t('homepage.shopPage.withDiscount')}
+                  </span>
+                </label>
               </div>
             </motion.div>
           )}
         </AnimatePresence>
       </div>
 
-      {/* Discount Filter */}
-      <div className="border border-ecommerce-border rounded-xl overflow-hidden">
-        <button
-          onClick={() => toggleSection('discount')}
-          className="w-full flex items-center justify-between px-4 py-3 text-sm font-semibold text-ecommerce-text-primary hover:bg-ecommerce-surface-hover transition-colors"
-        >
-          {t('homepage.shopPage.discountFilter')}
-          {expandedSections.discount ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
-        </button>
-        <AnimatePresence>
-          {expandedSections.discount && (
-            <motion.div
-              initial={{ height: 0, opacity: 0 }}
-              animate={{ height: 'auto', opacity: 1 }}
-              exit={{ height: 0, opacity: 0 }}
-              transition={{ duration: 0.2 }}
-              className="overflow-hidden"
-            >
-              <div className="px-4 pb-3">
-                <RadioGroup
-                  value={filters.discount}
-                  onValueChange={(v) => updateFilter('discount', v as DiscountFilter)}
-                  className="space-y-2"
-                >
-                  {[
-                    { val: 'all', label: t('homepage.shopPage.all') },
-                    { val: 'withDiscount', label: t('homepage.shopPage.withDiscount') },
-                    { val: 'withoutDiscount', label: t('homepage.shopPage.withoutDiscount') },
-                  ].map(({ val, label }) => (
-                    <div key={val} className="flex items-center gap-2.5 cursor-pointer group">
-                      <RadioGroupItem value={val} id={`discount-${val}`} className="border-ecommerce-border data-[state=checked]:border-ecommerce-red data-[state=checked]:bg-ecommerce-red" />
-                      <Label
-                        htmlFor={`discount-${val}`}
-                        className="text-sm text-ecommerce-text-secondary group-hover:text-ecommerce-text-primary cursor-pointer transition-colors"
-                      >
-                        {label}
-                      </Label>
-                    </div>
+      {/* Brand Filter */}
+      {allBrandsData && allBrandsData.length > 0 && (
+        <div className="border border-ecommerce-border rounded-xl overflow-hidden">
+          <button
+            onClick={() => toggleSection('brand')}
+            className="w-full flex items-center justify-between px-4 py-3 text-sm font-semibold text-ecommerce-text-primary hover:bg-ecommerce-surface-hover transition-colors"
+          >
+            {t('homepage.shopPage.brandFilter')}
+            {expandedSections.brand ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
+          </button>
+          <AnimatePresence>
+            {expandedSections.brand && (
+              <motion.div
+                initial={{ height: 0, opacity: 0 }}
+                animate={{ height: 'auto', opacity: 1 }}
+                exit={{ height: 0, opacity: 0 }}
+                transition={{ duration: 0.2 }}
+                className="overflow-hidden"
+              >
+                <div className="px-4 pb-3 space-y-1.5 max-h-60 overflow-y-auto custom-scrollbar">
+                  {allBrandsData.map((brand) => (
+                    <label key={brand.id} className="flex items-center gap-2.5 cursor-pointer group py-1">
+                      <Checkbox
+                        checked={filters.brands.includes(brand.id)}
+                        onCheckedChange={() => toggleBrand(brand.id)}
+                        className="rounded-md data-[state=checked]:bg-ecommerce-red data-[state=checked]:border-ecommerce-red"
+                      />
+                      <span className="text-sm text-ecommerce-text-secondary group-hover:text-ecommerce-text-primary transition-colors">
+                        {brand.name}
+                      </span>
+                      <span className="ms-auto text-xs text-ecommerce-text-muted">
+                        {brand.productsCount || 0}
+                      </span>
+                    </label>
                   ))}
-                </RadioGroup>
-              </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
-      </div>
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
+      )}
+
+      {/* Tags Filter */}
+      {allProductTags?.length > 0 && (
+        <div className="border border-ecommerce-border rounded-xl overflow-hidden">
+          <button
+            onClick={() => toggleSection('tags')}
+            className="w-full flex items-center justify-between px-4 py-3 text-sm font-semibold text-ecommerce-text-primary hover:bg-ecommerce-surface-hover transition-colors"
+          >
+            {t('homepage.shopPage.tagsFilter')}
+            {expandedSections.tags ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
+          </button>
+          <AnimatePresence>
+            {expandedSections.tags && (
+              <motion.div
+                initial={{ height: 0, opacity: 0 }}
+                animate={{ height: 'auto', opacity: 1 }}
+                exit={{ height: 0, opacity: 0 }}
+                transition={{ duration: 0.2 }}
+                className="overflow-hidden"
+              >
+                <div className="px-4 pb-3 space-y-1.5 max-h-48 overflow-y-auto custom-scrollbar">
+                  {allProductTags?.map((tag) => (
+                    <label key={"tag-" + tag.id} className="flex items-center gap-2.5 cursor-pointer group py-1">
+                      <Checkbox
+                        checked={filters.tags.includes(tag.id)}
+                        onCheckedChange={() => toggleTag(tag.id)}
+                        className="rounded-md data-[state=checked]:bg-ecommerce-red data-[state=checked]:border-ecommerce-red"
+                      />
+                      <span className="text-sm text-ecommerce-text-secondary group-hover:text-ecommerce-text-primary transition-colors capitalize">
+                        {tag.name}
+                      </span>
+                      <span className="ms-auto text-xs text-ecommerce-text-muted">
+                        {tag.productsCount || 0}
+                      </span>
+                    </label>
+                  ))}
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
+      )}
 
       {/* Stock Filter */}
       <div className="border border-ecommerce-border rounded-xl overflow-hidden">
@@ -654,114 +722,6 @@ function ProductsPageContent() {
           )}
         </AnimatePresence>
       </div>
-
-      {/* Rating Filter */}
-      <div className="border border-ecommerce-border rounded-xl overflow-hidden">
-        <button
-          onClick={() => toggleSection('rating')}
-          className="w-full flex items-center justify-between px-4 py-3 text-sm font-semibold text-ecommerce-text-primary hover:bg-ecommerce-surface-hover transition-colors"
-        >
-          {t('homepage.shopPage.ratingFilter')}
-          {expandedSections.rating ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
-        </button>
-        <AnimatePresence>
-          {expandedSections.rating && (
-            <motion.div
-              initial={{ height: 0, opacity: 0 }}
-              animate={{ height: 'auto', opacity: 1 }}
-              exit={{ height: 0, opacity: 0 }}
-              transition={{ duration: 0.2 }}
-              className="overflow-hidden"
-            >
-              <div className="px-4 pb-3">
-                <RadioGroup
-                  value={String(filters.minRating)}
-                  onValueChange={(v) => updateFilter('minRating', Number(v))}
-                  className="space-y-2"
-                >
-                  {[
-                    { val: '0', label: t('homepage.shopPage.allRatings') },
-                    { val: '4', stars: 4 },
-                    { val: '3', stars: 3 },
-                    { val: '2', stars: 2 },
-                    { val: '1', stars: 1 },
-                  ].map(({ val, label, stars }) => (
-                    <div key={val} className="flex items-center gap-2.5 cursor-pointer group">
-                      <RadioGroupItem
-                        value={val}
-                        id={`rating-${val}`}
-                        className="border-ecommerce-border data-[state=checked]:border-ecommerce-red data-[state=checked]:bg-ecommerce-red"
-                      />
-                      <Label
-                        htmlFor={`rating-${val}`}
-                        className="flex items-center gap-1.5 text-sm text-ecommerce-text-secondary group-hover:text-ecommerce-text-primary cursor-pointer transition-colors"
-                      >
-                        {label || (
-                          <span className="flex items-center gap-1">
-                            <span className="flex">
-                              {Array.from({ length: 5 }).map((_, i) => (
-                                <Star
-                                  key={i}
-                                  size={14}
-                                  className={
-                                    i < (stars || 0)
-                                      ? 'text-ecommerce-amber fill-ecommerce-amber'
-                                      : 'text-ecommerce-border'
-                                  }
-                                />
-                              ))}
-                            </span>
-                            <span className="text-xs text-ecommerce-text-muted">& up</span>
-                          </span>
-                        )}
-                      </Label>
-                    </div>
-                  ))}
-                </RadioGroup>
-              </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
-      </div>
-
-      {/* Tags Filter */}
-      {availableTags.length > 0 && (
-        <div className="border border-ecommerce-border rounded-xl overflow-hidden">
-          <button
-            onClick={() => toggleSection('tags')}
-            className="w-full flex items-center justify-between px-4 py-3 text-sm font-semibold text-ecommerce-text-primary hover:bg-ecommerce-surface-hover transition-colors"
-          >
-            {t('homepage.shopPage.tagsFilter')}
-            {expandedSections.tags ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
-          </button>
-          <AnimatePresence>
-            {expandedSections.tags && (
-              <motion.div
-                initial={{ height: 0, opacity: 0 }}
-                animate={{ height: 'auto', opacity: 1 }}
-                exit={{ height: 0, opacity: 0 }}
-                transition={{ duration: 0.2 }}
-                className="overflow-hidden"
-              >
-                <div className="px-4 pb-3 space-y-1.5 max-h-48 overflow-y-auto custom-scrollbar">
-                  {availableTags.map((tag) => (
-                    <label key={tag} className="flex items-center gap-2.5 cursor-pointer group py-1">
-                      <Checkbox
-                        checked={filters.tags.includes(tag)}
-                        onCheckedChange={() => toggleTag(tag)}
-                        className="rounded-md data-[state=checked]:bg-ecommerce-red data-[state=checked]:border-ecommerce-red"
-                      />
-                      <span className="text-sm text-ecommerce-text-secondary group-hover:text-ecommerce-text-primary transition-colors capitalize">
-                        {tag}
-                      </span>
-                    </label>
-                  ))}
-                </div>
-              </motion.div>
-            )}
-          </AnimatePresence>
-        </div>
-      )}
 
       {/* Reset Button */}
       {activeFilterCount > 0 && (
@@ -919,22 +879,20 @@ function ProductsPageContent() {
                 <div className="flex items-center bg-ecommerce-surface rounded-xl p-1 border border-ecommerce-border">
                   <button
                     onClick={() => updateFilter('viewMode', 'grid')}
-                    className={`p-2 rounded-lg transition-all ${
-                      filters.viewMode === 'grid'
-                        ? 'bg-ecommerce-red text-white shadow-sm'
-                        : 'text-ecommerce-text-muted hover:text-ecommerce-text-primary'
-                    }`}
+                    className={`p-2 rounded-lg transition-all ${filters.viewMode === 'grid'
+                      ? 'bg-ecommerce-red text-white shadow-sm'
+                      : 'text-ecommerce-text-muted hover:text-ecommerce-text-primary'
+                      }`}
                     aria-label={t('homepage.shopPage.gridView')}
                   >
                     <Grid3X3 size={16} />
                   </button>
                   <button
                     onClick={() => updateFilter('viewMode', 'list')}
-                    className={`p-2 rounded-lg transition-all ${
-                      filters.viewMode === 'list'
-                        ? 'bg-ecommerce-red text-white shadow-sm'
-                        : 'text-ecommerce-text-muted hover:text-ecommerce-text-primary'
-                    }`}
+                    className={`p-2 rounded-lg transition-all ${filters.viewMode === 'list'
+                      ? 'bg-ecommerce-red text-white shadow-sm'
+                      : 'text-ecommerce-text-muted hover:text-ecommerce-text-primary'
+                      }`}
                     aria-label={t('homepage.shopPage.listView')}
                   >
                     <LayoutList size={16} />
@@ -1064,9 +1022,9 @@ function ProductsPageContent() {
                       }
                     >
                       {products.map(
-                        (product: Record<string, unknown>, index: number) => (
+                        (product: ProductDisplayModel, index: number) => (
                           <motion.div
-                            key={product.id as string}
+                            key={product.id}
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{
@@ -1074,29 +1032,9 @@ function ProductsPageContent() {
                               delay: Math.min(index * 0.04, 0.4),
                             }}
                           >
-                            <Link href={`/products/${product.id as string}`} className="block">
+                            <Link href={`/products/${product.id}`} className="block">
                               <ProductCard
-                                id={product.id as string}
-                                name={product.name as string}
-                                price={product.price as number}
-                                comparePrice={
-                                  product.comparePrice as number | undefined
-                                }
-                                image={product.image as string}
-                                rating={product.rating as number}
-                                reviewCount={product.reviewCount as number}
-                                category={
-                                  product.category as { name: string; color: string }
-                                }
-                                shortDesc={
-                                  product.shortDesc as string | undefined
-                                }
-                                description={
-                                  product.description as string | undefined
-                                }
-                                stock={product.stock as number | undefined}
-                                sku={product.sku as string | undefined}
-                                tags={product.tags as string | undefined}
+                                product={product}
                                 index={index}
                               />
                             </Link>

@@ -604,6 +604,7 @@
       "apply": "تطبيق",
       "priceRange": "نطاق السعر",
       "categoriesFilter": "الفئات",
+      "brandFilter": "العلامات التجارية",
       "availabilityFilter": "التوفر",
       "discountFilter": "الخصم",
       "dateFilter": "تاريخ الإضافة",
@@ -1384,6 +1385,7 @@
     },
     "productTag": {
       "name": "نام برچسب",
+      "key": "کلید دسترسی",
       "products": "تعداد محصولات"
     },
     "productAttribute": {
