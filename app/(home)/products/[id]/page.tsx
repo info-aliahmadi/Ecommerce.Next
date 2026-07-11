@@ -415,6 +415,16 @@ function ProductDetailPageContent() {
 
   return (
     <div className="min-h-screen bg-white dark:bg-ecommerce-surface flex flex-col">
+      <title>{product.metaTitle || product.name}</title>
+      <meta name="description" content={product.metaDescription || product.shortDescription || ''} />
+      <meta name="keywords" content={"product.metaKeywords ||"} />
+      <meta property="og:title" content={product.metaTitle || product.name} />
+      <meta property="og:description" content={product.metaDescription || product.shortDescription || ''} />
+      <meta property="og:type" content="product" />
+      <meta property="og:image" content={imageList[0] || ''} />
+      <meta name="twitter:card" content="summary_large_image" />
+      <meta name="twitter:title" content={product.metaTitle || product.name} />
+      <meta name="twitter:description" content={product.metaDescription || product.shortDescription || ''} />
       <Header />
 
       <main className="flex-1 w-full">

@@ -75,9 +75,10 @@ export function ProductGrid() {
     categoryIds: selectedCategoryId ? [selectedCategoryId] : undefined,
     sorting: SORT_MAP[sortBy] ?? SortingType.SortNewest,
     fromSellUnitPrice: priceRange[0] > 0 ? priceRange[0] : undefined,
-    toSellUnitPrice: priceRange[1] < 9999 ? priceRange[1] : undefined,
+    toSellUnitPrice: priceRange[1] < sliderValue[1] ? priceRange[1] : undefined,
   }), [searchQuery, selectedCategoryId, sortBy, priceRange]);
 
+  
   const { data, isLoading, isError, fetchNextPage, hasNextPage, isFetchingNextPage } = useInfiniteQuery({
     queryKey: ['products', filter],
     queryFn: async ({ pageParam }) => {
@@ -97,11 +98,13 @@ export function ProductGrid() {
 
   const products = data?.pages.flatMap((page) => page?.items ?? []) ?? [];
   const total = data?.pages[0]?.totalItems ?? 0;
+  const maxRange = data?.pages[0]?.maxRange ?? 0;
+
 
   const handleClearPrice = useCallback(() => {
-    setPriceRange([0, 9999]);
-    setSliderValue([0, 9999]);
-  }, []);
+    setPriceRange([0, maxRange]);
+    setSliderValue([0, maxRange]);
+  }, [maxRange]);
 
   const handleCategoryClick = useCallback((slug: string | null) => {
     setSelectedCategory(slug);
@@ -120,8 +123,8 @@ export function ProductGrid() {
     setSelectedCategory(null);
     setSortBy('newest');
     useUIStore.getState().setSearchQuery('');
-    setPriceRange([0, 9999]);
-    setSliderValue([0, 9999]);
+    setPriceRange([0, maxRange]);
+    setSliderValue([0, maxRange]);
   }, [setSelectedCategory, setSortBy]);
 
   return (
@@ -301,7 +304,7 @@ export function ProductGrid() {
             <div style={{ maxWidth: "450px" }} className="p-3 rounded-xl space-y-3">
               <div className="flex items-center justify-between">
                 <span className="text-xs font-semibold text-ecommerce-text-muted uppercase tracking-wider">{t('homepage.common.priceRange')}</span>
-                {(priceRange[0] > 0 || priceRange[1] < 9999) && (
+                {(priceRange[0] > 0 || priceRange[1] < maxRange) && (
                   <button
                     onClick={handleClearPrice}
                     className="text-xs text-ecommerce-text-muted hover:text-ecommerce-red transition-colors flex items-center gap-1"
@@ -313,14 +316,14 @@ export function ProductGrid() {
               </div>
               <div className="flex items-center justify-between text-sm">
                 <span className="text-ecommerce-text-primary font-medium">${sliderValue[0]}</span>
-                <span className="text-ecommerce-text-primary font-medium">${sliderValue[1] < 2000 ? sliderValue[1] : '∞'}</span>
+                <span className="text-ecommerce-text-primary font-medium">${sliderValue[1] < maxRange ? sliderValue[1] : '∞'}</span>
               </div>
               <Slider
                 value={sliderValue}
                 onValueChange={(value) => setSliderValue(value as [number, number])}
                 onValueCommit={([min, max]) => setPriceRange([min, max])}
                 min={0}
-                max={2000}
+                max={maxRange}
                 step={1}
                 className="w-full"
               />
@@ -346,10 +349,10 @@ export function ProductGrid() {
                   <span className="absolute start-2.5 top-1/2 -translate-y-1/2 text-xs text-ecommerce-text-muted">$</span>
                   <input
                     type="number"
-                    value={priceRange[1] < 9999 ? priceRange[1] : ''}
+                    value={priceRange[1] < maxRange ? priceRange[1] : ''}
                     onChange={(e) => {
                       const val = e.target.value;
-                      const num = val === '' ? 9999 : Math.min(9999, Number(val) || 9999);
+                      const num = val === '' ? maxRange : Math.min(maxRange, Number(val) || maxRange);
                       setSliderValue([sliderValue[0], num]);
                       setPriceRange([priceRange[0], num]);
                     }}

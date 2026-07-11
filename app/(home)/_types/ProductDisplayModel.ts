@@ -51,7 +51,7 @@ export default interface ProductDisplayModel {
   /**
    * The ID of the associated picture (nullable).
    */
-  imagePreview?: FileUploadModel | undefined;
+  imagePreview?: FileUploadModel;
 
   /**
    * Meta keywords for SEO.
@@ -139,41 +139,6 @@ export default interface ProductDisplayModel {
    * The type of the MeasureType.
    */
   measureType: MeasureType;
-
-  /**
-   * The weight of the product.
-   */
-  weight: number;
-
-  /**
-   * The length of the product.
-   */
-  length: number;
-
-  /**
-   * The width of the product.
-   */
-  width: number;
-
-  /**
-   * The height of the product.
-   */
-  height: number;
-
-  /**
-   * The start date and time the product is available (nullable, UTC).
-   */
-  availableStartDateTimeUtc: Date | null;
-
-  /**
-   * The end date and time the product is available (nullable, UTC).
-   */
-  availableEndDateTimeUtc: Date | null;
-
-  /**
-   * The display order of the product.
-   */
-  displayOrder: number;
 
   /**
    * The sum of approved ratings.
@@ -269,16 +234,6 @@ export default interface ProductDisplayModel {
    * Indicates whether to call for price.
    */
   callForPrice: boolean;
-
-  /**
-   * Indicates whether the product is published.
-   */
-  published: boolean;
-
-  /**
-   * Indicates whether the product is deleted.
-   */
-  deleted: boolean;
 
   /**
    * The date and time the product was created (in UTC).
