@@ -81,7 +81,7 @@ export default interface ProductDisplayModel {
   /**
    * Administrative comments about the product.
    */
-  adminComment: string;
+  adminComment?: string;
 
   /**
    * The ID of the delivery date.

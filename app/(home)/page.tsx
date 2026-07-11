@@ -48,7 +48,7 @@ function SharedOverlays() {
       <MobileBottomNav />
       <FlyToCart />
       <CompareBar />
-      <CompareDrawer open={isCompareOpen} onClose={() => setCompareOpen(false)} />
+      <CompareDrawer />
       <CookieBanner />
     </>
   );
@@ -113,27 +113,7 @@ function PageRouter() {
   const currentPage = useUIStore((s) => s.currentPage);
 
   return (
-    <AnimatePresence mode="wait">
-      {currentPage === 'home' && (
-        <motion.div key="home" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.15 }}>
           <HomePage />
-        </motion.div>
-      )}
-      {currentPage === 'products' && (
-        <motion.div key="products" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }} transition={{ duration: 0.2 }}>
-          <PageShell>
-            <ProductsPage />
-          </PageShell>
-        </motion.div>
-      )}
-      {currentPage === 'checkout' && (
-        <motion.div key="checkout" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }} transition={{ duration: 0.2 }}>
-          <PageShell>
-            <CheckoutPage />
-          </PageShell>
-        </motion.div>
-      )}
-    </AnimatePresence>
   );
 }
 
