@@ -306,7 +306,12 @@ export default async function ProductDetailPage({
                 <Separator className="bg-ecommerce-border/50" />
 
                 {/* Quantity Selector (client for interactivity) */}
-                <QuantitySelector maxQuantity={product.stockQuantity}  />
+                <QuantitySelector
+                  maxQuantity={product.stockQuantity}
+                  allowedQuantities={product.allowedQuantities}
+                  orderMinimumQuantity={product.orderMinimumQuantity}
+                  orderMaximumQuantity={product.orderMaximumQuantity}
+                />
 
                 {/* Product Actions (client for cart/wishlist) */}
                 <ProductActions product={product} />

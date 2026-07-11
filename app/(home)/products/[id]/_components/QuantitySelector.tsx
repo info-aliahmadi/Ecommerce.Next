@@ -5,12 +5,25 @@ import { Button } from '../../../_components/ui/button';
 import { Minus, Plus } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 
+interface QuantitySelectorProps {
+  maxQuantity: number;
+  allowedQuantities?: boolean;
+  orderMinimumQuantity?: number;
+  orderMaximumQuantity?: number;
+}
+
 export default function QuantitySelector({
   maxQuantity,
-}: {
-  maxQuantity: number;
-}) {
-  const [quantity, setQuantity] = useState(1);
+  allowedQuantities = false,
+  orderMinimumQuantity = 1,
+  orderMaximumQuantity = 9999,
+}: QuantitySelectorProps) {
+  const minQty = allowedQuantities ? Math.max(1, orderMinimumQuantity) : 1;
+  const effectiveMax = allowedQuantities
+    ? Math.min(maxQuantity, orderMaximumQuantity)
+    : maxQuantity;
+
+  const [quantity, setQuantity] = useState(minQty);
   const t = useTranslations('');
 
   return (
@@ -23,8 +36,8 @@ export default function QuantitySelector({
           variant="outline"
           size="icon"
           className="h-10 w-10 rounded-lg border-ecommerce-border"
-          onClick={() => setQuantity((q) => Math.max(1, q - 1))}
-          disabled={quantity <= 1}
+          onClick={() => setQuantity((q) => Math.max(minQty, q - 1))}
+          disabled={quantity <= minQty}
         >
           <Minus size={16} />
         </Button>
@@ -35,8 +48,8 @@ export default function QuantitySelector({
           variant="outline"
           size="icon"
           className="h-10 w-10 rounded-lg border-ecommerce-border"
-          onClick={() => setQuantity((q) => Math.min(maxQuantity, q + 1))}
-          disabled={quantity >= maxQuantity}
+          onClick={() => setQuantity((q) => Math.min(effectiveMax, q + 1))}
+          disabled={quantity >= effectiveMax}
         >
           <Plus size={16} />
         </Button>
