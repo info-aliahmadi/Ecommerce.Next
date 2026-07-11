@@ -704,7 +704,13 @@
       "materials": "المواد",
       "dimensions": "الأبعاد",
       "weight": "الوزن",
-      "brandInfo": "معلومات العلامة التجارية"
+      "brandInfo": "معلومات العلامة التجارية",
+      "estimatedDelivery": "وقت التوصيل المقدر",
+      "deliveryEstimate": "وقت التوصيل يختلف حسب الموقع",
+      "deliveryOneDay": "يوم واحد",
+      "deliveryThreeDays": "٣ أيام",
+      "deliveryOneWeek": "أسبوع واحد",
+      "deliveryOneMonth": "شهر واحد"
     },
     "profile": {
       "title": "حسابي",

@@ -707,7 +707,13 @@
       "dimensions": "ابعاد",
       "weight": "وزن",
       "brandInfo": "اطلاعات برند",
-      "adminComment": "پیام مدیر"
+      "adminComment": "پیام مدیر",
+      "estimatedDelivery": "زمان تحویل تقریبی",
+      "deliveryEstimate": "زمان تحویل بسته به موقعیت متفاوت است",
+      "deliveryOneDay": "۱ روز",
+      "deliveryThreeDays": "۳ روز",
+      "deliveryOneWeek": "۱ هفته",
+      "deliveryOneMonth": "۱ ماه"
     },
     "profile": {
       "title": "حساب من",

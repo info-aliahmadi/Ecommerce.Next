@@ -105,10 +105,10 @@ export default interface ProductDisplayModel {
 
 
   /**
-   * Indicates whether to notify the admin for quantity below the minimum.
+   * Indicates whether allowed quantities are set.
    */
-  notifyAdminForQuantityBelow: boolean;
-
+  allowedQuantities: boolean;
+  
   /**
    * The minimum order quantity.
    */
@@ -185,10 +185,6 @@ export default interface ProductDisplayModel {
    */
   notReturnable: boolean;
 
-  /**
-   * Indicates whether allowed quantities are set.
-   */
-  allowedQuantities: boolean;
 
   /**
    * Indicates whether the product is tax exempt.

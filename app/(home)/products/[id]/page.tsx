@@ -39,7 +39,9 @@ import {
   Award,
   Zap,
   Star,
+  Calendar,
 } from 'lucide-react';
+import DeliveryDateType from '@root/app/types/enums/DeliveryDateType';
 
 // ── Server-side data fetch ─────────────────────────────
 async function getProduct(id: number): Promise<ProductDisplayModel | null> {
@@ -136,10 +138,19 @@ export default async function ProductDetailPage({
     ? product.oldSellUnitPrice - product.sellUnitPrice
     : 0;
 
+  // Delivery date label
+  const deliveryDateLabels: Record<number, string> = {
+    [DeliveryDateType.OneDay]: t('homepage.productDetail.deliveryOneDay'),
+    [DeliveryDateType.ThreeDays]: t('homepage.productDetail.deliveryThreeDays'),
+    [DeliveryDateType.OneWeek]: t('homepage.productDetail.deliveryOneWeek'),
+    [DeliveryDateType.OneMonth]: t('homepage.productDetail.deliveryOneMonth'),
+  };
+
   // Shipping cards data
   const shippingCards = [
+    { icon: Calendar, title: t('homepage.productDetail.estimatedDelivery'), desc: product.deliveryDateName || deliveryDateLabels[product.deliveryDateType] || t('homepage.productDetail.deliveryEstimate'), color: 'text-ecommerce-blue' },
     { icon: Truck, title: t('homepage.productDetail.freeShipping'), desc: t('homepage.productDetail.freeShippingDesc'), color: 'text-ecommerce-emerald' },
-    { icon: Zap, title: t('homepage.productDetail.expressShipping'), desc: t('homepage.productDetail.expressShippingDesc'), color: 'text-ecommerce-amber' },
+    // { icon: Zap, title: t('homepage.productDetail.expressShipping'), desc: t('homepage.productDetail.expressShippingDesc'), color: 'text-ecommerce-amber' },
     { icon: RotateCcw, title: t('homepage.productDetail.returnPolicy'), desc: t('homepage.productDetail.returnPolicyDesc'), color: 'text-ecommerce-purple' },
     { icon: Shield, title: t('homepage.productDetail.secureCheckout'), desc: t('homepage.productDetail.secureCheckoutDesc'), color: 'text-ecommerce-teal' },
     { icon: Award, title: t('homepage.productDetail.warranty'), desc: t('homepage.productDetail.warrantyDesc'), color: 'text-ecommerce-rose' },
@@ -295,7 +306,7 @@ export default async function ProductDetailPage({
                 <Separator className="bg-ecommerce-border/50" />
 
                 {/* Quantity Selector (client for interactivity) */}
-                <QuantitySelector maxQuantity={product.stockQuantity} />
+                <QuantitySelector maxQuantity={product.stockQuantity}  />
 
                 {/* Product Actions (client for cart/wishlist) */}
                 <ProductActions product={product} />

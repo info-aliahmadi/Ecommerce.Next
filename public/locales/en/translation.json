@@ -724,7 +724,13 @@
       "dimensions": "Dimensions",
       "weight": "Weight",
       "brandInfo": "Brand Information",
-      "adminComment": "Admin Comment"
+      "adminComment": "Admin Comment",
+      "estimatedDelivery": "Estimated Delivery",
+      "deliveryEstimate": "Delivery time varies by location",
+      "deliveryOneDay": "1 Day",
+      "deliveryThreeDays": "3 Days",
+      "deliveryOneWeek": "1 Week",
+      "deliveryOneMonth": "1 Month"
     },
     "profile": {
       "title": "My Account",
