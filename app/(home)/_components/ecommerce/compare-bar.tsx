@@ -4,6 +4,7 @@ import { GitCompareArrows } from 'lucide-react';
 import { useCompareStore } from '../../_lib/store';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTranslations } from 'next-intl';
+import { GetImage } from '../../_lib/utils';
 
 export function CompareBar() {
   const { items, setCompareOpen } = useCompareStore();
@@ -35,7 +36,7 @@ export function CompareBar() {
                   className="relative"
                 >
                   <img
-                    src={item.image}
+                    src={GetImage(item.image)}
                     alt={item.name}
                     className="w-8 h-8 rounded-full object-cover border-2 border-white dark:border-ecommerce-surface shadow-sm"
                   />

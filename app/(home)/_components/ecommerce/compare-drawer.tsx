@@ -5,14 +5,10 @@ import { Sheet, SheetContent, SheetHeader, SheetTitle } from '../ui/sheet';
 import { ScrollArea } from '../ui/scroll-area';
 import { Button } from '../ui/button';
 import { useCompareStore, useCartStore } from '../../_lib/store';
+import { GetImage } from '../../_lib/utils';
 import { motion } from 'framer-motion';
 import { toast } from 'sonner';
 import { useTranslations } from 'next-intl';
-
-interface CompareDrawerProps {
-  open: boolean;
-  onClose: () => void;
-}
 
 function ComparisonRow({ label, children }: { label: string; children: React.ReactNode }) {
   return (
@@ -44,8 +40,8 @@ function ComparisonCell({ children, delay = 0 }: { children: React.ReactNode; de
   );
 }
 
-export function CompareDrawer({ open, onClose }: CompareDrawerProps) {
-  const { items, removeItem, clearAll } = useCompareStore();
+export function CompareDrawer() {
+  const { items, removeItem, clearAll, isCompareOpen, setCompareOpen } = useCompareStore();
   const { addItem } = useCartStore();
   const t = useTranslations();
 
@@ -56,7 +52,7 @@ export function CompareDrawer({ open, onClose }: CompareDrawerProps) {
       price: item.price,
       comparePrice: item.comparePrice,
       image: item.image,
-      category: item.category.name,
+      categories: item.categories,
     });
     toast.success(t('homepage.cart.itemAdded', { name: item.name }), {
       description: `$${item.price.toFixed(2)}`,
@@ -65,7 +61,7 @@ export function CompareDrawer({ open, onClose }: CompareDrawerProps) {
   };
 
   return (
-    <Sheet open={open} onOpenChange={(v) => !v && onClose()}>
+    <Sheet open={isCompareOpen} onOpenChange={(v) => !v && setCompareOpen(false)}>
       <SheetContent
         side="bottom"
         className="h-[85vh] sm:max-w-full rounded-t-3xl border-t border-ecommerce-border bg-white dark:bg-ecommerce-surface p-0"
@@ -144,7 +140,7 @@ export function CompareDrawer({ open, onClose }: CompareDrawerProps) {
                               <X size={12} />
                             </button>
                             <img
-                              src={item.image}
+                              src={GetImage(item.image,true)}
                               alt={item.name}
                               className="w-16 h-16 sm:w-20 sm:h-20 rounded-xl object-cover border border-ecommerce-border"
                             />
@@ -210,8 +206,7 @@ export function CompareDrawer({ open, onClose }: CompareDrawerProps) {
                       {items.map((item, i) => (
                         <ComparisonCell key={item.id} delay={i * 0.05}>
                           <span className="inline-flex items-center gap-1.5 text-[11px] font-medium text-ecommerce-text-secondary">
-                            <span className="w-2 h-2 rounded-full" style={{ backgroundColor: item.category.color }} />
-                            {item.category.name}
+                            {item.categories?.[0]?.name || '—'}
                           </span>
                         </ComparisonCell>
                       ))}
@@ -221,13 +216,12 @@ export function CompareDrawer({ open, onClose }: CompareDrawerProps) {
                     <ComparisonRow label={t('homepage.compare.stock')}>
                       {items.map((item, i) => (
                         <ComparisonCell key={item.id} delay={i * 0.05}>
-                          <span className={`text-[11px] font-medium px-2 py-0.5 rounded-md ${
-                            item.stock === 0
-                              ? 'bg-ecommerce-red/10 text-ecommerce-red'
-                              : item.stock < 10
-                                ? 'bg-ecommerce-amber/10 text-ecommerce-amber'
-                                : 'bg-ecommerce-emerald/10 text-ecommerce-emerald'
-                          }`}>
+                          <span className={`text-[11px] font-medium px-2 py-0.5 rounded-md ${item.stock === 0
+                            ? 'bg-ecommerce-red/10 text-ecommerce-red'
+                            : item.stock < 10
+                              ? 'bg-ecommerce-amber/10 text-ecommerce-amber'
+                              : 'bg-ecommerce-emerald/10 text-ecommerce-emerald'
+                            }`}>
                             {item.stock === 0 ? t('homepage.common.outOfStock') : item.stock < 10 ? t('homepage.common.onlyLeft', { count: item.stock }) : t('homepage.common.inStock')}
                           </span>
                         </ComparisonCell>
@@ -254,9 +248,11 @@ export function CompareDrawer({ open, onClose }: CompareDrawerProps) {
                     <ComparisonRow label={t('homepage.compare.description')}>
                       {items.map((item, i) => (
                         <ComparisonCell key={item.id} delay={i * 0.05}>
-                          <p className="text-[11px] text-ecommerce-text-muted text-start max-w-[160px] line-clamp-4 leading-relaxed">
-                            {item.description || '—'}
-                          </p>
+                          <div
+                            className="text-[11px] text-ecommerce-text-muted text-start max-w-[160px] line-clamp-4 leading-relaxed"
+                            dangerouslySetInnerHTML={{ __html: item.description }}
+                          />
+                          <div />
                         </ComparisonCell>
                       ))}
                     </ComparisonRow>
