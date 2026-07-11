@@ -350,6 +350,16 @@ export default async function ProductDetailPage({
                       />
                     </div>
                   )}
+                  {product.adminComment && (
+                    <div className="mt-6 pt-6 border-t border-ecommerce-border">
+                      <h4 className="text-sm font-semibold text-ecommerce-text-primary mb-3">
+                        {t('homepage.productDetail.adminComment')}
+                      </h4>
+                      <p className="text-sm text-ecommerce-text-muted leading-relaxed">
+                        {product.adminComment}
+                      </p>
+                    </div>
+                  )}
                 </div>
               </TabsContent>
 

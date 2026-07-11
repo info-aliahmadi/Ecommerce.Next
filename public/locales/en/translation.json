@@ -723,7 +723,8 @@
       "materials": "Materials",
       "dimensions": "Dimensions",
       "weight": "Weight",
-      "brandInfo": "Brand Information"
+      "brandInfo": "Brand Information",
+      "adminComment": "Admin Comment"
     },
     "profile": {
       "title": "My Account",
@@ -1374,6 +1375,7 @@
       "discountIds": "Discounts",
       "imagePreviewId": "Product Preview",
       "relatedProductIds": "Related Products",
+      "adminComment": "Admin Comment",
       "attributeIds": "Attributes",
       "tagIds": "Product Tags",
       "createdBy": "created By",

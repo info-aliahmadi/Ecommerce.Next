@@ -353,6 +353,20 @@ export default function ProductBaseInfo({
             )}
           </Stack>
         </Grid>
+        <Grid size={{ xs: 12, sm: 12, md: 12, lg: 12, xl: 12 }}>
+          <Stack>
+            <TextField
+              id="adminComment"
+              name="adminComment"
+              type="text"
+              value={values?.adminComment || ''}
+              label={t(fieldsName + 'adminComment')}
+              onBlur={handleBlur}
+              onChange={handleChange}
+              fullWidth
+            />
+          </Stack>
+        </Grid>
       </Grid>
       <Grid size={{ xs: 12, sm: 12, md: 12, lg: 4, xl: 4 }}>
         <Stack>

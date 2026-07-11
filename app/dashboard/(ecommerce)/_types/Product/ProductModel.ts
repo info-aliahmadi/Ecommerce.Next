@@ -141,26 +141,6 @@ export default interface ProductModel {
   measureType: MeasureType;
 
   /**
-   * The weight of the product.
-   */
-  weight: number;
-
-  /**
-   * The length of the product.
-   */
-  length: number;
-
-  /**
-   * The width of the product.
-   */
-  width: number;
-
-  /**
-   * The height of the product.
-   */
-  height: number;
-
-  /**
    * The start date and time the product is available (nullable, UTC).
    */
   availableStartDateTimeUtc: Date | null;

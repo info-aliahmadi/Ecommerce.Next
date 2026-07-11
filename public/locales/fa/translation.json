@@ -706,7 +706,8 @@
       "materials": "مواد",
       "dimensions": "ابعاد",
       "weight": "وزن",
-      "brandInfo": "اطلاعات برند"
+      "brandInfo": "اطلاعات برند",
+      "adminComment": "پیام مدیر"
     },
     "profile": {
       "title": "حساب من",
@@ -1365,6 +1366,7 @@
       "discountIds": "تخفیف‌ها",
       "previewImage": "پیش‌نمایش تصویر",
       "relatedProductIds": "محصولات مرتبط",
+      "adminComment": "پیام مدیر",
       "attributeIds": "ویژگی‌ها",
       "tagIds": "برچسب‌های محصول",
       "createdBy": "ایجاد شده توسط",
