@@ -15,6 +15,8 @@ import CartItem from '../../_types/CartItem';
 import WishlistItem from '../../_types/WishlistItem';
 import CompareItem from '../../_types/CompareItem';
 import Link from 'next/link';
+import CurrencyViewer from '@root/utils/CurrencyViewer';
+import CONFIG from '@root/config';
 
 interface ProductCardProps {
   product: ProductDisplayModel;

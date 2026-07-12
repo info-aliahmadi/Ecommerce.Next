@@ -195,7 +195,7 @@ function ProfilePageContent() {
   // Load user data from localStorage (lazy init)
   const [userData] = useState(() => {
     try {
-      const stored = localStorage.getItem('shopsphere-user');
+      const stored = localStorage.getItem('hydrashop-user');
       if (stored) {
         const data = JSON.parse(stored);
         return {
@@ -267,7 +267,7 @@ function ProfilePageContent() {
     setUserPhone(editPhone);
     setIsEditingProfile(false);
     try {
-      localStorage.setItem('shopsphere-user', JSON.stringify({ name: editName, email: editEmail, phone: editPhone }));
+      localStorage.setItem('hydrashop-user', JSON.stringify({ name: editName, email: editEmail, phone: editPhone }));
     } catch {}
     toast.success(t('homepage.profile.profileUpdated'));
   };

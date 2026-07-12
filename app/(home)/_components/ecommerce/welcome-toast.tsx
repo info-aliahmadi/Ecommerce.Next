@@ -20,13 +20,13 @@ export function WelcomeToast() {
     if (!mounted) return;
 
     const timer = setTimeout(() => {
-      const welcomed = localStorage.getItem('shopsphere-welcomed');
+      const welcomed = localStorage.getItem('hydrashop-welcomed');
       if (!welcomed) {
         toast(t('homepage.welcome.title'), {
           description: t('homepage.welcome.message'),
           duration: 6000,
         });
-        localStorage.setItem('shopsphere-welcomed', 'true');
+        localStorage.setItem('hydrashop-welcomed', 'true');
       }
     }, 2000);
 

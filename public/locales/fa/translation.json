@@ -715,7 +715,8 @@
       "deliveryOneDay": "۱ روز",
       "deliveryThreeDays": "۳ روز",
       "deliveryOneWeek": "۱ هفته",
-      "deliveryOneMonth": "۱ ماه"
+      "deliveryOneMonth": "۱ ماه",
+      "callForPrice": "تماس برای قیمت"
     },
     "profile": {
       "title": "حساب من",

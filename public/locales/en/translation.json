@@ -732,7 +732,8 @@
       "deliveryOneDay": "1 Day",
       "deliveryThreeDays": "3 Days",
       "deliveryOneWeek": "1 Week",
-      "deliveryOneMonth": "1 Month"
+      "deliveryOneMonth": "1 Month",
+      "callForPrice": "Call for Price"
     },
     "profile": {
       "title": "My Account",

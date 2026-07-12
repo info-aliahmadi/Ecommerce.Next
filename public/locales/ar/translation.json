@@ -711,7 +711,8 @@
       "deliveryThreeDays": "٣ أيام",
       "deliveryOneWeek": "أسبوع واحد",
       "deliveryOneMonth": "شهر واحد",
-      "notReturnable": "هذا المنتج غير قابل للإرجاع"
+      "notReturnable": "هذا المنتج غير قابل للإرجاع",
+      "callForPrice": "اتصل للاستفسار عن السعر"
     },
     "profile": {
       "title": "حسابي",

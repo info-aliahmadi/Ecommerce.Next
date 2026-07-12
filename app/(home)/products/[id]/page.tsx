@@ -182,7 +182,7 @@ export default async function ProductDetailPage({
               </BreadcrumbItem>
               <BreadcrumbSeparator />
               <BreadcrumbItem>
-                <BreadcrumbLink href="/" className="text-ecommerce-text-muted hover:text-ecommerce-text-primary text-sm">
+                <BreadcrumbLink href="/products" className="text-ecommerce-text-muted hover:text-ecommerce-text-primary text-sm">
                   {t('homepage.shopPage.breadcrumbShop')}
                 </BreadcrumbLink>
               </BreadcrumbItem>
@@ -232,23 +232,31 @@ export default async function ProductDetailPage({
                 ></ReviewSummary>
 
                 {/* Price - Server rendered */}
-                <div className="space-y-1">
-                  <div className="flex items-baseline gap-3">
-                    <span className="text-3xl font-bold text-ecommerce-text-primary">
-                      {CurrencyViewer(product.sellUnitPrice, CONFIG.DEFAULT_CURRENCY)}
+                {product.callForPrice ? (
+                  <div className="flex items-center gap-2">
+                    <span className="text-xl font-bold text-ecommerce-amber">
+                      {t('homepage.productDetail.callForPrice')}
                     </span>
-                    {product.oldSellUnitPrice && product.oldSellUnitPrice > product.sellUnitPrice && (
-                      <span className="text-lg text-ecommerce-text-muted line-through">
-                        {CurrencyViewer(product.oldSellUnitPrice, CONFIG.DEFAULT_CURRENCY)}
+                  </div>
+                ) : (
+                  <div className="space-y-1">
+                    <div className="flex items-baseline gap-3">
+                      <span className="text-3xl font-bold text-ecommerce-text-primary">
+                        {CurrencyViewer(product.sellUnitPrice, CONFIG.DEFAULT_CURRENCY)}
                       </span>
+                      {product.oldSellUnitPrice && product.oldSellUnitPrice > product.sellUnitPrice && (
+                        <span className="text-lg text-ecommerce-text-muted line-through">
+                          {CurrencyViewer(product.oldSellUnitPrice, CONFIG.DEFAULT_CURRENCY)}
+                        </span>
+                      )}
+                    </div>
+                    {savings > 0 && (
+                      <p className="text-sm font-medium text-ecommerce-emerald">
+                        {t('homepage.productDetail.youSave', { amount: savings.toFixed(2) })}
+                      </p>
                     )}
                   </div>
-                  {savings > 0 && (
-                    <p className="text-sm font-medium text-ecommerce-emerald">
-                      {t('homepage.productDetail.youSave', { amount: savings.toFixed(2) })}
-                    </p>
-                  )}
-                </div>
+                )}
 
                 <Separator className="bg-ecommerce-border/50" />
 

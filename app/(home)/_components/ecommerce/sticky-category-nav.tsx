@@ -107,7 +107,7 @@ export function StickyCategoryNav() {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-full flex items-center gap-3">
             {/* Brand text - desktop only */}
             <span className="hidden lg:block font-bold text-sm text-ecommerce-text-primary shrink-0">
-              ShopSphere
+              HydraShop
             </span>
 
             {/* Scrollable category pills */}

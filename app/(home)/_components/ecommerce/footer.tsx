@@ -156,11 +156,11 @@ export function Footer() {
                 </div>
                 +1 (234) 567-890
               </a>
-              <a href="mailto:hello@shopsphere.com" className="flex items-center gap-2.5 text-sm text-white/50 hover:text-white/80 transition-colors group">
+              <a href="mailto:hello@hydrashop.com" className="flex items-center gap-2.5 text-sm text-white/50 hover:text-white/80 transition-colors group">
                 <div className="w-7 h-7 rounded-lg bg-white/[0.05] flex items-center justify-center group-hover:bg-white/10 transition-colors">
                   <Mail size={12} />
                 </div>
-                hello@shopsphere.com
+                hello@hydrashop.com
               </a>
               <div className="flex items-center gap-2.5 text-sm text-white/50">
                 <div className="w-7 h-7 rounded-lg bg-white/[0.05] flex items-center justify-center">
