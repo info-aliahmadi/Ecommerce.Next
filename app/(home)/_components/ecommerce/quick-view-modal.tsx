@@ -16,6 +16,8 @@ import { GetImage } from '../../_lib/utils';
 import CartItem from '../../_types/CartItem';
 import CONFIG from '@root/config';
 import { redirect } from 'next/navigation';
+import CurrencyViewer from '@root/utils/CurrencyViewer';
+import { ColorVariants, SizeVariants } from '@root/app/types/enums/Variants';
 interface ReviewData {
   id: string;
   productId: string;
@@ -316,17 +318,6 @@ function QuickViewContent({ product, onClose }: { product: ProductDisplayModel; 
   const [copied, setCopied] = useState(false);
   const [addedToCart, setAddedToCart] = useState(false);
   const addedTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-
-  const colorVariants = [
-    { name: 'Default', value: '#6C757D' },
-    { name: 'Midnight', value: '#1A1D2E' },
-    { name: 'Ruby', value: '#E63946' },
-    { name: 'Ocean', value: '#20B2AA' },
-    { name: 'Orchid', value: '#6A5ACD' },
-    { name: 'Sunset', value: '#FF8C42' },
-  ];
-
-  const sizeVariants = ['XS', 'S', 'M', 'L', 'XL', 'XXL'];
 
   const wishlisted = isInWishlist(product.id);
   const discount = product.oldSellUnitPrice ? Math.round(((product.oldSellUnitPrice - product.sellUnitPrice) / product.oldSellUnitPrice) * 100) : 0;
@@ -674,7 +665,7 @@ function QuickViewContent({ product, onClose }: { product: ProductDisplayModel; 
               <span className="text-sm text-ecommerce-text-secondary">{selectedColor.name}</span>
             </div>
             <div className="flex gap-2 flex-wrap">
-              {colorVariants.map((color) => (
+              {ColorVariants.map((color) => (
                 <button
                   key={color.name}
                   onClick={() => setSelectedColor(color)}
@@ -704,7 +695,7 @@ function QuickViewContent({ product, onClose }: { product: ProductDisplayModel; 
               </button>
             </div>
             <div className="flex gap-2 flex-wrap">
-              {sizeVariants.map((size) => (
+              {SizeVariants.map((size) => (
                 <button
                   key={size}
                   onClick={() => setSelectedSize(size)}

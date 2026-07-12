@@ -1,3 +1,5 @@
+import ProductAttributeDisplayModel from "./ProductAttributeDisplayModel";
+
 /**
  * Represents product inventory information.
  */
@@ -15,12 +17,12 @@ export default interface InventoryDisplayModel {
   /**
    * The ID of the associated attribute (nullable).
    */
-  attributeId: number | undefined;
+  attributeId?: number | undefined;
 
   /**
    * The name of the associated attribute (nullable).
    */
-  attributeName: string | undefined;
+  attribute?: ProductAttributeDisplayModel;
 
   /**
    * The quantity of stock.

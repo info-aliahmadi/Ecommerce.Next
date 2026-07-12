@@ -81,6 +81,14 @@ export function ProductCard({ product, index = 0 }: Readonly<ProductCardProps>) 
   const discount = product.oldSellUnitPrice ? Math.round(((product.oldSellUnitPrice - product.sellUnitPrice) / product.oldSellUnitPrice) * 100) : 0;
   const savings = product.oldSellUnitPrice && product.oldSellUnitPrice > product.sellUnitPrice ? product.oldSellUnitPrice - product.sellUnitPrice : 0;
 
+  // Check if product is currently "new" based on date range
+  const now = new Date();
+  const isMarkAsNew = product.markAsNew && (() => {
+    if (product.markAsNewStartDateTimeUtc && new Date(product.markAsNewStartDateTimeUtc) > now) return false;
+    if (product.markAsNewEndDateTimeUtc && new Date(product.markAsNewEndDateTimeUtc) < now) return false;
+    return true;
+  })();
+
   const handleAddToCart = (e: React.MouseEvent) => {
     handleAddToCartWithAnimation(e, GetImage(product.imagePreview), {
       id: product.id,
@@ -194,27 +202,29 @@ export function ProductCard({ product, index = 0 }: Readonly<ProductCardProps>) 
             {/* Overlay Actions - Glass style */}
             <div className="absolute inset-x-0 bottom-0 flex items-end justify-center pb-3 opacity-0 group-hover:opacity-100 translate-y-3 group-hover:translate-y-0 transition-all duration-300">
               <div className="flex gap-2 glass rounded-xl p-1.5 shadow-lg">
-                <div className="relative">
-                  <AnimatePresence>
-                    {heartBurst && wishlisted && (
-                      <motion.div
-                        key="heart-burst"
-                        initial={{ scale: 0.5, opacity: 1 }}
-                        animate={{ scale: 2.5, opacity: 0 }}
-                        exit={{ opacity: 0 }}
-                        transition={{ duration: 0.6, ease: 'easeOut' }}
-                        className="absolute inset-0 rounded-lg bg-ecommerce-rose/30 pointer-events-none"
-                      />
-                    )}
-                  </AnimatePresence>
-                  <button
-                    onClick={handleWishlist}
-                    className={`w-9 h-9 rounded-lg bg-white/80 dark:bg-ecommerce-surface/80 flex items-center justify-center hover:scale-110 transition-transform duration-200 hover:bg-ecommerce-red hover:text-white ${heartBurst && wishlisted ? 'scale-125' : ''}`}
-                    aria-label={wishlisted ? t('homepage.common.removeFromWishlist') : t('homepage.common.addToWishlist')}
-                  >
-                    <Heart size={15} className={`transition-colors duration-200 ${wishlisted ? 'fill-ecommerce-red text-ecommerce-red' : 'text-ecommerce-text-secondary'}`} />
-                  </button>
-                </div>
+                {!product.disableWishlistButton && (
+                  <div className="relative">
+                    <AnimatePresence>
+                      {heartBurst && wishlisted && (
+                        <motion.div
+                          key="heart-burst"
+                          initial={{ scale: 0.5, opacity: 1 }}
+                          animate={{ scale: 2.5, opacity: 0 }}
+                          exit={{ opacity: 0 }}
+                          transition={{ duration: 0.6, ease: 'easeOut' }}
+                          className="absolute inset-0 rounded-lg bg-ecommerce-rose/30 pointer-events-none"
+                        />
+                      )}
+                    </AnimatePresence>
+                    <button
+                      onClick={handleWishlist}
+                      className={`w-9 h-9 rounded-lg bg-white/80 dark:bg-ecommerce-surface/80 flex items-center justify-center hover:scale-110 transition-transform duration-200 hover:bg-ecommerce-red hover:text-white ${heartBurst && wishlisted ? 'scale-125' : ''}`}
+                      aria-label={wishlisted ? t('homepage.common.removeFromWishlist') : t('homepage.common.addToWishlist')}
+                    >
+                      <Heart size={15} className={`transition-colors duration-200 ${wishlisted ? 'fill-ecommerce-red text-ecommerce-red' : 'text-ecommerce-text-secondary'}`} />
+                    </button>
+                  </div>
+                )}
                 <button
                   onClick={handleCompare}
                   className={`w-9 h-9 rounded-lg bg-white/80 dark:bg-ecommerce-surface/80 flex items-center justify-center hover:scale-110 transition-all ${inCompare ? 'bg-ecommerce-teal/10 dark:bg-ecommerce-teal/10' : 'hover:bg-ecommerce-teal hover:text-white'}`}
@@ -229,13 +239,15 @@ export function ProductCard({ product, index = 0 }: Readonly<ProductCardProps>) 
                 >
                   <Eye size={15} className="text-ecommerce-text-secondary" />
                 </button>
-                <button
-                  onClick={handleAddToCart}
-                  className="w-9 h-9 rounded-lg bg-white/80 dark:bg-ecommerce-surface/80 flex items-center justify-center hover:scale-110 transition-all hover:bg-ecommerce-red hover:text-white sm:hidden"
-                  aria-label={t('homepage.common.addToCart')}
-                >
-                  <ShoppingCart size={15} />
-                </button>
+                {!product.disableBuyButton && (
+                  <button
+                    onClick={handleAddToCart}
+                    className="w-9 h-9 rounded-lg bg-white/80 dark:bg-ecommerce-surface/80 flex items-center justify-center hover:scale-110 transition-all hover:bg-ecommerce-red hover:text-white sm:hidden"
+                    aria-label={t('homepage.common.addToCart')}
+                  >
+                    <ShoppingCart size={15} />
+                  </button>
+                )}
               </div>
             </div>
 
@@ -260,7 +272,7 @@ export function ProductCard({ product, index = 0 }: Readonly<ProductCardProps>) 
                   {t('homepage.common.off', { percent: discount })}
                 </Badge>
               )}
-              {product.markAsNew && (
+              {isMarkAsNew && (
                 <Badge className="bg-ecommerce-teal text-white border-0 text-[10px] font-bold px-1.5 py-0.5 rounded-md shadow-sm">
                   {t('homepage.common.newBadge')}
                 </Badge>
@@ -278,18 +290,20 @@ export function ProductCard({ product, index = 0 }: Readonly<ProductCardProps>) 
             </div>
 
             {/* Quick add on image hover (desktop) */}
-            <motion.div
-              className="absolute bottom-3 end-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300 hidden sm:block"
-              whileTap={{ scale: 0.9 }}
-            >
-              <button
-                onClick={handleAddToCart}
-                className="w-10 h-10 rounded-full bg-ecommerce-red text-white shadow-lg shadow-ecommerce-red/30 flex items-center justify-center hover:bg-ecommerce-red/90 transition-colors hover:scale-110"
-                aria-label={t('homepage.common.addToCart')}
+            {!product.disableBuyButton && (
+              <motion.div
+                className="absolute bottom-3 end-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300 hidden sm:block"
+                whileTap={{ scale: 0.9 }}
               >
-                <ShoppingCart size={16} />
-              </button>
-            </motion.div>
+                <button
+                  onClick={handleAddToCart}
+                  className="w-10 h-10 rounded-full bg-ecommerce-red text-white shadow-lg shadow-ecommerce-red/30 flex items-center justify-center hover:bg-ecommerce-red/90 transition-colors hover:scale-110"
+                  aria-label={t('homepage.common.addToCart')}
+                >
+                  <ShoppingCart size={16} />
+                </button>
+              </motion.div>
+            )}
           </div>
 
           {/* Content */}
@@ -331,24 +345,32 @@ export function ProductCard({ product, index = 0 }: Readonly<ProductCardProps>) 
             {/* Price & Add to Cart */}
             <div className="flex items-center justify-between mt-3 pt-3 border-t border-ecommerce-border">
               <div className="flex flex-col gap-0.5">
-                <div className="flex items-baseline gap-1.5">
-                  <span className="text-base sm:text-lg font-bold text-ecommerce-text-primary">{CurrencyViewer(product.sellUnitPrice,CONFIG.DEFAULT_CURRENCY)}</span>
-                  {product.oldSellUnitPrice && product.oldSellUnitPrice > product.sellUnitPrice && (
-                    <span className="text-xs text-ecommerce-text-muted line-through">{CurrencyViewer(product.oldSellUnitPrice,CONFIG.DEFAULT_CURRENCY)}</span>
-                  )}
-                </div>
-                {savings > 0 && (
-                  <span className="text-ecommerce-emerald text-[10px] font-medium">{t('homepage.common.saveAmount', { amount: savings.toFixed(2) })}</span>
+                {product.callForPrice ? (
+                  <span className="text-sm font-bold text-ecommerce-amber">{t('homepage.productDetail.callForPrice')}</span>
+                ) : (
+                  <>
+                    <div className="flex items-baseline gap-1.5">
+                      <span className="text-base sm:text-lg font-bold text-ecommerce-text-primary">{CurrencyViewer(product.sellUnitPrice, CONFIG.DEFAULT_CURRENCY)}</span>
+                      {product.oldSellUnitPrice && product.oldSellUnitPrice > product.sellUnitPrice && (
+                        <span className="text-xs text-ecommerce-text-muted line-through">{CurrencyViewer(product.oldSellUnitPrice, CONFIG.DEFAULT_CURRENCY)}</span>
+                      )}
+                    </div>
+                    {savings > 0 && (
+                      <span className="text-ecommerce-emerald text-[10px] font-medium">{t('homepage.common.saveAmount', { amount: savings.toFixed(2) })}</span>
+                    )}
+                  </>
                 )}
               </div>
-              <Button
-                onClick={handleAddToCart}
-                size="sm"
-                className={`h-8 px-2.5 sm:px-3 rounded-lg text-xs font-medium gap-1.5 transition-all duration-300 active:scale-95 ripple btn-shine ${justAdded ? 'bg-ecommerce-emerald hover:bg-ecommerce-emerald text-white scale-105' : 'bg-ecommerce-red hover:bg-ecommerce-red/90 text-white hover:scale-105'}`}
-              >
-                {justAdded ? <Check size={13} /> : <ShoppingCart size={13} />}
-                <span className="hidden sm:inline">{justAdded ? t('homepage.quickView.added') : t('homepage.common.addToCart')}</span>
-              </Button>
+              {!product.disableBuyButton && (
+                <Button
+                  onClick={handleAddToCart}
+                  size="sm"
+                  className={`h-8 px-2.5 sm:px-3 rounded-lg text-xs font-medium gap-1.5 transition-all duration-300 active:scale-95 ripple btn-shine ${justAdded ? 'bg-ecommerce-emerald hover:bg-ecommerce-emerald text-white scale-105' : 'bg-ecommerce-red hover:bg-ecommerce-red/90 text-white hover:scale-105'}`}
+                >
+                  {justAdded ? <Check size={13} /> : <ShoppingCart size={13} />}
+                  <span className="hidden sm:inline">{justAdded ? t('homepage.quickView.added') : t('homepage.common.addToCart')}</span>
+                </Button>
+              )}
             </div>
           </div>
         </motion.div>

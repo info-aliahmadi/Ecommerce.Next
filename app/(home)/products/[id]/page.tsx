@@ -40,9 +40,11 @@ import {
   Zap,
   Star,
   Calendar,
+  Ruler,
 } from 'lucide-react';
 import DeliveryDateType from '@root/app/types/enums/DeliveryDateType';
 import CurrencyViewer from '@root/utils/CurrencyViewer';
+import { ColorVariants, SizeVariants } from '@root/app/types/enums/Variants';
 
 // ── Server-side data fetch ─────────────────────────────
 async function getProduct(id: number): Promise<ProductDisplayModel | null> {
@@ -328,6 +330,56 @@ export default async function ProductDetailPage({
                 )}
 
                 <Separator className="bg-ecommerce-border/50" />
+
+                {/* Color Variants */}
+                <div className="mt-5">
+                  <div className="flex items-center gap-2 mb-2.5">
+                    <span className="text-sm font-medium text-ecommerce-text-primary">{t('homepage.quickView.color')}</span>
+                    <span className="text-xs text-ecommerce-text-muted">:</span>
+                    <span className="text-sm text-ecommerce-text-secondary">{selectedColor.name}</span>
+                  </div>
+                  <div className="flex gap-2 flex-wrap">
+                    {ColorVariants.map((color) => (
+                      <button
+                        key={color.name}
+                        onClick={() => setSelectedColor(color)}
+                        className={`w-8 h-8 rounded-full border-2 transition-all duration-200 hover:scale-110 ${selectedColor.name === color.name ? 'border-ecommerce-red ring-2 ring-ecommerce-red/20 scale-110' : 'border-ecommerce-border hover:border-ecommerce-text-muted'}`}
+                        style={{ backgroundColor: color.value }}
+                        aria-label={color.name}
+                        title={color.name}
+                      />
+                    ))}
+                  </div>
+                </div>
+
+                {/* Size Variants */}
+                <div className="mt-4">
+                  <div className="flex items-center justify-between mb-2.5">
+                    <div className="flex items-center gap-2">
+                      <span className="text-sm font-medium text-ecommerce-text-primary">{t('homepage.quickView.size')}</span>
+                      <span className="text-xs text-ecommerce-text-muted">:</span>
+                      <span className="text-sm text-ecommerce-text-secondary">{selectedSize}</span>
+                    </div>
+                    <button
+                      onClick={() => setIsSizeGuideOpen(true)}
+                      className="text-xs text-ecommerce-purple hover:text-ecommerce-purple/80 hover:underline cursor-pointer flex items-center gap-1"
+                    >
+                      <Ruler size={12} />
+                      {t('homepage.quickView.sizeGuide')}
+                    </button>
+                  </div>
+                  <div className="flex gap-2 flex-wrap">
+                    {SizeVariants.map((size) => (
+                      <button
+                        key={size}
+                        onClick={() => setSelectedSize(size)}
+                        className={`h-9 min-w-[36px] px-3 rounded-lg border text-sm font-medium transition-all duration-200 ${selectedSize === size ? 'border-ecommerce-red bg-ecommerce-red/5 text-ecommerce-red' : 'border-ecommerce-border text-ecommerce-text-secondary hover:border-ecommerce-text-muted hover:bg-ecommerce-surface-hover'}`}
+                      >
+                        {size}
+                      </button>
+                    ))}
+                  </div>
+                </div>
 
                 {/* Quantity Selector (client for interactivity) */}
                 {!product.disableBuyButton && (
