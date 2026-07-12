@@ -322,14 +322,16 @@ export default async function ProductDetailPage({
                 <Separator className="bg-ecommerce-border/50" />
 
                 {/* Quantity Selector (client for interactivity) */}
-                <QuantitySelector
-                  measureType={product.measureType}
-                  displayStockQuantity={product.displayStockQuantity}
-                  maxQuantity={product.stockQuantity}
-                  allowedQuantities={product.allowedQuantities}
-                  orderMinimumQuantity={product.orderMinimumQuantity}
-                  orderMaximumQuantity={product.orderMaximumQuantity}
-                />
+                {!product.disableBuyButton && (
+                  <QuantitySelector
+                    measureType={product.measureType}
+                    displayStockQuantity={product.displayStockQuantity}
+                    maxQuantity={product.stockQuantity}
+                    allowedQuantities={product.allowedQuantities}
+                    orderMinimumQuantity={product.orderMinimumQuantity}
+                    orderMaximumQuantity={product.orderMaximumQuantity}
+                  />
+                )}
                 {/* Product Actions (client for cart/wishlist) */}
                 <ProductActions product={product} />
               </div>

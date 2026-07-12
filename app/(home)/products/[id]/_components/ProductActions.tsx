@@ -95,40 +95,44 @@ export default function ProductActions({
   return (
     <>
       {/* Action Buttons */}
-      <div className="space-y-2.5 pt-1">
-        <Button
-          onClick={handleAddToCart}
-          disabled={product.stockQuantity === 0}
-          className="w-full h-12 text-base font-semibold rounded-xl bg-ecommerce-red hover:bg-ecommerce-red/90 text-white gap-2 transition-all hover:scale-[1.01] active:scale-[0.99] disabled:opacity-50 disabled:hover:scale-100"
-        >
-          <ShoppingCart size={20} />
-          {t('homepage.productDetail.addToCart')}
-        </Button>
-        <Button
-          onClick={handleBuyNow}
-          disabled={product.stockQuantity === 0}
-          variant="outline"
-          className="w-full h-11 text-sm font-medium rounded-xl border-2 border-ecommerce-text-primary text-ecommerce-text-primary hover:bg-ecommerce-text-primary hover:text-white gap-2 transition-all disabled:opacity-50"
-        >
-          <Zap size={16} />
-          {t('homepage.productDetail.buyNow')}
-        </Button>
-      </div>
+      {!product.disableBuyButton && (
+        <div className="space-y-2.5 pt-1">
+          <Button
+            onClick={handleAddToCart}
+            disabled={product.stockQuantity === 0}
+            className="w-full h-12 text-base font-semibold rounded-xl bg-ecommerce-red hover:bg-ecommerce-red/90 text-white gap-2 transition-all hover:scale-[1.01] active:scale-[0.99] disabled:opacity-50 disabled:hover:scale-100"
+          >
+            <ShoppingCart size={20} />
+            {t('homepage.productDetail.addToCart')}
+          </Button>
+          <Button
+            onClick={handleBuyNow}
+            disabled={product.stockQuantity === 0}
+            variant="outline"
+            className="w-full h-11 text-sm font-medium rounded-xl border-2 border-ecommerce-text-primary text-ecommerce-text-primary hover:bg-ecommerce-text-primary hover:text-white gap-2 transition-all disabled:opacity-50"
+          >
+            <Zap size={16} />
+            {t('homepage.productDetail.buyNow')}
+          </Button>
+        </div>
+      )}
 
       {/* Wishlist & Share */}
       <div className="flex items-center gap-2">
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={handleWishlist}
-          className={`flex-1 h-10 rounded-lg gap-2 text-sm transition-all ${wishlisted
-            ? 'border-ecommerce-red text-ecommerce-red bg-ecommerce-red/5'
-            : 'border-ecommerce-border text-ecommerce-text-secondary hover:border-ecommerce-red hover:text-ecommerce-red'
-            }`}
-        >
-          <Heart size={15} className={wishlisted ? 'fill-ecommerce-red' : ''} />
-          {wishlisted ? t('homepage.common.removeFromWishlist') : t('homepage.common.addToWishlist')}
-        </Button>
+        {!product.disableWishlistButton && (
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={handleWishlist}
+            className={`flex-1 h-10 rounded-lg gap-2 text-sm transition-all ${wishlisted
+              ? 'border-ecommerce-red text-ecommerce-red bg-ecommerce-red/5'
+              : 'border-ecommerce-border text-ecommerce-text-secondary hover:border-ecommerce-red hover:text-ecommerce-red'
+              }`}
+          >
+            <Heart size={15} className={wishlisted ? 'fill-ecommerce-red' : ''} />
+            {wishlisted ? t('homepage.common.removeFromWishlist') : t('homepage.common.addToWishlist')}
+          </Button>
+        )}
         <Button
           variant="outline"
           size="sm"
