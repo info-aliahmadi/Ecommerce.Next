@@ -163,7 +163,7 @@ export function TrendingCarousel() {
                       {product.name}
                     </p>
                     <p className="text-white font-semibold text-base mb-3">
-                      ${product.sellUnitPrice.toFixed(2)}
+                      {CurrencyViewer(product.sellUnitPrice,CONFIG.DEFAULT_CURRENCY)}
                     </p>
                     <button
                       onClick={(e) => {

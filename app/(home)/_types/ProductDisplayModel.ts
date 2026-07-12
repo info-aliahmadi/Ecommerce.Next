@@ -108,7 +108,7 @@ export default interface ProductDisplayModel {
    * Indicates whether allowed quantities are set.
    */
   allowedQuantities: boolean;
-  
+
   /**
    * The minimum order quantity.
    */
@@ -134,11 +134,6 @@ export default interface ProductDisplayModel {
    * The type of the currency.
    */
   currencyType: CurrencyTypes;
-
-  /**
-   * The type of the MeasureType.
-   */
-  measureType: MeasureType;
 
   /**
    * The sum of approved ratings.
@@ -173,12 +168,12 @@ export default interface ProductDisplayModel {
   /**
    * The start date and time the product is marked as new (nullable, UTC).
    */
-  markAsNewStartDateTimeUtc: Date | null;
+  markAsNewStartDateTimeUtc?: Date;
 
   /**
    * The end date and time the product is marked as new (nullable, UTC).
    */
-  markAsNewEndDateTimeUtc: Date | null;
+  markAsNewEndDateTimeUtc?: Date ;
 
   /**
    * Indicates whether the product is not returnable.
@@ -206,10 +201,6 @@ export default interface ProductDisplayModel {
    */
   allowCustomerReviews: boolean;
 
-  /**
-   * Indicates whether to display the stock quantity.
-   */
-  displayStockQuantity: boolean;
 
   /**
    * Indicates whether the buy button is disabled.
@@ -241,6 +232,15 @@ export default interface ProductDisplayModel {
    */
   updatedOnUtc: Date | null;
 
+
+  /**
+   * The type of the MeasureType.
+   */
+  measureType: MeasureType;
+  /**
+   * Indicates whether to display the stock quantity.
+   */
+  displayStockQuantity: boolean;
   /**
    * The stock type.
    */

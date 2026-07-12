@@ -330,9 +330,9 @@ export function ProductCard({ product, index = 0 }: Readonly<ProductCardProps>) 
             <div className="flex items-center justify-between mt-3 pt-3 border-t border-ecommerce-border">
               <div className="flex flex-col gap-0.5">
                 <div className="flex items-baseline gap-1.5">
-                  <span className="text-base sm:text-lg font-bold text-ecommerce-text-primary">${product.sellUnitPrice.toFixed(2)}</span>
+                  <span className="text-base sm:text-lg font-bold text-ecommerce-text-primary">{CurrencyViewer(product.sellUnitPrice,CONFIG.DEFAULT_CURRENCY)}</span>
                   {product.oldSellUnitPrice && product.oldSellUnitPrice > product.sellUnitPrice && (
-                    <span className="text-xs text-ecommerce-text-muted line-through">${product.oldSellUnitPrice.toFixed(2)}</span>
+                    <span className="text-xs text-ecommerce-text-muted line-through">{CurrencyViewer(product.oldSellUnitPrice,CONFIG.DEFAULT_CURRENCY)}</span>
                   )}
                 </div>
                 {savings > 0 && (

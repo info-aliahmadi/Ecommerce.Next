@@ -412,7 +412,7 @@ function QuickViewContent({ product, onClose }: { product: ProductDisplayModel; 
       } as CartItem);
     }
     toast.success(t('homepage.cart.itemAdded', { name: product.name }), {
-      description: `${t('homepage.quickView.quantity')}: ${quantity} × $${product.sellUnitPrice.toFixed(2)}`,
+      description: `${t('homepage.quickView.quantity')}: ${quantity} × ${CurrencyViewer(product.sellUnitPrice,CONFIG.DEFAULT_CURRENCY)}`,
       action: { label: t('homepage.common.addToCart'), onClick: () => useCartStore.getState().setCartOpen(true) },
     });
     // Show checkmark animation
@@ -632,10 +632,10 @@ function QuickViewContent({ product, onClose }: { product: ProductDisplayModel; 
 
           {/* Price */}
           <div className="flex items-baseline gap-3 mt-4">
-            <span className="text-3xl font-bold text-ecommerce-text-primary">${product.sellUnitPrice.toFixed(2)}</span>
+            <span className="text-3xl font-bold text-ecommerce-text-primary">{CurrencyViewer(product.sellUnitPrice,CONFIG.DEFAULT_CURRENCY)}</span>
             {product.oldSellUnitPrice > 0 && (
               <>
-                <span className="text-lg text-ecommerce-text-muted line-through">${product.oldSellUnitPrice.toFixed(2)}</span>
+                <span className="text-lg text-ecommerce-text-muted line-through">{CurrencyViewer(product.oldSellUnitPrice,CONFIG.DEFAULT_CURRENCY)}</span>
                 <Badge className="bg-ecommerce-emerald/10 text-ecommerce-emerald border-0 text-xs font-semibold">
                   {t('homepage.cart.savings')} ${(product.oldSellUnitPrice - product.sellUnitPrice).toFixed(2)}
                 </Badge>

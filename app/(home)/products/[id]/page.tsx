@@ -119,6 +119,14 @@ export default async function ProductDetailPage({
   }
 
   const t = await getTranslations('');
+  const now = new Date();
+
+  // Check if product is currently "new" based on date range
+  const isMarkAsNew = product.markAsNew && (() => {
+    if (product.markAsNewStartDateTimeUtc && new Date(product.markAsNewStartDateTimeUtc) > now) return false;
+    if (product.markAsNewEndDateTimeUtc && new Date(product.markAsNewEndDateTimeUtc) < now) return false;
+    return true;
+  })();
 
   // Build image list
   let images: string[] = product.imagePaths || [];
@@ -206,9 +214,16 @@ export default async function ProductDetailPage({
             <div className="lg:col-span-2">
               <div className="lg:sticky lg:top-24 space-y-4">
                 {/* Product Name - Server rendered */}
-                <h1 className="text-2xl sm:text-3xl font-bold text-ecommerce-text-primary leading-tight">
-                  {product.name}
-                </h1>
+                <div className="flex items-center gap-2 flex-wrap">
+                  <h1 className="text-2xl sm:text-3xl font-bold text-ecommerce-text-primary leading-tight">
+                    {product.name}
+                  </h1>
+                  {isMarkAsNew && (
+                    <Badge className="bg-ecommerce-emerald text-white text-xs font-semibold px-2.5 py-0.5 rounded-full">
+                      {t('homepage.common.newBadge')}
+                    </Badge>
+                  )}
+                </div>
 
                 {/* Rating - Server rendered */}
                 <ReviewSummary
@@ -308,12 +323,13 @@ export default async function ProductDetailPage({
 
                 {/* Quantity Selector (client for interactivity) */}
                 <QuantitySelector
+                  measureType={product.measureType}
+                  displayStockQuantity={product.displayStockQuantity}
                   maxQuantity={product.stockQuantity}
                   allowedQuantities={product.allowedQuantities}
                   orderMinimumQuantity={product.orderMinimumQuantity}
                   orderMaximumQuantity={product.orderMaximumQuantity}
                 />
-
                 {/* Product Actions (client for cart/wishlist) */}
                 <ProductActions product={product} />
               </div>

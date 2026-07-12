@@ -4,8 +4,12 @@ import { useState } from 'react';
 import { Button } from '../../../_components/ui/button';
 import { Minus, Plus } from 'lucide-react';
 import { useTranslations } from 'next-intl';
+import MeasureType from '@root/app/types/enums/MeasureType';
+import MeasureTypeViewer from '@root/utils/MeasureTypeViewer';
 
 interface QuantitySelectorProps {
+  measureType: MeasureType;
+  displayStockQuantity: boolean;
   maxQuantity: number;
   allowedQuantities?: boolean;
   orderMinimumQuantity?: number;
@@ -13,11 +17,13 @@ interface QuantitySelectorProps {
 }
 
 export default function QuantitySelector({
+  measureType,
   maxQuantity,
+  displayStockQuantity,
   allowedQuantities = false,
   orderMinimumQuantity = 1,
   orderMaximumQuantity = 9999,
-}: QuantitySelectorProps) {
+}: Readonly<QuantitySelectorProps>) {
   const minQty = allowedQuantities ? Math.max(1, orderMinimumQuantity) : 1;
   const effectiveMax = allowedQuantities
     ? Math.min(maxQuantity, orderMaximumQuantity)
@@ -53,9 +59,9 @@ export default function QuantitySelector({
         >
           <Plus size={16} />
         </Button>
-        {maxQuantity > 0 && (
+        {displayStockQuantity && maxQuantity > 0 && (
           <span className="ms-2 text-xs text-ecommerce-text-muted">
-            {maxQuantity} {t('homepage.common.remaining')}
+            {MeasureTypeViewer(maxQuantity, measureType)} {t('homepage.common.remaining')}
           </span>
         )}
       </div>

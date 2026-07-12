@@ -181,9 +181,9 @@ export default function ProductListCard({ product, index = 0 }: Readonly<Product
             {/* Bottom: Price + Actions */}
             <div className="flex items-center justify-between mt-auto pt-4 border-t border-ecommerce-border mt-4">
               <div className="flex items-baseline gap-2">
-                <span className="text-xl font-bold text-ecommerce-text-primary">${product.sellUnitPrice.toFixed(2)}</span>
+                <span className="text-xl font-bold text-ecommerce-text-primary">{CurrencyViewer(product.sellUnitPrice,CONFIG.DEFAULT_CURRENCY)}</span>
                 {product.oldSellUnitPrice && product.oldSellUnitPrice > product.sellUnitPrice && (
-                  <span className="text-sm text-ecommerce-text-muted line-through">${product.oldSellUnitPrice.toFixed(2)}</span>
+                  <span className="text-sm text-ecommerce-text-muted line-through">{CurrencyViewer(product.oldSellUnitPrice,CONFIG.DEFAULT_CURRENCY)}</span>
                 )}
               </div>
               <div className="flex items-center gap-2">

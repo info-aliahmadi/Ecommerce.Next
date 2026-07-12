@@ -12,6 +12,8 @@ import HomePageService from '../../_services/HomePageService';
 import { useQuery } from '@tanstack/react-query';
 import BundleDisplayModel from '../../_types/BundleDisplayModel';
 import { GetImage } from '../../_lib/utils';
+import CurrencyViewer from '@root/utils/CurrencyViewer';
+import CONFIG from '@root/config';
 
 
 function getBundleSavings(products: ProductDisplayModel[]) {
@@ -125,11 +127,11 @@ export function ProductBundles() {
                               </p>
                               <div className="flex items-center gap-2">
                                 <span className="text-sm font-semibold text-ecommerce-red">
-                                  ${product.sellUnitPrice.toFixed(2)}
+                                  {CurrencyViewer(product.sellUnitPrice,CONFIG.DEFAULT_CURRENCY)}
                                 </span>
                                 {product.oldSellUnitPrice != 0 && (
                                   <span className="text-[11px] text-ecommerce-text-muted line-through">
-                                    ${product.oldSellUnitPrice.toFixed(2)}
+                                    {CurrencyViewer(product.oldSellUnitPrice,CONFIG.DEFAULT_CURRENCY)}
                                   </span>
                                 )}
                               </div>
