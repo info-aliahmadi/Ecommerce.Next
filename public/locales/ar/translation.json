@@ -710,7 +710,8 @@
       "deliveryOneDay": "يوم واحد",
       "deliveryThreeDays": "٣ أيام",
       "deliveryOneWeek": "أسبوع واحد",
-      "deliveryOneMonth": "شهر واحد"
+      "deliveryOneMonth": "شهر واحد",
+      "notReturnable": "هذا المنتج غير قابل للإرجاع"
     },
     "profile": {
       "title": "حسابي",

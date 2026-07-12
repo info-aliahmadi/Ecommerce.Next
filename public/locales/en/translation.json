@@ -703,6 +703,8 @@
       "expressShippingDesc": "2-3 business days — $9.99",
       "returnPolicy": "30-Day Returns",
       "returnPolicyDesc": "Easy returns within 30 days of purchase",
+      "notReturnablePolicy": "Non-Returnable",
+      "notReturnableDesc": "This product is non-returnable",
       "secureCheckout": "Secure Checkout",
       "secureCheckoutDesc": "256-bit SSL encryption",
       "warranty": "1 Year Warranty",

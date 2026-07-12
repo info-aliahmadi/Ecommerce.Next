@@ -684,6 +684,8 @@
       "expressShippingDesc": "۲ تا ۳ روز کاری — ۹.۹۹ دلار",
       "returnPolicy": "بازگشت ۳۰ روزه",
       "returnPolicyDesc": "بازگشت آسان تا ۳۰ روز پس از خرید",
+      "notReturnableDesc": "بازگشت ۳۰ روزه",
+      "notReturnableDesc": "این محصول غیرقابل برگشت است",
       "secureCheckout": "پرداخت امن",
       "secureCheckoutDesc": "رمزنگاری SSL ۲۵۶ بیتی",
       "warranty": "گارانتی ۱ ساله",
