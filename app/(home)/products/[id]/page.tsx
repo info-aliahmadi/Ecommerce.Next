@@ -42,6 +42,7 @@ import {
   Calendar,
 } from 'lucide-react';
 import DeliveryDateType from '@root/app/types/enums/DeliveryDateType';
+import CurrencyViewer from '@root/utils/CurrencyViewer';
 
 // ── Server-side data fetch ─────────────────────────────
 async function getProduct(id: number): Promise<ProductDisplayModel | null> {
@@ -219,11 +220,11 @@ export default async function ProductDetailPage({
                 <div className="space-y-1">
                   <div className="flex items-baseline gap-3">
                     <span className="text-3xl font-bold text-ecommerce-text-primary">
-                      ${product.sellUnitPrice.toFixed(2)}
+                      {CurrencyViewer(product.sellUnitPrice, CONFIG.DEFAULT_CURRENCY)}
                     </span>
                     {product.oldSellUnitPrice && product.oldSellUnitPrice > product.sellUnitPrice && (
                       <span className="text-lg text-ecommerce-text-muted line-through">
-                        ${product.oldSellUnitPrice.toFixed(2)}
+                        {CurrencyViewer(product.oldSellUnitPrice, CONFIG.DEFAULT_CURRENCY)}
                       </span>
                     )}
                   </div>

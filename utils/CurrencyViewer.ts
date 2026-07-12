@@ -1,37 +1,48 @@
+import CurrencyTypes from "@root/app/types/enums/CurrencyTypes";
+
 export default function CurrencyViewer(
   value: number,
-  currency: string,
+  currency: CurrencyTypes,
 ): string | undefined {
   let result;
 
-  let dollar = new Intl.NumberFormat('en-US', {
+  const dollar = new Intl.NumberFormat('en-US', {
     style: 'currency',
     currency: 'USD',
   });
-  let euro = Intl.NumberFormat('en-DE', {style: 'currency', currency: 'EUR'});
-  let pounds = Intl.NumberFormat('en-GB', {style: 'currency', currency: 'GBP'});
-  let rial = new Intl.NumberFormat('fa-IRR');
-  let toman = new Intl.NumberFormat('fa-IRT');
+  const euro = new Intl.NumberFormat('en-DE', {
+    style: 'currency',
+    currency: 'EUR',
+  });
+  const dinar = new Intl.NumberFormat('ar-IQ', {
+    style: 'currency',
+    currency: 'IQD',
+  });
+  const rial = new Intl.NumberFormat('fa');
 
   switch (currency) {
-    case 'USD': {
+    case CurrencyTypes.Dollar: {
       result = dollar.format(value);
       break;
     }
-    case 'EUR': {
+    case CurrencyTypes.Euro: {
       result = euro.format(value);
       break;
     }
-    case 'GBP': {
-      result = pounds.format(value);
+    case CurrencyTypes.Dinar: {
+      result = dinar.format(value);
       break;
     }
-    case 'Rial': {
-      result = `ریال${rial.format(value)}`;
+    case CurrencyTypes.Rial: {
+      result = `${rial.format(value)} ریال`;
       break;
     }
-    case 'Toman': {
-      result = `تومان${toman.format(value)}`;
+    case CurrencyTypes.Toman: {
+      result = `${value} تومان`;
+      break;
+    }
+    case CurrencyTypes.None: {
+      result = value.toString();
       break;
     }
   }
