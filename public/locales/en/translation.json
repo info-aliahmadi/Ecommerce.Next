@@ -1404,6 +1404,12 @@
         "reservedQuantity": "Reserved Quantity",
         "buyUnitPrice": "Buy Unit Price"
       },
+      "variants": "Variants",
+      "variant": "Variant",
+      "addVariant": "Add Variant",
+      "removeVariant": "Remove Variant",
+      "sellPrice": "Sell Price",
+      "oldSellPrice": "Old Sell Price",
       "measureType": "Measure Type",
       "measureTypes": {
         "Kilogram": "Kilogram",
@@ -1768,6 +1774,7 @@
       "requiredMeasureType": "Measure Type is require",
       "requiredavailableStartDateTimeUtc": "Available Start Date is require",
       "requiredInventories": "Inventories is require",
+      "requiredVariants": "At least one variant is required",
       "requiredManufacturerIds": "ManufacturerIds is require"
     },
     "category": {

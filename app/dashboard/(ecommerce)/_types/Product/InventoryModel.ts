@@ -1,5 +1,5 @@
 /**
- * Represents product inventory information.
+ * Represents product inventory information for a variant.
  */
 export default interface InventoryModel {
   /**
@@ -8,33 +8,16 @@ export default interface InventoryModel {
   id: number;
 
   /**
-   * The ID of the associated product.
+   * The variantId of the associated product.
    */
-  productId: number;
-
+  variantId: number;
   /**
-   * The ID of the associated attribute (nullable).
-   */
-  attributeId: number | undefined;
-
-  /**
-   * The name of the associated attribute (nullable).
-   */
-  attributeName: string | undefined;
-
-  /**
-   * The quantity of stock.
+   * The stockQuantity of the associated product.
    */
   stockQuantity: number;
-
   /**
-   * The quantity of reserved stock.
+   * The reservedQuantity of the associated product.
    */
   reservedQuantity: number;
-
-  /**
-   * The unit price of buy stock.
-   */
-  buyUnitPrice: number;
 
 }

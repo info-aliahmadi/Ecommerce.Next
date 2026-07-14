@@ -1380,6 +1380,12 @@
         "reservedQuantity": "موجودی رزرو شده",
         "buyUnitPrice": "قیمت خرید"
       },
+      "variants": " variants",
+      "variant": " variant",
+      "addVariant": "افزودن variant",
+      "removeVariant": "حذف variant",
+      "sellPrice": "قیمت فروش",
+      "oldSellPrice": "قیمت فروش قدیم",
       "measureType": "نوع اندازه‌گیری",
       "measureTypes": {
         "Kilogram": "کیلوگرم",
@@ -1717,6 +1723,7 @@
       "requiredMeasureType": "نوع اندازه گیری محصول الزامی است",
       "requiredavailableStartDateTimeUtc": "تاریخ انتشار الزامی است",
       "requiredInventories": "موجودی محصول الزامی است",
+      "requiredVariants": "حداقل یک variant الزامی است",
       "requiredManufacturerIds": "تولیدکننده الزامی است"
     },
     "category": {

@@ -24,17 +24,17 @@ import ProductsService from '@dashboard/(ecommerce)/_service/ProductService';
 import StoreIcon from '@mui/icons-material/Store';
 import SettingsSuggestIcon from '@mui/icons-material/SettingsSuggest';
 import BookmarksIcon from '@mui/icons-material/Bookmarks';
-import InventoryIcon from '@mui/icons-material/Inventory';
+import StyleIcon from '@mui/icons-material/Style';
 import ProductBaseInfo from '@dashboard/(ecommerce)/_components/Product/ProductBaseInfo';
 import ProductSettings from '@dashboard/(ecommerce)/_components/Product/ProductSettings';
-import ProductInventory from '@dashboard/(ecommerce)/_components/Product/ProductInventory';
+import ProductVariants from '@dashboard/(ecommerce)/_components/Product/ProductVariants';
 import ProductSEO from '@dashboard/(ecommerce)/_components/Product/ProductSEO';
 import { useSession } from 'next-auth/react';
 
-import ProductModel, { StockType } from '@dashboard/(ecommerce)/_types/Product/ProductModel';
+import ProductModel from '@dashboard/(ecommerce)/_types/Product/ProductModel';
 import DeliveryDate from '@root/app/types/enums/DeliveryDateType';
 import CONFIG from '@root/config';
-import FileImageModel from '@root/app/types/FileImageModel';
+
 function TabPanel(props: any) {
   const { children, value, index, ...other } = props;
 
@@ -82,12 +82,9 @@ export default function AddOrEditProduct({ params }: Readonly<{ params: Promise<
     taxCategoryId: null,
     stockQuantity: 0,
     minStockQuantity: 0,
-    stockType: StockType.Total,
     notifyAdminForQuantityBelow: true,
     orderMinimumQuantity: 0,
     orderMaximumQuantity: 0,
-    oldSellUnitPrice: 0,
-    sellUnitPrice: 0,
     currencyType: CONFIG.DEFAULT_CURRENCY,
     measureType: CONFIG.DEFAULT_MEASURETYPE,
     availableStartDateTimeUtc: null,
@@ -117,7 +114,7 @@ export default function AddOrEditProduct({ params }: Readonly<{ params: Promise<
     images: [],
     relatedProductIds: [],
     attributeIds: [],
-    inventories: [],
+    variants: [],
     tagIds: [],
     createUserId: 0,
     imagePreviewId: 0,
@@ -180,16 +177,11 @@ export default function AddOrEditProduct({ params }: Readonly<{ params: Promise<
     }
   };
   const setFieldValue = (field: string, value: any): void => {
-    debugger
     // fill the field in product
     const updatedProduct: ProductModel = {
       ...product,       // Override with existing product data
       [field]: value     // Add the new field value
     };
-
-    if (field === 'stockType' && product.stockType !== value) {
-      updatedProduct.inventories = []; // Clear inventories if stockType changes
-    }
 
     setProduct(updatedProduct);
 
@@ -283,7 +275,7 @@ export default function AddOrEditProduct({ params }: Readonly<{ params: Promise<
               >
                 <Tab label="Base Info" icon={<StoreIcon />} iconPosition="start" {...a11yProps(0)} />
                 <Tab label="Settings" icon={<SettingsSuggestIcon />} iconPosition="start" {...a11yProps(1)} />
-                <Tab label="Inventory" icon={<InventoryIcon />} iconPosition="start" {...a11yProps(2)} />
+                <Tab label="Variants" icon={<StyleIcon />} iconPosition="start" {...a11yProps(2)} />
                 <Tab label="SEO" icon={<BookmarksIcon />} iconPosition="start" {...a11yProps(3)} />
               </Tabs>
               <TabPanel component="div" value={tab} index={0}>
@@ -307,10 +299,9 @@ export default function AddOrEditProduct({ params }: Readonly<{ params: Promise<
                 />
               </TabPanel>
               <TabPanel component="div" value={tab} index={2}>
-                <ProductInventory
+                <ProductVariants
                   operation={operation}
                   values={product}
-                  handleChange={handleChange}
                   setFieldValue={setFieldValue}
                   handleBlur={handleBlur}
                   errors={errors}

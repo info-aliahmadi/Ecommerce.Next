@@ -1,10 +1,10 @@
 import AuthorModel from "@root/app/dashboard/(cms)/_types/Article/AuthorModel";
 import FileUploadModel from "@root/app/dashboard/(filestorage)/_types/FileUploadModel";
-import InventoryModel from "./InventoryModel";
 import DeliveryDateType from "@root/app/types/enums/DeliveryDateType";
 import CurrencyTypes from "@root/app/types/enums/CurrencyTypes";
 import MeasureType from "@root/app/types/enums/MeasureType";
 import FileImageModel from "@root/app/types/FileImageModel";
+import ProductVariantModel from "./ProductVariantModel";
 /**
  * Represents a product.
  */
@@ -118,17 +118,6 @@ export default interface ProductModel {
    * The maximum order quantity.
    */
   orderMaximumQuantity: number;
-
-  /**
-   * The price of the product.
-   */
-  sellUnitPrice: number;
-
-
-  /**
-   * The old price of the product.
-   */
-  oldSellUnitPrice: number;
 
   /**
    * The type of the currency.
@@ -271,23 +260,18 @@ export default interface ProductModel {
   updatedOnUtc: Date | null;
 
   /**
-   * The stock type.
-   */
-  stockType: StockType;
-
-  /**
    * The quantity of stock.
    */
   stockQuantity: number | null;
-
   /**
-   * The minimum stock quantity.
+   * The minimum stock quantity (product-level setting).
    */
   minStockQuantity: number;
+
   /**
-   * The product inventories.
+   * The product variants.
    */
-  inventories: InventoryModel[];
+  variants: ProductVariantModel[];
 
   /**
    * The IDs of the categories the product belongs to.
@@ -308,7 +292,6 @@ export default interface ProductModel {
    * The names of the manufacturers the product belongs to.
    */
   manufacturerNames: string[];
-
   /**
    * The IDs of the attributes the product has.
    */
@@ -318,8 +301,6 @@ export default interface ProductModel {
    * The names of the attributes the product has.
    */
   attributeNames: string[];
-
-
   /**
    * The images associated with the product.
    */
@@ -339,9 +320,4 @@ export default interface ProductModel {
    * The IDs of tags associated with the product.
    */
   tagIds: number[];
-}
-
-export enum StockType {
-  Total = 0,
-  PerAttribute = 1
 }

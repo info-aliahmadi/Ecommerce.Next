@@ -96,18 +96,26 @@ export default function ProductDataGrid() {
         // filterVariant: 'text' | 'select' | 'multi-select' | 'range' | 'range-slider' | 'checkbox',
       },
       {
-        accessorKey: 'stockQuantity',
+        accessorKey: 'variants',
         header: t(fieldsName + 'stockQuantity'),
         enableClickToCopy: true,
         type: 'number',
-        enableResizing: true
+        enableResizing: true,
+        Cell: ({ row }) => {
+          const totalStock = row.original.variants?.reduce((sum, v) => sum + (v.productInventory?.stockQuantity || 0), 0) || 0;
+          return totalStock;
+        }
       },
       {
-        accessorKey: 'sellUnitPrice',
-        header: t(fieldsName + 'sellUnitPrice'),
+        accessorKey: 'variants',
+        header: t(fieldsName + 'sellPrice'),
         type: 'number',
         enableResizing: true,
-        Cell: ({ renderedCellValue, row }) => (renderedCellValue as number).toCurrency(row.original.currencyType)
+        Cell: ({ row }) => {
+          const firstVariant = row.original.variants?.[0];
+          const price = firstVariant?.sellPrice || 0;
+          return price.toCurrency(row.original.currencyType);
+        }
       },
       {
         accessorKey: 'published',

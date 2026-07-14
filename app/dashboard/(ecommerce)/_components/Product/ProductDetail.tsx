@@ -1,11 +1,10 @@
 import { ImageNotSupported } from "@mui/icons-material";
-import { Avatar, Box, Chip, FormControlLabel, Grid, InputLabel, MenuItem, OutlinedInput, Select, Stack, Switch, TextField } from "@mui/material";
+import { Avatar, Box, Chip, FormControlLabel, Grid, InputLabel, MenuItem, OutlinedInput, Select, Stack, Switch, TextField, Typography } from "@mui/material";
 
 import Accordion from '@mui/material/Accordion';
 import AccordionSummary from '@mui/material/AccordionSummary';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import SelectProductAttribute from "../ProductAttribute/SelectProductAttribute";
 import { useTranslations } from 'next-intl';
 import CONFIG from '@root/config';
 import ProductModel from '../../_types/Product/ProductModel';
@@ -19,27 +18,6 @@ export default function ProductDetail({ row }: { row: MRT_Row<ProductModel> }) {
     const fieldsName = 'fields.product.';
     let language = nextIntlService.getNextIntlLocale();
 
-    function AttributeInventory({ invenroty }: { invenroty: any }) {
-
-        return <Grid container spacing={1} size={12} >
-            <Grid size={{ xs: 4, sm: 4, md: 3, lg: 3, xl: 3 }} sx={{ p: 2 }}>
-                <Stack>
-                    <Chip label={invenroty.attributeName}></Chip>
-                </Stack>
-            </Grid>
-            <Grid size={{ xs: 8, sm: 8, md: 6, lg: 5, xl: 5 }}>
-                <Stack>
-                    <TextField
-                        disabled
-                        type="number"
-                        value={invenroty.stockQuantity || 0}
-                        label={t(fieldsName + 'stockQuantity')}
-                        fullWidth
-                    />
-                </Stack>
-            </Grid>
-        </Grid>
-    }
     return (
         <Grid container spacing={3} direction="row">
             <Grid container spacing={3} size={{ xs: 12, sm: 6, md: 3, lg: 3, xl: 3 }} direction="row" sx={{ justifyContent: "center", alignItems: "center" }}>
@@ -126,13 +104,13 @@ export default function ProductDetail({ row }: { row: MRT_Row<ProductModel> }) {
                             <Grid size={{ xs: 12, sm: 12, md: 4, lg: 4, xl: 4 }}>
                                 <Stack spacing={1}>
                                     <InputLabel htmlFor="price">{t(fieldsName + 'price')}</InputLabel>
-                                    <OutlinedInput id="price" type="text" value={row.original.sellUnitPrice.toCurrency(row.original.currencyType)} fullWidth disabled />
+                                    <OutlinedInput id="price" type="text" value={row.original.variants?.[0]?.sellPrice?.toCurrency(row.original.currencyType) || 'N/A'} fullWidth disabled />
                                 </Stack>
                             </Grid>
                             <Grid size={{ xs: 12, sm: 12, md: 4, lg: 4, xl: 4 }}>
                                 <Stack spacing={1}>
                                     <InputLabel htmlFor="oldPrice">{t(fieldsName + 'oldPrice')}</InputLabel>
-                                    <OutlinedInput id="oldPrice" type="text" value={row.original.oldSellUnitPrice.toCurrency(row.original.currencyType)} fullWidth disabled />
+                                    <OutlinedInput id="oldPrice" type="text" value={row.original.variants?.[0]?.oldSellPrice?.toCurrency(row.original.currencyType) || 'N/A'} fullWidth disabled />
                                 </Stack>
                             </Grid>
                             <Grid size={{ xs: 12, sm: 12, md: 4, lg: 4, xl: 4 }}>
@@ -227,7 +205,7 @@ export default function ProductDetail({ row }: { row: MRT_Row<ProductModel> }) {
                                     />
                                 </Stack>
                             </Grid>
-                            <Grid size={{ xs: 12, sm: 12, md: 4, lg: 4, xl: 4 }}>
+                                   <Grid size={{ xs: 12, sm: 12, md: 4, lg: 4, xl: 4 }}>
                                 <Stack spacing={1}>
                                     <InputLabel htmlFor="attributeNames">{t(fieldsName + 'attributeIds')}</InputLabel>
                                     <Select
@@ -255,6 +233,12 @@ export default function ProductDetail({ row }: { row: MRT_Row<ProductModel> }) {
                                     </Select>
                                 </Stack>
                             </Grid>
+                            <Grid size={{ xs: 12, sm: 12, md: 4, lg: 4, xl: 4 }}>
+                                <Stack spacing={1}>
+                                    <InputLabel htmlFor="variantCount">{t(fieldsName + 'variants.title')}</InputLabel>
+                                    <OutlinedInput id="variantCount" type="text" value={row.original.variants?.length || 0} fullWidth disabled />
+                                </Stack>
+                            </Grid>
                         </Grid>
                     </AccordionDetails>
                 </Accordion>
@@ -264,55 +248,54 @@ export default function ProductDetail({ row }: { row: MRT_Row<ProductModel> }) {
                         aria-controls="panel1-content"
                         id="panel1-header"
                     >
-                        Inventory
+                        Variants
                     </AccordionSummary>
                     <AccordionDetails>
                         <Grid container spacing={3}>
-                            <Grid size={{ xs: 12, sm: 12, md: 3, lg: 3, xl: 3 }} >
-                                <Stack>
-                                    <InputLabel htmlFor="stockQuantity">{t(fieldsName + 'stockQuantity')}</InputLabel>
-                                    <OutlinedInput id="stockQuantity" type="text" value={row.original.stockQuantity} fullWidth disabled />
-                                </Stack>
-                            </Grid>
-
-                            <Grid size={{ xs: 12, sm: 12, md: 3, lg: 3, xl: 3 }}>
-                                <Stack>
-                                    <InputLabel htmlFor="minStockQuantity">{t(fieldsName + 'minStockQuantity')}</InputLabel>
-                                    <OutlinedInput id="minStockQuantity" type="text" value={row.original.minStockQuantity} fullWidth disabled />
-                                </Stack>
-                            </Grid>
-                            <Grid size={{ xs: 12, sm: 12, md: 3, lg: 3, xl: 3 }}>
-                                <Stack>
-
-                                    <InputLabel htmlFor="orderMinimumQuantity">{t(fieldsName + 'orderMinimumQuantity')}</InputLabel>
-                                    <OutlinedInput id="orderMinimumQuantity" type="text" value={row.original.orderMinimumQuantity} fullWidth disabled />
-                                </Stack>
-                            </Grid>
-                            <Grid size={{ xs: 12, sm: 12, md: 3, lg: 3, xl: 3 }}>
-                                <Stack>
-                                    <InputLabel htmlFor="orderMaximumQuantity">{t(fieldsName + 'orderMaximumQuantity')}</InputLabel>
-                                    <OutlinedInput id="orderMaximumQuantity" type="text" value={row.original.orderMaximumQuantity} fullWidth disabled />
-                                </Stack>
-                            </Grid>
-                            {/* <Grid size={{ xs: 12, sm: 12, md: 12, lg: 12, xl: 12 }}>
-                                <Stack>
-                                    <SelectProductAttribute
-                                        id="attributeIds"
-                                        name="attributeIds"
-                                        label={t(fieldsName + 'attributeIds')}
-                                        disabled={true}
-                                        defaultValues={row.original?.inventories?.filter(x => x.stockType == 1).map(x => x.attributeId) || []}
-                                        onChange={() => { }}
-                                        setFieldValue={() => { }}
-                                        error={false}
-                                    />
-                                </Stack>
-                                <Stack>
-                                    <Grid container spacing={1} size={12} sx={{ pt: 3 }}>
-                                        {row.original?.inventories?.filter(x => x.stockType == 1).map((item, index) => <AttributeInventory key={index} invenroty={item} />)}
-                                    </Grid>
-                                </Stack>
-                            </Grid> */}
+                            {row.original.variants?.map((variant, index) => (
+                                <Grid size={12} key={variant.id || index}>
+                                    <Box sx={{ p: 2, border: '1px solid #e0e0e0', borderRadius: 1 }}>
+                                        <Typography variant="subtitle2" sx={{ mb: 1 }}>
+                                            Variant #{index + 1} {variant.sku && `- ${variant.sku}`}
+                                        </Typography>
+                                        <Grid container spacing={2}>
+                                            <Grid size={{ xs: 12, sm: 6, md: 3 }}>
+                                                <Stack>
+                                                    <InputLabel>{t(fieldsName + 'sellPrice')}</InputLabel>
+                                                    <OutlinedInput type="text" value={variant.sellPrice || 0} fullWidth disabled />
+                                                </Stack>
+                                            </Grid>
+                                            <Grid size={{ xs: 12, sm: 6, md: 3 }}>
+                                                <Stack>
+                                                    <InputLabel>{t(fieldsName + 'oldSellPrice')}</InputLabel>
+                                                    <OutlinedInput type="text" value={variant.oldSellPrice || 0} fullWidth disabled />
+                                                </Stack>
+                                            </Grid>
+                                            <Grid size={{ xs: 12, sm: 6, md: 3 }}>
+                                                <Stack>
+                                                    <InputLabel>{t(fieldsName + 'inventory.stockQuantity')}</InputLabel>
+                                                    <OutlinedInput type="text" value={variant.productInventory?.stockQuantity || 0} fullWidth disabled />
+                                                </Stack>
+                                            </Grid>
+                                            <Grid size={{ xs: 12, sm: 6, md: 3 }}>
+                                                <Stack>
+                                                    <InputLabel>{t(fieldsName + 'inventory.reservedQuantity')}</InputLabel>
+                                                    <OutlinedInput type="text" value={variant.productInventory?.reservedQuantity || 0} fullWidth disabled />
+                                                </Stack>
+                                            </Grid>
+                                            {variant.productAttributes?.length > 0 && (
+                                                <Grid size={12}>
+                                                    <Stack direction="row" spacing={1} sx={{ flexWrap: 'wrap', gap: 0.5 }}>
+                                                        {variant.productAttributes.map((attr) => (
+                                                            <Chip key={attr.id} label={`${attr.name}: ${attr.value}`} size="small" />
+                                                        ))}
+                                                    </Stack>
+                                                </Grid>
+                                            )}
+                                        </Grid>
+                                    </Box>
+                                </Grid>
+                            ))}
 
                             <Grid size={{ xs: 12, sm: 12, md: 4, lg: 4, xl: 4 }}>
                                 <Stack>
