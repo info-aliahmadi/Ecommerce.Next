@@ -1404,8 +1404,21 @@
         "reservedQuantity": "Reserved Quantity",
         "buyUnitPrice": "Buy Unit Price"
       },
-      "variants": "Variants",
-      "variant": "Variant",
+      "variants": {
+        "title": "Variants",
+        "addVariant": "Add Variant",
+        "noVariants": "No variants yet",
+        "variant": "Variant {index}",
+        "sku": "SKU",
+        "sellPrice": "Sell Price",
+        "oldSellPrice": "Old Sell Price",
+        "attributeIds": "Attributes",
+        "inventory": {
+          "stockQuantity": "Stock Quantity",
+          "reservedQuantity": "Reserved Quantity",
+          "sellUnitPrice": "Sell Unit Price"
+        }
+      },
       "addVariant": "Add Variant",
       "removeVariant": "Remove Variant",
       "sellPrice": "Sell Price",
@@ -1639,7 +1652,10 @@
       "edit": "Edit Product",
       "draft": "Save as Draft",
       "delete": "Delete Product",
-      "saveOrder": "Save Order"
+      "saveOrder": "Save Order",
+      "variants": {
+        "addVariant": "Add Variant"
+      }
     },
     "category": {
       "save": "Save",

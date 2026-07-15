@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { useState, useEffect } from 'react';
 import { Chip, FormControl, MenuItem, OutlinedInput, Select, InputLabel, Box, useTheme, Theme } from '@mui/material';
-import { } from '@mui/system';
 import Result from '@root/app/types/Result';
 
 
@@ -11,7 +10,7 @@ interface MultiSelectProps {
   readonly name: string;
   readonly label: string;
   readonly optionLabel: string;
-  readonly setFieldValue: (field: string, value: any) => void;
+  readonly setFieldValue?: (field: string, value: any) => void;
   readonly onChange?: (event: React.ChangeEvent<{ value: unknown }>, options: any[]) => void;
   readonly error?: boolean;
   readonly disabled?: boolean;
@@ -64,7 +63,9 @@ export default function MultiSelect({
     if (onChange) {
       onChange(event, options);
     } else {
-      setFieldValue(id, event.target.value);
+      if  (setFieldValue) {
+        setFieldValue(id, event.target.value);
+      }
       setValues(event.target.value);
     }
   };

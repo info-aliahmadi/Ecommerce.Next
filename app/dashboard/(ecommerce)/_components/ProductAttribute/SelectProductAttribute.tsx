@@ -9,7 +9,7 @@ interface SelectProductAttributeProps {
   name: string;
   label: string;
   onChange?: (event: React.ChangeEvent<{ value: unknown }>, options: any[]) => void;
-  setFieldValue: (field: string, value: any) => void;
+  setFieldValue?: (field: string, value: any) => void;
   error: boolean;
   disabled: boolean
 }
