@@ -14,10 +14,10 @@ const Palette = (mode : 'light' | 'dark' | undefined) : any => {
 
   const greyPrimary =
     mode == 'light'
-      ? ['#ffffff', '#fafafa', '#f5f5f5', '#f0f0f0', '#d9d9d9', '#bfbfbf', '#8c8c8c', '#595959', '#262626', '#141414', '#000000']
+      ? ['#ffffff', '#fafafa', '#f5f5f5', '#f0f0f0', '#d9d9d9', '#8e8e8e', '#8c8c8c', '#595959', '#262626', '#141414', '#000000']
       : ['#1a1a1a', '#202020', '#222222', '#303030', '#727272', '#999999', '#c0c0c0', '#b4b4b4', '#bfbfbf', '#f0f0f0', '#f8f8f8'];
 
-  const greyAscent = mode == 'light' ? ['#fafafa', '#bfbfbf', '#434343', '#1f1f1f'] : ['#2c2c2c', '#999999', '#f8f8f8', '#DDDDDD'];
+  const greyAscent = mode == 'light' ? ['#fafafa', '#8e8e8e', '#434343', '#1f1f1f'] : ['#2c2c2c', '#999999', '#f8f8f8', '#DDDDDD'];
   const greyConstant = mode == 'light' ? ['#fafafb', '#e6ebf1'] : ['#1e1e1e', '#1f1f1f'];
 
   colors.grey = [...greyPrimary, ...greyAscent, ...greyConstant];

@@ -30,28 +30,28 @@ export default interface ProductModel {
   /**
    * The user who created the product.
    */
-  createUser?: AuthorModel | null;
+  createUser?: AuthorModel | undefined;
 
   /**
-   * The ID of the user who last updated the product (nullable).
+   * The ID of the user who last updated the product (undefinedable).
    */
-  updateUserId?: number | null;
+  updateUserId?: number | undefined;
 
   /**
-   * The user who last updated the product (nullable).
+   * The user who last updated the product (undefinedable).
    */
-  updateUser?: AuthorModel | null;
+  updateUser?: AuthorModel | undefined;
 
 
   /**
-   * The ID of the preview image (nullable).
+   * The ID of the preview image (undefinedable).
    */
-  imagePreviewId?: number | null;
+  imagePreviewId?: number | undefined;
 
   /**
-   * The preview image (nullable).
+   * The preview image (undefinedable).
    */
-  imagePreview?: FileUploadModel | null;
+  imagePreview?: FileUploadModel | undefined;
 
   /**
    * Meta keywords for SEO.
@@ -89,14 +89,9 @@ export default interface ProductModel {
   deliveryDateType: DeliveryDateType;
 
   /**
-   * The name of the delivery date.
-   */
-  deliveryDateName: string;
-
-  /**
    * The ID of the tax category.
    */
-  taxCategoryId: number | null;
+  taxCategoryId: number | undefined;
 
   /**
    * The name of the tax category.
@@ -130,14 +125,14 @@ export default interface ProductModel {
   measureType: MeasureType;
 
   /**
-   * The start date and time the product is available (nullable, UTC).
+   * The start date and time the product is available (undefinedable, UTC).
    */
-  availableStartDateTimeUtc: Date | null;
+  availableStartDateTimeUtc: Date | undefined;
 
   /**
-   * The end date and time the product is available (nullable, UTC).
+   * The end date and time the product is available (undefinedable, UTC).
    */
-  availableEndDateTimeUtc: Date | null;
+  availableEndDateTimeUtc: Date | undefined;
 
   /**
    * The display order of the product.
@@ -175,14 +170,14 @@ export default interface ProductModel {
   markAsNew: boolean;
 
   /**
-   * The start date and time the product is marked as new (nullable, UTC).
+   * The start date and time the product is marked as new (undefinedable, UTC).
    */
-  markAsNewStartDateTimeUtc: Date | null;
+  markAsNewStartDateTimeUtc: Date | undefined;
 
   /**
-   * The end date and time the product is marked as new (nullable, UTC).
+   * The end date and time the product is marked as new (undefinedable, UTC).
    */
-  markAsNewEndDateTimeUtc: Date | null;
+  markAsNewEndDateTimeUtc: Date | undefined;
 
   /**
    * Indicates whether the product is not returnable.
@@ -255,14 +250,14 @@ export default interface ProductModel {
   createdOnUtc: Date;
 
   /**
-   * The date and time the product was last updated (nullable, UTC).
+   * The date and time the product was last updated (undefinedable, UTC).
    */
-  updatedOnUtc: Date | null;
+  updatedOnUtc: Date | undefined;
 
   /**
    * The quantity of stock.
    */
-  stockQuantity: number | null;
+  stockQuantity: number | undefined;
   /**
    * The minimum stock quantity (product-level setting).
    */

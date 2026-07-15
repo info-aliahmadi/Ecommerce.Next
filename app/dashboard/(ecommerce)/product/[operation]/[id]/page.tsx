@@ -65,7 +65,7 @@ export default function AddOrEditProduct({ params }: Readonly<{ params: Promise<
   const { id, operation } = React.use(params);
 
   const { data: session } = useSession();
-
+  let datetimeNow = new Date();
   const jwt = session?.accessToken;
   let productService = new ProductsService(jwt ?? '');
   const initProduct: ProductModel = {
@@ -79,7 +79,7 @@ export default function AddOrEditProduct({ params }: Readonly<{ params: Promise<
     fullDescription: '',
     adminComment: '',
     deliveryDateType: DeliveryDate.ThreeDays,
-    taxCategoryId: null,
+    taxCategoryId: undefined,
     stockQuantity: 0,
     minStockQuantity: 0,
     notifyAdminForQuantityBelow: true,
@@ -87,12 +87,12 @@ export default function AddOrEditProduct({ params }: Readonly<{ params: Promise<
     orderMaximumQuantity: 0,
     currencyType: CONFIG.DEFAULT_CURRENCY,
     measureType: CONFIG.DEFAULT_MEASURETYPE,
-    availableStartDateTimeUtc: null,
-    availableEndDateTimeUtc: null,
+    availableStartDateTimeUtc: datetimeNow,
+    availableEndDateTimeUtc: undefined,
     hasDiscountsApplied: false,
     markAsNew: false,
-    markAsNewStartDateTimeUtc: null,
-    markAsNewEndDateTimeUtc: null,
+    markAsNewStartDateTimeUtc: undefined,
+    markAsNewEndDateTimeUtc: undefined,
     notReturnable: true,
     allowedQuantities: false,
     isTaxExempt: true,
@@ -105,10 +105,10 @@ export default function AddOrEditProduct({ params }: Readonly<{ params: Promise<
     availableForPreOrder: false,
     callForPrice: false,
     published: false,
-    createdOnUtc: new Date(),
-    updatedOnUtc: new Date(),
-    createUser: null,
-    updateUser: null,
+    createdOnUtc: datetimeNow,
+    updatedOnUtc: datetimeNow,
+    createUser: undefined,
+    updateUser: undefined,
     categoryIds: [],
     manufacturerIds: [],
     images: [],

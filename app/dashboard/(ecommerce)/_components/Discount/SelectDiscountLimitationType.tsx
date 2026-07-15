@@ -30,16 +30,16 @@ const SelectDiscountLimitationType: React.FC<SelectDiscountLimitationTypeProps> 
   };
 
   const discountLimitationTypeLabels = {
-    Unlimited: t('fields.discount.discountLimitationTypes.Unlimited'),
-    NTimesOnly: t('fields.discount.discountLimitationTypes.NTimesOnly'),
-    NTimesPerCustomer: t('fields.discount.discountLimitationTypes.NTimesPerCustomer')
+    [DiscountLimitationType.Unlimited]: t('fields.discount.discountLimitationTypes.Unlimited'),
+    [DiscountLimitationType.NTimesOnly]: t('fields.discount.discountLimitationTypes.NTimesOnly'),
+    [DiscountLimitationType.NTimesPerCustomer]: t('fields.discount.discountLimitationTypes.NTimesPerCustomer')
   };
 
   return (
     <FormControl error={error} key={id} fullWidth>
       <InputLabel id={`${id}-label`}>{label}</InputLabel>
       <EnumDropdown
-        defaultValue={defaultValue ?? null}
+        defaultValue={defaultValue ?? 0}
         enumObject={DiscountLimitationType}
         disabled={disabled}
         customLabels={discountLimitationTypeLabels}

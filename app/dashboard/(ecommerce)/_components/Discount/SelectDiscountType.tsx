@@ -30,19 +30,19 @@ const SelectDiscountType: React.FC<SelectDiscountTypeProps> = ({
   };
 
   const discountTypeLabels = {
-    AssignedToOrderTotal: t('fields.discount.discountTypes.AssignedToOrderTotal'),
-    AssignedToSkus: t('fields.discount.discountTypes.AssignedToSkus'),
-    AssignedToCategories: t('fields.discount.discountTypes.AssignedToCategories'),
-    AssignedToManufacturers: t('fields.discount.discountTypes.AssignedToManufacturers'),
-    AssignedToShipping: t('fields.discount.discountTypes.AssignedToShipping'),
-    AssignedToOrderSubTotal: t('fields.discount.discountTypes.AssignedToOrderSubTotal')
+    [DiscountType.AssignedToOrderTotal]: t('fields.discount.discountTypes.AssignedToOrderTotal'),
+    [DiscountType.AssignedToSkus]: t('fields.discount.discountTypes.AssignedToSkus'),
+    [DiscountType.AssignedToCategories]: t('fields.discount.discountTypes.AssignedToCategories'),
+    [DiscountType.AssignedToManufacturers]: t('fields.discount.discountTypes.AssignedToManufacturers'),
+    [DiscountType.AssignedToShipping]: t('fields.discount.discountTypes.AssignedToShipping'),
+    [DiscountType.AssignedToOrderSubTotal]: t('fields.discount.discountTypes.AssignedToOrderSubTotal')
   };
 
   return (
     <FormControl error={error} key={id} fullWidth>
       <InputLabel id={`${id}-label`}>{label}</InputLabel>
       <EnumDropdown
-        defaultValue={defaultValue ?? null}
+        defaultValue={defaultValue ?? 0}
         enumObject={DiscountType}
         disabled={disabled}
         customLabels={discountTypeLabels}

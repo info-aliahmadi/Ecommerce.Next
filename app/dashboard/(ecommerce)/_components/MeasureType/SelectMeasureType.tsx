@@ -30,13 +30,13 @@ const SelectMeasureType: React.FC<SelectMeasureTypeProps> = ({
   };
 
   const measureTypeLabels = {
-    Kilogram: t("fields.product.measureTypes.Kilogram"),
-    Number: t("fields.product.measureTypes.Number"),
-    Box: t("fields.product.measureTypes.Box"),
-    Meter: t("fields.product.measureTypes.Meter"),
-    Litr: t("fields.product.measureTypes.Litr"),
-    Gram: t("fields.product.measureTypes.Gram"),
-    Mesghal: t("fields.product.measureTypes.Mesghal")
+    [MeasureType.Kilogram]: t("fields.product.measureTypes.Kilogram"),
+    [MeasureType.Number]: t("fields.product.measureTypes.Number"),
+    [MeasureType.Box]: t("fields.product.measureTypes.Box"),
+    [MeasureType.Meter]: t("fields.product.measureTypes.Meter"),
+    [MeasureType.Litr]: t("fields.product.measureTypes.Litr"),
+    [MeasureType.Gram]: t("fields.product.measureTypes.Gram"),
+    [MeasureType.Mesghal]: t("fields.product.measureTypes.Mesghal")
   };
   return (
     <FormControl error={error} key={id} fullWidth>

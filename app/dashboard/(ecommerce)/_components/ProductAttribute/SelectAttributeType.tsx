@@ -30,17 +30,17 @@ const SelectAttributeType: React.FC<SelectAttributeTypeProps> = ({
   };
 
   const attributeLabels: Record<string, string> = {
-    Color: t('fields.productAttribute.attributeTypes.Color'),
-    Size: t('fields.productAttribute.attributeTypes.Size'),
-    Weight: t('fields.productAttribute.attributeTypes.Weight'),
-    Length: t('fields.productAttribute.attributeTypes.Length'),
-    Width: t('fields.productAttribute.attributeTypes.Width'),
-    Height: t('fields.productAttribute.attributeTypes.Height'),
-    Material: t('fields.productAttribute.attributeTypes.Material'),
-    Style: t('fields.productAttribute.attributeTypes.Style'),
-    Pattern: t('fields.productAttribute.attributeTypes.Pattern'),
-    Brand: t('fields.productAttribute.attributeTypes.Brand'),
-    Model: t('fields.productAttribute.attributeTypes.Model'),
+    [AttributeTypes.Color]: t('fields.productAttribute.attributeTypes.Color'),
+    [AttributeTypes.Size]: t('fields.productAttribute.attributeTypes.Size'),
+    [AttributeTypes.Weight]: t('fields.productAttribute.attributeTypes.Weight'),
+    [AttributeTypes.Length]: t('fields.productAttribute.attributeTypes.Length'),
+    [AttributeTypes.Width]: t('fields.productAttribute.attributeTypes.Width'),
+    [AttributeTypes.Height]: t('fields.productAttribute.attributeTypes.Height'),
+    [AttributeTypes.Material]: t('fields.productAttribute.attributeTypes.Material'),
+    [AttributeTypes.Style]: t('fields.productAttribute.attributeTypes.Style'),
+    [AttributeTypes.Pattern]: t('fields.productAttribute.attributeTypes.Pattern'),
+    [AttributeTypes.Brand]: t('fields.productAttribute.attributeTypes.Brand'),
+    [AttributeTypes.Model]: t('fields.productAttribute.attributeTypes.Model'),
   };
   return (
     <FormControl error={error} key={name} fullWidth>

@@ -2,7 +2,7 @@ import React, { useMemo } from 'react';
 import { Select, MenuItem, SelectChangeEvent } from '@mui/material';
 
 interface EnumDropdownProps {
-  defaultValue: number | undefined;
+  defaultValue?: number | undefined;
   enumObject: any;
   disabled?: boolean;
   onChange: (newValue: number | null) => void;
@@ -20,41 +20,26 @@ const EnumDropdown: React.FC<EnumDropdownProps> = ({
   noneOptionLabel = '-',
   customLabels = null,
 }) => {
-  const handleChange = (event: SelectChangeEvent<string>) => {
-    const selectedKey = event.target.value as string;
-
-    if (selectedKey === 'none') {
+  const handleChange = (event: SelectChangeEvent<number>) => {
+    const selectedKey = parseInt(event.target.value as unknown as string);
+    if (selectedKey === 0) {
       onChange(null);
     } else {
-      const numericValue = enumObject[selectedKey]; // Map key back to numeric value
-      onChange(numericValue);
+      onChange(selectedKey);
     }
   };
 
-  // Filter out numeric keys
-  const enumKeys = Object.keys(enumObject).filter((key) => isNaN(Number(key)));
-
-  // Map defaultValue number to corresponding enum key
-  const defaultKey = defaultValue !== undefined ? enumKeys.find((key) => enumObject[key] === defaultValue) : undefined;
-  const getDisplayLabel = useMemo(() => {
-    return (customLabel: any | null, key: string) => {
-
-      // Use the enum key directly to look up in customLabels
-      let label = customLabel ? customLabel[key] : key;
-      return label;
-    };
-  }, [customLabels]);
 
   return (
-    <Select value={defaultKey || ""} onChange={handleChange} fullWidth disabled={disabled}>
+    <Select value={defaultValue || 0} onChange={handleChange} fullWidth disabled={disabled}>
       {showNoneOption && (
         <MenuItem value="">
           <em>{noneOptionLabel}</em>
         </MenuItem>
       )}
-      {enumKeys.map((key) => (
+      {customLabels && Object.keys(customLabels).map((key) => (
         <MenuItem key={key} value={key}>
-          {getDisplayLabel(customLabels, key)}
+          {customLabels[key]}
         </MenuItem>
       ))}
     </Select>

@@ -30,18 +30,19 @@ const SelectCurrency: React.FC<SelectCurrencyProps> = ({
   };
 
   // Create filtered enum object with only Cash and Debit
-  const currencyLabels: Record<string, string> = {
-    Rial: t("fields.siteSetting.currencyTypes.Rial"),
-    Toman: t("fields.siteSetting.currencyTypes.Toman"),
-    Dollar: t("fields.siteSetting.currencyTypes.Dollar"),
-    Euro: t("fields.siteSetting.currencyTypes.Euro"),
-    Dinar: t("fields.siteSetting.currencyTypes.Dinar")
+  const currencyLabels: Record<number, string> = {
+    [CurrencyTypes.Rial]: t("fields.siteSetting.currencyTypes.Rial"),
+    [CurrencyTypes.Toman]: t("fields.siteSetting.currencyTypes.Toman"),
+    [CurrencyTypes.Dollar]: t("fields.siteSetting.currencyTypes.Dollar"),
+    [CurrencyTypes.Euro]: t("fields.siteSetting.currencyTypes.Euro"),
+    [CurrencyTypes.Dinar]: t("fields.siteSetting.currencyTypes.Dinar")
   };
+
   return (
     <FormControl error={error} key={id} fullWidth>
       <InputLabel id={`${id}-label`}>{label}</InputLabel>
       <EnumDropdown
-        defaultValue={defaultValue || null}
+        defaultValue={defaultValue || 0}
         enumObject={CurrencyTypes}
         customLabels={currencyLabels}
         onChange={handleChange}
