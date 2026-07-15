@@ -273,10 +273,10 @@ export default function AddOrEditProduct({ params }: Readonly<{ params: Promise<
                 variant="scrollable"
                 scrollButtons="auto"
               >
-                <Tab label="Base Info" icon={<StoreIcon />} iconPosition="start" {...a11yProps(0)} />
-                <Tab label="Settings" icon={<SettingsSuggestIcon />} iconPosition="start" {...a11yProps(1)} />
-                <Tab label="Variants" icon={<StyleIcon />} iconPosition="start" {...a11yProps(2)} />
-                <Tab label="SEO" icon={<BookmarksIcon />} iconPosition="start" {...a11yProps(3)} />
+                <Tab label={t("fields.product.tabs.baseInfo")} icon={<StoreIcon />} iconPosition="start" {...a11yProps(0)} />
+                <Tab label={t("fields.product.tabs.settings")} icon={<SettingsSuggestIcon />} iconPosition="start" {...a11yProps(1)} />
+                <Tab label={t("fields.product.tabs.variants")} icon={<StyleIcon />} iconPosition="start" {...a11yProps(2)} />
+                <Tab label={t("fields.product.tabs.seo")} icon={<BookmarksIcon />} iconPosition="start" {...a11yProps(3)} />
               </Tabs>
               <TabPanel component="div" value={tab} index={0}>
                 <ProductBaseInfo

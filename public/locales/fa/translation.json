@@ -684,7 +684,6 @@
       "expressShippingDesc": "۲ تا ۳ روز کاری — ۹.۹۹ دلار",
       "returnPolicy": "بازگشت ۳۰ روزه",
       "returnPolicyDesc": "بازگشت آسان تا ۳۰ روز پس از خرید",
-      "notReturnableDesc": "بازگشت ۳۰ روزه",
       "notReturnableDesc": "این محصول غیرقابل برگشت است",
       "secureCheckout": "پرداخت امن",
       "secureCheckoutDesc": "رمزنگاری SSL ۲۵۶ بیتی",
@@ -1329,6 +1328,12 @@
       "color": "رنگ"
     },
     "product": {
+      "tabs" :{
+        "baseInfo" : "اطلاعات اولیه",
+        "settings" : "تنظیمات",
+        "variants" : "موجودی",
+        "seo" : "سئو",
+      },
       "id": "شناسه",
       "name": "نام",
       "sku": "شناسه (SKU)",
@@ -1373,34 +1378,31 @@
       "manufacturerIds": "تولیدکنندگان",
       "images": "تصاویر محصول",
       "discountIds": "تخفیف‌ها",
-      "previewImage": "پیش‌نمایش تصویر",
+      "imagePreviewId": "پیش‌نمایش تصویر",
       "relatedProductIds": "محصولات مرتبط",
       "adminComment": "پیام مدیر",
       "attributeIds": "ویژگی‌ها",
       "tagIds": "برچسب‌های محصول",
       "createdBy": "ایجاد شده توسط",
       "editedBy": "ویرایش شده توسط",
-      "sellUnitPrice": "قیمت فروش",
-      "oldSellUnitPrice": "قیمت فروش قدیم",
       "currencyType": "نوع ارز",
       "stockQuantity": "موجودی انبار",
       "minStockQuantity": "حداقل موجودی انبار",
-      "stockType": {
-        "Total": "کل موجودی انبار",
-        "PerAttribute": "موجودی انبار بر اساس خصوصیت"
+      "variants": {
+        "title": "موجودی",
+        "addVariant": "افزودن موجودی",
+        "noVariants": "هنوز موجودی ندارید",
+        "variant": "موجودی {index}",
+        "sku": "SKU",
+        "sellPrice": "قیمت فروش",
+        "oldSellPrice": "قیمت فروش قدیم",
+        "attributeIds": "خصوصیات",
+        "inventory": {
+          "stockQuantity": "تعداد موجودی",
+          "reservedQuantity": "تعداد موجودی رزرو شده",
+          "sellUnitPrice": "قیمت فروش"
+        }
       },
-      "inventory": {
-        "attributeName": "خصوصیت",
-        "stockQuantity": "موجودی انبار",
-        "reservedQuantity": "موجودی رزرو شده",
-        "buyUnitPrice": "قیمت خرید"
-      },
-      "variants": "variants",
-      "variant": "variant",
-      "addVariant": "افزودن variant",
-      "removeVariant": "حذف variant",
-      "sellPrice": "قیمت فروش",
-      "oldSellPrice": "قیمت فروش قدیم",
       "measureType": "نوع اندازه‌گیری",
       "measureTypes": {
         "Kilogram": "کیلوگرم",
@@ -1410,8 +1412,7 @@
         "Litr": "لیتر",
         "Gram": "گرم",
         "Mesghal": "مثقال"
-      },
-      "picturePreviewId": "پیشنمایش محصول"
+      }
     },
     "productTag": {
       "name": "عنوان برچسب",
@@ -1425,7 +1426,7 @@
       "description": "توضیحات",
       "displayOrder": "ترتیب نمایش",
       "imagePreviewId": " تصویر پیش‌نمایش",
-      "showOnHomepage" : "نمایش در صفحه اصلی",
+      "showOnHomepage": "نمایش در صفحه اصلی",
       "attributeTypes": {
         "Color": "رنگ",
         "Size": "اندازه",
@@ -1438,7 +1439,6 @@
         "Pattern": "الگو",
         "Brand": "برند",
         "Model": "مدل"
-
       }
     },
     "stateProvince": {

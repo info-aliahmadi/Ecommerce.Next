@@ -27,6 +27,7 @@ import ProductModel from '../../_types/Product/ProductModel';
 import { MRT_Column } from '@root/app/types/MRT_Column';
 import GridDataBound from '@root/app/types/GridDataBound';
 import FileUploadModel from '@root/app/dashboard/(filestorage)/_types/FileUploadModel';
+import { GetImage } from '@root/app/(home)/_lib/utils';
 
 // ===============================|| COLOR BOX ||=============================== //
 
@@ -81,13 +82,24 @@ export default function ProductDataGrid() {
           }}
         >
           {row.original.imagePreview ? (
-            <img alt="ImagePreview" src={CONFIG.UPLOAD_BASEPATH + row.original.imagePreview?.directory + row.original.imagePreview?.fileName} height={'80px'} />
+            <Avatar
+              variant="rounded"
+              alt={row.original.name}
+              src={GetImage(row.original.imagePreview, true)}
+              sx={{ width: 80, height: 80 }}
+            ></Avatar>
           ) : (
             <Avatar variant="rounded">
               <ImageNotSupported />
             </Avatar>
           )}
         </Box>
+      }, {
+        accessorKey: 'sku',
+        header: t(fieldsName + 'sku'),
+        enableClickToCopy: true,
+        type: 'string'
+        // filterVariant: 'text' | 'select' | 'multi-select' | 'range' | 'range-slider' | 'checkbox',
       }, {
         accessorKey: 'name',
         header: t(fieldsName + 'name'),
@@ -108,13 +120,18 @@ export default function ProductDataGrid() {
       },
       {
         accessorKey: 'variants',
-        header: t(fieldsName + 'sellPrice'),
+        header: t(fieldsName + 'variants.sellPrice'),
         type: 'number',
         enableResizing: true,
         Cell: ({ row }) => {
-          const firstVariant = row.original.variants?.[0];
-          const price = firstVariant?.sellPrice || 0;
-          return price.toCurrency(row.original.currencyType);
+          const variants = row.original.variants || [];
+          if (variants.length === 0) return (0).toCurrency(row.original.currencyType);
+          const prices = variants.map((v) => v.sellPrice || 0).filter((p) => p > 0);
+          if (prices.length === 0) return (0).toCurrency(row.original.currencyType);
+          const minPrice = Math.min(...prices);
+          const maxPrice = Math.max(...prices);
+          if (minPrice === maxPrice) return minPrice.toCurrency(row.original.currencyType);
+          return `${minPrice.toCurrency(row.original.currencyType)}-${maxPrice.toCurrency(row.original.currencyType)}`;
         }
       },
       {

@@ -32,10 +32,8 @@ export default function ProductDetail({ row }: { row: MRT_Row<ProductModel> }) {
                             }}
                         >
                             {row.original.imagePreview ? <Avatar
-                                component="img"
                                 variant="rounded"
-                                loading="lazy"
-                                alt="product Preview"
+                                alt={row.original.name}
                                 src={CONFIG.UPLOAD_BASEPATH + row.original.imagePreview.directory + row.original.imagePreview?.fileName}
                                 sx={{ width: 200, height: 200 }}
                             ></Avatar> : <Avatar variant="rounded" sx={{ width: 200, height: 200 }}>
@@ -47,7 +45,7 @@ export default function ProductDetail({ row }: { row: MRT_Row<ProductModel> }) {
                     </Stack>
                 </Grid>
             </Grid>
-            <Grid container size={{ xs: 12, sm: 6, md: 6, lg: 6, xl: 4 }}>
+            <Grid container size={{ xs: 12, sm: 6, md: 9, lg: 9, xl: 9 }}>
 
                 <Accordion >
                     <AccordionSummary
@@ -55,7 +53,7 @@ export default function ProductDetail({ row }: { row: MRT_Row<ProductModel> }) {
                         aria-controls="panel2-content"
                         id="panel2-header"
                     >
-                        Base Info
+                       {t("fields.product.tabs.baseInfo")}
                     </AccordionSummary>
                     <AccordionDetails>
                         <Grid container spacing={3}>
@@ -103,23 +101,11 @@ export default function ProductDetail({ row }: { row: MRT_Row<ProductModel> }) {
                             </Grid>
                             <Grid size={{ xs: 12, sm: 12, md: 4, lg: 4, xl: 4 }}>
                                 <Stack spacing={1}>
-                                    <InputLabel htmlFor="price">{t(fieldsName + 'price')}</InputLabel>
-                                    <OutlinedInput id="price" type="text" value={row.original.variants?.[0]?.sellPrice?.toCurrency(row.original.currencyType) || 'N/A'} fullWidth disabled />
-                                </Stack>
-                            </Grid>
-                            <Grid size={{ xs: 12, sm: 12, md: 4, lg: 4, xl: 4 }}>
-                                <Stack spacing={1}>
-                                    <InputLabel htmlFor="oldPrice">{t(fieldsName + 'oldPrice')}</InputLabel>
-                                    <OutlinedInput id="oldPrice" type="text" value={row.original.variants?.[0]?.oldSellPrice?.toCurrency(row.original.currencyType) || 'N/A'} fullWidth disabled />
-                                </Stack>
-                            </Grid>
-                            <Grid size={{ xs: 12, sm: 12, md: 4, lg: 4, xl: 4 }}>
-                                <Stack spacing={1}>
                                     <InputLabel htmlFor="categoryNames">{t(fieldsName + 'categoryIds')}</InputLabel>
                                     <Select
                                         className="select-margin"
                                         multiple
-                                        value={row.original.categoryNames || ''}
+                                        value={row.original.taxCategoryId || []}
                                         size="medium"
                                         disabled
                                         defaultValue={row.original.categoryNames?.filter((x) => row.original.categoryNames?.find((c) => c === x)) ?? []}
@@ -248,7 +234,7 @@ export default function ProductDetail({ row }: { row: MRT_Row<ProductModel> }) {
                         aria-controls="panel1-content"
                         id="panel1-header"
                     >
-                        Variants
+                        {t("fields.product.tabs.variants")}
                     </AccordionSummary>
                     <AccordionDetails>
                         <Grid container spacing={3}>
@@ -342,7 +328,7 @@ export default function ProductDetail({ row }: { row: MRT_Row<ProductModel> }) {
                         aria-controls="panel3-content"
                         id="panel3-header"
                     >
-                        Settings
+                        {t("fields.product.tabs.settings")}
                     </AccordionSummary>
                     <AccordionDetails>
                         <Grid container spacing={3}>

@@ -39,7 +39,7 @@ Number.prototype.toCurrency = function (currencyType?: CurrencyTypes | undefined
   );
 
   const value = Number(this).toFormattedCurrency(currencyType);
-  return `${value.toLocaleString()} ${code}`;
+  return `${value.toLocaleString()}${symbol}`;
 
   //   return this.toLocaleString('en-US', {
   //     minimumFractionDigits: 0,

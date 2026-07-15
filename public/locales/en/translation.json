@@ -1339,6 +1339,12 @@
       "color": "Color"
     },
     "product": {
+      "tabs": {
+        "baseInfo": "Base Info",
+        "settings": "Settings",
+        "variants": "Variants",
+        "seo": "SEO"
+      },
       "id": "Id",
       "name": "Name",
       "sku": "SKU",
@@ -1389,21 +1395,9 @@
       "tagIds": "Product Tags",
       "createdBy": "created By",
       "editedBy": "Edited By",
-      "sellUnitPrice": "Sell Unit Price",
-      "oldSellUnitPrice": "Old Sell Unit Price",
       "currencyType": "Currency Type",
       "stockQuantity": "Stock Quantity",
       "minStockQuantity": "Min Stock Quantity",
-      "stockType": {
-        "Total": "Stock Total",
-        "PerAttribute": "Stock Per Attribute"
-      },
-      "inventory": {
-        "attributeName": "Attribute",
-        "stockQuantity": "Stock Quantity",
-        "reservedQuantity": "Reserved Quantity",
-        "buyUnitPrice": "Buy Unit Price"
-      },
       "variants": {
         "title": "Variants",
         "addVariant": "Add Variant",
@@ -1419,10 +1413,6 @@
           "sellUnitPrice": "Sell Unit Price"
         }
       },
-      "addVariant": "Add Variant",
-      "removeVariant": "Remove Variant",
-      "sellPrice": "Sell Price",
-      "oldSellPrice": "Old Sell Price",
       "measureType": "Measure Type",
       "measureTypes": {
         "Kilogram": "Kilogram",
@@ -1436,7 +1426,7 @@
     },
     "productTag": {
       "name": "Tag Name",
-      "key" : "Tag Key",
+      "key": "Tag Key",
       "products": "Number of Products"
     },
     "productAttribute": {
@@ -1446,7 +1436,7 @@
       "description": "Description",
       "displayOrder": "Display Order",
       "imagePreviewId": "Image Preview",
-      "showOnHomepage" : "Show On Homepage",
+      "showOnHomepage": "Show On Homepage",
       "attributeTypes": {
         "Color": "Color",
         "Size": "Size",
