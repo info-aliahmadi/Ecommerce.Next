@@ -41,7 +41,7 @@ export default function ProductVariants({ operation, values, setFieldValue, hand
 
   const createDefaultVariant = (): ProductVariantModel => ({
     id: 0,
-    sku: '',
+    sku: values.sku || '',
     productId: values.id || 0,
     sellPrice: 0,
     oldSellPrice: 0,
@@ -94,34 +94,6 @@ export default function ProductVariants({ operation, values, setFieldValue, hand
           [field]: value,
         },
       };
-    });
-    setFieldValue('variants', updated);
-  };
-
-  const handleAttributeChange = (variantIndex: number, attributeId: number, attributeData: { name: string; value: string; attributeType: number; imagePreviewId: number | null; displayOrder: number; description: string | null; showOnHomepage: boolean }) => {
-    const updated = variants.map((v: ProductVariantModel, i: number) => {
-      if (i !== variantIndex) return v;
-
-      const existingIndex = v.productAttributes.findIndex((a: ProductAttributeModel) => a.id === attributeId);
-      let newAttributes: ProductAttributeModel[];
-
-      if (existingIndex >= 0) {
-        newAttributes = v.productAttributes.filter((_: any, idx: number) => idx !== existingIndex);
-      } else {
-        const newAttr: ProductAttributeModel = {
-          id: attributeId,
-          name: attributeData.name,
-          value: attributeData.value,
-          attributeType: attributeData.attributeType,
-          imagePreviewId: attributeData.imagePreviewId,
-          displayOrder: attributeData.displayOrder,
-          description: attributeData.description,
-          showOnHomepage: attributeData.showOnHomepage,
-        };
-        newAttributes = [...v.productAttributes, newAttr];
-      }
-
-      return { ...v, productAttributes: newAttributes, sku: generateVariantSku(newAttributes) };
     });
     setFieldValue('variants', updated);
   };

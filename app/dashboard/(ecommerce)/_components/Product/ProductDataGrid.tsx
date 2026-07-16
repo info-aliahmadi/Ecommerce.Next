@@ -108,7 +108,7 @@ export default function ProductDataGrid() {
         // filterVariant: 'text' | 'select' | 'multi-select' | 'range' | 'range-slider' | 'checkbox',
       },
       {
-        accessorKey: 'variants',
+        accessorKey: 'variants.productInventory.stockQuantity',
         header: t(fieldsName + 'stockQuantity'),
         enableClickToCopy: true,
         type: 'number',

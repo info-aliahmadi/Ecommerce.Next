@@ -145,8 +145,7 @@ export function Header() {
   const t = useTranslations();
   const { totalItems, toggleCart } = useCartStore();
   const { totalCount: wishlistTotal } = useWishlistStore();
-  const { searchQuery, setSearchQuery, selectedCategory, setSelectedCategory, isMobileMenuOpen, setMobileMenuOpen, isWishlistOpen, setWishlistOpen, setCatalogOpen } = useUIStore();
-  const mounted = useMounted();
+  const { searchQuery, setSearchQuery,  isMobileMenuOpen, setMobileMenuOpen, isWishlistOpen, setWishlistOpen } = useUIStore();
   const [isScrolled, setIsScrolled] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isSearchFocused, setIsSearchFocused] = useState(false);

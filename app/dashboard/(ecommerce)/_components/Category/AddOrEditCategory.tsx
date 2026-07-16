@@ -171,7 +171,7 @@ const AddOrEditCategory = ({ row, isNew, open, setOpen, refetch }: AddOrEditCate
                   ? row
                     ? t('dialog.category.addSub', { parentTitle: `"${row?.original?.name}"` })
                     : t('dialog.category.addMain')
-                  : t('dialog.edit.title', { item: `"${values.name}"`})}
+                  : t('dialog.edit.title', { item: `"${values.name}"` })}
                 <CloseDialog onClose={onClose} />
               </DialogTitle>
               <DialogContent>
@@ -310,6 +310,7 @@ const AddOrEditCategory = ({ row, isNew, open, setOpen, refetch }: AddOrEditCate
                     <Stack spacing={1}>
                       <InputLabel htmlFor="imagePreviewId">{t(fieldsName + 'imagePreviewId')}</InputLabel>
                       <ImageUpload
+                        key={values?.imagePreviewId}
                         name="imagePreviewId"
                         setFieldValue={setFieldValue}
                         value={values?.imagePreviewId || 0}
@@ -377,6 +378,7 @@ const AddOrEditCategory = ({ row, isNew, open, setOpen, refetch }: AddOrEditCate
                       <OutlinedInput
                         id="displayOrder"
                         type="number"
+                        inputMode='numeric'
                         value={values?.displayOrder || ''}
                         name="displayOrder"
                         onBlur={handleBlur}

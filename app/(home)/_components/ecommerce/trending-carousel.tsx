@@ -12,6 +12,8 @@ import HomePageService from '../../_services/HomePageService';
 import ProductDisplayModel from '../../_types/ProductDisplayModel';
 import CartItem from '../../_types/CartItem';
 import { GetImage } from '../../_lib/utils';
+import CurrencyViewer from '@root/utils/CurrencyViewer';
+import CONFIG from '@root/config';
 
 export function TrendingCarousel() {
   const t = useTranslations();
@@ -163,7 +165,7 @@ export function TrendingCarousel() {
                       {product.name}
                     </p>
                     <p className="text-white font-semibold text-base mb-3">
-                      {CurrencyViewer(product.sellUnitPrice,CONFIG.DEFAULT_CURRENCY)}
+                      {CurrencyViewer(product.sellUnitPrice, CONFIG.DEFAULT_CURRENCY)}
                     </p>
                     <button
                       onClick={(e) => {

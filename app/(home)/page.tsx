@@ -29,17 +29,12 @@ import { ImageComparison } from './_components/ecommerce/image-comparison';
 import { ProductBundles } from './_components/ecommerce/product-bundles';
 import { StockAlert } from './_components/ecommerce/stock-alert';
 import { ProductQuickStats } from './_components/ecommerce/product-quick-stats';
-import { useCompareStore, useUIStore } from './_lib/store';
+import { useCompareStore } from './_lib/store';
 import { useScrollReveal } from './_hooks/use-scroll-reveal';
 import { Header } from './_components/ecommerce/header';
-import { AnimatePresence, motion } from 'framer-motion';
-import ProductsPage from './products/page';
-import CheckoutPage from './checkout/page';
 
 /* ─── Shared overlays (cart, quick-view, etc.) ──────────────── */
 function SharedOverlays() {
-  const isCompareOpen = useCompareStore((s) => s.isCompareOpen);
-  const setCompareOpen = useCompareStore((s) => s.setCompareOpen);
   return (
     <>
       <CartDrawer />
@@ -67,7 +62,7 @@ function HomePage() {
         <HeroSection />
         <WaveDivider variant="subtle" color="#E63946" />
         <BrandMarquee />
-        {/* <CategoryNavSentinel /> */} 
+        {/* <CategoryNavSentinel /> */}
         <FeaturedCategories />
         <WaveDivider variant="gradient" color="#6A5ACD" />
         <ImageComparison />
@@ -110,15 +105,13 @@ function PageShell({ children }: { children: React.ReactNode }) {
 
 /* ─── Client-side page router ───────────────────────────────── */
 function PageRouter() {
-  const currentPage = useUIStore((s) => s.currentPage);
-
   return (
-          <HomePage />
+    <HomePage />
   );
 }
 
 export default function Home() {
   return (
-      <PageRouter />
+    <PageRouter />
   );
 }

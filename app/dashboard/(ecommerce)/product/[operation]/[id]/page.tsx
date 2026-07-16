@@ -34,6 +34,7 @@ import { useSession } from 'next-auth/react';
 import ProductModel from '@dashboard/(ecommerce)/_types/Product/ProductModel';
 import DeliveryDate from '@root/app/types/enums/DeliveryDateType';
 import CONFIG from '@root/config';
+import Result from '@root/app/types/Result';
 
 function TabPanel(props: any) {
   const { children, value, index, ...other } = props;
@@ -118,7 +119,6 @@ export default function AddOrEditProduct({ params }: Readonly<{ params: Promise<
     tagIds: [],
     createUserId: 0,
     imagePreviewId: 0,
-    deliveryDateName: '',
     taxCategoryName: '',
     displayOrder: 0,
     approvedRatingSum: 0,
@@ -226,8 +226,8 @@ export default function AddOrEditProduct({ params }: Readonly<{ params: Promise<
               router.push('/dashboard/product');
             }, 4000);
           })
-          .catch((error) => {
-            setNotify({ open: true, type: 'error', description: error });
+          .catch((error: Result<ProductModel>) => {
+            setNotify({ open: true, type: 'error', title: error.message, description: error.errors.map(x => x.description).join('\n') });
           });
       } else {
         productService
@@ -236,8 +236,9 @@ export default function AddOrEditProduct({ params }: Readonly<{ params: Promise<
             setProduct(result.data ?? product);
             setNotify({ open: true });
           })
-          .catch((error) => {
-            setNotify({ open: true, type: 'error', description: error });
+          .catch((error: Result<ProductModel>) => {
+            debugger
+            setNotify({ open: true, type: 'error', title: error.message, description: error.errors.map(x => x.description).join('\n') });
           });
       }
     } catch (error) {

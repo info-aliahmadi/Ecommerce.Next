@@ -65,7 +65,7 @@ export default function ProductDetail({ row }: { row: MRT_Row<ProductModel> }) {
                                     <OutlinedInput type="text" value={row.original.sku || ''} fullWidth disabled />
                                 </Stack>
                             </Grid>
-                         
+
                             <Grid size={{ xs: 12, sm: 12, md: 4, lg: 4, xl: 4 }}>
                                 <Stack spacing={1}>
                                     <InputLabel>{t(fieldsName + 'deliveryDateId')}</InputLabel>
@@ -193,7 +193,7 @@ export default function ProductDetail({ row }: { row: MRT_Row<ProductModel> }) {
                                     <OutlinedInput type="text" value={DateTimeViewer(language, row.original.availableEndDateTimeUtc)} fullWidth disabled />
                                 </Stack>
                             </Grid>
-                               <Grid size={{ xs: 12, sm: 12, md: 12, lg: 12, xl: 12 }}>
+                            <Grid size={{ xs: 12, sm: 12, md: 12, lg: 12, xl: 12 }}>
                                 <Stack spacing={1}>
                                     <InputLabel>{t(fieldsName + 'shortDescription')}</InputLabel>
                                     <div
@@ -214,7 +214,7 @@ export default function ProductDetail({ row }: { row: MRT_Row<ProductModel> }) {
                     <AccordionDetails>
                         <Grid container spacing={3}>
                             {row.original.variants?.map((variant, index) => (
-                                <Grid size={12} key={variant.id ?? `variant-${index}`}>
+                                <Grid size={12} key={row.original.id + `variant-${variant.id ?? index}`}>
                                     <Box sx={{ p: 2, border: '1px solid #e0e0e0', borderRadius: 1 }}>
                                         <Typography variant="subtitle2" sx={{ mb: 1 }}>
                                             {t(fieldsName + 'variants.variant', { index: index + 1 })} {variant.sku && `- ${variant.sku}`}
