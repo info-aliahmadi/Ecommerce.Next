@@ -590,7 +590,7 @@ function QuickViewContent({ product, onClose }: { product: ProductDisplayModel; 
           <div className="flex items-center gap-1.5 mb-2">
             {product.categories?.map(category => category && (
               <span key={"category-" + category.key} className="text-xs font-medium text-ecommerce-text-muted uppercase tracking-wider">
-                <span className="w-2 h-2 rounded-full" style={{ backgroundColor: category.color }} > </span>
+                <span className="inline-block w-2 h-2 mx-2 rounded-full " style={{ backgroundColor: category.color}} > </span>
                 <span className="text-xs font-medium text-ecommerce-text-muted uppercase tracking-wider">{category.name}</span>
               </span>))}
             {product.sku && (
@@ -628,19 +628,27 @@ function QuickViewContent({ product, onClose }: { product: ProductDisplayModel; 
           </div>
 
           {/* Price */}
-          <div className="flex items-baseline gap-3 mt-4">
-            <span className="text-3xl font-bold text-ecommerce-text-primary">
-              {CurrencyViewer(activeVariant?.sellPrice ?? 0, CONFIG.DEFAULT_CURRENCY)}
-            </span>
-            {activeVariant?.oldSellPrice > 0 && activeVariant.oldSellPrice > activeVariant.sellPrice && (
-              <>
-                <span className="text-lg text-ecommerce-text-muted line-through">{CurrencyViewer(activeVariant.oldSellPrice, CONFIG.DEFAULT_CURRENCY)}</span>
-                <Badge className="bg-ecommerce-emerald/10 text-ecommerce-emerald border-0 text-xs font-semibold">
-                  {t('homepage.cart.savings')} { CurrencyViewer(activeVariant.oldSellPrice - activeVariant.sellPrice, CONFIG.DEFAULT_CURRENCY) }
-                </Badge>  
-              </>
-            )}
-          </div>
+          {product.callForPrice ? (
+            <div className="flex items-center gap-2 mt-4">
+              <span className="text-xl font-bold text-ecommerce-amber">
+                {t('homepage.productDetail.callForPrice')}
+              </span>
+            </div>
+          ) : (
+            <div className="flex items-baseline gap-3 mt-4">
+              <span className="text-3xl font-bold text-ecommerce-text-primary">
+                {CurrencyViewer(activeVariant?.sellPrice ?? 0, CONFIG.DEFAULT_CURRENCY)}
+              </span>
+              {activeVariant?.oldSellPrice > 0 && activeVariant.oldSellPrice > activeVariant.sellPrice && (
+                <>
+                  <span className="text-lg text-ecommerce-text-muted line-through">{CurrencyViewer(activeVariant.oldSellPrice, CONFIG.DEFAULT_CURRENCY)}</span>
+                  <Badge className="bg-ecommerce-emerald/10 text-ecommerce-emerald border-0 text-xs font-semibold">
+                    {t('homepage.cart.savings')} { CurrencyViewer(activeVariant.oldSellPrice - activeVariant.sellPrice, CONFIG.DEFAULT_CURRENCY) }
+                  </Badge>
+                </>
+              )}
+            </div>
+          )}
 
           {/* Short description */}
           {product.shortDescription && (
@@ -772,7 +780,7 @@ function QuickViewContent({ product, onClose }: { product: ProductDisplayModel; 
             <div className="flex items-center gap-2">
               <button
                 onClick={() => {
-                  navigator.clipboard.writeText(window.location.href + '#product-' + product.id);
+                  navigator.clipboard.writeText(CONFIG.DOMAIN + '/products/' + product.id);
                   setCopied(true);
                   toast.success(t('homepage.common.linkCopied'));
                   setTimeout(() => setCopied(false), 2000);
@@ -807,17 +815,23 @@ function QuickViewContent({ product, onClose }: { product: ProductDisplayModel; 
           </div>
 
           {/* Trust badges */}
-          <div className="grid grid-cols-3 gap-2 mt-5 pt-5 border-t border-ecommerce-border">
-            {[
-              { icon: Truck, label: t('homepage.hero.freeShipping') },
-              { icon: Shield, label: t('homepage.hero.securePayment') },
-              { icon: RotateCcw, label: t('homepage.hero.easyReturns') },
-            ].map((item) => (
-              <div key={item.label} className="flex flex-col items-center gap-1 text-center">
-                <item.icon size={16} className="text-ecommerce-text-muted" />
-                <span className="text-[10px] text-ecommerce-text-muted leading-tight">{item.label}</span>
+          <div className="flex flex-wrap justify-center gap-4 mt-5 pt-5 border-t border-ecommerce-border">
+            <div className="flex flex-col items-center gap-1 text-center">
+              <Shield size={16} className="text-ecommerce-text-muted" />
+              <span className="text-[10px] text-ecommerce-text-muted leading-tight">{t('homepage.hero.securePayment')}</span>
+            </div>
+            {product.isFreeShipping && (
+              <div className="flex flex-col items-center gap-1 text-center">
+                <Truck size={16} className="text-ecommerce-text-muted" />
+                <span className="text-[10px] text-ecommerce-text-muted leading-tight">{t('homepage.hero.freeShipping')}</span>
               </div>
-            ))}
+            )}
+            {!product.notReturnable && (
+              <div className="flex flex-col items-center gap-1 text-center">
+                <RotateCcw size={16} className="text-ecommerce-text-muted" />
+                <span className="text-[10px] text-ecommerce-text-muted leading-tight">{t('homepage.hero.easyReturns')}</span>
+              </div>
+            )}
           </div>
 
           {/* Description / Reviews / Shipping tabs */}
