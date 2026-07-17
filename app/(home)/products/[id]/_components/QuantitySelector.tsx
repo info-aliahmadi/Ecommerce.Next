@@ -53,7 +53,7 @@ export default function QuantitySelector({
       <div className="flex items-center border border-ecommerce-border rounded-xl overflow-hidden">
         <button
           className="w-10 h-10 flex items-center justify-center hover:bg-ecommerce-surface-hover transition-colors"
-          onClick={() => setQuantity((q) => Math.max(minQty, q - 1))}
+          onClick={() => setQuantity(Math.max(minQty, quantity - 1))}
           disabled={quantity <= minQty}
         >
           <Minus size={16} />
@@ -61,7 +61,7 @@ export default function QuantitySelector({
         <span className="w-12 text-center text-sm font-semibold countdown-digit">{quantity}</span>
         <button
           className="w-10 h-10 flex items-center justify-center hover:bg-ecommerce-surface-hover transition-colors"
-          onClick={() => setQuantity((q) => Math.min(effectiveMax, q + 1))}
+          onClick={() => setQuantity(Math.min(effectiveMax, quantity + 1))}
           disabled={quantity >= effectiveMax}
         >
           <Plus size={16} />

@@ -4,6 +4,7 @@ import { useState, useMemo } from 'react';
 import { useTranslations } from 'next-intl';
 import ProductVariantDisplayModel from '../../../_types/ProductVariantDisplayModel';
 import ProductAttributeDisplayModel from '../../../_types/ProductAttributeDisplayModel';
+import { getCheapestVariant } from '../../../_types/ProductDisplayModel';
 import AttributeType from '@root/app/types/enums/AttributeType';
 import { SizeGuideModal } from '@root/app/(home)/_components/ecommerce/size-guide-modal';
 import { Ruler } from 'lucide-react';
@@ -154,8 +155,11 @@ export default function VariantSelector({ variants, onVariantChange }: VariantSe
 
   const [selectedByType, setSelectedByType] = useState<Map<AttributeType, VariantOption | null>>(() => {
     const initial = new Map<AttributeType, VariantOption | null>();
+    const cheapest = getCheapestVariant(variants);
     for (const [type, options] of attributesByType) {
-      initial.set(type, options[0] ?? null);
+      const matchAttr = cheapest?.productAttributes?.find(attr => attr.attributeType === type);
+      const matchOpt = matchAttr ? options.find(o => o.key === matchAttr.key) : null;
+      initial.set(type, matchOpt ?? options[0] ?? null);
     }
     return initial;
   });
