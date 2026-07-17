@@ -659,6 +659,7 @@
       "quantity": "تعداد",
       "inStock": "موجود",
       "outOfStock": "ناموجود",
+      "variantNotAvailable": "این ترکیب موجود نیست",
       "onlyLeft": "فقط {count} عدد باقیمانده",
       "sku": "کد محصول",
       "category": "دسته‌بندی",

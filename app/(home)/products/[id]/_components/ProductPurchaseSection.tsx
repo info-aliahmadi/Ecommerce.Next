@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useMemo } from 'react';
+import { useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { Separator } from '../../../_components/ui/separator';
 import { Badge } from '../../../_components/ui/badge';
@@ -37,18 +37,23 @@ export default function ProductPurchaseSection({ product }: ProductPurchaseSecti
     : 0;
 
   const handleVariantChange = (options: Map<AttributeType, { id: number; displayName: string; key: string } | null>) => {
-    const selectedValues = Array.from(options.values()).filter(Boolean).map(o => o!.key);
+    const selectedKeys = Array.from(options.values()).filter(Boolean).map(o => o!.key);
+
+    if (selectedKeys.length === 0) {
+      setSelectedVariant(defaultCheapest);
+      return;
+    }
 
     const matched = product.variants?.find(v =>
-      selectedValues.every(val =>
-        v.productAttributes?.some(attr => attr.key === val)
+      selectedKeys.every(key =>
+        v.productAttributes?.some(attr => attr.key === key)
       )
-    );
+    ) ?? null;
 
-    if (matched) {
-      setSelectedVariant(matched);
-    }
+    setSelectedVariant(matched);
   };
+
+  const isOutOfStock = !activeVariant || stock <= 0;
 
   return (
     <>
@@ -88,7 +93,14 @@ export default function ProductPurchaseSection({ product }: ProductPurchaseSecti
 
       {/* Stock Status */}
       <div className="flex items-center gap-2">
-        {stock > 0 ? (
+        {isOutOfStock ? (
+          <>
+            <span className="w-2.5 h-2.5 rounded-full bg-ecommerce-red" />
+            <span className="text-sm font-medium text-ecommerce-red">
+              {activeVariant ? t('homepage.productDetail.outOfStock') : t('homepage.productDetail.variantNotAvailable')}
+            </span>
+          </>
+        ) : (
           <>
             <span className="w-2.5 h-2.5 rounded-full bg-ecommerce-emerald animate-pulse" />
             {stock <= 10 ? (
@@ -100,13 +112,6 @@ export default function ProductPurchaseSection({ product }: ProductPurchaseSecti
                 {t('homepage.productDetail.inStock')}
               </span>
             )}
-          </>
-        ) : (
-          <>
-            <span className="w-2.5 h-2.5 rounded-full bg-ecommerce-red" />
-            <span className="text-sm font-medium text-ecommerce-red">
-              {t('homepage.productDetail.outOfStock')}
-            </span>
           </>
         )}
       </div>
@@ -162,7 +167,7 @@ export default function ProductPurchaseSection({ product }: ProductPurchaseSecti
       />
 
       {/* Quantity Selector */}
-      {!product.disableBuyButton && (
+      {!product.disableBuyButton && !isOutOfStock && (
         <QuantitySelector
           measureType={product.measureType}
           displayStockQuantity={product.displayStockQuantity}
@@ -174,7 +179,7 @@ export default function ProductPurchaseSection({ product }: ProductPurchaseSecti
       )}
 
       {/* Product Actions */}
-      <ProductActions product={product} selectedVariant={activeVariant} />
+      <ProductActions product={product} selectedVariant={activeVariant} isOutOfStock={isOutOfStock} />
     </>
   );
 }

@@ -145,7 +145,11 @@ export default function VariantSelector({ variants, onVariantChange }: VariantSe
               {options.map((opt) => (
                 <button
                   key={opt.id}
-                  onClick={() => setSelectedByType(prev => new Map(prev).set(config.type, opt))}
+                  onClick={() => {
+                    const next = new Map(selectedByType).set(config.type, opt);
+                    setSelectedByType(next);
+                    onVariantChange?.(next);
+                  }}
                   className={`h-9 min-w-[36px] px-3 rounded-lg border text-sm font-medium transition-all duration-200 ${
                     selected?.id === opt.id
                       ? 'border-ecommerce-red bg-ecommerce-red/5 text-ecommerce-red'

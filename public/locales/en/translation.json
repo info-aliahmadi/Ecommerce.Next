@@ -678,6 +678,7 @@
       "quantity": "Quantity",
       "inStock": "In Stock",
       "outOfStock": "Out of Stock",
+      "variantNotAvailable": "This combination is not available",
       "onlyLeft": "Only {count} left in stock",
       "sku": "SKU",
       "category": "Category",

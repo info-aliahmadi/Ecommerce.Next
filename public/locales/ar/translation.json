@@ -657,6 +657,7 @@
       "quantity": "الكمية",
       "inStock": "متوفر",
       "outOfStock": "غير متوفر",
+      "variantNotAvailable": "هذا التجميع غير متاح",
       "onlyLeft": "متبقي {count} فقط",
       "sku": "رقم المنتج",
       "category": "الفئة",
