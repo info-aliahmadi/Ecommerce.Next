@@ -61,6 +61,61 @@ function getUniqueAttributes(
   return result.sort((a, b) => a.displayName.localeCompare(b.displayName));
 }
 
+function getAvailableKeys(
+  variants: ProductVariantDisplayModel[],
+  currentSelection: Map<AttributeType, VariantOption | null>,
+  targetType: AttributeType
+): Set<string> {
+  const selectedKeys: string[] = [];
+  for (const [type, opt] of currentSelection) {
+    if (type !== targetType && opt !== null) {
+      selectedKeys.push(opt.key);
+    }
+  }
+
+  const compatibleVariants = variants.filter(v =>
+    selectedKeys.every(key =>
+      v.productAttributes?.some(attr => attr.key === key)
+    )
+  );
+
+  const available = new Set<string>();
+  for (const v of compatibleVariants) {
+    for (const attr of v.productAttributes ?? []) {
+      if (attr.attributeType === targetType) {
+        available.add(attr.key);
+      }
+    }
+  }
+  return available;
+}
+
+function computeAutoSelection(
+  variants: ProductVariantDisplayModel[],
+  attributesByType: Map<AttributeType, VariantOption[]>,
+  currentSelection: Map<AttributeType, VariantOption | null>,
+  changedType: AttributeType,
+  newValue: VariantOption
+): Map<AttributeType, VariantOption | null> {
+  const next = new Map<AttributeType, VariantOption | null>();
+  for (const [type] of attributesByType) {
+    next.set(type, type === changedType ? newValue : currentSelection.get(type) ?? null);
+  }
+
+  // Auto-select compatible options for other types
+  for (const [type, options] of attributesByType) {
+    if (type === changedType) continue;
+    const available = getAvailableKeys(variants, next, type);
+    const current = next.get(type);
+    if (current && !available.has(current.key)) {
+      const firstAvailable = options.find(o => available.has(o.key));
+      next.set(type, firstAvailable ?? null);
+    }
+  }
+
+  return next;
+}
+
 export default function VariantSelector({ variants, onVariantChange }: VariantSelectorProps) {
   const t = useTranslations();
 
@@ -115,7 +170,7 @@ export default function VariantSelector({ variants, onVariantChange }: VariantSe
                   <button
                     key={opt.id}
                     onClick={() => {
-                      const next = new Map(selectedByType).set(config.type, opt);
+                      const next = computeAutoSelection(variants, attributesByType, selectedByType, config.type, opt);
                       setSelectedByType(next);
                       onVariantChange?.(next);
                     }}
@@ -142,23 +197,31 @@ export default function VariantSelector({ variants, onVariantChange }: VariantSe
               <span className="text-sm text-ecommerce-text-secondary">{selected?.displayName}</span>
             </div>
             <div className="flex gap-2 flex-wrap">
-              {options.map((opt) => (
-                <button
-                  key={opt.id}
-                  onClick={() => {
-                    const next = new Map(selectedByType).set(config.type, opt);
-                    setSelectedByType(next);
-                    onVariantChange?.(next);
-                  }}
-                  className={`h-9 min-w-[36px] px-3 rounded-lg border text-sm font-medium transition-all duration-200 ${
-                    selected?.id === opt.id
-                      ? 'border-ecommerce-red bg-ecommerce-red/5 text-ecommerce-red'
-                      : 'border-ecommerce-border text-ecommerce-text-secondary hover:border-ecommerce-text-muted hover:bg-ecommerce-surface-hover'
-                  }`}
-                >
-                  {opt.displayName}
-                </button>
-              ))}
+              {options.map((opt) => {
+                const available = getAvailableKeys(variants, selectedByType, config.type);
+                const isAvailable = available.has(opt.key);
+                return (
+                  <button
+                    key={opt.id}
+                    onClick={() => {
+                      if (!isAvailable) return;
+                      const next = computeAutoSelection(variants, attributesByType, selectedByType, config.type, opt);
+                      setSelectedByType(next);
+                      onVariantChange?.(next);
+                    }}
+                    className={`h-9 min-w-[36px] px-3 rounded-lg border text-sm font-medium transition-all duration-200 ${
+                      !isAvailable
+                        ? 'opacity-30 cursor-not-allowed border-ecommerce-border text-ecommerce-text-muted line-through'
+                        : selected?.id === opt.id
+                          ? 'border-ecommerce-red bg-ecommerce-red/5 text-ecommerce-red'
+                          : 'border-ecommerce-border text-ecommerce-text-secondary hover:border-ecommerce-text-muted hover:bg-ecommerce-surface-hover'
+                    }`}
+                    disabled={!isAvailable}
+                  >
+                    {opt.displayName}
+                  </button>
+                );
+              })}
             </div>
           </div>
         );

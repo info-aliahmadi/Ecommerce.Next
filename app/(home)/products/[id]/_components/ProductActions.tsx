@@ -19,10 +19,12 @@ export default function ProductActions({
   product,
   selectedVariant,
   isOutOfStock = false,
+  isVariantUnavailable = false,
 }: {
   product: ProductDisplayModel;
   selectedVariant?: ProductVariantDisplayModel | null;
   isOutOfStock?: boolean;
+  isVariantUnavailable?: boolean;
 }) {
   const t = useTranslations('');
   const addItem = useCartStore((s) => s.addItem);
@@ -106,15 +108,15 @@ export default function ProductActions({
         <div className="space-y-2.5 pt-1">
           <Button
             onClick={handleAddToCart}
-            disabled={isOutOfStock}
+            disabled={isOutOfStock || isVariantUnavailable}
             className="w-full h-12 text-base font-semibold rounded-xl bg-ecommerce-red hover:bg-ecommerce-red/90 text-white gap-2 transition-all hover:scale-[1.01] active:scale-[0.99] disabled:opacity-50 disabled:hover:scale-100"
           >
             <ShoppingCart size={20} />
-            {isOutOfStock ? t('homepage.productDetail.outOfStock') : t('homepage.productDetail.addToCart')}
+            {isVariantUnavailable ? t('homepage.productDetail.variantNotAvailable') : isOutOfStock ? t('homepage.productDetail.outOfStock') : t('homepage.productDetail.addToCart')}
           </Button>
           <Button
             onClick={handleBuyNow}
-            disabled={isOutOfStock}
+            disabled={isOutOfStock || isVariantUnavailable}
             variant="outline"
             className="w-full h-11 text-sm font-medium rounded-xl border-2 border-ecommerce-text-primary text-ecommerce-text-primary hover:bg-ecommerce-text-primary hover:text-white gap-2 transition-all disabled:opacity-50"
           >

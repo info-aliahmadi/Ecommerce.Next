@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 import { useTranslations } from 'next-intl';
 import { Separator } from '../../../_components/ui/separator';
 import { Badge } from '../../../_components/ui/badge';
@@ -20,13 +20,15 @@ interface ProductPurchaseSectionProps {
 
 export default function ProductPurchaseSection({ product }: ProductPurchaseSectionProps) {
   const t = useTranslations();
-  const { cheapestVariant: defaultCheapest } = getProductPricing(product.variants ?? []);
+  const { cheapestVariant: defaultCheapest, minSellPrice, maxSellPrice } = getProductPricing(product.variants ?? []);
 
   const [selectedVariant, setSelectedVariant] = useState<ProductVariantDisplayModel | null>(
     defaultCheapest ?? null
   );
+  const [hasUserSelected, setHasUserSelected] = useState(false);
 
-  const activeVariant = selectedVariant ?? defaultCheapest;
+  const isMatchValid = !hasUserSelected || selectedVariant !== null;
+  const activeVariant = isMatchValid ? selectedVariant : null;
   const stock = activeVariant?.productInventory?.stockQuantity ?? 0;
 
   const discount = activeVariant?.oldSellPrice
@@ -36,11 +38,13 @@ export default function ProductPurchaseSection({ product }: ProductPurchaseSecti
     ? activeVariant.oldSellPrice - activeVariant.sellPrice
     : 0;
 
-  const handleVariantChange = (options: Map<AttributeType, { id: number; displayName: string; key: string } | null>) => {
+  const handleVariantChange = useCallback((options: Map<AttributeType, { id: number; displayName: string; key: string } | null>) => {
+    setHasUserSelected(true);
     const selectedKeys = Array.from(options.values()).filter(Boolean).map(o => o!.key);
 
     if (selectedKeys.length === 0) {
       setSelectedVariant(defaultCheapest);
+      setHasUserSelected(false);
       return;
     }
 
@@ -51,7 +55,7 @@ export default function ProductPurchaseSection({ product }: ProductPurchaseSecti
     ) ?? null;
 
     setSelectedVariant(matched);
-  };
+  }, [product.variants, defaultCheapest]);
 
   const isOutOfStock = !activeVariant || stock <= 0;
 
@@ -64,13 +68,13 @@ export default function ProductPurchaseSection({ product }: ProductPurchaseSecti
             {t('homepage.productDetail.callForPrice')}
           </span>
         </div>
-      ) : (
+      ) : isMatchValid && activeVariant ? (
         <div className="space-y-1">
           <div className="flex items-baseline gap-3">
             <span className="text-3xl font-bold text-ecommerce-text-primary">
-              {CurrencyViewer(activeVariant?.sellPrice ?? 0, CONFIG.DEFAULT_CURRENCY)}
+              {CurrencyViewer(activeVariant.sellPrice, CONFIG.DEFAULT_CURRENCY)}
             </span>
-            {activeVariant?.oldSellPrice && activeVariant.oldSellPrice > activeVariant.sellPrice && (
+            {activeVariant.oldSellPrice && activeVariant.oldSellPrice > activeVariant.sellPrice && (
               <span className="text-lg text-ecommerce-text-muted line-through">
                 {CurrencyViewer(activeVariant.oldSellPrice, CONFIG.DEFAULT_CURRENCY)}
               </span>
@@ -87,17 +91,37 @@ export default function ProductPurchaseSection({ product }: ProductPurchaseSecti
             </p>
           )}
         </div>
+      ) : (
+        <div className="space-y-1">
+          <div className="flex items-baseline gap-3">
+            <span className="text-3xl font-bold text-ecommerce-text-primary">
+              {CurrencyViewer(minSellPrice, CONFIG.DEFAULT_CURRENCY)}
+            </span>
+            {maxSellPrice > minSellPrice && (
+              <span className="text-lg text-ecommerce-text-muted">
+                - {CurrencyViewer(maxSellPrice, CONFIG.DEFAULT_CURRENCY)}
+              </span>
+            )}
+          </div>
+        </div>
       )}
 
       <Separator className="bg-ecommerce-border/50" />
 
       {/* Stock Status */}
       <div className="flex items-center gap-2">
-        {isOutOfStock ? (
+        {!isMatchValid ? (
+          <>
+            <span className="w-2.5 h-2.5 rounded-full bg-ecommerce-amber" />
+            <span className="text-sm font-medium text-ecommerce-amber">
+              {t('homepage.productDetail.variantNotAvailable')}
+            </span>
+          </>
+        ) : isOutOfStock ? (
           <>
             <span className="w-2.5 h-2.5 rounded-full bg-ecommerce-red" />
             <span className="text-sm font-medium text-ecommerce-red">
-              {activeVariant ? t('homepage.productDetail.outOfStock') : t('homepage.productDetail.variantNotAvailable')}
+              {t('homepage.productDetail.outOfStock')}
             </span>
           </>
         ) : (
@@ -167,7 +191,7 @@ export default function ProductPurchaseSection({ product }: ProductPurchaseSecti
       />
 
       {/* Quantity Selector */}
-      {!product.disableBuyButton && !isOutOfStock && (
+      {!product.disableBuyButton && !isOutOfStock && isMatchValid && (
         <QuantitySelector
           measureType={product.measureType}
           displayStockQuantity={product.displayStockQuantity}
@@ -179,7 +203,12 @@ export default function ProductPurchaseSection({ product }: ProductPurchaseSecti
       )}
 
       {/* Product Actions */}
-      <ProductActions product={product} selectedVariant={activeVariant} isOutOfStock={isOutOfStock} />
+      <ProductActions
+        product={product}
+        selectedVariant={activeVariant}
+        isOutOfStock={isOutOfStock}
+        isVariantUnavailable={!isMatchValid}
+      />
     </>
   );
 }
