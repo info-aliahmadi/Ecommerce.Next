@@ -9,12 +9,12 @@ export default interface ProductAttributeDisplayModel {
     /**
      * The name of the product attribute.
      */
-    name: string;
+    displayName: string;
   
     /**
      * The value of the product attribute.
      */
-    value: string;
+    key: string;
   
     /**
      * The type of the product attribute.
