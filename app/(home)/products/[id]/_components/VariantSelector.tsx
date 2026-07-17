@@ -5,6 +5,8 @@ import { useTranslations } from 'next-intl';
 import ProductVariantDisplayModel from '../../../_types/ProductVariantDisplayModel';
 import ProductAttributeDisplayModel from '../../../_types/ProductAttributeDisplayModel';
 import AttributeType from '@root/app/types/enums/AttributeType';
+import { SizeGuideModal } from '@root/app/(home)/_components/ecommerce/size-guide-modal';
+import { Ruler } from 'lucide-react';
 
 interface VariantOption {
   id: number;
@@ -138,7 +140,7 @@ function computeAutoSelection(
 
 export default function VariantSelector({ variants, onVariantChange }: VariantSelectorProps) {
   const t = useTranslations();
-
+  const [isSizeGuideOpen, setIsSizeGuideOpen] = useState(false);
   const attributesByType = useMemo(() => {
     const map = new Map<AttributeType, VariantOption[]>();
     for (const config of ATTRIBUTE_CONFIGS) {
@@ -194,11 +196,10 @@ export default function VariantSelector({ variants, onVariantChange }: VariantSe
                       setSelectedByType(next);
                       onVariantChange?.(next);
                     }}
-                    className={`w-8 h-8 rounded-full border-2 transition-all duration-200 hover:scale-110 ${
-                      selected?.id === opt.id
-                        ? 'border-ecommerce-red ring-2 ring-ecommerce-red/20 scale-110'
-                        : 'border-ecommerce-border hover:border-ecommerce-text-muted'
-                    }`}
+                    className={`w-8 h-8 rounded-full border-2 transition-all duration-200 hover:scale-120 ${selected?.id === opt.id
+                      ? 'border-ecommerce-red ring-2 ring-ecommerce-red/20 scale-120'
+                      : 'border-ecommerce-border hover:border-ecommerce-text-muted'
+                      }`}
                     style={{ backgroundColor: opt.key }}
                     aria-label={opt.displayName}
                     title={opt.displayName}
@@ -211,10 +212,25 @@ export default function VariantSelector({ variants, onVariantChange }: VariantSe
 
         return (
           <div key={config.type} className="mt-4">
-            <div className="flex items-center gap-2 mb-2.5">
-              <span className="text-sm font-medium text-ecommerce-text-primary">{label}</span>
-              <span className="text-xs text-ecommerce-text-muted">:</span>
-              <span className="text-sm text-ecommerce-text-secondary">{selected?.displayName}</span>
+            <div className="flex justify-between gap-2 mb-2.5">
+              {/* make seperate between div and button */}
+              <div className="flex items-center gap-2">
+                <span className="text-sm font-medium text-ecommerce-text-primary">{label}</span>
+                <span className="text-xs text-ecommerce-text-muted">:</span>
+                <span className="text-sm text-ecommerce-text-secondary">{selected?.displayName}</span>
+              </div>
+              {/* Size Guide Button */}
+              {config.type === AttributeType.Size &&
+                (
+                  <button
+                    onClick={() => setIsSizeGuideOpen(true)}
+                    className="text-xs text-ecommerce-purple hover:text-ecommerce-purple/80 hover:underline cursor-pointer flex items-center gap-1"
+                  >
+                    <Ruler size={12} />
+                    {t('homepage.quickView.sizeGuide')}
+                  </button>
+                )
+              }
             </div>
             <div className="flex gap-2 flex-wrap">
               {options.map((opt) => {
@@ -229,21 +245,24 @@ export default function VariantSelector({ variants, onVariantChange }: VariantSe
                       setSelectedByType(next);
                       onVariantChange?.(next);
                     }}
-                    className={`h-9 min-w-[36px] px-3 rounded-lg border text-sm font-medium transition-all duration-200 ${
-                      !isAvailable
-                        ? 'opacity-30 cursor-not-allowed border-ecommerce-border text-ecommerce-text-muted line-through'
-                        : selected?.id === opt.id
-                          ? 'border-ecommerce-red bg-ecommerce-red/5 text-ecommerce-red'
-                          : 'border-ecommerce-border text-ecommerce-text-secondary hover:border-ecommerce-text-muted hover:bg-ecommerce-surface-hover'
-                    }`}
+                    className={`h-9 min-w-[36px] px-3 rounded-lg border text-sm font-medium transition-all duration-200 ${!isAvailable
+                      ? 'opacity-30 cursor-not-allowed border-ecommerce-border text-ecommerce-text-muted line-through'
+                      : selected?.id === opt.id
+                        ? 'border-ecommerce-red bg-ecommerce-red/5 text-ecommerce-red'
+                        : 'border-ecommerce-border text-ecommerce-text-secondary hover:border-ecommerce-text-muted hover:bg-ecommerce-surface-hover'
+                      }`}
                     disabled={!isAvailable}
                   >
                     {opt.displayName}
                   </button>
+
                 );
               })}
             </div>
+
+            <SizeGuideModal open={isSizeGuideOpen} onClose={() => setIsSizeGuideOpen(false)} />
           </div>
+
         );
       })}
 

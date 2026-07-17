@@ -34,26 +34,25 @@ export default function QuantitySelector({
 
   return (
     <div>
+      {/* Quantity */}
       <label className="text-sm font-medium text-ecommerce-text-primary mb-2 block">
         {t('homepage.productDetail.quantity')}
       </label>
-      <div className="flex items-center gap-1">
+      <div className="flex items-center border border-ecommerce-border rounded-xl overflow-hidden">
         <Button
           variant="outline"
           size="icon"
-          className="h-10 w-10 rounded-lg border-ecommerce-border"
+          className="w-10 h-10 flex items-center justify-center hover:bg-ecommerce-surface-hover transition-colors"
           onClick={() => setQuantity((q) => Math.max(minQty, q - 1))}
           disabled={quantity <= minQty}
         >
           <Minus size={16} />
         </Button>
-        <div className="h-10 w-14 flex items-center justify-center border border-ecommerce-border rounded-lg text-sm font-medium text-ecommerce-text-primary">
-          {quantity}
-        </div>
+        <span className="w-12 text-center text-sm font-semibold countdown-digit">{quantity}</span>
         <Button
           variant="outline"
           size="icon"
-          className="h-10 w-10 rounded-lg border-ecommerce-border"
+          className="w-10 h-10 flex items-center justify-center hover:bg-ecommerce-surface-hover transition-colors"
           onClick={() => setQuantity((q) => Math.min(effectiveMax, q + 1))}
           disabled={quantity >= effectiveMax}
         >
@@ -65,6 +64,10 @@ export default function QuantitySelector({
           </span>
         )}
       </div>
+      {/* calculate and display total */}
+      <span className="text-sm text-ecommerce-text-muted">
+        {t('homepage.cart.total')}: <span className="font-bold text-ecommerce-text-primary">{ }</span>
+      </span>
     </div>
   );
 }
