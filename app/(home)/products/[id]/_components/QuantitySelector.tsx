@@ -1,7 +1,6 @@
 'use client';
 
 import { useState } from 'react';
-import { Button } from '../../../_components/ui/button';
 import { Minus, Plus } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import MeasureType from '@root/app/types/enums/MeasureType';
@@ -14,6 +13,8 @@ interface QuantitySelectorProps {
   displayStockQuantity: boolean;
   maxQuantity: number;
   price?: number;
+  quantity?: number;
+  onQuantityChange?: (quantity: number) => void;
   allowedQuantities?: boolean;
   orderMinimumQuantity?: number;
   orderMaximumQuantity?: number;
@@ -24,6 +25,8 @@ export default function QuantitySelector({
   maxQuantity,
   displayStockQuantity,
   price = 0,
+  quantity: controlledQuantity,
+  onQuantityChange,
   allowedQuantities = false,
   orderMinimumQuantity = 1,
   orderMaximumQuantity = 9999,
@@ -33,7 +36,15 @@ export default function QuantitySelector({
     ? Math.min(maxQuantity, orderMaximumQuantity)
     : maxQuantity;
 
-  const [quantity, setQuantity] = useState(minQty);
+  const [internalQuantity, setInternalQuantity] = useState(minQty);
+  const quantity = controlledQuantity ?? internalQuantity;
+  const setQuantity = (q: number) => {
+    if (onQuantityChange) {
+      onQuantityChange(q);
+    } else {
+      setInternalQuantity(q);
+    }
+  };
   const t = useTranslations('');
 
   return (

@@ -26,6 +26,7 @@ export default function ProductPurchaseSection({ product }: ProductPurchaseSecti
     defaultCheapest ?? null
   );
   const [hasUserSelected, setHasUserSelected] = useState(false);
+  const [quantity, setQuantity] = useState(1);
 
   const isMatchValid = !hasUserSelected || selectedVariant !== null;
   const activeVariant = isMatchValid ? selectedVariant : null;
@@ -197,6 +198,8 @@ export default function ProductPurchaseSection({ product }: ProductPurchaseSecti
           displayStockQuantity={product.displayStockQuantity}
           maxQuantity={stock}
           price={activeVariant?.sellPrice ?? 0}
+          quantity={quantity}
+          onQuantityChange={setQuantity}
           allowedQuantities={product.allowedQuantities}
           orderMinimumQuantity={product.orderMinimumQuantity}
           orderMaximumQuantity={product.orderMaximumQuantity}
@@ -207,6 +210,7 @@ export default function ProductPurchaseSection({ product }: ProductPurchaseSecti
       <ProductActions
         product={product}
         selectedVariant={activeVariant}
+        quantity={quantity}
         isOutOfStock={isOutOfStock}
         isVariantUnavailable={!isMatchValid}
       />

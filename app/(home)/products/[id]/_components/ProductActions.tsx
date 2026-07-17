@@ -18,11 +18,13 @@ import ProductVariantDisplayModel from '../../../_types/ProductVariantDisplayMod
 export default function ProductActions({
   product,
   selectedVariant,
+  quantity = 1,
   isOutOfStock = false,
   isVariantUnavailable = false,
 }: {
   product: ProductDisplayModel;
   selectedVariant?: ProductVariantDisplayModel | null;
+  quantity?: number;
   isOutOfStock?: boolean;
   isVariantUnavailable?: boolean;
 }) {
@@ -40,29 +42,33 @@ export default function ProductActions({
   const handleAddToCart = useCallback(
     (e: React.MouseEvent) => {
       if (!activeVariant) return;
-      handleAddToCartWithAnimation(e, GetImage(product.imagePreview), {
-        id: product.id,
-        name: product.name,
-        variant: activeVariant,
-        image: product.imagePreview,
-        categories: product.categories,
-        quantity: 1
-      });
+      for (let i = 0; i < quantity; i++) {
+        handleAddToCartWithAnimation(e, GetImage(product.imagePreview), {
+          id: product.id,
+          name: product.name,
+          variant: activeVariant,
+          image: product.imagePreview,
+          categories: product.categories,
+          quantity: 1
+        });
+      }
     },
-    [product, handleAddToCartWithAnimation, activeVariant],
+    [product, handleAddToCartWithAnimation, activeVariant, quantity],
   );
 
   const handleBuyNow = useCallback(() => {
     if (!activeVariant) return;
-    addItem({
-      id: product.id,
-      name: product.name,
-      variant: activeVariant,
-      image: product.imagePreview,
-      categories: product.categories
-    });
+    for (let i = 0; i < quantity; i++) {
+      addItem({
+        id: product.id,
+        name: product.name,
+        variant: activeVariant,
+        image: product.imagePreview,
+        categories: product.categories
+      });
+    }
     setCartOpen(true);
-  }, [product, addItem, setCartOpen, activeVariant]);
+  }, [product, addItem, setCartOpen, activeVariant, quantity]);
 
   const handleWishlist = useCallback(() => {
     toggleItem({
