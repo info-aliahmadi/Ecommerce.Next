@@ -363,18 +363,9 @@ export function ProductCard({ product, index = 0 }: Readonly<ProductCardProps>) 
                         </>
                       )}
                     </div>
-                    {!hasMultipleVariants && savings > 0 && (
+                    {savings > 0 && (
                       <span className="text-ecommerce-emerald text-[10px] font-medium">{t('homepage.common.saveAmount', { amount: CurrencyViewer(savings, CONFIG.DEFAULT_CURRENCY) })}</span>
                     )}
-                    {hasMultipleVariants && (() => {
-                      const maxSavings = product.variants.filter(v => v.productInventory.stockQuantity > 0).reduce((max, v) => {
-                        const s = v.oldSellPrice > v.sellPrice ? v.oldSellPrice - v.sellPrice : 0;
-                        return s > max ? s : max;
-                      }, 0) ?? 0;
-                      return maxSavings > 0 ? (
-                        <span className="text-ecommerce-emerald text-[10px] font-medium">{t('homepage.common.saveFrom', { amount: CurrencyViewer(maxSavings, CONFIG.DEFAULT_CURRENCY) })}</span>
-                      ) : null;
-                    })()}
                   </>
                 )}
               </div>

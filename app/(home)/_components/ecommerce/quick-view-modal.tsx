@@ -12,12 +12,14 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { SizeGuideModal } from './size-guide-modal';
 import { useTranslations } from 'next-intl';
 import ProductDisplayModel from '../../_types/ProductDisplayModel';
+import ProductVariantDisplayModel from '../../_types/ProductVariantDisplayModel';
+import { getCheapestVariant, getProductPricing } from '../../_types/ProductDisplayModel';
 import { GetImage } from '../../_lib/utils';
 import CartItem from '../../_types/CartItem';
 import CONFIG from '@root/config';
 import { redirect } from 'next/navigation';
 import CurrencyViewer from '@root/utils/CurrencyViewer';
-import { ColorVariants, SizeVariants } from '@root/app/types/enums/Variants';
+import VariantSelector from '@root/app/(home)/products/[id]/_components/VariantSelector';
 interface ReviewData {
   id: string;
   productId: string;
@@ -306,9 +308,7 @@ function QuickViewContent({ product, onClose }: { product: ProductDisplayModel; 
   const { addItem: addRecent } = useRecentStore();
   const [quantity, setQuantity] = useState(1);
   const [activeTab, setActiveTab] = useState<'description' | 'reviews' | 'shipping'>('description');
-  const [selectedSize, setSelectedSize] = useState('M');
   const [isSizeGuideOpen, setIsSizeGuideOpen] = useState(false);
-  const [selectedColor, setSelectedColor] = useState({ name: 'Default', value: '#6C757D' });
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const [isZoomed, setIsZoomed] = useState(false);
   const [zoomPosition, setZoomPosition] = useState({ x: 50, y: 50 });
@@ -320,14 +320,13 @@ function QuickViewContent({ product, onClose }: { product: ProductDisplayModel; 
   const addedTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const wishlisted = isInWishlist(product.id);
-  const firstVariant = product.variants?.[0];
+  const { cheapestVariant: defaultCheapest, minSellPrice, maxSellPrice, totalStock } = getProductPricing(product.variants ?? []);
+  const [selectedVariant, setSelectedVariant] = useState<ProductVariantDisplayModel | null>(defaultCheapest ?? null);
+  const activeVariant = selectedVariant ?? defaultCheapest;
   const hasMultipleVariants = (product.variants?.length ?? 0) > 1;
-  const sellPrices = product.variants?.map(v => v.sellPrice).filter(p => p > 0) ?? [];
-  const minSellPrice = sellPrices.length > 0 ? Math.min(...sellPrices) : 0;
-  const maxSellPrice = sellPrices.length > 0 ? Math.max(...sellPrices) : 0;
-  const discount = firstVariant?.oldSellPrice ? Math.round(((firstVariant.oldSellPrice - firstVariant.sellPrice) / firstVariant.oldSellPrice) * 100) : 0;
-  const totalStock = product.variants?.reduce((sum, v) => sum + (v.productInventory?.stockQuantity ?? 0), 0) ?? 0;
+  const discount = activeVariant?.oldSellPrice ? Math.round(((activeVariant.oldSellPrice - activeVariant.sellPrice) / activeVariant.oldSellPrice) * 100) : 0;
   const parsedTags: string[] = product.productTags || [];
+  const stock = activeVariant?.productInventory?.stockQuantity ?? 0;
 
   // Fetch reviews from API
   const { data: reviewsData, isLoading: reviewsLoading } = useQuery({
@@ -398,17 +397,18 @@ function QuickViewContent({ product, onClose }: { product: ProductDisplayModel; 
   }, [imageList.length]);
 
   const handleAddToCart = () => {
+    if (!activeVariant) return;
     for (let i = 0; i < quantity; i++) {
       addItem({
         id: product.id,
         name: product.name,
-        variant: firstVariant!,
+        variant: activeVariant,
         image: product.imagePreview,
         categories: product.categories,
       } as CartItem);
     }
     toast.success(t('homepage.cart.itemAdded', { name: product.name }), {
-      description: `${t('homepage.quickView.quantity')}: ${quantity} × ${CurrencyViewer(firstVariant?.sellPrice ?? 0, CONFIG.DEFAULT_CURRENCY)}`,
+      description: `${t('homepage.quickView.quantity')}: ${quantity} × ${CurrencyViewer(activeVariant.sellPrice, CONFIG.DEFAULT_CURRENCY)}`,
       action: { label: t('homepage.common.addToCart'), onClick: () => useCartStore.getState().setCartOpen(true) },
     });
     // Show checkmark animation
@@ -422,8 +422,8 @@ function QuickViewContent({ product, onClose }: { product: ProductDisplayModel; 
     toggleItem({
       id: product.id,
       name: product.name,
-      price: firstVariant?.sellPrice ?? 0,
-      comparePrice: firstVariant?.oldSellPrice || undefined,
+      price: activeVariant?.sellPrice ?? 0,
+      comparePrice: activeVariant?.oldSellPrice || undefined,
       image: product.imagePreview,
       categories: product.categories,
     });
@@ -578,20 +578,21 @@ function QuickViewContent({ product, onClose }: { product: ProductDisplayModel; 
         {/* Details */}
         <div className="p-6 flex flex-col overflow-y-auto max-h-[70vh]">
           {/* Close button */}
-          <button
+          {/* <button
             onClick={onClose}
             className="absolute top-4 end-4 md:top-3 md:end-3 w-8 h-8 rounded-lg bg-ecommerce-surface-hover flex items-center justify-center hover:bg-ecommerce-border transition-colors z-10"
             aria-label={t('homepage.common.close')}
           >
             <X size={16} />
-          </button>
+          </button> */}
 
           {/* Category */}
           <div className="flex items-center gap-1.5 mb-2">
-            {product.categories?.map(category => category && (<>
-              <span className="w-2 h-2 rounded-full" style={{ backgroundColor: category.color }} />
-              <span className="text-xs font-medium text-ecommerce-text-muted uppercase tracking-wider">{category.name}</span>
-            </>))}
+            {product.categories?.map(category => category && (
+              <span key={"category-" + category.key} className="text-xs font-medium text-ecommerce-text-muted uppercase tracking-wider">
+                <span className="w-2 h-2 rounded-full" style={{ backgroundColor: category.color }} > </span>
+                <span className="text-xs font-medium text-ecommerce-text-muted uppercase tracking-wider">{category.name}</span>
+              </span>))}
             {product.sku && (
               <span className="text-xs text-ecommerce-text-muted ms-auto">{t('homepage.common.sku')}: {product.sku}</span>
             )}
@@ -628,34 +629,17 @@ function QuickViewContent({ product, onClose }: { product: ProductDisplayModel; 
 
           {/* Price */}
           <div className="flex items-baseline gap-3 mt-4">
-            {hasMultipleVariants ? (
-              <span className="text-3xl font-bold text-ecommerce-text-primary">
-                {CurrencyViewer(minSellPrice, CONFIG.DEFAULT_CURRENCY)} - {CurrencyViewer(maxSellPrice, CONFIG.DEFAULT_CURRENCY)}
-              </span>
-            ) : (
+            <span className="text-3xl font-bold text-ecommerce-text-primary">
+              {CurrencyViewer(activeVariant?.sellPrice ?? 0, CONFIG.DEFAULT_CURRENCY)}
+            </span>
+            {activeVariant?.oldSellPrice > 0 && activeVariant.oldSellPrice > activeVariant.sellPrice && (
               <>
-                <span className="text-3xl font-bold text-ecommerce-text-primary">{CurrencyViewer(minSellPrice, CONFIG.DEFAULT_CURRENCY)}</span>
-                {firstVariant?.oldSellPrice > 0 && (
-                  <>
-                    <span className="text-lg text-ecommerce-text-muted line-through">{CurrencyViewer(firstVariant.oldSellPrice, CONFIG.DEFAULT_CURRENCY)}</span>
-                    <Badge className="bg-ecommerce-emerald/10 text-ecommerce-emerald border-0 text-xs font-semibold">
-                      {t('homepage.cart.savings')} ${(firstVariant.oldSellPrice - firstVariant.sellPrice).toFixed(2)}
-                    </Badge>
-                  </>
-                )}
+                <span className="text-lg text-ecommerce-text-muted line-through">{CurrencyViewer(activeVariant.oldSellPrice, CONFIG.DEFAULT_CURRENCY)}</span>
+                <Badge className="bg-ecommerce-emerald/10 text-ecommerce-emerald border-0 text-xs font-semibold">
+                  {t('homepage.cart.savings')} { CurrencyViewer(activeVariant.oldSellPrice - activeVariant.sellPrice, CONFIG.DEFAULT_CURRENCY) }
+                </Badge>  
               </>
             )}
-            {hasMultipleVariants && (() => {
-              const maxSavings = product.variants?.reduce((max, v) => {
-                const s = v.oldSellPrice > v.sellPrice ? v.oldSellPrice - v.sellPrice : 0;
-                return s > max ? s : max;
-              }, 0) ?? 0;
-              return maxSavings > 0 ? (
-                <Badge className="bg-ecommerce-emerald/10 text-ecommerce-emerald border-0 text-xs font-semibold">
-                  {t('homepage.common.saveFrom', { amount: maxSavings.toFixed(2) })}
-                </Badge>
-              ) : null;
-            })()}
           </div>
 
           {/* Short description */}
@@ -668,12 +652,12 @@ function QuickViewContent({ product, onClose }: { product: ProductDisplayModel; 
 
           {/* Stock status */}
           <div className="flex items-center gap-2 mt-4">
-            {totalStock > 0 ? (
+            {stock > 0 ? (
               <>
                 <Check size={14} className="text-ecommerce-emerald" />
                 <span className="text-sm text-ecommerce-emerald font-medium">{t('homepage.common.inStock')}</span>
-                {totalStock < 20 && (
-                  <span className="text-xs text-ecommerce-amber font-medium">— {t('homepage.common.onlyLeft', { count: totalStock })}</span>
+                {stock < 20 && (
+                  <span className="text-xs text-ecommerce-amber font-medium">— {t('homepage.common.onlyLeft', { count: stock })}</span>
                 )}
               </>
             ) : (
@@ -681,55 +665,23 @@ function QuickViewContent({ product, onClose }: { product: ProductDisplayModel; 
             )}
           </div>
 
-          {/* Color Variants */}
-          <div className="mt-5">
-            <div className="flex items-center gap-2 mb-2.5">
-              <span className="text-sm font-medium text-ecommerce-text-primary">{t('homepage.quickView.color')}</span>
-              <span className="text-xs text-ecommerce-text-muted">:</span>
-              <span className="text-sm text-ecommerce-text-secondary">{selectedColor.name}</span>
-            </div>
-            <div className="flex gap-2 flex-wrap">
-              {ColorVariants.map((color) => (
-                <button
-                  key={color.name}
-                  onClick={() => setSelectedColor(color)}
-                  className={`w-8 h-8 rounded-full border-2 transition-all duration-200 hover:scale-110 ${selectedColor.name === color.name ? 'border-ecommerce-red ring-2 ring-ecommerce-red/20 scale-110' : 'border-ecommerce-border hover:border-ecommerce-text-muted'}`}
-                  style={{ backgroundColor: color.value }}
-                  aria-label={color.name}
-                  title={color.name}
-                />
-              ))}
-            </div>
-          </div>
-
-          {/* Size Variants */}
-          <div className="mt-4">
-            <div className="flex items-center justify-between mb-2.5">
-              <div className="flex items-center gap-2">
-                <span className="text-sm font-medium text-ecommerce-text-primary">{t('homepage.quickView.size')}</span>
-                <span className="text-xs text-ecommerce-text-muted">:</span>
-                <span className="text-sm text-ecommerce-text-secondary">{selectedSize}</span>
-              </div>
-              <button
-                onClick={() => setIsSizeGuideOpen(true)}
-                className="text-xs text-ecommerce-purple hover:text-ecommerce-purple/80 hover:underline cursor-pointer flex items-center gap-1"
-              >
-                <Ruler size={12} />
-                {t('homepage.quickView.sizeGuide')}
-              </button>
-            </div>
-            <div className="flex gap-2 flex-wrap">
-              {SizeVariants.map((size) => (
-                <button
-                  key={size}
-                  onClick={() => setSelectedSize(size)}
-                  className={`h-9 min-w-[36px] px-3 rounded-lg border text-sm font-medium transition-all duration-200 ${selectedSize === size ? 'border-ecommerce-red bg-ecommerce-red/5 text-ecommerce-red' : 'border-ecommerce-border text-ecommerce-text-secondary hover:border-ecommerce-text-muted hover:bg-ecommerce-surface-hover'}`}
-                >
-                  {size}
-                </button>
-              ))}
-            </div>
-          </div>
+          {/* Variant Selector */}
+          <VariantSelector
+            variants={product.variants ?? []}
+            onVariantChange={(options) => {
+              const selectedKeys = Array.from(options.values()).filter(Boolean).map(o => o!.key);
+              if (selectedKeys.length === 0) {
+                setSelectedVariant(defaultCheapest);
+                return;
+              }
+              const matched = product.variants?.find(v =>
+                selectedKeys.every(key =>
+                  v.productAttributes?.some(attr => attr.key === key)
+                )
+              ) ?? null;
+              setSelectedVariant(matched);
+            }}
+          />
 
           {/* Quantity */}
           <div className="flex items-center gap-4 mt-5">
@@ -744,7 +696,7 @@ function QuickViewContent({ product, onClose }: { product: ProductDisplayModel; 
               </button>
               <span className="w-12 text-center text-sm font-semibold countdown-digit">{quantity}</span>
               <button
-                onClick={() => setQuantity(Math.min(totalStock || 99, quantity + 1))}
+                onClick={() => setQuantity(Math.min(stock || 99, quantity + 1))}
                 className="w-10 h-10 flex items-center justify-center hover:bg-ecommerce-surface-hover transition-colors"
                 aria-label={t('homepage.common.next')}
               >
@@ -752,16 +704,19 @@ function QuickViewContent({ product, onClose }: { product: ProductDisplayModel; 
               </button>
             </div>
             <span className="text-sm text-ecommerce-text-muted">
-              {t('homepage.cart.total')}: <span className="font-bold text-ecommerce-text-primary">${((firstVariant?.sellPrice ?? 0) * quantity).toFixed(2)}</span>
+              {t('homepage.cart.total')}: <span className="font-bold text-ecommerce-text-primary">{CurrencyViewer((activeVariant?.sellPrice ?? 0) * quantity, CONFIG.DEFAULT_CURRENCY)}</span>
             </span>
           </div>
 
           {/* Selected options summary */}
           <div className="mt-3 px-3 py-2 rounded-lg bg-ecommerce-surface-hover/60 border border-ecommerce-border/40">
             <span className="text-xs text-ecommerce-text-muted">{t('homepage.quickView.selected', { value: '' }).replace(/:\s*$/, '')} </span>
-            <span className="text-xs text-ecommerce-text-secondary font-medium">{selectedColor.name}</span>
-            <span className="text-xs text-ecommerce-text-muted"> / </span>
-            <span className="text-xs text-ecommerce-text-secondary font-medium">{selectedSize}</span>
+            {activeVariant?.productAttributes?.map((attr, i) => (
+              <span key={attr.id}>
+                {i > 0 && <span className="text-xs text-ecommerce-text-muted mx-1">/</span>}
+                <span className="text-xs text-ecommerce-text-secondary font-medium">{attr.displayName}</span>
+              </span>
+            ))}
             <span className="text-xs text-ecommerce-text-muted"> × {quantity}</span>
           </div>
 
@@ -769,7 +724,7 @@ function QuickViewContent({ product, onClose }: { product: ProductDisplayModel; 
           <div className="flex gap-3 mt-4">
             <Button
               onClick={handleAddToCart}
-              disabled={totalStock === 0 || addedToCart}
+              disabled={stock === 0 || addedToCart}
               className="flex-1 h-12 bg-ecommerce-red hover:bg-ecommerce-red/90 text-white rounded-xl font-semibold text-sm gap-2 transition-all hover:scale-[1.02] active:scale-95 disabled:opacity-50 shadow-lg shadow-ecommerce-red/10"
             >
               <AnimatePresence mode="wait">
