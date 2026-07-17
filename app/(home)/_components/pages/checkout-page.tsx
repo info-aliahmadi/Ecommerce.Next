@@ -19,6 +19,7 @@ import { toast } from 'sonner';
 import { Confetti } from '../ecommerce/confetti';
 import { useTranslations } from 'next-intl';
 import { useLocaleStore, RTL_LOCALES } from '../../_lib/store';
+import { GetImage } from '../../_lib/utils';
 
 function useMounted() {
   const [mounted, setMounted] = useState(false);
@@ -278,21 +279,18 @@ export function CheckoutPage() {
           {steps.map((s, i) => (
             <div key={i} className="flex items-center">
               <div className="flex flex-col items-center">
-                <div className={`w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold transition-all duration-300 ${
-                  i < step ? 'bg-ecommerce-emerald text-white' :
+                <div className={`w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold transition-all duration-300 ${i < step ? 'bg-ecommerce-emerald text-white' :
                   i === step ? 'bg-ecommerce-red text-white shadow-lg shadow-ecommerce-red/25' :
-                  'bg-ecommerce-surface-hover text-ecommerce-text-muted'
-                }`}>
+                    'bg-ecommerce-surface-hover text-ecommerce-text-muted'
+                  }`}>
                   {i < step ? <CheckCircle2 size={18} /> : <s.icon size={18} />}
                 </div>
-                <span className={`text-xs mt-2 font-medium ${
-                  i === step ? 'text-ecommerce-red' : i < step ? 'text-ecommerce-emerald' : 'text-ecommerce-text-muted'
-                }`}>{s.label}</span>
+                <span className={`text-xs mt-2 font-medium ${i === step ? 'text-ecommerce-red' : i < step ? 'text-ecommerce-emerald' : 'text-ecommerce-text-muted'
+                  }`}>{s.label}</span>
               </div>
               {i < steps.length - 1 && (
-                <div className={`w-20 sm:w-32 h-0.5 mx-3 mb-5 transition-colors duration-300 rounded-full ${
-                  i < step ? 'bg-ecommerce-emerald' : 'bg-ecommerce-border'
-                }`} />
+                <div className={`w-20 sm:w-32 h-0.5 mx-3 mb-5 transition-colors duration-300 rounded-full ${i < step ? 'bg-ecommerce-emerald' : 'bg-ecommerce-border'
+                  }`} />
               )}
             </div>
           ))}
@@ -303,9 +301,8 @@ export function CheckoutPage() {
       <div className="sm:hidden mb-6">
         <div className="flex items-center justify-between bg-ecommerce-surface-hover rounded-xl p-3">
           <div className="flex items-center gap-2">
-            <div className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold ${
-              'bg-ecommerce-red text-white'
-            }`}>
+            <div className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold ${'bg-ecommerce-red text-white'
+              }`}>
               {step + 1}
             </div>
             <span className="text-sm font-medium text-ecommerce-text-primary">{steps[step].label}</span>
@@ -493,9 +490,8 @@ export function CheckoutPage() {
                       <h3 className="text-sm font-semibold text-ecommerce-text-primary">{t('homepage.checkoutPage.shippingMethod')}</h3>
                     </div>
                     <RadioGroup value={shippingMethod} onValueChange={(v) => setShippingMethod(v as 'standard' | 'express')} className="space-y-3">
-                      <label className={`flex items-center gap-4 p-4 rounded-xl border-2 cursor-pointer transition-all ${
-                        shippingMethod === 'standard' ? 'border-ecommerce-purple bg-ecommerce-purple/5' : 'border-ecommerce-border hover:border-ecommerce-border'
-                      }`}>
+                      <label className={`flex items-center gap-4 p-4 rounded-xl border-2 cursor-pointer transition-all ${shippingMethod === 'standard' ? 'border-ecommerce-purple bg-ecommerce-purple/5' : 'border-ecommerce-border hover:border-ecommerce-border'
+                        }`}>
                         <RadioGroupItem value="standard" className="data-[state=checked]:border-ecommerce-purple data-[state=checked]:text-ecommerce-purple" />
                         <div className="flex-1">
                           <div className="flex items-center gap-2">
@@ -510,9 +506,8 @@ export function CheckoutPage() {
                           ) : '$5.99'}
                         </span>
                       </label>
-                      <label className={`flex items-center gap-4 p-4 rounded-xl border-2 cursor-pointer transition-all ${
-                        shippingMethod === 'express' ? 'border-ecommerce-purple bg-ecommerce-purple/5' : 'border-ecommerce-border hover:border-ecommerce-border'
-                      }`}>
+                      <label className={`flex items-center gap-4 p-4 rounded-xl border-2 cursor-pointer transition-all ${shippingMethod === 'express' ? 'border-ecommerce-purple bg-ecommerce-purple/5' : 'border-ecommerce-border hover:border-ecommerce-border'
+                        }`}>
                         <RadioGroupItem value="express" className="data-[state=checked]:border-ecommerce-purple data-[state=checked]:text-ecommerce-purple" />
                         <div className="flex-1">
                           <div className="flex items-center gap-2">
@@ -565,9 +560,8 @@ export function CheckoutPage() {
                   {/* Payment methods */}
                   <div className="bg-white dark:bg-ecommerce-surface rounded-2xl border border-ecommerce-border p-5 sm:p-6 space-y-4">
                     <RadioGroup value={payment.method} onValueChange={(v) => setPayment(p => ({ ...p, method: v as PaymentForm['method'] }))} className="space-y-3">
-                      <label className={`flex items-center gap-4 p-4 rounded-xl border-2 cursor-pointer transition-all ${
-                        payment.method === 'card' ? 'border-ecommerce-purple bg-ecommerce-purple/5' : 'border-ecommerce-border hover:border-ecommerce-border'
-                      }`}>
+                      <label className={`flex items-center gap-4 p-4 rounded-xl border-2 cursor-pointer transition-all ${payment.method === 'card' ? 'border-ecommerce-purple bg-ecommerce-purple/5' : 'border-ecommerce-border hover:border-ecommerce-border'
+                        }`}>
                         <RadioGroupItem value="card" className="data-[state=checked]:border-ecommerce-purple data-[state=checked]:text-ecommerce-purple" />
                         <div className="w-10 h-10 rounded-xl bg-ecommerce-surface-hover flex items-center justify-center">
                           <CreditCardIcon size={20} className="text-ecommerce-text-secondary" />
@@ -580,9 +574,8 @@ export function CheckoutPage() {
                           <BadgeCheck size={16} className="text-ecommerce-purple" />
                         )}
                       </label>
-                      <label className={`flex items-center gap-4 p-4 rounded-xl border-2 cursor-pointer transition-all ${
-                        payment.method === 'paypal' ? 'border-ecommerce-purple bg-ecommerce-purple/5' : 'border-ecommerce-border hover:border-ecommerce-border'
-                      }`}>
+                      <label className={`flex items-center gap-4 p-4 rounded-xl border-2 cursor-pointer transition-all ${payment.method === 'paypal' ? 'border-ecommerce-purple bg-ecommerce-purple/5' : 'border-ecommerce-border hover:border-ecommerce-border'
+                        }`}>
                         <RadioGroupItem value="paypal" className="data-[state=checked]:border-ecommerce-purple data-[state=checked]:text-ecommerce-purple" />
                         <div className="w-10 h-10 rounded-xl bg-ecommerce-surface-hover flex items-center justify-center">
                           <Shield size={20} className="text-[#0070ba]" />
@@ -595,9 +588,8 @@ export function CheckoutPage() {
                           <BadgeCheck size={16} className="text-ecommerce-purple" />
                         )}
                       </label>
-                      <label className={`flex items-center gap-4 p-4 rounded-xl border-2 cursor-pointer transition-all ${
-                        payment.method === 'cod' ? 'border-ecommerce-purple bg-ecommerce-purple/5' : 'border-ecommerce-border hover:border-ecommerce-border'
-                      }`}>
+                      <label className={`flex items-center gap-4 p-4 rounded-xl border-2 cursor-pointer transition-all ${payment.method === 'cod' ? 'border-ecommerce-purple bg-ecommerce-purple/5' : 'border-ecommerce-border hover:border-ecommerce-border'
+                        }`}>
                         <RadioGroupItem value="cod" className="data-[state=checked]:border-ecommerce-purple data-[state=checked]:text-ecommerce-purple" />
                         <div className="w-10 h-10 rounded-xl bg-ecommerce-surface-hover flex items-center justify-center">
                           <Banknote size={20} className="text-ecommerce-text-secondary" />
@@ -834,13 +826,13 @@ export function CheckoutPage() {
                     <div className="space-y-3 max-h-72 overflow-y-auto scrollbar-thin pe-1">
                       {items.map((item) => (
                         <div key={item.id} className="flex items-center gap-3 p-3 rounded-xl bg-ecommerce-surface-hover">
-                          <img src={item.image} alt={item.name} className="w-14 h-14 rounded-lg object-cover shrink-0" />
+                          <img src={GetImage(item.image)} alt={item.name} className="w-14 h-14 rounded-lg object-cover shrink-0" />
                           <div className="flex-1 min-w-0">
                             <p className="text-sm font-medium text-ecommerce-text-primary truncate">{item.name}</p>
-                            <p className="text-xs text-ecommerce-text-muted">{item.category} &middot; {t('homepage.cart.quantity')}: {item.quantity}</p>
+                            <p className="text-xs text-ecommerce-text-muted">{item.categories.map(x => x + ",")} &middot; {t('homepage.cart.quantity')}: {item.quantity}</p>
                           </div>
                           <span className="text-sm font-bold text-ecommerce-text-primary shrink-0">
-                            ${(item.price * item.quantity).toFixed(2)}
+                            ${(item.variant.sellPrice * item.quantity).toFixed(2)}
                           </span>
                         </div>
                       ))}
@@ -895,7 +887,7 @@ export function CheckoutPage() {
                 {items.map((item) => (
                   <div key={item.id} className="flex items-center gap-3">
                     <div className="relative">
-                      <img src={item.image} alt={item.name} className="w-11 h-11 rounded-lg object-cover" />
+                      <img src={GetImage(item.image)} alt={item.name} className="w-11 h-11 rounded-lg object-cover" />
                       <span className="absolute -top-1.5 -end-1.5 w-5 h-5 rounded-full bg-ecommerce-purple text-white text-[10px] font-bold flex items-center justify-center">
                         {item.quantity}
                       </span>
@@ -904,7 +896,7 @@ export function CheckoutPage() {
                       <p className="text-xs font-medium text-ecommerce-text-primary truncate">{item.name}</p>
                     </div>
                     <span className="text-xs font-semibold text-ecommerce-text-primary shrink-0">
-                      ${(item.price * item.quantity).toFixed(2)}
+                      ${(item.variant.sellPrice * item.quantity).toFixed(2)}
                     </span>
                   </div>
                 ))}

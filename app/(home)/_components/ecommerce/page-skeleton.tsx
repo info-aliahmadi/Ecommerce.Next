@@ -169,7 +169,7 @@ function NewsletterSkeleton() {
   return (
     <section className="py-12 sm:py-16">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <SkeletonRect className="!rounded-3xl p-8 sm:p-12 lg:p-16 overflow-hidden">
+        <SkeletonRect className="!rounded-3xl p-8 sm:p-12 lg:p-16 overflow-hidden" />
           <div className="grid lg:grid-cols-2 gap-10 items-center relative z-10">
             {/* Left - text */}
             <div className="space-y-4">
@@ -188,7 +188,6 @@ function NewsletterSkeleton() {
               <SkeletonLine className="h-3 w-48" />
             </div>
           </div>
-        </SkeletonRect>
       </div>
     </section>
   );

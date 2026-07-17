@@ -3,12 +3,13 @@
 import { useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, Flame } from 'lucide-react';
-import { useStockAlertStore, type StockAlert } from '../../_lib/store';
+import { useStockAlertStore } from '../../_lib/store';
 import { useTranslations } from 'next-intl';
+import StockAlertType from '../../_types/StockAlertType';
 
 const AUTO_DISMISS_MS = 5000;
 
-function AlertCard({ alert, onDismiss }: { alert: StockAlert; onDismiss: () => void }) {
+function AlertCard({ alert, onDismiss }: { alert: StockAlertType; onDismiss: () => void }) {
   const t = useTranslations();
   useEffect(() => {
     const timer = setTimeout(onDismiss, AUTO_DISMISS_MS);

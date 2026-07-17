@@ -49,11 +49,10 @@ export function CompareDrawer() {
     addItem({
       id: item.id,
       name: item.name,
-      price: item.price,
-      comparePrice: item.comparePrice,
+      variant: { id: 0, sku: '', productId: item.id, sellPrice: item.price, oldSellPrice: item.comparePrice ?? 0, productInventory: { id: 0, variantId: 0, stockQuantity: item.stock, reservedQuantity: 0 }, productAttributes: [] },
       image: item.image,
       categories: item.categories,
-    });
+    } as any);
     toast.success(t('homepage.cart.itemAdded', { name: item.name }), {
       description: `$${item.price.toFixed(2)}`,
       action: { label: t('homepage.common.addToCart'), onClick: () => useCartStore.getState().setCartOpen(true) },

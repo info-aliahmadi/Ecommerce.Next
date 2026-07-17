@@ -64,6 +64,7 @@
       "per": "لكل",
       "trendingBadge": "رائج",
       "saveAmount": "وفّر ${amount}",
+      "saveFrom": "وفّر من ${amount}",
       "pleaseTryAgain": "يرجى المحاولة لاحقاً",
       "retry": "إعادة المحاولة",
       "newArrivalsBadge": "New"

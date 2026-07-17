@@ -8,6 +8,7 @@ import { useWishlistStore, useCartStore } from '../../_lib/store';
 import { motion, AnimatePresence } from 'framer-motion';
 import { toast } from 'sonner';
 import { useTranslations } from 'next-intl';
+import { GetImage } from '../../_lib/utils';
 
 export function WishlistDrawer({ open, onClose }: { open: boolean; onClose: () => void }) {
   const { items, removeItem, totalCount } = useWishlistStore();
@@ -18,16 +19,15 @@ export function WishlistDrawer({ open, onClose }: { open: boolean; onClose: () =
     addItem({
       id: item.id,
       name: item.name,
-      price: item.price,
-      comparePrice: item.comparePrice,
+      variant: { id: 0, sku: '', productId: item.id, sellPrice: item.price, oldSellPrice: item.comparePrice ?? 0, productInventory: { id: 0, variantId: 0, stockQuantity: 99, reservedQuantity: 0 }, productAttributes: [] },
       image: item.image,
-      category: item.category,
-    });
+      categories: item.categories,
+    } as any);
     removeItem(item.id);
     toast.success(t('homepage.cart.itemAdded', { name: item.name }));
   };
 
-  const handleRemove = (id: string, name: string) => {
+  const handleRemove = (id: number, name: string) => {
     removeItem(id);
     toast.success(t('homepage.common.removeFromWishlist'));
   };
@@ -70,13 +70,13 @@ export function WishlistDrawer({ open, onClose }: { open: boolean; onClose: () =
                   className="flex items-center gap-3 p-3 rounded-xl bg-ecommerce-surface-hover dark:bg-[#252836] group"
                 >
                   <img
-                    src={item.image}
+                    src={GetImage(item.image)}
                     alt={item.name}
                     className="w-16 h-16 rounded-lg object-cover shrink-0"
                   />
                   <div className="flex-1 min-w-0">
                     <p className="text-sm font-semibold text-ecommerce-text-primary truncate">{item.name}</p>
-                    <p className="text-xs text-ecommerce-text-muted mt-0.5">{item.category}</p>
+                    <p className="text-xs text-ecommerce-text-muted mt-0.5">{item.categories.map(x => x.name + ",")}</p>
                     <div className="flex items-baseline gap-1.5 mt-1">
                       <span className="text-sm font-bold text-ecommerce-text-primary">${item.price.toFixed(2)}</span>
                       {item.comparePrice && (
@@ -111,11 +111,10 @@ export function WishlistDrawer({ open, onClose }: { open: boolean; onClose: () =
                     addItem({
                       id: item.id,
                       name: item.name,
-                      price: item.price,
-                      comparePrice: item.comparePrice,
+                      variant: { id: 0, sku: '', productId: item.id, sellPrice: item.price, oldSellPrice: item.comparePrice ?? 0, productInventory: { id: 0, variantId: 0, stockQuantity: 99, reservedQuantity: 0 }, productAttributes: [] },
                       image: item.image,
-                      category: item.category,
-                    });
+                      categories: item.categories,
+                    } as any);
                   });
                   toast.success(t('homepage.cart.itemAdded', { name: `${items.length} ${t('homepage.wishlist.items')}` }));
                   onClose();

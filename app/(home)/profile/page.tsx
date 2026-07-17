@@ -341,7 +341,13 @@ function ProfilePageContent() {
   };
 
   const handleWishlistAddToCart = (item: typeof wishlistItems[0]) => {
-    addToCart({ id: item.id, name: item.name, price: item.price, comparePrice: item.comparePrice, image: item.image, categories: item.categories });
+    addToCart({
+      id: item.id,
+      name: item.name,
+      variant: { id: 0, sku: '', productId: item.id, sellPrice: item.price, oldSellPrice: item.comparePrice ?? 0, productInventory: { id: 0, variantId: 0, stockQuantity: 99, reservedQuantity: 0 }, productAttributes: [] },
+      image: item.image,
+      categories: item.categories
+    } as any);
     toast.success(t('homepage.common.addToCart'));
   };
 

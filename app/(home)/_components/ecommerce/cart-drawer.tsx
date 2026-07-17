@@ -7,11 +7,12 @@ import { useCartStore, useRecentStore } from '../../_lib/store';
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from '../ui/sheet';
 import { CheckoutSheet } from './checkout-sheet';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useQuery } from '@tanstack/react-query';
 import { toast } from 'sonner';
 import { useState, useCallback } from 'react';
 import { useTranslations } from 'next-intl';
 import { GetImage } from '../../_lib/utils';
+import CurrencyViewer from '@root/utils/CurrencyViewer';
+import CONFIG from '@root/config';
 
 const PROMO_CODES: Record<string, { type: 'percentage' | 'freeship'; value: number; label: string }> = {
   WELCOME15: { type: 'percentage', value: 15, label: '15% off' },
@@ -46,9 +47,11 @@ function YouMightAlsoLike() {
             animate={{ opacity: 1, y: 0 }}
             className="flex items-center gap-2.5 p-2 rounded-xl bg-ecommerce-surface-hover/60 hover:bg-ecommerce-surface-hover transition-colors cursor-pointer group"
             onClick={() => {
+              const firstVariant = item.variants?.[0];
+              if (!firstVariant) return;
               useCartStore.getState().addItem({
-                id: item.id, name: item.name, price: item.sellUnitPrice,
-                comparePrice: item.oldSellUnitPrice, image: item.imagePreview, categories: item.categories,
+                id: item.id, name: item.name, variant: firstVariant,
+                image: item.imagePreview, categories: item.categories,
               });
               toast.success(t('homepage.cart.itemAdded', { name: item.name }));
             }}
@@ -58,7 +61,7 @@ function YouMightAlsoLike() {
             </div>
             <div className="flex-1 min-w-0">
               <p className="text-xs font-medium text-ecommerce-text-primary line-clamp-1">{item.name}</p>
-              <p className="text-xs font-bold text-ecommerce-text-primary mt-0.5">${item.sellUnitPrice.toFixed(2)}</p>
+              <p className="text-xs font-bold text-ecommerce-text-primary mt-0.5">{CurrencyViewer(item.variants?.[0]?.sellPrice,CONFIG.DEFAULT_CURRENCY)  ?? '0.00'}</p>
             </div>
             <div className="w-7 h-7 rounded-lg bg-ecommerce-red/10 text-ecommerce-red flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity shrink-0">
               <ShoppingCart size={12} />
@@ -211,9 +214,9 @@ export function CartDrawer() {
                         <h4 className="text-sm font-medium text-ecommerce-text-primary line-clamp-1">{item.name}</h4>
 
                         <p className="text-xs text-ecommerce-text-muted mt-0.5">{item.categories.map(x => x.name + ",")}</p>
-                        {item.comparePrice && item.comparePrice > item.price && (
+                        {item.variant.oldSellPrice > 0 && item.variant.oldSellPrice > item.variant.sellPrice && (
                           <p className="text-[10px] text-ecommerce-emerald font-medium mt-0.5">
-                            {t('homepage.cart.couponApplied', { amount: `$${(item.comparePrice - item.price).toFixed(2)}` })}
+                            {t('homepage.cart.couponApplied', { amount: `$${(item.variant.oldSellPrice - item.variant.sellPrice).toFixed(2)}` })}
                           </p>
                         )}
 
@@ -240,11 +243,11 @@ export function CartDrawer() {
                           {/* Price */}
                           <div className="text-end">
                             <span className="text-sm font-bold text-ecommerce-text-primary">
-                              ${(item.price * item.quantity).toFixed(2)}
+                              ${(item.variant.sellPrice * item.quantity).toFixed(2)}
                             </span>
-                            {item.comparePrice && (
+                            {item.variant.oldSellPrice > 0 && (
                               <p className="text-[10px] text-ecommerce-text-muted line-through">
-                                ${(item.comparePrice * item.quantity).toFixed(2)}
+                                ${(item.variant.oldSellPrice * item.quantity).toFixed(2)}
                               </p>
                             )}
                           </div>

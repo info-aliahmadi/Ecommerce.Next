@@ -291,7 +291,7 @@ function CheckoutPageInner() {
                 </p>
               </div>
               <span className="text-sm font-bold text-ecommerce-text-primary shrink-0">
-                ${(item.price * item.quantity).toFixed(2)}
+                ${(item.variant.sellPrice * item.quantity).toFixed(2)}
               </span>
             </div>
           ))}
@@ -711,11 +711,11 @@ function CheckoutPageInner() {
                   {item.name}
                 </p>
                 <p className="text-xs text-ecommerce-text-muted mt-0.5">
-                  ${item.price.toFixed(2)} × {item.quantity}
+                  ${item.variant.sellPrice.toFixed(2)} × {item.quantity}
                 </p>
               </div>
               <span className="text-sm font-bold text-ecommerce-text-primary shrink-0">
-                ${(item.price * item.quantity).toFixed(2)}
+                ${(item.variant.sellPrice * item.quantity).toFixed(2)}
               </span>
             </div>
           ))}

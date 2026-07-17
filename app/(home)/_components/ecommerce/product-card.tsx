@@ -9,7 +9,7 @@ import { useState, useRef, useEffect, useCallback } from 'react';
 import { toast } from 'sonner';
 import { useFlyToCart } from '../../_hooks/use-fly-to-cart';
 import { useTranslations } from 'next-intl';
-import ProductDisplayModel from '../../_types/ProductDisplayModel';
+import ProductDisplayModel, { getProductPricing } from '../../_types/ProductDisplayModel';
 import { GetImage } from '../../_lib/utils';
 import CartItem from '../../_types/CartItem';
 import WishlistItem from '../../_types/WishlistItem';
@@ -25,9 +25,10 @@ interface ProductCardProps {
 
 export function ProductCard({ product, index = 0 }: Readonly<ProductCardProps>) {
   const category = product.categories?.[0];
-  // make a method to get the image url from the product object, if the product has a thumbnailPath, use that, otherwise use the fullPath, if neither exists, use a placeholder image
   const image = GetImage(product.imagePreview, true);
   const rating = product.approvedTotalReviews > 0 ? product.approvedRatingSum / product.approvedTotalReviews : 0;
+
+  const { cheapestVariant, hasMultipleVariants, minSellPrice, maxSellPrice, totalStock } = getProductPricing(product.variants ?? []);
 
   const t = useTranslations();
   const { toggleItem, isInWishlist } = useWishlistStore();
@@ -78,8 +79,8 @@ export function ProductCard({ product, index = 0 }: Readonly<ProductCardProps>) 
 
   const wishlisted = isInWishlist(product.id);
   const inCompare = isInCompare(product.id);
-  const discount = product.oldSellUnitPrice ? Math.round(((product.oldSellUnitPrice - product.sellUnitPrice) / product.oldSellUnitPrice) * 100) : 0;
-  const savings = product.oldSellUnitPrice && product.oldSellUnitPrice > product.sellUnitPrice ? product.oldSellUnitPrice - product.sellUnitPrice : 0;
+  const discount = cheapestVariant?.oldSellPrice ? Math.round(((cheapestVariant.oldSellPrice - cheapestVariant.sellPrice) / cheapestVariant.oldSellPrice) * 100) : 0;
+  const savings = cheapestVariant?.oldSellPrice && cheapestVariant.oldSellPrice > cheapestVariant.sellPrice ? cheapestVariant.oldSellPrice - cheapestVariant.sellPrice : 0;
 
   // Check if product is currently "new" based on date range
   const now = new Date();
@@ -93,8 +94,7 @@ export function ProductCard({ product, index = 0 }: Readonly<ProductCardProps>) 
     handleAddToCartWithAnimation(e, GetImage(product.imagePreview), {
       id: product.id,
       name: product.name,
-      price: product.sellUnitPrice,
-      comparePrice: product.oldSellUnitPrice,
+      variant: cheapestVariant!,
       image: product.imagePreview,
       categories: product.categories || [],
     } as CartItem);
@@ -108,8 +108,8 @@ export function ProductCard({ product, index = 0 }: Readonly<ProductCardProps>) 
     toggleItem({
       id: product.id,
       name: product.name,
-      price: product.sellUnitPrice,
-      comparePrice: product.oldSellUnitPrice,
+      price: cheapestVariant?.sellPrice ?? 0,
+      comparePrice: cheapestVariant?.oldSellPrice || undefined,
       image: product.imagePreview,
       categories: product.categories || [],
     } as WishlistItem);
@@ -125,13 +125,13 @@ export function ProductCard({ product, index = 0 }: Readonly<ProductCardProps>) 
       addCompareItem({
         id: product.id,
         name: product.name,
-        price: product.sellUnitPrice,
-        comparePrice: product.oldSellUnitPrice,
+        price: cheapestVariant?.sellPrice ?? 0,
+        comparePrice: cheapestVariant?.oldSellPrice || undefined,
         image: product.imagePreview,
         rating: product.approvedRatingSum,
         reviewCount: product.approvedTotalReviews,
         categories: product.categories || [],
-        stock: product.stockQuantity || 0,
+        stock: totalStock,
         description: product.fullDescription || '',
         sku: product.sku || ''
       } as CompareItem);
@@ -144,13 +144,13 @@ export function ProductCard({ product, index = 0 }: Readonly<ProductCardProps>) 
       addCompareItem({
         id: product.id,
         name: product.name,
-        price: product.sellUnitPrice,
-        comparePrice: product.oldSellUnitPrice,
+        price: cheapestVariant?.sellPrice ?? 0,
+        comparePrice: cheapestVariant?.oldSellPrice || undefined,
         image: product.imagePreview,
         rating: product.approvedRatingSum,
         reviewCount: product.approvedTotalReviews,
         categories: product.categories || [],
-        stock: product.stockQuantity || 0,
+        stock: totalStock,
         description: product.fullDescription || '',
         sku: product.sku || ''
       } as CompareItem);
@@ -252,14 +252,14 @@ export function ProductCard({ product, index = 0 }: Readonly<ProductCardProps>) 
             </div>
 
             {/* Stock indicator */}
-            {product.stockQuantity != null && product.stockQuantity < 10 && product.stockQuantity > 0 && (
+            {totalStock > 0 && totalStock < 10 && (
               <div className="absolute bottom-2.5 start-2.5 z-10">
                 <span className="text-[10px] font-bold px-2 py-0.5 rounded-md bg-ecommerce-amber/90 text-white shadow-sm">
-                  {t('homepage.common.onlyLeft', { count: product.stockQuantity })}
+                  {t('homepage.common.onlyLeft', { count: totalStock })}
                 </span>
               </div>
             )}
-            {product.stockQuantity === 0 && (
+            {totalStock === 0 && (
               <div className="absolute inset-0 bg-black/40 z-10 flex items-center justify-center">
                 <span className="text-sm font-bold text-white bg-black/60 px-4 py-2 rounded-xl">{t('homepage.common.outOfStock')}</span>
               </div>
@@ -350,19 +350,37 @@ export function ProductCard({ product, index = 0 }: Readonly<ProductCardProps>) 
                 ) : (
                   <>
                     <div className="flex items-baseline gap-1.5">
-                      <span className="text-base sm:text-lg font-bold text-ecommerce-text-primary">{CurrencyViewer(product.sellUnitPrice, CONFIG.DEFAULT_CURRENCY)}</span>
-                      {product.oldSellUnitPrice && product.oldSellUnitPrice > product.sellUnitPrice && (
-                        <span className="text-xs text-ecommerce-text-muted line-through">{CurrencyViewer(product.oldSellUnitPrice, CONFIG.DEFAULT_CURRENCY)}</span>
+                      {hasMultipleVariants ? (
+                        <span className="text-base sm:text-lg font-bold text-ecommerce-text-primary">
+                          {CurrencyViewer(minSellPrice, CONFIG.DEFAULT_CURRENCY)} - {CurrencyViewer(maxSellPrice, CONFIG.DEFAULT_CURRENCY)}
+                        </span>
+                      ) : (
+                        <>
+                          <span className="text-base sm:text-lg font-bold text-ecommerce-text-primary">{CurrencyViewer(minSellPrice, CONFIG.DEFAULT_CURRENCY)}</span>
+                          {cheapestVariant.oldSellPrice > 0 && cheapestVariant.oldSellPrice > cheapestVariant.sellPrice && (
+                            <span className="text-xs text-ecommerce-text-muted line-through">{CurrencyViewer(cheapestVariant.oldSellPrice, CONFIG.DEFAULT_CURRENCY)}</span>
+                          )}
+                        </>
                       )}
                     </div>
-                    {savings > 0 && (
-                      <span className="text-ecommerce-emerald text-[10px] font-medium">{t('homepage.common.saveAmount', { amount: savings.toFixed(2) })}</span>
+                    {!hasMultipleVariants && savings > 0 && (
+                      <span className="text-ecommerce-emerald text-[10px] font-medium">{t('homepage.common.saveAmount', { amount: CurrencyViewer(savings, CONFIG.DEFAULT_CURRENCY) })}</span>
                     )}
+                    {hasMultipleVariants && (() => {
+                      const maxSavings = product.variants.filter(v => v.productInventory.stockQuantity > 0).reduce((max, v) => {
+                        const s = v.oldSellPrice > v.sellPrice ? v.oldSellPrice - v.sellPrice : 0;
+                        return s > max ? s : max;
+                      }, 0) ?? 0;
+                      return maxSavings > 0 ? (
+                        <span className="text-ecommerce-emerald text-[10px] font-medium">{t('homepage.common.saveFrom', { amount: CurrencyViewer(maxSavings, CONFIG.DEFAULT_CURRENCY) })}</span>
+                      ) : null;
+                    })()}
                   </>
                 )}
               </div>
               {!product.disableBuyButton && (
                 <Button
+                  disabled={(totalStock === 0)}
                   onClick={handleAddToCart}
                   size="sm"
                   className={`h-8 px-2.5 sm:px-3 rounded-lg text-xs font-medium gap-1.5 transition-all duration-300 active:scale-95 ripple btn-shine ${justAdded ? 'bg-ecommerce-emerald hover:bg-ecommerce-emerald text-white scale-105' : 'bg-ecommerce-red hover:bg-ecommerce-red/90 text-white hover:scale-105'}`}

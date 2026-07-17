@@ -12,7 +12,7 @@ import {
 } from '../../../_lib/store';
 import { useFlyToCart } from '../../../_hooks/use-fly-to-cart';
 import { GetImage } from '../../../_lib/utils';
-import ProductDisplayModel from '../../../_types/ProductDisplayModel';
+import ProductDisplayModel, { getProductPricing } from '../../../_types/ProductDisplayModel';
 
 export default function ProductActions({
   product,
@@ -27,40 +27,41 @@ export default function ProductActions({
   const { handleAddToCartWithAnimation } = useFlyToCart();
 
   const wishlisted = isInWishlist(product.id);
+  const { cheapestVariant, totalStock } = getProductPricing(product.variants ?? []);
 
   const handleAddToCart = useCallback(
     (e: React.MouseEvent) => {
+      if (!cheapestVariant) return;
       handleAddToCartWithAnimation(e, GetImage(product.imagePreview), {
         id: product.id,
         name: product.name,
-        price: product.sellUnitPrice,
-        comparePrice: product.oldSellUnitPrice ?? undefined,
+        variant: cheapestVariant,
         image: product.imagePreview,
         categories: product.categories,
         quantity: 1
       });
     },
-    [product, handleAddToCartWithAnimation],
+    [product, handleAddToCartWithAnimation, cheapestVariant],
   );
 
   const handleBuyNow = useCallback(() => {
+    if (!cheapestVariant) return;
     addItem({
       id: product.id,
       name: product.name,
-      price: product.sellUnitPrice,
-      comparePrice: product.oldSellUnitPrice ?? undefined,
+      variant: cheapestVariant,
       image: product.imagePreview,
       categories: product.categories
     });
     setCartOpen(true);
-  }, [product, addItem, setCartOpen]);
+  }, [product, addItem, setCartOpen, cheapestVariant]);
 
   const handleWishlist = useCallback(() => {
     toggleItem({
       id: product.id,
       name: product.name,
-      price: product.sellUnitPrice,
-      comparePrice: product.oldSellUnitPrice ?? undefined,
+      price: cheapestVariant?.sellPrice ?? 0,
+      comparePrice: cheapestVariant?.oldSellPrice || undefined,
       image: product.imagePreview,
       categories: product.categories
     });
@@ -79,18 +80,18 @@ export default function ProductActions({
     addCompareItem({
       id: product.id,
       name: product.name,
-      price: product.sellUnitPrice,
-      comparePrice: product.oldSellUnitPrice,
+      price: cheapestVariant?.sellPrice ?? 0,
+      comparePrice: cheapestVariant?.oldSellPrice || undefined,
       image: product.imagePreview,
       rating: product.approvedRatingSum,
       reviewCount: product.approvedTotalReviews,
       categories: product.categories || [],
-      stock: product.stockQuantity || 0,
+      stock: totalStock,
       description: product.fullDescription || '',
       sku: product.sku || ''
     });
     toast.success(t('homepage.common.compare'));
-  }, [product, addCompareItem, t]);
+  }, [product, addCompareItem, t, cheapestVariant, totalStock]);
 
   return (
     <>
@@ -99,7 +100,7 @@ export default function ProductActions({
         <div className="space-y-2.5 pt-1">
           <Button
             onClick={handleAddToCart}
-            disabled={product.stockQuantity === 0}
+            disabled={totalStock === 0}
             className="w-full h-12 text-base font-semibold rounded-xl bg-ecommerce-red hover:bg-ecommerce-red/90 text-white gap-2 transition-all hover:scale-[1.01] active:scale-[0.99] disabled:opacity-50 disabled:hover:scale-100"
           >
             <ShoppingCart size={20} />
@@ -107,7 +108,7 @@ export default function ProductActions({
           </Button>
           <Button
             onClick={handleBuyNow}
-            disabled={product.stockQuantity === 0}
+            disabled={totalStock === 0}
             variant="outline"
             className="w-full h-11 text-sm font-medium rounded-xl border-2 border-ecommerce-text-primary text-ecommerce-text-primary hover:bg-ecommerce-text-primary hover:text-white gap-2 transition-all disabled:opacity-50"
           >

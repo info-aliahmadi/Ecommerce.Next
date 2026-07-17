@@ -64,6 +64,7 @@
       "per": "per",
       "trendingBadge": "TRENDING",
       "saveAmount": "Save ${amount}",
+      "saveFrom": "Saving from ${amount}",
       "pleaseTryAgain": "Please try again later",
       "retry": "Retry",
       "newArrivalsBadge": "New"

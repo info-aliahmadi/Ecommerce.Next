@@ -15,7 +15,7 @@ const getInitialDrawerState = (): boolean => {
     }
   }
   // Default to false if no stored value or not in browser
-  return false; 
+  return true; 
 };
 
 // initial state

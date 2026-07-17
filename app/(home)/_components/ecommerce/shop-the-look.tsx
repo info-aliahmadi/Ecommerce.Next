@@ -69,7 +69,7 @@ function LookCard({
   isFirst: boolean;
 }>) {
   const t = useTranslations();
-  const totalPrice = look.products.reduce((sum, p) => sum + p.sellUnitPrice, 0);
+  const totalPrice = look.products.reduce((sum, p) => sum + (p.variants?.[0]?.sellPrice ?? 0), 0);
 
   return (
     <motion.div

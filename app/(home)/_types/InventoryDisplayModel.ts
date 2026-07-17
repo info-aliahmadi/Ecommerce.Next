@@ -1,42 +1,24 @@
-import ProductAttributeDisplayModel from "./ProductAttributeDisplayModel";
-
 /**
  * Represents product inventory information.
  */
 export default interface InventoryDisplayModel {
+  /**
   /**
    * The ID of the product inventory record.
    */
   id: number;
 
   /**
-   * The ID of the associated product.
+   * The variantId of the associated product.
    */
-  productId: number;
-
+  variantId: number;
   /**
-   * The ID of the associated attribute (nullable).
-   */
-  attributeId?: number | undefined;
-
-  /**
-   * The name of the associated attribute (nullable).
-   */
-  attribute?: ProductAttributeDisplayModel;
-
-  /**
-   * The quantity of stock.
+   * The stockQuantity of the associated product.
    */
   stockQuantity: number;
-
   /**
-   * The quantity of reserved stock.
+   * The reservedQuantity of the associated product.
    */
   reservedQuantity: number;
-
-  /**
-   * The unit price of buy stock.
-   */
-  buyUnitPrice: number;
 
 }

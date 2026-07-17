@@ -2,7 +2,7 @@ import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { getLocale, getTranslations } from 'next-intl/server';
 import CONFIG from '@root/config';
-import ProductDisplayModel from '../../_types/ProductDisplayModel';
+import ProductDisplayModel, { getProductPricing } from '../../_types/ProductDisplayModel';
 import { GetImage } from '../../_lib/utils';
 
 // Client components (only for interactive parts)
@@ -141,12 +141,15 @@ export default async function ProductDetailPage({
   // Parse tags
   const tags: string[] = product.productTags ?? [];
 
+  // Get pricing from cheapest in-stock variant
+  const { cheapestVariant } = getProductPricing(product.variants ?? []);
+
   // Calculate discount
-  const discount = product.oldSellUnitPrice
-    ? Math.round(((product.oldSellUnitPrice - product.sellUnitPrice) / product.oldSellUnitPrice) * 100)
+  const discount = cheapestVariant?.oldSellPrice
+    ? Math.round(((cheapestVariant.oldSellPrice - cheapestVariant.sellPrice) / cheapestVariant.oldSellPrice) * 100)
     : 0;
-  const savings = product.oldSellUnitPrice && product.oldSellUnitPrice > product.sellUnitPrice
-    ? product.oldSellUnitPrice - product.sellUnitPrice
+  const savings = cheapestVariant?.oldSellPrice && cheapestVariant.oldSellPrice > cheapestVariant.sellPrice
+    ? cheapestVariant.oldSellPrice - cheapestVariant.sellPrice
     : 0;
 
   // Delivery date label
@@ -244,11 +247,11 @@ export default async function ProductDetailPage({
                   <div className="space-y-1">
                     <div className="flex items-baseline gap-3">
                       <span className="text-3xl font-bold text-ecommerce-text-primary">
-                        {CurrencyViewer(product.sellUnitPrice, CONFIG.DEFAULT_CURRENCY)}
+                        {CurrencyViewer(cheapestVariant?.sellPrice ?? 0, CONFIG.DEFAULT_CURRENCY)}
                       </span>
-                      {product.oldSellUnitPrice && product.oldSellUnitPrice > product.sellUnitPrice && (
+                      {cheapestVariant?.oldSellPrice && cheapestVariant.oldSellPrice > cheapestVariant.sellPrice && (
                         <span className="text-lg text-ecommerce-text-muted line-through">
-                          {CurrencyViewer(product.oldSellUnitPrice, CONFIG.DEFAULT_CURRENCY)}
+                          {CurrencyViewer(cheapestVariant.oldSellPrice, CONFIG.DEFAULT_CURRENCY)}
                         </span>
                       )}
                     </div>
@@ -332,7 +335,7 @@ export default async function ProductDetailPage({
                 <Separator className="bg-ecommerce-border/50" />
 
                 {/* Color Variants */}
-                <div className="mt-5">
+                {/* <div className="mt-5">
                   <div className="flex items-center gap-2 mb-2.5">
                     <span className="text-sm font-medium text-ecommerce-text-primary">{t('homepage.quickView.color')}</span>
                     <span className="text-xs text-ecommerce-text-muted">:</span>
@@ -350,10 +353,10 @@ export default async function ProductDetailPage({
                       />
                     ))}
                   </div>
-                </div>
+                </div> */}
 
                 {/* Size Variants */}
-                <div className="mt-4">
+                {/* <div className="mt-4">
                   <div className="flex items-center justify-between mb-2.5">
                     <div className="flex items-center gap-2">
                       <span className="text-sm font-medium text-ecommerce-text-primary">{t('homepage.quickView.size')}</span>
@@ -379,7 +382,7 @@ export default async function ProductDetailPage({
                       </button>
                     ))}
                   </div>
-                </div>
+                </div> */}
 
                 {/* Quantity Selector (client for interactivity) */}
                 {!product.disableBuyButton && (

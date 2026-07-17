@@ -3,7 +3,7 @@ import CurrencyTypes from "@root/app/types/enums/CurrencyTypes";
 export default function CurrencyViewer(
   value: number,
   currency: CurrencyTypes,
-): string | undefined {
+): string {
   let result;
 
   const dollar = new Intl.NumberFormat('en-US', {

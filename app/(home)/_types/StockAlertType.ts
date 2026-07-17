@@ -1,4 +1,4 @@
-export default interface StockAlert {
+export default interface StockAlertType {
   id: string;
   productName: string;
   stock: number;

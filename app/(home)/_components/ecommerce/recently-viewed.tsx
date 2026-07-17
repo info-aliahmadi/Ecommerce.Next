@@ -117,14 +117,25 @@ export function RecentlyViewed() {
                     <div className="p-3 flex flex-col flex-1">
                       <p className="text-xs font-medium text-ecommerce-text-muted">{item.categories.map(p => p.name + ",")}</p>
                       <h4 className="text-sm font-semibold text-ecommerce-text-primary line-clamp-1 mt-0.5">{item.name}</h4>
-                      <span className="text-sm font-bold text-ecommerce-text-primary mt-2">${item.sellUnitPrice.toFixed(2)}</span>
+                      {(() => {
+                        const prices = item.variants?.map(v => v.sellPrice).filter(p => p > 0) ?? [];
+                        const min = prices.length > 0 ? Math.min(...prices) : 0;
+                        const max = prices.length > 0 ? Math.max(...prices) : 0;
+                        const hasMultiple = (item.variants?.length ?? 0) > 1;
+                        return (
+                          <span className="text-sm font-bold text-ecommerce-text-primary mt-2">
+                            {hasMultiple ? `$${min.toFixed(2)} - $${max.toFixed(2)}` : `$${min.toFixed(2)}`}
+                          </span>
+                        );
+                      })()}
                       <button
                         onClick={() => {
+                          const firstVariant = item.variants?.[0];
+                          if (!firstVariant) return;
                           addItem({
                             id: item.id,
                             name: item.name,
-                            price: item.sellUnitPrice,
-                            comparePrice: item.oldSellUnitPrice,
+                            variant: firstVariant,
                             image: item.imagePreview,
                             categories: item.categories
                           });

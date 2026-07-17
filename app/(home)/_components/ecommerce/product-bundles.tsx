@@ -7,7 +7,7 @@ import { Badge } from '../ui/badge';
 import { useCartStore } from '../../_lib/store';
 import { toast } from 'sonner';
 import { useTranslations } from 'next-intl';
-import ProductDisplayModel from '../../_types/ProductDisplayModel';
+import ProductDisplayModel, { getCheapestVariant } from '../../_types/ProductDisplayModel';
 import HomePageService from '../../_services/HomePageService';
 import { useQuery } from '@tanstack/react-query';
 import BundleDisplayModel from '../../_types/BundleDisplayModel';
@@ -16,9 +16,11 @@ import CurrencyViewer from '@root/utils/CurrencyViewer';
 import CONFIG from '@root/config';
 
 
+
 function getBundleSavings(products: ProductDisplayModel[]) {
-  const totalPrice = products.reduce((s, p) => s + p.sellUnitPrice, 0);
-  const compareTotal = products.reduce((s, p) => s + (p.oldSellUnitPrice || p.sellUnitPrice), 0);
+  const variants = products.map(p => getCheapestVariant(p.variants));
+  const totalPrice = variants.reduce((s, v) => s + (v?.sellPrice ?? 0), 0);
+  const compareTotal = variants.reduce((s, v) => s + (v?.oldSellPrice ?? v?.sellPrice ?? 0), 0);
   const savings = compareTotal - totalPrice;
   const percentage = compareTotal > 0 ? Math.round((savings / compareTotal) * 100) : 0;
   return { totalPrice, compareTotal, savings, percentage };
@@ -41,11 +43,12 @@ export function ProductBundles() {
 
   const handleAddBundle = (bundle: BundleDisplayModel) => {
     bundle.products?.forEach((p) => {
+      const v = getCheapestVariant(p.variants);
+      if (!v) return;
       addItem({
         id: p.id,
         name: p.name,
-        price: p.sellUnitPrice,
-        comparePrice: p.oldSellUnitPrice,
+        variant: v,
         image: p.imagePreview,
         categories: p.categories,
       });
@@ -121,21 +124,26 @@ export function ProductBundles() {
                               alt={product.name}
                               className="w-12 h-12 rounded-lg object-cover shrink-0"
                             />
-                            <div className="flex-1 min-w-0">
-                              <p className="text-sm font-medium text-ecommerce-text-primary truncate">
-                                {product.name}
-                              </p>
-                              <div className="flex items-center gap-2">
-                                <span className="text-sm font-semibold text-ecommerce-red">
-                                  {CurrencyViewer(product.sellUnitPrice,CONFIG.DEFAULT_CURRENCY)}
-                                </span>
-                                {product.oldSellUnitPrice != 0 && (
-                                  <span className="text-[11px] text-ecommerce-text-muted line-through">
-                                    {CurrencyViewer(product.oldSellUnitPrice,CONFIG.DEFAULT_CURRENCY)}
-                                  </span>
-                                )}
-                              </div>
-                            </div>
+                            {(() => {
+                              const v = getCheapestVariant(product.variants);
+                              return (
+                                <div className="flex-1 min-w-0">
+                                  <p className="text-sm font-medium text-ecommerce-text-primary truncate">
+                                    {product.name}
+                                  </p>
+                                  <div className="flex items-center gap-2">
+                                    <span className="text-sm font-semibold text-ecommerce-red">
+                                      {CurrencyViewer(v?.sellPrice ?? 0, CONFIG.DEFAULT_CURRENCY)}
+                                    </span>
+                                    {v?.oldSellPrice != 0 && (
+                                      <span className="text-[11px] text-ecommerce-text-muted line-through">
+                                        {CurrencyViewer(v?.oldSellPrice ?? 0, CONFIG.DEFAULT_CURRENCY)}
+                                      </span>
+                                    )}
+                                  </div>
+                                </div>
+                              );
+                            })()}
                           </div>
                         ))}
                       </div>

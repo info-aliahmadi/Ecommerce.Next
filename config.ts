@@ -4,7 +4,7 @@ import MeasureType from "./app/types/enums/MeasureType";
 // ==============================|| THEME CONFIG  ||============================== //
 const CONFIG = {
   APP_VERSION: '1.2',
-  APP_HEADER: 'Hydra Cashier App',
+  APP_HEADER: 'Hydra Shop',
   DEFAULT_PATH: '/',
   MINIDRAWER: true,
   CONTAINER: true,
@@ -41,7 +41,7 @@ const CONFIG = {
   RTL_FONTS_EDITOR: '"Iran Sans", Arial, tohoma'
 };
 
-export default CONFIG;
+
 
 export const drawerWidth = 260;
 
@@ -50,3 +50,5 @@ export const drawerMinimizeWidth = 60;
 export const twitterColor = '#1DA1F2';
 export const facebookColor = '#3b5998';
 export const linkedInColor = '#0e76a8';
+
+export default CONFIG;

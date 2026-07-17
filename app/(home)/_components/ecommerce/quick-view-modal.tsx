@@ -320,7 +320,13 @@ function QuickViewContent({ product, onClose }: { product: ProductDisplayModel; 
   const addedTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const wishlisted = isInWishlist(product.id);
-  const discount = product.oldSellUnitPrice ? Math.round(((product.oldSellUnitPrice - product.sellUnitPrice) / product.oldSellUnitPrice) * 100) : 0;
+  const firstVariant = product.variants?.[0];
+  const hasMultipleVariants = (product.variants?.length ?? 0) > 1;
+  const sellPrices = product.variants?.map(v => v.sellPrice).filter(p => p > 0) ?? [];
+  const minSellPrice = sellPrices.length > 0 ? Math.min(...sellPrices) : 0;
+  const maxSellPrice = sellPrices.length > 0 ? Math.max(...sellPrices) : 0;
+  const discount = firstVariant?.oldSellPrice ? Math.round(((firstVariant.oldSellPrice - firstVariant.sellPrice) / firstVariant.oldSellPrice) * 100) : 0;
+  const totalStock = product.variants?.reduce((sum, v) => sum + (v.productInventory?.stockQuantity ?? 0), 0) ?? 0;
   const parsedTags: string[] = product.productTags || [];
 
   // Fetch reviews from API
@@ -396,14 +402,13 @@ function QuickViewContent({ product, onClose }: { product: ProductDisplayModel; 
       addItem({
         id: product.id,
         name: product.name,
-        price: product.sellUnitPrice,
-        comparePrice: product.oldSellUnitPrice,
+        variant: firstVariant!,
         image: product.imagePreview,
         categories: product.categories,
       } as CartItem);
     }
     toast.success(t('homepage.cart.itemAdded', { name: product.name }), {
-      description: `${t('homepage.quickView.quantity')}: ${quantity} × ${CurrencyViewer(product.sellUnitPrice,CONFIG.DEFAULT_CURRENCY)}`,
+      description: `${t('homepage.quickView.quantity')}: ${quantity} × ${CurrencyViewer(firstVariant?.sellPrice ?? 0, CONFIG.DEFAULT_CURRENCY)}`,
       action: { label: t('homepage.common.addToCart'), onClick: () => useCartStore.getState().setCartOpen(true) },
     });
     // Show checkmark animation
@@ -417,8 +422,8 @@ function QuickViewContent({ product, onClose }: { product: ProductDisplayModel; 
     toggleItem({
       id: product.id,
       name: product.name,
-      price: product.sellUnitPrice,
-      comparePrice: product.oldSellUnitPrice,
+      price: firstVariant?.sellPrice ?? 0,
+      comparePrice: firstVariant?.oldSellPrice || undefined,
       image: product.imagePreview,
       categories: product.categories,
     });
@@ -507,9 +512,9 @@ function QuickViewContent({ product, onClose }: { product: ProductDisplayModel; 
                   {t('homepage.common.off', { percent: discount })}
                 </Badge>
               )}
-              {product.stockQuantity > 0 && product.stockQuantity < product.minStockQuantity && (
+              {totalStock > 0 && totalStock < 10 && (
                 <Badge className="bg-ecommerce-amber text-ecommerce-text-primary border-0 text-xs font-bold px-2.5 py-1 rounded-lg shadow-sm">
-                  {t('homepage.common.onlyLeft', { count: product.stockQuantity })}
+                  {t('homepage.common.onlyLeft', { count: totalStock })}
                 </Badge>
               )}
             </div>
@@ -601,7 +606,7 @@ function QuickViewContent({ product, onClose }: { product: ProductDisplayModel; 
           {parsedTags.length > 0 && (
             <div className="flex gap-1.5 mt-2 flex-wrap">
               {parsedTags.map(tag => (
-                <span key={tag} className="text-[10px] font-semibold px-2 py-0.5 rounded-md bg-ecommerce-surface-hover text-ecommerce-text-muted capitalize border border-ecommerce-border/50">{tag}</span>
+                <span key={"tag-" + tag} className="text-[10px] font-semibold px-2 py-0.5 rounded-md bg-ecommerce-surface-hover text-ecommerce-text-muted capitalize border border-ecommerce-border/50">{tag}</span>
               ))}
             </div>
           )}
@@ -611,7 +616,7 @@ function QuickViewContent({ product, onClose }: { product: ProductDisplayModel; 
             <div className="flex items-center gap-0.5">
               {Array.from({ length: 5 }).map((_, i) => (
                 <Star
-                  key={i}
+                  key={"sklet-rating-" + i}
                   size={14}
                   className={i < Math.floor(product.approvedRatingSum) ? 'fill-ecommerce-amber text-ecommerce-amber' : 'text-ecommerce-border'}
                 />
@@ -623,15 +628,34 @@ function QuickViewContent({ product, onClose }: { product: ProductDisplayModel; 
 
           {/* Price */}
           <div className="flex items-baseline gap-3 mt-4">
-            <span className="text-3xl font-bold text-ecommerce-text-primary">{CurrencyViewer(product.sellUnitPrice,CONFIG.DEFAULT_CURRENCY)}</span>
-            {product.oldSellUnitPrice > 0 && (
+            {hasMultipleVariants ? (
+              <span className="text-3xl font-bold text-ecommerce-text-primary">
+                {CurrencyViewer(minSellPrice, CONFIG.DEFAULT_CURRENCY)} - {CurrencyViewer(maxSellPrice, CONFIG.DEFAULT_CURRENCY)}
+              </span>
+            ) : (
               <>
-                <span className="text-lg text-ecommerce-text-muted line-through">{CurrencyViewer(product.oldSellUnitPrice,CONFIG.DEFAULT_CURRENCY)}</span>
-                <Badge className="bg-ecommerce-emerald/10 text-ecommerce-emerald border-0 text-xs font-semibold">
-                  {t('homepage.cart.savings')} ${(product.oldSellUnitPrice - product.sellUnitPrice).toFixed(2)}
-                </Badge>
+                <span className="text-3xl font-bold text-ecommerce-text-primary">{CurrencyViewer(minSellPrice, CONFIG.DEFAULT_CURRENCY)}</span>
+                {firstVariant?.oldSellPrice > 0 && (
+                  <>
+                    <span className="text-lg text-ecommerce-text-muted line-through">{CurrencyViewer(firstVariant.oldSellPrice, CONFIG.DEFAULT_CURRENCY)}</span>
+                    <Badge className="bg-ecommerce-emerald/10 text-ecommerce-emerald border-0 text-xs font-semibold">
+                      {t('homepage.cart.savings')} ${(firstVariant.oldSellPrice - firstVariant.sellPrice).toFixed(2)}
+                    </Badge>
+                  </>
+                )}
               </>
             )}
+            {hasMultipleVariants && (() => {
+              const maxSavings = product.variants?.reduce((max, v) => {
+                const s = v.oldSellPrice > v.sellPrice ? v.oldSellPrice - v.sellPrice : 0;
+                return s > max ? s : max;
+              }, 0) ?? 0;
+              return maxSavings > 0 ? (
+                <Badge className="bg-ecommerce-emerald/10 text-ecommerce-emerald border-0 text-xs font-semibold">
+                  {t('homepage.common.saveFrom', { amount: maxSavings.toFixed(2) })}
+                </Badge>
+              ) : null;
+            })()}
           </div>
 
           {/* Short description */}
@@ -644,12 +668,12 @@ function QuickViewContent({ product, onClose }: { product: ProductDisplayModel; 
 
           {/* Stock status */}
           <div className="flex items-center gap-2 mt-4">
-            {product.stockQuantity > 0 ? (
+            {totalStock > 0 ? (
               <>
                 <Check size={14} className="text-ecommerce-emerald" />
                 <span className="text-sm text-ecommerce-emerald font-medium">{t('homepage.common.inStock')}</span>
-                {product.stockQuantity < 20 && (
-                  <span className="text-xs text-ecommerce-amber font-medium">— {t('homepage.common.onlyLeft', { count: product.stockQuantity })}</span>
+                {totalStock < 20 && (
+                  <span className="text-xs text-ecommerce-amber font-medium">— {t('homepage.common.onlyLeft', { count: totalStock })}</span>
                 )}
               </>
             ) : (
@@ -720,7 +744,7 @@ function QuickViewContent({ product, onClose }: { product: ProductDisplayModel; 
               </button>
               <span className="w-12 text-center text-sm font-semibold countdown-digit">{quantity}</span>
               <button
-                onClick={() => setQuantity(Math.min(product.stockQuantity || 99, quantity + 1))}
+                onClick={() => setQuantity(Math.min(totalStock || 99, quantity + 1))}
                 className="w-10 h-10 flex items-center justify-center hover:bg-ecommerce-surface-hover transition-colors"
                 aria-label={t('homepage.common.next')}
               >
@@ -728,7 +752,7 @@ function QuickViewContent({ product, onClose }: { product: ProductDisplayModel; 
               </button>
             </div>
             <span className="text-sm text-ecommerce-text-muted">
-              {t('homepage.cart.total')}: <span className="font-bold text-ecommerce-text-primary">${(product.sellUnitPrice * quantity).toFixed(2)}</span>
+              {t('homepage.cart.total')}: <span className="font-bold text-ecommerce-text-primary">${((firstVariant?.sellPrice ?? 0) * quantity).toFixed(2)}</span>
             </span>
           </div>
 
@@ -745,7 +769,7 @@ function QuickViewContent({ product, onClose }: { product: ProductDisplayModel; 
           <div className="flex gap-3 mt-4">
             <Button
               onClick={handleAddToCart}
-              disabled={product.stockQuantity === 0 || addedToCart}
+              disabled={totalStock === 0 || addedToCart}
               className="flex-1 h-12 bg-ecommerce-red hover:bg-ecommerce-red/90 text-white rounded-xl font-semibold text-sm gap-2 transition-all hover:scale-[1.02] active:scale-95 disabled:opacity-50 shadow-lg shadow-ecommerce-red/10"
             >
               <AnimatePresence mode="wait">

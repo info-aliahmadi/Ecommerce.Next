@@ -9,7 +9,7 @@ import { toast } from 'sonner';
 import { useCartStore } from '../../_lib/store';
 import { useTranslations } from 'next-intl';
 import HomePageService from '../../_services/HomePageService';
-import ProductDisplayModel from '../../_types/ProductDisplayModel';
+import ProductDisplayModel, { getProductPricing } from '../../_types/ProductDisplayModel';
 import CartItem from '../../_types/CartItem';
 import { GetImage } from '../../_lib/utils';
 import CurrencyViewer from '@root/utils/CurrencyViewer';
@@ -46,11 +46,12 @@ export function TrendingCarousel() {
 
   const handleAddToCart = (e: React.MouseEvent, product: ProductDisplayModel) => {
     e.stopPropagation();
+    const { cheapestVariant } = getProductPricing(product.variants ?? []);
+    if (!cheapestVariant) return;
     addItem({
       id: product.id,
       name: product.name,
-      price: product.sellUnitPrice,
-      comparePrice: product.oldSellUnitPrice,
+      variant: cheapestVariant,
       image: product.imagePreview,
       categories: product.categories
     } as CartItem);
@@ -165,7 +166,12 @@ export function TrendingCarousel() {
                       {product.name}
                     </p>
                     <p className="text-white font-semibold text-base mb-3">
-                      {CurrencyViewer(product.sellUnitPrice, CONFIG.DEFAULT_CURRENCY)}
+                      {(() => {
+                        const { hasMultipleVariants, minSellPrice, maxSellPrice } = getProductPricing(product.variants ?? []);
+                        return hasMultipleVariants
+                          ? `${CurrencyViewer(minSellPrice, CONFIG.DEFAULT_CURRENCY)} - ${CurrencyViewer(maxSellPrice, CONFIG.DEFAULT_CURRENCY)}`
+                          : CurrencyViewer(minSellPrice, CONFIG.DEFAULT_CURRENCY);
+                      })()}
                     </p>
                     <button
                       onClick={(e) => {

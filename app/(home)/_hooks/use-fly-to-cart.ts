@@ -25,7 +25,7 @@ export function useFlyToCart() {
 
       // Show toast
       toast.success(`${cartItem.name} added to cart!`, {
-        description: `$${cartItem.price.toFixed(2)}`,
+        description: `$${cartItem.variant.sellPrice.toFixed(2)}`,
         action: {
           label: 'View Cart',
           onClick: () => useCartStore.getState().setCartOpen(true),

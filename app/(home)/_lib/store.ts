@@ -5,7 +5,7 @@ import ProductDisplayModel from '../_types/ProductDisplayModel';
 import CartItem from '../_types/CartItem';
 import WishlistItem from '../_types/WishlistItem';
 import CompareItem from '../_types/CompareItem';
-import StockAlert from '../_types/StockAlert';
+import StockAlertType from '../_types/StockAlertType';
 
 
 
@@ -69,12 +69,12 @@ export const useCartStore = create<CartStore>()(
       totalItems: () => get().items.reduce((sum, i) => sum + i.quantity, 0),
 
       totalPrice: () =>
-        get().items.reduce((sum, i) => sum + i.price * i.quantity, 0),
+        get().items.reduce((sum, i) => sum + i.variant.sellPrice * i.quantity, 0),
 
       totalSavings: () =>
         get().items.reduce((sum, i) => {
-          if (i.comparePrice) {
-            return sum + (i.comparePrice - i.price) * i.quantity;
+          if (i.variant.oldSellPrice > 0) {
+            return sum + (i.variant.oldSellPrice - i.variant.sellPrice) * i.quantity;
           }
           return sum;
         }, 0),
@@ -253,7 +253,7 @@ export const useCompareStore = create<CompareStore>((set, get) => ({
 
 
 interface StockAlertStore {
-  alerts: StockAlert[];
+  alerts: StockAlertType[];
   addAlert: (product: { name: string; stock: number }) => void;
   dismissAlert: (id: string) => void;
   clearAll: () => void;

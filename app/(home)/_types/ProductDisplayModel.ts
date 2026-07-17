@@ -6,6 +6,7 @@ import MeasureType from "@root/app/types/enums/MeasureType";
 import InventoryDisplayModel from "./InventoryDisplayModel";
 import CategoryDisplayModel from "./CategoryDisplayModel";
 import ProductAttributeDisplayModel from "./ProductAttributeDisplayModel";
+import ProductVariantDisplayModel from "./ProductVariantDisplayModel";
 /**
  * Represents a product.
  */
@@ -96,7 +97,7 @@ export default interface ProductDisplayModel {
   /**
    * The ID of the tax category.
    */
-  taxCategoryId: number| null ;
+  taxCategoryId: number | null;
 
   /**
    * The name of the tax category.
@@ -118,17 +119,6 @@ export default interface ProductDisplayModel {
    * The maximum order quantity.
    */
   orderMaximumQuantity: number;
-
-  /**
-   * The price of the product.
-   */
-  sellUnitPrice: number;
-
-
-  /**
-   * The old price of the product.
-   */
-  oldSellUnitPrice: number;
 
   /**
    * The type of the currency.
@@ -173,7 +163,7 @@ export default interface ProductDisplayModel {
   /**
    * The end date and time the product is marked as new (nullable, UTC).
    */
-  markAsNewEndDateTimeUtc?: Date ;
+  markAsNewEndDateTimeUtc?: Date;
 
   /**
    * Indicates whether the product is not returnable.
@@ -241,10 +231,6 @@ export default interface ProductDisplayModel {
    * Indicates whether to display the stock quantity.
    */
   displayStockQuantity: boolean;
-  /**
-   * The stock type.
-   */
-  stockType: StockType;
 
   /**
    * The quantity of stock.
@@ -255,11 +241,7 @@ export default interface ProductDisplayModel {
    * The minimum stock quantity.
    */
   minStockQuantity: number;
-  /**
-   * The product inventories.
-   */
-  inventories: InventoryDisplayModel[];
-  
+
   /**
    * The IDs of the categories the product belongs to.
    */
@@ -280,7 +262,12 @@ export default interface ProductDisplayModel {
    * The paths to the images associated with the product.
    */
   imagePaths: string[];
-  
+
+  /**
+   * The product variants.
+   */
+  variants: ProductVariantDisplayModel[];
+
   /**
    * The IDs of the reviews associated with the product.
    */
@@ -295,9 +282,43 @@ export default interface ProductDisplayModel {
    * The product tags.
    */
   productTags: string[];
+
+
+}
+export function getCheapestVariant(variants: ProductVariantDisplayModel[]) : ProductVariantDisplayModel {
+  if (variants.length === 1) return variants[0];
+  const inStock = variants?.filter(v => (v.productInventory.stockQuantity) > 0);
+  if (!inStock || inStock.length === 0) return variants[0];
+  return inStock.reduce((min, v) =>
+    v.sellPrice < min.sellPrice ? v : min
+  , inStock[0]);
 }
 
-export enum StockType {
-  Total = 0,
-  PerAttribute = 1
+export function getInStockVariants(variants: ProductVariantDisplayModel[]) {
+  return variants?.filter(v => (v.productInventory?.stockQuantity ?? 0) > 0) ?? [];
+}
+
+export interface ProductPricing {
+  cheapestVariant: ProductVariantDisplayModel;
+  inStockVariants: ProductVariantDisplayModel[];
+  hasMultipleVariants: boolean;
+  minSellPrice: number;
+  maxSellPrice: number;
+  totalStock: number;
+}
+
+export function getProductPricing(variants: ProductVariantDisplayModel[]): ProductPricing {
+  const inStockVariants = getInStockVariants(variants);
+  const cheapestVariant = getCheapestVariant(variants);
+  const sellPrices = inStockVariants.map(v => v.sellPrice).filter(p => p > 0);
+  const totalStock = variants?.reduce((sum, v) => sum + (v.productInventory?.stockQuantity ?? 0), 0) ?? 0;
+
+  return {
+    cheapestVariant,
+    inStockVariants,
+    hasMultipleVariants: inStockVariants.length > 1,
+    minSellPrice: sellPrices.length > 0 ? Math.min(...sellPrices) : 0,
+    maxSellPrice: sellPrices.length > 0 ? Math.max(...sellPrices) : 0,
+    totalStock,
+  };
 }

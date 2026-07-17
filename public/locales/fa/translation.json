@@ -64,6 +64,7 @@
       "per": "هر",
       "trendingBadge": "پرطرفدار",
       "saveAmount": "${amount} صرفه‌جویی",
+      "saveFrom": "صرفه‌جویی از ${amount}",
       "pleaseTryAgain": "لطفاً بعداً دوباره تلاش کنید",
       "retry": "تلاش مجدد",
       "newArrivalsBadge": "New"
