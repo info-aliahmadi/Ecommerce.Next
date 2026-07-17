@@ -54,12 +54,8 @@ export default class HomePageService {
     return result;
   }
 
-  async getFeaturedProducts(): Promise<Result<PaginatedDisplayList<ProductDisplayModel>>> {
-    let filter: ProductFilterModel = {
-      pageIndex: 1,
-      pageSize: 8,
-      productTagIds : [ProductTags.Featured]
-    }
+  async getFeaturedProducts(filter: ProductFilterModel): Promise<Result<PaginatedDisplayList<ProductDisplayModel>>> {
+    filter.productTagIds = [ProductTags.Featured];
     let result = await this.getProducts(filter);
     return result;
   }
@@ -68,7 +64,7 @@ export default class HomePageService {
     let filter: ProductFilterModel = {
       pageIndex: 1,
       pageSize: 8,
-      productTagIds : [ProductTags.Trending]
+      productTagIds: [ProductTags.Trending]
     }
     let result = await this.getProducts(filter);
     return result;
@@ -78,7 +74,7 @@ export default class HomePageService {
     let filter: ProductFilterModel = {
       pageIndex: 1,
       pageSize: 4,
-      productTagIds : [ProductTags.Bestseller]
+      productTagIds: [ProductTags.Bestseller]
     }
     const response = await this.getProducts(filter);
     return response;
@@ -88,8 +84,8 @@ export default class HomePageService {
     let filter: ProductFilterModel = {
       pageIndex: 1,
       pageSize: 4,
-      hasDiscounts : true,
-      sorting : SortingType.SortPriceAsc
+      hasDiscounts: true,
+      sorting: SortingType.SortPriceAsc
     }
     const response = await this.getProducts(filter);
     return response;
@@ -116,7 +112,7 @@ export default class HomePageService {
     return response;
   }
 
-  async getProductById(productId : number): Promise<Result<ProductDisplayModel>> {
+  async getProductById(productId: number): Promise<Result<ProductDisplayModel>> {
     let result = await Fetch.Get<Result<ProductDisplayModel>>(`${this.baseUrl}/Product/GetProduct?productId=${productId}`);
     return result;
   }
@@ -128,12 +124,20 @@ export default class HomePageService {
     let result = await Fetch.Get<Result<BundleDisplayModel[]>>(`${this.baseUrl}/Product/GetPublishedBundles`, this.config);
     return result;
   }
-  
+
   /**
    * Get all categories for display
    */
   async getAllCategories(): Promise<Result<CategoryDisplayModel[]>> {
     let result = await Fetch.Get<Result<CategoryDisplayModel[]>>(`${this.baseUrl}/Product/GetCategories`, this.config);
+    return result;
+  }
+
+  /**
+   * Get all categories for display
+   */
+  async getAllFeaturedCategories(): Promise<Result<CategoryDisplayModel[]>> {
+    let result = await Fetch.Get<Result<CategoryDisplayModel[]>>(`${this.baseUrl}/Product/GetFeaturedCategories`, this.config);
     return result;
   }
 
@@ -164,7 +168,7 @@ export default class HomePageService {
   /**
    * Get Product Attributes
    */
-  async getProductAttributesByType(attributeTypes : AttributeType[]): Promise<Result<ProductAttributeDisplayModel[]>> {
+  async getProductAttributesByType(attributeTypes: AttributeType[]): Promise<Result<ProductAttributeDisplayModel[]>> {
     // convert the attribute types to joined string
     let joinedAttributeTypes = attributeTypes.join(',')
     let result = await Fetch.Get<Result<ProductAttributeDisplayModel[]>>(`${this.baseUrl}/Product/GetProductAttributesByType?attributeTypes=${joinedAttributeTypes}`, this.config);

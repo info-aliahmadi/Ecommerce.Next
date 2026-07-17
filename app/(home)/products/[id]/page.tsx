@@ -335,7 +335,7 @@ export default async function ProductDetailPage({
                 <Separator className="bg-ecommerce-border/50" />
 
                 {/* Color Variants */}
-                {/* <div className="mt-5">
+                <div className="mt-5">
                   <div className="flex items-center gap-2 mb-2.5">
                     <span className="text-sm font-medium text-ecommerce-text-primary">{t('homepage.quickView.color')}</span>
                     <span className="text-xs text-ecommerce-text-muted">:</span>
@@ -353,10 +353,10 @@ export default async function ProductDetailPage({
                       />
                     ))}
                   </div>
-                </div> */}
+                </div>
 
                 {/* Size Variants */}
-                {/* <div className="mt-4">
+                <div className="mt-4">
                   <div className="flex items-center justify-between mb-2.5">
                     <div className="flex items-center gap-2">
                       <span className="text-sm font-medium text-ecommerce-text-primary">{t('homepage.quickView.size')}</span>
@@ -382,7 +382,7 @@ export default async function ProductDetailPage({
                       </button>
                     ))}
                   </div>
-                </div> */}
+                </div>
 
                 {/* Quantity Selector (client for interactivity) */}
                 {!product.disableBuyButton && (

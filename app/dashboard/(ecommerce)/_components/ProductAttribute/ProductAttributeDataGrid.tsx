@@ -97,8 +97,8 @@ export default function ProductAttributeDataGrid() {
         type: 'string'
       },
       {
-        accessorKey: 'value',
-        header: t(fieldsName + 'value'),
+        accessorKey: 'key',
+        header: t(fieldsName + 'key'),
         enableClickToCopy: true,
         type: 'string'
       },

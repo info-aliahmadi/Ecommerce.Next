@@ -136,7 +136,7 @@ export default function AddOrEditProductAttribute(
   const initialValues: ProductAttributeModel = {
     id: productAttribute?.id ?? 0,
     name: productAttribute?.name ?? '',
-    value: productAttribute?.value ?? '',
+    key: productAttribute?.key ?? '',
     attributeType: productAttribute?.attributeType ?? AttributeType.Color,
     imagePreviewId: productAttribute?.imagePreviewId ?? null,
     displayOrder: productAttribute?.displayOrder ?? 0,
@@ -154,7 +154,7 @@ export default function AddOrEditProductAttribute(
           validationSchema={Yup.object().shape({
             name: Yup.string().max(70).required('Name is required'),
             attributeType: Yup.string().required('AttributeType is required'),
-            value: Yup.string().required('Value is required'),
+            key: Yup.string().required('Key is required'),
           })}
           onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
             try {
@@ -200,21 +200,21 @@ export default function AddOrEditProductAttribute(
 
                   <Grid size={12}>
                     <Stack spacing={1}>
-                      <InputLabel htmlFor="value">{t(fieldsName + 'value')}</InputLabel>
+                      <InputLabel htmlFor="key">{t(fieldsName + 'key')}</InputLabel>
                       <OutlinedInput
-                        id="value"
+                        id="key"
                         type="text"
-                        value={values?.value || ''}
-                        name="value"
+                        value={values?.key || ''}
+                        name="key"
                         onBlur={handleBlur}
                         onChange={handleChange}
-                        placeholder={t(fieldsName + 'value')}
+                        placeholder={t(fieldsName + 'key')}
                         fullWidth
-                        error={Boolean(touched.value && errors.value)}
+                        error={Boolean(touched.key && errors.key)}
                       />
-                      {touched.value && errors.value && (
-                        <FormHelperText error id="helper-text-value">
-                          {errors.value}
+                      {touched.key && errors.key && (
+                        <FormHelperText error id="helper-text-key">
+                          {errors.key}
                         </FormHelperText>
                       )}
                     </Stack>
@@ -238,28 +238,6 @@ export default function AddOrEditProductAttribute(
                           </FormHelperText>
                         )}
                       </FormControl>
-                    </Stack>
-                  </Grid>
-
-                  <Grid size={12}>
-                    <Stack spacing={1}>
-                      <InputLabel htmlFor="description">{t(fieldsName + 'description')}</InputLabel>
-                      <OutlinedInput
-                        id="description"
-                        type="text"
-                        value={values?.description || ''}
-                        name="description"
-                        onBlur={handleBlur}
-                        onChange={handleChange}
-                        placeholder={t(fieldsName + 'description')}
-                        fullWidth
-                        error={Boolean(touched.description && errors.description)}
-                      />
-                      {touched.description && errors.description && (
-                        <FormHelperText error id="helper-text-description">
-                          {errors.description}
-                        </FormHelperText>
-                      )}
                     </Stack>
                   </Grid>
 

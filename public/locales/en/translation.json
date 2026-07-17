@@ -1432,7 +1432,7 @@
     },
     "productAttribute": {
       "name": "Attribute Name",
-      "value": "Value",
+      "key": "Key",
       "attributeType": "Attribute Type",
       "description": "Description",
       "displayOrder": "Display Order",

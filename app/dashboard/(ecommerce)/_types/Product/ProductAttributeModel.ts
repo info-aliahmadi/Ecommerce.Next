@@ -17,7 +17,7 @@ export default interface ProductAttributeModel {
     /**
      * The value of the product attribute.
      */
-    value: string;
+    key: string;
   
     /**
      * The type of the product attribute.

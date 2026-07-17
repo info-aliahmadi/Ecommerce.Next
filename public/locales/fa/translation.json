@@ -1422,7 +1422,7 @@
     },
     "productAttribute": {
       "name": "عنوان خصوصیات",
-      "value": "مقدار",
+      "key": "کلید",
       "attributeType": "نوع خصوصیات",
       "description": "توضیحات",
       "displayOrder": "ترتیب نمایش",

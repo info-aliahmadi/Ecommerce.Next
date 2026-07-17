@@ -37,7 +37,7 @@ const SORT_MAP: Record<SortOption, SortingType> = {
 };
 export function ProductGrid() {
   const t = useTranslations();
-  const { searchQuery, selectedCategory, sortBy, setSortBy, setSelectedCategory, setCatalogOpen } = useUIStore();
+  const { searchQuery, selectedCategory, sortBy, setSortBy, setSelectedCategory } = useUIStore();
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
   const [priceRange, setPriceRange] = useState<[number, number]>([0, 9999]);
   const [sliderValue, setSliderValue] = useState<[number, number]>([0, 9999]);
@@ -55,10 +55,10 @@ export function ProductGrid() {
   ];
 
   const { data: categories = [] } = useQuery({
-    queryKey: ['categories'],
+    queryKey: ['featured-categories'],
     queryFn: async () => {
       const service = new HomePageService();
-      const result = await service.getAllCategories();
+      const result = await service.getAllFeaturedCategories();
       return result.succeeded ? result.data ?? [] : [];
     },
   });
@@ -83,7 +83,7 @@ export function ProductGrid() {
     queryKey: ['products', filter],
     queryFn: async ({ pageParam }) => {
       const service = new HomePageService();
-      const result = await service.getProducts({ ...filter, pageIndex: pageParam } as ProductFilterModel);
+      const result = await service.getFeaturedProducts({ ...filter, pageIndex: pageParam } as ProductFilterModel);
       if (!result.succeeded) throw new Error(result.message ?? 'Failed to load products');
       return result.data;
     },

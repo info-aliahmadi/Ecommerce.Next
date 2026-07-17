@@ -7,7 +7,7 @@ import { Badge } from '../ui/badge';
 import { useCartStore } from '../../_lib/store';
 import { toast } from 'sonner';
 import { useTranslations } from 'next-intl';
-import ProductDisplayModel, { getCheapestVariant } from '../../_types/ProductDisplayModel';
+import ProductDisplayModel, { getProductPricing } from '../../_types/ProductDisplayModel';
 import HomePageService from '../../_services/HomePageService';
 import { useQuery } from '@tanstack/react-query';
 import BundleDisplayModel from '../../_types/BundleDisplayModel';
@@ -18,9 +18,9 @@ import CONFIG from '@root/config';
 
 
 function getBundleSavings(products: ProductDisplayModel[]) {
-  const variants = products.map(p => getCheapestVariant(p.variants));
-  const totalPrice = variants.reduce((s, v) => s + (v?.sellPrice ?? 0), 0);
-  const compareTotal = variants.reduce((s, v) => s + (v?.oldSellPrice ?? v?.sellPrice ?? 0), 0);
+  const pricings = products.map(p => getProductPricing(p.variants ?? []));
+  const totalPrice = pricings.reduce((s, p) => s + (p.cheapestVariant?.sellPrice ?? 0), 0);
+  const compareTotal = pricings.reduce((s, p) => s + (p.cheapestVariant?.oldSellPrice ?? p.cheapestVariant?.sellPrice ?? 0), 0);
   const savings = compareTotal - totalPrice;
   const percentage = compareTotal > 0 ? Math.round((savings / compareTotal) * 100) : 0;
   return { totalPrice, compareTotal, savings, percentage };
@@ -43,12 +43,12 @@ export function ProductBundles() {
 
   const handleAddBundle = (bundle: BundleDisplayModel) => {
     bundle.products?.forEach((p) => {
-      const v = getCheapestVariant(p.variants);
-      if (!v) return;
+      const { cheapestVariant } = getProductPricing(p.variants ?? []);
+      if (!cheapestVariant || cheapestVariant.productInventory.stockQuantity === 0) return;
       addItem({
         id: p.id,
         name: p.name,
-        variant: v,
+        variant: cheapestVariant,
         image: p.imagePreview,
         categories: p.categories,
       });
@@ -125,7 +125,7 @@ export function ProductBundles() {
                               className="w-12 h-12 rounded-lg object-cover shrink-0"
                             />
                             {(() => {
-                              const v = getCheapestVariant(product.variants);
+                              const { cheapestVariant } = getProductPricing(product.variants ?? []);
                               return (
                                 <div className="flex-1 min-w-0">
                                   <p className="text-sm font-medium text-ecommerce-text-primary truncate">
@@ -133,11 +133,11 @@ export function ProductBundles() {
                                   </p>
                                   <div className="flex items-center gap-2">
                                     <span className="text-sm font-semibold text-ecommerce-red">
-                                      {CurrencyViewer(v?.sellPrice ?? 0, CONFIG.DEFAULT_CURRENCY)}
+                                      {CurrencyViewer(cheapestVariant?.sellPrice ?? 0, CONFIG.DEFAULT_CURRENCY)}
                                     </span>
-                                    {v?.oldSellPrice != 0 && (
+                                    {cheapestVariant && cheapestVariant.oldSellPrice != 0 && (
                                       <span className="text-[11px] text-ecommerce-text-muted line-through">
-                                        {CurrencyViewer(v?.oldSellPrice ?? 0, CONFIG.DEFAULT_CURRENCY)}
+                                        {CurrencyViewer(cheapestVariant.oldSellPrice, CONFIG.DEFAULT_CURRENCY)}
                                       </span>
                                     )}
                                   </div>
@@ -155,16 +155,16 @@ export function ProductBundles() {
                             <p className="text-xs text-ecommerce-text-muted">{t('homepage.bundles.bundlePrice')}</p>
                             <div className="flex items-baseline gap-2">
                               <span className="text-xl font-bold text-ecommerce-text-primary">
-                                ${totalPrice.toFixed(2)}
+                                { CurrencyViewer(totalPrice, CONFIG.DEFAULT_CURRENCY)}
                               </span>
                               <span className="text-sm text-ecommerce-text-muted line-through">
-                                ${compareTotal.toFixed(2)}
+                                {CurrencyViewer(compareTotal, CONFIG.DEFAULT_CURRENCY)}
                               </span>
                             </div>
                           </div>
                           <div className="text-right">
                             <p className="text-xs text-ecommerce-emerald font-semibold">
-                              {t('homepage.bundles.youSave', { amount: savings.toFixed(2) })}
+                              {t('homepage.bundles.youSave', { amount: CurrencyViewer(savings, CONFIG.DEFAULT_CURRENCY) })}
                             </p>
                           </div>
                         </div>

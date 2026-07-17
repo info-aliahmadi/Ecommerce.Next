@@ -60,8 +60,8 @@ export default function ProductVariants({ operation, values, setFieldValue, hand
     const colorAttr = attributes.find((a) => a.attributeType === AttributeType.Color);
 
     const parts = [baseSku];
-    if (sizeAttr?.value) parts.push(sizeAttr.value);
-    if (colorAttr?.value) parts.push(colorAttr.value);
+    if (sizeAttr?.key) parts.push(sizeAttr.key);
+    if (colorAttr?.key) parts.push(colorAttr.key);
 
     return parts.join('-');
   };
@@ -112,7 +112,7 @@ export default function ProductVariants({ operation, values, setFieldValue, hand
         return {
           id: attrId,
           name: attrData?.name || '',
-          value: attrData?.value || '',
+          key: attrData?.key || '',
           attributeType: attrData?.attributeType || 0,
           imagePreviewId: attrData?.imagePreviewId || null,
           displayOrder: attrData?.displayOrder || 0,
@@ -186,7 +186,7 @@ export default function ProductVariants({ operation, values, setFieldValue, hand
                   {variant.productAttributes.map((attr: ProductAttributeModel) => (
                     <Chip
                       key={attr.id}
-                      label={`${attr.name}: ${attr.value}`}
+                      label={`${attr.name}: ${attr.key}`}
                       size="small"
                       color="primary"
                       variant="outlined"

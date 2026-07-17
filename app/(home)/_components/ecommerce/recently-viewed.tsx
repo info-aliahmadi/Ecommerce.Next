@@ -7,7 +7,7 @@ import { useEffect, useState, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { toast } from 'sonner';
 import { useTranslations } from 'next-intl';
-import ProductDisplayModel from '../../_types/ProductDisplayModel';
+import ProductDisplayModel, { getProductPricing } from '../../_types/ProductDisplayModel';
 import { GetImage } from '../../_lib/utils';
 
 export function RecentlyViewed() {
@@ -118,30 +118,28 @@ export function RecentlyViewed() {
                       <p className="text-xs font-medium text-ecommerce-text-muted">{item.categories.map(p => p.name + ",")}</p>
                       <h4 className="text-sm font-semibold text-ecommerce-text-primary line-clamp-1 mt-0.5">{item.name}</h4>
                       {(() => {
-                        const prices = item.variants?.map(v => v.sellPrice).filter(p => p > 0) ?? [];
-                        const min = prices.length > 0 ? Math.min(...prices) : 0;
-                        const max = prices.length > 0 ? Math.max(...prices) : 0;
-                        const hasMultiple = (item.variants?.length ?? 0) > 1;
+                        const { hasMultipleVariants, minSellPrice, maxSellPrice } = getProductPricing(item.variants ?? []);
                         return (
                           <span className="text-sm font-bold text-ecommerce-text-primary mt-2">
-                            {hasMultiple ? `$${min.toFixed(2)} - $${max.toFixed(2)}` : `$${min.toFixed(2)}`}
+                            {hasMultipleVariants ? `$${minSellPrice.toFixed(2)} - $${maxSellPrice.toFixed(2)}` : `$${minSellPrice.toFixed(2)}`}
                           </span>
                         );
                       })()}
                       <button
+                        disabled={item.stockQuantity === 0}
                         onClick={() => {
-                          const firstVariant = item.variants?.[0];
-                          if (!firstVariant) return;
+                          const { cheapestVariant } = getProductPricing(item.variants ?? []);
+                          if (!cheapestVariant) return;
                           addItem({
                             id: item.id,
                             name: item.name,
-                            variant: firstVariant,
+                            variant: cheapestVariant,
                             image: item.imagePreview,
                             categories: item.categories
                           });
                           toast.success(t('homepage.cart.itemAdded', { name: item.name }));
                         }}
-                        className="mt-3 w-full h-9 rounded-lg bg-ecommerce-red/10 text-ecommerce-red text-xs font-semibold flex items-center justify-center gap-1.5 hover:bg-ecommerce-red hover:text-white transition-all duration-200"
+                        className="mt-3 w-full h-9 rounded-lg bg-ecommerce-red/10 text-ecommerce-red text-xs font-semibold flex items-center justify-center gap-1.5 hover:bg-ecommerce-red hover:text-white transition-all duration-200 disabled:opacity-50"
                       >
                         <ShoppingCart size={13} />
                         {t('homepage.common.addToCart')}
