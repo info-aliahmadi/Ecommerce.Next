@@ -58,10 +58,25 @@ export default function ProductVariants({ operation, values, setFieldValue, hand
     const baseSku = values.sku || '';
     const sizeAttr = attributes.find((a) => a.attributeType === AttributeType.Size);
     const colorAttr = attributes.find((a) => a.attributeType === AttributeType.Color);
+    const patternAttr = attributes.find((a) => a.attributeType === AttributeType.Pattern);
+    const materialAttr = attributes.find((a) => a.attributeType === AttributeType.Material);
+    const heightAttr = attributes.find((a) => a.attributeType === AttributeType.Height);
+    const widthAttr = attributes.find((a) => a.attributeType === AttributeType.Width);
+    const lengthAttr = attributes.find((a) => a.attributeType === AttributeType.Length);
+    const weightAttr = attributes.find((a) => a.attributeType === AttributeType.Weight);
+    const brandAttr = attributes.find((a) => a.attributeType === AttributeType.Brand);
+    const modelAttr = attributes.find((a) => a.attributeType === AttributeType.Model);
 
     const parts = [baseSku];
     if (sizeAttr?.key) parts.push(sizeAttr.key);
     if (colorAttr?.key) parts.push(colorAttr.key);
+    if (patternAttr?.key) parts.push(patternAttr.key);
+    if (materialAttr?.key) parts.push(materialAttr.key);
+    if (heightAttr?.key) parts.push(heightAttr.key);
+    if (widthAttr?.key) parts.push(widthAttr.key);
+    if (weightAttr?.key) parts.push(weightAttr.key);
+    if (brandAttr?.key) parts.push(brandAttr.key);
+    if (modelAttr?.key) parts.push(modelAttr.key);
 
     return parts.join('-');
   };
