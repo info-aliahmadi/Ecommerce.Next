@@ -253,8 +253,8 @@ export default function VariantSelector({ variants, onVariantChange }: VariantSe
           {selectedEntries.map((entry, i) => (
             <span key={entry.label}>
               {i > 0 && <span className="text-xs text-ecommerce-text-muted mx-1">/</span>}
-              <span className="text-xs text-ecommerce-text-muted">{entry.label}: </span>
-              <span className="text-xs text-ecommerce-text-secondary font-medium">{entry.value}</span>
+              <span className="text-sm text-ecommerce-text-muted">{entry.label}: </span>
+              <span className="text-sm text-ecommerce-text-secondary font-bold">{entry.value}</span>
             </span>
           ))}
         </div>

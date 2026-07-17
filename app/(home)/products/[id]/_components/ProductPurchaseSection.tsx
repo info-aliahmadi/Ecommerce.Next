@@ -120,7 +120,7 @@ export default function ProductPurchaseSection({ product }: ProductPurchaseSecti
         ) : isOutOfStock ? (
           <>
             <span className="w-2.5 h-2.5 rounded-full bg-ecommerce-red" />
-            <span className="text-sm font-medium text-ecommerce-red">
+            <span className="text-md font-medium text-ecommerce-red">
               {t('homepage.productDetail.outOfStock')}
             </span>
           </>
@@ -128,11 +128,11 @@ export default function ProductPurchaseSection({ product }: ProductPurchaseSecti
           <>
             <span className="w-2.5 h-2.5 rounded-full bg-ecommerce-emerald animate-pulse" />
             {stock <= 10 ? (
-              <span className="text-sm font-medium text-ecommerce-amber">
+              <span className="text-md font-medium text-ecommerce-amber">
                 {t('homepage.productDetail.onlyLeft', { count: stock })}
               </span>
             ) : (
-              <span className="text-sm font-medium text-ecommerce-emerald">
+              <span className="text-md font-medium text-ecommerce-emerald">
                 {t('homepage.productDetail.inStock')}
               </span>
             )}
