@@ -97,23 +97,43 @@ function computeAutoSelection(
   changedType: AttributeType,
   newValue: VariantOption
 ): Map<AttributeType, VariantOption | null> {
-  const next = new Map<AttributeType, VariantOption | null>();
+  // Build a partial selection with the changed value
+  const partial = new Map<AttributeType, VariantOption | null>();
   for (const [type] of attributesByType) {
-    next.set(type, type === changedType ? newValue : currentSelection.get(type) ?? null);
+    partial.set(type, type === changedType ? newValue : currentSelection.get(type) ?? null);
   }
 
-  // Auto-select compatible options for other types
-  for (const [type, options] of attributesByType) {
-    if (type === changedType) continue;
-    const available = getAvailableKeys(variants, next, type);
-    const current = next.get(type);
-    if (current && !available.has(current.key)) {
-      const firstAvailable = options.find(o => available.has(o.key));
-      next.set(type, firstAvailable ?? null);
+  // Find the first variant that matches the changed type's new value
+  const matchingVariant = variants.find(v =>
+    v.productAttributes?.some(attr => attr.key === newValue.key)
+  );
+
+  if (matchingVariant) {
+    // Use this variant's attributes for all types
+    for (const [type, options] of attributesByType) {
+      if (type === changedType) continue;
+      const matchAttr = matchingVariant.productAttributes?.find(
+        attr => attr.attributeType === type
+      );
+      if (matchAttr) {
+        const opt = options.find(o => o.key === matchAttr.key);
+        if (opt) partial.set(type, opt);
+      }
+    }
+  } else {
+    // No matching variant — try to find compatible options for other types
+    for (const [type, options] of attributesByType) {
+      if (type === changedType) continue;
+      const available = getAvailableKeys(variants, partial, type);
+      const current = partial.get(type);
+      if (current && !available.has(current.key)) {
+        const firstAvailable = options.find(o => available.has(o.key));
+        partial.set(type, firstAvailable ?? null);
+      }
     }
   }
 
-  return next;
+  return partial;
 }
 
 export default function VariantSelector({ variants, onVariantChange }: VariantSelectorProps) {
