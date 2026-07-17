@@ -13,11 +13,14 @@ import {
 import { useFlyToCart } from '../../../_hooks/use-fly-to-cart';
 import { GetImage } from '../../../_lib/utils';
 import ProductDisplayModel, { getProductPricing } from '../../../_types/ProductDisplayModel';
+import ProductVariantDisplayModel from '../../../_types/ProductVariantDisplayModel';
 
 export default function ProductActions({
   product,
+  selectedVariant,
 }: {
   product: ProductDisplayModel;
+  selectedVariant?: ProductVariantDisplayModel | null;
 }) {
   const t = useTranslations('');
   const addItem = useCartStore((s) => s.addItem);
@@ -28,47 +31,48 @@ export default function ProductActions({
 
   const wishlisted = isInWishlist(product.id);
   const { cheapestVariant, totalStock } = getProductPricing(product.variants ?? []);
+  const activeVariant = selectedVariant ?? cheapestVariant;
 
   const handleAddToCart = useCallback(
     (e: React.MouseEvent) => {
-      if (!cheapestVariant) return;
+      if (!activeVariant) return;
       handleAddToCartWithAnimation(e, GetImage(product.imagePreview), {
         id: product.id,
         name: product.name,
-        variant: cheapestVariant,
+        variant: activeVariant,
         image: product.imagePreview,
         categories: product.categories,
         quantity: 1
       });
     },
-    [product, handleAddToCartWithAnimation, cheapestVariant],
+    [product, handleAddToCartWithAnimation, activeVariant],
   );
 
   const handleBuyNow = useCallback(() => {
-    if (!cheapestVariant) return;
+    if (!activeVariant) return;
     addItem({
       id: product.id,
       name: product.name,
-      variant: cheapestVariant,
+      variant: activeVariant,
       image: product.imagePreview,
       categories: product.categories
     });
     setCartOpen(true);
-  }, [product, addItem, setCartOpen, cheapestVariant]);
+  }, [product, addItem, setCartOpen, activeVariant]);
 
   const handleWishlist = useCallback(() => {
     toggleItem({
       id: product.id,
       name: product.name,
-      price: cheapestVariant?.sellPrice ?? 0,
-      comparePrice: cheapestVariant?.oldSellPrice || undefined,
+      price: activeVariant?.sellPrice ?? 0,
+      comparePrice: activeVariant?.oldSellPrice || undefined,
       image: product.imagePreview,
       categories: product.categories
     });
     toast.success(
       wishlisted ? t('homepage.productDetail.removeFromWishlistSuccess') : t('homepage.productDetail.addToWishlistSuccess'),
     );
-  }, [product, toggleItem, wishlisted, t]);
+  }, [product, toggleItem, wishlisted, t, activeVariant]);
 
   const handleShare = useCallback(() => {
     navigator.clipboard.writeText(window.location.href).then(() => {
@@ -80,8 +84,8 @@ export default function ProductActions({
     addCompareItem({
       id: product.id,
       name: product.name,
-      price: cheapestVariant?.sellPrice ?? 0,
-      comparePrice: cheapestVariant?.oldSellPrice || undefined,
+      price: activeVariant?.sellPrice ?? 0,
+      comparePrice: activeVariant?.oldSellPrice || undefined,
       image: product.imagePreview,
       rating: product.approvedRatingSum,
       reviewCount: product.approvedTotalReviews,
@@ -91,7 +95,7 @@ export default function ProductActions({
       sku: product.sku || ''
     });
     toast.success(t('homepage.common.compare'));
-  }, [product, addCompareItem, t, cheapestVariant, totalStock]);
+  }, [product, addCompareItem, t, activeVariant, totalStock]);
 
   return (
     <>

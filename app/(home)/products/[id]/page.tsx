@@ -2,14 +2,12 @@ import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { getLocale, getTranslations } from 'next-intl/server';
 import CONFIG from '@root/config';
-import ProductDisplayModel, { getProductPricing } from '../../_types/ProductDisplayModel';
+import ProductDisplayModel from '../../_types/ProductDisplayModel';
 import { GetImage } from '../../_lib/utils';
 
 // Client components (only for interactive parts)
 import ImageGallery from './_components/ImageGallery';
-import QuantitySelector from './_components/QuantitySelector';
-import ProductActions from './_components/ProductActions';
-import VariantSelector from './_components/VariantSelector';
+import ProductPurchaseSection from './_components/ProductPurchaseSection';
 import ReviewForm from './_components/ReviewForm';
 import ReviewSummary from './_components/ReviewSummary';
 import { Header } from '../../_components/ecommerce/header';
@@ -23,7 +21,6 @@ import { FlyToCart } from '../../_components/ecommerce/fly-to-cart';
 import { MobileBottomNav } from '../../_components/ecommerce/mobile-bottom-nav';
 import { Badge } from '../../_components/ui/badge';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '../../_components/ui/tabs';
-import { Separator } from '../../_components/ui/separator';
 import {
   Breadcrumb,
   BreadcrumbList,
@@ -38,12 +35,10 @@ import {
   Shield,
   Headphones,
   Award,
-  Zap,
   Star,
   Calendar,
 } from 'lucide-react';
 import DeliveryDateType from '@root/app/types/enums/DeliveryDateType';
-import CurrencyViewer from '@root/utils/CurrencyViewer';
 
 // ── Server-side data fetch ─────────────────────────────
 async function getProduct(id: number): Promise<ProductDisplayModel | null> {
@@ -137,20 +132,6 @@ export default async function ProductDetailPage({
   }
   const imageList = images.map(x => CONFIG.API_BASEPATH + x);
 
-  // Parse tags
-  const tags: string[] = product.productTags ?? [];
-
-  // Get pricing from cheapest in-stock variant
-  const { cheapestVariant } = getProductPricing(product.variants ?? []);
-
-  // Calculate discount
-  const discount = cheapestVariant?.oldSellPrice
-    ? Math.round(((cheapestVariant.oldSellPrice - cheapestVariant.sellPrice) / cheapestVariant.oldSellPrice) * 100)
-    : 0;
-  const savings = cheapestVariant?.oldSellPrice && cheapestVariant.oldSellPrice > cheapestVariant.sellPrice
-    ? cheapestVariant.oldSellPrice - cheapestVariant.sellPrice
-    : 0;
-
   // Delivery date label
   const deliveryDateLabels: Record<number, string> = {
     [DeliveryDateType.OneDay]: t('homepage.productDetail.deliveryOneDay'),
@@ -235,120 +216,8 @@ export default async function ProductDetailPage({
                   reviewCount={product.approvedTotalReviews}
                 ></ReviewSummary>
 
-                {/* Price - Server rendered */}
-                {product.callForPrice ? (
-                  <div className="flex items-center gap-2">
-                    <span className="text-xl font-bold text-ecommerce-amber">
-                      {t('homepage.productDetail.callForPrice')}
-                    </span>
-                  </div>
-                ) : (
-                  <div className="space-y-1">
-                    <div className="flex items-baseline gap-3">
-                      <span className="text-3xl font-bold text-ecommerce-text-primary">
-                        {CurrencyViewer(cheapestVariant?.sellPrice ?? 0, CONFIG.DEFAULT_CURRENCY)}
-                      </span>
-                      {cheapestVariant?.oldSellPrice && cheapestVariant.oldSellPrice > cheapestVariant.sellPrice && (
-                        <span className="text-lg text-ecommerce-text-muted line-through">
-                          {CurrencyViewer(cheapestVariant.oldSellPrice, CONFIG.DEFAULT_CURRENCY)}
-                        </span>
-                      )}
-                    </div>
-                    {savings > 0 && (
-                      <p className="text-sm font-medium text-ecommerce-emerald">
-                        {t('homepage.productDetail.youSave', { amount: savings.toFixed(2) })}
-                      </p>
-                    )}
-                  </div>
-                )}
-
-                <Separator className="bg-ecommerce-border/50" />
-
-                {/* Stock Status - Server rendered */}
-                <div className="flex items-center gap-2">
-                  {product.stockQuantity > 0 ? (
-                    <>
-                      <span className="w-2.5 h-2.5 rounded-full bg-ecommerce-emerald animate-pulse" />
-                      {product.stockQuantity <= 10 ? (
-                        <span className="text-sm font-medium text-ecommerce-amber">
-                          {t('homepage.productDetail.onlyLeft', { count: product.stockQuantity })}
-                        </span>
-                      ) : (
-                        <span className="text-sm font-medium text-ecommerce-emerald">
-                          {t('homepage.productDetail.inStock')}
-                        </span>
-                      )}
-                    </>
-                  ) : (
-                    <>
-                      <span className="w-2.5 h-2.5 rounded-full bg-ecommerce-red" />
-                      <span className="text-sm font-medium text-ecommerce-red">
-                        {t('homepage.productDetail.outOfStock')}
-                      </span>
-                    </>
-                  )}
-                </div>
-
-                {/* SKU - Server rendered */}
-                {product.sku && (
-                  <div className="flex items-center gap-2 text-sm">
-                    <span className="text-ecommerce-text-muted">{t('homepage.productDetail.sku')}:</span>
-                    <span className="font-mono text-ecommerce-text-primary">{product.sku}</span>
-                  </div>
-                )}
-
-                {/* Category - Server rendered */}
-                <div className="flex items-center gap-2">
-                  <span>
-                    <span className="text-sm text-ecommerce-text-muted">{t('homepage.productDetail.category')}: </span>
-                    <span className="text-sm font-medium text-ecommerce-text-primary">
-                      {product.categories?.map(category => category.name)}
-                    </span>
-                  </span>
-                </div>
-
-                {/* Tags - Server rendered */}
-                {tags.length > 0 && (
-                  <div className="flex items-center gap-2 flex-wrap">
-                    <span className="text-sm text-ecommerce-text-muted">{t('homepage.productDetail.tags')}:</span>
-                    {tags.map((tag) => (
-                      <Badge
-                        key={tag}
-                        variant="outline"
-                        className="text-xs border-ecommerce-border text-ecommerce-text-secondary capitalize"
-                      >
-                        {tag}
-                      </Badge>
-                    ))}
-                  </div>
-                )}
-
-                {/* Short Description - Server rendered */}
-                {product.shortDescription && (
-                  <div
-                    className="text-sm text-ecommerce-text-muted leading-relaxed"
-                    dangerouslySetInnerHTML={{ __html: product.shortDescription }}
-                  />
-                )}
-
-                <Separator className="bg-ecommerce-border/50" />
-
-                {/* Variant Selector (colors & sizes from variants) */}
-                <VariantSelector variants={product.variants ?? []} />
-
-                {/* Quantity Selector (client for interactivity) */}
-                {!product.disableBuyButton && (
-                  <QuantitySelector
-                    measureType={product.measureType}
-                    displayStockQuantity={product.displayStockQuantity}
-                    maxQuantity={product.stockQuantity}
-                    allowedQuantities={product.allowedQuantities}
-                    orderMinimumQuantity={product.orderMinimumQuantity}
-                    orderMaximumQuantity={product.orderMaximumQuantity}
-                  />
-                )}
-                {/* Product Actions (client for cart/wishlist) */}
-                <ProductActions product={product} />
+                {/* Interactive purchase section (price, stock, variants, quantity, actions) */}
+                <ProductPurchaseSection product={product} />
               </div>
             </div>
           </div>

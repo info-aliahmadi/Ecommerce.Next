@@ -34,6 +34,7 @@ const ATTRIBUTE_CONFIGS: AttributeTypeConfig[] = [
 
 interface VariantSelectorProps {
   variants: ProductVariantDisplayModel[];
+  onVariantChange?: (selectedByType: Map<AttributeType, VariantOption | null>) => void;
 }
 
 function getUniqueAttributes(
@@ -60,7 +61,7 @@ function getUniqueAttributes(
   return result.sort((a, b) => a.displayName.localeCompare(b.displayName));
 }
 
-export default function VariantSelector({ variants }: VariantSelectorProps) {
+export default function VariantSelector({ variants, onVariantChange }: VariantSelectorProps) {
   const t = useTranslations();
 
   const attributesByType = useMemo(() => {
@@ -113,7 +114,11 @@ export default function VariantSelector({ variants }: VariantSelectorProps) {
                 {options.map((opt) => (
                   <button
                     key={opt.id}
-                    onClick={() => setSelectedByType(prev => new Map(prev).set(config.type, opt))}
+                    onClick={() => {
+                      const next = new Map(selectedByType).set(config.type, opt);
+                      setSelectedByType(next);
+                      onVariantChange?.(next);
+                    }}
                     className={`w-8 h-8 rounded-full border-2 transition-all duration-200 hover:scale-110 ${
                       selected?.id === opt.id
                         ? 'border-ecommerce-red ring-2 ring-ecommerce-red/20 scale-110'
