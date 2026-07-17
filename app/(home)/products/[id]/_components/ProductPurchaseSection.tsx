@@ -196,6 +196,7 @@ export default function ProductPurchaseSection({ product }: ProductPurchaseSecti
           measureType={product.measureType}
           displayStockQuantity={product.displayStockQuantity}
           maxQuantity={stock}
+          price={activeVariant?.sellPrice ?? 0}
           allowedQuantities={product.allowedQuantities}
           orderMinimumQuantity={product.orderMinimumQuantity}
           orderMaximumQuantity={product.orderMaximumQuantity}
