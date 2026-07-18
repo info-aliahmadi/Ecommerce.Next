@@ -9,6 +9,8 @@ import { GetImage } from '../../_lib/utils';
 import { motion } from 'framer-motion';
 import { toast } from 'sonner';
 import { useTranslations } from 'next-intl';
+import CurrencyViewer from '@root/utils/CurrencyViewer';
+import CONFIG from '@root/config';
 
 function ComparisonRow({ label, children }: { label: string; children: React.ReactNode }) {
   return (
@@ -49,12 +51,12 @@ export function CompareDrawer() {
     addItem({
       id: item.id,
       name: item.name,
-      variant: { id: 0, sku: '', productId: item.id, sellPrice: item.price, oldSellPrice: item.comparePrice ?? 0, productInventory: { id: 0, variantId: 0, stockQuantity: item.stock, reservedQuantity: 0 }, productAttributes: [] },
+      variant: item.variant,
       image: item.image,
       categories: item.categories,
     } as any);
     toast.success(t('homepage.cart.itemAdded', { name: item.name }), {
-      description: `$${item.price.toFixed(2)}`,
+      description: `${CurrencyViewer(item.variant.sellPrice, CONFIG.DEFAULT_CURRENCY)}`,
       action: { label: t('homepage.common.addToCart'), onClick: () => useCartStore.getState().setCartOpen(true) },
     });
   };
@@ -124,7 +126,7 @@ export function CompareDrawer() {
                     <tr>
                       <th className="w-24" />
                       {items.map((item, i) => (
-                        <th key={item.id} className="relative p-3">
+                        <th key={item.variant.id} className="relative p-3">
                           <motion.div
                             initial={{ opacity: 0, y: -10 }}
                             animate={{ opacity: 1, y: 0 }}
@@ -139,7 +141,7 @@ export function CompareDrawer() {
                               <X size={12} />
                             </button>
                             <img
-                              src={GetImage(item.image,true)}
+                              src={GetImage(item.image, true)}
                               alt={item.name}
                               className="w-16 h-16 sm:w-20 sm:h-20 rounded-xl object-cover border border-ecommerce-border"
                             />
@@ -152,7 +154,7 @@ export function CompareDrawer() {
                     {/* Name */}
                     <ComparisonRow label={t('homepage.compare.name')}>
                       {items.map((item, i) => (
-                        <ComparisonCell key={item.id} delay={i * 0.05}>
+                        <ComparisonCell key={item.variant.id} delay={i * 0.05}>
                           <span className="text-xs font-semibold text-ecommerce-text-primary text-center leading-tight max-w-[140px]">
                             {item.name}
                           </span>
@@ -163,14 +165,14 @@ export function CompareDrawer() {
                     {/* Price */}
                     <ComparisonRow label={t('homepage.compare.price')}>
                       {items.map((item, i) => (
-                        <ComparisonCell key={item.id} delay={i * 0.05}>
+                        <ComparisonCell key={item.variant.id} delay={i * 0.05}>
                           <div className="flex flex-col items-center gap-0.5">
                             <span className="text-sm font-bold text-ecommerce-text-primary">
-                              ${item.price.toFixed(2)}
+                              {CurrencyViewer(item.variant.sellPrice, CONFIG.DEFAULT_CURRENCY)}
                             </span>
-                            {item.comparePrice && item.comparePrice > item.price && (
+                            {item.variant.oldSellPrice && item.variant.oldSellPrice > item.variant.sellPrice && (
                               <span className="text-[10px] text-ecommerce-text-muted line-through">
-                                ${item.comparePrice.toFixed(2)}
+                                {CurrencyViewer(item.variant.oldSellPrice, CONFIG.DEFAULT_CURRENCY)}
                               </span>
                             )}
                           </div>
@@ -181,7 +183,7 @@ export function CompareDrawer() {
                     {/* Rating */}
                     <ComparisonRow label={t('homepage.compare.rating')}>
                       {items.map((item, i) => (
-                        <ComparisonCell key={item.id} delay={i * 0.05}>
+                        <ComparisonCell key={item.variant.id} delay={i * 0.05}>
                           <div className="flex flex-col items-center gap-0.5">
                             <div className="flex items-center gap-px">
                               {Array.from({ length: 5 }).map((_, si) => (
@@ -203,7 +205,7 @@ export function CompareDrawer() {
                     {/* Category */}
                     <ComparisonRow label={t('homepage.compare.category')}>
                       {items.map((item, i) => (
-                        <ComparisonCell key={item.id} delay={i * 0.05}>
+                        <ComparisonCell key={item.variant.id} delay={i * 0.05}>
                           <span className="inline-flex items-center gap-1.5 text-[11px] font-medium text-ecommerce-text-secondary">
                             {item.categories?.[0]?.name || '—'}
                           </span>
@@ -214,7 +216,7 @@ export function CompareDrawer() {
                     {/* Stock */}
                     <ComparisonRow label={t('homepage.compare.stock')}>
                       {items.map((item, i) => (
-                        <ComparisonCell key={item.id} delay={i * 0.05}>
+                        <ComparisonCell key={item.variant.id} delay={i * 0.05}>
                           <span className={`text-[11px] font-medium px-2 py-0.5 rounded-md ${item.stock === 0
                             ? 'bg-ecommerce-red/10 text-ecommerce-red'
                             : item.stock < 10
@@ -230,9 +232,9 @@ export function CompareDrawer() {
                     {/* SKU */}
                     <ComparisonRow label={t('homepage.compare.sku')}>
                       {items.map((item, i) => (
-                        <ComparisonCell key={item.id} delay={i * 0.05}>
+                        <ComparisonCell key={item.variant.id} delay={i * 0.05}>
                           <span className="text-[11px] text-ecommerce-text-muted font-mono">
-                            {item.sku || (
+                            {item.variant.sku || (
                               <span className="flex items-center gap-1">
                                 <Package size={10} />
                                 N/A
@@ -246,7 +248,7 @@ export function CompareDrawer() {
                     {/* Description */}
                     <ComparisonRow label={t('homepage.compare.description')}>
                       {items.map((item, i) => (
-                        <ComparisonCell key={item.id} delay={i * 0.05}>
+                        <ComparisonCell key={item.variant.id} delay={i * 0.05}>
                           <div
                             className="text-[11px] text-ecommerce-text-muted text-start max-w-[160px] line-clamp-4 leading-relaxed"
                             dangerouslySetInnerHTML={{ __html: item.description }}
@@ -259,7 +261,7 @@ export function CompareDrawer() {
                     {/* Add to Cart */}
                     <ComparisonRow label={t('homepage.quickView.quantity')}>
                       {items.map((item, i) => (
-                        <ComparisonCell key={item.id} delay={i * 0.05}>
+                        <ComparisonCell key={item.variant.id} delay={i * 0.05}>
                           <Button
                             size="sm"
                             onClick={() => handleAddToCart(item)}

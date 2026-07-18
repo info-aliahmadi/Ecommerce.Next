@@ -35,9 +35,10 @@ export default function ProductActions({
   const { addItem: addCompareItem } = useCompareStore();
   const { handleAddToCartWithAnimation } = useFlyToCart();
 
-  const wishlisted = isInWishlist(product.id);
   const { cheapestVariant, totalStock } = getProductPricing(product.variants ?? []);
   const activeVariant = selectedVariant ?? cheapestVariant;
+
+  const wishlisted = isInWishlist(activeVariant.id);
 
   const handleAddToCart = useCallback(
     (e: React.MouseEvent) => {
@@ -74,8 +75,7 @@ export default function ProductActions({
     toggleItem({
       id: product.id,
       name: product.name,
-      price: activeVariant?.sellPrice ?? 0,
-      comparePrice: activeVariant?.oldSellPrice || undefined,
+      variant: activeVariant,
       image: product.imagePreview,
       categories: product.categories
     });
@@ -94,15 +94,13 @@ export default function ProductActions({
     addCompareItem({
       id: product.id,
       name: product.name,
-      price: activeVariant?.sellPrice ?? 0,
-      comparePrice: activeVariant?.oldSellPrice || undefined,
+      variant: activeVariant,
       image: product.imagePreview,
       rating: product.approvedRatingSum,
       reviewCount: product.approvedTotalReviews,
       categories: product.categories || [],
       stock: totalStock,
-      description: product.fullDescription || '',
-      sku: product.sku || ''
+      description: product.fullDescription || ''
     });
     toast.success(t('homepage.common.compare'));
   }, [product, addCompareItem, t, activeVariant, totalStock]);

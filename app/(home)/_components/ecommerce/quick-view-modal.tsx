@@ -422,8 +422,7 @@ function QuickViewContent({ product, onClose }: { product: ProductDisplayModel; 
     toggleItem({
       id: product.id,
       name: product.name,
-      price: activeVariant?.sellPrice ?? 0,
-      comparePrice: activeVariant?.oldSellPrice || undefined,
+      variant: activeVariant,
       image: product.imagePreview,
       categories: product.categories,
     });

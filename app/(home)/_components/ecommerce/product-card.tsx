@@ -108,8 +108,7 @@ export function ProductCard({ product, index = 0 }: Readonly<ProductCardProps>) 
     toggleItem({
       id: product.id,
       name: product.name,
-      price: cheapestVariant?.sellPrice ?? 0,
-      comparePrice: cheapestVariant?.oldSellPrice || undefined,
+        variant: cheapestVariant,
       image: product.imagePreview,
       categories: product.categories || [],
     } as WishlistItem);
@@ -125,15 +124,13 @@ export function ProductCard({ product, index = 0 }: Readonly<ProductCardProps>) 
       addCompareItem({
         id: product.id,
         name: product.name,
-        price: cheapestVariant?.sellPrice ?? 0,
-        comparePrice: cheapestVariant?.oldSellPrice || undefined,
+        variant: cheapestVariant,
         image: product.imagePreview,
         rating: product.approvedRatingSum,
         reviewCount: product.approvedTotalReviews,
         categories: product.categories || [],
         stock: totalStock,
-        description: product.fullDescription || '',
-        sku: product.sku || ''
+        description: product.fullDescription || ''
       } as CompareItem);
       toast.success(t('homepage.compare.remove'));
     } else {
@@ -144,15 +141,13 @@ export function ProductCard({ product, index = 0 }: Readonly<ProductCardProps>) 
       addCompareItem({
         id: product.id,
         name: product.name,
-        price: cheapestVariant?.sellPrice ?? 0,
-        comparePrice: cheapestVariant?.oldSellPrice || undefined,
+        variant: cheapestVariant,
         image: product.imagePreview,
         rating: product.approvedRatingSum,
         reviewCount: product.approvedTotalReviews,
         categories: product.categories || [],
         stock: totalStock,
-        description: product.fullDescription || '',
-        sku: product.sku || ''
+        description: product.fullDescription || ''
       } as CompareItem);
       toast.success(t('homepage.common.compare'));
     }

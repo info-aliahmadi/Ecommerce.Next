@@ -56,6 +56,21 @@
 }
 
 :root {
+  --red: #E63946;
+  --blue: #2f99f5;
+  --green: #2A9D8F;
+  --white: #FFFFFF;
+  --black: #212529;
+  --yellow: #FFC107;
+  --orange: #F97316;
+  --purple: #6A5ACD;
+  --pink: #FF69B4;
+  --gray: #6C757D;
+  --cyan: #06B6D4;
+  --teal: #20B2AA;
+  --lime: #84CC16;
+  --mint: #3EB489;
+
   --radius: 0.625rem;
   --background: #F8F9FA;
   --foreground: #212529;

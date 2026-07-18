@@ -15,8 +15,8 @@ interface CartStore {
   setCartOpen: (open: boolean) => void;
   toggleCart: () => void;
   addItem: (item: Omit<CartItem, 'quantity'>) => void;
-  removeItem: (id: number) => void;
-  updateQuantity: (id: number, quantity: number) => void;
+  removeItem: (variantId: number) => void;
+  updateQuantity: (variantId: number, quantity: number) => void;
   clearCart: () => void;
   totalItems: () => number;
   totalPrice: () => number;
@@ -34,7 +34,7 @@ export const useCartStore = create<CartStore>()(
 
       addItem: (item) => {
         set((state) => {
-          const existing = state.items.find((i) => i.id === item.id);
+          const existing = state.items.find((i) => i.variant.id === item.variant.id);
           if (existing) {
             return {
               items: state.items.map((i) =>
@@ -46,20 +46,23 @@ export const useCartStore = create<CartStore>()(
         });
       },
 
-      removeItem: (id) => {
+      removeItem: (variantId: number) => {
         set((state) => ({
-          items: state.items.filter((i) => i.id !== id),
+          items: state.items.filter((i) => i.variant.id === variantId),
         }));
       },
 
-      updateQuantity: (id, quantity) => {
+      updateQuantity: (variantId: number, quantity) => {
         if (quantity <= 0) {
-          get().removeItem(id);
+          // remove based on variant id
+          set((state) => ({
+            items: state.items.filter((i) => i.variant.id !== variantId),
+          }));
           return;
         }
         set((state) => ({
           items: state.items.map((i) =>
-            i.id === id ? { ...i, quantity } : i
+            i.variant.id === variantId ? { ...i, quantity } : i
           ),
         }));
       },
@@ -90,9 +93,9 @@ export const useCartStore = create<CartStore>()(
 interface WishlistStore {
   items: WishlistItem[];
   addItem: (item: WishlistItem) => void;
-  removeItem: (id: number) => void;
+  removeItem: (variantId: number) => void;
   toggleItem: (item: WishlistItem) => void;
-  isInWishlist: (id: number) => boolean;
+  isInWishlist: (variantId: number) => boolean;
   totalCount: () => number;
 }
 
@@ -103,27 +106,27 @@ export const useWishlistStore = create<WishlistStore>()(
 
       addItem: (item) => {
         set((state) => {
-          if (state.items.find((i) => i.id === item.id)) return state;
+          if (state.items.find((i) => i.variant.id === item.variant.id)) return state;
           return { items: [...state.items, item] };
         });
       },
 
-      removeItem: (id) => {
+      removeItem: (variantId) => {
         set((state) => ({
-          items: state.items.filter((i) => i.id !== id),
+          items: state.items.filter((i) => i.variant.id !== variantId),
         }));
       },
 
       toggleItem: (item) => {
-        const isIn = get().items.some((i) => i.id === item.id);
+        const isIn = get().items.some((i) => i.variant.id === item.variant.id);
         if (isIn) {
-          get().removeItem(item.id);
+          get().removeItem(item.variant.id);
         } else {
           get().addItem(item);
         }
       },
 
-      isInWishlist: (id) => get().items.some((i) => i.id === id),
+      isInWishlist: (variantId) => get().items.some((i) => i.variant.id === variantId),
       totalCount: () => get().items.length,
     }),
     {
@@ -213,9 +216,9 @@ interface CompareStore {
   isCompareOpen: boolean;
   setCompareOpen: (open: boolean) => void;
   addItem: (item: CompareItem) => void;
-  removeItem: (id: number) => void;
+  removeItem: (variantId: number) => void;
   clearAll: () => void;
-  isInCompare: (id: number) => boolean;
+  isInCompare: (variantId: number) => boolean;
   totalCount: () => number;
 }
 
@@ -228,9 +231,9 @@ export const useCompareStore = create<CompareStore>((set, get) => ({
   setCompareOpen: (open) => set({ isCompareOpen: open }),
 
   addItem: (item) => {
-    const existing = get().items.find((i) => i.id === item.id);
+    const existing = get().items.find((i) => i.variant.id === item.variant.id);
     if (existing) {
-      set((state) => ({ items: state.items.filter((i) => i.id !== item.id) }));
+      set((state) => ({ items: state.items.filter((i) => i.variant.id !== item.variant.id) }));
       return;
     }
     if (get().items.length >= MAX_COMPARE) {
@@ -239,13 +242,13 @@ export const useCompareStore = create<CompareStore>((set, get) => ({
     set((state) => ({ items: [...state.items, item] }));
   },
 
-  removeItem: (id) => {
-    set((state) => ({ items: state.items.filter((i) => i.id !== id) }));
+  removeItem: (variantId) => {
+    set((state) => ({ items: state.items.filter((i) => i.variant.id !== variantId) }));
   },
 
   clearAll: () => set({ items: [] }),
 
-  isInCompare: (id) => get().items.some((i) => i.id === id),
+  isInCompare: (variantId) => get().items.some((i) => i.variant.id === variantId),
 
   totalCount: () => get().items.length,
 }));

@@ -97,8 +97,7 @@ export default function ProductListCard({ product, index = 0 }: Readonly<Product
     toggleItem({
       id: product.id,
       name: product.name,
-      price: cheapestVariant?.sellPrice ?? 0,
-      comparePrice: cheapestVariant?.oldSellPrice || undefined,
+      variant: cheapestVariant,
       image: product.imagePreview,
       categories: product.categories || [],
     });
@@ -114,15 +113,13 @@ export default function ProductListCard({ product, index = 0 }: Readonly<Product
       addCompareItem({
         id: product.id,
         name: product.name,
-        price: cheapestVariant?.sellPrice ?? 0,
-        comparePrice: cheapestVariant?.oldSellPrice || undefined,
+        variant: cheapestVariant,
         image: product.imagePreview,
         rating: rating,
         reviewCount: product.approvedTotalReviews,
         categories: product.categories || [],
         stock: product.stockQuantity || 0,
-        description: product.fullDescription || '',
-        sku: product.sku || '',
+        description: product.fullDescription || ''
       });
       toast.success(t('homepage.compare.remove'));
     } else {
@@ -133,15 +130,13 @@ export default function ProductListCard({ product, index = 0 }: Readonly<Product
       addCompareItem({
         id: product.id,
         name: product.name,
-        price: cheapestVariant?.sellPrice ?? 0,
-        comparePrice: cheapestVariant?.oldSellPrice || undefined,
+        variant: cheapestVariant,
         image: product.imagePreview,
         rating: rating,
         reviewCount: product.approvedTotalReviews,
         categories: product.categories || [],
         stock: product.stockQuantity || 0,
-        description: product.fullDescription || '',
-        sku: product.sku || '',
+        description: product.fullDescription || ''
       });
       toast.success(t('homepage.common.compare'));
     }
@@ -171,156 +166,156 @@ export default function ProductListCard({ product, index = 0 }: Readonly<Product
           transition={{ duration: 0.3, delay: index * 0.03 }}
           className="group relative bg-white dark:bg-ecommerce-surface rounded-2xl border border-ecommerce-border overflow-hidden card-lift category-glow"
         >
-        <div className="flex flex-col sm:flex-row">
-          {/* Image */}
-          <div className="relative w-full sm:w-48 lg:w-56 aspect-square sm:aspect-auto shrink-0 overflow-hidden bg-ecommerce-surface-hover dark:bg-[#252836]">
-            {!isImageLoaded && (
-              <div className="absolute inset-0 bg-muted shimmer" />
-            )}
-            <img
-              src={GetImage(product.imagePreview, true)}
-              alt={product.name}
-              className={`w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 ${isImageLoaded ? 'opacity-100' : 'opacity-0'}`}
-              onLoad={() => setIsImageLoaded(true)}
-              loading="lazy"
-            />
-            {discount > 0 && (
-              <Badge className="absolute top-2.5 start-2.5 bg-ecommerce-red text-white border-0 text-[10px] font-bold px-1.5 py-0.5 rounded-md">
-                {t('homepage.common.off', { percent: discount })}
-              </Badge>
-            )}
-            {product.markAsNew && (
-              <Badge className="absolute top-2.5 start-2.5 bg-ecommerce-teal text-white border-0 text-[10px] font-bold px-1.5 py-0.5 rounded-md">
-                {t('homepage.common.newBadge')}
-              </Badge>
-            )}
-            {/* Stock indicator */}
-            {totalStock === 0 ? (
-              <div className="absolute inset-0 bg-black/40 z-10 flex items-center justify-center">
-                <span className="text-sm font-bold text-white bg-black/60 px-4 py-2 rounded-xl">{t('homepage.common.outOfStock')}</span>
-              </div>
-            ) : totalStock < 10 ? (
-              <div className="absolute bottom-2.5 start-2.5">
-                <span className="text-[10px] font-bold px-2 py-0.5 rounded-md bg-ecommerce-amber/90 text-white">{t('homepage.common.onlyLeft', { count: totalStock })}</span>
-              </div>
-            ) : null}
-          </div>
-
-          {/* Content */}
-          <div className="flex-1 p-4 sm:p-5 flex flex-col">
-            <div className="flex items-start justify-between gap-2">
-              <div className="flex-1 min-w-0">
-                <div className="flex items-center gap-1.5 mb-1">
-                  {product.categories?.map(category => category &&
-                    (<span key={"cat-" + category.key}>
-                      {category && <span className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: category.color }} />}
-                      {category && <span className="text-[11px] font-medium text-ecommerce-text-muted uppercase tracking-wider">{category.name}</span>}
-                    </span>))}
-                  {product.sku && <span className="text-[10px] text-ecommerce-text-muted ms-auto sm:ms-2">{t('homepage.common.sku')}: {product.sku}</span>}
+          <div className="flex flex-col sm:flex-row">
+            {/* Image */}
+            <div className="relative w-full sm:w-48 lg:w-56 aspect-square sm:aspect-auto shrink-0 overflow-hidden bg-ecommerce-surface-hover dark:bg-[#252836]">
+              {!isImageLoaded && (
+                <div className="absolute inset-0 bg-muted shimmer" />
+              )}
+              <img
+                src={GetImage(product.imagePreview, true)}
+                alt={product.name}
+                className={`w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 ${isImageLoaded ? 'opacity-100' : 'opacity-0'}`}
+                onLoad={() => setIsImageLoaded(true)}
+                loading="lazy"
+              />
+              {discount > 0 && (
+                <Badge className="absolute top-2.5 start-2.5 bg-ecommerce-red text-white border-0 text-[10px] font-bold px-1.5 py-0.5 rounded-md">
+                  {t('homepage.common.off', { percent: discount })}
+                </Badge>
+              )}
+              {product.markAsNew && (
+                <Badge className="absolute top-2.5 start-2.5 bg-ecommerce-teal text-white border-0 text-[10px] font-bold px-1.5 py-0.5 rounded-md">
+                  {t('homepage.common.newBadge')}
+                </Badge>
+              )}
+              {/* Stock indicator */}
+              {totalStock === 0 ? (
+                <div className="absolute inset-0 bg-black/40 z-10 flex items-center justify-center">
+                  <span className="text-sm font-bold text-white bg-black/60 px-4 py-2 rounded-xl">{t('homepage.common.outOfStock')}</span>
                 </div>
-                <h3 className="font-semibold text-base text-ecommerce-text-primary line-clamp-1 group-hover:text-ecommerce-red transition-colors">{product.name}</h3>
-                {product.shortDescription && <p className="text-xs text-ecommerce-text-muted mt-1 line-clamp-2">{product.shortDescription}</p>}
-              </div>
+              ) : totalStock < 10 ? (
+                <div className="absolute bottom-2.5 start-2.5">
+                  <span className="text-[10px] font-bold px-2 py-0.5 rounded-md bg-ecommerce-amber/90 text-white">{t('homepage.common.onlyLeft', { count: totalStock })}</span>
+                </div>
+              ) : null}
             </div>
 
-            {/* Rating */}
-            <div className="flex items-center gap-1.5 mt-3">
-              <div className="flex items-center gap-px">
-                {Array.from({ length: 5 }).map((_, i) => (
-                  <Star key={"star-" + i} size={12} className={i < Math.floor(rating) ? 'fill-ecommerce-amber text-ecommerce-amber' : 'text-ecommerce-border'} />
-                ))}
-              </div>
-              <span className="text-xs text-ecommerce-text-muted">{rating.toFixed(1)} ({product.approvedTotalReviews})</span>
-            </div>
-
-            {/* Tags */}
-            {product.productTags && product.productTags.length > 0 && (
-              <div className="flex gap-1.5 mt-3">
-                {product.productTags.slice(0, 3).map(tag => (
-                  <span key={"tag-" + tag} className="text-[10px] font-medium px-2 py-0.5 rounded-md bg-ecommerce-surface-hover text-ecommerce-text-muted capitalize">{tag}</span>
-                ))}
-              </div>
-            )}
-
-            {/* Bottom: Price + Actions */}
-            <div className="flex items-center justify-between mt-auto pt-4 border-t border-ecommerce-border mt-4">
-              <div className="flex flex-col gap-0.5">
-                <div className="flex items-baseline gap-1.5">
-                  {hasMultipleVariants ? (
-                    <span className="text-base sm:text-lg font-bold text-ecommerce-text-primary">
-                      {CurrencyViewer(minSellPrice, CONFIG.DEFAULT_CURRENCY)} - {CurrencyViewer(maxSellPrice, CONFIG.DEFAULT_CURRENCY)}
-                    </span>
-                  ) : (
-                    <>
-                      <span className="text-base sm:text-lg font-bold text-ecommerce-text-primary">{CurrencyViewer(minSellPrice, CONFIG.DEFAULT_CURRENCY)}</span>
-                      {cheapestVariant && cheapestVariant.oldSellPrice > 0 && cheapestVariant.oldSellPrice > cheapestVariant.sellPrice && (
-                        <span className="text-xs text-ecommerce-text-muted line-through">{CurrencyViewer(cheapestVariant.oldSellPrice, CONFIG.DEFAULT_CURRENCY)}</span>
-                      )}
-                    </>
-                  )}
-                </div>
-                {!hasMultipleVariants && savings > 0 && (
-                  <span className="text-ecommerce-emerald text-[10px] font-medium">{t('homepage.common.saveAmount', { amount: CurrencyViewer(savings, CONFIG.DEFAULT_CURRENCY) })}</span>
-                )}
-                {hasMultipleVariants && (() => {
-                  const maxSavings = (product.variants ?? []).filter(v => (v.productInventory?.stockQuantity ?? 0) > 0).reduce((max, v) => {
-                    const s = v.oldSellPrice > v.sellPrice ? v.oldSellPrice - v.sellPrice : 0;
-                    return s > max ? s : max;
-                  }, 0);
-                  return maxSavings > 0 ? (
-                    <span className="text-ecommerce-emerald text-[10px] font-medium">{t('homepage.common.saveFrom', { amount: CurrencyViewer(maxSavings, CONFIG.DEFAULT_CURRENCY) })}</span>
-                  ) : null;
-                })()}
-              </div>
-              <div className="flex items-center gap-2">
-                <button
-                  onClick={handleCompare}
-                  className={`w-9 h-9 rounded-lg border flex items-center justify-center transition-all ${inCompare ? 'bg-ecommerce-teal/5 border-ecommerce-teal/30 text-ecommerce-teal' : 'border-ecommerce-border hover:bg-ecommerce-teal hover:text-white hover:border-ecommerce-teal'}`}
-                  aria-label={inCompare ? t('homepage.compare.remove') : t('homepage.common.compare')}
-                >
-                  <GitCompareArrows size={14} />
-                </button>
-                <button
-                  onClick={handleQuickView}
-                  className="w-9 h-9 rounded-lg border border-ecommerce-border flex items-center justify-center hover:bg-ecommerce-purple hover:text-white hover:border-ecommerce-purple transition-all"
-                  aria-label={t('homepage.common.quickView')}
-                >
-                  <Eye size={14} />
-                </button>
-                <button
-                  onClick={handleWishlist}
-                  className={`w-9 h-9 rounded-lg border flex items-center justify-center transition-all ${wishlisted ? 'bg-ecommerce-red/5 border-ecommerce-red/30 text-ecommerce-red' : 'border-ecommerce-border hover:bg-ecommerce-rose hover:text-white hover:border-ecommerce-rose'}`}
-                  aria-label={wishlisted ? t('homepage.common.removeFromWishlist') : t('homepage.common.addToWishlist')}
-                >
-                  <div className="relative">
-                    <AnimatePresence>
-                      {heartBurst && wishlisted && (
-                        <motion.div
-                          key="heart-burst"
-                          initial={{ scale: 0.5, opacity: 1 }}
-                          animate={{ scale: 2.5, opacity: 0 }}
-                          exit={{ opacity: 0 }}
-                          transition={{ duration: 0.6, ease: 'easeOut' }}
-                          className="absolute inset-0 rounded-lg bg-ecommerce-rose/30 pointer-events-none"
-                        />
-                      )}
-                    </AnimatePresence>
-                    <Heart size={14} className={`transition-colors duration-200 ${wishlisted ? 'fill-ecommerce-red text-ecommerce-red' : ''} ${heartBurst && wishlisted ? 'scale-125' : ''}`} />
+            {/* Content */}
+            <div className="flex-1 p-4 sm:p-5 flex flex-col">
+              <div className="flex items-start justify-between gap-2">
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center gap-1.5 mb-1">
+                    {product.categories?.map(category => category &&
+                      (<span key={"cat-" + category.key}>
+                        {category && <span className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: category.color }} />}
+                        {category && <span className="text-[11px] font-medium text-ecommerce-text-muted uppercase tracking-wider">{category.name}</span>}
+                      </span>))}
+                    {product.sku && <span className="text-[10px] text-ecommerce-text-muted ms-auto sm:ms-2">{t('homepage.common.sku')}: {product.sku}</span>}
                   </div>
-                </button>
-                <Button
-                  onClick={handleAddToCart}
-                  size="sm"
-                  disabled={totalStock === 0}
-                  className={`h-9 px-4 rounded-lg text-xs font-medium gap-1.5 transition-all duration-300 active:scale-95 ripple disabled:opacity-50 ${justAdded ? 'bg-ecommerce-emerald hover:bg-ecommerce-emerald text-white scale-105' : 'bg-ecommerce-red hover:bg-ecommerce-red/90 text-white hover:scale-105'}`}
-                >
-                  {justAdded ? <Check size={13} /> : <ShoppingCart size={13} />}
-                </Button>
+                  <h3 className="font-semibold text-base text-ecommerce-text-primary line-clamp-1 group-hover:text-ecommerce-red transition-colors">{product.name}</h3>
+                  {product.shortDescription && <p className="text-xs text-ecommerce-text-muted mt-1 line-clamp-2">{product.shortDescription}</p>}
+                </div>
+              </div>
+
+              {/* Rating */}
+              <div className="flex items-center gap-1.5 mt-3">
+                <div className="flex items-center gap-px">
+                  {Array.from({ length: 5 }).map((_, i) => (
+                    <Star key={"star-" + i} size={12} className={i < Math.floor(rating) ? 'fill-ecommerce-amber text-ecommerce-amber' : 'text-ecommerce-border'} />
+                  ))}
+                </div>
+                <span className="text-xs text-ecommerce-text-muted">{rating.toFixed(1)} ({product.approvedTotalReviews})</span>
+              </div>
+
+              {/* Tags */}
+              {product.productTags && product.productTags.length > 0 && (
+                <div className="flex gap-1.5 mt-3">
+                  {product.productTags.slice(0, 3).map(tag => (
+                    <span key={"tag-" + tag} className="text-[10px] font-medium px-2 py-0.5 rounded-md bg-ecommerce-surface-hover text-ecommerce-text-muted capitalize">{tag}</span>
+                  ))}
+                </div>
+              )}
+
+              {/* Bottom: Price + Actions */}
+              <div className="flex items-center justify-between mt-auto pt-4 border-t border-ecommerce-border mt-4">
+                <div className="flex flex-col gap-0.5">
+                  <div className="flex items-baseline gap-1.5">
+                    {hasMultipleVariants ? (
+                      <span className="text-base sm:text-lg font-bold text-ecommerce-text-primary">
+                        {CurrencyViewer(minSellPrice, CONFIG.DEFAULT_CURRENCY)} - {CurrencyViewer(maxSellPrice, CONFIG.DEFAULT_CURRENCY)}
+                      </span>
+                    ) : (
+                      <>
+                        <span className="text-base sm:text-lg font-bold text-ecommerce-text-primary">{CurrencyViewer(minSellPrice, CONFIG.DEFAULT_CURRENCY)}</span>
+                        {cheapestVariant && cheapestVariant.oldSellPrice > 0 && cheapestVariant.oldSellPrice > cheapestVariant.sellPrice && (
+                          <span className="text-xs text-ecommerce-text-muted line-through">{CurrencyViewer(cheapestVariant.oldSellPrice, CONFIG.DEFAULT_CURRENCY)}</span>
+                        )}
+                      </>
+                    )}
+                  </div>
+                  {!hasMultipleVariants && savings > 0 && (
+                    <span className="text-ecommerce-emerald text-[10px] font-medium">{t('homepage.common.saveAmount', { amount: CurrencyViewer(savings, CONFIG.DEFAULT_CURRENCY) })}</span>
+                  )}
+                  {hasMultipleVariants && (() => {
+                    const maxSavings = (product.variants ?? []).filter(v => (v.productInventory?.stockQuantity ?? 0) > 0).reduce((max, v) => {
+                      const s = v.oldSellPrice > v.sellPrice ? v.oldSellPrice - v.sellPrice : 0;
+                      return s > max ? s : max;
+                    }, 0);
+                    return maxSavings > 0 ? (
+                      <span className="text-ecommerce-emerald text-[10px] font-medium">{t('homepage.common.saveFrom', { amount: CurrencyViewer(maxSavings, CONFIG.DEFAULT_CURRENCY) })}</span>
+                    ) : null;
+                  })()}
+                </div>
+                <div className="flex items-center gap-2">
+                  <button
+                    onClick={handleCompare}
+                    className={`w-9 h-9 rounded-lg border flex items-center justify-center transition-all ${inCompare ? 'bg-ecommerce-teal/5 border-ecommerce-teal/30 text-ecommerce-teal' : 'border-ecommerce-border hover:bg-ecommerce-teal hover:text-white hover:border-ecommerce-teal'}`}
+                    aria-label={inCompare ? t('homepage.compare.remove') : t('homepage.common.compare')}
+                  >
+                    <GitCompareArrows size={14} />
+                  </button>
+                  <button
+                    onClick={handleQuickView}
+                    className="w-9 h-9 rounded-lg border border-ecommerce-border flex items-center justify-center hover:bg-ecommerce-purple hover:text-white hover:border-ecommerce-purple transition-all"
+                    aria-label={t('homepage.common.quickView')}
+                  >
+                    <Eye size={14} />
+                  </button>
+                  <button
+                    onClick={handleWishlist}
+                    className={`w-9 h-9 rounded-lg border flex items-center justify-center transition-all ${wishlisted ? 'bg-ecommerce-red/5 border-ecommerce-red/30 text-ecommerce-red' : 'border-ecommerce-border hover:bg-ecommerce-rose hover:text-white hover:border-ecommerce-rose'}`}
+                    aria-label={wishlisted ? t('homepage.common.removeFromWishlist') : t('homepage.common.addToWishlist')}
+                  >
+                    <div className="relative">
+                      <AnimatePresence>
+                        {heartBurst && wishlisted && (
+                          <motion.div
+                            key="heart-burst"
+                            initial={{ scale: 0.5, opacity: 1 }}
+                            animate={{ scale: 2.5, opacity: 0 }}
+                            exit={{ opacity: 0 }}
+                            transition={{ duration: 0.6, ease: 'easeOut' }}
+                            className="absolute inset-0 rounded-lg bg-ecommerce-rose/30 pointer-events-none"
+                          />
+                        )}
+                      </AnimatePresence>
+                      <Heart size={14} className={`transition-colors duration-200 ${wishlisted ? 'fill-ecommerce-red text-ecommerce-red' : ''} ${heartBurst && wishlisted ? 'scale-125' : ''}`} />
+                    </div>
+                  </button>
+                  <Button
+                    onClick={handleAddToCart}
+                    size="sm"
+                    disabled={totalStock === 0}
+                    className={`h-9 px-4 rounded-lg text-xs font-medium gap-1.5 transition-all duration-300 active:scale-95 ripple disabled:opacity-50 ${justAdded ? 'bg-ecommerce-emerald hover:bg-ecommerce-emerald text-white scale-105' : 'bg-ecommerce-red hover:bg-ecommerce-red/90 text-white hover:scale-105'}`}
+                  >
+                    {justAdded ? <Check size={13} /> : <ShoppingCart size={13} />}
+                  </Button>
+                </div>
               </div>
             </div>
           </div>
-        </div>
-      </motion.div>
+        </motion.div>
       </div>
     </Link>
   );

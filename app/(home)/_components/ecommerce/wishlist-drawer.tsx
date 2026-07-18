@@ -9,6 +9,8 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { toast } from 'sonner';
 import { useTranslations } from 'next-intl';
 import { GetImage } from '../../_lib/utils';
+import CurrencyViewer from '@root/utils/CurrencyViewer';
+import CONFIG from '@root/config';
 
 export function WishlistDrawer({ open, onClose }: { open: boolean; onClose: () => void }) {
   const { items, removeItem, totalCount } = useWishlistStore();
@@ -19,7 +21,7 @@ export function WishlistDrawer({ open, onClose }: { open: boolean; onClose: () =
     addItem({
       id: item.id,
       name: item.name,
-      variant: { id: 0, sku: '', productId: item.id, sellPrice: item.price, oldSellPrice: item.comparePrice ?? 0, productInventory: { id: 0, variantId: 0, stockQuantity: 99, reservedQuantity: 0 }, productAttributes: [] },
+      variant: item.variant,
       image: item.image,
       categories: item.categories,
     } as any);
@@ -27,8 +29,8 @@ export function WishlistDrawer({ open, onClose }: { open: boolean; onClose: () =
     toast.success(t('homepage.cart.itemAdded', { name: item.name }));
   };
 
-  const handleRemove = (id: number, name: string) => {
-    removeItem(id);
+  const handleRemove = (variantId: number, name: string) => {
+    removeItem(variantId);
     toast.success(t('homepage.common.removeFromWishlist'));
   };
 
@@ -62,7 +64,7 @@ export function WishlistDrawer({ open, onClose }: { open: boolean; onClose: () =
             <AnimatePresence>
               {items.map((item) => (
                 <motion.div
-                  key={item.id}
+                  key={item.variant.id}
                   layout
                   initial={{ opacity: 0, x: 20 }}
                   animate={{ opacity: 1, x: 0 }}
@@ -78,9 +80,9 @@ export function WishlistDrawer({ open, onClose }: { open: boolean; onClose: () =
                     <p className="text-sm font-semibold text-ecommerce-text-primary truncate">{item.name}</p>
                     <p className="text-xs text-ecommerce-text-muted mt-0.5">{item.categories.map(x => x.name + ",")}</p>
                     <div className="flex items-baseline gap-1.5 mt-1">
-                      <span className="text-sm font-bold text-ecommerce-text-primary">${item.price.toFixed(2)}</span>
-                      {item.comparePrice && (
-                        <span className="text-xs text-ecommerce-text-muted line-through">${item.comparePrice.toFixed(2)}</span>
+                      <span className="text-sm font-bold text-ecommerce-text-primary">{CurrencyViewer(item.variant.sellPrice, CONFIG.DEFAULT_CURRENCY)}</span>
+                      {item.variant.oldSellPrice > 0 && item.variant.oldSellPrice > item.variant.sellPrice && (
+                        <span className="text-xs text-ecommerce-text-muted line-through">{CurrencyViewer(item.variant.oldSellPrice, CONFIG.DEFAULT_CURRENCY)}</span>
                       )}
                     </div>
                   </div>
@@ -93,7 +95,7 @@ export function WishlistDrawer({ open, onClose }: { open: boolean; onClose: () =
                       <ShoppingCart size={14} />
                     </button>
                     <button
-                      onClick={() => handleRemove(item.id, item.name)}
+                      onClick={() => handleRemove(item.variant.id, item.name)}
                       className="w-8 h-8 rounded-lg bg-ecommerce-surface text-ecommerce-text-muted flex items-center justify-center hover:bg-ecommerce-red/10 hover:text-ecommerce-red transition-colors"
                       aria-label={t('homepage.wishlist.remove')}
                     >
@@ -111,7 +113,7 @@ export function WishlistDrawer({ open, onClose }: { open: boolean; onClose: () =
                     addItem({
                       id: item.id,
                       name: item.name,
-                      variant: { id: 0, sku: '', productId: item.id, sellPrice: item.price, oldSellPrice: item.comparePrice ?? 0, productInventory: { id: 0, variantId: 0, stockQuantity: 99, reservedQuantity: 0 }, productAttributes: [] },
+                      variant: item.variant,
                       image: item.image,
                       categories: item.categories,
                     } as any);

@@ -1,11 +1,11 @@
 import FileUploadModel from "@root/app/dashboard/(filestorage)/_types/FileUploadModel";
 import CategoryDisplayModel from "./CategoryDisplayModel";
+import ProductVariantDisplayModel from "./ProductVariantDisplayModel";
 
 export default interface WishlistItem {
   id: number;
   name: string;
-  price: number;
-  comparePrice?: number;
+  variant: ProductVariantDisplayModel;
   image?: FileUploadModel;
   categories: CategoryDisplayModel[];
 }

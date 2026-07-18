@@ -13,6 +13,9 @@ import { useTranslations } from 'next-intl';
 import { GetImage } from '../../_lib/utils';
 import CurrencyViewer from '@root/utils/CurrencyViewer';
 import CONFIG from '@root/config';
+import { getCheapestVariant } from '../../_types/ProductDisplayModel';
+import { Badge } from '../ui/badge';
+import AttributeType from '@root/app/types/enums/AttributeType';
 
 const PROMO_CODES: Record<string, { type: 'percentage' | 'freeship'; value: number; label: string }> = {
   WELCOME15: { type: 'percentage', value: 15, label: '15% off' },
@@ -40,17 +43,16 @@ function YouMightAlsoLike() {
         <p className="text-xs font-semibold text-ecommerce-text-muted uppercase tracking-wider">{t('homepage.cart.suggestions')}</p>
       </div>
       <div className="space-y-2">
-        {suggestions.map((item) => (
-          <motion.div
-            key={item.id}
+        {suggestions.map((item) => {
+          let cheapestVariant = getCheapestVariant(item.variants);
+          return <motion.div
+            key={cheapestVariant.id}
             initial={{ opacity: 0, y: 5 }}
             animate={{ opacity: 1, y: 0 }}
             className="flex items-center gap-2.5 p-2 rounded-xl bg-ecommerce-surface-hover/60 hover:bg-ecommerce-surface-hover transition-colors cursor-pointer group"
             onClick={() => {
-              const firstVariant = item.variants?.[0];
-              if (!firstVariant) return;
               useCartStore.getState().addItem({
-                id: item.id, name: item.name, variant: firstVariant,
+                id: cheapestVariant.id, name: item.name, variant: cheapestVariant,
                 image: item.imagePreview, categories: item.categories,
               });
               toast.success(t('homepage.cart.itemAdded', { name: item.name }));
@@ -61,13 +63,13 @@ function YouMightAlsoLike() {
             </div>
             <div className="flex-1 min-w-0">
               <p className="text-xs font-medium text-ecommerce-text-primary line-clamp-1">{item.name}</p>
-              <p className="text-xs font-bold text-ecommerce-text-primary mt-0.5">{CurrencyViewer(item.variants?.[0]?.sellPrice,CONFIG.DEFAULT_CURRENCY)  ?? '0.00'}</p>
+              <p className="text-xs font-bold text-ecommerce-text-primary mt-0.5">{CurrencyViewer(cheapestVariant.sellPrice, CONFIG.DEFAULT_CURRENCY) ?? '0.00'}</p>
             </div>
             <div className="w-7 h-7 rounded-lg bg-ecommerce-red/10 text-ecommerce-red flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity shrink-0">
               <ShoppingCart size={12} />
             </div>
           </motion.div>
-        ))}
+        })}
       </div>
     </div>
   );
@@ -171,7 +173,7 @@ export function CartDrawer() {
             {price < freeShippingThreshold && (
               <div className="px-6 py-3 bg-ecommerce-amber/5 border-b border-ecommerce-border">
                 <p className="text-xs text-ecommerce-text-secondary mb-1.5">
-                  {t('homepage.cart.awayFromFree', { amount: `$${remainingForFreeShipping.toFixed(2)}` })}
+                  {t('homepage.cart.awayFromFree', { amount: `${CurrencyViewer(remainingForFreeShipping, CONFIG.DEFAULT_CURRENCY)}` })}
                 </p>
                 <div className="h-1.5 bg-ecommerce-border/50 rounded-full overflow-hidden">
                   <motion.div
@@ -195,7 +197,7 @@ export function CartDrawer() {
               <AnimatePresence mode="popLayout">
                 {items.map((item) => (
                   <motion.div
-                    key={item.id}
+                    key={item.variant.sku}
                     layout
                     initial={{ opacity: 0, x: -20 }}
                     animate={{ opacity: 1, x: 0 }}
@@ -212,11 +214,26 @@ export function CartDrawer() {
                       {/* Details */}
                       <div className="flex-1 min-w-0">
                         <h4 className="text-sm font-medium text-ecommerce-text-primary line-clamp-1">{item.name}</h4>
+                        <p className="text-xs text-ecommerce-text-muted mt-0.5">
+                          {item.variant.productAttributes.map(attribute => (
+                            <Badge key={attribute.id} className="bg-ecommerce-emerald/10 text-ecommerce-emerald border-0 text-xs font-semibold mx-0.5">
+                              {attribute.displayName}
+                            </Badge>
 
+                            /*  attribute.attributeType == AttributeType.Color ? <span key={attribute.id}
+                                className="inline-block w-8 h-8 rounded-full border-2 transition-all duration-200 hover:scale-120 border-ecommerce-border hover:border-ecommerce-text-muted"
+                                style={{ backgroundColor: 'var(--' + attribute.key + ')' }} />
+                                : <Badge key={attribute.id} className="bg-ecommerce-emerald/10 text-ecommerce-emerald border-0 text-xs font-semibold mx-0.5">
+                                  {attribute.displayName}
+                                </Badge>*/
+                          ))}
+
+
+                        </p>
                         <p className="text-xs text-ecommerce-text-muted mt-0.5">{item.categories.map(x => x.name + ",")}</p>
                         {item.variant.oldSellPrice > 0 && item.variant.oldSellPrice > item.variant.sellPrice && (
                           <p className="text-[10px] text-ecommerce-emerald font-medium mt-0.5">
-                            {t('homepage.cart.couponApplied', { amount: `$${(item.variant.oldSellPrice - item.variant.sellPrice).toFixed(2)}` })}
+                            {t('homepage.cart.couponApplied', { amount: `${CurrencyViewer((item.variant.oldSellPrice - item.variant.sellPrice), CONFIG.DEFAULT_CURRENCY)}` })}
                           </p>
                         )}
 
@@ -224,7 +241,7 @@ export function CartDrawer() {
                           {/* Quantity Controls */}
                           <div className="flex items-center gap-1 bg-white dark:bg-ecommerce-surface rounded-lg border border-ecommerce-border">
                             <button
-                              onClick={() => updateQuantity(item.id, item.quantity - 1)}
+                              onClick={() => updateQuantity(item.variant.id, item.quantity - 1)}
                               className="w-7 h-7 flex items-center justify-center hover:bg-ecommerce-surface-hover rounded-s-lg transition-colors"
                               aria-label={t('homepage.common.previous')}
                             >
@@ -232,7 +249,7 @@ export function CartDrawer() {
                             </button>
                             <span className="w-8 text-center text-sm font-medium">{item.quantity}</span>
                             <button
-                              onClick={() => updateQuantity(item.id, item.quantity + 1)}
+                              onClick={() => updateQuantity(item.variant.id, item.quantity + 1)}
                               className="w-7 h-7 flex items-center justify-center hover:bg-ecommerce-surface-hover rounded-e-lg transition-colors"
                               aria-label={t('homepage.common.next')}
                             >
@@ -243,11 +260,11 @@ export function CartDrawer() {
                           {/* Price */}
                           <div className="text-end">
                             <span className="text-sm font-bold text-ecommerce-text-primary">
-                              ${(item.variant.sellPrice * item.quantity).toFixed(2)}
+                              {CurrencyViewer(item.variant.sellPrice * item.quantity, CONFIG.DEFAULT_CURRENCY)}
                             </span>
                             {item.variant.oldSellPrice > 0 && (
                               <p className="text-[10px] text-ecommerce-text-muted line-through">
-                                ${(item.variant.oldSellPrice * item.quantity).toFixed(2)}
+                                {CurrencyViewer(item.variant.oldSellPrice * item.quantity, CONFIG.DEFAULT_CURRENCY)}
                               </p>
                             )}
                           </div>
@@ -256,7 +273,7 @@ export function CartDrawer() {
 
                       {/* Remove */}
                       <button
-                        onClick={() => removeItem(item.id)}
+                        onClick={() => removeItem(item.variant.id)}
                         className="self-start p-1 text-ecommerce-text-muted hover:text-ecommerce-red transition-colors"
                         aria-label={t('homepage.cart.remove')}
                       >
@@ -282,7 +299,7 @@ export function CartDrawer() {
                       {appliedPromo.type === 'percentage' && (
                         <>
                           <span>·</span>
-                          <span>-${discount.toFixed(2)}</span>
+                          <span>-{CurrencyViewer(discount, CONFIG.DEFAULT_CURRENCY)}</span>
                         </>
                       )}
                       <button
@@ -354,19 +371,19 @@ export function CartDrawer() {
                 {savings > 0 && (
                   <div className="flex items-center justify-between px-3 py-2 rounded-xl bg-ecommerce-emerald/10 border border-ecommerce-emerald/10">
                     <span className="text-sm text-ecommerce-emerald font-medium">🎉 {t('homepage.cart.savings')}</span>
-                    <span className="text-sm font-bold text-ecommerce-emerald">-${savings.toFixed(2)}</span>
+                    <span className="text-sm font-bold text-ecommerce-emerald">-{CurrencyViewer(savings, CONFIG.DEFAULT_CURRENCY)}</span>
                   </div>
                 )}
 
                 <div className="flex items-center justify-between">
                   <span className="text-sm text-ecommerce-text-secondary">{t('homepage.cart.subtotal')}</span>
-                  <span className="text-xl font-bold text-ecommerce-text-primary">${price.toFixed(2)}</span>
+                  <span className="text-xl font-bold text-ecommerce-text-primary">{CurrencyViewer(price, CONFIG.DEFAULT_CURRENCY)}</span>
                 </div>
 
                 {discount > 0 && (
                   <div className="flex items-center justify-between">
                     <span className="text-sm text-ecommerce-emerald font-medium">{t('homepage.cart.savings')}</span>
-                    <span className="text-sm font-bold text-ecommerce-emerald">-${discount.toFixed(2)}</span>
+                    <span className="text-sm font-bold text-ecommerce-emerald">-{CurrencyViewer(discount, CONFIG.DEFAULT_CURRENCY)}</span>
                   </div>
                 )}
 

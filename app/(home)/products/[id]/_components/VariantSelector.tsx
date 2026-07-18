@@ -204,7 +204,7 @@ export default function VariantSelector({ variants, onVariantChange }: VariantSe
                       ? 'border-ecommerce-red ring-2 ring-ecommerce-red/20 scale-120'
                       : 'border-ecommerce-border hover:border-ecommerce-text-muted'
                       }`}
-                    style={{ backgroundColor: opt.key }}
+                    style={{ backgroundColor: 'var(--' + opt.key + ')' }}
                     aria-label={opt.displayName}
                     title={opt.displayName}
                   />
