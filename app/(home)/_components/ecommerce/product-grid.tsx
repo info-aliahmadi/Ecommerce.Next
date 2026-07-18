@@ -83,7 +83,7 @@ export function ProductGrid() {
     queryKey: ['products', filter],
     queryFn: async ({ pageParam }) => {
       const service = new HomePageService();
-      const result = await service.getFeaturedProducts({ ...filter, pageIndex: pageParam } as ProductFilterModel);
+      const result = await service.getFeaturedProductsByFilter({ ...filter, pageIndex: pageParam } as ProductFilterModel);
       if (!result.succeeded) throw new Error(result.message ?? 'Failed to load products');
       return result.data;
     },

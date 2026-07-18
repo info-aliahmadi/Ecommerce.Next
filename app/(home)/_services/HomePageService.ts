@@ -54,16 +54,28 @@ export default class HomePageService {
     return result;
   }
 
-  async getFeaturedProducts(filter: ProductFilterModel): Promise<Result<PaginatedDisplayList<ProductDisplayModel>>> {
+  async getFeaturedProductsByFilter(filter: ProductFilterModel): Promise<Result<PaginatedDisplayList<ProductDisplayModel>>> {
     filter.productTagIds = [ProductTags.Featured];
     let result = await this.getProducts(filter);
     return result;
   }
+// it means product
+  async getFeaturedProducts(): Promise<Result<PaginatedDisplayList<ProductDisplayModel>>> {
+     let filter: ProductFilterModel = {
+      pageIndex: 1,
+      pageSize: 8,
+      productTagIds : [ProductTags.Featured]
+    }
+    let result = await this.getProducts(filter);
+    debugger
+    return result;
+  }
+
 
   async getTrendProducts(): Promise<Result<PaginatedDisplayList<ProductDisplayModel>>> {
     let filter: ProductFilterModel = {
       pageIndex: 1,
-      pageSize: 8,
+      pageSize: 10,
       productTagIds: [ProductTags.Trending]
     }
     let result = await this.getProducts(filter);
