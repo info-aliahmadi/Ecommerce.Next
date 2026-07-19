@@ -22,6 +22,8 @@ import ProductFilterModel from '../../_types/ProductFilterModel';
 import SortingType, { SortOption } from '@root/app/types/enums/SortingType';
 import Link from 'next/link';
 import ProductListCard from './product-list';
+import CurrencyViewer, { GetCurrencySymbol } from '@root/utils/CurrencyViewer';
+import CONFIG from '@root/config';
 
 const PAGE_SIZE = 8;
 
@@ -39,8 +41,6 @@ export function ProductGrid() {
   const t = useTranslations();
   const { searchQuery, selectedCategory, sortBy, setSortBy, setSelectedCategory } = useUIStore();
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
-  const [priceRange, setPriceRange] = useState<[number, number]>([0, 9999]);
-  const [sliderValue, setSliderValue] = useState<[number, number]>([0, 9999]);
   const [showFilters, setShowFilters] = useState(false);
   // ── Sort options ────────────────────────────────────
   const sortOptions: { value: SortOption; label: string }[] = [
@@ -69,6 +69,9 @@ export function ProductGrid() {
     return cat?.id ?? null;
   }, [selectedCategory, categories]);
 
+  const [priceRange, setPriceRange] = useState<[number, number]>([0, 9999]);
+  const [sliderValue, setSliderValue] = useState<[number, number]>([0, 9999]);
+
   const filter = useMemo((): Omit<ProductFilterModel, 'pageIndex'> => ({
     pageSize: PAGE_SIZE,
     searchInput: searchQuery,
@@ -78,9 +81,9 @@ export function ProductGrid() {
     toSellUnitPrice: priceRange[1] < sliderValue[1] ? priceRange[1] : undefined,
   }), [searchQuery, selectedCategoryId, sortBy, priceRange]);
 
-  
+
   const { data, isLoading, isError, fetchNextPage, hasNextPage, isFetchingNextPage } = useInfiniteQuery({
-    queryKey: ['products', filter],
+    queryKey: ['productsFeatured', filter],
     queryFn: async ({ pageParam }) => {
       const service = new HomePageService();
       const result = await service.getFeaturedProductsByFilter({ ...filter, pageIndex: pageParam } as ProductFilterModel);
@@ -193,9 +196,10 @@ export function ProductGrid() {
                     <button onClick={() => setSortBy('newest')} className="hover:bg-ecommerce-red/20 rounded-full p-0.5 transition-colors"><X size={12} /></button>
                   </span>
                 )}
-                {(priceRange[0] > 0 || priceRange[1] < 9999) && (
+                {(priceRange[0] > 0 || priceRange[1] < maxRange) && (
                   <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-ecommerce-red/10 text-ecommerce-red text-xs font-medium">
-                    {t('homepage.common.priceRange')}: ${priceRange[0]} – ${priceRange[1] < 9999 ? priceRange[1] : '∞'}
+                    {t('homepage.common.priceRange')}: {CurrencyViewer(priceRange[0], CONFIG.DEFAULT_CURRENCY)} –
+                    {priceRange[1] < maxRange ? CurrencyViewer(priceRange[1], CONFIG.DEFAULT_CURRENCY) : CurrencyViewer(maxRange, CONFIG.DEFAULT_CURRENCY)}
                     <button onClick={handleClearPrice} className="hover:bg-ecommerce-red/20 rounded-full p-0.5 transition-colors"><X size={12} /></button>
                   </span>
                 )}
@@ -315,8 +319,8 @@ export function ProductGrid() {
                 )}
               </div>
               <div className="flex items-center justify-between text-sm">
-                <span className="text-ecommerce-text-primary font-medium">${sliderValue[0]}</span>
-                <span className="text-ecommerce-text-primary font-medium">${sliderValue[1] < maxRange ? sliderValue[1] : '∞'}</span>
+                <span className="text-ecommerce-text-primary font-medium">{CurrencyViewer(sliderValue[0], CONFIG.DEFAULT_CURRENCY)}</span>
+                <span className="text-ecommerce-text-primary font-medium">{CurrencyViewer(Math.min(sliderValue[1], maxRange), CONFIG.DEFAULT_CURRENCY)}</span>
               </div>
               <Slider
                 value={sliderValue}
@@ -329,7 +333,7 @@ export function ProductGrid() {
               />
               <div className="flex items-center gap-2 ">
                 <div className="relative flex-1 max-w-[120px]">
-                  <span className="absolute start-2.5 top-1/2 -translate-y-1/2 text-xs text-ecommerce-text-muted">$</span>
+                  <span className="absolute start-2.5 top-1/2 -translate-y-1/2 text-xs text-ecommerce-text-muted">{GetCurrencySymbol(CONFIG.DEFAULT_CURRENCY)}</span>
                   <input
                     type="number"
                     value={priceRange[0] > 0 ? priceRange[0] : ''}
@@ -342,11 +346,12 @@ export function ProductGrid() {
                     placeholder="0"
                     className="w-full h-8 ps-6 pe-2 text-xs rounded-lg bg-white dark:bg-ecommerce-surface border border-ecommerce-border focus:outline-none focus:ring-1 focus:ring-ecommerce-red/30 focus:border-ecommerce-red/50 text-ecommerce-text-primary transition-all"
                     min="0"
+                    max={maxRange - 1}
                   />
                 </div>
                 <span className="text-ecommerce-text-muted text-xs">—</span>
                 <div className="relative flex-1 max-w-[120px]">
-                  <span className="absolute start-2.5 top-1/2 -translate-y-1/2 text-xs text-ecommerce-text-muted">$</span>
+                  <span className="absolute start-2.5 top-1/2 -translate-y-1/2 text-xs text-ecommerce-text-muted">{GetCurrencySymbol(CONFIG.DEFAULT_CURRENCY)}</span>
                   <input
                     type="number"
                     value={priceRange[1] < maxRange ? priceRange[1] : ''}
@@ -356,9 +361,10 @@ export function ProductGrid() {
                       setSliderValue([sliderValue[0], num]);
                       setPriceRange([priceRange[0], num]);
                     }}
-                    placeholder="∞"
+                    placeholder={maxRange.toString()}
                     className="w-full h-8 ps-6 pe-2 text-xs rounded-lg bg-white dark:bg-ecommerce-surface border border-ecommerce-border focus:outline-none focus:ring-1 focus:ring-ecommerce-red/30 focus:border-ecommerce-red/50 text-ecommerce-text-primary transition-all"
                     min="0"
+                    max={maxRange}
                   />
                 </div>
               </div>

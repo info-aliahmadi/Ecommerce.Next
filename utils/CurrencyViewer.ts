@@ -48,3 +48,36 @@ export default function CurrencyViewer(
   }
   return result;
 }
+// get the currency symbol
+export function GetCurrencySymbol(
+  currency: CurrencyTypes,
+): string {
+  let result;
+  switch (currency) {
+    case CurrencyTypes.Dollar: {
+      result = '$';
+      break;
+    }
+    case CurrencyTypes.Euro: {
+      result = '€';
+      break;
+    }
+    case CurrencyTypes.Dinar: {
+      result = 'د.إ';
+      break;
+    }
+    case CurrencyTypes.Rial: {
+      result = 'ریال';
+      break;
+    }
+    case CurrencyTypes.Toman: {
+      result = 'تومان';
+      break;
+    }
+    case CurrencyTypes.None: {
+      result = '';
+      break;
+    }
+  }
+  return result;
+}

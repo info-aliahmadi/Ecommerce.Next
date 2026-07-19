@@ -72,6 +72,8 @@ import {
 import { useCompareStore } from '../_lib/store';
 import ProductListCard from '../_components/ecommerce/product-list';
 import AttributeType from '@root/app/types/enums/AttributeType';
+import CurrencyViewer, { GetCurrencySymbol } from '@root/utils/CurrencyViewer';
+import CONFIG from '@root/config';
 
 // ── Types ──────────────────────────────────────────────
 type StockFilter = 'all' | 'inStock' | 'outOfStock';
@@ -530,7 +532,7 @@ function ProductsPageContent() {
       const attr = attributesData?.find((a) => a.id === attrId);
       chips.push({
         key: `attr-${attrId}`,
-        label: attr?.name ?? String(attrId),
+        label: attr?.displayName ?? String(attrId),
         onRemove: () => toggleAttribute(attrId),
       });
     });
@@ -640,10 +642,10 @@ function ProductsPageContent() {
               <div className="px-4 pb-4 space-y-3">
                 <div className="flex items-center justify-between text-sm">
                   <span className="text-ecommerce-text-primary font-medium">
-                    ${sliderValue[0]}
+                    {CurrencyViewer(sliderValue[0], CONFIG.DEFAULT_CURRENCY)}
                   </span>
                   <span className="text-ecommerce-text-primary font-medium">
-                    ${sliderValue[1]}
+                    {CurrencyViewer(sliderValue[1], CONFIG.DEFAULT_CURRENCY)}
                   </span>
                 </div>
                 <Slider
@@ -670,7 +672,7 @@ function ProductsPageContent() {
                   <div className="flex-1">
                     <label className="text-[10px] text-ecommerce-text-muted uppercase tracking-wider mb-1 block">{t('homepage.catalog.priceMin')}</label>
                     <div className="relative">
-                      <span className="absolute start-2.5 top-1/2 -translate-y-1/2 text-xs text-ecommerce-text-muted">$</span>
+                      <span className="absolute start-2.5 top-1/2 -translate-y-1/2 text-xs text-ecommerce-text-muted">{GetCurrencySymbol(CONFIG.DEFAULT_CURRENCY)}</span>
                       <input
                         type="number"
                         value={priceMinInput}
@@ -682,7 +684,7 @@ function ProductsPageContent() {
                         }}
                         className="w-full h-9 ps-6 pe-2 rounded-lg bg-ecommerce-surface border border-ecommerce-border text-sm text-ecommerce-text-primary focus:outline-none focus:ring-2 focus:ring-ecommerce-red/30"
                         min={0}
-                        max={maxPriceRange}
+                        max={maxPriceRange - 1}
                       />
                     </div>
                   </div>
@@ -690,7 +692,7 @@ function ProductsPageContent() {
                   <div className="flex-1">
                     <label className="text-[10px] text-ecommerce-text-muted uppercase tracking-wider mb-1 block">{t('homepage.catalog.priceMax')}</label>
                     <div className="relative">
-                      <span className="absolute start-2.5 top-1/2 -translate-y-1/2 text-xs text-ecommerce-text-muted">$</span>
+                      <span className="absolute start-2.5 top-1/2 -translate-y-1/2 text-xs text-ecommerce-text-muted">{GetCurrencySymbol(CONFIG.DEFAULT_CURRENCY)}</span>
                       <input
                         type="number"
                         value={priceMaxInput}
@@ -835,7 +837,7 @@ function ProductsPageContent() {
                         className="rounded-md data-[state=checked]:bg-ecommerce-red data-[state=checked]:border-ecommerce-red"
                       />
                       <span className="text-sm text-ecommerce-text-secondary group-hover:text-ecommerce-text-primary transition-colors capitalize">
-                        {attr.name}
+                        {attr.displayName}
                       </span>
                     </label>
                   ))}

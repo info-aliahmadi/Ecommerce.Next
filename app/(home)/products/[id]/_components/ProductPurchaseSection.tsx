@@ -88,7 +88,7 @@ export default function ProductPurchaseSection({ product }: ProductPurchaseSecti
           </div>
           {savings > 0 && (
             <p className="text-sm font-medium text-ecommerce-emerald">
-              {t('homepage.productDetail.youSave', { amount: savings.toFixed(2) })}
+              {t('homepage.productDetail.youSave', { amount: CurrencyViewer(savings, CONFIG.DEFAULT_CURRENCY) })}
             </p>
           )}
         </div>

@@ -146,7 +146,7 @@ export function CartDrawer() {
             <div className="flex items-center gap-2">
               {t('homepage.cart.title')}
               {total > 0 && (
-                <span className="text-xs font-semibold text-white bg-ecommerce-red rounded-full px-2 py-0.5">{total}</span>
+                <span className="text-xs font-semibold text-white bg-ecommerce-red rounded-full px-2 py-0.5">{CurrencyViewer(total, CONFIG.DEFAULT_CURRENCY)}</span>
               )}
             </div>
           </SheetTitle>

@@ -9,6 +9,8 @@ import { motion } from 'framer-motion';
 import { useTranslations } from 'next-intl';
 import HomePageService from '../../_services/HomePageService';
 import ProductDisplayModel, { getCheapestVariant } from '../../_types/ProductDisplayModel';
+import CurrencyViewer from '@root/utils/CurrencyViewer';
+import CONFIG from '@root/config';
 
 function StockBar({ stock, maxStock = 50 }: { stock: number; maxStock?: number }) {
   const t = useTranslations();
@@ -86,7 +88,7 @@ export function DealsSection() {
 
   //const deals = (data?.products || []).filter((p: { comparePrice: number | null; price: number }) => p.comparePrice && p.comparePrice > p.price);
 
-   const deals = data?.items || [];
+  const deals = data?.items || [];
 
   if (deals.length === 0) return null;
 
@@ -95,7 +97,7 @@ export function DealsSection() {
     return v ? sum + (v.oldSellPrice - v.sellPrice) : sum;
   }, 0);
   const maxDiscount = Math.max(...deals.map((p: ProductDisplayModel) => {
-    const v = p.variants?.[0];
+    const v = getCheapestVariant(p.variants);
     return v && v.oldSellPrice > 0 ? Math.round(((v.oldSellPrice - v.sellPrice) / v.oldSellPrice) * 100) : 0;
   }));
 
@@ -142,7 +144,7 @@ export function DealsSection() {
             </div>
             <div>
               <p className="text-xs text-ecommerce-text-muted">{t('homepage.deals.totalSavings')}</p>
-              <p className="text-sm font-bold text-ecommerce-emerald">${totalSavings.toFixed(2)}</p>
+              <p className="text-sm font-bold text-ecommerce-emerald">{ CurrencyViewer(totalSavings, CONFIG.DEFAULT_CURRENCY)}</p>
             </div>
           </div>
           <div className="hidden sm:flex items-center gap-3 p-3 rounded-xl bg-white dark:bg-ecommerce-surface border border-ecommerce-border">
