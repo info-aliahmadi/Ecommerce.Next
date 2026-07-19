@@ -25,11 +25,11 @@ export function WishlistDrawer({ open, onClose }: { open: boolean; onClose: () =
       image: item.image,
       categories: item.categories,
     } as any);
-    removeItem(item.id);
+    removeItem(item.variant.id);
     toast.success(t('homepage.cart.itemAdded', { name: item.name }));
   };
 
-  const handleRemove = (variantId: number, name: string) => {
+  const handleRemove = (variantId: number) => {
     removeItem(variantId);
     toast.success(t('homepage.common.removeFromWishlist'));
   };
@@ -78,6 +78,13 @@ export function WishlistDrawer({ open, onClose }: { open: boolean; onClose: () =
                   />
                   <div className="flex-1 min-w-0">
                     <p className="text-sm font-semibold text-ecommerce-text-primary truncate">{item.name}</p>
+                    <p className="text-xs text-ecommerce-text-muted mt-0.5">
+                      {item.variant.productAttributes.map(attribute => (
+                        <Badge key={attribute.id} className="bg-ecommerce-emerald/10 text-ecommerce-emerald border-0 text-xs font-semibold mx-0.5">
+                          {attribute.displayName}
+                        </Badge>
+                      ))}
+                    </p>
                     <p className="text-xs text-ecommerce-text-muted mt-0.5">{item.categories.map(x => x.name + ",")}</p>
                     <div className="flex items-baseline gap-1.5 mt-1">
                       <span className="text-sm font-bold text-ecommerce-text-primary">{CurrencyViewer(item.variant.sellPrice, CONFIG.DEFAULT_CURRENCY)}</span>
@@ -95,7 +102,7 @@ export function WishlistDrawer({ open, onClose }: { open: boolean; onClose: () =
                       <ShoppingCart size={14} />
                     </button>
                     <button
-                      onClick={() => handleRemove(item.variant.id, item.name)}
+                      onClick={() => handleRemove(item.variant.id)}
                       className="w-8 h-8 rounded-lg bg-ecommerce-surface text-ecommerce-text-muted flex items-center justify-center hover:bg-ecommerce-red/10 hover:text-ecommerce-red transition-colors"
                       aria-label={t('homepage.wishlist.remove')}
                     >

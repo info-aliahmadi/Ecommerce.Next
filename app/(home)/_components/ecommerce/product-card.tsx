@@ -77,10 +77,11 @@ export function ProductCard({ product, index = 0 }: Readonly<ProductCardProps>) 
     });
   }, []);
 
-  const wishlisted = isInWishlist(product.id);
-  const inCompare = isInCompare(product.id);
   const discount = cheapestVariant?.oldSellPrice ? Math.round(((cheapestVariant.oldSellPrice - cheapestVariant.sellPrice) / cheapestVariant.oldSellPrice) * 100) : 0;
   const savings = cheapestVariant?.oldSellPrice && cheapestVariant.oldSellPrice > cheapestVariant.sellPrice ? cheapestVariant.oldSellPrice - cheapestVariant.sellPrice : 0;
+
+  const wishlisted = isInWishlist(cheapestVariant.id);
+  const inCompare = isInCompare(cheapestVariant.id);
 
   // Check if product is currently "new" based on date range
   const now = new Date();
@@ -108,7 +109,7 @@ export function ProductCard({ product, index = 0 }: Readonly<ProductCardProps>) 
     toggleItem({
       id: product.id,
       name: product.name,
-        variant: cheapestVariant,
+      variant: cheapestVariant,
       image: product.imagePreview,
       categories: product.categories || [],
     } as WishlistItem);

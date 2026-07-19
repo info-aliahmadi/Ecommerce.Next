@@ -319,7 +319,6 @@ function QuickViewContent({ product, onClose }: { product: ProductDisplayModel; 
   const [addedToCart, setAddedToCart] = useState(false);
   const addedTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  const wishlisted = isInWishlist(product.id);
   const { cheapestVariant: defaultCheapest, minSellPrice, maxSellPrice, totalStock } = getProductPricing(product.variants ?? []);
   const [selectedVariant, setSelectedVariant] = useState<ProductVariantDisplayModel | null>(defaultCheapest ?? null);
   const activeVariant = selectedVariant ?? defaultCheapest;
@@ -328,6 +327,7 @@ function QuickViewContent({ product, onClose }: { product: ProductDisplayModel; 
   const parsedTags: string[] = product.productTags || [];
   const stock = activeVariant?.productInventory?.stockQuantity ?? 0;
 
+  const wishlisted = isInWishlist(activeVariant.id);
   // Fetch reviews from API
   const { data: reviewsData, isLoading: reviewsLoading } = useQuery({
     queryKey: ['reviews', product.id],

@@ -34,11 +34,12 @@ export const useCartStore = create<CartStore>()(
 
       addItem: (item) => {
         set((state) => {
-          const existing = state.items.find((i) => i.variant.id === item.variant.id);
+          debugger
+          const existing = state.items.some((i) => i.variant.id === item.variant.id);
           if (existing) {
             return {
               items: state.items.map((i) =>
-                i.id === item.id ? { ...i, quantity: i.quantity + 1 } : i
+                i.variant.id === item.variant.id ? { ...i, quantity: i.quantity + 1 } : i,
               ),
             };
           }
@@ -48,7 +49,7 @@ export const useCartStore = create<CartStore>()(
 
       removeItem: (variantId: number) => {
         set((state) => ({
-          items: state.items.filter((i) => i.variant.id === variantId),
+          items: state.items.filter((i) => i.variant.id !== variantId),
         }));
       },
 

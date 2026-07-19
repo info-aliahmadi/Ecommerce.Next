@@ -4,7 +4,7 @@ import { X, Plus, Minus, ShoppingBag, ShoppingCart, Sparkles, ChevronDown, Chevr
 import { Button } from '../ui/button';
 import { ScrollArea } from '../ui/scroll-area';
 import { useCartStore, useRecentStore } from '../../_lib/store';
-import { Sheet, SheetContent, SheetHeader, SheetTitle } from '../ui/sheet';
+import { Sheet, SheetContent, SheetFooter, SheetHeader, SheetTitle } from '../ui/sheet';
 import { CheckoutSheet } from './checkout-sheet';
 import { motion, AnimatePresence } from 'framer-motion';
 import { toast } from 'sonner';
@@ -146,7 +146,7 @@ export function CartDrawer() {
             <div className="flex items-center gap-2">
               {t('homepage.cart.title')}
               {total > 0 && (
-                <span className="text-xs font-semibold text-white bg-ecommerce-red rounded-full px-2 py-0.5">{CurrencyViewer(total, CONFIG.DEFAULT_CURRENCY)}</span>
+                <span className="text-xs font-semibold text-white bg-ecommerce-red rounded-full px-2 py-0.5">{total}</span>
               )}
             </div>
           </SheetTitle>
@@ -197,7 +197,7 @@ export function CartDrawer() {
               <AnimatePresence mode="popLayout">
                 {items.map((item) => (
                   <motion.div
-                    key={item.variant.sku}
+                    key={item.variant.id}
                     layout
                     initial={{ opacity: 0, x: -20 }}
                     animate={{ opacity: 1, x: 0 }}
@@ -239,31 +239,36 @@ export function CartDrawer() {
 
                         <div className="flex items-center justify-between mt-2">
                           {/* Quantity Controls */}
-                          <div className="flex items-center gap-1 bg-white dark:bg-ecommerce-surface rounded-lg border border-ecommerce-border">
-                            <button
-                              onClick={() => updateQuantity(item.variant.id, item.quantity - 1)}
-                              className="w-7 h-7 flex items-center justify-center hover:bg-ecommerce-surface-hover rounded-s-lg transition-colors"
-                              aria-label={t('homepage.common.previous')}
-                            >
-                              <Minus size={12} />
-                            </button>
-                            <span className="w-8 text-center text-sm font-medium">{item.quantity}</span>
-                            <button
-                              onClick={() => updateQuantity(item.variant.id, item.quantity + 1)}
-                              className="w-7 h-7 flex items-center justify-center hover:bg-ecommerce-surface-hover rounded-e-lg transition-colors"
-                              aria-label={t('homepage.common.next')}
-                            >
-                              <Plus size={12} />
-                            </button>
+                          <div className="flex items-center justify-between mt-2">
+                            <div className="flex items-center gap-1 bg-white dark:bg-ecommerce-surface rounded-lg border border-ecommerce-border">
+                              <button
+                                onClick={() => updateQuantity(item.variant.id, item.quantity - 1)}
+                                className="w-7 h-7 flex items-center justify-center hover:bg-ecommerce-surface-hover rounded-s-lg transition-colors"
+                                aria-label={t('homepage.common.previous')}
+                              >
+                                <Minus size={12} />
+                              </button>
+                              <span className="w-8 text-center text-sm font-medium">{item.quantity}</span>
+                              <button
+                                onClick={() => updateQuantity(item.variant.id, item.quantity + 1)}
+                                className="w-7 h-7 flex items-center justify-center hover:bg-ecommerce-surface-hover rounded-e-lg transition-colors"
+                                aria-label={t('homepage.common.next')}
+                              >
+                                <Plus size={12} />
+                              </button>
+                            </div>
+                            <span className="mx-2 text-sm ">
+                              × {CurrencyViewer(item.variant.sellPrice, CONFIG.DEFAULT_CURRENCY)}
+                            </span>
                           </div>
 
                           {/* Price */}
                           <div className="text-end">
-                            <span className="text-sm font-bold text-ecommerce-text-primary">
+                            <span className="text-md font-bold text-ecommerce-text-primary">
                               {CurrencyViewer(item.variant.sellPrice * item.quantity, CONFIG.DEFAULT_CURRENCY)}
                             </span>
                             {item.variant.oldSellPrice > 0 && (
-                              <p className="text-[10px] text-ecommerce-text-muted line-through">
+                              <p className="text-[11px] text-ecommerce-text-muted line-through">
                                 {CurrencyViewer(item.variant.oldSellPrice * item.quantity, CONFIG.DEFAULT_CURRENCY)}
                               </p>
                             )}
@@ -366,38 +371,39 @@ export function CartDrawer() {
             </ScrollArea>
 
             {/* Footer */}
-            {items.length > 0 && (
-              <div className="border-t border-ecommerce-border px-6 py-4 shrink-0 bg-white dark:bg-ecommerce-surface space-y-3">
-                {savings > 0 && (
-                  <div className="flex items-center justify-between px-3 py-2 rounded-xl bg-ecommerce-emerald/10 border border-ecommerce-emerald/10">
-                    <span className="text-sm text-ecommerce-emerald font-medium">🎉 {t('homepage.cart.savings')}</span>
-                    <span className="text-sm font-bold text-ecommerce-emerald">-{CurrencyViewer(savings, CONFIG.DEFAULT_CURRENCY)}</span>
-                  </div>
-                )}
+            <SheetFooter>
+              {items.length > 0 && (
+                <div className="border-t border-ecommerce-border px-6 py-4 shrink-0 bg-white dark:bg-ecommerce-surface space-y-3">
+                  {savings > 0 && (
+                    <div className="flex items-center justify-between px-3 py-2 rounded-xl bg-ecommerce-emerald/10 border border-ecommerce-emerald/10">
+                      <span className="text-sm text-ecommerce-emerald font-medium">🎉 {t('homepage.cart.savings')}</span>
+                      <span className="text-sm font-bold text-ecommerce-emerald">-{CurrencyViewer(savings, CONFIG.DEFAULT_CURRENCY)}</span>
+                    </div>
+                  )}
 
-                <div className="flex items-center justify-between">
-                  <span className="text-sm text-ecommerce-text-secondary">{t('homepage.cart.subtotal')}</span>
-                  <span className="text-xl font-bold text-ecommerce-text-primary">{CurrencyViewer(price, CONFIG.DEFAULT_CURRENCY)}</span>
-                </div>
-
-                {discount > 0 && (
                   <div className="flex items-center justify-between">
-                    <span className="text-sm text-ecommerce-emerald font-medium">{t('homepage.cart.savings')}</span>
-                    <span className="text-sm font-bold text-ecommerce-emerald">-{CurrencyViewer(discount, CONFIG.DEFAULT_CURRENCY)}</span>
+                    <span className="text-sm text-ecommerce-text-secondary">{t('homepage.cart.subtotal')}</span>
+                    <span className="text-xl font-bold text-ecommerce-text-primary">{CurrencyViewer(price, CONFIG.DEFAULT_CURRENCY)}</span>
                   </div>
-                )}
 
-                <p className="text-xs text-ecommerce-text-muted">
-                  {(price >= freeShippingThreshold || appliedCode === 'FREESHIP')
-                    ? `✅ ${t('homepage.cart.freeShippingMsg')}`
-                    : ''}
-                </p>
+                  {discount > 0 && (
+                    <div className="flex items-center justify-between">
+                      <span className="text-sm text-ecommerce-emerald font-medium">{t('homepage.cart.savings')}</span>
+                      <span className="text-sm font-bold text-ecommerce-emerald">-{CurrencyViewer(discount, CONFIG.DEFAULT_CURRENCY)}dddd</span>
+                    </div>
+                  )}
 
-                <CheckoutSheet />
-              </div>
-            )}
+                  <p className="text-xs text-ecommerce-text-muted">
+                    {(price >= freeShippingThreshold || appliedCode === 'FREESHIP')
+                      ? `✅ ${t('homepage.cart.freeShippingMsg')}`
+                      : ''}
+                  </p>
+                </div>
+              )}
+            </SheetFooter>
           </>
         )}
+        <CheckoutSheet />
       </SheetContent>
     </Sheet>
   );
