@@ -21,7 +21,7 @@ export function CheckoutSheet() {
     <>
       {/* Checkout trigger in cart - redirects to checkout page */}
       {isCartOpen && items.length > 0 && (
-        <div className="absolute bottom-0 start-0 end-0 p-4 bg-white dark:bg-ecommerce-surface border-t border-ecommerce-border">
+        <div className="shrink-0 px-4 pb-4 pt-2 bg-white dark:bg-ecommerce-surface">
           <Button
             onClick={startCheckout}
             className="w-full h-12 bg-ecommerce-red hover:bg-ecommerce-red/90 text-white rounded-xl font-semibold text-sm gap-2 transition-all hover:scale-[1.01] active:scale-95"

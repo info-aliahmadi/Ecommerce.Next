@@ -4,7 +4,7 @@ import { X, Plus, Minus, ShoppingBag, ShoppingCart, Sparkles, ChevronDown, Chevr
 import { Button } from '../ui/button';
 import { ScrollArea } from '../ui/scroll-area';
 import { useCartStore, useRecentStore } from '../../_lib/store';
-import { Sheet, SheetContent, SheetFooter, SheetHeader, SheetTitle } from '../ui/sheet';
+import { Sheet, SheetContent, SheetHeader, SheetTitle } from '../ui/sheet';
 import { CheckoutSheet } from './checkout-sheet';
 import { motion, AnimatePresence } from 'framer-motion';
 import { toast } from 'sonner';
@@ -370,38 +370,34 @@ export function CartDrawer() {
               </div>
             </ScrollArea>
 
-            {/* Footer */}
-            <SheetFooter>
-              {items.length > 0 && (
-                <div className="border-t border-ecommerce-border px-6 py-4 shrink-0 bg-white dark:bg-ecommerce-surface space-y-3">
-                  {savings > 0 && (
-                    <div className="flex items-center justify-between px-3 py-2 rounded-xl bg-ecommerce-emerald/10 border border-ecommerce-emerald/10">
-                      <span className="text-sm text-ecommerce-emerald font-medium">🎉 {t('homepage.cart.savings')}</span>
-                      <span className="text-sm font-bold text-ecommerce-emerald">-{CurrencyViewer(savings, CONFIG.DEFAULT_CURRENCY)}</span>
-                    </div>
-                  )}
-
-                  <div className="flex items-center justify-between">
-                    <span className="text-sm text-ecommerce-text-secondary">{t('homepage.cart.subtotal')}</span>
-                    <span className="text-xl font-bold text-ecommerce-text-primary">{CurrencyViewer(price, CONFIG.DEFAULT_CURRENCY)}</span>
-                  </div>
-
-                  {discount > 0 && (
-                    <div className="flex items-center justify-between">
-                      <span className="text-sm text-ecommerce-emerald font-medium">{t('homepage.cart.savings')}</span>
-                      <span className="text-sm font-bold text-ecommerce-emerald">-{CurrencyViewer(discount, CONFIG.DEFAULT_CURRENCY)}dddd</span>
-                    </div>
-                  )}
-
-                  <p className="text-xs text-ecommerce-text-muted">
-                    {(price >= freeShippingThreshold || appliedCode === 'FREESHIP')
-                      ? `✅ ${t('homepage.cart.freeShippingMsg')}`
-                      : ''}
-                  </p>
+            {/* Static Bottom - Pricing & Checkout */}
+            <div className="shrink-0 border-t border-ecommerce-border bg-white dark:bg-ecommerce-surface px-6 pt-4 pb-0 space-y-3">
+              {savings > 0 && (
+                <div className="flex items-center justify-between px-3 py-2 rounded-xl bg-ecommerce-emerald/10 border border-ecommerce-emerald/10">
+                  <span className="text-sm text-ecommerce-emerald font-medium">🎉 {t('homepage.cart.savings')}</span>
+                  <span className="text-sm font-bold text-ecommerce-emerald">-{CurrencyViewer(savings, CONFIG.DEFAULT_CURRENCY)}</span>
                 </div>
               )}
-              <CheckoutSheet />
-            </SheetFooter>
+
+              <div className="flex items-center justify-between">
+                <span className="text-sm text-ecommerce-text-secondary">{t('homepage.cart.subtotal')}</span>
+                <span className="text-xl font-bold text-ecommerce-text-primary">{CurrencyViewer(price, CONFIG.DEFAULT_CURRENCY)}</span>
+              </div>
+
+              {discount > 0 && (
+                <div className="flex items-center justify-between">
+                  <span className="text-sm text-ecommerce-emerald font-medium">{t('homepage.cart.discount')}</span>
+                  <span className="text-sm font-bold text-ecommerce-emerald">-{CurrencyViewer(discount, CONFIG.DEFAULT_CURRENCY)}</span>
+                </div>
+              )}
+
+              <p className="text-xs text-ecommerce-text-muted">
+                {(price >= freeShippingThreshold || appliedCode === 'FREESHIP')
+                  ? `✅ ${t('homepage.cart.freeShippingMsg')}`
+                  : ''}
+              </p>
+            </div>
+            <CheckoutSheet />
           </>
         )}
       </SheetContent>
