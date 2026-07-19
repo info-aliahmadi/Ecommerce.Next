@@ -193,7 +193,7 @@ export function CartDrawer() {
               </div>
             )}
 
-            <ScrollArea className="flex-1 px-6 py-4">
+            <ScrollArea className="flex-1 min-h-0 px-6 py-4">
               <AnimatePresence mode="popLayout">
                 {items.map((item) => (
                   <motion.div
@@ -400,10 +400,10 @@ export function CartDrawer() {
                   </p>
                 </div>
               )}
+              <CheckoutSheet />
             </SheetFooter>
           </>
         )}
-        <CheckoutSheet />
       </SheetContent>
     </Sheet>
   );
