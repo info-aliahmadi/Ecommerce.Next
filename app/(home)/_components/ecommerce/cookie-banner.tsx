@@ -30,6 +30,7 @@ export function CookieBanner() {
   const handleAccept = useCallback(() => {
     localStorage.setItem(STORAGE_KEY, 'all');
     window.dispatchEvent(new Event('homepage.storage'));
+    setDismissed(true);
   }, []);
 
   const handleCustomize = useCallback(() => {
@@ -84,7 +85,7 @@ export function CookieBanner() {
         )}
       </AnimatePresence>
 
-      {hasConsented && !showBanner && (
+      {/* {hasConsented && !showBanner && (
         <motion.button
           initial={{ opacity: 0, scale: 0.8 }}
           animate={{ opacity: 1, scale: 1 }}
@@ -95,7 +96,7 @@ export function CookieBanner() {
         >
           <Cookie size={18} className="text-ecommerce-text-secondary" />
         </motion.button>
-      )}
+      )} */}
     </>
   );
 }
