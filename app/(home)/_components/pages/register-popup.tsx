@@ -2,21 +2,21 @@
 
 import { useState, useCallback } from 'react';
 import { motion } from 'framer-motion';
-import { UserPlus } from 'lucide-react';
+import { signIn } from 'next-auth/react';
+import { UserPlus, Loader2 } from 'lucide-react';
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
   DialogDescription,
-} from '@/components/ui/dialog';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { useUIStore, useAuthStore, useLocaleStore } from '@/lib/store';
+} from '@(home)/_components/ui/dialog';
+import { Button } from '@(home)/_components/ui/button';
+import { Input } from '@(home)/_components/ui/input';
+import { Label } from '@(home)/_components/ui/label';
+import { useUIStore, useAuthStore, useLocaleStore, RTL_LOCALES } from '@(home)/_lib/store';
 import { useTranslations } from 'next-intl';
 import { toast } from 'sonner';
-import type { Locale } from '@/lib/store';
 
 export default function RegisterPopup() {
   const [name, setName] = useState('');
@@ -25,10 +25,9 @@ export default function RegisterPopup() {
 
   const isRegisterOpen = useAuthStore((s) => s.isRegisterOpen);
   const setRegisterOpen = useAuthStore((s) => s.setRegisterOpen);
-  const setUser = useAuthStore((s) => s.setUser);
   const navigate = useUIStore((s) => s.navigate);
   const locale = useLocaleStore((s) => s.locale);
-  const isRTL = (['fa', 'ar'] as Locale[]).includes(locale);
+  const isRTL = RTL_LOCALES.includes(locale);
 
   const t = useTranslations('auth.register');
 
@@ -100,19 +99,36 @@ export default function RegisterPopup() {
           return;
         }
 
+        const result = await signIn('credentials', {
+          redirect: false,
+          username: phone.trim(),
+          password: data.defaultPassword || phone.trim(),
+        });
+
+        if (result?.error) {
+          toast.error(t('successRegistered'));
+          setRegisterOpen(false);
+          resetForm();
+          navigate('login');
+          return;
+        }
+
         toast.success(t('success'));
-        setUser(data.user);
         setRegisterOpen(false);
         resetForm();
-        navigate('profile');
       } catch {
         toast.error(t('errorGeneric'));
       } finally {
         setIsSubmitting(false);
       }
     },
-    [name, phone, validate, t, setUser, setRegisterOpen, resetForm, navigate],
+    [name, phone, validate, t, setRegisterOpen, resetForm, navigate],
   );
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.35, ease: 'easeOut' as const } },
+  } as const;
 
   return (
     <Dialog open={isRegisterOpen} onOpenChange={handleClose}>
@@ -121,33 +137,33 @@ export default function RegisterPopup() {
         dir={isRTL ? 'rtl' : 'ltr'}
       >
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.35, ease: 'easeOut' }}
+          initial="hidden"
+          animate="visible"
+          variants={itemVariants}
         >
-          {/* Decorative header */}
-          <div className="ecommerce-text-center ecommerce-mb-6">
-            <div className="ecommerce-mx-auto ecommerce-flex ecommerce-items-center ecommerce-justify-center ecommerce-w-16 ecommerce-h-16 ecommerce-rounded-full ecommerce-bg-gradient-to-br ecommerce-from-purple-500 ecommerce-to-purple-700 ecommerce-mb-4">
-              <UserPlus className="ecommerce-w-8 ecommerce-h-8 ecommerce-text-white" />
+          {/* Header */}
+          <div className="flex flex-col items-center mb-6">
+            <div className="w-14 h-14 rounded-full bg-ecommerce-purple flex items-center justify-center mb-4">
+              <UserPlus className="w-7 h-7 text-white" />
             </div>
 
-            <DialogHeader>
-              <DialogTitle className="ecommerce-text-xl ecommerce-font-bold ecommerce-text-primary ecommerce-text-center">
+            <DialogHeader className="text-center">
+              <DialogTitle className="text-xl font-bold text-ecommerce-text-primary text-center">
                 {t('title')}
               </DialogTitle>
-              <DialogDescription className="ecommerce-text-muted ecommerce-text-center ecommerce-mt-1">
+              <DialogDescription className="text-ecommerce-text-muted text-center mt-1">
                 {t('subtitle')}
               </DialogDescription>
             </DialogHeader>
           </div>
 
           {/* Form */}
-          <form onSubmit={handleSubmit} className="ecommerce-space-y-4">
+          <form onSubmit={handleSubmit} className="space-y-4">
             {/* Name field */}
-            <div className="ecommerce-space-y-2">
+            <div className="space-y-2">
               <Label
                 htmlFor="register-name"
-                className="ecommerce-text-sm ecommerce-font-medium ecommerce-text-primary"
+                className="text-sm font-medium text-ecommerce-text-secondary"
               >
                 {t('name')}
               </Label>
@@ -157,34 +173,36 @@ export default function RegisterPopup() {
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 placeholder={t('namePlaceholder')}
-                className="ecommerce-border ecommerce-border-border ecommerce-bg-surface ecommerce-text-primary ecommerce-rounded-lg"
+                className="rounded-lg"
                 autoComplete="name"
                 disabled={isSubmitting}
               />
             </div>
 
             {/* Phone field */}
-            <div className="ecommerce-space-y-2">
+            <div className="space-y-2">
               <Label
                 htmlFor="register-phone"
-                className="ecommerce-text-sm ecommerce-font-medium ecommerce-text-primary"
+                className="text-sm font-medium text-ecommerce-text-secondary"
               >
                 {t('phone')}
               </Label>
               <Input
                 id="register-phone"
                 type="tel"
+                inputMode="numeric"
                 value={phone}
                 onChange={(e) => setPhone(e.target.value)}
                 placeholder={t('phonePlaceholder')}
-                className="ecommerce-border ecommerce-border-border ecommerce-bg-surface ecommerce-text-primary ecommerce-rounded-lg"
+                className="rounded-lg"
                 autoComplete="tel"
+                dir="ltr"
                 disabled={isSubmitting}
               />
             </div>
 
             {/* Password note */}
-            <p className="ecommerce-text-xs ecommerce-text-muted ecommerce-text-center ecommerce-leading-relaxed ecommerce-px-2">
+            <p className="text-xs text-ecommerce-text-muted text-center leading-relaxed px-2">
               {t('passwordNote', {
                 defaultValue:
                   "We'll create a default password from your phone number. You can set a real password later.",
@@ -194,30 +212,12 @@ export default function RegisterPopup() {
             {/* Submit button */}
             <Button
               type="submit"
-              className="ecommerce-w-full ecommerce-bg-gradient-to-r ecommerce-from-purple-500 ecommerce-to-purple-700 hover:ecommerce-from-purple-600 hover:ecommerce-to-purple-800 ecommerce-text-white ecommerce-font-semibold ecommerce-rounded-lg ecommerce-py-2.5 ecommerce-transition-all ecommerce-duration-200"
+              className="w-full bg-ecommerce-purple hover:bg-ecommerce-purple/90 text-white font-semibold h-11 rounded-lg transition-colors"
               disabled={isSubmitting}
             >
               {isSubmitting ? (
-                <span className="ecommerce-flex ecommerce-items-center ecommerce-gap-2">
-                  <svg
-                    className="ecommerce-animate-spin ecommerce-h-4 ecommerce-w-4"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                  >
-                    <circle
-                      className="ecommerce-opacity-25"
-                      cx="12"
-                      cy="12"
-                      r="10"
-                      stroke="currentColor"
-                      strokeWidth="4"
-                    />
-                    <path
-                      className="ecommerce-opacity-75"
-                      fill="currentColor"
-                      d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"
-                    />
-                  </svg>
+                <span className="flex items-center gap-2">
+                  <Loader2 className="w-4 h-4 animate-spin" />
                   {t('registering')}
                 </span>
               ) : (
@@ -227,12 +227,12 @@ export default function RegisterPopup() {
           </form>
 
           {/* Login link */}
-          <p className="ecommerce-text-center ecommerce-text-sm ecommerce-text-muted ecommerce-mt-5">
+          <p className="text-center text-sm text-ecommerce-text-muted mt-5">
             {t('hasAccount')}{' '}
             <button
               type="button"
               onClick={handleGoToLogin}
-              className="ecommerce-text-purple ecommerce-font-semibold hover:ecommerce-text-purple-700 ecommerce-underline ecommerce-underline-offset-2 ecommerce-transition-colors ecommerce-duration-200"
+              className="text-ecommerce-purple font-semibold hover:underline underline-offset-2 transition-colors"
             >
               {t('loginLink')}
             </button>

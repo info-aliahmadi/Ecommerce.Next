@@ -5,24 +5,28 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { signIn } from 'next-auth/react';
 import { useTranslations } from 'next-intl';
 import Image from 'next/image';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Lock, Eye, EyeOff, ShieldCheck, Truck, Headphones, ArrowRight, ArrowLeft, Loader2 } from 'lucide-react';
 
-// material-ui
-import { Box, Typography, Link, Button, Paper, Alert, TextField } from '@mui/material';
-import Grid from '@mui/material/Grid';
+// shadcn/ui components
+import { Button } from '@(home)/_components/ui/button';
+import { Input } from '@(home)/_components/ui/input';
+import { Label } from '@(home)/_components/ui/label';
 
-// project import
-import Notify from '@dashboard/_components/@extended/Notify';
-import './page.css'
+// project imports
 import CONFIG from '@root/config';
+
 // ============================|| LOGIN ||============================ //
 
 const Login = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const t = useTranslations('auth.login');
 
   const callbackUrl = searchParams.get('callbackUrl') || '/';
-  const [email, setEmail] = useState('');
+  const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -34,211 +38,233 @@ const Login = () => {
     try {
       const result = await signIn('credentials', {
         redirect: false,
-        username: email,
+        username,
         password,
         callbackUrl,
       });
 
       if (result?.error) {
-        setError('Invalid username or password');
+        setError(t('errorInvalid'));
         return;
       }
-      
-      if (callbackUrl != "/") {
+
+      if (callbackUrl != '/') {
         router.push(callbackUrl);
       } else {
         router.push(CONFIG.DASHBOARD_PATH);
       }
       router.refresh();
-
     } catch {
-      setError('Something went wrong');
+      setError(t('errorGeneric'));
     } finally {
       setLoading(false);
     }
   };
 
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: { staggerChildren: 0.1, delayChildren: 0.15 },
+    },
+  } as const;
 
-  function SignUpLink() {
-    return (
-      <Link href="/" variant="body2">
-        Sign up
-      </Link>
-    );
-  }
+  const itemVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.4, ease: 'easeOut' as const } },
+  } as const;
 
-  function ForgotPasswordLink() {
-    return (
-      <Link href="/" variant="body2">
-        Forgot password?
-      </Link>
-    );
-  }
-  const BRANDING = {
-    logo: (
-      <img
-        src="/images/apple-touch-icon.png"
-        alt="MUI logo"
-        style={{ height: 24 }}
-      />
-    ),
-    title: 'MUI',
-  };
+  const panelVariants = {
+    hidden: { opacity: 0, x: -60 },
+    visible: { opacity: 1, x: 0, transition: { duration: 0.5, ease: 'easeOut' as const } },
+  } as const;
 
   return (
-    <>
-      <Grid
-        container
-        direction="row"
-        sx={{
-          minHeight: '100vh'
+    <div className="min-h-screen flex bg-ecommerce-surface">
+      {/* ── Left decorative panel (hidden on mobile) ── */}
+      <motion.div
+        initial="hidden"
+        animate="visible"
+        variants={panelVariants}
+        className="hidden lg:flex lg:w-[480px] xl:w-[520px] relative overflow-hidden flex-col justify-between p-12"
+        style={{
+          background:
+            'linear-gradient(160deg, #7c3aed 0%, #6d28d9 30%, #5b21b6 60%, #4c1d95 100%)',
         }}
       >
-        {/* <Notify notify={notify} setNotify={setNotify} /> */}
-        {/* Right Side - Login Form */}
-        <Grid
-          size={{ xs: 12, sm: 12, md: 6, lg: 4, xl: 4 }}
-          sx={{
-            height: '100vh',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            p: 3,
-            backgroundColor: 'background.default',
-          }}
+        {/* Decorative circles */}
+        <div className="absolute -top-24 -left-24 w-72 h-72 rounded-full bg-white/10 blur-2xl" />
+        <div className="absolute bottom-16 right-0 w-96 h-96 rounded-full bg-purple-400/10 blur-3xl" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] rounded-full border border-white/5" />
+
+        {/* Top section – Logo & tagline */}
+        <div className="relative z-10">
+          <div className="flex items-center gap-3 mb-6">
+            <div className="w-10 h-10 rounded-xl bg-white/20 backdrop-blur-sm flex items-center justify-center">
+              <Image
+                src="/images/apple-touch-icon.png"
+                alt="Logo"
+                width={24}
+                height={24}
+              />
+            </div>
+          </div>
+
+          <h1 className="text-white text-3xl font-bold leading-tight mb-3">
+            {t('title')}
+          </h1>
+          <p className="text-purple-200/80 text-lg leading-relaxed">
+            {t('subtitle')}
+          </p>
+        </div>
+
+        {/* Feature bullets */}
+        <div className="relative z-10 space-y-5">
+          {[
+            { icon: ShieldCheck, label: 'Secure Checkout' },
+            { icon: Truck, label: 'Fast Delivery' },
+            { icon: Headphones, label: '24/7 Support' },
+          ].map(({ icon: Icon, label }) => (
+            <div key={label} className="flex items-center gap-4">
+              <div className="w-10 h-10 rounded-lg bg-white/15 backdrop-blur-sm flex items-center justify-center shrink-0">
+                <Icon className="w-5 h-5 text-white" />
+              </div>
+              <span className="text-white/90 text-sm font-medium">{label}</span>
+            </div>
+          ))}
+        </div>
+
+        {/* Bottom attribution */}
+        <p className="relative z-10 text-purple-300/40 text-xs">
+          &copy; {new Date().getFullYear()} Hydra Cashier System
+        </p>
+      </motion.div>
+
+      {/* ── Right side – Login form ── */}
+      <div className="flex-1 flex items-center justify-center px-6 py-12 sm:px-12">
+        <motion.div
+          initial="hidden"
+          animate="visible"
+          variants={containerVariants}
+          className="w-full max-w-md"
         >
-          <Grid className='main' sx={{ width: '100%' }}>
-            <Box
-              sx={{
-                minHeight: '100vh',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                bgcolor: '#f5f5f5',
-                px: 2,
-              }}
+          {/* Back button */}
+          <motion.div variants={itemVariants} className="mb-6">
+            <a
+              href="/"
+              className="inline-flex items-center gap-2 text-sm text-ecommerce-text-muted hover:text-ecommerce-text-primary transition-colors group"
             >
-              <Paper elevation={3} sx={{ p: 4, width: '100%', maxWidth: 420 }}>
-                <Typography variant="h4" gutterBottom>
-                  Sign in
-                </Typography>
+              <ArrowLeft className="w-4 h-4 transition-transform group-hover:-translate-x-1" />
+              <span>{t('backToHome')}</span>
+            </a>
+          </motion.div>
 
-                <Typography variant="body2" color="text.secondary" sx={{ mb: 3 }}>
-                  Use your account credentials to continue.
-                </Typography>
+          {/* Header */}
+          <motion.div variants={itemVariants} className="text-center mb-8">
+            <h2 className="ecommerce-text-primary text-2xl font-bold mb-2">
+              {t('welcomeBack')}
+            </h2>
+            <p className="ecommerce-text-muted text-sm">
+              {t('subtitle')}
+            </p>
+          </motion.div>
 
-                <form onSubmit={handleSubmit}>
-                  <TextField
-                    label="Username"
-                    fullWidth
-                    margin="normal"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    autoComplete="username"
-                    required
-                  />
-
-                  <TextField
-                    label="Password"
-                    type="password"
-                    fullWidth
-                    margin="normal"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    autoComplete="current-password"
-                    required
-                  />
-
-                  {error && (
-                    <Alert severity="error" sx={{ mt: 2 }}>
-                      {error}
-                    </Alert>
-                  )}
-
-                  <Button
-                    type="submit"
-                    variant="contained"
-                    fullWidth
-                    sx={{ mt: 3 }}
-                    disabled={loading}
-                  >
-                    {loading ? 'Signing in...' : 'Sign in'}
-                  </Button>
-                </form>
-
-                <Typography variant="body2" sx={{ mt: 2, textAlign: 'center' }}>
-                  <Link href="/" underline="hover">
-                    Back to home
-                  </Link>
-                </Typography>
-              </Paper>
-            </Box>
-          </Grid>
-        </Grid>
-        {/* Left Side - Image/Video */}
-        <Grid
-          size={{ xs: 12, sm: 12, md: 6, lg: 8, xl: 8 }}
-          sx={{
-            height: '100vh',
-            position: 'relative',
-            overflow: 'hidden',
-            background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-          }}
-        >
-          <Grid
-            sx={{
-              position: 'relative',
-              width: '100%',
-              height: '100%',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-            }}
+          {/* Form */}
+          <motion.form
+            variants={itemVariants}
+            onSubmit={handleSubmit}
+            noValidate
+            className="space-y-5"
           >
-            <Image
-              src="/images/OnWaveLogo.png"
-              alt="Cashier Next"
-              fill
-              style={{
-                objectFit: 'contain',
-                opacity: 0.8,
-              }}
-              priority
-            />
-            <Box
-              sx={{
-                position: 'absolute',
-                top: 0,
-                left: 0,
-                right: 0,
-                bottom: 0,
-                background: 'linear-gradient(45deg, rgba(102, 126, 234, 0.8) 0%, rgba(118, 75, 162, 0.8) 100%)',
-              }}
-            />
-            <Box
-              sx={{
-                position: 'relative',
-                zIndex: 2,
-                textAlign: 'center',
-                color: 'white',
-                p: 3,
-              }}
-            >
-              <Typography variant="h3" component="h1" sx={{ mb: 2, fontWeight: 'bold' }}>
-                Welcome to Hydra Cashier System
-              </Typography>
-              <Typography variant="h6" sx={{ opacity: 0.9 }}>
-                Your complete point of sale solution
-              </Typography>
-            </Box>
-          </Grid>
-        </Grid>
+            {/* Username */}
+            <div className="space-y-2">
+              <Label htmlFor="login-username" className="ecommerce-text-secondary text-sm font-medium">
+                {t('phone')}
+              </Label>
+              <div className="relative">
+                <Input
+                  id="login-username"
+                  type="text"
+                  placeholder={t('phonePlaceholder')}
+                  value={username}
+                  onChange={(e) => {
+                    setUsername(e.target.value);
+                    if (error) setError(null);
+                  }}
+                  className="pe-10"
+                  autoComplete="username"
+                  dir="ltr"
+                />
+              </div>
+            </div>
 
-      </Grid >
-    </>
+            {/* Password */}
+            <div className="space-y-2">
+              <Label htmlFor="login-password" className="ecommerce-text-secondary text-sm font-medium">
+                {t('password')}
+              </Label>
+              <div className="relative">
+                <Input
+                  id="login-password"
+                  type={showPassword ? 'text' : 'password'}
+                  placeholder={t('passwordPlaceholder')}
+                  value={password}
+                  onChange={(e) => {
+                    setPassword(e.target.value);
+                    if (error) setError(null);
+                  }}
+                  className="pe-10"
+                  autoComplete="current-password"
+                  dir="ltr"
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword((prev) => !prev)}
+                  className="absolute end-3 top-1/2 -translate-y-1/2 text-ecommerce-text-muted hover:text-ecommerce-text-secondary transition-colors"
+                  tabIndex={-1}
+                  aria-label={showPassword ? 'Hide password' : 'Show password'}
+                >
+                  {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                </button>
+              </div>
+            </div>
+
+            {/* Error */}
+            <AnimatePresence>
+              {error && (
+                <motion.div
+                  initial={{ opacity: 0, height: 0 }}
+                  animate={{ opacity: 1, height: 'auto' }}
+                  exit={{ opacity: 0, height: 0 }}
+                  className="text-ecommerce-red text-sm"
+                >
+                  {error}
+                </motion.div>
+              )}
+            </AnimatePresence>
+
+            {/* Submit */}
+            <Button
+              type="submit"
+              disabled={loading}
+              className="w-full bg-ecommerce-purple hover:bg-ecommerce-purple/90 text-white font-semibold h-11 rounded-lg transition-colors"
+            >
+              {loading ? (
+                <span className="flex items-center gap-2">
+                  <Loader2 className="w-4 h-4 animate-spin" />
+                  {t('loggingIn')}
+                </span>
+              ) : (
+                <span className="flex items-center gap-2">
+                  {t('submit')}
+                  <ArrowRight className="w-4 h-4" />
+                </span>
+              )}
+            </Button>
+          </motion.form>
+        </motion.div>
+      </div>
+    </div>
   );
 };
 

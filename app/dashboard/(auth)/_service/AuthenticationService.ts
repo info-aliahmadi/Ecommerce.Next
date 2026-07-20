@@ -22,4 +22,9 @@ export default class AuthenticationService {
     this.config = Fetch.SetDefaultHeader(jwt);
     return Fetch.Get<string>(CONFIG.REFRESH_TOKEN_API_PATH,this.config);
   };
+  
+  register = async (registerModel: RegisterModel): Promise<Result<User>> => {
+
+    return Fetch.Post<Result<User>>(CONFIG.API_BASEPATH + '/Auth/Register', registerModel, this.config);
+  };
 }

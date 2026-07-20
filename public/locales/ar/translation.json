@@ -1800,5 +1800,29 @@
     "payment": {
       "title": "جزئیات پرداخت"
     }
+  },
+  "auth": {
+    "login": {
+      "title": "!مرحباً بعودتك",
+      "subtitle": "سجل الدخول إلى حسابك للمتابعة",
+      "backToHome": "العودة للرئيسية",
+      "welcomeBack": "مرحباً بعودتك",
+      "phone": "اسم المستخدم",
+      "phonePlaceholder": "أدخل اسم المستخدم",
+      "errorPhone": "يرجى إدخال اسم المستخدم",
+      "password": "كلمة المرور",
+      "passwordPlaceholder": "أدخل كلمة المرور",
+      "errorInvalid": "اسم المستخدم أو كلمة المرور غير صحيحة",
+      "errorGeneric": "حدث خطأ ما",
+      "rememberMe": "تذكرني",
+      "forgotPassword": "نسيت كلمة المرور؟",
+      "loggingIn": "جاري تسجيل الدخول...",
+      "submit": "تسجيل الدخول",
+      "orContinueWith": "أو المتابعة بـ",
+      "noAccount": "ليس لديك حساب؟",
+      "registerLink": "تسجيل",
+      "guestBrowse": "تصفح كضيف",
+      "success": "تم تسجيل الدخول بنجاح"
+    }
   }
 }

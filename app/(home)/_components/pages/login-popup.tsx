@@ -2,6 +2,7 @@
 
 import { useState, useCallback } from 'react';
 import { motion } from 'framer-motion';
+import { signIn } from 'next-auth/react';
 import { LogIn, Phone, Eye, EyeOff, Loader2 } from 'lucide-react';
 import {
   Dialog,
@@ -9,14 +10,14 @@ import {
   DialogHeader,
   DialogTitle,
   DialogDescription,
-} from '@/components/ui/dialog';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Checkbox } from '@/components/ui/checkbox';
-import { useUIStore, useAuthStore, useLocaleStore, RTL_LOCALES } from '@/lib/store';
+} from '@(home)/_components/ui/dialog';
+import { Button } from '@(home)/_components/ui/button';
+import { Input } from '@(home)/_components/ui/input';
+import { Label } from '@(home)/_components/ui/label';
+import { Checkbox } from '@(home)/_components/ui/checkbox';
+import { useUIStore, useAuthStore, useLocaleStore, RTL_LOCALES } from '@(home)/_lib/store';
 import { useTranslations } from 'next-intl';
-import { toast } from 'sonner';
+import { toast } from 'sonner'; 
 
 export default function LoginPopup() {
   const [phone, setPhone] = useState('');
@@ -28,7 +29,6 @@ export default function LoginPopup() {
   const isLoginOpen = useAuthStore((s) => s.isLoginOpen);
   const setLoginOpen = useAuthStore((s) => s.setLoginOpen);
   const setRegisterOpen = useAuthStore((s) => s.setRegisterOpen);
-  const setUser = useAuthStore((s) => s.setUser);
   const goHome = useUIStore((s) => s.goHome);
   const navigate = useUIStore((s) => s.navigate);
   const locale = useLocaleStore((s) => s.locale);
@@ -65,8 +65,7 @@ export default function LoginPopup() {
   }, [setLoginOpen, resetForm, navigate]);
 
   const validate = useCallback((): boolean => {
-    const cleaned = phone.replace(/\D/g, '');
-    if (!cleaned || cleaned.length < 7) {
+    if (!phone.trim()) {
       toast.error(t('errorPhone'));
       return false;
     }
@@ -85,33 +84,27 @@ export default function LoginPopup() {
       setIsLoading(true);
 
       try {
-        const cleanedPhone = phone.replace(/\D/g, '');
-        const finalPassword = password || cleanedPhone.slice(-6);
-
-        const res = await fetch('/api/auth/login', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ phone: cleanedPhone, password: finalPassword }),
+        const result = await signIn('credentials', {
+          redirect: false,
+          username: phone,
+          password,
         });
 
-        const data = await res.json();
-
-        if (!res.ok) {
-          throw new Error(data?.message || 'Login failed');
+        if (result?.error) {
+          toast.error(t('errorInvalid'));
+          return;
         }
 
-        setUser(data.user ?? data);
         toast.success(t('success'));
         setLoginOpen(false);
         resetForm();
-      } catch (err: unknown) {
-        const message = err instanceof Error ? err.message : t('errorGeneric');
-        toast.error(message);
+      } catch {
+        toast.error(t('errorGeneric'));
       } finally {
         setIsLoading(false);
       }
     },
-    [phone, password, validate, t, setUser, setLoginOpen, resetForm],
+    [phone, password, validate, t, setLoginOpen, resetForm],
   );
 
   return (
@@ -123,7 +116,7 @@ export default function LoginPopup() {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.35, ease: 'easeOut' }}
+          transition={{ duration: 0.35, ease: 'easeOut' as const }}
         >
           {/* Decorative header */}
           <div className="text-center mb-6">

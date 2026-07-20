@@ -1860,5 +1860,29 @@
     "productTag": {
       "add": "Add New Product Tag"
     }
+  },
+  "auth": {
+    "login": {
+      "title": "Welcome back!",
+      "subtitle": "Sign in to your account to continue",
+      "backToHome": "Back to Home",
+      "welcomeBack": "Welcome back",
+      "phone": "Username",
+      "phonePlaceholder": "Enter your username",
+      "errorPhone": "Please enter your username",
+      "password": "Password",
+      "passwordPlaceholder": "Enter your password",
+      "errorInvalid": "Invalid username or password",
+      "errorGeneric": "Something went wrong",
+      "rememberMe": "Remember me",
+      "forgotPassword": "Forgot password?",
+      "loggingIn": "Signing in...",
+      "submit": "Sign in",
+      "orContinueWith": "Or continue with",
+      "noAccount": "Don't have an account?",
+      "registerLink": "Register",
+      "guestBrowse": "Browse as guest",
+      "success": "Login successful"
+    }
   }
 }
