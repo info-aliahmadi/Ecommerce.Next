@@ -293,6 +293,22 @@ export const useStockAlertStore = create<StockAlertStore>()(
   )
 );
 
+// ── Auth Store ───────────────────────────────────────────────
+
+interface AuthStore {
+  isLoginOpen: boolean;
+  setLoginOpen: (open: boolean) => void;
+  isRegisterOpen: boolean;
+  setRegisterOpen: (open: boolean) => void;
+}
+
+export const useAuthStore = create<AuthStore>((set) => ({
+  isLoginOpen: false,
+  setLoginOpen: (open) => set({ isLoginOpen: open }),
+  isRegisterOpen: false,
+  setRegisterOpen: (open) => set({ isRegisterOpen: open }),
+}));
+
 // ── Locale Store ──────────────────────────────────────────────
 export type Locale = 'en' | 'fa' | 'ar';
 

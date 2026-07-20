@@ -14,18 +14,21 @@ import {
 import { Button } from '@(home)/_components/ui/button';
 import { Input } from '@(home)/_components/ui/input';
 import { Label } from '@(home)/_components/ui/label';
-import { useUIStore, useAuthStore, useLocaleStore, RTL_LOCALES } from '@(home)/_lib/store';
+import { useAuthStore, useLocaleStore, RTL_LOCALES } from '@(home)/_lib/store';
 import { useTranslations } from 'next-intl';
 import { toast } from 'sonner';
+import { useRouter } from 'next/navigation';
 
 export default function RegisterPopup() {
   const [name, setName] = useState('');
-  const [phone, setPhone] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [phoneNumber, setPhoneNumber] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const isRegisterOpen = useAuthStore((s) => s.isRegisterOpen);
   const setRegisterOpen = useAuthStore((s) => s.setRegisterOpen);
-  const navigate = useUIStore((s) => s.navigate);
+    const router = useRouter();
   const locale = useLocaleStore((s) => s.locale);
   const isRTL = RTL_LOCALES.includes(locale);
 
@@ -33,7 +36,9 @@ export default function RegisterPopup() {
 
   const resetForm = useCallback(() => {
     setName('');
-    setPhone('');
+    setEmail('');
+    setPassword('');
+    setPhoneNumber('');
     setIsSubmitting(false);
   }, []);
 
@@ -50,15 +55,27 @@ export default function RegisterPopup() {
   const handleGoToLogin = useCallback(() => {
     setRegisterOpen(false);
     resetForm();
-    navigate('login');
-  }, [setRegisterOpen, resetForm, navigate]);
+    router.push('/login');
+  }, [setRegisterOpen, resetForm]);
 
   const validate = useCallback((): boolean => {
     const trimmedName = name.trim();
-    const trimmedPhone = phone.trim();
+    const trimmedEmail = email.trim();
+    const trimmedPassword = password;
+    const trimmedPhone = phoneNumber.trim();
 
     if (!trimmedName || trimmedName.length < 2) {
       toast.error(t('errorName'));
+      return false;
+    }
+
+    if (!trimmedEmail || !trimmedEmail.includes('@')) {
+      toast.error(t('errorEmail', { defaultValue: 'Please enter a valid email' }));
+      return false;
+    }
+
+    if (!trimmedPassword || trimmedPassword.length < 6) {
+      toast.error(t('errorPassword', { defaultValue: 'Password must be at least 6 characters' }));
       return false;
     }
 
@@ -68,7 +85,7 @@ export default function RegisterPopup() {
     }
 
     return true;
-  }, [name, phone, t]);
+  }, [name, email, password, phoneNumber, t]);
 
   const handleSubmit = useCallback(
     async (e: React.FormEvent) => {
@@ -84,7 +101,9 @@ export default function RegisterPopup() {
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             name: name.trim(),
-            phone: phone.trim(),
+            email: email.trim(),
+            password: password,
+            phoneNumber: phoneNumber.trim(),
           }),
         });
 
@@ -101,15 +120,15 @@ export default function RegisterPopup() {
 
         const result = await signIn('credentials', {
           redirect: false,
-          username: phone.trim(),
-          password: data.defaultPassword || phone.trim(),
+          username: phoneNumber.trim(),
+          password: password,
         });
 
         if (result?.error) {
           toast.error(t('successRegistered'));
           setRegisterOpen(false);
           resetForm();
-          navigate('login');
+          router.push('/login');
           return;
         }
 
@@ -122,7 +141,7 @@ export default function RegisterPopup() {
         setIsSubmitting(false);
       }
     },
-    [name, phone, validate, t, setRegisterOpen, resetForm, navigate],
+    [name, email, password, phoneNumber, validate, t, setRegisterOpen, resetForm],
   );
 
   const itemVariants = {
@@ -179,6 +198,46 @@ export default function RegisterPopup() {
               />
             </div>
 
+            {/* Email field */}
+            <div className="space-y-2">
+              <Label
+                htmlFor="register-email"
+                className="text-sm font-medium text-ecommerce-text-secondary"
+              >
+                {t('email', { defaultValue: 'Email' })}
+              </Label>
+              <Input
+                id="register-email"
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder={t('emailPlaceholder', { defaultValue: 'you@example.com' })}
+                className="rounded-lg"
+                autoComplete="email"
+                disabled={isSubmitting}
+              />
+            </div>
+
+            {/* Password field */}
+            <div className="space-y-2">
+              <Label
+                htmlFor="register-password"
+                className="text-sm font-medium text-ecommerce-text-secondary"
+              >
+                {t('password', { defaultValue: 'Password' })}
+              </Label>
+              <Input
+                id="register-password"
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder={t('passwordPlaceholder', { defaultValue: 'At least 6 characters' })}
+                className="rounded-lg"
+                autoComplete="new-password"
+                disabled={isSubmitting}
+              />
+            </div>
+
             {/* Phone field */}
             <div className="space-y-2">
               <Label
@@ -191,8 +250,8 @@ export default function RegisterPopup() {
                 id="register-phone"
                 type="tel"
                 inputMode="numeric"
-                value={phone}
-                onChange={(e) => setPhone(e.target.value)}
+                value={phoneNumber}
+                onChange={(e) => setPhoneNumber(e.target.value)}
                 placeholder={t('phonePlaceholder')}
                 className="rounded-lg"
                 autoComplete="tel"
@@ -200,14 +259,6 @@ export default function RegisterPopup() {
                 disabled={isSubmitting}
               />
             </div>
-
-            {/* Password note */}
-            <p className="text-xs text-ecommerce-text-muted text-center leading-relaxed px-2">
-              {t('passwordNote', {
-                defaultValue:
-                  "We'll create a default password from your phone number. You can set a real password later.",
-              })}
-            </p>
 
             {/* Submit button */}
             <Button

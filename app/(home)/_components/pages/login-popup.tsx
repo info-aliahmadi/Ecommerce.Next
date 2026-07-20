@@ -15,11 +15,13 @@ import { Button } from '@(home)/_components/ui/button';
 import { Input } from '@(home)/_components/ui/input';
 import { Label } from '@(home)/_components/ui/label';
 import { Checkbox } from '@(home)/_components/ui/checkbox';
-import { useUIStore, useAuthStore, useLocaleStore, RTL_LOCALES } from '@(home)/_lib/store';
+import { useAuthStore, useLocaleStore, RTL_LOCALES } from '@(home)/_lib/store';
 import { useTranslations } from 'next-intl';
-import { toast } from 'sonner'; 
+import { toast } from 'sonner';
+import { useRouter } from 'next/navigation';
 
 export default function LoginPopup() {
+  const router = useRouter();
   const [phone, setPhone] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
@@ -29,8 +31,6 @@ export default function LoginPopup() {
   const isLoginOpen = useAuthStore((s) => s.isLoginOpen);
   const setLoginOpen = useAuthStore((s) => s.setLoginOpen);
   const setRegisterOpen = useAuthStore((s) => s.setRegisterOpen);
-  const goHome = useUIStore((s) => s.goHome);
-  const navigate = useUIStore((s) => s.navigate);
   const locale = useLocaleStore((s) => s.locale);
   const isRTL = RTL_LOCALES.includes(locale);
 
@@ -61,8 +61,8 @@ export default function LoginPopup() {
   const handleGoToFullLogin = useCallback(() => {
     setLoginOpen(false);
     resetForm();
-    navigate('login');
-  }, [setLoginOpen, resetForm, navigate]);
+    router.push('/login');
+  }, [setLoginOpen, resetForm]);
 
   const validate = useCallback((): boolean => {
     if (!phone.trim()) {
