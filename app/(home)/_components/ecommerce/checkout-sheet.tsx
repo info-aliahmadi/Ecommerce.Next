@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import { useCartStore, useUIStore } from '../../_lib/store';
 import { Button } from '../ui/button';
 import {
@@ -22,13 +23,13 @@ export function CheckoutSheet() {
       {/* Checkout trigger in cart - redirects to checkout page */}
       {isCartOpen && items.length > 0 && (
         <div className="shrink-0 px-4 pb-4 pt-2 bg-white dark:bg-ecommerce-surface">
-          <Button
-            onClick={startCheckout}
-            className="w-full h-12 bg-ecommerce-red hover:bg-ecommerce-red/90 text-white rounded-xl font-semibold text-sm gap-2 transition-all hover:scale-[1.01] active:scale-95"
+          <Link
+            href="/checkout"
+            className="flex items-center justify-center w-full h-12 bg-ecommerce-red hover:bg-ecommerce-red/90 text-white rounded-xl font-semibold text-sm gap-2 transition-all hover:scale-[1.01] active:scale-95"
           >
             {t('homepage.cart.checkout')}
             <ChevronRight size={16} />
-          </Button>
+          </Link>
           <div className="flex items-center justify-center gap-3 mt-2">
             <div className="flex items-center gap-1 text-[10px] text-ecommerce-text-muted">
               <Lock size={10} /> {t('homepage.checkout.sslEncrypted')}
