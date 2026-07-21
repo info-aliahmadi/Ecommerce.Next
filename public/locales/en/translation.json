@@ -1882,7 +1882,32 @@
       "noAccount": "Don't have an account?",
       "registerLink": "Register",
       "guestBrowse": "Browse as guest",
-      "success": "Login successful"
+      "success": "Login successful",
+      "goToFullLoginPage": "Go to full login page"
+    },
+    "register": {
+      "title": "Create Account",
+      "subtitle": "Fill in the details below to register",
+      "name": "Full Name",
+      "namePlaceholder": "Enter your full name",
+      "email": "Email Address",
+      "emailPlaceholder": "you@example.com",
+      "password": "Password",
+      "passwordPlaceholder": "At least 6 characters",
+      "phone": "Phone Number",
+      "phonePlaceholder": "+1 (234) 567-890",
+      "submit": "Register",
+      "registering": "Registering...",
+      "hasAccount": "Already have an account?",
+      "loginLink": "Sign in",
+      "success": "Registration successful!",
+      "successRegistered": "Account created. Please sign in.",
+      "errorName": "Please enter your name",
+      "errorEmail": "Please enter a valid email",
+      "errorPassword": "Password must be at least 6 characters",
+      "errorPhone": "Please enter a valid phone number",
+      "errorPhoneExists": "This phone number is already registered",
+      "errorGeneric": "Registration failed. Please try again."
     }
   }
 }

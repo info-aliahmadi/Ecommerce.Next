@@ -1338,16 +1338,16 @@
       "color": "رنگ"
     },
     "product": {
-      "tabs" :{
-        "baseInfo" : "اطلاعات اولیه",
-        "settings" : "تنظیمات",
-        "variants" : "موجودی",
-        "seo" : "سئو"
+      "tabs": {
+        "baseInfo": "اطلاعات اولیه",
+        "settings": "تنظیمات",
+        "variants": "موجودی",
+        "seo": "سئو"
       },
       "id": "شناسه",
       "name": "نام",
       "sku": "شناسه (SKU)",
-      "imagePreviewId": "تصویر پیش‌نمایش",
+      "imagePreviewId": "پیش‌نمایش تصویر",
       "metaKeywords": "کلمات کلیدی متا",
       "metaTitle": "عنوان متا",
       "metaDescription": "توضیحات متا",
@@ -1388,7 +1388,6 @@
       "manufacturerIds": "تولیدکنندگان",
       "images": "تصاویر محصول",
       "discountIds": "تخفیف‌ها",
-      "imagePreviewId": "پیش‌نمایش تصویر",
       "relatedProductIds": "محصولات مرتبط",
       "adminComment": "پیام مدیر",
       "attributeIds": "ویژگی‌ها",
@@ -1890,7 +1889,32 @@
       "noAccount": "حساب کاربری ندارید؟",
       "registerLink": "ثبت نام",
       "guestBrowse": "مشاهده به عنوان مهمان",
-      "success": "ورود موفقیت‌آمیز"
+      "success": "ورود موفقیت‌آمیز",
+      "goToFullLoginPage": "رفتن به صفحه ورود کامل"
+    },
+    "register": {
+      "title": "ایجاد حساب کاربری",
+      "subtitle": "اطلاعات زیر را برای ثبت‌نام وارد کنید",
+      "name": "نام و نام خانوادگی",
+      "namePlaceholder": "نام کامل خود را وارد کنید",
+      "email": "آدرس ایمیل",
+      "emailPlaceholder": "you@example.com",
+      "password": "رمز عبور",
+      "passwordPlaceholder": "حداقل ۶ کاراکتر",
+      "phone": "شماره تلفن",
+      "phonePlaceholder": "+1 (234) 567-890",
+      "submit": "ثبت نام",
+      "registering": "در حال ثبت‌نام...",
+      "hasAccount": "قبلاً حساب دارید؟",
+      "loginLink": "ورود",
+      "success": "ثبت‌نام موفقیت‌آمیز!",
+      "successRegistered": "حساب ایجاد شد. لطفاً وارد شوید.",
+      "errorName": "لطفاً نام خود را وارد کنید",
+      "errorEmail": "لطفاً ایمیل معتبر وارد کنید",
+      "errorPassword": "رمز عبور باید حداقل ۶ کاراکتر باشد",
+      "errorPhone": "لطفاً شماره تلفن معتبر وارد کنید",
+      "errorPhoneExists": "این شماره تلفن قبلاً ثبت شده است",
+      "errorGeneric": "ثبت‌نام ناموفق بود. لطفاً دوباره تلاش کنید."
     }
   }
 }
