@@ -17,11 +17,11 @@ export default class AuthenticationService {
 
     return Fetch.Post<Result<User>>(CONFIG.LOGIN_API_PATH, loginModel, this.config);
   };
-  loginByOtp = async (loginModel: LoginModel): Promise<AccountResult> => {
-    return Fetch.Post<AccountResult>(CONFIG.API_BASEPATH + '/Auth/SendOtpCode', loginModel, this.config);
+  loginByOtp = async (addPhoneNumberModel: AddPhoneNumberModel): Promise<AccountResult> => {
+    return Fetch.Post<AccountResult>(CONFIG.API_BASEPATH + '/Auth/SendOtpCode', addPhoneNumberModel, this.config);
   };
-  verifyOtpAndLogin = async (loginModel: LoginModel): Promise<Result<User>> => {
-    return Fetch.Post<Result<User>>(CONFIG.API_BASEPATH + '/Auth/VerifyOtpAndLogin', loginModel, this.config);
+  verifyOtpAndLogin = async (verifyPhoneNumberModel: VerifyPhoneNumberModel): Promise<Result<User>> => {
+    return Fetch.Post<Result<User>>(CONFIG.API_BASEPATH + '/Auth/VerifyOtpAndLogin', verifyPhoneNumberModel, this.config);
   };
 
   refreshToken = async (jwt: string): Promise<string> => {

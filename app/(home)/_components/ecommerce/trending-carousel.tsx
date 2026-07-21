@@ -40,7 +40,6 @@ export function TrendingCarousel() {
   }, []);
 
   const handleQuickView = (product: ProductDisplayModel) => {
-    debugger
     setQuickViewProduct(product);
   };
 

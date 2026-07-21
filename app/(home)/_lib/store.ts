@@ -34,7 +34,6 @@ export const useCartStore = create<CartStore>()(
 
       addItem: (item) => {
         set((state) => {
-          debugger
           const existing = state.items.some((i) => i.variant.id === item.variant.id);
           if (existing) {
             return {

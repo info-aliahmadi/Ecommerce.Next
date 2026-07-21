@@ -67,7 +67,6 @@ export default class HomePageService {
       productTagIds : [ProductTags.Featured]
     }
     let result = await this.getProducts(filter);
-    debugger
     return result;
   }
 

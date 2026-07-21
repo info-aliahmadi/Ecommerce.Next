@@ -174,7 +174,6 @@ export default function ImageUpload({
 
   const handleBeforeRemoveFile = useCallback(async (file: FilePondFile): Promise<boolean> => {
     if (!setFieldValue || !file) return false;
-    debugger
     const fileId = parseInt(file.serverId);
     if (isNaN(fileId)) return false;
 

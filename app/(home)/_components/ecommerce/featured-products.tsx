@@ -24,9 +24,7 @@ export function FeaturedProducts() {
     queryKey: ['products', 'featured'],
     queryFn: async () => {
       const service = new HomePageService();
-      debugger
       const result = await service.getFeaturedProducts();
-      debugger
       const data = result.succeeded ? result.data : undefined;
       return data;
     }

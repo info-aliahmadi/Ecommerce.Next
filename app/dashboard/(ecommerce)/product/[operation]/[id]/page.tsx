@@ -157,7 +157,6 @@ export default function AddOrEditProduct({ params }: Readonly<{ params: Promise<
   const validationSchema = createProductValidationSchema(t);
 
   const handleChange = (e: any) => {
-    debugger
     const { name, value } = e.target;
 
 
@@ -237,7 +236,6 @@ export default function AddOrEditProduct({ params }: Readonly<{ params: Promise<
             setNotify({ open: true });
           })
           .catch((error: Result<ProductModel>) => {
-            debugger
             setNotify({ open: true, type: 'error', title: error.message, description: error.errors.map(x => x.description).join('\n') });
           });
       }
