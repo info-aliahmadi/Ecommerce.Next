@@ -17,12 +17,18 @@ export default class AuthenticationService {
 
     return Fetch.Post<Result<User>>(CONFIG.LOGIN_API_PATH, loginModel, this.config);
   };
+  loginByOtp = async (loginModel: LoginModel): Promise<AccountResult> => {
+    return Fetch.Post<AccountResult>(CONFIG.API_BASEPATH + '/Auth/SendOtpCode', loginModel, this.config);
+  };
+  verifyOtpAndLogin = async (loginModel: LoginModel): Promise<Result<User>> => {
+    return Fetch.Post<Result<User>>(CONFIG.API_BASEPATH + '/Auth/VerifyOtpAndLogin', loginModel, this.config);
+  };
 
   refreshToken = async (jwt: string): Promise<string> => {
     this.config = Fetch.SetDefaultHeader(jwt);
-    return Fetch.Get<string>(CONFIG.REFRESH_TOKEN_API_PATH,this.config);
+    return Fetch.Get<string>(CONFIG.REFRESH_TOKEN_API_PATH, this.config);
   };
-  
+
   register = async (registerModel: RegisterModel): Promise<Result<User>> => {
 
     return Fetch.Post<Result<User>>(CONFIG.API_BASEPATH + '/Auth/Register', registerModel, this.config);
