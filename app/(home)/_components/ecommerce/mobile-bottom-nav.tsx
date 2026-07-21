@@ -2,9 +2,10 @@
 
 import { useState } from 'react';
 import { Home, Search, ShoppingBag, Heart, User } from 'lucide-react';
-import { useCartStore, useWishlistStore, useUIStore } from '../../_lib/store';
+import { useCartStore, useWishlistStore, useUIStore, useAuthStore } from '../../_lib/store';
 import { motion } from 'framer-motion';
 import { useTranslations } from 'next-intl';
+import { useSession } from 'next-auth/react';
 
 interface NavItem {
   icon: typeof Home;
@@ -19,6 +20,8 @@ export function MobileBottomNav() {
   const { totalItems, toggleCart } = useCartStore();
   const { totalCount: wishlistCount } = useWishlistStore();
   const { setSearchQuery, setWishlistOpen } = useUIStore();
+  const setLoginOpen = useAuthStore((s) => s.setLoginOpen);
+  const { data: session } = useSession();
   const total = totalItems();
   const wishCount = wishlistCount();
 
@@ -52,6 +55,11 @@ export function MobileBottomNav() {
     } else if (item.action === 'wishlist') {
       e.preventDefault();
       setWishlistOpen(true);
+    } else if (item.id === 'account') {
+      if (!session) {
+        e.preventDefault();
+        setLoginOpen(true);
+      }
     }
   };
 

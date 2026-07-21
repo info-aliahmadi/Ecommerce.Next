@@ -5,9 +5,10 @@ import { Search, ShoppingCart, Menu, X, User, Heart, ChevronDown, Sun, Moon, Bel
 import { useTranslations } from 'next-intl';
 import { Input } from '../ui/input';
 import { Badge } from '../ui/badge';
-import { useCartStore, useWishlistStore, useUIStore } from '../../_lib/store';
+import { useCartStore, useWishlistStore, useUIStore, useAuthStore } from '../../_lib/store';
 import { useQuery } from '@tanstack/react-query';
 import { useTheme } from 'next-themes';
+import { useSession } from 'next-auth/react';
 import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
 import { SearchSuggestions } from './search-suggestions';
@@ -146,6 +147,8 @@ export function Header() {
   const { totalItems, toggleCart } = useCartStore();
   const { totalCount: wishlistTotal } = useWishlistStore();
   const { searchQuery, setSearchQuery,  isMobileMenuOpen, setMobileMenuOpen, isWishlistOpen, setWishlistOpen } = useUIStore();
+  const setLoginOpen = useAuthStore((s) => s.setLoginOpen);
+  const { data: session } = useSession();
   const [isScrolled, setIsScrolled] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isSearchFocused, setIsSearchFocused] = useState(false);
@@ -343,9 +346,19 @@ export function Header() {
               </button>
 
               {/* Account */}
-              <Link href="/profile" className="hidden sm:flex p-2 rounded-lg hover:bg-ecommerce-surface-hover transition-colors duration-200" aria-label={t('homepage.header.account')}>
-                <User size={18} className="text-ecommerce-text-secondary" />
-              </Link>
+              {session ? (
+                <Link href="/profile" className="hidden sm:flex p-2 rounded-lg hover:bg-ecommerce-surface-hover transition-colors duration-200" aria-label={t('homepage.header.account')}>
+                  <User size={18} className="text-ecommerce-text-secondary" />
+                </Link>
+              ) : (
+                <button
+                  onClick={() => setLoginOpen(true)}
+                  className="hidden sm:flex p-2 rounded-lg hover:bg-ecommerce-surface-hover transition-colors duration-200"
+                  aria-label={t('homepage.header.account')}
+                >
+                  <User size={18} className="text-ecommerce-text-secondary" />
+                </button>
+              )}
 
               {/* Cart Button */}
               <button

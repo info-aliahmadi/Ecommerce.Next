@@ -29,9 +29,10 @@ import { ImageComparison } from './_components/ecommerce/image-comparison';
 import { ProductBundles } from './_components/ecommerce/product-bundles';
 import { StockAlert } from './_components/ecommerce/stock-alert';
 import { ProductQuickStats } from './_components/ecommerce/product-quick-stats';
-import { useCompareStore } from './_lib/store';
 import { useScrollReveal } from './_hooks/use-scroll-reveal';
 import { Header } from './_components/ecommerce/header';
+import LoginPopup from './_components/pages/login-popup';
+import RegisterPopup from './_components/pages/register-popup';
 
 /* ─── Shared overlays (cart, quick-view, etc.) ──────────────── */
 function SharedOverlays() {
@@ -45,6 +46,8 @@ function SharedOverlays() {
       <CompareBar />
       <CompareDrawer />
       <CookieBanner />
+      <LoginPopup />
+      <RegisterPopup />
     </>
   );
 }
