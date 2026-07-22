@@ -810,7 +810,8 @@
       "reviewWritten": "تمت كتابة مراجعة لـ {product}",
       "addressAdded": "تمت إضافة عنوان جديد",
       "passwordChanged": "تم تغيير كلمة المرور",
-      "profilePictureUpdated": "تم تحديث الصورة الشخصية"
+      "profilePictureUpdated": "تم تحديث الصورة الشخصية",
+      "fieldRequired": "هذا الحقل مطلوب"
     },
     "paymentPage": {
       "homepage": {

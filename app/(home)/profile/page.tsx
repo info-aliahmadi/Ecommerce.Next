@@ -238,15 +238,18 @@ function ProfilePageContent() {
     if (res.succeeded) {
       setAddresses((prev) => prev.filter((a) => a.id !== id));
       toast.success(t('homepage.common.delete'));
+    } else {
+      toast.error(t('homepage.profile.addressNotDeleted'));
     }
   };
 
   const handleSetDefault = async (id: number) => {
-    if (!session?.user?.accessToken) return;
+    if (!session?.user?.accessToken) return;add 
     const service = new ProfileService(session.user.accessToken);
     const res = await service.setAsDefaultAddress(id);
     if (res.succeeded) {
-      toast.success(t('homepage.profile.defaultBadge'));
+      if (res.data == true) toast.success(t('homepage.profile.defaultBadge'));
+      else if (res.data == false) toast.error(t('homepage.profile.addressNotSetAsDefault'));
     }
   };
 
@@ -364,7 +367,7 @@ function ProfilePageContent() {
                   onClick={() => toast.info('Coming soon!')}
                   className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-ecommerce-text-secondary hover:bg-red-50 dark:hover:bg-red-500/10 hover:text-red-500 transition-all duration-200 w-full"
                 >
-                  <LogOut className="w-4.5 h-4.5" onClick={()=> signOut()} />
+                  <LogOut className="w-4.5 h-4.5" onClick={() => signOut()} />
                   {t('homepage.profile.logout')}
                 </button>
               </Card>

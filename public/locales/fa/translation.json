@@ -813,7 +813,8 @@
       "reviewWritten": "نظر برای {product} نوشته شد",
       "addressAdded": "آدرس جدید اضافه شد",
       "passwordChanged": "رمز عبور تغییر کرد",
-      "profilePictureUpdated": "تصویر پروفایل بروزرسانی شد"
+      "profilePictureUpdated": "تصویر پروفایل بروزرسانی شد",
+      "fieldRequired": "این فیلد الزامی است"
     },
     "paymentPage": {
       "title": "تکمیل خرید",

@@ -831,7 +831,8 @@
       "reviewWritten": "Review written for {product}",
       "addressAdded": "New address added",
       "passwordChanged": "Password changed",
-      "profilePictureUpdated": "Profile picture updated"
+      "profilePictureUpdated": "Profile picture updated",
+      "fieldRequired": "This field is required"
     },
     "paymentPage": {
       "title": "Checkout",
