@@ -8,6 +8,12 @@ export default interface AddressModel {
     id: number;
   
     /**
+     * First name associated with this address.
+     */
+    title: string;
+  
+  
+    /**
      * Identifier of the user associated with this address.
      */
     userId: number;
@@ -42,12 +48,6 @@ export default interface AddressModel {
     county: string;
   
     /**
-     * First name associated with this address.
-     */
-    title: string;
-  
-  
-    /**
      * Phone number associated with this address.
      */
     phoneNumber: string;
@@ -77,8 +77,4 @@ export default interface AddressModel {
      */
     createdOnUtc: Date;
   
-    /**
-     * Number of orders associated with this address.
-     */
-    orders: number;
   }

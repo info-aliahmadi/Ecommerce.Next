@@ -73,26 +73,13 @@ function ProfilePageContent() {
     }
   }, [status, router]);
 
-  if (status === 'loading' || status === 'unauthenticated') {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <Loader2 className="w-8 h-8 text-ecommerce-red animate-spin" />
-      </div>
-    );
-  }
-
-  const user = session?.user;
-  const userName = user?.name || 'User';
-  const userEmail = user?.email || '';
-  const userAvatar = user?.avatar || '';
-
   // Local state
   const [activeTab, setActiveTab] = useState<TabId>('dashboard');
 
   // Profile editing
   const [isEditingProfile, setIsEditingProfile] = useState(false);
-  const [editName, setEditName] = useState(userName);
-  const [editEmail, setEditEmail] = useState(userEmail);
+  const [editName, setEditName] = useState('');
+  const [editEmail, setEditEmail] = useState('');
 
   // Password
   const [currentPw, setCurrentPw] = useState('');
@@ -115,6 +102,19 @@ function ProfilePageContent() {
   const [addressesLoading, setAddressesLoading] = useState(false);
   const [countries, setCountries] = useState<CountryModel[]>([]);
   const [states, setStates] = useState<StateProvinceModel[]>([]);
+
+  // Stores
+  const wishlistItems = useWishlistStore((s) => s.items);
+  const wishlistCount = wishlistItems.length;
+  const addToCart = useCartStore((s) => s.addItem);
+  const removeWishlistItem = useWishlistStore((s) => s.removeItem);
+
+  useEffect(() => {
+    if (status === 'authenticated' && session?.user) {
+      setEditName(session.user.name || 'User');
+      setEditEmail(session.user.email || '');
+    }
+  }, [status, session]);
 
   useEffect(() => {
     if (status === 'authenticated' && session?.user?.accessToken) {
@@ -146,11 +146,18 @@ function ProfilePageContent() {
     }
   }, [addrForm?.countryId, session]);
 
-  // Stores
-  const wishlistItems = useWishlistStore((s) => s.items);
-  const wishlistCount = wishlistItems.length;
-  const addToCart = useCartStore((s) => s.addItem);
-  const removeWishlistItem = useWishlistStore((s) => s.removeItem);
+  if (status === 'loading' || status === 'unauthenticated') {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <Loader2 className="w-8 h-8 text-ecommerce-red animate-spin" />
+      </div>
+    );
+  }
+
+  const user = session?.user;
+  const userName = editName || 'User';
+  const userEmail = editEmail || '';
+  const userAvatar = user?.avatar || '';
 
   // Activity messages use translations with params
   const activities: ActivityItem[] = INITIAL_ACTIVITIES.map((a, i) => {
@@ -171,8 +178,8 @@ function ProfilePageContent() {
   };
 
   const handleCancelEdit = () => {
-    setEditName(userName);
-    setEditEmail(userEmail);
+    setEditName(session?.user?.name || 'User');
+    setEditEmail(session?.user?.email || '');
     setIsEditingProfile(false);
   };
 
@@ -190,7 +197,7 @@ function ProfilePageContent() {
 
   const openAddAddress = () => {
     setEditingAddress(null);
-    setAddrForm({ id: 0, userId: 0, title: '', address1: '', city: '', stateProvinceName: '', stateProvinceId: 0, zipPostalCode: '', countryName: '', countryId: 0, county: '', phoneNumber: '', geoLocation: '', isDefault: false, createdOnUtc: new Date(), orders: 0 });
+    setAddrForm({ id: 0, userId: 0, title: '', address1: '', city: '', stateProvinceName: '', stateProvinceId: 0, zipPostalCode: '', countryName: '', countryId: 0, county: '', phoneNumber: '', geoLocation: '', isDefault: false, createdOnUtc: new Date() });
     setAddressDialogOpen(true);
   };
 
