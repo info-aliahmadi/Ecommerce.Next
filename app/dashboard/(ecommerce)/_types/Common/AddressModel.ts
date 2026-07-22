@@ -26,7 +26,7 @@ export default interface AddressModel {
     /**
      * Identifier of the country for this address.
      */
-    countryName: string;
+    countryName?: string;
   
     /**
      * Identifier of the state or province for this address.
@@ -35,7 +35,7 @@ export default interface AddressModel {
     /**
      * Identifier of the state or province for this address.
      */
-    stateProvinceName: string;
+    stateProvinceName?: string;
   
     /**
      * City name for this address.
@@ -45,12 +45,12 @@ export default interface AddressModel {
     /**
      * County name for this address.
      */
-    county: string;
+    county?: string;
   
     /**
      * Phone number associated with this address.
      */
-    phoneNumber: string;
+    phoneNumber?: string;
   
     /**
      * First line of the address.
@@ -60,12 +60,12 @@ export default interface AddressModel {
     /**
      * Zip or postal code for this address.
      */
-    zipPostalCode: string;
+    zipPostalCode?: string;
   
     /**
      * Zip or postal code for this address.
      */
-    geoLocation: string;
+    geoLocation?: string;
     
     /**
      * default address
@@ -75,6 +75,6 @@ export default interface AddressModel {
     /**
      * Date and time when this address was created (UTC).
      */
-    createdOnUtc: Date;
+    createdOnUtc?: Date;
   
   }

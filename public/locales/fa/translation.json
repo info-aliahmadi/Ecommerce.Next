@@ -814,7 +814,10 @@
       "addressAdded": "آدرس جدید اضافه شد",
       "passwordChanged": "رمز عبور تغییر کرد",
       "profilePictureUpdated": "تصویر پروفایل بروزرسانی شد",
-      "fieldRequired": "این فیلد الزامی است"
+      "fieldRequired": "این فیلد الزامی است",
+      "addressNotSaved": "ذخیره آدرس ناموفق بود",
+      "deleteAddress": "حذف آدرس",
+      "deleteAddressConfirm": "آیا مطمئن هستید که می‌خواهید این آدرس را حذف کنید؟ این عمل قابل بازگشت نیست."
     },
     "paymentPage": {
       "title": "تکمیل خرید",

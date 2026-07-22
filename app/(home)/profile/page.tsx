@@ -100,6 +100,9 @@ function ProfilePageContent() {
   const [editingAddress, setEditingAddress] = useState<AddressModel | null>(null);
   const [addrForm, setAddrForm] = useState<AddressModel | null>(null);
   const [addressesLoading, setAddressesLoading] = useState(false);
+  const [addressSaving, setAddressSaving] = useState(false);
+  const [addressDeleting, setAddressDeleting] = useState<number | null>(null);
+  const [addressSettingDefault, setAddressSettingDefault] = useState<number | null>(null);
   const [countries, setCountries] = useState<CountryModel[]>([]);
   const [states, setStates] = useState<StateProvinceModel[]>([]);
 
@@ -116,14 +119,20 @@ function ProfilePageContent() {
     }
   }, [status, session]);
 
-  useEffect(() => {
-    if (status === 'authenticated' && session?.user?.accessToken) {
-      setAddressesLoading(true);
+  const fetchAddresses = async () => {
+    if (!session?.user?.accessToken) return;
+    setAddressesLoading(true);
+    try {
       const service = new ProfileService(session.user.accessToken);
-      service.getUserAddresses().then((res) => {
-        if (res.succeeded && res.data) setAddresses(res.data);
-      }).finally(() => setAddressesLoading(false));
+      const res = await service.getUserAddresses();
+      if (res.succeeded && res.data) setAddresses(res.data);
+    } finally {
+      setAddressesLoading(false);
     }
+  };
+
+  useEffect(() => {
+    if (status === 'authenticated') fetchAddresses();
   }, [status, session]);
 
   useEffect(() => {
@@ -208,48 +217,70 @@ function ProfilePageContent() {
   };
 
   const handleSaveAddress = async () => {
-    if (!addrForm?.title || !addrForm?.address1 || !addrForm?.city || !addrForm?.stateProvinceName || !addrForm?.zipPostalCode || !addrForm?.countryName) return;
-    if (!session?.user?.accessToken) return;
-    const service = new ProfileService(session.user.accessToken);
-    const payload: AddressModel = {
-      ...addrForm,
-      id: editingAddress?.id ?? 0,
-      userId: 0,
-    };
-    const res = editingAddress
-      ? await service.updateAddress(payload)
-      : await service.addAddress(payload);
-    if (res.succeeded && res.data) {
-      setAddresses((prev) => {
-        if (editingAddress) {
-          return prev.map((a) => a.id === editingAddress.id ? res.data! : a);
-        }
-        return [...prev, res.data!];
-      });
-      setAddressDialogOpen(false);
-      toast.success(editingAddress ? t('homepage.common.save') : t('homepage.profile.addressAdded'));
+    if (!session?.user?.accessToken || !addrForm) return;
+    setAddressSaving(true);
+    try {
+      const service = new ProfileService(session.user.accessToken);
+      const payload: AddressModel = {
+        ...addrForm,
+        id: editingAddress?.id ?? 0,
+        userId: 0,
+      };
+      const res = editingAddress
+        ? await service.updateAddress(payload)
+        : await service.addAddress(payload);
+      if (res.succeeded && res.data) {
+        setAddressDialogOpen(false);
+        toast.success(editingAddress ? t('homepage.common.save') : t('homepage.profile.addressAdded'));
+        fetchAddresses();
+      } else {
+        toast.error(res.message ?? t('homepage.profile.addressNotSaved'));
+      }
+    } catch {
+      toast.error(t('homepage.profile.addressNotSaved'));
+    } finally {
+      setAddressSaving(false);
     }
   };
 
   const handleDeleteAddress = async (id: number) => {
     if (!session?.user?.accessToken) return;
-    const service = new ProfileService(session.user.accessToken);
-    const res = await service.deleteAddress(id);
-    if (res.succeeded) {
-      setAddresses((prev) => prev.filter((a) => a.id !== id));
-      toast.success(t('homepage.common.delete'));
-    } else {
+    setAddressDeleting(id);
+    try {
+      const service = new ProfileService(session.user.accessToken);
+      const res = await service.deleteAddress(id);
+      if (res.succeeded) {
+        setAddresses((prev) => prev.filter((a) => a.id !== id));
+        fetchAddresses();
+        toast.success(t('homepage.common.delete'));
+      } else {
+        toast.error(res.message ?? t('homepage.profile.addressNotDeleted'));
+      }
+    } catch {
       toast.error(t('homepage.profile.addressNotDeleted'));
+    } finally {
+      setAddressDeleting(null);
     }
   };
 
   const handleSetDefault = async (id: number) => {
-    if (!session?.user?.accessToken) return;add 
-    const service = new ProfileService(session.user.accessToken);
-    const res = await service.setAsDefaultAddress(id);
-    if (res.succeeded) {
-      if (res.data == true) toast.success(t('homepage.profile.defaultBadge'));
-      else if (res.data == false) toast.error(t('homepage.profile.addressNotSetAsDefault'));
+    if (!session?.user?.accessToken) return;
+    setAddressSettingDefault(id);
+    try {
+      const service = new ProfileService(session.user.accessToken);
+      const res = await service.setAsDefaultAddress(id);
+      if (res.succeeded) {
+        if (res.data == true) {
+          toast.success(t('homepage.profile.setAsDefaultSuccess'));
+          fetchAddresses();
+        } else if (res.data == false) toast.error(t('homepage.profile.addressNotSetAsDefault'));
+      } else {
+        toast.error(res.message ?? t('homepage.profile.addressNotSetAsDefault'));
+      }
+    } catch {
+      toast.error(t('homepage.profile.addressNotSetAsDefault'));
+    } finally {
+      setAddressSettingDefault(null);
     }
   };
 
@@ -285,8 +316,8 @@ function ProfilePageContent() {
             <h1 className="text-lg font-bold text-ecommerce-text-primary">{t('homepage.profile.title')}</h1>
           </div>
           <div className="hidden md:flex items-center gap-2">
-            <Button variant="ghost" size="sm" className="text-ecommerce-text-secondary hover:text-ecommerce-red" onClick={() => toast.info('Coming soon!')}>
-              <LogOut className="w-4 h-4" onClick={() => signOut()} />
+            <Button variant="ghost" size="sm" className="text-ecommerce-text-secondary hover:text-ecommerce-red" onClick={() => signOut()}>
+              <LogOut className="w-4 h-4" />
               <span className="ms-2">{t('homepage.profile.logout')}</span>
             </Button>
           </div>
@@ -364,7 +395,7 @@ function ProfilePageContent() {
                 </nav>
                 <Separator className="my-2 bg-ecommerce-border" />
                 <button
-                  onClick={() => toast.info('Coming soon!')}
+                  onClick={() => signOut()}
                   className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-ecommerce-text-secondary hover:bg-red-50 dark:hover:bg-red-500/10 hover:text-red-500 transition-all duration-200 w-full"
                 >
                   <LogOut className="w-4.5 h-4.5" onClick={() => signOut()} />
@@ -421,6 +452,9 @@ function ProfilePageContent() {
                     setAddrForm={setAddrForm}
                     onSave={handleSaveAddress}
                     loading={addressesLoading}
+                    saving={addressSaving}
+                    deletingId={addressDeleting}
+                    settingDefaultId={addressSettingDefault}
                     countries={countries}
                     states={states}
                   />

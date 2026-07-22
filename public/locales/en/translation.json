@@ -789,6 +789,8 @@
       "zipCode": "ZIP/Postal Code",
       "country": "Country",
       "setAsDefault": "Set as Default",
+      "setAsDefaultSuccess": "Address set as default",
+      "addressNotSetAsDefault": "Failed to set address as default",
       "accountSettings": "Account Settings",
       "changePassword": "Change Password",
       "currentPassword": "Current Password",
@@ -832,7 +834,10 @@
       "addressAdded": "New address added",
       "passwordChanged": "Password changed",
       "profilePictureUpdated": "Profile picture updated",
-      "fieldRequired": "This field is required"
+      "fieldRequired": "This field is required",
+      "addressNotSaved": "Failed to save address",
+      "deleteAddress": "Delete Address",
+      "deleteAddressConfirm": "Are you sure you want to delete this address? This action cannot be undone."
     },
     "paymentPage": {
       "title": "Checkout",

@@ -3,7 +3,7 @@ import "./globals.css";
 import { ThemeProvider } from "next-themes";
 import { QueryProvider } from "./_components/query-provider";
 import { SessionProvider } from "./_components/session-provider";
-import { Toaster } from "./_components/ui/toaster";
+import { Toaster } from "./_components/ui/sonner";
 import CONFIG from "@root/config";
 
 export const metadata: Metadata = {
@@ -27,7 +27,7 @@ export default function RootLayout({
       <SessionProvider>
         <QueryProvider>
           {children}
-          <Toaster />
+          <Toaster position="top-center" />
         </QueryProvider>
       </SessionProvider>
     </ThemeProvider>

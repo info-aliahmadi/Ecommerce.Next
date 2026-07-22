@@ -811,7 +811,10 @@
       "addressAdded": "تمت إضافة عنوان جديد",
       "passwordChanged": "تم تغيير كلمة المرور",
       "profilePictureUpdated": "تم تحديث الصورة الشخصية",
-      "fieldRequired": "هذا الحقل مطلوب"
+      "fieldRequired": "هذا الحقل مطلوب",
+      "addressNotSaved": "فشل في حفظ العنوان",
+      "deleteAddress": "حذف العنوان",
+      "deleteAddressConfirm": "هل أنت متأكد أنك تريد حذف هذا العنوان؟ لا يمكن التراجع عن هذا الإجراء."
     },
     "paymentPage": {
       "homepage": {

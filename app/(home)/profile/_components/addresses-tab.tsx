@@ -18,6 +18,17 @@ import {
   DialogHeader,
   DialogTitle,
 } from '../../_components/ui/dialog';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from '../../_components/ui/alert-dialog';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../../_components/ui/select';
 import AddressModel from '@root/app/dashboard/(ecommerce)/_types/Common/AddressModel';
 import CountryModel from '@root/app/dashboard/(ecommerce)/_types/Common/CountryModel';
@@ -38,6 +49,9 @@ export function AddressesTab({
   setAddrForm,
   onSave,
   loading,
+  saving,
+  deletingId,
+  settingDefaultId,
   countries,
   states,
 }: Readonly<{
@@ -54,6 +68,9 @@ export function AddressesTab({
   setAddrForm: (form: AddressModel) => void;
   onSave: () => void;
   loading?: boolean;
+  saving?: boolean;
+  deletingId?: number | null;
+  settingDefaultId?: number | null;
   countries: CountryModel[];
   states: StateProvinceModel[];
 }>) {
@@ -97,7 +114,7 @@ export function AddressesTab({
     <div className="space-y-4">
       <div className="flex items-center justify-between">
         <h2 className="text-xl font-bold text-ecommerce-text-primary">{t('homepage.profile.myAddresses')}</h2>
-        <Button size="sm" className="bg-ecommerce-red hover:bg-ecommerce-red/90 text-white" onClick={onAdd}>
+        <Button size="sm" className="bg-ecommerce-red hover:bg-ecommerce-red/90 text-white" onClick={onAdd} disabled={saving}>
           <Plus className="w-4 h-4" />
           <span className="ms-1.5">{t('homepage.profile.addNewAddress')}</span>
         </Button>
@@ -117,7 +134,7 @@ export function AddressesTab({
             </div>
             <h3 className="font-semibold text-ecommerce-text-primary">{t('homepage.profile.noAddresses')}</h3>
             <p className="text-sm text-ecommerce-text-muted mt-1 max-w-sm">{t('homepage.profile.noAddressesDesc')}</p>
-            <Button className="mt-4 bg-ecommerce-red hover:bg-ecommerce-red/90 text-white" onClick={onAdd}>
+            <Button className="mt-4 bg-ecommerce-red hover:bg-ecommerce-red/90 text-white" onClick={onAdd} disabled={saving}>
               <Plus className="w-4 h-4" />
               <span className="ms-1.5">{t('homepage.profile.addNewAddress')}</span>
             </Button>
@@ -134,7 +151,7 @@ export function AddressesTab({
                       <div className="flex items-center gap-2">
                         <h3 className="font-semibold text-ecommerce-text-primary truncate">{addr.title}</h3>
                         {addr.isDefault && (
-                          <Badge className="bg-ecommerce-emerald/10 text-ecommerce-emerald border-0 text-[10px] font-semibold px-1.5 py-0">
+                          <Badge className="bg-ecommerce-emerald text-white text-[10px] font-semibold px-2 py-0.5">
                             {t('homepage.profile.defaultBadge')}
                           </Badge>
                         )}
@@ -154,17 +171,36 @@ export function AddressesTab({
 
                   <div className="flex items-center gap-2 mt-4 pt-3 border-t border-ecommerce-border">
                     {!addr.isDefault && (
-                      <Button variant="ghost" size="sm" className="text-xs text-ecommerce-text-muted hover:text-ecommerce-emerald" onClick={() => onSetDefault(addr.id)}>
+                      <Button variant="ghost" size="sm" className="text-xs text-ecommerce-text-muted hover:text-ecommerce-emerald" onClick={() => onSetDefault(addr.id)} disabled={settingDefaultId === addr.id}>
                         {t('homepage.profile.setAsDefault')}
                       </Button>
                     )}
                     <div className="ms-auto flex items-center gap-1">
-                      <Button variant="ghost" size="sm" className="text-ecommerce-text-muted hover:text-ecommerce-text-primary" onClick={() => onEdit(addr)}>
+                      <Button variant="ghost" size="sm" className="text-ecommerce-text-muted hover:text-ecommerce-text-primary" onClick={() => onEdit(addr)} disabled={deletingId === addr.id || settingDefaultId === addr.id}>
                         <Pencil className="w-3.5 h-3.5" />
                       </Button>
-                      <Button variant="ghost" size="sm" className="text-ecommerce-text-muted hover:text-red-500" onClick={() => onDelete(addr.id)}>
-                        <Trash2 className="w-3.5 h-3.5" />
-                      </Button>
+                      <AlertDialog>
+                        <AlertDialogTrigger asChild>
+                          <Button variant="ghost" size="sm" className="text-ecommerce-text-muted hover:text-red-500" disabled={deletingId === addr.id || settingDefaultId === addr.id}>
+                            <Trash2 className="w-3.5 h-3.5" />
+                          </Button>
+                        </AlertDialogTrigger>
+                        <AlertDialogContent className="bg-ecommerce-surface border-ecommerce-border">
+                          <AlertDialogHeader>
+                            <AlertDialogTitle className="text-ecommerce-text-primary">{t('homepage.profile.deleteAddress')}</AlertDialogTitle>
+                            <AlertDialogDescription className="text-ecommerce-text-muted">
+                              {t('homepage.profile.deleteAddressConfirm')}
+                            </AlertDialogDescription>
+                          </AlertDialogHeader>
+                          <AlertDialogFooter>
+                            <AlertDialogCancel className="border-ecommerce-border text-ecommerce-text-secondary">{t('homepage.common.cancel')}</AlertDialogCancel>
+                            <AlertDialogAction onClick={() => onDelete(addr.id)} className="bg-red-500 hover:bg-red-600 text-white">
+                              {deletingId === addr.id && <Loader2 className="w-4 h-4 me-1.5 animate-spin" />}
+                              {t('homepage.common.delete')}
+                            </AlertDialogAction>
+                          </AlertDialogFooter>
+                        </AlertDialogContent>
+                      </AlertDialog>
                     </div>
                   </div>
                 </CardContent>
@@ -272,7 +308,8 @@ export function AddressesTab({
             <Button variant="outline" onClick={() => setDialogOpen(false)} className="border-ecommerce-border text-ecommerce-text-secondary">
               {t('homepage.common.cancel')}
             </Button>
-            <Button onClick={handleSave} className="bg-ecommerce-red hover:bg-ecommerce-red/90 text-white">
+            <Button onClick={handleSave} className="bg-ecommerce-red hover:bg-ecommerce-red/90 text-white" disabled={saving}>
+              {saving && <Loader2 className="w-4 h-4 me-1.5 animate-spin" />}
               {t('homepage.profile.saveAddress')}
             </Button>
           </DialogFooter>
