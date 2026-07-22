@@ -1,10 +1,12 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect } from 'react';
 import { useTranslations } from 'next-intl';
 import { motion, AnimatePresence } from 'framer-motion';
 import { toast } from 'sonner';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import { signOut, useSession } from 'next-auth/react';
 import {
   LayoutDashboard,
   Package,
@@ -26,6 +28,7 @@ import {
   AlertTriangle,
   Check,
   X,
+  Loader2,
 } from 'lucide-react';
 
 import { Footer } from '../_components/ecommerce/footer';
@@ -38,6 +41,7 @@ import { FlyToCart } from '../_components/ecommerce/fly-to-cart';
 import { MobileBottomNav } from '../_components/ecommerce/mobile-bottom-nav';
 import { ProductCard } from '../_components/ecommerce/product-card';
 import { useCartStore, useWishlistStore, useCompareStore } from '../_lib/store';
+import CategoryDisplayModel from '../_types/CategoryDisplayModel';
 
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '../_components/ui/card';
 import { Button } from '../_components/ui/button';
@@ -67,6 +71,14 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from '../_components/ui/alert-dialog';
+import ProductVariantDisplayModel from '../_types/ProductVariantDisplayModel';
+import FileUploadModel from '@root/app/dashboard/(filestorage)/_types/FileUploadModel';
+import ProfileService from '../_services/ProfileService';
+import AddressModel from '@root/app/dashboard/(ecommerce)/_types/Common/AddressModel';
+import CountryModel from '@root/app/dashboard/(ecommerce)/_types/Common/CountryModel';
+import StateProvinceModel from '@root/app/dashboard/(ecommerce)/_types/Common/StateProvinceModel';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../_components/ui/select';
+import { Header } from '../_components/ecommerce/header';
 
 // ─── Types ────────────────────────────────────────────────────────
 type TabId = 'dashboard' | 'orders' | 'wishlist' | 'addresses' | 'settings';
@@ -80,17 +92,7 @@ interface MockOrder {
   total: number;
 }
 
-interface MockAddress {
-  id: string;
-  name: string;
-  line1: string;
-  line2?: string;
-  city: string;
-  state: string;
-  zip: string;
-  country: string;
-  isDefault: boolean;
-}
+
 
 interface ActivityItem {
   id: string;
@@ -107,28 +109,7 @@ const MOCK_ORDERS: MockOrder[] = [
   { id: 'o4', orderNum: 1275, date: '2025-02-01', status: 'pending', items: 4, total: 359.96 },
 ];
 
-const INITIAL_ADDRESSES: MockAddress[] = [
-  {
-    id: 'a1',
-    name: 'John Doe',
-    line1: '123 Main Street, Apt 4B',
-    city: 'New York',
-    state: 'NY',
-    zip: '10001',
-    country: 'United States',
-    isDefault: true,
-  },
-  {
-    id: 'a2',
-    name: 'John Doe (Office)',
-    line1: '456 Broadway, Suite 1200',
-    city: 'New York',
-    state: 'NY',
-    zip: '10013',
-    country: 'United States',
-    isDefault: false,
-  },
-];
+
 
 const INITIAL_ACTIVITIES: ActivityItem[] = [
   { id: 'act1', type: 'order', message: '', time: '2 hours ago' },
@@ -139,20 +120,20 @@ const INITIAL_ACTIVITIES: ActivityItem[] = [
 
 // ─── Sidebar Navigation Config ────────────────────────────────────
 const NAV_ITEMS: { id: TabId; icon: typeof LayoutDashboard; labelKey: string }[] = [
-  { id: 'dashboard', icon: LayoutDashboard, labelKey: 'profile.dashboard' },
-  { id: 'orders', icon: Package, labelKey: 'profile.orders' },
-  { id: 'wishlist', icon: Heart, labelKey: 'profile.wishlist' },
-  { id: 'addresses', icon: MapPin, labelKey: 'profile.addresses' },
-  { id: 'settings', icon: Settings, labelKey: 'profile.settings' },
+  { id: 'dashboard', icon: LayoutDashboard, labelKey: 'homepage.profile.dashboard' },
+  { id: 'orders', icon: Package, labelKey: 'homepage.profile.orders' },
+  { id: 'wishlist', icon: Heart, labelKey: 'homepage.profile.wishlist' },
+  { id: 'addresses', icon: MapPin, labelKey: 'homepage.profile.addresses' },
+  { id: 'settings', icon: Settings, labelKey: 'homepage.profile.settings' },
 ];
 
 // ─── Status Badge Config ──────────────────────────────────────────
 const STATUS_CONFIG: Record<string, { color: string; bg: string; labelKey: string }> = {
-  pending: { color: 'text-ecommerce-amber', bg: 'bg-ecommerce-amber/10', labelKey: 'profile.pending' },
-  processing: { color: 'text-blue-500', bg: 'bg-blue-500/10', labelKey: 'profile.processing' },
-  shipped: { color: 'text-ecommerce-purple', bg: 'bg-ecommerce-purple/10', labelKey: 'profile.shipped' },
-  delivered: { color: 'text-ecommerce-emerald', bg: 'bg-ecommerce-emerald/10', labelKey: 'profile.delivered' },
-  cancelled: { color: 'text-red-500', bg: 'bg-red-500/10', labelKey: 'profile.cancelled' },
+  pending: { color: 'text-ecommerce-amber', bg: 'bg-ecommerce-amber/10', labelKey: 'homepage.profile.pending' },
+  processing: { color: 'text-blue-500', bg: 'bg-blue-500/10', labelKey: 'homepage.profile.processing' },
+  shipped: { color: 'text-ecommerce-purple', bg: 'bg-ecommerce-purple/10', labelKey: 'homepage.profile.shipped' },
+  delivered: { color: 'text-ecommerce-emerald', bg: 'bg-ecommerce-emerald/10', labelKey: 'homepage.profile.delivered' },
+  cancelled: { color: 'text-red-500', bg: 'bg-red-500/10', labelKey: 'homepage.profile.cancelled' },
 };
 
 // ─── Activity Icon Config ─────────────────────────────────────────
@@ -173,7 +154,7 @@ const ACTIVITY_COLORS: Record<string, string> = {
 };
 
 // ─── Animation Variants ───────────────────────────────────────────
-const pageVariants : any = {
+const pageVariants: any = {
   initial: { opacity: 0, y: 12 },
   animate: { opacity: 1, y: 0, transition: { duration: 0.35, ease: 'easeOut' } },
   exit: { opacity: 0, y: -8, transition: { duration: 0.2 } },
@@ -183,7 +164,7 @@ const staggerContainer = {
   animate: { transition: { staggerChildren: 0.06 } },
 };
 
-const staggerItem : any = {
+const staggerItem: any = {
   initial: { opacity: 0, y: 16 },
   animate: { opacity: 1, y: 0, transition: { duration: 0.3, ease: 'easeOut' } },
 };
@@ -191,35 +172,35 @@ const staggerItem : any = {
 // ─── Profile Page Component ───────────────────────────────────────
 function ProfilePageContent() {
   const t = useTranslations();
+  const router = useRouter();
+  const { data: session, status } = useSession();
 
-  // Load user data from localStorage (lazy init)
-  const [userData] = useState(() => {
-    try {
-      const stored = localStorage.getItem('hydrashop-user');
-      if (stored) {
-        const data = JSON.parse(stored);
-        return {
-          name: data.name || 'John Doe',
-          email: data.email || 'john.doe@example.com',
-          phone: data.phone || '+1 (555) 123-4567',
-        };
-      }
-    } catch {}
-    return { name: 'John Doe', email: 'john.doe@example.com', phone: '+1 (555) 123-4567' };
-  });
+  useEffect(() => {
+    if (status === 'unauthenticated') {
+      router.replace('/login?callbackUrl=/profile');
+    }
+  }, [status, router]);
+
+  if (status === 'loading' || status === 'unauthenticated') {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <Loader2 className="w-8 h-8 text-ecommerce-red animate-spin" />
+      </div>
+    );
+  }
+
+  const user = session?.user;
+  const userName = user?.name || 'User';
+  const userEmail = user?.email || '';
+  const userAvatar = user?.avatar || '';
 
   // Local state
   const [activeTab, setActiveTab] = useState<TabId>('dashboard');
-  const [userName, setUserName] = useState(userData.name);
-  const [userEmail, setUserEmail] = useState(userData.email);
-  const [userPhone, setUserPhone] = useState(userData.phone);
-  const [memberSince] = useState('January 2024');
 
   // Profile editing
   const [isEditingProfile, setIsEditingProfile] = useState(false);
-  const [editName, setEditName] = useState(userData.name);
-  const [editEmail, setEditEmail] = useState(userData.email);
-  const [editPhone, setEditPhone] = useState(userData.phone);
+  const [editName, setEditName] = useState(userName);
+  const [editEmail, setEditEmail] = useState(userEmail);
 
   // Password
   const [currentPw, setCurrentPw] = useState('');
@@ -235,18 +216,49 @@ function ProfilePageContent() {
   });
 
   // Addresses
-  const [addresses, setAddresses] = useState<MockAddress[]>(INITIAL_ADDRESSES);
+  const [addresses, setAddresses] = useState<AddressModel[]>([]);
   const [addressDialogOpen, setAddressDialogOpen] = useState(false);
-  const [editingAddress, setEditingAddress] = useState<MockAddress | null>(null);
-  const [addrForm, setAddrForm] = useState({ name: '', line1: '', line2: '', city: '', state: '', zip: '', country: '' });
+  const [editingAddress, setEditingAddress] = useState<AddressModel | null>(null);
+  const [addrForm, setAddrForm] = useState<AddressModel | null>(null);
+  const [addressesLoading, setAddressesLoading] = useState(false);
+  const [countries, setCountries] = useState<CountryModel[]>([]);
+  const [states, setStates] = useState<StateProvinceModel[]>([]);
+
+  useEffect(() => {
+    if (status === 'authenticated' && session?.user?.accessToken) {
+      setAddressesLoading(true);
+      const service = new ProfileService(session.user.accessToken);
+      service.getUserAddresses().then((res) => {
+        if (res.succeeded && res.data) setAddresses(res.data);
+      }).finally(() => setAddressesLoading(false));
+    }
+  }, [status, session]);
+
+  useEffect(() => {
+    if (addressDialogOpen && session?.user?.accessToken) {
+      const service = new ProfileService(session.user.accessToken);
+      service.getCountriesForSelect().then((res) => {
+        if (res.succeeded && res.data) setCountries(res.data);
+      });
+    }
+  }, [addressDialogOpen, session]);
+
+  useEffect(() => {
+    if (addrForm?.countryId && session?.user?.accessToken) {
+      const service = new ProfileService(session.user.accessToken);
+      service.getStateProvincesForSelect(addrForm.countryId).then((res) => {
+        if (res.succeeded && res.data) setStates(res.data);
+      });
+    } else {
+      setStates([]);
+    }
+  }, [addrForm?.countryId, session]);
 
   // Stores
   const wishlistItems = useWishlistStore((s) => s.items);
-  const wishlistCount = useWishlistStore((s) => s.totalCount());
+  const wishlistCount = wishlistItems.length;
   const addToCart = useCartStore((s) => s.addItem);
   const removeWishlistItem = useWishlistStore((s) => s.removeItem);
-  const isCompareOpen = useCompareStore((s) => s.isCompareOpen);
-  const setCompareOpen = useCompareStore((s) => s.setCompareOpen);
 
   // Activity messages use translations with params
   const activities: ActivityItem[] = INITIAL_ACTIVITIES.map((a, i) => {
@@ -262,20 +274,13 @@ function ProfilePageContent() {
   // ─── Handlers ─────────────────────────────────────────────────
   const handleSaveProfile = () => {
     if (!editName.trim()) return;
-    setUserName(editName);
-    setUserEmail(editEmail);
-    setUserPhone(editPhone);
     setIsEditingProfile(false);
-    try {
-      localStorage.setItem('hydrashop-user', JSON.stringify({ name: editName, email: editEmail, phone: editPhone }));
-    } catch {}
     toast.success(t('homepage.profile.profileUpdated'));
   };
 
   const handleCancelEdit = () => {
     setEditName(userName);
     setEditEmail(userEmail);
-    setEditPhone(userPhone);
     setIsEditingProfile(false);
   };
 
@@ -293,61 +298,67 @@ function ProfilePageContent() {
 
   const openAddAddress = () => {
     setEditingAddress(null);
-    setAddrForm({ name: '', line1: '', line2: '', city: '', state: '', zip: '', country: '' });
+    setAddrForm({ id: 0, userId: 0, title: '', address1: '', city: '', stateProvinceName: '', stateProvinceId: 0, zipPostalCode: '', countryName: '', countryId: 0, county: '', phoneNumber: '', geoLocation: '', isDefault: false, createdOnUtc: new Date(), orders: 0 });
     setAddressDialogOpen(true);
   };
 
-  const openEditAddress = (addr: MockAddress) => {
+  const openEditAddress = (addr: AddressModel) => {
     setEditingAddress(addr);
-    setAddrForm({ name: addr.name, line1: addr.line1, line2: addr.line2 || '', city: addr.city, state: addr.state, zip: addr.zip, country: addr.country });
+    setAddrForm({ ...addr });
     setAddressDialogOpen(true);
   };
 
-  const handleSaveAddress = () => {
-    if (!addrForm.name || !addrForm.line1 || !addrForm.city || !addrForm.state || !addrForm.zip || !addrForm.country) return;
-    if (editingAddress) {
-      setAddresses((prev) =>
-        prev.map((a) =>
-          a.id === editingAddress.id
-            ? { ...a, ...addrForm, line2: addrForm.line2 || undefined }
-            : a
-        )
-      );
-    } else {
-      const newAddr: MockAddress = {
-        id: `a-${Date.now()}`,
-        name: addrForm.name,
-        line1: addrForm.line1,
-        line2: addrForm.line2 || undefined,
-        city: addrForm.city,
-        state: addrForm.state,
-        zip: addrForm.zip,
-        country: addrForm.country,
-        isDefault: addresses.length === 0,
-      };
-      setAddresses((prev) => [...prev, newAddr]);
+  const handleSaveAddress = async () => {
+    if (!addrForm?.title || !addrForm?.address1 || !addrForm?.city || !addrForm?.stateProvinceName || !addrForm?.zipPostalCode || !addrForm?.countryName) return;
+    if (!session?.user?.accessToken) return;
+    const service = new ProfileService(session.user.accessToken);
+    const payload: AddressModel = {
+      ...addrForm,
+      id: editingAddress?.id ?? 0,
+      userId: 0,
+    };
+    const res = editingAddress
+      ? await service.updateAddress(payload)
+      : await service.addAddress(payload);
+    if (res.succeeded && res.data) {
+      setAddresses((prev) => {
+        if (editingAddress) {
+          return prev.map((a) => a.id === editingAddress.id ? res.data! : a);
+        }
+        return [...prev, res.data!];
+      });
+      setAddressDialogOpen(false);
+      toast.success(editingAddress ? t('homepage.common.save') : t('homepage.profile.addressAdded'));
     }
-    setAddressDialogOpen(false);
-    toast.success(editingAddress ? t('homepage.common.save') : t('homepage.profile.addressAdded'));
   };
 
-  const handleDeleteAddress = (id: string) => {
-    setAddresses((prev) => prev.filter((a) => a.id !== id));
-    toast.success(t('homepage.common.delete'));
+  const handleDeleteAddress = async (id: number) => {
+    if (!session?.user?.accessToken) return;
+    const service = new ProfileService(session.user.accessToken);
+    const res = await service.deleteAddress(id);
+    if (res.succeeded) {
+      setAddresses((prev) => prev.filter((a) => a.id !== id));
+      toast.success(t('homepage.common.delete'));
+    }
   };
 
-  const handleSetDefault = (id: string) => {
-    setAddresses((prev) => prev.map((a) => ({ ...a, isDefault: a.id === id })));
+  const handleSetDefault = async (id: number) => {
+    if (!session?.user?.accessToken) return;
+    const service = new ProfileService(session.user.accessToken);
+    const res = await service.setAsDefaultAddress(id);
+    if (res.succeeded) {
+      toast.success(t('homepage.profile.defaultBadge'));
+    }
   };
 
   const handleWishlistAddToCart = (item: typeof wishlistItems[0]) => {
     addToCart({
       id: item.id,
       name: item.name,
-      variant: { id: 0, sku: '', productId: item.id, sellPrice: item.price, oldSellPrice: item.comparePrice ?? 0, productInventory: { id: 0, variantId: 0, stockQuantity: 99, reservedQuantity: 0 }, productAttributes: [] },
+      variant: item.variant,
       image: item.image,
-      categories: item.categories
-    } as any);
+      categories: item.categories,
+    });
     toast.success(t('homepage.common.addToCart'));
   };
 
@@ -361,6 +372,7 @@ function ProfilePageContent() {
 
   return (
     <div className="min-h-screen flex flex-col pb-16 lg:pb-0">
+      <Header />
       {/* Header */}
       <header className="sticky top-0 z-40 bg-white/80 dark:bg-ecommerce-surface/80 backdrop-blur-xl border-b border-ecommerce-border">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-14 flex items-center justify-between">
@@ -372,7 +384,7 @@ function ProfilePageContent() {
           </div>
           <div className="hidden md:flex items-center gap-2">
             <Button variant="ghost" size="sm" className="text-ecommerce-text-secondary hover:text-ecommerce-red" onClick={() => toast.info('Coming soon!')}>
-              <LogOut className="w-4 h-4" />
+              <LogOut className="w-4 h-4" onClick={() => signOut()} />
               <span className="ms-2">{t('homepage.profile.logout')}</span>
             </Button>
           </div>
@@ -390,11 +402,10 @@ function ProfilePageContent() {
                 <button
                   key={item.id}
                   onClick={() => setActiveTab(item.id)}
-                  className={`flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-medium transition-all duration-200 whitespace-nowrap ${
-                    isActive
-                      ? 'bg-white dark:bg-ecommerce-surface-hover text-ecommerce-red shadow-sm'
-                      : 'text-ecommerce-text-secondary hover:text-ecommerce-text-primary'
-                  }`}
+                  className={`flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-medium transition-all duration-200 whitespace-nowrap ${isActive
+                    ? 'bg-white dark:bg-ecommerce-surface-hover text-ecommerce-red shadow-sm'
+                    : 'text-ecommerce-text-secondary hover:text-ecommerce-text-primary'
+                    }`}
                 >
                   <Icon className="w-3.5 h-3.5" />
                   {t(item.labelKey)}
@@ -413,15 +424,13 @@ function ProfilePageContent() {
                 <div className="h-20 bg-gradient-to-r from-ecommerce-red to-ecommerce-rose" />
                 <div className="px-5 pb-5 -mt-8">
                   <Avatar className="w-16 h-16 border-4 border-ecommerce-surface shadow-lg">
+                    {userAvatar && <AvatarImage src={userAvatar} alt={userName} />}
                     <AvatarFallback className="bg-ecommerce-red/10 text-ecommerce-red font-bold text-lg">
-                      {userName.split('homepage. ').map((n : any) => n[0]).join('').slice(0, 2).toUpperCase()}
+                      {userName.split(' ').map((n: any) => n[0]).join('').slice(0, 2).toUpperCase()}
                     </AvatarFallback>
                   </Avatar>
                   <h3 className="mt-3 font-bold text-ecommerce-text-primary">{userName}</h3>
                   <p className="text-sm text-ecommerce-text-muted mt-0.5">{userEmail}</p>
-                  <p className="text-xs text-ecommerce-text-muted mt-1">
-                    {t('homepage.profile.memberSince')}: {memberSince}
-                  </p>
                 </div>
               </Card>
 
@@ -435,11 +444,10 @@ function ProfilePageContent() {
                       <button
                         key={item.id}
                         onClick={() => setActiveTab(item.id)}
-                        className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-200 ${
-                          isActive
-                            ? 'bg-ecommerce-red/10 text-ecommerce-red'
-                            : 'text-ecommerce-text-secondary hover:bg-ecommerce-surface-hover hover:text-ecommerce-text-primary'
-                        }`}
+                        className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-200 ${isActive
+                          ? 'bg-ecommerce-red/10 text-ecommerce-red'
+                          : 'text-ecommerce-text-secondary hover:bg-ecommerce-surface-hover hover:text-ecommerce-text-primary'
+                          }`}
                       >
                         <Icon className="w-4.5 h-4.5" />
                         {t(item.labelKey)}
@@ -473,7 +481,7 @@ function ProfilePageContent() {
                     t={t}
                     userName={userName}
                     userEmail={userEmail}
-                    memberSince={memberSince}
+                    userAvatar={userAvatar}
                     stats={stats}
                     activities={activities}
                     setActiveTab={setActiveTab}
@@ -510,6 +518,9 @@ function ProfilePageContent() {
                     addrForm={addrForm}
                     setAddrForm={setAddrForm}
                     onSave={handleSaveAddress}
+                    loading={addressesLoading}
+                    countries={countries}
+                    states={states}
                   />
                 </motion.div>
               )}
@@ -520,10 +531,8 @@ function ProfilePageContent() {
                     isEditing={isEditingProfile}
                     editName={editName}
                     editEmail={editEmail}
-                    editPhone={editPhone}
                     setEditName={setEditName}
                     setEditEmail={setEditEmail}
-                    setEditPhone={setEditPhone}
                     onEdit={() => setIsEditingProfile(true)}
                     onSave={handleSaveProfile}
                     onCancel={handleCancelEdit}
@@ -551,7 +560,7 @@ function ProfilePageContent() {
       <MobileBottomNav />
       <FlyToCart />
       <CompareBar />
-      <CompareDrawer open={isCompareOpen} onClose={() => setCompareOpen(false)} />
+      <CompareDrawer />
     </div>
   );
 }
@@ -561,7 +570,7 @@ function DashboardTab({
   t,
   userName,
   userEmail,
-  memberSince,
+  userAvatar,
   stats,
   activities,
   setActiveTab,
@@ -569,7 +578,7 @@ function DashboardTab({
   t: ReturnType<typeof useTranslations>;
   userName: string;
   userEmail: string;
-  memberSince: string;
+  userAvatar: string;
   stats: { icon: typeof Package; label: string; value: string; color: string; bg: string }[];
   activities: ActivityItem[];
   setActiveTab: (tab: TabId) => void;
@@ -579,11 +588,8 @@ function DashboardTab({
       {/* Welcome */}
       <motion.div variants={staggerItem} initial="initial" animate="animate">
         <h2 className="text-2xl font-bold text-ecommerce-text-primary">
-          {t('homepage.profile.welcomeBack', { name: userName.split('homepage. ')[0] })}
+          {t('homepage.profile.welcomeBack', { name: userName.split(' ')[0] })}
         </h2>
-        <p className="text-sm text-ecommerce-text-muted mt-1">
-          {t('homepage.profile.memberSince')}: {memberSince}
-        </p>
       </motion.div>
 
       {/* Stats Grid */}
@@ -611,8 +617,9 @@ function DashboardTab({
         <Card className="bg-ecommerce-surface border-ecommerce-border">
           <CardContent className="p-4 flex items-center gap-4">
             <Avatar className="w-14 h-14">
+              {userAvatar && <AvatarImage src={userAvatar} alt={userName} />}
               <AvatarFallback className="bg-ecommerce-red/10 text-ecommerce-red font-bold">
-                {userName.split('homepage. ').map((n) => n[0]).join('').slice(0, 2).toUpperCase()}
+                {userName.split(' ').map((n) => n[0]).join('').slice(0, 2).toUpperCase()}
               </AvatarFallback>
             </Avatar>
             <div className="flex-1 min-w-0">
@@ -768,12 +775,18 @@ function WishlistTab({
   items,
   onAddToCart,
   onRemove,
-}: {
+}: Readonly<{
   t: ReturnType<typeof useTranslations>;
-  items: { id: string; name: string; price: number; comparePrice?: number; image: string; category: string }[];
+  items: {
+    id: number;
+    name: string;
+    variant: ProductVariantDisplayModel;
+    image?: FileUploadModel;
+    categories: CategoryDisplayModel[]
+  }[];
   onAddToCart: (item: typeof items[0]) => void;
-  onRemove: (id: string) => void;
-}) {
+  onRemove: (variantId: number) => void;
+}>) {
   if (items.length === 0) {
     return (
       <div className="space-y-4">
@@ -803,21 +816,62 @@ function WishlistTab({
         {items.map((item, i) => (
           <motion.div key={item.id} variants={staggerItem} className="group relative">
             <ProductCard
-              id={item.id}
-              name={item.name}
-              price={item.price}
-              comparePrice={item.comparePrice}
-              image={item.image}
-              rating={4.5}
-              reviewCount={12}
-              category={{ name: item.category, color: '#E63946' }}
+              product={{
+                id: item.id,
+                name: item.name,
+                sku: item.variant.sku,
+                createUserId: 0,
+                imagePreviewId: item.image?.id ?? null,
+                imagePreview: item.image,
+                metaKeywords: '',
+                metaTitle: '',
+                metaDescription: '',
+                shortDescription: '',
+                fullDescription: '',
+                deliveryDateType: 0 as any,
+                deliveryDateName: '',
+                taxCategoryId: null,
+                taxCategoryName: '',
+                allowedQuantities: false,
+                orderMinimumQuantity: 1,
+                orderMaximumQuantity: 999,
+                currencyType: 0 as any,
+                approvedRatingSum: 45,
+                notApprovedRatingSum: 0,
+                approvedTotalReviews: 10,
+                notApprovedTotalReviews: 0,
+                hasDiscountsApplied: item.variant.oldSellPrice > 0,
+                markAsNew: false,
+                notReturnable: false,
+                isTaxExempt: false,
+                showOnHomepage: false,
+                isFreeShipping: false,
+                allowCustomerReviews: true,
+                disableBuyButton: false,
+                disableWishlistButton: false,
+                availableForPreOrder: false,
+                callForPrice: false,
+                createdOnUtc: new Date(),
+                updatedOnUtc: null,
+                measureType: 0 as any,
+                displayStockQuantity: false,
+                stockQuantity: item.variant.productInventory.stockQuantity,
+                minStockQuantity: 0,
+                categories: item.categories,
+                manufacturerNames: [],
+                attributes: [],
+                imagePaths: [],
+                variants: [item.variant],
+                reviewIds: [],
+                relatedProductIds: [],
+                productTags: [],
+              } as any}
               index={i}
             />
-            {/* Remove button overlay */}
             <button
               onClick={(e) => {
                 e.preventDefault();
-                onRemove(item.id);
+                onRemove(item.variant.id);
                 toast.success(t('homepage.common.removeFromWishlist'));
               }}
               className="absolute top-2.5 end-2.5 z-20 w-8 h-8 rounded-full bg-white dark:bg-ecommerce-surface shadow-lg flex items-center justify-center text-ecommerce-text-secondary hover:text-ecommerce-red hover:scale-110 transition-all opacity-0 group-hover:opacity-100"
@@ -846,20 +900,26 @@ function AddressesTab({
   addrForm,
   setAddrForm,
   onSave,
-}: {
+  loading,
+  countries,
+  states,
+}: Readonly<{
   t: ReturnType<typeof useTranslations>;
-  addresses: MockAddress[];
+  addresses: AddressModel[];
   onAdd: () => void;
-  onEdit: (addr: MockAddress) => void;
-  onDelete: (id: string) => void;
-  onSetDefault: (id: string) => void;
+  onEdit: (addr: AddressModel) => void;
+  onDelete: (id: number) => void;
+  onSetDefault: (id: number) => void;
   dialogOpen: boolean;
   setDialogOpen: (open: boolean) => void;
-  editingAddress: MockAddress | null;
-  addrForm: { name: string; line1: string; line2: string; city: string; state: string; zip: string; country: string };
-  setAddrForm: (form: { name: string; line1: string; line2: string; city: string; state: string; zip: string; country: string }) => void;
+  editingAddress: AddressModel | null;
+  addrForm: AddressModel | null;
+  setAddrForm: (form: AddressModel) => void;
   onSave: () => void;
-}) {
+  loading?: boolean;
+  countries: CountryModel[];
+  states: StateProvinceModel[];
+}>) {
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between">
@@ -870,7 +930,13 @@ function AddressesTab({
         </Button>
       </div>
 
-      {addresses.length === 0 ? (
+      {loading ? (
+        <Card className="bg-ecommerce-surface border-ecommerce-border">
+          <CardContent className="py-12 flex items-center justify-center">
+            <Loader2 className="w-6 h-6 text-ecommerce-red animate-spin" />
+          </CardContent>
+        </Card>
+      ) : addresses.length === 0 ? (
         <Card className="bg-ecommerce-surface border-ecommerce-border">
           <CardContent className="py-12 flex flex-col items-center text-center">
             <div className="w-16 h-16 rounded-full bg-ecommerce-surface-hover flex items-center justify-center mb-4">
@@ -893,7 +959,7 @@ function AddressesTab({
                   <div className="flex items-start justify-between gap-2">
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2">
-                        <h3 className="font-semibold text-ecommerce-text-primary truncate">{addr.name}</h3>
+                        <h3 className="font-semibold text-ecommerce-text-primary truncate">{addr.title}</h3>
                         {addr.isDefault && (
                           <Badge className="bg-ecommerce-emerald/10 text-ecommerce-emerald border-0 text-[10px] font-semibold px-1.5 py-0">
                             {t('homepage.profile.defaultBadge')}
@@ -904,12 +970,11 @@ function AddressesTab({
                   </div>
 
                   <div className="mt-3 flex-1 text-sm text-ecommerce-text-secondary space-y-1">
-                    <p>{addr.line1}</p>
-                    {addr.line2 && <p>{addr.line2}</p>}
+                    <p>{addr.address1}</p>
                     <p>
-                      {addr.city}, {addr.state} {addr.zip}
+                      {addr.city}, {addr.stateProvinceName} {addr.zipPostalCode}
                     </p>
-                    <p>{addr.country}</p>
+                    <p>{addr.countryName}</p>
                   </div>
 
                   <div className="flex items-center gap-2 mt-4 pt-3 border-t border-ecommerce-border">
@@ -945,40 +1010,61 @@ function AddressesTab({
               {editingAddress ? t('homepage.profile.editAddress') : t('homepage.profile.addNewAddress')}
             </DialogDescription>
           </DialogHeader>
-          <div className="space-y-4 py-2">
-            <div className="space-y-2">
-              <Label className="text-ecommerce-text-primary text-sm">{t('homepage.profile.addressName')}</Label>
-              <Input value={addrForm.name} onChange={(e) => setAddrForm({ ...addrForm, name: e.target.value })} placeholder="Home, Office, etc." className="bg-ecommerce-surface-hover border-ecommerce-border text-ecommerce-text-primary" />
-            </div>
-            <div className="space-y-2">
-              <Label className="text-ecommerce-text-primary text-sm">{t('homepage.profile.addressLine1')}</Label>
-              <Input value={addrForm.line1} onChange={(e) => setAddrForm({ ...addrForm, line1: e.target.value })} className="bg-ecommerce-surface-hover border-ecommerce-border text-ecommerce-text-primary" />
-            </div>
-            <div className="space-y-2">
-              <Label className="text-ecommerce-text-primary text-sm">{t('homepage.profile.addressLine2')}</Label>
-              <Input value={addrForm.line2} onChange={(e) => setAddrForm({ ...addrForm, line2: e.target.value })} className="bg-ecommerce-surface-hover border-ecommerce-border text-ecommerce-text-primary" />
-            </div>
-            <div className="grid grid-cols-2 gap-3">
+          {addrForm && (
+            <div className="space-y-4 py-2">
+              <div className="space-y-2">
+                <Label className="text-ecommerce-text-primary text-sm">{t('homepage.profile.addressName')}</Label>
+                <Input value={addrForm?.title ?? ''} onChange={(e) => setAddrForm({ ...addrForm, title: e.target.value })} placeholder="Home, Office, etc." className="bg-ecommerce-surface-hover border-ecommerce-border text-ecommerce-text-primary" />
+              </div>
+              <div className="space-y-2">
+                <Label className="text-ecommerce-text-primary text-sm">{t('homepage.profile.country')}</Label>
+                <Select value={addrForm.countryId ? String(addrForm.countryId) : ''} onValueChange={(val) => {
+                  const country = countries.find((c) => c.id === Number(val));
+                  setAddrForm({ ...addrForm, countryId: Number(val), countryName: country?.name ?? '', stateProvinceId: 0, stateProvinceName: '' });
+                }}>
+                  <SelectTrigger className="bg-ecommerce-surface-hover border-ecommerce-border text-ecommerce-text-primary">
+                    <SelectValue placeholder={t('homepage.profile.country')} />
+                  </SelectTrigger>
+                  <SelectContent className="bg-ecommerce-surface border-ecommerce-border">
+                    {countries.map((c) => (
+                      <SelectItem key={c.id} value={String(c.id)} className="text-ecommerce-text-primary">{c.name}</SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+              <div className="space-y-2">
+                <Label className="text-ecommerce-text-primary text-sm">{t('homepage.profile.state')}</Label>
+                <Select value={addrForm.stateProvinceId ? String(addrForm.stateProvinceId) : ''} onValueChange={(val) => {
+                  const state = states.find((s) => s.id === Number(val));
+                  setAddrForm({ ...addrForm, stateProvinceId: Number(val), stateProvinceName: state?.name ?? '' });
+                }} disabled={!addrForm.countryId}>
+                  <SelectTrigger className="bg-ecommerce-surface-hover border-ecommerce-border text-ecommerce-text-primary">
+                    <SelectValue placeholder={t('homepage.profile.state')} />
+                  </SelectTrigger>
+                  <SelectContent className="bg-ecommerce-surface border-ecommerce-border">
+                    {states.map((s) => (
+                      <SelectItem key={s.id} value={String(s.id)} className="text-ecommerce-text-primary">{s.name}</SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
               <div className="space-y-2">
                 <Label className="text-ecommerce-text-primary text-sm">{t('homepage.profile.city')}</Label>
                 <Input value={addrForm.city} onChange={(e) => setAddrForm({ ...addrForm, city: e.target.value })} className="bg-ecommerce-surface-hover border-ecommerce-border text-ecommerce-text-primary" />
               </div>
+              <div className="grid grid-cols-2 gap-3">
+
+                <div className="space-y-2">
+                  <Label className="text-ecommerce-text-primary text-sm">{t('homepage.profile.zipCode')}</Label>
+                  <Input value={addrForm.zipPostalCode} onChange={(e) => setAddrForm({ ...addrForm, zipPostalCode: e.target.value })} className="bg-ecommerce-surface-hover border-ecommerce-border text-ecommerce-text-primary" />
+                </div>
+              </div>
               <div className="space-y-2">
-                <Label className="text-ecommerce-text-primary text-sm">{t('homepage.profile.state')}</Label>
-                <Input value={addrForm.state} onChange={(e) => setAddrForm({ ...addrForm, state: e.target.value })} className="bg-ecommerce-surface-hover border-ecommerce-border text-ecommerce-text-primary" />
+                <Label className="text-ecommerce-text-primary text-sm">{t('homepage.profile.addressLine1')}</Label>
+                <Input value={addrForm?.address1} onChange={(e) => setAddrForm({ ...addrForm, address1: e.target.value })} className="bg-ecommerce-surface-hover border-ecommerce-border text-ecommerce-text-primary" />
               </div>
             </div>
-            <div className="grid grid-cols-2 gap-3">
-              <div className="space-y-2">
-                <Label className="text-ecommerce-text-primary text-sm">{t('homepage.profile.zipCode')}</Label>
-                <Input value={addrForm.zip} onChange={(e) => setAddrForm({ ...addrForm, zip: e.target.value })} className="bg-ecommerce-surface-hover border-ecommerce-border text-ecommerce-text-primary" />
-              </div>
-              <div className="space-y-2">
-                <Label className="text-ecommerce-text-primary text-sm">{t('homepage.profile.country')}</Label>
-                <Input value={addrForm.country} onChange={(e) => setAddrForm({ ...addrForm, country: e.target.value })} className="bg-ecommerce-surface-hover border-ecommerce-border text-ecommerce-text-primary" />
-              </div>
-            </div>
-          </div>
+          )}
           <DialogFooter>
             <Button variant="outline" onClick={() => setDialogOpen(false)} className="border-ecommerce-border text-ecommerce-text-secondary">
               {t('homepage.common.cancel')}
@@ -999,10 +1085,8 @@ function SettingsTab({
   isEditing,
   editName,
   editEmail,
-  editPhone,
   setEditName,
   setEditEmail,
-  setEditPhone,
   onEdit,
   onSave,
   onCancel,
@@ -1020,10 +1104,8 @@ function SettingsTab({
   isEditing: boolean;
   editName: string;
   editEmail: string;
-  editPhone: string;
   setEditName: (v: string) => void;
   setEditEmail: (v: string) => void;
-  setEditPhone: (v: string) => void;
   onEdit: () => void;
   onSave: () => void;
   onCancel: () => void;
@@ -1067,10 +1149,6 @@ function SettingsTab({
                   <Input type="email" value={editEmail} onChange={(e) => setEditEmail(e.target.value)} className="bg-ecommerce-surface-hover border-ecommerce-border text-ecommerce-text-primary" />
                 </div>
               </div>
-              <div className="space-y-2 max-w-sm">
-                <Label className="text-sm text-ecommerce-text-primary">{t('homepage.profile.phone')}</Label>
-                <Input value={editPhone} onChange={(e) => setEditPhone(e.target.value)} className="bg-ecommerce-surface-hover border-ecommerce-border text-ecommerce-text-primary" />
-              </div>
               <div className="flex gap-2">
                 <Button size="sm" className="bg-ecommerce-red hover:bg-ecommerce-red/90 text-white" onClick={onSave}>
                   <Check className="w-3.5 h-3.5 me-1.5" />
@@ -1090,10 +1168,6 @@ function SettingsTab({
               <div>
                 <p className="text-xs text-ecommerce-text-muted mb-1">{t('homepage.profile.email')}</p>
                 <p className="text-sm font-medium text-ecommerce-text-primary">{editEmail}</p>
-              </div>
-              <div>
-                <p className="text-xs text-ecommerce-text-muted mb-1">{t('homepage.profile.phone')}</p>
-                <p className="text-sm font-medium text-ecommerce-text-primary">{editPhone}</p>
               </div>
             </div>
           )}
@@ -1222,6 +1296,6 @@ function SettingsTab({
 // ─── Page Export ──────────────────────────────────────────────────
 export default function ProfilePage() {
   return (
-      <ProfilePageContent />
+    <ProfilePageContent />
   );
 }

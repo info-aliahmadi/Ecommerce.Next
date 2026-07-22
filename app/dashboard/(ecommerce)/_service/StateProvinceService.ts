@@ -13,8 +13,9 @@ export default class StateProvinceService {
   getStateProvinceList = async (searchParams: GridDataBound): Promise<Result<PaginatedList<StateProvinceModel>>> => {
     return Fetch.Post<Result<PaginatedList<StateProvinceModel>>>(CONFIG.API_BASEPATH + '/Common/GetStateProvinceList', searchParams, this.config);
   };
-  getStateProvinceListForSelect = async (): Promise<Result<StateProvinceModel[]>> => {
-    return Fetch.Get<Result<StateProvinceModel[]>>(CONFIG.API_BASEPATH + `/Common/GetStateProvinceListForSelect`, this.config);
+  getStateProvinceListForSelect = async (countryId : number): Promise<Result<StateProvinceModel[]>> => {
+    const params = new URLSearchParams({ countryId: countryId.toString() });
+    return Fetch.Get<Result<StateProvinceModel[]>>(CONFIG.API_BASEPATH + `/Common/GetStateProvincesForSelect?${params.toString()}`, this.config);
   };
   getStateProvinceById = async (stateProvinceId : number): Promise<Result<StateProvinceModel>> => {
     const params = new URLSearchParams({ stateProvinceId: stateProvinceId.toString() });

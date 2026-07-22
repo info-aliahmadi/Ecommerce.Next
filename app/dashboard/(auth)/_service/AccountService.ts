@@ -3,6 +3,7 @@ import { UserModel } from '../_types/User/UserModel';
 
 import Fetch from '@root/utils/Fetch';
 import Result from '@root/app/types/Result';
+import AddPassword from '../_types/User/AddPassword';
 
 export default class AccountService {
   config?: RequestInit;
@@ -24,7 +25,14 @@ export default class AccountService {
   changePassword = async (password: ChangePassword) => {
     return Fetch.Post<Result<UserModel>>(CONFIG.API_BASEPATH + '/auth/changePassword', password, this.config);
   }
-
+  /* check whether user has password or not */
+  hasPassword = async () : Promise<Result<boolean>> => {
+    return Fetch.Post<Result<boolean>>(CONFIG.API_BASEPATH + '/auth/HasPassword', this.config);
+  }
+  /* for users doesn't have password and just login by phone-number*/
+  addPassword = async (addPassword: AddPassword) => {
+    return Fetch.Post<Result<UserModel>>(CONFIG.API_BASEPATH + '/auth/AddPassword', addPassword, this.config);
+  }
   setDefaultTheme = async (defaultTheme: 'light' | 'dark') => {
     const params = new URLSearchParams({ defaultTheme: defaultTheme });
     return Fetch.Get<UserModel>(CONFIG.API_BASEPATH + `/auth/SetDefaultTheme?${params.toString()}`, this.config);

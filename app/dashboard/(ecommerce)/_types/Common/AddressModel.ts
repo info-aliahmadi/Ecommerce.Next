@@ -16,11 +16,20 @@ export default interface AddressModel {
      * Identifier of the country for this address.
      */
     countryId: number;
+
+    /**
+     * Identifier of the country for this address.
+     */
+    countryName: string;
   
     /**
      * Identifier of the state or province for this address.
      */
     stateProvinceId: number;
+    /**
+     * Identifier of the state or province for this address.
+     */
+    stateProvinceName: string;
   
     /**
      * City name for this address.
@@ -35,12 +44,8 @@ export default interface AddressModel {
     /**
      * First name associated with this address.
      */
-    firstName: string;
+    title: string;
   
-    /**
-     * Last name associated with this address.
-     */
-    lastName: string;
   
     /**
      * Phone number associated with this address.
@@ -48,24 +53,9 @@ export default interface AddressModel {
     phoneNumber: string;
   
     /**
-     * Email address associated with this address.
-     */
-    email: string;
-  
-    /**
-     * Company name associated with this address.
-     */
-    company: string;
-  
-    /**
      * First line of the address.
      */
     address1: string;
-  
-    /**
-     * Second line of the address (optional).
-     */
-    address2: string;
   
     /**
      * Zip or postal code for this address.
@@ -73,10 +63,15 @@ export default interface AddressModel {
     zipPostalCode: string;
   
     /**
-     * Fax number associated with this address.
+     * Zip or postal code for this address.
      */
-    faxNumber: string;
-  
+    geoLocation: string;
+    
+    /**
+     * default address
+     */
+    isDefault: boolean;
+
     /**
      * Date and time when this address was created (UTC).
      */
