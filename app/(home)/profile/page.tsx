@@ -472,13 +472,6 @@ function ProfilePageContent() {
                     onEdit={() => setIsEditingProfile(true)}
                     onSave={handleSaveProfile}
                     onCancel={handleCancelEdit}
-                    currentPw={currentPw}
-                    newPw={newPw}
-                    confirmPw={confirmPw}
-                    setCurrentPw={setCurrentPw}
-                    setNewPw={setNewPw}
-                    setConfirmPw={setConfirmPw}
-                    onUpdatePassword={handleUpdatePassword}
                     notifs={notifs}
                     setNotifs={setNotifs}
                   />

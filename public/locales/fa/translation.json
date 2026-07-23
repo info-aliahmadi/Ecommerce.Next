@@ -817,7 +817,14 @@
       "fieldRequired": "این فیلد الزامی است",
       "addressNotSaved": "ذخیره آدرس ناموفق بود",
       "deleteAddress": "حذف آدرس",
-      "deleteAddressConfirm": "آیا مطمئن هستید که می‌خواهید این آدرس را حذف کنید؟ این عمل قابل بازگشت نیست."
+      "deleteAddressConfirm": "آیا مطمئن هستید که می‌خواهید این آدرس را حذف کنید؟ این عمل قابل بازگشت نیست.",
+      "addPassword": "افزودن رمز عبور",
+      "passwordMismatch": "رمزهای عبور مطابقت ندارند",
+      "passwordMinLength": "رمز عبور باید حداقل 6 کاراکتر باشد",
+      "noPasswordInfo": "شما بدون رمز عبور وارد شده‌اید. لطفاً یک رمز عبور برای حساب خود تنظیم کنید.",
+      "passwordAdded": "رمز عبور با موفقیت اضافه شد",
+      "passwordAddFailed": "افزودن رمز عبور ناموفق بود",
+      "passwordChangeFailed": "تغییر رمز عبور ناموفق بود"
     },
     "paymentPage": {
       "title": "تکمیل خرید",

@@ -814,7 +814,14 @@
       "fieldRequired": "هذا الحقل مطلوب",
       "addressNotSaved": "فشل في حفظ العنوان",
       "deleteAddress": "حذف العنوان",
-      "deleteAddressConfirm": "هل أنت متأكد أنك تريد حذف هذا العنوان؟ لا يمكن التراجع عن هذا الإجراء."
+      "deleteAddressConfirm": "هل أنت متأكد أنك تريد حذف هذا العنوان؟ لا يمكن التراجع عن هذا الإجراء.",
+      "addPassword": "إضافة كلمة المرور",
+      "passwordMismatch": "كلمتا المرور غير متطابقتين",
+      "passwordMinLength": "يجب أن تكون كلمة المرور 6 أحرف على الأقل",
+      "noPasswordInfo": "لقد سجلت الدخول بدون كلمة المرور. يرجى تعيين كلمة المرور لحسابك.",
+      "passwordAdded": "تمت إضافة كلمة المرور بنجاح",
+      "passwordAddFailed": "فشل في إضافة كلمة المرور",
+      "passwordChangeFailed": "فشل في تغيير كلمة المرور"
     },
     "paymentPage": {
       "homepage": {

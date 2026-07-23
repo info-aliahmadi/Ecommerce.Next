@@ -837,7 +837,14 @@
       "fieldRequired": "This field is required",
       "addressNotSaved": "Failed to save address",
       "deleteAddress": "Delete Address",
-      "deleteAddressConfirm": "Are you sure you want to delete this address? This action cannot be undone."
+      "deleteAddressConfirm": "Are you sure you want to delete this address? This action cannot be undone.",
+      "addPassword": "Add Password",
+      "passwordMismatch": "Passwords do not match",
+      "passwordMinLength": "Password must be at least 6 characters",
+      "noPasswordInfo": "You signed in without a password. Please set a password for your account.",
+      "passwordAdded": "Password added successfully",
+      "passwordAddFailed": "Failed to add password",
+      "passwordChangeFailed": "Failed to change password"
     },
     "paymentPage": {
       "title": "Checkout",
