@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback } from 'react';
+import { useCallback, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { signIn } from 'next-auth/react';
 import {
@@ -16,11 +16,14 @@ import {
 import { useAuthStore, useLocaleStore, RTL_LOCALES } from '@(home)/_lib/store';
 import { useTranslations } from 'next-intl';
 import { useRouter } from 'next/navigation';
+import { useSession } from 'next-auth/react';
 import LoginForm from './login-form';
 import ForgotPasswordPopup from './forgot-password-popup';
+import CONFIG from '@root/config';
 
 export default function LoginPopup() {
   const router = useRouter();
+  const { data: session, status } = useSession();
 
   const isLoginOpen = useAuthStore((s) => s.isLoginOpen);
   const setLoginOpen = useAuthStore((s) => s.setLoginOpen);
@@ -56,6 +59,21 @@ export default function LoginPopup() {
     setLoginOpen(false);
     setForgotPasswordOpen(true);
   }, [setLoginOpen, setForgotPasswordOpen]);
+
+  // Redirect based on role after login
+  useEffect(() => {
+    if (status === 'authenticated' && session?.user?.roles) {
+      const userRoles = session.user.roles;
+      debugger
+      const hasAdminRole = userRoles.some((role) => CONFIG.ADMIN_ROLES.includes(role));
+
+      if (hasAdminRole) {
+        router.push(CONFIG.DASHBOARD_PATH);
+      } else {
+        router.push('/profile');
+      }
+    }
+  }, [status, session, router]);
 
   return (
     <Dialog open={isLoginOpen} onOpenChange={handleClose}>

@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback } from 'react';
+import { useCallback, useEffect } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import Image from 'next/image';
@@ -12,6 +12,7 @@ import {
   Headphones,
   ArrowLeft,
 } from 'lucide-react';
+import { useSession } from 'next-auth/react';
 
 // project imports
 import CONFIG from '@root/config';
@@ -19,28 +20,43 @@ import LoginForm from '../_components/pages/login-form';
 import ForgotPasswordPopup from '../_components/pages/forgot-password-popup';
 import { useAuthStore } from '../_lib/store';
 
+
 // ============================|| LOGIN ||============================ //
 
 const Login = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const { data: session, status } = useSession();
   const t = useTranslations('homepage.auth.login');
 
   const callbackUrl = searchParams.get('callbackUrl') || '/';
   const setForgotPasswordOpen = useAuthStore((s) => s.setForgotPasswordOpen);
 
   const handleLoginSuccess = useCallback(() => {
-    if (callbackUrl !== '/') {
-      router.push(callbackUrl);
-    } else {
-      router.push(CONFIG.DASHBOARD_PATH);
-    }
-    router.refresh();
-  }, [callbackUrl, router]);
+    // Redirect will happen via useEffect based on session
+  }, []);
 
   const handleForgotPassword = useCallback(() => {
     setForgotPasswordOpen(true);
   }, [setForgotPasswordOpen]);
+
+  // Redirect based on role after login
+  useEffect(() => {
+    if (status === 'authenticated' && session?.user?.roles) {
+      const userRoles = session.user.roles;
+      debugger
+      const hasAdminRole = userRoles.some((role) => CONFIG.ADMIN_ROLES.includes(role));
+
+      if (callbackUrl !== '/') {
+        router.push(callbackUrl);
+      } else if (hasAdminRole) {
+        router.push(CONFIG.DASHBOARD_PATH);
+      } else {
+        router.push('/profile');
+      }
+      router.refresh();
+    }
+  }, [status, session, callbackUrl, router]);
 
   const containerVariants = {
     hidden: { opacity: 0 },

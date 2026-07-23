@@ -4,6 +4,8 @@ import AllRoutes from './app/dashboard/_lib/routes';
 import CONFIG from './config';
 import { NextRequest, NextResponse } from 'next/server';
 
+
+
 // const intlHomepageMiddleware = createIntlMiddleware({
 //   LOCALES,
 //   DEFAULT_LOCALE,
@@ -31,6 +33,15 @@ export default withAuth(
 
         if (req.nextUrl.pathname.startsWith('/dashboard')) {
           if (token) {
+            // Check if user has admin role
+            const userRoles = token.user?.roles || [];
+            const hasAdminRole = userRoles.some((role: string) => CONFIG.ADMIN_ROLES.includes(role));
+
+            if (!hasAdminRole) {
+              // Regular users cannot access dashboard
+              return false;
+            }
+
             const path = req.nextUrl.pathname;
             const jwt = token.accessToken;
 

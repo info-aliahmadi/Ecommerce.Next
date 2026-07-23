@@ -27,7 +27,7 @@ const CONFIG = {
   FRONT_PATH: process.env.NEXT_PUBLIC_FRONT_URL ,
   DASHBOARD_PATH: `${process.env.NEXT_PUBLIC_FRONT_URL}/dashboard/`,
   LOGIN_PATH:  `${process.env.NEXT_PUBLIC_FRONT_URL}/login`,
-
+  ADMIN_ROLES: ['ADMIN', 'SUPERADMIN'],
   AUTHENTICATION_DEFAULT_STORAGE: 'localStorage', //'cookie',
   AUTHENTICATION_STORAGE_NAME: 'HydraAuthenticationStorage',
   AUTHORIZATION_STORAGE_NAME: 'HydraAuthorizationStorage',
