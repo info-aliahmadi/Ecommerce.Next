@@ -47,6 +47,7 @@ import { OrdersTab } from './_components/orders-tab';
 import { WishlistTab } from './_components/wishlist-tab';
 import { AddressesTab } from './_components/addresses-tab';
 import { SettingsTab } from './_components/settings-tab';
+import CONFIG from '@root/config';
 
 const INITIAL_ACTIVITIES: ActivityItem[] = [
   { id: 'act1', type: 'order', message: '', time: '2 hours ago' },
@@ -75,11 +76,6 @@ function ProfilePageContent() {
 
   // Local state
   const [activeTab, setActiveTab] = useState<TabId>('dashboard');
-
-  // Profile editing
-  const [isEditingProfile, setIsEditingProfile] = useState(false);
-  const [editName, setEditName] = useState('');
-  const [editEmail, setEditEmail] = useState('');
 
   // Password
   const [currentPw, setCurrentPw] = useState('');
@@ -111,13 +107,6 @@ function ProfilePageContent() {
   const wishlistCount = wishlistItems.length;
   const addToCart = useCartStore((s) => s.addItem);
   const removeWishlistItem = useWishlistStore((s) => s.removeItem);
-
-  useEffect(() => {
-    if (status === 'authenticated' && session?.user) {
-      setEditName(session.user.name || 'User');
-      setEditEmail(session.user.email || '');
-    }
-  }, [status, session]);
 
   const fetchAddresses = async () => {
     if (!session?.user?.accessToken) return;
@@ -164,9 +153,9 @@ function ProfilePageContent() {
   }
 
   const user = session?.user;
-  const userName = editName || 'User';
-  const userEmail = editEmail || '';
-  const userAvatar = user?.avatar || '';
+  const userName = user?.name || 'User';
+  const userEmail = user?.email || '';
+  const userAvatar = CONFIG.AVATAR_BASEPATH + user?.avatar || '';
 
   // Activity messages use translations with params
   const activities: ActivityItem[] = INITIAL_ACTIVITIES.map((a, i) => {
@@ -180,18 +169,6 @@ function ProfilePageContent() {
   });
 
   // ─── Handlers ─────────────────────────────────────────────────
-  const handleSaveProfile = () => {
-    if (!editName.trim()) return;
-    setIsEditingProfile(false);
-    toast.success(t('homepage.profile.profileUpdated'));
-  };
-
-  const handleCancelEdit = () => {
-    setEditName(session?.user?.name || 'User');
-    setEditEmail(session?.user?.email || '');
-    setIsEditingProfile(false);
-  };
-
   const handleUpdatePassword = () => {
     if (!currentPw || !newPw || !confirmPw) return;
     if (newPw !== confirmPw) {
@@ -462,19 +439,7 @@ function ProfilePageContent() {
               )}
               {activeTab === 'settings' && (
                 <motion.div key="settings" variants={pageVariants} initial="initial" animate="animate" exit="exit">
-                  <SettingsTab
-                    t={t}
-                    isEditing={isEditingProfile}
-                    editName={editName}
-                    editEmail={editEmail}
-                    setEditName={setEditName}
-                    setEditEmail={setEditEmail}
-                    onEdit={() => setIsEditingProfile(true)}
-                    onSave={handleSaveProfile}
-                    onCancel={handleCancelEdit}
-                    notifs={notifs}
-                    setNotifs={setNotifs}
-                  />
+                  <SettingsTab t={t} />
                 </motion.div>
               )}
             </AnimatePresence>

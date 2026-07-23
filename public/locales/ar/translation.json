@@ -878,7 +878,12 @@
       "noPasswordInfo": "لقد سجلت الدخول بدون كلمة المرور. يرجى تعيين كلمة المرور لحسابك.",
       "passwordAdded": "تمت إضافة كلمة المرور بنجاح",
       "passwordAddFailed": "فشل في إضافة كلمة المرور",
-      "passwordChangeFailed": "فشل في تغيير كلمة المرور"
+      "passwordChangeFailed": "فشل في تغيير كلمة المرور",
+      "avatarInvalidType": "يرجى تحديد ملف صورة صالح (JPEG أو PNG أو WebP أو GIF)",
+      "avatarTooLarge": "الصورة كبيرة جداً ({size}MB). الحد الأقصى هو {max}MB",
+      "loadError": "فشل في تحميل بيانات الملف الشخصي",
+      "updateError": "فشل في تحديث الملف الشخصي",
+      "nameRequired": "الاسم مطلوب"
     },
     "paymentPage": {
       "homepage": {

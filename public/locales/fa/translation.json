@@ -905,7 +905,12 @@
       "noPasswordInfo": "شما بدون رمز عبور وارد شده‌اید. لطفاً یک رمز عبور برای حساب خود تنظیم کنید.",
       "passwordAdded": "رمز عبور با موفقیت اضافه شد",
       "passwordAddFailed": "افزودن رمز عبور ناموفق بود",
-      "passwordChangeFailed": "تغییر رمز عبور ناموفق بود"
+      "passwordChangeFailed": "تغییر رمز عبور ناموفق بود",
+      "avatarInvalidType": "لطفاً یک فایل تصویری معتبر انتخاب کنید (JPEG، PNG، WebP یا GIF)",
+      "avatarTooLarge": "تصویر بیش از حد بزرگ است ({size}MB). حداکثر اندازه {max}MB است",
+      "loadError": "بارگیری اطلاعات پروفایل ناموفق بود",
+      "updateError": "به‌روزرسانی پروفایل ناموفق بود",
+      "nameRequired": "نام الزامی است"
     },
     "paymentPage": {
       "title": "تکمیل خرید",

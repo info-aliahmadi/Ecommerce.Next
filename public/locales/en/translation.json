@@ -925,7 +925,12 @@
       "noPasswordInfo": "You signed in without a password. Please set a password for your account.",
       "passwordAdded": "Password added successfully",
       "passwordAddFailed": "Failed to add password",
-      "passwordChangeFailed": "Failed to change password"
+      "passwordChangeFailed": "Failed to change password",
+      "avatarInvalidType": "Please select a valid image file (JPEG, PNG, WebP, or GIF)",
+      "avatarTooLarge": "Image is too large ({size}MB). Maximum size is {max}MB",
+      "loadError": "Failed to load profile data",
+      "updateError": "Failed to update profile",
+      "nameRequired": "Name is required"
     },
     "paymentPage": {
       "title": "Checkout",
