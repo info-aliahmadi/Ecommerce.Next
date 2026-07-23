@@ -6,9 +6,9 @@ import CurrencyTypes from './enums/CurrencyTypes';
 declare module 'next-auth' {
   interface User {
     id: number;
-    email: string;
+    email?: string;
     name: string;
-    userName: string;
+    userName?: string;
     avatar: string;
     defaultLanguage: string;
     defaultTheme: 'light' | 'dark';

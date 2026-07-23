@@ -1,5 +1,5 @@
 
-interface ChangePassword {
+export default interface ChangePassword {
     oldPassword?: string;
     newPassword: string;
 }

@@ -3,6 +3,7 @@ import { UserModel } from '../_types/User/UserModel';
 
 import Fetch from '@root/utils/Fetch';
 import Result from '@root/app/types/Result';
+import ChangePassword from '../_types/User/ChangePassword';
 import AddPassword from '../_types/User/AddPassword';
 
 export default class AccountService {
@@ -27,7 +28,7 @@ export default class AccountService {
   }
   /* check whether user has password or not */
   hasPassword = async () : Promise<Result<boolean>> => {
-    return Fetch.Post<Result<boolean>>(CONFIG.API_BASEPATH + '/auth/HasPassword', this.config);
+    return Fetch.Get<Result<boolean>>(CONFIG.API_BASEPATH + '/auth/HasPassword', this.config);
   }
   /* for users doesn't have password and just login by phone-number*/
   addPassword = async (addPassword: AddPassword) => {
