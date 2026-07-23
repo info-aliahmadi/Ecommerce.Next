@@ -265,7 +265,7 @@ export default function LoginPopup() {
                       placeholder={t('emailPlaceholder')}
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
-                      className="pe-10 border-ecommerce-border bg-ecommerce-surface text-ecommerce-text-primary rounded-md"
+                      className="h-11 pe-10 border-ecommerce-border bg-ecommerce-surface text-ecommerce-text-primary rounded-md"
                       autoComplete="email"
                       disabled={isLoading}
                       dir="ltr"
@@ -294,7 +294,7 @@ export default function LoginPopup() {
                       placeholder={t('passwordPlaceholder')}
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
-                      className="pe-10 border-ecommerce-border bg-ecommerce-surface text-ecommerce-text-primary rounded-md"
+                      className="h-11 pe-10 border-ecommerce-border bg-ecommerce-surface text-ecommerce-text-primary rounded-md"
                       autoComplete="current-password"
                       disabled={isLoading}
                       dir="ltr"
@@ -365,7 +365,7 @@ export default function LoginPopup() {
                   </Label>
                   <div className="relative flex">
                     <span className="text-ecommerce-text-muted inline-flex items-center px-3 rounded-s-md border border-r-0 border-ecommerce-border bg-ecommerce-surface text-sm shrink-0">
-                      +1
+                      +98
                     </span>
                     <Input
                       id="popup-otp-phone"
@@ -376,10 +376,12 @@ export default function LoginPopup() {
                       onChange={(e) =>
                         setPhone(e.target.value.replace(/\D/g, '').slice(0, 15))
                       }
-                      className="rounded-s-none border-ecommerce-border bg-ecommerce-surface text-ecommerce-text-primary rounded-e-md"
+                      className="h-11 rounded-s-none border-ecommerce-border bg-ecommerce-surface text-ecommerce-text-primary rounded-e-md"
                       autoComplete="tel"
                       disabled={isLoading || otpSending || otpSent}
                       dir="ltr"
+                      minLength={10}
+                      maxLength={10}
                     />
                     <div className="absolute end-3 top-1/2 -translate-y-1/2 text-ecommerce-text-muted pointer-events-none">
                       <Phone className="w-4 h-4" />
@@ -409,9 +411,11 @@ export default function LoginPopup() {
                       onChange={(e) =>
                         setOtpCode(e.target.value.replace(/\D/g, '').slice(0, 6))
                       }
-                      className="border-ecommerce-border bg-ecommerce-surface text-ecommerce-text-primary rounded-md tracking-[0.3em] text-center text-lg"
+                      className="h-11 border-ecommerce-border bg-ecommerce-surface text-ecommerce-text-primary rounded-md tracking-[0.3em] text-center text-lg"
                       autoComplete="one-time-code"
                       disabled={isLoading}
+                      minLength={5}
+                      maxLength={5}
                       dir="ltr"
                       autoFocus
                     />
