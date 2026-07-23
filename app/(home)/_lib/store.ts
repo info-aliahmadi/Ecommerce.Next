@@ -299,6 +299,8 @@ interface AuthStore {
   setLoginOpen: (open: boolean) => void;
   isRegisterOpen: boolean;
   setRegisterOpen: (open: boolean) => void;
+  isForgotPasswordOpen: boolean;
+  setForgotPasswordOpen: (open: boolean) => void;
 }
 
 export const useAuthStore = create<AuthStore>((set) => ({
@@ -306,6 +308,8 @@ export const useAuthStore = create<AuthStore>((set) => ({
   setLoginOpen: (open) => set({ isLoginOpen: open }),
   isRegisterOpen: false,
   setRegisterOpen: (open) => set({ isRegisterOpen: open }),
+  isForgotPasswordOpen: false,
+  setForgotPasswordOpen: (open) => set({ isForgotPasswordOpen: open }),
 }));
 
 // ── Locale Store ──────────────────────────────────────────────

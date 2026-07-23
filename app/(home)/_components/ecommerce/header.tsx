@@ -347,13 +347,13 @@ export function Header() {
 
               {/* Account */}
               {session ? (
-                <Link href="/profile" className="hidden sm:flex p-2 rounded-lg hover:bg-ecommerce-surface-hover transition-colors duration-200" aria-label={t('homepage.header.account')}>
+                <Link href="/profile" className="flex p-2 rounded-lg hover:bg-ecommerce-surface-hover transition-colors duration-200" aria-label={t('homepage.header.account')}>
                   <User size={18} className="text-ecommerce-text-secondary" />
                 </Link>
               ) : (
                 <button
                   onClick={() => setLoginOpen(true)}
-                  className="hidden sm:flex p-2 rounded-lg hover:bg-ecommerce-surface-hover transition-colors duration-200"
+                  className="flex p-2 rounded-lg hover:bg-ecommerce-surface-hover transition-colors duration-200"
                   aria-label={t('homepage.header.account')}
                 >
                   <User size={18} className="text-ecommerce-text-secondary" />

@@ -1,12 +1,12 @@
 'use client';
 
 import { useCallback } from 'react';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
 import {
-  Lock,
+  UserPlus,
   ShieldCheck,
   Truck,
   Headphones,
@@ -14,33 +14,17 @@ import {
 } from 'lucide-react';
 
 // project imports
-import CONFIG from '@root/config';
-import LoginForm from '../_components/pages/login-form';
-import ForgotPasswordPopup from '../_components/pages/forgot-password-popup';
-import { useAuthStore } from '../_lib/store';
+import RegisterForm from '../_components/pages/register-form';
 
-// ============================|| LOGIN ||============================ //
+// ============================|| REGISTER ||============================ //
 
-const Login = () => {
+const Register = () => {
   const router = useRouter();
-  const searchParams = useSearchParams();
-  const t = useTranslations('homepage.auth.login');
+  const t = useTranslations('homepage.auth.register');
 
-  const callbackUrl = searchParams.get('callbackUrl') || '/';
-  const setForgotPasswordOpen = useAuthStore((s) => s.setForgotPasswordOpen);
-
-  const handleLoginSuccess = useCallback(() => {
-    if (callbackUrl !== '/') {
-      router.push(callbackUrl);
-    } else {
-      router.push(CONFIG.DASHBOARD_PATH);
-    }
-    router.refresh();
-  }, [callbackUrl, router]);
-
-  const handleForgotPassword = useCallback(() => {
-    setForgotPasswordOpen(true);
-  }, [setForgotPasswordOpen]);
+  const handleRegisterSuccess = useCallback(() => {
+    router.push('/login');
+  }, [router]);
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -121,7 +105,7 @@ const Login = () => {
         </p>
       </motion.div>
 
-      {/* ── Right side – Login form ── */}
+      {/* ── Right side – Register form ── */}
       <div className="flex-1 flex items-center justify-center px-6 py-12 sm:px-12">
         <motion.div
           initial="hidden"
@@ -136,50 +120,48 @@ const Login = () => {
               className="inline-flex items-center gap-2 text-sm text-ecommerce-text-muted hover:text-ecommerce-text-primary transition-colors group"
             >
               <ArrowLeft className="w-4 h-4 transition-transform group-hover:-translate-x-1" />
-              <span>{t('backToHome')}</span>
+              <span>{t('backToHome', { defaultValue: 'Back to home' })}</span>
             </a>
           </motion.div>
 
           {/* Header */}
           <motion.div variants={itemVariants} className="text-center mb-8">
             <div className="mx-auto flex items-center justify-center w-16 h-16 rounded-full bg-gradient-to-br from-purple-500 to-purple-700 mb-4 shadow-lg shadow-purple-500/25">
-              <Lock className="w-7 h-7 text-white" />
+              <UserPlus className="w-7 h-7 text-white" />
             </div>
             <h2 className="text-ecommerce-text-primary text-2xl font-bold mb-2">
-              {t('welcomeBack')}
+              {t('title')}
             </h2>
             <p className="text-ecommerce-text-muted text-sm">
               {t('subtitle')}
             </p>
           </motion.div>
 
-          {/* Shared Login Form */}
+          {/* Shared Register Form */}
           <motion.div variants={itemVariants}>
-            <LoginForm
-              onLoginSuccess={handleLoginSuccess}
-              onForgotPassword={handleForgotPassword}
+            <RegisterForm
+              onRegisterSuccess={handleRegisterSuccess}
               showInlineError
-              idPrefix="page-login"
+              idPrefix="page-register"
             />
           </motion.div>
 
-          {/* Register link */}
+          {/* Login link */}
           <motion.div variants={itemVariants} className="mt-6 text-center">
             <p className="text-sm text-ecommerce-text-muted">
-              {t('noAccount')}{' '}
+              {t('hasAccount')}{' '}
               <a
-                href="/register"
+                href="/login"
                 className="text-purple-600 font-semibold hover:text-purple-700 underline underline-offset-2 transition-colors"
               >
-                {t('registerLink')}
+                {t('loginLink')}
               </a>
             </p>
           </motion.div>
         </motion.div>
       </div>
-      <ForgotPasswordPopup />
     </div>
   );
 };
 
-export default Login;
+export default Register;

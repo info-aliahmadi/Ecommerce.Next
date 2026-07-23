@@ -3,6 +3,7 @@ import { User } from 'next-auth';
 
 import Fetch from '@root/utils/Fetch';
 import Result from '@root/app/types/Result';
+import ForgotPassword from '../_types/User/ForgotPassword';
 
 export default class AuthenticationService {
   config: RequestInit = {
@@ -33,4 +34,9 @@ export default class AuthenticationService {
 
     return Fetch.Post<Result<User>>(CONFIG.API_BASEPATH + '/Auth/Register', registerModel, this.config);
   };
+  
+  /* for users doesn't have password and just login by phone-number*/
+  forgotPassword = async (forgotPassword: ForgotPassword): Promise<Result<boolean>> => {
+    return Fetch.Post<Result<boolean>>(CONFIG.API_BASEPATH + '/auth/forgotPassword', forgotPassword, this.config);
+  }
 }

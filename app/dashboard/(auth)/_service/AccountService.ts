@@ -5,6 +5,7 @@ import Fetch from '@root/utils/Fetch';
 import Result from '@root/app/types/Result';
 import ChangePassword from '../_types/User/ChangePassword';
 import AddPassword from '../_types/User/AddPassword';
+import ForgotPassword from '../_types/User/ForgotPassword';
 
 export default class AccountService {
   config?: RequestInit;
