@@ -28,7 +28,7 @@ export default class AccountService {
     return Fetch.Post<Result<UserModel>>(CONFIG.API_BASEPATH + '/auth/changePassword', password, this.config);
   }
   /* check whether user has password or not */
-  hasPassword = async () : Promise<Result<boolean>> => {
+  hasPassword = async (): Promise<Result<boolean>> => {
     return Fetch.Get<Result<boolean>>(CONFIG.API_BASEPATH + '/auth/HasPassword', this.config);
   }
   /* for users doesn't have password and just login by phone-number*/
@@ -40,4 +40,7 @@ export default class AccountService {
     return Fetch.Get<UserModel>(CONFIG.API_BASEPATH + `/auth/SetDefaultTheme?${params.toString()}`, this.config);
   };
 
+  deleteCurrentUser = async (): Promise<Result<null>> => {
+    return Fetch.Get<Result<null>>(CONFIG.API_BASEPATH + "/auth/DeleteCurrentUser", this.config);
+  };
 }

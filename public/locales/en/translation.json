@@ -930,7 +930,9 @@
       "avatarTooLarge": "Image is too large ({size}MB). Maximum size is {max}MB",
       "loadError": "Failed to load profile data",
       "updateError": "Failed to update profile",
-      "nameRequired": "Name is required"
+      "nameRequired": "Name is required",
+      "accountDeleted": "Account deleted successfully",
+      "deleteAccountFailed": "Failed to delete account"
     },
     "paymentPage": {
       "title": "Checkout",

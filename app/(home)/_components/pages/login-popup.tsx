@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useEffect } from 'react';
+import { useCallback, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { signIn } from 'next-auth/react';
 import {
@@ -24,6 +24,7 @@ import CONFIG from '@root/config';
 export default function LoginPopup() {
   const router = useRouter();
   const { data: session, status } = useSession();
+  const justLoggedIn = useRef(false);
 
   const isLoginOpen = useAuthStore((s) => s.isLoginOpen);
   const setLoginOpen = useAuthStore((s) => s.setLoginOpen);
@@ -52,6 +53,7 @@ export default function LoginPopup() {
   }, [setLoginOpen, router]);
 
   const handleLoginSuccess = useCallback(() => {
+    justLoggedIn.current = true;
     setLoginOpen(false);
   }, [setLoginOpen]);
 
@@ -60,11 +62,11 @@ export default function LoginPopup() {
     setForgotPasswordOpen(true);
   }, [setLoginOpen, setForgotPasswordOpen]);
 
-  // Redirect based on role after login
+  // Redirect based on role ONLY after login, not on page load
   useEffect(() => {
-    if (status === 'authenticated' && session?.user?.roles) {
+    if (justLoggedIn.current && status === 'authenticated' && session?.user?.roles) {
+      justLoggedIn.current = false;
       const userRoles = session.user.roles;
-      debugger
       const hasAdminRole = userRoles.some((role) => CONFIG.ADMIN_ROLES.includes(role));
 
       if (hasAdminRole) {

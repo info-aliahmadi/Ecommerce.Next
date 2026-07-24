@@ -44,7 +44,6 @@ const Login = () => {
   useEffect(() => {
     if (status === 'authenticated' && session?.user?.roles) {
       const userRoles = session.user.roles;
-      debugger
       const hasAdminRole = userRoles.some((role) => CONFIG.ADMIN_ROLES.includes(role));
 
       if (callbackUrl !== '/') {

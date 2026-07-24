@@ -5,7 +5,7 @@ import { useTranslations } from 'next-intl';
 import { motion } from 'framer-motion';
 import { Pencil, Check, Trash2, Loader2, Eye, EyeOff, Camera } from 'lucide-react';
 import { toast } from 'sonner';
-import { useSession } from 'next-auth/react';
+import { useSession, signOut } from 'next-auth/react';
 
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '../../_components/ui/card';
 import { Button } from '../../_components/ui/button';
@@ -72,6 +72,9 @@ export function SettingsTab({
   const [showNewPassword, setShowNewPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [showAddPassword, setShowAddPassword] = useState(false);
+
+  // Delete account state
+  const [deleting, setDeleting] = useState(false);
   const [showAddConfirm, setShowAddConfirm] = useState(false);
 
   // Fetch current user data
@@ -289,6 +292,26 @@ export function SettingsTab({
       toast.error(t('homepage.profile.passwordAddFailed'));
     } finally {
       setPasswordSubmitting(false);
+    }
+  };
+
+  const handleDeleteAccount = async () => {
+    if (!jwt) return;
+
+    setDeleting(true);
+    try {
+      const service = new AccountService(jwt);
+      const result = await service.deleteCurrentUser();
+      if (result.succeeded) {
+        toast.success(t('homepage.profile.accountDeleted'));
+        await signOut({ callbackUrl: '/' });
+      } else {
+        toast.error(result.message || t('homepage.profile.deleteAccountFailed'));
+      }
+    } catch {
+      toast.error(t('homepage.profile.deleteAccountFailed'));
+    } finally {
+      setDeleting(false);
     }
   };
 
@@ -563,10 +586,15 @@ export function SettingsTab({
                 </AlertDialogDescription>
               </AlertDialogHeader>
               <AlertDialogFooter>
-                <AlertDialogCancel className="border-ecommerce-border text-ecommerce-text-secondary">
+                <AlertDialogCancel className="border-ecommerce-border text-ecommerce-text-secondary" disabled={deleting}>
                   {t('homepage.common.cancel')}
                 </AlertDialogCancel>
-                <AlertDialogAction className="bg-red-500 hover:bg-red-600 text-white">
+                <AlertDialogAction
+                  className="bg-red-500 hover:bg-red-600 text-white"
+                  onClick={handleDeleteAccount}
+                  disabled={deleting}
+                >
+                  {deleting && <Loader2 className="w-4 h-4 me-1.5 animate-spin" />}
                   {t('homepage.common.delete')}
                 </AlertDialogAction>
               </AlertDialogFooter>

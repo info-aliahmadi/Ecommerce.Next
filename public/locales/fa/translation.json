@@ -910,7 +910,9 @@
       "avatarTooLarge": "تصویر بیش از حد بزرگ است ({size}MB). حداکثر اندازه {max}MB است",
       "loadError": "بارگیری اطلاعات پروفایل ناموفق بود",
       "updateError": "به‌روزرسانی پروفایل ناموفق بود",
-      "nameRequired": "نام الزامی است"
+      "nameRequired": "نام الزامی است",
+      "accountDeleted": "حساب کاربری با موفقیت حذف شد",
+      "deleteAccountFailed": "حذف حساب کاربری ناموفق بود"
     },
     "paymentPage": {
       "title": "تکمیل خرید",

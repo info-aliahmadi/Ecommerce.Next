@@ -883,7 +883,9 @@
       "avatarTooLarge": "الصورة كبيرة جداً ({size}MB). الحد الأقصى هو {max}MB",
       "loadError": "فشل في تحميل بيانات الملف الشخصي",
       "updateError": "فشل في تحديث الملف الشخصي",
-      "nameRequired": "الاسم مطلوب"
+      "nameRequired": "الاسم مطلوب",
+      "accountDeleted": "تم حذف الحساب بنجاح",
+      "deleteAccountFailed": "فشل في حذف الحساب"
     },
     "paymentPage": {
       "homepage": {
