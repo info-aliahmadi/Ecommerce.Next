@@ -1016,7 +1016,12 @@
       "editPayment": "Edit Payment",
       "secureBadge": "Secure Checkout",
       "freeReturnBadge": "Free Returns",
-      "fastDeliveryBadge": "Fast Delivery"
+      "fastDeliveryBadge": "Fast Delivery",
+      "selectSavedAddress": "Select a saved address",
+      "useNewAddress": "Use a new address",
+      "defaultBadge": "Default",
+      "orderFailed": "Failed to place order. Please try again.",
+      "loginRequired": "Please login to continue"
     }
   },
   "title": "Welcome to react using react-i18next",

@@ -5,6 +5,16 @@ import { QueryProvider } from "./_components/query-provider";
 import { SessionProvider } from "./_components/session-provider";
 import { Toaster } from "./_components/ui/sonner";
 import CONFIG from "@root/config";
+import { CartDrawer } from "./_components/ecommerce/cart-drawer";
+import { QuickViewModal } from "./_components/ecommerce/quick-view-modal";
+import { BackToTop } from "./_components/ecommerce/back-to-top";
+import { MobileBottomNav } from "./_components/ecommerce/mobile-bottom-nav";
+import { FlyToCart } from "./_components/ecommerce/fly-to-cart";
+import { CompareBar } from "./_components/ecommerce/compare-bar";
+import { CompareDrawer } from "./_components/ecommerce/compare-drawer";
+import { CookieBanner } from "./_components/ecommerce/cookie-banner";
+import LoginPopup from "./_components/pages/login-popup";
+import RegisterPopup from "./_components/pages/register-popup";
 
 export const metadata: Metadata = {
   title: "HydraShop — Discover Your Perfect Style",
@@ -17,6 +27,22 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  function SharedOverlays() {
+    return (
+      <>
+        <CartDrawer />
+        <QuickViewModal />
+        <BackToTop />
+        <MobileBottomNav />
+        <FlyToCart />
+        <CompareBar />
+        <CompareDrawer />
+        <CookieBanner />
+        <LoginPopup />
+        <RegisterPopup />
+      </>
+    );
+  }
   return (
     <ThemeProvider
       attribute="class"
@@ -28,6 +54,7 @@ export default function RootLayout({
         <QueryProvider>
           {children}
           <Toaster position="top-center" />
+          <SharedOverlays />
         </QueryProvider>
       </SessionProvider>
     </ThemeProvider>

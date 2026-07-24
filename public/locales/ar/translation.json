@@ -970,7 +970,12 @@
         "editPayment": "تعديل الدفع",
         "secureBadge": "دفع آمن",
         "freeReturnBadge": "إرجاع مجاني",
-        "fastDeliveryBadge": "توصيل سريع"
+        "fastDeliveryBadge": "توصيل سريع",
+        "selectSavedAddress": "اختر عنواناً محفوظاً",
+        "useNewAddress": "استخدام عنوان جديد",
+        "defaultBadge": "افتراضي",
+        "orderFailed": "فشل في تقديم الطلب. يرجى المحاولة مرة أخرى.",
+        "loginRequired": "يرجى تسجيل الدخول للمتابعة"
       }
     }
   },
