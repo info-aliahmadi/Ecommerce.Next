@@ -915,6 +915,7 @@
       "deleteAccountFailed": "حذف حساب کاربری ناموفق بود"
     },
     "paymentPage": {
+      "loading": "در حال بارگیری...",
       "title": "تکمیل خرید",
       "breadcrumbHome": "خانه",
       "breadcrumbCart": "سبد خرید",
@@ -1001,7 +1002,12 @@
       "useNewAddress": "استفاده از آدرس جدید",
       "defaultBadge": "پیش‌فرض",
       "orderFailed": "ثبت سفارش ناموفق بود. لطفاً دوباره تلاش کنید.",
-      "loginRequired": "لطفاً برای ادامه وارد شوید"
+      "loginRequired": "لطفاً برای ادامه وارد شوید",
+      "fieldRequired": "این فیلد الزامی است",
+      "addressSaved": "آدرس با موفقیت ذخیره شد",
+      "addressSaveFailed": "ذخیره آدرس ناموفق بود",
+      "addressUpdated": "آدرس با موفقیت به‌روزرسانی شد",
+      "addressUpdateFailed": "به‌روزرسانی آدرس ناموفق بود"
     }
   },
   "title": "خوش آمدید",

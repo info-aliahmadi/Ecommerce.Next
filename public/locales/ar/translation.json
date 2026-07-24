@@ -888,6 +888,7 @@
       "deleteAccountFailed": "فشل في حذف الحساب"
     },
     "paymentPage": {
+      "loading": "جاري التحميل...",
       "homepage": {
         "title": "إتمام الشراء",
         "breadcrumbHome": "الرئيسية",
@@ -975,7 +976,12 @@
         "useNewAddress": "استخدام عنوان جديد",
         "defaultBadge": "افتراضي",
         "orderFailed": "فشل في تقديم الطلب. يرجى المحاولة مرة أخرى.",
-        "loginRequired": "يرجى تسجيل الدخول للمتابعة"
+        "loginRequired": "يرجى تسجيل الدخول للمتابعة",
+        "fieldRequired": "هذا الحقل مطلوب",
+        "addressSaved": "تم حفظ العنوان بنجاح",
+        "addressSaveFailed": "فشل في حفظ العنوان",
+        "addressUpdated": "تم تحديث العنوان بنجاح",
+        "addressUpdateFailed": "فشل في تحديث العنوان"
       }
     }
   },

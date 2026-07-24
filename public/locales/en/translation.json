@@ -935,6 +935,7 @@
       "deleteAccountFailed": "Failed to delete account"
     },
     "paymentPage": {
+      "loading": "Loading...",
       "title": "Checkout",
       "breadcrumbHome": "Home",
       "breadcrumbCart": "Cart",
@@ -1021,7 +1022,12 @@
       "useNewAddress": "Use a new address",
       "defaultBadge": "Default",
       "orderFailed": "Failed to place order. Please try again.",
-      "loginRequired": "Please login to continue"
+      "loginRequired": "Please login to continue",
+      "fieldRequired": "This field is required",
+      "addressSaved": "Address saved successfully",
+      "addressSaveFailed": "Failed to save address",
+      "addressUpdated": "Address updated successfully",
+      "addressUpdateFailed": "Failed to update address"
     }
   },
   "title": "Welcome to react using react-i18next",

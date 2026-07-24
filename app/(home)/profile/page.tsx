@@ -37,8 +37,6 @@ import { Separator } from '../_components/ui/separator';
 import { Avatar, AvatarFallback, AvatarImage } from '../_components/ui/avatar';
 import ProfileService from '../_services/ProfileService';
 import AddressModel from '@root/app/dashboard/(ecommerce)/_types/Common/AddressModel';
-import CountryModel from '@root/app/dashboard/(ecommerce)/_types/Common/CountryModel';
-import StateProvinceModel from '@root/app/dashboard/(ecommerce)/_types/Common/StateProvinceModel';
 import { Header } from '../_components/ecommerce/header';
 
 import { TabId, ActivityItem, NAV_ITEMS, staggerContainer, staggerItem } from './_components/types';
@@ -99,8 +97,6 @@ function ProfilePageContent() {
   const [addressSaving, setAddressSaving] = useState(false);
   const [addressDeleting, setAddressDeleting] = useState<number | null>(null);
   const [addressSettingDefault, setAddressSettingDefault] = useState<number | null>(null);
-  const [countries, setCountries] = useState<CountryModel[]>([]);
-  const [states, setStates] = useState<StateProvinceModel[]>([]);
 
   // Stores
   const wishlistItems = useWishlistStore((s) => s.items);
@@ -123,26 +119,6 @@ function ProfilePageContent() {
   useEffect(() => {
     if (status === 'authenticated') fetchAddresses();
   }, [status, session]);
-
-  useEffect(() => {
-    if (addressDialogOpen && session?.user?.accessToken) {
-      const service = new ProfileService(session.user.accessToken);
-      service.getCountriesForSelect().then((res) => {
-        if (res.succeeded && res.data) setCountries(res.data);
-      });
-    }
-  }, [addressDialogOpen, session]);
-
-  useEffect(() => {
-    if (addrForm?.countryId && session?.user?.accessToken) {
-      const service = new ProfileService(session.user.accessToken);
-      service.getStateProvincesForSelect(addrForm.countryId).then((res) => {
-        if (res.succeeded && res.data) setStates(res.data);
-      });
-    } else {
-      setStates([]);
-    }
-  }, [addrForm?.countryId, session]);
 
   if (status === 'loading' || status === 'unauthenticated') {
     return (
@@ -432,8 +408,6 @@ function ProfilePageContent() {
                     saving={addressSaving}
                     deletingId={addressDeleting}
                     settingDefaultId={addressSettingDefault}
-                    countries={countries}
-                    states={states}
                   />
                 </motion.div>
               )}

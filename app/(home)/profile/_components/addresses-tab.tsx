@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { motion } from 'framer-motion';
 import { MapPin, Pencil, Trash2, Plus, Loader2 } from 'lucide-react';
@@ -8,8 +8,6 @@ import { MapPin, Pencil, Trash2, Plus, Loader2 } from 'lucide-react';
 import { Card, CardContent } from '../../_components/ui/card';
 import { Button } from '../../_components/ui/button';
 import { Badge } from '../../_components/ui/badge';
-import { Input } from '../../_components/ui/input';
-import { Label } from '../../_components/ui/label';
 import {
   Dialog,
   DialogContent,
@@ -29,11 +27,9 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from '../../_components/ui/alert-dialog';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../../_components/ui/select';
 import AddressModel from '@root/app/dashboard/(ecommerce)/_types/Common/AddressModel';
-import CountryModel from '@root/app/dashboard/(ecommerce)/_types/Common/CountryModel';
-import StateProvinceModel from '@root/app/dashboard/(ecommerce)/_types/Common/StateProvinceModel';
 import { staggerContainer, staggerItem } from './types';
+import { AddressForm } from '../../_components/shared/address-form';
 
 export function AddressesTab({
   t,
@@ -52,8 +48,6 @@ export function AddressesTab({
   saving,
   deletingId,
   settingDefaultId,
-  countries,
-  states,
 }: Readonly<{
   t: ReturnType<typeof useTranslations>;
   addresses: AddressModel[];
@@ -71,17 +65,8 @@ export function AddressesTab({
   saving?: boolean;
   deletingId?: number | null;
   settingDefaultId?: number | null;
-  countries: CountryModel[];
-  states: StateProvinceModel[];
 }>) {
   const [errors, setErrors] = useState<Record<string, string>>({});
-
-  useEffect(() => {
-    if (!editingAddress && countries.length > 0 && addrForm && addrForm.countryId === 0) {
-      const first = countries[0];
-      setAddrForm({ ...addrForm, countryId: first.id, countryName: first.name });
-    }
-  }, [editingAddress, countries, addrForm, setAddrForm]);
 
   const validate = (): boolean => {
     const newErrors: Record<string, string> = {};
@@ -222,87 +207,14 @@ export function AddressesTab({
             </DialogDescription>
           </DialogHeader>
           {addrForm && (
-            <div className="space-y-4 py-2">
-              <div className="space-y-1">
-                <Label className="text-ecommerce-text-primary text-sm">{t('homepage.profile.addressName')}</Label>
-                <Input value={addrForm.title} onChange={(e) => { setAddrForm({ ...addrForm, title: e.target.value }); clearError('title'); }} placeholder={t('homepage.profile.addressNamePlaceHolder')} className={`bg-ecommerce-surface-hover border text-ecommerce-text-primary w-full ${errors.title ? 'border-red-500' : 'border-ecommerce-border'}`} />
-                {errors.title && <p className="text-red-500 text-xs">{errors.title}</p>}
-              </div>
-              <div className="grid grid-cols-3 gap-3">
-                <div className="space-y-1">
-                  <Label className="text-ecommerce-text-primary text-sm">{t('homepage.profile.country')}</Label>
-                  <Select value={addrForm.countryId ? String(addrForm.countryId) : ''} onValueChange={(val) => {
-                    const country = countries.find((c) => c.id === Number(val));
-                    setAddrForm({ ...addrForm, countryId: Number(val), countryName: country?.name ?? '', stateProvinceId: 0, stateProvinceName: '' });
-                    clearError('country');
-                  }}>
-                    <SelectTrigger className={`bg-ecommerce-surface-hover border text-ecommerce-text-primary w-full ${errors.country ? 'border-red-500' : 'border-ecommerce-border'}`}>
-                      <SelectValue placeholder={t('homepage.profile.country')} />
-                    </SelectTrigger>
-                    <SelectContent className="bg-ecommerce-surface border-ecommerce-border">
-                      {countries.map((c) => (
-                        <SelectItem key={c.id} value={String(c.id)} className="text-ecommerce-text-primary">{c.name}</SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                  {errors.country && <p className="text-red-500 text-xs">{errors.country}</p>}
-                </div>
-                <div className="space-y-1">
-                  <Label className="text-ecommerce-text-primary text-sm">{t('homepage.profile.state')}</Label>
-                  <Select value={addrForm.stateProvinceId ? String(addrForm.stateProvinceId) : ''} onValueChange={(val) => {
-                    const state = states.find((s) => s.id === Number(val));
-                    setAddrForm({ ...addrForm, stateProvinceId: Number(val), stateProvinceName: state?.name ?? '' });
-                    clearError('state');
-                  }} disabled={!addrForm.countryId}>
-                    <SelectTrigger className={`bg-ecommerce-surface-hover border text-ecommerce-text-primary w-full ${errors.state ? 'border-red-500' : 'border-ecommerce-border'}`}>
-                      <SelectValue placeholder={t('homepage.profile.state')} />
-                    </SelectTrigger>
-                    <SelectContent className="bg-ecommerce-surface border-ecommerce-border">
-                      {states.map((s) => (
-                        <SelectItem key={s.id} value={String(s.id)} className="text-ecommerce-text-primary">{s.name}</SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                  {errors.state && <p className="text-red-500 text-xs">{errors.state}</p>}
-                </div>
-                <div className="space-y-1">
-                  <Label className="text-ecommerce-text-primary text-sm">{t('homepage.profile.city')}</Label>
-                  <Input value={addrForm.city} onChange={(e) => { setAddrForm({ ...addrForm, city: e.target.value }); clearError('city'); }} className={`bg-ecommerce-surface-hover border text-ecommerce-text-primary ${errors.city ? 'border-red-500' : 'border-ecommerce-border'}`} />
-                  {errors.city && <p className="text-red-500 text-xs">{errors.city}</p>}
-                </div>
-              </div>
-              <div className="gap-3">
-                <div className="space-y-1">
-                  <Label className="text-ecommerce-text-primary text-sm">{t('homepage.profile.addressLine1')}</Label>
-                  <Input value={addrForm.address1} onChange={(e) => { setAddrForm({ ...addrForm, address1: e.target.value }); clearError('address1'); }} className={`bg-ecommerce-surface-hover border text-ecommerce-text-primary ${errors.address1 ? 'border-red-500' : 'border-ecommerce-border'}`} />
-                  {errors.address1 && <p className="text-red-500 text-xs">{errors.address1}</p>}
-                </div>
-              </div>
-              <div className="grid grid-cols-2 gap-3">
-                <div className="space-y-2">
-                  <Label className="text-ecommerce-text-primary text-sm">{t('homepage.profile.zipCode')}</Label>
-                  <Input value={addrForm.zipPostalCode} onChange={(e) => setAddrForm({ ...addrForm, zipPostalCode: e.target.value })} className="bg-ecommerce-surface-hover border-ecommerce-border text-ecommerce-text-primary" />
-                </div>
-                <div className="space-y-2">
-                  <Label className="text-ecommerce-text-primary text-sm">{t('homepage.profile.phoneNumber')}</Label>
-                  <Input value={addrForm.phoneNumber} onChange={(e) => setAddrForm({ ...addrForm, phoneNumber: e.target.value })} className="bg-ecommerce-surface-hover border-ecommerce-border text-ecommerce-text-primary" />
-                </div>
-              </div>
-              <div className="space-y-2">
-                <Label className="text-ecommerce-text-primary text-sm">{t('homepage.profile.geoLocation')}</Label>
-                <Input value={addrForm.geoLocation} onChange={(e) => setAddrForm({ ...addrForm, geoLocation: e.target.value })} className="bg-ecommerce-surface-hover border-ecommerce-border text-ecommerce-text-primary" />
-              </div>
-              <div className="flex items-center gap-2">
-                <input
-                  type="checkbox"
-                  id="isDefault"
-                  checked={addrForm.isDefault}
-                  onChange={(e) => setAddrForm({ ...addrForm, isDefault: e.target.checked })}
-                  className="h-4 w-4 rounded border-ecommerce-border text-ecommerce-red focus:ring-ecommerce-red"
-                />
-                <Label htmlFor="isDefault" className="text-ecommerce-text-primary text-sm">{t('homepage.profile.setAsDefault')}</Label>
-              </div>
-            </div>
+            <AddressForm
+              value={addrForm}
+              onChange={setAddrForm}
+              errors={errors}
+              onClearError={clearError}
+              showTitle
+              showIsDefault
+            />
           )}
           <DialogFooter>
             <Button variant="outline" onClick={() => setDialogOpen(false)} className="border-ecommerce-border text-ecommerce-text-secondary">
