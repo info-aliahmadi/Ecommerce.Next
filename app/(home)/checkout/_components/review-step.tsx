@@ -104,14 +104,19 @@ export function ReviewStep({
         </div>
         <div className="p-3 rounded-xl bg-ecommerce-surface-hover border border-ecommerce-border text-sm text-ecommerce-text-secondary space-y-1">
           <p className="font-medium text-ecommerce-text-primary">
-            {shipping.firstName} {shipping.lastName}
+            {shipping.fullName}
           </p>
-          <p>{shipping.address}{shipping.apartment ? `, ${shipping.apartment}` : ''}</p>
+          <p>{shipping.address.address1}</p>
           <p>
-            {shipping.city}, {shipping.state} {shipping.zipCode}
+            {shipping.address.city}, {shipping.address.stateProvinceName} {shipping.address.zipPostalCode}
           </p>
-          <p>{shipping.country}</p>
+          <p>{shipping.address.countryName}</p>
           <p>{shipping.email}</p>
+          {shipping.note && (
+            <p className="text-xs italic mt-2 pt-2 border-t border-ecommerce-border">
+              {shipping.note}
+            </p>
+          )}
         </div>
       </section>
 

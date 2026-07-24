@@ -6,6 +6,7 @@ import { Loader2 } from 'lucide-react';
 import { Button } from '@(home)/_components/ui/button';
 import { Input } from '@(home)/_components/ui/input';
 import { Label } from '@(home)/_components/ui/label';
+import { PhoneInput } from '@(home)/_components/shared/phone-input';
 import { useTranslations } from 'next-intl';
 import { toast } from 'sonner';
 
@@ -210,16 +211,11 @@ export default function RegisterForm({
           >
             {t('phone')}
           </Label>
-          <Input
+          <PhoneInput
             id={`${idPrefix}-phone`}
-            type="tel"
-            inputMode="numeric"
             value={phoneNumber}
-            onChange={(e) => { setPhoneNumber(e.target.value); if (error) setError(null); }}
+            onChange={(v) => { setPhoneNumber(v); if (error) setError(null); }}
             placeholder={t('phonePlaceholder')}
-            className="rounded-lg"
-            autoComplete="tel"
-            dir="ltr"
             disabled={isSubmitting}
           />
         </div>

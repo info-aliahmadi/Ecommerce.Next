@@ -29,6 +29,7 @@ import {
 import AccountService from '@root/app/dashboard/(auth)/_service/AccountService';
 import { UserModel } from '@root/app/dashboard/(auth)/_types/User/UserModel';
 import CONFIG from '@root/config';
+import { PhoneInput } from '@(home)/_components/shared/phone-input';
 
 export function SettingsTab({
   t,
@@ -386,10 +387,12 @@ export function SettingsTab({
                       <Input type="email" value={editEmail} onChange={(e) => setEditEmail(e.target.value)} className="bg-ecommerce-surface-hover border-ecommerce-border text-ecommerce-text-primary" dir="ltr" />
                     </div>
                   </div>
-                  <div className="space-y-2">
-                    <Label className="text-sm text-ecommerce-text-primary">{t('homepage.profile.phoneNumber')}</Label>
-                    <Input type="tel" value={editPhoneNumber} onChange={(e) => setEditPhoneNumber(e.target.value)} className="bg-ecommerce-surface-hover border-ecommerce-border text-ecommerce-text-primary max-w-sm" dir="ltr" placeholder="+98..." />
-                  </div>
+                  <PhoneInput
+                    value={editPhoneNumber}
+                    onChange={setEditPhoneNumber}
+                    placeholder={t('phonePlaceholder')}
+                  />
+
                 </div>
               </div>
               <div className="flex gap-2">

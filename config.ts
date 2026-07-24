@@ -35,6 +35,7 @@ const CONFIG = {
   DEFAULT_LANGUAGE: 'en',
   DEFAULT_CURRENCY: CurrencyTypes.Dollar,
   DEFAULT_MEASURETYPE: MeasureType.Number,
+  DEFAULT_PHONECOUNTRY: '+98',
   DATE_STYLE: "short", // "full" | "long" | "medium" | "short",
   TIME_STYLE: 'short', // "full" | "long" | "medium" | "short"
   LTR_FONTS_EDITOR: '"Poppins", Arial, tohoma',

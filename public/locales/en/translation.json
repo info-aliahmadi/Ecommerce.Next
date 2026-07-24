@@ -906,7 +906,7 @@
       "browseProducts": "Browse Products",
       "trackOrder": "Track Order",
       "viewOrders": "View Orders",
-      "addressName": "Title",
+      "addressName": "Address Title",
       "addressNamePlaceHolder": "Home, Office, etc.",
       "saveAddress": "Save Address",
       "phoneNumber": "Phone Number",
@@ -970,8 +970,7 @@
       "invalidCode": "Invalid promo code",
       "codeApplied": "Promo code applied!",
       "removeCode": "Remove",
-      "firstName": "First Name",
-      "lastName": "Last Name",
+      "fullName": "Full Name",
       "email": "Email Address",
       "phone": "Phone Number",
       "address": "Street Address",
@@ -1027,7 +1026,11 @@
       "addressSaved": "Address saved successfully",
       "addressSaveFailed": "Failed to save address",
       "addressUpdated": "Address updated successfully",
-      "addressUpdateFailed": "Failed to update address"
+      "addressUpdateFailed": "Failed to update address",
+      "saving": "Saving...",
+      "deliveryNote": "Delivery Note",
+      "deliveryNotePlaceholder": "Any special instructions for delivery? (e.g., gate code, floor number, landmarks)",
+      "deliveryNoteHint": "Optional - help the courier find you easily"
     }
   },
   "title": "Welcome to react using react-i18next",

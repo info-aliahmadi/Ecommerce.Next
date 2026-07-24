@@ -924,8 +924,7 @@
         "invalidCode": "كود خصم غير صالح",
         "codeApplied": "تم تطبيق الكود!",
         "removeCode": "إزالة",
-        "firstName": "الاسم الأول",
-        "lastName": "اسم العائلة",
+        "fullName": "الاسم الكامل",
         "email": "البريد الإلكتروني",
         "phone": "رقم الهاتف",
         "address": "عنوان الشارع",
@@ -981,7 +980,11 @@
         "addressSaved": "تم حفظ العنوان بنجاح",
         "addressSaveFailed": "فشل في حفظ العنوان",
         "addressUpdated": "تم تحديث العنوان بنجاح",
-        "addressUpdateFailed": "فشل في تحديث العنوان"
+        "addressUpdateFailed": "فشل في تحديث العنوان",
+        "saving": "جاري الحفظ...",
+        "deliveryNote": "ملاحظات التوصيل",
+        "deliveryNotePlaceholder": "هل لديك تعليمات خاصة للتوصيل؟ (مثل: كود الباب، رقم الطابق، معالم)",
+        "deliveryNoteHint": "اختياري - ساعد عامل التوصيل في العثور عليك بسهولة"
       }
     }
   },

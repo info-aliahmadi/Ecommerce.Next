@@ -9,6 +9,7 @@ import { Button } from '../ui/button';
 import { Input } from '../ui/input';
 import { Label } from '../ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/select';
+import { PhoneInput } from './phone-input';
 import AddressModel from '@root/app/dashboard/(ecommerce)/_types/Common/AddressModel';
 import CountryModel from '@root/app/dashboard/(ecommerce)/_types/Common/CountryModel';
 import StateProvinceModel from '@root/app/dashboard/(ecommerce)/_types/Common/StateProvinceModel';
@@ -210,11 +211,10 @@ export function AddressForm({
         </div>
         <div className="space-y-1.5">
           <Label className="text-sm font-medium text-ecommerce-text-primary">{t('phoneNumber')}</Label>
-          <Input
+          <PhoneInput
             value={value.phoneNumber || ''}
-            onChange={(e) => onChange({ ...value, phoneNumber: e.target.value })}
-            className="h-11 rounded-xl bg-ecommerce-surface-hover border-ecommerce-border text-ecommerce-text-primary"
-            dir="ltr"
+            onChange={(v) => onChange({ ...value, phoneNumber: v })}
+            className="rounded-xl"
           />
         </div>
       </div>

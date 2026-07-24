@@ -886,7 +886,7 @@
       "browseProducts": "مشاهده محصولات",
       "trackOrder": "پیگیری سفارش",
       "viewOrders": "مشاهده سفارشات",
-      "addressName": "عنوان",
+      "addressName": "عنوان آدرس",
       "addressNamePlaceHolder": "خانه، اداره و غیره",
       "saveAddress": "ذخیره آدرس",
       "phoneNumber": "شماره تلفن",
@@ -950,8 +950,7 @@
       "invalidCode": "کد تخفیف نامعتبر",
       "codeApplied": "کد تخفیف اعمال شد!",
       "removeCode": "حذف",
-      "firstName": "نام",
-      "lastName": "نام خانوادگی",
+      "fullName": "نام و نام خانوادگی",
       "email": "آدرس ایمیل",
       "phone": "شماره تلفن",
       "address": "آدرس خیابان",
@@ -1007,7 +1006,11 @@
       "addressSaved": "آدرس با موفقیت ذخیره شد",
       "addressSaveFailed": "ذخیره آدرس ناموفق بود",
       "addressUpdated": "آدرس با موفقیت به‌روزرسانی شد",
-      "addressUpdateFailed": "به‌روزرسانی آدرس ناموفق بود"
+      "addressUpdateFailed": "به‌روزرسانی آدرس ناموفق بود",
+      "saving": "در حال ذخیره...",
+      "deliveryNote": "یادداشت تحویل",
+      "deliveryNotePlaceholder": "دستورالعمل‌های خاصی برای تحویل دارید؟ (مثلاً کد درب، شماره طبقه، نشانه‌ها)",
+      "deliveryNoteHint": "اختیاری - به پیک کمک کنید تا شما را راحت‌تر پیدا کند"
     }
   },
   "title": "خوش آمدید",

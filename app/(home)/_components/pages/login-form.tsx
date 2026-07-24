@@ -17,6 +17,7 @@ import { Input } from '@(home)/_components/ui/input';
 import { Label } from '@(home)/_components/ui/label';
 import { Checkbox } from '@(home)/_components/ui/checkbox';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@(home)/_components/ui/tabs';
+import { PhoneInput } from '@(home)/_components/shared/phone-input';
 import { useTranslations } from 'next-intl';
 import { toast } from 'sonner';
 
@@ -362,31 +363,16 @@ export default function LoginForm({
               >
                 {t('phoneLabel')}
               </Label>
-              <div className="relative flex">
-                <span className="text-ecommerce-text-muted inline-flex items-center px-3 rounded-s-md border border-r-0 border-ecommerce-border bg-ecommerce-surface text-sm shrink-0">
-                  +98
-                </span>
-                <Input
-                  id={`${idPrefix}-phone`}
-                  type="tel"
-                  inputMode="numeric"
-                  placeholder={t('phonePlaceholder')}
-                  value={phone}
-                  onChange={(e) => {
-                    setPhone(e.target.value.replace(/\D/g, '').slice(0, 15));
-                    if (error) setError(null);
-                  }}
-                  className="h-11 rounded-s-none border-ecommerce-border bg-ecommerce-surface text-ecommerce-text-primary rounded-e-md"
-                  autoComplete="tel"
-                  disabled={loading || otpSending || otpSent}
-                  dir="ltr"
-                  minLength={10}
-                  maxLength={10}
-                />
-                <div className="absolute end-3 top-1/2 -translate-y-1/2 text-ecommerce-text-muted pointer-events-none">
-                  <Phone className="w-4 h-4" />
-                </div>
-              </div>
+              <PhoneInput
+                id={`${idPrefix}-phone`}
+                value={phone}
+                onChange={(v) => {
+                  setPhone(v);
+                  if (error) setError(null);
+                }}
+                placeholder={t('phonePlaceholder')}
+                disabled={loading || otpSending || otpSent}
+              />
             </div>
 
             {/* OTP Code (shown after code is sent) */}

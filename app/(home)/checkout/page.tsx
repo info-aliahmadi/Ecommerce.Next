@@ -16,14 +16,13 @@ import { BackToTop } from '../_components/ecommerce/back-to-top';
 import { MobileBottomNav } from '../_components/ecommerce/mobile-bottom-nav';
 import { useCartStore } from '../_lib/store';
 
-import { Button } from '../_components/ui/button';
 import { Card, CardContent } from '../_components/ui/card';
 import {
   Accordion, AccordionItem, AccordionTrigger, AccordionContent,
 } from '../_components/ui/accordion';
 import ProfileService from '../_services/ProfileService';
 import OrderService from '@root/app/dashboard/(ecommerce)/_service/OrderService';
-import OrderModel from '@root/app/dashboard/(ecommerce)/_types/Order/OrderModel';
+import AccountService from '@root/app/dashboard/(auth)/_service/AccountService';
 import AddressModel from '@root/app/dashboard/(ecommerce)/_types/Common/AddressModel';
 import { Header } from '../_components/ecommerce/header';
 
@@ -33,7 +32,6 @@ import {
   PaymentForm,
   VALID_PROMOS,
   PAYMENT_METHOD_MAP,
-  PaymentMethod,
 } from './_components';
 import {
   OrderSummary,
@@ -44,6 +42,12 @@ import {
   ConfirmationStep,
   EmptyCart,
 } from './_components';
+import OrderDisplayModel, { PaymentMethod } from '../_types/OrderDisplayModel';
+import OrderStatus from '@root/app/types/enums/OrderStatus';
+import ShippingStatus from '@root/app/types/enums/ShippingStatus';
+import PaymentStatus from '@root/app/types/enums/PaymentStatus';
+import CONFIG from '@root/config';
+import ShippingMethod from '@root/app/types/enums/ShippingMethod';
 
 /* ──────────────────────────────────────────────────────────────── */
 
@@ -74,9 +78,21 @@ function CheckoutPageInner() {
 
   // Shipping form
   const [shipping, setShipping] = useState<ShippingForm>({
-    firstName: '', lastName: '', email: '', phone: '',
-    address: '', apartment: '', city: '', state: '', zipCode: '', country: '',
-    saveAddress: false,
+    fullName: '', email: '', phone: '',
+    address: {
+      id: 0,
+      userId: 0,
+      title: '',
+      countryId: 0,
+      countryName: '',
+      stateProvinceId: 0,
+      stateProvinceName: '',
+      city: '',
+      address1: '',
+      zipPostalCode: '',
+      phoneNumber: '',
+      isDefault: false,
+    },
   });
 
   // Payment form
@@ -119,8 +135,7 @@ function CheckoutPageInner() {
     if (status === 'authenticated' && session?.user) {
       setShipping((prev) => ({
         ...prev,
-        firstName: session.user.name?.split(' ')[0] || '',
-        lastName: session.user.name?.split(' ').slice(1).join(' ') || '',
+        fullName: session.user.name || '',
         email: session.user.email || '',
       }));
       setAddrForm((prev) => ({
@@ -160,14 +175,9 @@ function CheckoutPageInner() {
   useEffect(() => {
     setShipping((prev) => ({
       ...prev,
-      address: addrForm.address1 || '',
-      apartment: addrForm.county || '',
-      city: addrForm.city || '',
-      state: addrForm.stateProvinceName || '',
-      zipCode: addrForm.zipPostalCode || '',
-      country: addrForm.countryName || '',
-      phone: addrForm.phoneNumber || prev.phone,
+      address: addrForm,
       addressId: addrForm.id || undefined,
+      phone: addrForm.phoneNumber || prev.phone,
     }));
   }, [addrForm]);
 
@@ -178,7 +188,7 @@ function CheckoutPageInner() {
       setAddrForm({
         id: 0,
         userId: 0,
-        title: shipping.firstName ? `${shipping.firstName} ${shipping.lastName}` : '',
+        title: shipping.fullName || '',
         countryId: 0,
         countryName: '',
         stateProvinceId: 0,
@@ -193,7 +203,7 @@ function CheckoutPageInner() {
       const addr = savedAddresses.find((a) => a.id === Number(value));
       if (addr) setAddrForm(addr);
     }
-  }, [savedAddresses, shipping.firstName, shipping.lastName]);
+  }, [savedAddresses, shipping.fullName]);
 
   // Shipping field setter
   const setShippingField = useCallback(
@@ -245,22 +255,6 @@ function CheckoutPageInner() {
   /* ── Validation ───────────────────────────────────────────── */
   const [errors, setErrors] = useState<Record<string, string>>({});
 
-  const validateShipping = useCallback((): boolean => {
-    const errs: Record<string, string> = {};
-    if (!shipping.firstName.trim()) errs.firstName = 'Required';
-    if (!shipping.lastName.trim()) errs.lastName = 'Required';
-    if (!shipping.email.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(shipping.email))
-      errs.email = 'Valid email required';
-    if (!shipping.phone.trim()) errs.phone = 'Required';
-    if (!shipping.address.trim()) errs.address = 'Required';
-    if (!shipping.city.trim()) errs.city = 'Required';
-    if (!shipping.state.trim()) errs.state = 'Required';
-    if (!shipping.zipCode.trim()) errs.zipCode = 'Required';
-    if (!shipping.country.trim()) errs.country = 'Required';
-    setErrors(errs);
-    return Object.keys(errs).length === 0;
-  }, [shipping]);
-
   const validatePayment = useCallback((): boolean => {
     if (payment.method !== 'card') {
       setErrors({});
@@ -285,8 +279,10 @@ function CheckoutPageInner() {
   }, [currentStep]);
 
   const handleContinueShipping = useCallback(async () => {
-    if (!validateShipping()) return;
-
+    // Validate contact info
+    const contactErrors: Record<string, string> = {};
+    if (!shipping.fullName.trim()) contactErrors.fullName = t('fieldRequired');
+debugger
     // Validate address form
     const addrErrors: Record<string, string> = {};
     if (!addrForm.title?.trim()) addrErrors.title = t('fieldRequired');
@@ -294,20 +290,37 @@ function CheckoutPageInner() {
     if (!addrForm.countryId) addrErrors.country = t('fieldRequired');
     if (!addrForm.stateProvinceId) addrErrors.state = t('fieldRequired');
     if (!addrForm.city?.trim()) addrErrors.city = t('fieldRequired');
+    if (!addrForm.phoneNumber?.trim()) addrErrors.phoneNumber = t('fieldRequired');
 
-    if (Object.keys(addrErrors).length > 0) {
-      setErrors(addrErrors);
+    // Merge all errors
+    const allErrors = { ...contactErrors, ...addrErrors };
+    if (Object.keys(allErrors).length > 0) {
+      setErrors(allErrors);
       return;
     }
 
-    // Save or update address
     if (session?.user?.accessToken) {
       setIsPlacing(true);
       try {
+        // Save contact info to user profile
+        const accountService = new AccountService(session.user.accessToken);
+        const currentUser = await accountService.getCurrentUser();
+        const updateResult = await accountService.updateCurrentUser({
+          ...currentUser,
+          name: shipping.fullName,
+          email: shipping.email,
+          phoneNumber: shipping.phone,
+        });
+        if (!updateResult.succeeded) {
+          toast.error(updateResult.message || t('addressSaveFailed'));
+          setIsPlacing(false);
+          return;
+        }
+
+        // Save or update address
         const profileService = new ProfileService(session.user.accessToken);
 
         if (selectedAddressId === 'new') {
-          // Save new address
           const res = await profileService.addAddress(addrForm);
           if (res.succeeded && res.data) {
             setShipping((prev) => ({ ...prev, addressId: res.data!.id }));
@@ -318,7 +331,6 @@ function CheckoutPageInner() {
             return;
           }
         } else {
-          // Update existing address
           const res = await profileService.updateAddress(addrForm);
           if (res.succeeded) {
             toast.success(t('addressUpdated'));
@@ -338,7 +350,7 @@ function CheckoutPageInner() {
     }
 
     goToStep(2);
-  }, [validateShipping, addrForm, selectedAddressId, session, goToStep, t]);
+  }, [shipping, addrForm, selectedAddressId, session, goToStep, t]);
 
   const handleContinuePayment = useCallback(() => {
     if (validatePayment()) goToStep(3);
@@ -353,60 +365,26 @@ function CheckoutPageInner() {
 
     setIsPlacing(true);
     try {
-      // Save address if checkbox is checked and using new address
-      let addressId = shipping.addressId;
-      if (shipping.saveAddress && !addressId) {
-        const profileService = new ProfileService(session.user.accessToken);
-        const newAddress: AddressModel = {
-          id: 0,
-          title: `${shipping.firstName} ${shipping.lastName}`,
-          userId: 0,
-          countryId: 0,
-          countryName: shipping.country,
-          stateProvinceId: 0,
-          stateProvinceName: shipping.state,
-          city: shipping.city,
-          address1: shipping.address,
-          county: shipping.apartment,
-          phoneNumber: shipping.phone,
-          zipPostalCode: shipping.zipCode,
-          isDefault: false,
-        };
-        const addrRes = await profileService.addAddress(newAddress);
-        if (addrRes.succeeded && addrRes.data) {
-          addressId = addrRes.data.id;
-        }
-      }
-
-      // Build order model
+      // Build order model using OrderDisplayModel
       const orderService = new OrderService(session.user.accessToken);
-      const order: OrderModel = {
+      const order: OrderDisplayModel = {
         id: 0,
-        userId: 0,
-        userName: `${shipping.firstName} ${shipping.lastName}`,
-        addressId: addressId || null,
+        addressId: shipping.addressId || null,
         shipmentId: null,
-        shippingMethodId: 1,
-        shippingMethodTitle: 'Standard Shipping',
-        orderStatusId: 1,
-        shippingStatusId: 1,
-        shippingStatusTitle: 'Pending',
-        paymentStatusId: 1,
-        paymentStatusTitle: 'Pending',
+        shippingMethodId: ShippingMethod.Ground,
+        orderStatusId: OrderStatus.Pending,
+        shippingStatusId: ShippingStatus.NotYetShipped,
+        paymentStatusId: PaymentStatus.Pending,
         paymentMethodId: PAYMENT_METHOD_MAP[payment.method],
-        userCurrencyId: null,
-        userCurrency: 'USD',
+        userCurrency: CONFIG.DEFAULT_CURRENCY as any,
         finalPrice: total,
         refundedAmount: 0,
         customerIp: '',
         allowStoringCreditCardNumber: false,
         paidDateUtc: null,
-        deleted: false,
         createdOnUtc: new Date(),
-        createdOnUtcString: '',
         paymentDateUtc: null,
-        paymentDateUtcToString: '',
-        orderNotes: [],
+        orderNote: shipping.note || '',
         shippingTax: 0,
         shippingAmount: shippingCost,
         shippingAmountTax: 0,
@@ -416,9 +394,21 @@ function CheckoutPageInner() {
         transactionTrackingCode: '',
         paymentTrackingCode: '',
         trackingNumber: '',
+        orderItems: items.map((item) => ({
+          id: 0,
+          orderId: 0,
+          productVariantId: item.variant.id,
+          productSku: item.variant.sku,
+          productName: item.name,
+          quantity: item.quantity,
+          unitPrice: item.variant.sellPrice,
+          discountAmount: 0,
+          totalPrice: item.variant.sellPrice * item.quantity,
+          totalPriceTax: 0,
+        })),
       };
 
-      const result = await orderService.addOrder(order);
+      const result = await orderService.addOrderFromDisplay(order);
 
       if (result.succeeded && result.data) {
         setOrderNumber(`ORD-${result.data.id}`);
@@ -433,7 +423,7 @@ function CheckoutPageInner() {
     } finally {
       setIsPlacing(false);
     }
-  }, [session, shipping, payment, total, shippingCost, tax, discountAmount, clearCart, goToStep, router, t]);
+  }, [session, shipping, payment, total, shippingCost, tax, discountAmount, items, clearCart, goToStep, router, t]);
 
   /* ── Auth Loading / Redirect ──────────────────────────────────── */
   if (status === 'loading' || status === 'unauthenticated') {
@@ -566,6 +556,7 @@ function CheckoutPageInner() {
                               savedAddresses={savedAddresses}
                               selectedAddressId={selectedAddressId}
                               addrForm={addrForm}
+                              isSaving={isPlacing}
                               onSetShippingField={setShippingField}
                               onSetAddrForm={setAddrForm}
                               onAddressSelect={handleAddressSelect}

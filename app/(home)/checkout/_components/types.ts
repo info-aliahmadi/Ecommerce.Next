@@ -1,23 +1,19 @@
+import AddressModel from "@root/app/dashboard/(ecommerce)/_types/Common/AddressModel";
+import PaymentMethod from "@root/app/types/enums/PaymentMethod";
+
 export type CheckoutStep = 1 | 2 | 3 | 4;
-export type PaymentMethod = 'card' | 'paypal' | 'cod';
 
 export interface ShippingForm {
-  firstName: string;
-  lastName: string;
+  fullName: string;
   email: string;
   phone: string;
-  address: string;
-  apartment: string;
-  city: string;
-  state: string;
-  zipCode: string;
-  country: string;
-  saveAddress: boolean;
+  address: AddressModel;
   addressId?: number;
+  note?: string;
 }
 
 export interface PaymentForm {
-  method: PaymentMethod;
+  method: 'card' | 'paypal' | 'cod';
   cardholderName: string;
   cardNumber: string;
   expiryDate: string;
@@ -29,10 +25,11 @@ export const VALID_PROMOS: Record<string, { type: 'percent'; value: number } | {
   SAVE10: { type: 'fixed', value: 10 },
 };
 
-export const PAYMENT_METHOD_MAP: Record<PaymentMethod, number> = {
-  card: 1,
-  paypal: 2,
-  cod: 3,
+// Maps checkout payment method to OrderDisplayModel PaymentMethod enum
+export const PAYMENT_METHOD_MAP: Record<'card' | 'paypal' | 'cod', PaymentMethod> = {
+  card: PaymentMethod.CreditCard,
+  paypal: PaymentMethod.PayPal,
+  cod: PaymentMethod.CashOnDelivery,
 };
 
 export function formatCardNumber(val: string) {

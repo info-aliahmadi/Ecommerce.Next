@@ -2,14 +2,13 @@
 
 import { useTranslations } from 'next-intl';
 import { ChevronRight, MapPin, Loader2 } from 'lucide-react';
-
 import { Button } from '@(home)/_components/ui/button';
 import { Label } from '@(home)/_components/ui/label';
-import { Checkbox } from '@(home)/_components/ui/checkbox';
 import { Separator } from '@(home)/_components/ui/separator';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@(home)/_components/ui/select';
 import AddressModel from '@root/app/dashboard/(ecommerce)/_types/Common/AddressModel';
 import { AddressForm } from '@(home)/_components/shared/address-form';
+import { PhoneInput } from '@(home)/_components/shared/phone-input';
 import { FormField } from './form-field';
 import { ShippingForm } from './types';
 
@@ -37,7 +36,7 @@ export function ShippingStep({
   onSetAddrForm,
   onAddressSelect,
   onContinue,
-}: ShippingStepProps) {
+}: Readonly<ShippingStepProps>) {
   const t = useTranslations('homepage.paymentPage');
 
   return (
@@ -47,20 +46,12 @@ export function ShippingStep({
         <h3 className="text-lg font-bold text-ecommerce-text-primary mb-4">{t('contactInfo')}</h3>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <FormField
-            id="firstName"
-            label={t('firstName')}
-            value={shipping.firstName}
-            onChange={(v) => onSetShippingField('firstName', v)}
-            placeholder="John"
-            error={errors.firstName}
-          />
-          <FormField
-            id="lastName"
-            label={t('lastName')}
-            value={shipping.lastName}
-            onChange={(v) => onSetShippingField('lastName', v)}
-            placeholder="Doe"
-            error={errors.lastName}
+            id="fullName"
+            label={t('fullName')}
+            value={shipping.fullName}
+            onChange={(v) => onSetShippingField('fullName', v)}
+            placeholder="John Doe"
+            error={errors.fullName}
           />
           <FormField
             id="email"
@@ -71,14 +62,11 @@ export function ShippingStep({
             type="email"
             error={errors.email}
           />
-          <FormField
-            id="phone"
-            label={t('phone')}
+          <PhoneInput
             value={shipping.phone}
             onChange={(v) => onSetShippingField('phone', v)}
-            placeholder="+1 (234) 567-890"
-            type="tel"
-            error={errors.phone}
+            placeholder={t('phone')}
+            error={!!errors.phone}
           />
         </div>
       </section>
@@ -122,21 +110,33 @@ export function ShippingStep({
           <AddressForm
             value={addrForm}
             onChange={onSetAddrForm}
+            errors={errors}
+            onClearError={(field) => {
+              // Clear error when field is edited
+              if (errors[field]) {
+                const newErrors = { ...errors };
+                delete newErrors[field];
+                // This will be handled by parent
+              }
+            }}
             showTitle
             showIsDefault={false}
           />
 
-          {/* Save Address Checkbox */}
-          <div className="flex items-center gap-2 pt-1">
-            <Checkbox
-              id="saveAddress"
-              checked={shipping.saveAddress}
-              onCheckedChange={(checked) => onSetShippingField('saveAddress', !!checked)}
-              className="border-ecommerce-border data-[state=checked]:bg-ecommerce-red data-[state=checked]:border-ecommerce-red"
-            />
-            <Label htmlFor="saveAddress" className="text-xs text-ecommerce-text-secondary cursor-pointer select-none">
-              {t('saveAddress')}
+          {/* Delivery Note */}
+          <div className="space-y-1.5">
+            <Label htmlFor="note" className="text-xs font-medium text-ecommerce-text-secondary">
+              {t('deliveryNote')}
             </Label>
+            <textarea
+              id="note"
+              value={shipping.note || ''}
+              onChange={(e) => onSetShippingField('note', e.target.value)}
+              placeholder={t('deliveryNotePlaceholder')}
+              rows={3}
+              className="w-full rounded-xl bg-ecommerce-surface-hover border border-ecommerce-border text-sm text-ecommerce-text-primary px-3 py-2.5 resize-none focus:outline-none focus:ring-2 focus:ring-ecommerce-red/20 focus:border-ecommerce-red transition-colors"
+            />
+            <p className="text-[11px] text-ecommerce-text-muted">{t('deliveryNoteHint')}</p>
           </div>
         </div>
       </section>
@@ -144,10 +144,20 @@ export function ShippingStep({
       {/* Continue Button */}
       <Button
         onClick={onContinue}
-        className="w-full h-12 bg-ecommerce-red hover:bg-ecommerce-red/90 text-white rounded-xl font-semibold text-sm gap-2 transition-all hover:scale-[1.01] active:scale-95"
+        disabled={isSaving}
+        className="w-full h-12 bg-ecommerce-red hover:bg-ecommerce-red/90 text-white rounded-xl font-semibold text-sm gap-2 transition-all hover:scale-[1.01] active:scale-95 disabled:opacity-70 disabled:cursor-not-allowed"
       >
-        {t('step2')}
-        <ChevronRight size={16} />
+        {isSaving ? (
+          <>
+            <Loader2 size={16} className="animate-spin" />
+            {t('saving')}
+          </>
+        ) : (
+          <>
+            {t('step2')}
+            <ChevronRight size={16} />
+          </>
+        )}
       </Button>
     </div>
   );

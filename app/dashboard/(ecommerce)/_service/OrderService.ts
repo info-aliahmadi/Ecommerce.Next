@@ -3,6 +3,7 @@ import Result from '@root/app/types/Result';
 import GridDataBound from '@root/app/types/GridDataBound';
 import CONFIG from '@root/config';
 import OrderModel from '../_types/Order/OrderModel';
+import OrderDisplayModel from '@root/app/(home)/_types/OrderDisplayModel';
 
 import OrderItemModel, { SumOrderItemsModel } from '../_types/Order/OrderItemModel';
 
@@ -39,6 +40,11 @@ export default class OrderService {
   addOrder = async (order: OrderModel): Promise<Result<OrderModel>> => {
     return Fetch.Post<Result<OrderModel>>(CONFIG.API_BASEPATH + '/Order/addOrder', order, this.config);
   };
+
+  addOrderFromDisplay = async (order: OrderDisplayModel): Promise<Result<OrderDisplayModel>> => {
+    return Fetch.Post<Result<OrderDisplayModel>>(CONFIG.API_BASEPATH + '/Order/addOrder', order, this.config);
+  };
+
   updateOrder = async (order: OrderModel): Promise<Result<OrderModel>> => {
     return Fetch.Post<Result<OrderModel>>(CONFIG.API_BASEPATH + '/Order/UpdateOrderState', order, this.config);
   };
