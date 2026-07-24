@@ -5,8 +5,9 @@ import { CreditCard, Shield, Truck, Check, ChevronLeft, ChevronRight } from 'luc
 import { motion, AnimatePresence } from 'framer-motion';
 
 import { Button } from '@(home)/_components/ui/button';
-import { PaymentForm, PaymentMethod, formatCardNumber, formatExpiry } from './types';
+import { PaymentForm, formatCardNumber, formatExpiry } from './types';
 import { FormField } from './form-field';
+import { PaymentMethod } from '../../_types/OrderDisplayModel';
 
 interface PaymentStepProps {
   payment: PaymentForm;
@@ -141,7 +142,7 @@ export function PaymentStep({
           className="flex-1 h-12 rounded-xl font-semibold text-sm gap-2 border-ecommerce-border text-ecommerce-text-primary hover:bg-ecommerce-surface-hover"
         >
           <ChevronLeft size={16} />
-          {t('homepage.step1')}
+          {t('step1')}
         </Button>
         <Button
           onClick={onContinue}

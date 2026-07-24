@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useMemo, useCallback, useEffect } from 'react';
+import { useState, useMemo, useCallback, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
@@ -137,6 +137,7 @@ function CheckoutPageInner() {
         ...prev,
         fullName: session.user.name || '',
         email: session.user.email || '',
+        phone: session.user.phoneNumber || '',
       }));
       setAddrForm((prev) => ({
         ...prev,
@@ -146,10 +147,13 @@ function CheckoutPageInner() {
     }
   }, [status, session]);
 
-  // Load saved addresses
+  // Load saved addresses (only on initial auth)
+  const addressesLoadedRef = useRef(false);
   useEffect(() => {
+    if (addressesLoadedRef.current) return;
     const loadData = async () => {
       if (status !== 'authenticated' || !session?.user?.accessToken) return;
+      addressesLoadedRef.current = true;
       setAddressesLoading(true);
       try {
         const service = new ProfileService(session.user.accessToken);
@@ -177,18 +181,21 @@ function CheckoutPageInner() {
       ...prev,
       address: addrForm,
       addressId: addrForm.id || undefined,
-      phone: addrForm.phoneNumber || prev.phone,
     }));
   }, [addrForm]);
 
   // Handle address selection from saved addresses
+  const shippingRef = useRef(shipping);
+  shippingRef.current = shipping;
+
   const handleAddressSelect = useCallback((value: string) => {
     setSelectedAddressId(value);
+    const s = shippingRef.current;
     if (value === 'new') {
       setAddrForm({
         id: 0,
         userId: 0,
-        title: shipping.fullName || '',
+        title: s.fullName || '',
         countryId: 0,
         countryName: '',
         stateProvinceId: 0,
@@ -196,14 +203,19 @@ function CheckoutPageInner() {
         city: '',
         address1: '',
         zipPostalCode: '',
-        phoneNumber: '',
+        phoneNumber: s.phone,
         isDefault: false,
       });
     } else {
       const addr = savedAddresses.find((a) => a.id === Number(value));
-      if (addr) setAddrForm(addr);
+      if (addr) {
+        setAddrForm({
+          ...addr,
+          phoneNumber: addr.phoneNumber || s.phone,
+        });
+      }
     }
-  }, [savedAddresses, shipping.fullName]);
+  }, [savedAddresses]);
 
   // Shipping field setter
   const setShippingField = useCallback(
@@ -282,7 +294,7 @@ function CheckoutPageInner() {
     // Validate contact info
     const contactErrors: Record<string, string> = {};
     if (!shipping.fullName.trim()) contactErrors.fullName = t('fieldRequired');
-debugger
+
     // Validate address form
     const addrErrors: Record<string, string> = {};
     if (!addrForm.title?.trim()) addrErrors.title = t('fieldRequired');
@@ -298,23 +310,31 @@ debugger
       setErrors(allErrors);
       return;
     }
-
+debugger
     if (session?.user?.accessToken) {
       setIsPlacing(true);
       try {
-        // Save contact info to user profile
+        // Only update user profile if contact info changed
         const accountService = new AccountService(session.user.accessToken);
         const currentUser = await accountService.getCurrentUser();
-        const updateResult = await accountService.updateCurrentUser({
-          ...currentUser,
-          name: shipping.fullName,
-          email: shipping.email,
-          phoneNumber: shipping.phone,
-        });
-        if (!updateResult.succeeded) {
-          toast.error(updateResult.message || t('addressSaveFailed'));
-          setIsPlacing(false);
-          return;
+        const contactChanged =
+          shipping.fullName?.trim() !== currentUser?.name?.trim() ||
+          shipping.email?.trim() !== currentUser?.email?.trim() ||
+          shipping.phone?.trim() !== currentUser?.phoneNumber?.trim();
+
+        if (contactChanged) {
+
+          const updateResult = await accountService.updateCurrentUser({
+            ...currentUser,
+            name: shipping.fullName,
+            email: shipping.email,
+            phoneNumber: shipping.phone,
+          });
+          if (!updateResult.succeeded) {
+            toast.error(updateResult.message || t('addressSaveFailed'));
+            setIsPlacing(false);
+            return;
+          }
         }
 
         // Save or update address
@@ -323,6 +343,10 @@ debugger
         if (selectedAddressId === 'new') {
           const res = await profileService.addAddress(addrForm);
           if (res.succeeded && res.data) {
+            const newAddr = { ...addrForm, ...res.data };
+            setSavedAddresses((prev) => [...prev, newAddr]);
+            setSelectedAddressId(String(res.data!.id));
+            setAddrForm(newAddr);
             setShipping((prev) => ({ ...prev, addressId: res.data!.id }));
             toast.success(t('addressSaved'));
           } else {

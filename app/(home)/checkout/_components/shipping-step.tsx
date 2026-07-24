@@ -67,6 +67,7 @@ export function ShippingStep({
             onChange={(v) => onSetShippingField('phone', v)}
             placeholder={t('phone')}
             error={!!errors.phone}
+            errorText={errors.phone}
           />
         </div>
       </section>

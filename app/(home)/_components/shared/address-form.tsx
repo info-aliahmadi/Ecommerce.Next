@@ -213,7 +213,9 @@ export function AddressForm({
           <Label className="text-sm font-medium text-ecommerce-text-primary">{t('phoneNumber')}</Label>
           <PhoneInput
             value={value.phoneNumber || ''}
-            onChange={(v) => onChange({ ...value, phoneNumber: v })}
+            onChange={(v) => { onChange({ ...value, phoneNumber: v }); if (errors?.phoneNumber) onClearError?.('phoneNumber'); }}
+            error={!!errors?.phoneNumber}
+            errorText={errors?.phoneNumber}
             className="rounded-xl"
           />
         </div>
