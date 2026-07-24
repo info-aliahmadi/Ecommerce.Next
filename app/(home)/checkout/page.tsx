@@ -71,6 +71,34 @@ function CheckoutPageInner() {
   const { items, totalPrice, totalSavings, clearCart, totalItems } = useCartStore();
   const checkoutPersist = useCheckoutPersistStore();
 
+  // Promo code
+  const [promoInput, setPromoInput] = useState('');
+  const [appliedPromo, setAppliedPromo] = useState<string | null>(checkoutPersist.appliedPromo);
+  const [promoError, setPromoError] = useState('');
+  const [showPromoInput, setShowPromoInput] = useState(false);
+
+  // Order confirmation
+  const [orderNumber, setOrderNumber] = useState('');
+
+  // Saved addresses
+  const [savedAddresses, setSavedAddresses] = useState<AddressModel[]>([]);
+  const [selectedAddressId, setSelectedAddressId] = useState<string>(
+    checkoutPersist.selectedAddressId ?? 'new'
+  );
+  const [addressesLoading, setAddressesLoading] = useState(false);
+
+
+  const getNextAddressTitle = useCallback(() => {
+    const existingTitles = savedAddresses.map((a) => a.title?.toLowerCase() || '');
+    let counter = 1;
+    let title: string;
+    do {
+      title = t('addressTitle', { number: counter });
+      counter++;
+    } while (existingTitles.includes(title.toLowerCase()));
+    return title;
+  }, [savedAddresses, t]);
+
   // Step management
   const [currentStep, setCurrentStep] = useState<CheckoutStep>(1);
   const [direction, setDirection] = useState<1 | -1>(1);
@@ -100,22 +128,6 @@ function CheckoutPageInner() {
   const [payment, setPayment] = useState<PaymentForm>({
     method: checkoutPersist.paymentMethod ?? PaymentMethod.CreditCard
   });
-
-  // Promo code
-  const [promoInput, setPromoInput] = useState('');
-  const [appliedPromo, setAppliedPromo] = useState<string | null>(checkoutPersist.appliedPromo);
-  const [promoError, setPromoError] = useState('');
-  const [showPromoInput, setShowPromoInput] = useState(false);
-
-  // Order confirmation
-  const [orderNumber, setOrderNumber] = useState('');
-
-  // Saved addresses
-  const [savedAddresses, setSavedAddresses] = useState<AddressModel[]>([]);
-  const [selectedAddressId, setSelectedAddressId] = useState<string>(
-    checkoutPersist.selectedAddressId ?? 'new'
-  );
-  const [addressesLoading, setAddressesLoading] = useState(false);
 
   // Address form state
   const [addrForm, setAddrForm] = useState<AddressModel>({
@@ -224,7 +236,7 @@ function CheckoutPageInner() {
       setAddrForm({
         id: 0,
         userId: 0,
-        title: s.fullName || '',
+        title: getNextAddressTitle(),
         countryId: 0,
         countryName: '',
         stateProvinceId: 0,
@@ -244,7 +256,7 @@ function CheckoutPageInner() {
         });
       }
     }
-  }, [savedAddresses, checkoutPersist.setCheckoutPersist]);
+  }, [savedAddresses, getNextAddressTitle, checkoutPersist.setCheckoutPersist]);
 
   // Shipping field setter
   const setShippingField = useCallback(
@@ -504,7 +516,10 @@ function CheckoutPageInner() {
 
   /* ── Empty Cart ───────────────────────────────────────────── */
   if (items.length === 0 && currentStep < 4) {
-    return <EmptyCart />;
+    return <>
+      <Header />
+      <EmptyCart />
+    </>;
   }
 
   /* ── Step progress data ───────────────────────────────────── */

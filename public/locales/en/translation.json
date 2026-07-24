@@ -979,6 +979,7 @@
       "state": "State/Province",
       "zipCode": "ZIP/Postal Code",
       "country": "Country",
+      "addressTitle": "Address {number}",
       "saveAddress": "Save this address for next time",
       "creditCard": "Credit / Debit Card",
       "paypal": "PayPal",

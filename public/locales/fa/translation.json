@@ -959,6 +959,7 @@
       "state": "استان",
       "zipCode": "کد پستی",
       "country": "کشور",
+      "addressTitle": "آدرس {number}",
       "saveAddress": "ذخیره آدرس برای دفعات بعد",
       "creditCard": "کارت اعتباری / نقدی",
       "paypal": "پی‌پال",

@@ -933,6 +933,7 @@
         "state": "الولاية / المحافظة",
         "zipCode": "الرمز البريدي",
         "country": "البلد",
+        "addressTitle": "العنوان {number}",
         "saveAddress": "حفظ العنوان للمرة القادمة",
         "creditCard": "بطاقة ائتمان / خصم",
         "paypal": "باي بال",
