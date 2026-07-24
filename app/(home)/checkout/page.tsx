@@ -31,7 +31,6 @@ import {
   ShippingForm,
   PaymentForm,
   VALID_PROMOS,
-  PAYMENT_METHOD_MAP,
 } from './_components';
 import {
   OrderSummary,
@@ -97,7 +96,7 @@ function CheckoutPageInner() {
 
   // Payment form
   const [payment, setPayment] = useState<PaymentForm>({
-    method: 'card', cardholderName: '', cardNumber: '', expiryDate: '', cvc: '',
+    method: PaymentMethod.CreditCard
   });
 
   // Promo code
@@ -229,7 +228,7 @@ function CheckoutPageInner() {
 
   // Payment field setter
   const setPaymentField = useCallback(
-    (field: keyof PaymentForm, value: string | PaymentMethod) =>
+    (field: keyof PaymentForm, value: PaymentMethod) =>
       setPayment((prev) => ({ ...prev, [field]: value })),
     [],
   );
@@ -271,18 +270,14 @@ function CheckoutPageInner() {
   const [errors, setErrors] = useState<Record<string, string>>({});
 
   const validatePayment = useCallback((): boolean => {
-    if (payment.method !== 'card') {
-      setErrors({});
-      return true;
-    }
-    const errs: Record<string, string> = {};
-    if (!payment.cardholderName.trim()) errs.cardholderName = 'Required';
-    const rawCard = payment.cardNumber.replace(/\s/g, '');
-    if (!rawCard || rawCard.length < 15) errs.cardNumber = 'Valid card number required';
-    if (!payment.expiryDate.trim() || payment.expiryDate.length < 5) errs.expiryDate = 'MM/YY';
-    if (!payment.cvc.trim() || payment.cvc.length < 3) errs.cvc = '3+ digits';
-    setErrors(errs);
-    return Object.keys(errs).length === 0;
+    return true;
+    // if (payment.method !==  PaymentMethod.CreditCard) {
+    //   setErrors({});
+    //   return true;
+    // }
+    // const errs: Record<string, string> = {};
+    // return Object.keys(errs).length === 0;
+    
   }, [payment]);
 
   /* ── Step Navigation ──────────────────────────────────────── */
@@ -407,7 +402,7 @@ debugger
         orderStatusId: OrderStatus.Pending,
         shippingStatusId: ShippingStatus.NotYetShipped,
         paymentStatusId: PaymentStatus.Pending,
-        paymentMethodId: PAYMENT_METHOD_MAP[payment.method],
+        paymentMethodId: payment.method,
         userCurrency: CONFIG.DEFAULT_CURRENCY as any,
         finalPrice: total,
         refundedAmount: 0,

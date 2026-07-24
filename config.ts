@@ -1,5 +1,6 @@
 import CurrencyTypes from "./app/types/enums/CurrencyTypes";
 import MeasureType from "./app/types/enums/MeasureType";
+import PaymentMethod from "./app/types/enums/PaymentMethod";
 
 // ==============================|| THEME CONFIG  ||============================== //
 const CONFIG = {
@@ -36,6 +37,7 @@ const CONFIG = {
   DEFAULT_CURRENCY: CurrencyTypes.Dollar,
   DEFAULT_MEASURETYPE: MeasureType.Number,
   DEFAULT_PHONECOUNTRY: '+98',
+  DEFAULT_PAYMENT_METHODS: [PaymentMethod.CreditCard, PaymentMethod.CashOnDelivery, PaymentMethod.CashOnDelivery],
   DATE_STYLE: "short", // "full" | "long" | "medium" | "short",
   TIME_STYLE: 'short', // "full" | "long" | "medium" | "short"
   LTR_FONTS_EDITOR: '"Poppins", Arial, tohoma',

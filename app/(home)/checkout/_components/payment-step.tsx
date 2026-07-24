@@ -5,17 +5,25 @@ import { CreditCard, Shield, Truck, Check, ChevronLeft, ChevronRight } from 'luc
 import { motion, AnimatePresence } from 'framer-motion';
 
 import { Button } from '@(home)/_components/ui/button';
-import { PaymentForm, formatCardNumber, formatExpiry } from './types';
+import { PaymentForm } from './types';
 import { FormField } from './form-field';
-import { PaymentMethod } from '../../_types/OrderDisplayModel';
+import PaymentMethod from '@root/app/types/enums/PaymentMethod';
+import CONFIG from '@root/config';
 
 interface PaymentStepProps {
   payment: PaymentForm;
   errors: Record<string, string>;
-  onSetPaymentField: (field: keyof PaymentForm, value: string | PaymentMethod) => void;
+  onSetPaymentField: (field: keyof PaymentForm, value: PaymentMethod) => void;
   onBack: () => void;
   onContinue: () => void;
 }
+
+const PAYMENT_META: Record<PaymentMethod, { labelKey: string; icon: typeof CreditCard; descKey?: string }> = {
+  [PaymentMethod.CreditCard]: { labelKey: 'creditCard', icon: CreditCard },
+  [PaymentMethod.PayPal]: { labelKey: 'paypal', icon: Shield },
+  [PaymentMethod.BankTransfer]: { labelKey: 'bankTransfer', icon: CreditCard },
+  [PaymentMethod.CashOnDelivery]: { labelKey: 'cashOnDelivery', icon: Truck, descKey: 'codNote' },
+};
 
 export function PaymentStep({
   payment,
@@ -26,11 +34,12 @@ export function PaymentStep({
 }: PaymentStepProps) {
   const t = useTranslations('homepage.paymentPage');
 
-  const paymentMethods: { value: PaymentMethod; label: string; icon: typeof CreditCard; desc?: string }[] = [
-    { value: 'card', label: t('creditCard'), icon: CreditCard },
-    { value: 'paypal', label: t('paypal'), icon: Shield },
-    { value: 'cod', label: t('cashOnDelivery'), icon: Truck, desc: t('codNote') },
-  ];
+  const paymentMethods = CONFIG.DEFAULT_PAYMENT_METHODS.map((method) => ({
+    value: method,
+    label: t(PAYMENT_META[method].labelKey),
+    icon: PAYMENT_META[method].icon,
+    desc: PAYMENT_META[method].descKey ? t(PAYMENT_META[method].descKey!) : undefined,
+  }));
 
   return (
     <div className="space-y-6">
@@ -83,56 +92,6 @@ export function PaymentStep({
           </button>
         ))}
       </div>
-
-      {/* Card form (shown when Credit Card selected) */}
-      <AnimatePresence>
-        {payment.method === 'card' && (
-          <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: 'auto' }}
-            exit={{ opacity: 0, height: 0 }}
-            transition={{ duration: 0.25 }}
-            className="overflow-hidden"
-          >
-            <div className="space-y-4 pt-2">
-              <FormField
-                id="cardholderName"
-                label={t('cardholderName')}
-                value={payment.cardholderName}
-                onChange={(v) => onSetPaymentField('cardholderName', v)}
-                placeholder="John Doe"
-                error={errors.cardholderName}
-              />
-              <FormField
-                id="cardNumber"
-                label={t('cardNumber')}
-                value={payment.cardNumber}
-                onChange={(v) => onSetPaymentField('cardNumber', formatCardNumber(v))}
-                placeholder="4242 4242 4242 4242"
-                error={errors.cardNumber}
-              />
-              <div className="grid grid-cols-2 gap-4">
-                <FormField
-                  id="expiryDate"
-                  label={t('expiryDate')}
-                  value={payment.expiryDate}
-                  onChange={(v) => onSetPaymentField('expiryDate', formatExpiry(v))}
-                  placeholder="MM/YY"
-                  error={errors.expiryDate}
-                />
-                <FormField
-                  id="cvc"
-                  label={t('cvc')}
-                  value={payment.cvc}
-                  onChange={(v) => onSetPaymentField('cvc', v.replace(/\D/g, '').slice(0, 4))}
-                  placeholder="123"
-                  error={errors.cvc}
-                />
-              </div>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
 
       {/* Navigation buttons */}
       <div className="flex flex-col sm:flex-row gap-3">
