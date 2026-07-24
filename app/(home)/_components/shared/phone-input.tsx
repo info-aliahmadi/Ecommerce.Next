@@ -28,7 +28,7 @@ export function PhoneInput({
   className = '',
   minLength = 10,
   maxLength = 10,
-}: PhoneInputProps) {
+}: Readonly<PhoneInputProps>) {
   return (
     <div className={className}>
       <div className="relative flex">
@@ -41,7 +41,7 @@ export function PhoneInput({
           inputMode="numeric"
           placeholder={placeholder}
           value={value}
-          onChange={(e) => onChange(e.target.value.replace(/\D/g, '').slice(0, 15))}
+          onChange={(e) => onChange(e.target.value)}
           className={`h-11 rounded-s-none border-ecommerce-border bg-ecommerce-surface text-ecommerce-text-primary rounded-e-xl ${error ? 'border-red-500' : ''}`}
           autoComplete="tel"
           disabled={disabled}

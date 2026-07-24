@@ -130,9 +130,12 @@ function CheckoutPageInner() {
     isDefault: false,
   });
 
-  // Pre-fill form with session data
+  // Pre-fill form with session data (only on initial auth)
+  const sessionPrefilledRef = useRef(false);
   useEffect(() => {
+    if (sessionPrefilledRef.current) return;
     if (status === 'authenticated' && session?.user) {
+      sessionPrefilledRef.current = true;
       setShipping((prev) => ({
         ...prev,
         fullName: session.user.name || '',
@@ -291,6 +294,7 @@ function CheckoutPageInner() {
   }, [currentStep]);
 
   const handleContinueShipping = useCallback(async () => {
+    debugger
     // Validate contact info
     const contactErrors: Record<string, string> = {};
     if (!shipping.fullName.trim()) contactErrors.fullName = t('fieldRequired');
@@ -355,14 +359,18 @@ debugger
             return;
           }
         } else {
-          const res = await profileService.updateAddress(addrForm);
-          if (res.succeeded) {
-            toast.success(t('addressUpdated'));
-          } else {
-            toast.error(res.message || t('addressUpdateFailed'));
-            setIsPlacing(false);
-            return;
+          // Only call update if the address was actually modified
+          const original = savedAddresses.find((a) => a.id === Number(selectedAddressId));
+          const addrChanged = !original || JSON.stringify(addrForm) !== JSON.stringify(original);
+          if (addrChanged) {
+            const res = await profileService.updateAddress(addrForm);
+            if (!res.succeeded) {
+              toast.error(res.message || t('addressUpdateFailed'));
+              setIsPlacing(false);
+              return;
+            }
           }
+          setShipping((prev) => ({ ...prev, addressId: addrForm.id }));
         }
       } catch {
         toast.error(t('addressSaveFailed'));
@@ -374,7 +382,7 @@ debugger
     }
 
     goToStep(2);
-  }, [shipping, addrForm, selectedAddressId, session, goToStep, t]);
+  }, [shipping, addrForm, selectedAddressId, savedAddresses, session, goToStep, t]);
 
   const handleContinuePayment = useCallback(() => {
     if (validatePayment()) goToStep(3);
