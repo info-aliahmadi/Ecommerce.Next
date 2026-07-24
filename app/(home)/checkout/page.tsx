@@ -14,7 +14,7 @@ import {
 import { Footer } from '../_components/ecommerce/footer';
 import { BackToTop } from '../_components/ecommerce/back-to-top';
 import { MobileBottomNav } from '../_components/ecommerce/mobile-bottom-nav';
-import { useCartStore } from '../_lib/store';
+import { useCartStore, useCheckoutPersistStore } from '../_lib/store';
 
 import { Card, CardContent } from '../_components/ui/card';
 import {
@@ -69,6 +69,7 @@ function CheckoutPageInner() {
   }, [status, router]);
 
   const { items, totalPrice, totalSavings, clearCart, totalItems } = useCartStore();
+  const checkoutPersist = useCheckoutPersistStore();
 
   // Step management
   const [currentStep, setCurrentStep] = useState<CheckoutStep>(1);
@@ -78,6 +79,7 @@ function CheckoutPageInner() {
   // Shipping form
   const [shipping, setShipping] = useState<ShippingForm>({
     fullName: '', email: '', phone: '',
+    note: checkoutPersist.shippingNote || '',
     address: {
       id: 0,
       userId: 0,
@@ -96,12 +98,12 @@ function CheckoutPageInner() {
 
   // Payment form
   const [payment, setPayment] = useState<PaymentForm>({
-    method: PaymentMethod.CreditCard
+    method: checkoutPersist.paymentMethod ?? PaymentMethod.CreditCard
   });
 
   // Promo code
   const [promoInput, setPromoInput] = useState('');
-  const [appliedPromo, setAppliedPromo] = useState<string | null>(null);
+  const [appliedPromo, setAppliedPromo] = useState<string | null>(checkoutPersist.appliedPromo);
   const [promoError, setPromoError] = useState('');
   const [showPromoInput, setShowPromoInput] = useState(false);
 
@@ -110,7 +112,9 @@ function CheckoutPageInner() {
 
   // Saved addresses
   const [savedAddresses, setSavedAddresses] = useState<AddressModel[]>([]);
-  const [selectedAddressId, setSelectedAddressId] = useState<string>('new');
+  const [selectedAddressId, setSelectedAddressId] = useState<string>(
+    checkoutPersist.selectedAddressId ?? 'new'
+  );
   const [addressesLoading, setAddressesLoading] = useState(false);
 
   // Address form state
@@ -129,24 +133,36 @@ function CheckoutPageInner() {
     isDefault: false,
   });
 
-  // Pre-fill form with session data (only on initial auth)
+  // Hydrate step from persist store (once)
+  const stepHydratedRef = useRef(false);
+  useEffect(() => {
+    if (stepHydratedRef.current) return;
+    stepHydratedRef.current = true;
+    const persisted = checkoutPersist.currentStep;
+    if (persisted && persisted >= 1 && persisted <= 3) {
+      setCurrentStep(persisted);
+    }
+  }, [checkoutPersist.currentStep]);
+
+  // Pre-fill form with user data (only on initial auth)
   const sessionPrefilledRef = useRef(false);
   useEffect(() => {
     if (sessionPrefilledRef.current) return;
-    if (status === 'authenticated' && session?.user) {
-      sessionPrefilledRef.current = true;
+    if (status !== 'authenticated' || !session?.user?.accessToken) return;
+    sessionPrefilledRef.current = true;
+    const accountService = new AccountService(session.user.accessToken);
+    accountService.getCurrentUser().then((user) => {
       setShipping((prev) => ({
         ...prev,
-        fullName: session.user.name || '',
-        email: session.user.email || '',
-        phone: session.user.phoneNumber || '',
+        fullName: user.name || '',
+        email: user.email || '',
+        phone: user.phoneNumber || '',
       }));
       setAddrForm((prev) => ({
         ...prev,
-        title: session.user.name || '',
-        phoneNumber: '',
+        title: user.name || '',
       }));
-    }
+    });
   }, [status, session]);
 
   // Load saved addresses (only on initial auth)
@@ -162,10 +178,20 @@ function CheckoutPageInner() {
         const addrRes = await service.getUserAddresses();
         if (addrRes.succeeded && addrRes.data) {
           setSavedAddresses(addrRes.data);
-          const defaultAddr = addrRes.data.find((a) => a.isDefault);
-          if (defaultAddr) {
-            setSelectedAddressId(String(defaultAddr.id));
-            setAddrForm(defaultAddr);
+          const persistedId = checkoutPersist.selectedAddressId;
+          const persistedAddr = persistedId && persistedId !== 'new'
+            ? addrRes.data.find((a) => String(a.id) === persistedId)
+            : null;
+          if (persistedAddr) {
+            setSelectedAddressId(persistedId);
+            setAddrForm(persistedAddr);
+          } else {
+            const defaultAddr = addrRes.data.find((a) => a.isDefault);
+            if (defaultAddr) {
+              setSelectedAddressId(String(defaultAddr.id));
+              setAddrForm(defaultAddr);
+              checkoutPersist.setCheckoutPersist({ selectedAddressId: String(defaultAddr.id) });
+            }
           }
         }
       } catch {
@@ -192,6 +218,7 @@ function CheckoutPageInner() {
 
   const handleAddressSelect = useCallback((value: string) => {
     setSelectedAddressId(value);
+    checkoutPersist.setCheckoutPersist({ selectedAddressId: value });
     const s = shippingRef.current;
     if (value === 'new') {
       setAddrForm({
@@ -217,20 +244,28 @@ function CheckoutPageInner() {
         });
       }
     }
-  }, [savedAddresses]);
+  }, [savedAddresses, checkoutPersist.setCheckoutPersist]);
 
   // Shipping field setter
   const setShippingField = useCallback(
-    (field: keyof ShippingForm, value: string | boolean) =>
-      setShipping((prev) => ({ ...prev, [field]: value })),
-    [],
+    (field: keyof ShippingForm, value: string | boolean) => {
+      setShipping((prev) => ({ ...prev, [field]: value }));
+      if (field === 'note') {
+        checkoutPersist.setCheckoutPersist({ shippingNote: String(value) });
+      }
+    },
+    [checkoutPersist.setCheckoutPersist],
   );
 
   // Payment field setter
   const setPaymentField = useCallback(
-    (field: keyof PaymentForm, value: PaymentMethod) =>
-      setPayment((prev) => ({ ...prev, [field]: value })),
-    [],
+    (field: keyof PaymentForm, value: PaymentMethod) => {
+      setPayment((prev) => ({ ...prev, [field]: value }));
+      if (field === 'method') {
+        checkoutPersist.setCheckoutPersist({ paymentMethod: value });
+      }
+    },
+    [checkoutPersist.setCheckoutPersist],
   );
 
   /* ── Calculations ─────────────────────────────────────────── */
@@ -256,15 +291,17 @@ function CheckoutPageInner() {
       return;
     }
     setAppliedPromo(code);
+    checkoutPersist.setCheckoutPersist({ appliedPromo: code });
     setPromoError('');
     setPromoInput('');
     setShowPromoInput(false);
-  }, [promoInput, t]);
+  }, [promoInput, t, checkoutPersist.setCheckoutPersist]);
 
   const handleRemovePromo = useCallback(() => {
     setAppliedPromo(null);
+    checkoutPersist.setCheckoutPersist({ appliedPromo: null });
     setPromoInput('');
-  }, []);
+  }, [checkoutPersist.setCheckoutPersist]);
 
   /* ── Validation ───────────────────────────────────────────── */
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -284,12 +321,12 @@ function CheckoutPageInner() {
   const goToStep = useCallback((step: CheckoutStep, dir?: 1 | -1) => {
     setDirection(dir ?? (step > currentStep ? 1 : -1));
     setCurrentStep(step);
+    checkoutPersist.setCheckoutPersist({ currentStep: step });
     setErrors({});
     window.scrollTo({ top: 0, behavior: 'smooth' });
-  }, [currentStep]);
+  }, [currentStep, checkoutPersist.setCheckoutPersist]);
 
   const handleContinueShipping = useCallback(async () => {
-    debugger
     // Validate contact info
     const contactErrors: Record<string, string> = {};
     if (!shipping.fullName.trim()) contactErrors.fullName = t('fieldRequired');
@@ -309,7 +346,7 @@ function CheckoutPageInner() {
       setErrors(allErrors);
       return;
     }
-debugger
+
     if (session?.user?.accessToken) {
       setIsPlacing(true);
       try {
@@ -440,6 +477,7 @@ debugger
       if (result.succeeded && result.data) {
         setOrderNumber(`ORD-${result.data.id}`);
         clearCart();
+        checkoutPersist.clearCheckoutPersist();
         toast.success(t('orderPlaced'));
         goToStep(4, 1);
       } else {
@@ -450,7 +488,7 @@ debugger
     } finally {
       setIsPlacing(false);
     }
-  }, [session, shipping, payment, total, shippingCost, tax, discountAmount, items, clearCart, goToStep, router, t]);
+  }, [session, shipping, payment, total, shippingCost, tax, discountAmount, items, clearCart, checkoutPersist.clearCheckoutPersist, goToStep, router, t]);
 
   /* ── Auth Loading / Redirect ──────────────────────────────────── */
   if (status === 'loading' || status === 'unauthenticated') {

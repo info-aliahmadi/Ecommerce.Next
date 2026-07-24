@@ -1,6 +1,8 @@
 import CONFIG from '@root/config';
 import { create } from 'zustand';
-import { persist } from 'zustand/middleware';
+import { persist, createJSONStorage } from 'zustand/middleware';
+import { CheckoutStep } from '../checkout/_components/types';
+import PaymentMethod from '@root/app/types/enums/PaymentMethod';
 import ProductDisplayModel from '../_types/ProductDisplayModel';
 import CartItem from '../_types/CartItem';
 import WishlistItem from '../_types/WishlistItem';
@@ -311,6 +313,50 @@ export const useAuthStore = create<AuthStore>((set) => ({
   isForgotPasswordOpen: false,
   setForgotPasswordOpen: (open) => set({ isForgotPasswordOpen: open }),
 }));
+
+// ── Checkout Persist Store (sessionStorage) ─────────────────
+
+interface CheckoutPersistState {
+  currentStep: CheckoutStep;
+  paymentMethod: PaymentMethod | null;
+  selectedAddressId: string | null;
+  appliedPromo: string | null;
+  shippingNote: string;
+  setCheckoutPersist: (partial: Partial<CheckoutPersistState>) => void;
+  clearCheckoutPersist: () => void;
+}
+
+export const useCheckoutPersistStore = create<CheckoutPersistState>()(
+  persist(
+    (set) => ({
+      currentStep: 1 as CheckoutStep,
+      paymentMethod: null,
+      selectedAddressId: null,
+      appliedPromo: null,
+      shippingNote: '',
+      setCheckoutPersist: (partial) => set(partial),
+      clearCheckoutPersist: () =>
+        set({
+          currentStep: 1,
+          paymentMethod: null,
+          selectedAddressId: null,
+          appliedPromo: null,
+          shippingNote: '',
+        }),
+    }),
+    {
+      name: 'ecommerce-checkout',
+      storage: createJSONStorage(() => sessionStorage),
+      partialize: (state) => ({
+        currentStep: state.currentStep,
+        paymentMethod: state.paymentMethod,
+        selectedAddressId: state.selectedAddressId,
+        appliedPromo: state.appliedPromo,
+        shippingNote: state.shippingNote,
+      }),
+    }
+  )
+);
 
 // ── Locale Store ──────────────────────────────────────────────
 export type Locale = 'en' | 'fa' | 'ar';
