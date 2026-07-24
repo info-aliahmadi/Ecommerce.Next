@@ -314,7 +314,7 @@ function CheckoutPageInner() {
     // }
     // const errs: Record<string, string> = {};
     // return Object.keys(errs).length === 0;
-    
+
   }, [payment]);
 
   /* ── Step Navigation ──────────────────────────────────────── */
@@ -330,7 +330,7 @@ function CheckoutPageInner() {
     // Validate contact info
     const contactErrors: Record<string, string> = {};
     if (!shipping.fullName.trim()) contactErrors.fullName = t('fieldRequired');
-
+    debugger
     // Validate address form
     const addrErrors: Record<string, string> = {};
     if (!addrForm.title?.trim()) addrErrors.title = t('fieldRequired');

@@ -121,7 +121,7 @@ export function ShippingStep({
               }
             }}
             showTitle
-            showIsDefault={false}
+            showIsDefault
           />
 
           {/* Delivery Note */}
