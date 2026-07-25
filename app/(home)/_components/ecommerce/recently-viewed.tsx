@@ -7,7 +7,7 @@ import { useEffect, useState, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { toast } from 'sonner';
 import { useTranslations } from 'next-intl';
-import ProductDisplayModel, { getProductPricing } from '../../_types/ProductDisplayModel';
+import ProductDisplayModel, { getProductPricing } from '../../_types/Product/ProductDisplayModel';
 import { GetImage } from '../../_lib/utils';
 
 export function RecentlyViewed() {

@@ -1,5 +1,5 @@
 import InventoryDisplayModel from "./InventoryDisplayModel";
-import ProductAttributeDisplayModel from "./ProductAttributeDisplayModel";
+import ProductAttributeDisplayModel from "./Product/ProductAttributeDisplayModel";
 
 /**
  * Represents a product variant with its own inventory and attributes.

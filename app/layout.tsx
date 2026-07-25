@@ -8,14 +8,14 @@ import { RTL_LOCALES } from './(home)/_lib/store';
 import "@root/public/fonts/IRANSans/iransans.css";
 import "@root/public/fonts/Geist/geist.css";
 import "@root/public/css/customStyle/homePage.css";
+import { resolveLanguage } from '@root/utils/resolver';
 
 export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const locale = await getLocale();
-
+  const locale = await getLocale() ?? "en";
   // Load messages for the current locale (use client)
   let messages;
   messages = (await import(`@root/public/locales/${locale}/translation.json`)).default;
@@ -37,7 +37,7 @@ export default async function RootLayout({
         className={`font-sans ${fontlocaleCssClass} antialiased`}
         style={{ fontFamily: 'var(--font-locale, var(--font-geist-sans)), sans-serif' }}
       >
-        <NextIntlClientProvider locale={locale ?? CONFIG.DEFAULT_LANGUAGE} messages={messages}>
+        <NextIntlClientProvider locale={locale ?? resolveLanguage(CONFIG.DEFAULT_LANGUAGE)} messages={messages}>
           <DirectionProvider>
             {children}
           </DirectionProvider>

@@ -84,7 +84,7 @@ function MaterialTable({
 
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
 
-  let currentLanguage = nextIntlService.getNextIntlLocale();
+  let currentLanguage =  nextIntlService.getNextIntlLocale();
 
   const dir = RTL_LOCALES.includes(currentLanguage as any) == true ? 'rtl' : 'ltr';
 

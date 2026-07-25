@@ -2,7 +2,7 @@ import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { getLocale, getTranslations } from 'next-intl/server';
 import CONFIG from '@root/config';
-import ProductDisplayModel from '../../_types/ProductDisplayModel';
+import ProductDisplayModel from '../../_types/Product/ProductDisplayModel';
 import { GetImage } from '../../_lib/utils';
 
 // Client components (only for interactive parts)

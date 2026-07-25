@@ -7,7 +7,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@(home)/_components/ui
 import { Button } from '@(home)/_components/ui/button';
 import { Input } from '@(home)/_components/ui/input';
 import { Separator } from '@(home)/_components/ui/separator';
-import CartItem from '@(home)/_types/CartItem';
+import CartItem from '@root/app/(home)/_types/Order/CartItem';
 import { GetImage } from '@(home)/_lib/utils';
 import { VALID_PROMOS } from './types';
 
@@ -63,7 +63,7 @@ export function OrderSummary({
         {/* Compact items list */}
         <div className="space-y-3 max-h-64 overflow-y-auto pe-1">
           {items.map((item: CartItem) => (
-            <div key={item.id} className="flex items-center gap-3">
+            <div key={item.variant.id} className="flex items-center gap-3">
               <img
                 src={GetImage(item.image)}
                 alt={item.name}

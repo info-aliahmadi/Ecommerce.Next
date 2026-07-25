@@ -1,4 +1,4 @@
-import ProductDisplayModel from "./ProductDisplayModel";
+import ProductDisplayModel from "./Product/ProductDisplayModel";
 
 /**
  * Represents a product bundle.

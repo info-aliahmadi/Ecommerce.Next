@@ -12,7 +12,7 @@ import {
 } from '../../../_lib/store';
 import { useFlyToCart } from '../../../_hooks/use-fly-to-cart';
 import { GetImage } from '../../../_lib/utils';
-import ProductDisplayModel, { getProductPricing } from '../../../_types/ProductDisplayModel';
+import ProductDisplayModel, { getProductPricing } from '../../../_types/Product/ProductDisplayModel';
 import ProductVariantDisplayModel from '../../../_types/ProductVariantDisplayModel';
 
 export default function ProductActions({

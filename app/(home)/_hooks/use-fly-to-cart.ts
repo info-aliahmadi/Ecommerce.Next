@@ -4,7 +4,7 @@ import { useCallback } from 'react';
 import { triggerFlyToCart } from '../_components/ecommerce/fly-to-cart';
 import { useCartStore } from '../_lib/store';
 import { toast } from 'sonner';
-import CartItem from '../_types/CartItem';
+import CartItem from '../_types/Order/CartItem';
 
 
 export function useFlyToCart() {

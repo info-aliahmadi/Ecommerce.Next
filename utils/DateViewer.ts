@@ -2,11 +2,19 @@ import CONFIG from '@root/config';
 import { formatDistanceToNow } from 'date-fns';
 import moment from 'moment';
 import { enUS, faIR, ar } from 'date-fns/locale';
+import LanguageType from '@root/app/types/enums/LanguageType';
+import languageList from '@root/locales/languageList';
 
 type DateStyle = 'short' | 'full' | 'long' | 'medium';
+type LanguageInput = string | LanguageType;
+
+const resolveLocale = (lang: LanguageInput): string => {
+  if (typeof lang === 'string') return lang;
+  return languageList.find((l) => l.languageType === lang)?.key ?? 'en';
+};
 
 export const DateViewer = (
-  currentLanguage: string,
+  currentLanguage: LanguageInput,
   date?: Date | number | undefined,
   dateStyle?: DateStyle,
 ): string => {
@@ -19,14 +27,14 @@ export const DateViewer = (
 
   let timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
   let dateStype = dateStyle ?? (CONFIG.DATE_STYLE as DateStyle);
-  return new Intl.DateTimeFormat(currentLanguage, {
+  return new Intl.DateTimeFormat(resolveLocale(currentLanguage), {
     dateStyle: dateStype,
     timeZone: timeZone,
   }).format(moment(date).toDate());
 };
 
 export const DateTimeViewer = (
-  currentLanguage: string,
+  currentLanguage: LanguageInput,
   dateTime: Date | undefined,
 ): string => {
   if (dateTime === null || dateTime === undefined) return '';
@@ -39,7 +47,7 @@ export const DateTimeViewer = (
   let timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
   let dateStype = CONFIG.DATE_STYLE as DateStyle;
   let timeStyle = CONFIG.TIME_STYLE as DateStyle;
-  return new Intl.DateTimeFormat(currentLanguage, {
+  return new Intl.DateTimeFormat(resolveLocale(currentLanguage), {
     dateStyle: dateStype,
     timeStyle: timeStyle,
     hour12: false,
@@ -47,22 +55,20 @@ export const DateTimeViewer = (
   }).format(moment(dateTime).toDate());
 };
 
-export const showDistanceToNow = (date: Date, locale: string) => {
+export const showDistanceToNow = (date: Date, locale: LanguageInput) => {
   // Only run on client side to avoid hydration mismatch
   if (typeof window === 'undefined') {
     return moment(date).fromNow();
   }
 
+  const resolved = resolveLocale(locale);
   let loc;
-  switch (locale) {
+  switch (resolved) {
     case 'ar':
       loc = ar;
       break;
     case 'fa':
       loc = faIR;
-      break;
-    case 'en':
-      loc = enUS;
       break;
     default:
       loc = enUS;

@@ -27,16 +27,20 @@ import Loader from '@dashboard/_components/Loader';
 import { Options } from '@emotion/cache';
 import nextIntlService from '@root/locales/nextIntlService';
 import { PERSIAN_CALENDAR, RTL_LOCALES } from '@root/app/(home)/_lib/store';
+import ThemeType from '@root/app/types/enums/ThemeType';
+import { resolveLanguage, resolveThemeMode } from '@root/utils/resolver';
+
 // ==============================|| DEFAULT THEME - MAIN  ||============================== //
+
+
+
 export default function DashboardThemeCustomization({ children }: { children: any }) {
 
   const { data: session, status } = useSession();
 
-  let themeMode: 'light' | 'dark' | undefined = session?.user?.defaultTheme;
-
-  if (session != undefined && themeMode == undefined) {
-    themeMode = CONFIG.DEFAULT_THEME as 'light' | 'dark';
-  }
+  const themeMode: 'light' | 'dark' = resolveThemeMode(
+    session?.user?.defaultTheme ?? CONFIG.DEFAULT_THEME
+  );
 
   const [direction, setDirection] = useState<'ltr' | 'rtl'>('ltr'); // Default to LTR
   const [isPersianCalendar, setIsPersianCalendar] = useState<boolean>(false);
@@ -53,7 +57,7 @@ export default function DashboardThemeCustomization({ children }: { children: an
     // Only run on client side
     if (typeof window === 'undefined') return;
 
-    let locale: string = session?.user?.defaultLanguage ?? CONFIG.DEFAULT_LANGUAGE;
+    let locale: string = resolveLanguage(session?.user?.defaultLanguage ?? CONFIG.DEFAULT_LANGUAGE);
     nextIntlService.setNextIntlLocale(locale);
     const dir = RTL_LOCALES.includes(locale as any) == true ? 'rtl' : 'ltr';
     setDirection(dir)
@@ -143,4 +147,3 @@ export default function DashboardThemeCustomization({ children }: { children: an
     </StyledEngineProvider>
   );
 }
-

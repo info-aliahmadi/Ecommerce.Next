@@ -3,8 +3,8 @@ import OrderStatus from "@root/app/types/enums/OrderStatus";
 import ShippingStatus from "@root/app/types/enums/ShippingStatus";
 import PaymentStatus from "@root/app/types/enums/PaymentStatus";
 import PaymentMethod from "@root/app/types/enums/PaymentMethod";
-import OrderItemDisplayModel from "./OrderItemDisplayModel";
 import ShippingMethod from "@root/app/types/enums/ShippingMethod";
+import OrderItemDisplayModel from "./OrderItemDisplayModel";
 
 /**
  * Represents an order.
@@ -150,6 +150,3 @@ export default interface OrderDisplayModel {
    */
   orderItems: OrderItemDisplayModel[];
 }
-
-// Re-export enums for convenience
-export { OrderStatus, ShippingStatus, PaymentStatus, PaymentMethod };

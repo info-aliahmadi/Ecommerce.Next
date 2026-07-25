@@ -7,7 +7,7 @@ import { Badge } from '../ui/badge';
 import { useCartStore } from '../../_lib/store';
 import { toast } from 'sonner';
 import { useTranslations } from 'next-intl';
-import ProductDisplayModel, { getProductPricing } from '../../_types/ProductDisplayModel';
+import ProductDisplayModel, { getProductPricing } from '../../_types/Product/ProductDisplayModel';
 import HomePageService from '../../_services/HomePageService';
 import { useQuery } from '@tanstack/react-query';
 import BundleDisplayModel from '../../_types/BundleDisplayModel';

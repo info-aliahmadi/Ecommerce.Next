@@ -6,6 +6,8 @@ import { JWT } from 'next-auth/jwt';
 import { AdapterUser } from 'next-auth/adapters';
 import AccountService from '@root/app/dashboard/(auth)/_service/AccountService';
 import CONFIG from '@root/config';
+import ThemeType from '@root/app/types/enums/ThemeType';
+import LanguageType from '@root/app/types/enums/LanguageType';
 
 export const options: NextAuthOptions = {
   pages: {
@@ -63,8 +65,8 @@ export const options: NextAuthOptions = {
           name: string;
           userName: string;
           email: string;
-          defaultLanguage: string;
-          defaultTheme: 'light' | 'dark';
+          defaultLanguage: LanguageType;
+          defaultTheme: ThemeType;
           avatar: string;
           roles: string[];
           id: number;

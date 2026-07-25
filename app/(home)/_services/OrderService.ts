@@ -2,54 +2,17 @@ import Fetch from '@root/utils/Fetch';
 import Result from '@root/app/types/Result';
 import CONFIG from '@root/config';
 import AddressModel from '@root/app/dashboard/(ecommerce)/_types/Common/AddressModel';
-import ShoppingCartItemModel from '@root/app/(home)/_types/ShoppingCartItemModel';
+import ShoppingCartItemModel from '@root/app/(home)/_types/Order/ShoppingCartItemModel';
 import OrderModel from '@root/app/dashboard/(ecommerce)/_types/Order/OrderModel';
 import OrderItemModel from '@root/app/dashboard/(ecommerce)/_types/Order/OrderItemModel';
-import PaymentModel, { PaymentViewModel } from '@root/app/(home)/_types/PaymentModel';
-
-// Request types
-export interface AddToCartRequest {
-  productVariantId: number;
-  quantity?: number;
-}
-
-export interface AddToWishlistRequest {
-  productVariantId: number;
-}
-
-export interface RemoveFromCartRequest {
-  productVariantId: number;
-}
-
-export interface RemoveFromWishlistRequest {
-  productVariantId: number;
-}
-
-export interface UpdateQuantityRequest {
-  itemId: number;
-  quantity: number;
-}
-
-export interface CreateOrderRequest {
-  addressId?: number | null;
-  shippingMethodId?: number | null;
-  paymentMethodId?: number | null;
-  items: {
-    productId: number;
-    quantity: number;
-    unitPrice: number;
-  }[];
-}
-
-export interface ProcessPaymentRequest {
-  orderId: number;
-  paymentMethodId?: number | null;
-  cardName: string;
-  cardNumber: string;
-  cardCvv2: string;
-  cardExpirationMonth: string;
-  cardExpirationYear: string;
-}
+import PaymentModel, { PaymentViewModel } from '@root/app/(home)/_types/Order/PaymentModel';
+import AddToCartRequest from '@root/app/(home)/_types/Order/AddToCartRequest';
+import AddToWishlistRequest from '@root/app/(home)/_types/Order/AddToWishlistRequest';
+import RemoveFromCartRequest from '@root/app/(home)/_types/Order/RemoveFromCartRequest';
+import RemoveFromWishlistRequest from '@root/app/(home)/_types/Order/RemoveFromWishlistRequest';
+import UpdateQuantityRequest from '@root/app/(home)/_types/Order/UpdateQuantityRequest';
+import CreateOrderRequest from '@root/app/(home)/_types/Order/CreateOrderRequest';
+import ProcessPaymentRequest from '@root/app/(home)/_types/Order/ProcessPaymentRequest';
 
 export default class OrderService {
   config?: RequestInit;

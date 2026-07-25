@@ -41,7 +41,7 @@ function FilesList({ directory }: Readonly<{ directory: string }>) {
   const t = useTranslations("");
   const { data: session } = useSession();
   const jwt = session?.accessToken;
-  const currentLanguage = session?.user.defaultLanguage;
+  const currentLanguage = session?.user.defaultLanguage ?? CONFIG.DEFAULT_LANGUAGE;
 
   const theme = useTheme();
 
@@ -210,7 +210,7 @@ function FilesList({ directory }: Readonly<{ directory: string }>) {
                           placement="top-start"
                           title={t('buttons.fileStorage.uploadedInfo', {
                             user: file.userName,
-                            date: file.uploadDate.toLocalDatetime(currentLanguage ?? "")
+                            date: file.uploadDate.toLocalDatetime(currentLanguage)
                           })}
                         >
                           <IconButton>

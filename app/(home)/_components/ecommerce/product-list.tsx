@@ -8,7 +8,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { toast } from 'sonner';
 import { useFlyToCart } from '../../_hooks/use-fly-to-cart';
 import { useTranslations } from 'next-intl';
-import ProductDisplayModel, { getProductPricing } from '../../_types/ProductDisplayModel';
+import ProductDisplayModel, { getProductPricing } from '../../_types/Product/ProductDisplayModel';
 import { GetImage } from '../../_lib/utils';
 import Link from 'next/link';
 import CurrencyViewer from '@root/utils/CurrencyViewer';

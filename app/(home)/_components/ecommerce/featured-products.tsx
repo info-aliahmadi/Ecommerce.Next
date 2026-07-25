@@ -7,7 +7,7 @@ import { Button } from '../ui/button';
 import { motion } from 'framer-motion';
 import { useTranslations } from 'next-intl';
 import HomePageService from '../../_services/HomePageService';
-import ProductDisplayModel from '../../_types/ProductDisplayModel';
+import ProductDisplayModel from '../../_types/Product/ProductDisplayModel';
 
 function ProductCardWrapper({ product, index }: Readonly<{ product: ProductDisplayModel, index: number }>) {
   return (

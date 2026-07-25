@@ -16,6 +16,7 @@ import Notify from '@dashboard/_components/@extended/Notify';
 import { useSession } from 'next-auth/react';
 import CONFIG from '@root/config';
 import nextIntlService from '@root/locales/nextIntlService';
+import { Language } from '@root/locales/Language';
 
 // ============================|| FIREBASE - REGISTER ||============================ //
 
@@ -27,7 +28,7 @@ const ChangeLanguageForm = () => {
   useEffect(() => {
     if (typeof document !== 'undefined') {
       let locale = session?.user?.defaultLanguage ?? CONFIG.DEFAULT_LANGUAGE;
-      let cl = languageList.find((l) => l.key === locale);
+      let cl = languageList.find((l) => l.languageType === locale);
       setCurrentLanguage(cl);
     }
   }, [])
@@ -44,7 +45,7 @@ const ChangeLanguageForm = () => {
     // Set both cookies for compatibility
     nextIntlService.setNextIntlLocale(lng.key);
     if (session) {
-      session.user.defaultLanguage = lng.key;
+      session.user.defaultLanguage = lng.languageType;
       await update({ ...session, user: session.user });
     }
     // Refresh the page to apply the new locale

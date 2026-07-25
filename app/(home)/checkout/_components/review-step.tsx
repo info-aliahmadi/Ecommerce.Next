@@ -9,7 +9,7 @@ import {
 import { Button } from '@(home)/_components/ui/button';
 import { Input } from '@(home)/_components/ui/input';
 import { Separator } from '@(home)/_components/ui/separator';
-import CartItem from '@(home)/_types/CartItem';
+import CartItem from '@root/app/(home)/_types/Order/CartItem';
 import { GetImage } from '@(home)/_lib/utils';
 import { ShippingForm, PaymentForm, VALID_PROMOS } from './types';
 

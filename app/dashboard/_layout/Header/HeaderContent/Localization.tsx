@@ -11,8 +11,8 @@ import { useTranslations } from 'next-intl';
 import LocalizationService from '@root/locales/LocalizationService';
 import { useSession } from 'next-auth/react';
 import CONFIG from '@root/config';
-import LocalStorageService from '@root/utils/LocalStorageService';
 import nextIntlService from '@root/locales/nextIntlService';
+import { Language } from '@root/locales/Language';
 
 // ==============================|| HEADER CONTENT - NOTIFICATION ||============================== //
 
@@ -37,7 +37,7 @@ const Localization = () => {
 
     if (session) {
       
-      session.user.defaultLanguage = lng.key;
+      session.user.defaultLanguage = lng.languageType;
       await update({ ...session, user: session.user });
     }
     setAnchorEl(null);

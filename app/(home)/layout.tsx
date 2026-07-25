@@ -15,6 +15,7 @@ import { CompareDrawer } from "./_components/ecommerce/compare-drawer";
 import { CookieBanner } from "./_components/ecommerce/cookie-banner";
 import LoginPopup from "./_components/pages/login-popup";
 import RegisterPopup from "./_components/pages/register-popup";
+import { resolveThemeMode } from "@root/utils/resolver";
 
 export const metadata: Metadata = {
   title: "HydraShop — Discover Your Perfect Style",
@@ -46,7 +47,7 @@ export default function RootLayout({
   return (
     <ThemeProvider
       attribute="class"
-      defaultTheme={CONFIG.DEFAULT_THEME}
+      defaultTheme={resolveThemeMode(CONFIG.DEFAULT_THEME)}
       enableSystem={false}
       disableTransitionOnChange={false}
     >

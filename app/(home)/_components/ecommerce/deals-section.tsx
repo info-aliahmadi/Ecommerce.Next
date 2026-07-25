@@ -8,7 +8,7 @@ import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { useTranslations } from 'next-intl';
 import HomePageService from '../../_services/HomePageService';
-import ProductDisplayModel, { getCheapestVariant } from '../../_types/ProductDisplayModel';
+import ProductDisplayModel, { getCheapestVariant } from '../../_types/Product/ProductDisplayModel';
 import CurrencyViewer from '@root/utils/CurrencyViewer';
 import CONFIG from '@root/config';
 

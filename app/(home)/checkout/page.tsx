@@ -15,13 +15,13 @@ import { Footer } from '../_components/ecommerce/footer';
 import { BackToTop } from '../_components/ecommerce/back-to-top';
 import { MobileBottomNav } from '../_components/ecommerce/mobile-bottom-nav';
 import { useCartStore, useCheckoutPersistStore } from '../_lib/store';
+import { getCustomerIp } from '../_lib/utils';
 
 import { Card, CardContent } from '../_components/ui/card';
 import {
   Accordion, AccordionItem, AccordionTrigger, AccordionContent,
 } from '../_components/ui/accordion';
 import ProfileService from '../_services/ProfileService';
-import OrderService from '@root/app/dashboard/(ecommerce)/_service/OrderService';
 import AccountService from '@root/app/dashboard/(auth)/_service/AccountService';
 import AddressModel from '@root/app/dashboard/(ecommerce)/_types/Common/AddressModel';
 import { Header } from '../_components/ecommerce/header';
@@ -41,12 +41,10 @@ import {
   ConfirmationStep,
   EmptyCart,
 } from './_components';
-import OrderDisplayModel, { PaymentMethod } from '../_types/OrderDisplayModel';
-import OrderStatus from '@root/app/types/enums/OrderStatus';
-import ShippingStatus from '@root/app/types/enums/ShippingStatus';
-import PaymentStatus from '@root/app/types/enums/PaymentStatus';
-import CONFIG from '@root/config';
 import ShippingMethod from '@root/app/types/enums/ShippingMethod';
+import OrderService from '../_services/OrderService';
+import CreateOrderRequest from '../_types/Order/CreateOrderRequest';
+import PaymentMethod from '@root/app/types/enums/PaymentMethod';
 
 /* ──────────────────────────────────────────────────────────────── */
 
@@ -89,6 +87,7 @@ function CheckoutPageInner() {
 
 
   const getNextAddressTitle = useCallback(() => {
+    debugger
     const existingTitles = savedAddresses.map((a) => a.title?.toLowerCase() || '');
     let counter = 1;
     let title: string;
@@ -172,7 +171,8 @@ function CheckoutPageInner() {
       }));
       setAddrForm((prev) => ({
         ...prev,
-        title: user.name || '',
+        title: getNextAddressTitle() || '',
+        phoneNumber: savedAddresses.length == 0 ? user.phoneNumber || '' : undefined,
       }));
     });
   }, [status, session]);
@@ -188,23 +188,29 @@ function CheckoutPageInner() {
       try {
         const service = new ProfileService(session.user.accessToken);
         const addrRes = await service.getUserAddresses();
-        if (addrRes.succeeded && addrRes.data) {
+        debugger
+        if (addrRes.succeeded && addrRes.data && addrRes.data.length > 0) {
           setSavedAddresses(addrRes.data);
           const persistedId = checkoutPersist.selectedAddressId;
           const persistedAddr = persistedId && persistedId !== 'new'
             ? addrRes.data.find((a) => String(a.id) === persistedId)
             : null;
           if (persistedAddr) {
-            setSelectedAddressId(persistedId);
+            setSelectedAddressId(persistedId ?? 'new');
             setAddrForm(persistedAddr);
           } else {
             const defaultAddr = addrRes.data.find((a) => a.isDefault);
-            if (defaultAddr) {
-              setSelectedAddressId(String(defaultAddr.id));
-              setAddrForm(defaultAddr);
-              checkoutPersist.setCheckoutPersist({ selectedAddressId: String(defaultAddr.id) });
+            const addrToSelect = defaultAddr || addrRes.data[0];
+            if (addrToSelect) {
+              setSelectedAddressId(String(addrToSelect.id));
+              setAddrForm(addrToSelect);
+              checkoutPersist.setCheckoutPersist({ selectedAddressId: String(addrToSelect.id) });
             }
           }
+        }else{
+          setSavedAddresses([]);
+          setSelectedAddressId('new');
+          checkoutPersist.setCheckoutPersist({ selectedAddressId: 'new' });
         }
       } catch {
         // Silent fail
@@ -342,7 +348,6 @@ function CheckoutPageInner() {
     // Validate contact info
     const contactErrors: Record<string, string> = {};
     if (!shipping.fullName.trim()) contactErrors.fullName = t('fieldRequired');
-    debugger
     // Validate address form
     const addrErrors: Record<string, string> = {};
     if (!addrForm.title?.trim()) addrErrors.title = t('fieldRequired');
@@ -443,34 +448,14 @@ function CheckoutPageInner() {
     try {
       // Build order model using OrderDisplayModel
       const orderService = new OrderService(session.user.accessToken);
-      const order: OrderDisplayModel = {
-        id: 0,
+      const customerIp = await getCustomerIp();
+      const order: CreateOrderRequest = {
         addressId: shipping.addressId || null,
-        shipmentId: null,
         shippingMethodId: ShippingMethod.Ground,
-        orderStatusId: OrderStatus.Pending,
-        shippingStatusId: ShippingStatus.NotYetShipped,
-        paymentStatusId: PaymentStatus.Pending,
         paymentMethodId: payment.method,
-        userCurrency: CONFIG.DEFAULT_CURRENCY as any,
-        finalPrice: total,
-        refundedAmount: 0,
-        customerIp: '',
-        allowStoringCreditCardNumber: false,
-        paidDateUtc: null,
-        createdOnUtc: new Date(),
-        paymentDateUtc: null,
         orderNote: shipping.note || '',
-        shippingTax: 0,
-        shippingAmount: shippingCost,
-        shippingAmountTax: 0,
-        taxAmount: tax,
-        discountAmount: discountAmount,
-        totalAmount: total,
-        transactionTrackingCode: '',
-        paymentTrackingCode: '',
-        trackingNumber: '',
-        orderItems: items.map((item) => ({
+        discountId: null,
+        items: items.map((item) => ({
           id: 0,
           orderId: 0,
           productVariantId: item.variant.id,
@@ -478,13 +463,13 @@ function CheckoutPageInner() {
           productName: item.name,
           quantity: item.quantity,
           unitPrice: item.variant.sellPrice,
-          discountAmount: 0,
+          discountAmount: item.variant.oldSellPrice > 0 ? item.variant.sellPrice - item.variant.oldSellPrice : 0,
           totalPrice: item.variant.sellPrice * item.quantity,
           totalPriceTax: 0,
         })),
       };
 
-      const result = await orderService.addOrderFromDisplay(order);
+      const result = await orderService.createOrder(order);
 
       if (result.succeeded && result.data) {
         setOrderNumber(`ORD-${result.data.id}`);

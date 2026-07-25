@@ -1,6 +1,8 @@
 import CurrencyTypes from "./app/types/enums/CurrencyTypes";
+import LanguageType from "./app/types/enums/LanguageType";
 import MeasureType from "./app/types/enums/MeasureType";
 import PaymentMethod from "./app/types/enums/PaymentMethod";
+import ThemeType from "./app/types/enums/ThemeType";
 
 // ==============================|| THEME CONFIG  ||============================== //
 const CONFIG = {
@@ -9,7 +11,7 @@ const CONFIG = {
   DEFAULT_PATH: '/',
   MINIDRAWER: true,
   CONTAINER: true,
-  DEFAULT_THEME: 'light',
+  DEFAULT_THEME: ThemeType.Light,
   DASHBOARD_THEME_MODE_STORAGE_NAME: 'HydraThemeMode',
   PRESET_COLOR: 'default',
   DOMAIN: process.env.NEXT_PUBLIC_FRONT_URL,
@@ -33,7 +35,7 @@ const CONFIG = {
   AUTHENTICATION_STORAGE_NAME: 'HydraAuthenticationStorage',
   AUTHORIZATION_STORAGE_NAME: 'HydraAuthorizationStorage',
   LANGUAGE_STORAGE_NAME: 'NEXT_LOCALE',
-  DEFAULT_LANGUAGE: 'en',
+  DEFAULT_LANGUAGE: LanguageType.English,
   DEFAULT_CURRENCY: CurrencyTypes.Dollar,
   DEFAULT_MEASURETYPE: MeasureType.Number,
   DEFAULT_PHONECOUNTRY: '+98',

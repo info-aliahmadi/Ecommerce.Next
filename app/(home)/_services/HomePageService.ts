@@ -1,7 +1,7 @@
 import CONFIG from "@root/config";
 import Fetch from "@root/utils/Fetch";
 import Result from "@root/app/types/Result";
-import ProductFilterModel from "../_types/ProductFilterModel";
+import ProductFilterModel from "../_types/Product/ProductFilterModel";
 import ArticleModel from "@root/app/dashboard/(cms)/_types/Article/ArticleMode";
 import PageModel from "@root/app/dashboard/(cms)/_types/Page/PageModel";
 import TopicModel from "@root/app/dashboard/(cms)/_types/Topic/TopicModel";
@@ -10,16 +10,16 @@ import LinkModel from "@root/app/dashboard/(cms)/_types/Link/LinkModel";
 import SlideshowModel from "@root/app/dashboard/(cms)/_types/Slideshow/SlideshowModel";
 import SiteSettingsModel from "@root/app/dashboard/(cms)/_types/SiteSetting/SiteSettingsModel";
 import MenuModel from "@root/app/dashboard/(cms)/_types/Menu/MenuModel";
-import ProductDisplayModel from "../_types/ProductDisplayModel";
-import CategoryDisplayModel from "../_types/CategoryDisplayModel";
-import ManufacturerDisplayModel from "../_types/ManufacturerDisplayModel";
+import ProductDisplayModel from "../_types/Product/ProductDisplayModel";
+import CategoryDisplayModel from "../_types/Product/CategoryDisplayModel";
+import ManufacturerDisplayModel from "../_types/Product/ManufacturerDisplayModel";
 import PaginatedDisplayList from "../_types/PaginatedList";
 import ProductTags from "@root/app/types/enums/ProductTags";
 import SortingType from "@root/app/types/enums/SortingType";
 import CuratedStyleProductModel from "../_types/CuratedStyleProductModel";
 import BundleDisplayModel from "../_types/BundleDisplayModel";
-import ProductTagDisplayModel from "../_types/ProductTagDisplayModel";
-import ProductAttributeDisplayModel from "../_types/ProductAttributeDisplayModel";
+import ProductTagDisplayModel from "../_types/Product/ProductTagDisplayModel";
+import ProductAttributeDisplayModel from "../_types/Product/ProductAttributeDisplayModel";
 import AttributeType from "@root/app/types/enums/AttributeType";
 
 export default class HomePageService {

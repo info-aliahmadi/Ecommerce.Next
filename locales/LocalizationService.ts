@@ -3,6 +3,8 @@ import Result from '@root/app/types/Result';
 import CONFIG from '@root/config';
 import nextIntlService from '@root/locales/nextIntlService';
 import Fetch from '@root/utils/Fetch';
+import { Language } from './Language';
+import LanguageType from '@root/app/types/enums/LanguageType';
 
 
 export default class LocalizationService {
@@ -11,8 +13,8 @@ export default class LocalizationService {
     if (jwt) this.config = Fetch.SetDefaultHeader(jwt);
   }
 
-  getCurrentLanguage = async (): Promise<string> => {
-    return Fetch.Get<string>(CONFIG.API_BASEPATH + `/auth/GetDefaultLanguage`, this.config).then((response) => {
+  getCurrentLanguage = async (): Promise<LanguageType> => {
+    return Fetch.Get<LanguageType>(CONFIG.API_BASEPATH + `/auth/GetDefaultLanguage`, this.config).then((response) => {
       if (response) {
         return response;
       } else {
@@ -22,7 +24,7 @@ export default class LocalizationService {
   };
 
   setCurrentLanguage = async (lang: Language): Promise<Result<null>> => {
-    const params = new URLSearchParams({ defaultLanguage: lang.key });
+    const params = new URLSearchParams({ defaultLanguage: lang.languageType.toString() });
     return Fetch.Get<Result<null>>(CONFIG.API_BASEPATH + `/auth/SetDefaultLanguage?${params.toString()}`, this.config);
   };
 

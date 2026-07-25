@@ -13,7 +13,7 @@ import { useTranslations } from 'next-intl';
 import { GetImage } from '../../_lib/utils';
 import CurrencyViewer from '@root/utils/CurrencyViewer';
 import CONFIG from '@root/config';
-import { getCheapestVariant } from '../../_types/ProductDisplayModel';
+import { getCheapestVariant } from '../../_types/Product/ProductDisplayModel';
 import { Badge } from '../ui/badge';
 import AttributeType from '@root/app/types/enums/AttributeType';
 

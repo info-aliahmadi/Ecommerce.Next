@@ -6,6 +6,7 @@ import Result from '@root/app/types/Result';
 import ChangePassword from '../_types/User/ChangePassword';
 import AddPassword from '../_types/User/AddPassword';
 import ForgotPassword from '../_types/User/ForgotPassword';
+import ThemeType from '@root/app/types/enums/ThemeType';
 
 export default class AccountService {
   config?: RequestInit;
@@ -35,8 +36,8 @@ export default class AccountService {
   addPassword = async (addPassword: AddPassword) => {
     return Fetch.Post<Result<UserModel>>(CONFIG.API_BASEPATH + '/auth/AddPassword', addPassword, this.config);
   }
-  setDefaultTheme = async (defaultTheme: 'light' | 'dark') => {
-    const params = new URLSearchParams({ defaultTheme: defaultTheme });
+  setDefaultTheme = async (defaultTheme: ThemeType) => {
+    const params = new URLSearchParams({ defaultTheme: defaultTheme.toString() });
     return Fetch.Get<UserModel>(CONFIG.API_BASEPATH + `/auth/SetDefaultTheme?${params.toString()}`, this.config);
   };
 

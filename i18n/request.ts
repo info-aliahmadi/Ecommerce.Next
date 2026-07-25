@@ -1,6 +1,7 @@
 import { getRequestConfig } from 'next-intl/server';
 import { cookies } from 'next/headers';
 import CONFIG from '@root/config';
+import languageList from '@root/locales/languageList';
 
 export default getRequestConfig(async () => {
   // Get locale from cookie or use default
@@ -11,8 +12,8 @@ export default getRequestConfig(async () => {
   let locale = localeCookie?.value;
 
   // Final fallback to default
-  locale = locale || CONFIG.DEFAULT_LANGUAGE;
-
+  locale = locale ?? languageList.find((l) => l.languageType === CONFIG.DEFAULT_LANGUAGE)?.key ?? 'en';
+debugger
   return {
     locale: locale,
     messages: (await import(`../public/locales/${locale}/translation.json`)).default,

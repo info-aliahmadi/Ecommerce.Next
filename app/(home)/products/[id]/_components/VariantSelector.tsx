@@ -3,8 +3,8 @@
 import { useState, useMemo } from 'react';
 import { useTranslations } from 'next-intl';
 import ProductVariantDisplayModel from '../../../_types/ProductVariantDisplayModel';
-import ProductAttributeDisplayModel from '../../../_types/ProductAttributeDisplayModel';
-import { getCheapestVariant } from '../../../_types/ProductDisplayModel';
+import ProductAttributeDisplayModel from '../../../_types/Product/ProductAttributeDisplayModel';
+import { getCheapestVariant } from '../../../_types/Product/ProductDisplayModel';
 import AttributeType from '@root/app/types/enums/AttributeType';
 import { SizeGuideModal } from '@root/app/(home)/_components/ecommerce/size-guide-modal';
 import { Ruler } from 'lucide-react';

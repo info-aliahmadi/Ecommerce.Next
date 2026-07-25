@@ -1,5 +1,6 @@
 'use client';
 
+import { resolveLanguage } from '@root/utils/resolver';
 import CONFIG from '../config';
 
 class NextIntlService {
@@ -26,10 +27,10 @@ class NextIntlService {
         .find((row) => row.startsWith('NEXT_LOCALE='))
         ?.split('=')[1];
       
-      return cookieValue || CONFIG.DEFAULT_LANGUAGE;
+      return cookieValue || resolveLanguage(CONFIG.DEFAULT_LANGUAGE);
     }
     
-    return CONFIG.DEFAULT_LANGUAGE;
+    return resolveLanguage(CONFIG.DEFAULT_LANGUAGE);
   }
 }
 

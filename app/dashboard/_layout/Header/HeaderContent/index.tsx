@@ -11,6 +11,7 @@ import Brightness7Icon from '@mui/icons-material/Brightness7';
 import { useSession } from 'next-auth/react';
 import { useTranslations } from 'next-intl';
 import AccountService from '@root/app/dashboard/(auth)/_service/AccountService';
+import ThemeType from '@root/app/types/enums/ThemeType';
 
 // ==============================|| HEADER - CONTENT ||============================== //
 
@@ -26,7 +27,7 @@ const HeaderContent = () => {
 
   const theme = useTheme();
 
-  const handleThemeMode = async (mode: 'light' | 'dark') => {
+  const handleThemeMode = async (mode: ThemeType) => {
     if (session) {
       session.user.defaultTheme = mode;
       await update({ ...session, user: session.user });
@@ -43,7 +44,7 @@ const HeaderContent = () => {
         <Tooltip title={t('tooltips.switch-to-darkmode')}>
           <IconButton
             aria-label="open drawer"
-            onClick={() => handleThemeMode('dark')}
+            onClick={() => handleThemeMode(ThemeType.Dark)}
             edge="start"
             color="secondary"
             sx={{ color: 'text.primary' }}
@@ -55,7 +56,7 @@ const HeaderContent = () => {
         <Tooltip title={t('tooltips.switch-to-lightmode')}>
           <IconButton
             aria-label="open drawer"
-            onClick={() => handleThemeMode('light')}
+            onClick={() => handleThemeMode(ThemeType.Light)}
             edge="start"
             color="secondary"
             sx={{ color: 'text.primary' }}

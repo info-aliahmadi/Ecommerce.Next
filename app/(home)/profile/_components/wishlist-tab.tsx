@@ -11,7 +11,7 @@ import { Button } from '../../_components/ui/button';
 import { ProductCard } from '../../_components/ecommerce/product-card';
 import ProductVariantDisplayModel from '../../_types/ProductVariantDisplayModel';
 import FileUploadModel from '@root/app/dashboard/(filestorage)/_types/FileUploadModel';
-import CategoryDisplayModel from '../../_types/CategoryDisplayModel';
+import CategoryDisplayModel from '../../_types/Product/CategoryDisplayModel';
 import { staggerContainer, staggerItem } from './types';
 
 export function WishlistTab({

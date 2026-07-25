@@ -3,10 +3,10 @@ import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
 import { CheckoutStep } from '../checkout/_components/types';
 import PaymentMethod from '@root/app/types/enums/PaymentMethod';
-import ProductDisplayModel from '../_types/ProductDisplayModel';
-import CartItem from '../_types/CartItem';
-import WishlistItem from '../_types/WishlistItem';
-import CompareItem from '../_types/CompareItem';
+import ProductDisplayModel from '../_types/Product/ProductDisplayModel';
+import CartItem from '../_types/Order/CartItem';
+import WishlistItem from '../_types/Order/WishlistItem';
+import CompareItem from '../_types/Product/CompareItem';
 import StockAlertType from '../_types/StockAlertType';
 
 

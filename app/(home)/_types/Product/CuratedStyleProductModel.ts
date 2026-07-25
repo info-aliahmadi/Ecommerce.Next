@@ -1,5 +1,5 @@
 import FileUploadModel from "@root/app/dashboard/(filestorage)/_types/FileUploadModel";
-import ProductDisplayModel from "./ProductDisplayModel";
+import ProductDisplayModel from "./Product/ProductDisplayModel";
 /**
  * Represents a product.
  */

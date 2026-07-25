@@ -2,6 +2,8 @@ import 'next-auth';
 import {DefaultSession} from 'next-auth';
 import {DefaultJWT} from 'next-auth/jwt';
 import CurrencyTypes from './enums/CurrencyTypes';
+import ThemeType from './enums/ThemeType';
+import LanguageType from './enums/LanguageType';
 
 declare module 'next-auth' {
   interface User {
@@ -11,8 +13,8 @@ declare module 'next-auth' {
     name: string;
     userName?: string;
     avatar: string;
-    defaultLanguage: string;
-    defaultTheme: 'light' | 'dark';
+    defaultLanguage: LanguageType;
+    defaultTheme: ThemeType;
     roles: Array<string>;
     accessToken: string;
     accessTokenExpires: number;

@@ -1,11 +1,12 @@
 import { formatDistanceToNow } from "date-fns";
 import { DateTimeViewer, DateViewer } from "../DateViewer";
+import LanguageType from "@root/app/types/enums/LanguageType";
 
 // Extend the Number interface
 declare global {
     interface Date {
         toDistanceToNow(): string;
-        toLocalDatetime(currentLanguage: string): string;
+        toLocalDatetime(currentLanguage: LanguageType): string;
         toLocalDate(currentLanguage: string): string;
     }
 }
@@ -18,7 +19,7 @@ Date.prototype.toDistanceToNow = function (): string {
     return formatDistanceToNow(new Date(this), { addSuffix: false, includeSeconds: false });
 };
 
-Date.prototype.toLocalDatetime = function (currentLanguage: string): string {
+Date.prototype.toLocalDatetime = function (currentLanguage: LanguageType): string {
     
     return DateTimeViewer(currentLanguage, this);
 };

@@ -18,7 +18,7 @@ import { useState, useMemo, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTranslations } from 'next-intl';
 import HomePageService from '../../_services/HomePageService';
-import ProductFilterModel from '../../_types/ProductFilterModel';
+import ProductFilterModel from '../../_types/Product/ProductFilterModel';
 import SortingType, { SortOption } from '@root/app/types/enums/SortingType';
 import Link from 'next/link';
 import ProductListCard from './product-list';

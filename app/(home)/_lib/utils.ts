@@ -14,6 +14,20 @@ export function GetImage(imagePreview?: FileUploadModel | undefined | null, thum
     ? `${CONFIG.API_BASEPATH}${path}`
     : CONFIG.UNKNOWN_IMAGE_BASEPATH;
 }
+export async function getCustomerIp(): Promise<string> {
+  const cached = typeof window !== 'undefined' ? localStorage.getItem('customerIp') : null;
+  if (cached) return cached;
+  try {
+    const res = await fetch('https://api.ipify.org?format=json');
+    const data = await res.json();
+    if (data.ip) {
+      localStorage.setItem('customerIp', data.ip);
+      return data.ip;
+    }
+  } catch {}
+  return '';
+}
+
 export  function getThumbnailName(filename : string) {
   if (!filename) return "";
 

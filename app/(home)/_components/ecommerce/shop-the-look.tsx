@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Sparkles, ShoppingCart, Plus } from 'lucide-react';
 import { useTranslations } from 'next-intl';
-import ProductDisplayModel from '../../_types/ProductDisplayModel';
+import ProductDisplayModel from '../../_types/Product/ProductDisplayModel';
 import { GetImage } from '../../_lib/utils';
 import CuratedStyleProductModel from '../../_types/CuratedStyleProductModel';
 import { useQuery } from '@tanstack/react-query';
