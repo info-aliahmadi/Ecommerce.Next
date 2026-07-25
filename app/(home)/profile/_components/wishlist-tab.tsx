@@ -9,18 +9,16 @@ import { toast } from 'sonner';
 import { Card, CardContent } from '../../_components/ui/card';
 import { Button } from '../../_components/ui/button';
 import { ProductCard } from '../../_components/ecommerce/product-card';
-import ProductVariantDisplayModel from '../../_types/ProductVariantDisplayModel';
 import FileUploadModel from '@root/app/dashboard/(filestorage)/_types/FileUploadModel';
 import CategoryDisplayModel from '../../_types/Product/CategoryDisplayModel';
 import { staggerContainer, staggerItem } from './types';
+import ProductVariantDisplayModel from '../../_types/Product/ProductVariantDisplayModel';
 
 export function WishlistTab({
-  t,
   items,
   onAddToCart,
   onRemove,
 }: Readonly<{
-  t: ReturnType<typeof useTranslations>;
   items: {
     id: number;
     name: string;
@@ -31,6 +29,7 @@ export function WishlistTab({
   onAddToCart: (item: typeof items[0]) => void;
   onRemove: (variantId: number) => void;
 }>) {
+  const t = useTranslations();
   if (items.length === 0) {
     return (
       <div className="space-y-4">

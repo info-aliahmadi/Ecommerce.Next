@@ -15,7 +15,7 @@ import CurrencyViewer from '@root/utils/CurrencyViewer';
 import CONFIG from '@root/config';
 import { getCheapestVariant } from '../../_types/Product/ProductDisplayModel';
 import { Badge } from '../ui/badge';
-import AttributeType from '@root/app/types/enums/AttributeType';
+import { useRouter } from 'next/navigation';
 
 const PROMO_CODES: Record<string, { type: 'percentage' | 'freeship'; value: number; label: string }> = {
   WELCOME15: { type: 'percentage', value: 15, label: '15% off' },
@@ -77,6 +77,7 @@ function YouMightAlsoLike() {
 
 export function CartDrawer() {
   const { items, isCartOpen, setCartOpen, updateQuantity, removeItem, totalItems, totalPrice, totalSavings } = useCartStore();
+  const router = useRouter();
   const t = useTranslations();
   const total = totalItems();
   const price = totalPrice();
@@ -162,7 +163,10 @@ export function CartDrawer() {
             <p className="text-sm text-ecommerce-text-muted mt-1.5">{t('homepage.cart.emptyDesc')}</p>
             <Button
               className="mt-6 bg-ecommerce-red hover:bg-ecommerce-red/90 rounded-xl px-6 h-11 font-medium transition-all hover:scale-105 active:scale-95"
-              onClick={() => setCartOpen(false)}
+              onClick={() => {
+                setCartOpen(false);
+                router.push('/products');
+              }}
             >
               {t('homepage.cart.startShopping')}
             </Button>

@@ -8,6 +8,8 @@ import CartItem from '../_types/Order/CartItem';
 import WishlistItem from '../_types/Order/WishlistItem';
 import CompareItem from '../_types/Product/CompareItem';
 import StockAlertType from '../_types/StockAlertType';
+import { resolveLanguage } from '@root/utils/resolver';
+import LanguageType from '@root/app/types/enums/LanguageType';
 
 
 
@@ -363,16 +365,16 @@ export type Locale = 'en' | 'fa' | 'ar';
 
 export const LOCALES = ['en', 'ar', 'fa'] as const;
 
-export const DEFAULT_LOCALE = CONFIG.DEFAULT_LANGUAGE as Locale;
+export const DEFAULT_LOCALE = resolveLanguage(CONFIG.DEFAULT_LANGUAGE);
 
 export const PERSIAN_CALENDAR: Locale[] = ['fa'];
 
 export const RTL_LOCALES: Locale[] = ['fa', 'ar'];
 
-export const LOCALE_CONFIG: Record<Locale, { name: string; dir: 'ltr' | 'rtl'; nativeName: string }> = {
-  en: { name: 'English', dir: 'ltr', nativeName: 'English' },
-  fa: { name: 'Farsi', dir: 'rtl', nativeName: 'فارسی' },
-  ar: { name: 'Arabic', dir: 'rtl', nativeName: 'العربية' },
+export const LOCALE_CONFIG: Record<Locale, { name: string; dir: 'ltr' | 'rtl'; nativeName: string; type: LanguageType }> = {
+  en: { name: 'English', dir: 'ltr', nativeName: 'English' , type: LanguageType.English },
+  fa: { name: 'Farsi', dir: 'rtl', nativeName: 'فارسی' , type: LanguageType.Persian },
+  ar: { name: 'Arabic', dir: 'rtl', nativeName: 'العربية' , type: LanguageType.Arabic },
 };
 
 interface LocaleStore {

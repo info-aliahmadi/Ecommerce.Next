@@ -16,7 +16,8 @@ const MOCK_ORDERS: MockOrder[] = [
   { id: 'o4', orderNum: 1275, date: '2025-02-01', status: 'pending', items: 4, total: 359.96 },
 ];
 
-export function OrdersTab({ t }: { t: ReturnType<typeof useTranslations> }) {
+export function OrdersTab() {
+  const t = useTranslations();
   const statusBadge = (status: string) => {
     const cfg = STATUS_CONFIG[status];
     if (!cfg) return null;

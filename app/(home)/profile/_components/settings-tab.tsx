@@ -31,11 +31,8 @@ import { UserModel } from '@root/app/dashboard/(auth)/_types/User/UserModel';
 import CONFIG from '@root/config';
 import { PhoneInput } from '@(home)/_components/shared/phone-input';
 
-export function SettingsTab({
-  t,
-}: Readonly<{
-  t: ReturnType<typeof useTranslations>;
-}>) {
+export function SettingsTab() {
+  const t = useTranslations();
   const { data: session, update } = useSession();
   const jwt = session?.user?.accessToken;
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -390,7 +387,7 @@ export function SettingsTab({
                   <PhoneInput
                     value={editPhoneNumber}
                     onChange={setEditPhoneNumber}
-                    placeholder={t('phonePlaceholder')}
+                    placeholder={t('homepage.profile.phonePlaceholder')}
                   />
 
                 </div>

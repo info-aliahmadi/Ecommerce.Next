@@ -364,7 +364,6 @@ function ProfilePageContent() {
               {activeTab === 'dashboard' && (
                 <motion.div key="dashboard" variants={pageVariants} initial="initial" animate="animate" exit="exit">
                   <DashboardTab
-                    t={t}
                     userName={userName}
                     userEmail={userEmail}
                     userAvatar={userAvatar}
@@ -376,13 +375,12 @@ function ProfilePageContent() {
               )}
               {activeTab === 'orders' && (
                 <motion.div key="orders" variants={pageVariants} initial="initial" animate="animate" exit="exit">
-                  <OrdersTab t={t} />
+                  <OrdersTab />
                 </motion.div>
               )}
               {activeTab === 'wishlist' && (
                 <motion.div key="wishlist" variants={pageVariants} initial="initial" animate="animate" exit="exit">
                   <WishlistTab
-                    t={t}
                     items={wishlistItems}
                     onAddToCart={handleWishlistAddToCart}
                     onRemove={removeWishlistItem}
@@ -392,7 +390,6 @@ function ProfilePageContent() {
               {activeTab === 'addresses' && (
                 <motion.div key="addresses" variants={pageVariants} initial="initial" animate="animate" exit="exit">
                   <AddressesTab
-                    t={t}
                     addresses={addresses}
                     onAdd={openAddAddress}
                     onEdit={openEditAddress}
@@ -413,7 +410,7 @@ function ProfilePageContent() {
               )}
               {activeTab === 'settings' && (
                 <motion.div key="settings" variants={pageVariants} initial="initial" animate="animate" exit="exit">
-                  <SettingsTab t={t} />
+                  <SettingsTab />
                 </motion.div>
               )}
             </AnimatePresence>

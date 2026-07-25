@@ -32,7 +32,6 @@ import { staggerContainer, staggerItem } from './types';
 import { AddressForm } from '../../_components/shared/address-form';
 
 export function AddressesTab({
-  t,
   addresses,
   onAdd,
   onEdit,
@@ -49,7 +48,6 @@ export function AddressesTab({
   deletingId,
   settingDefaultId,
 }: Readonly<{
-  t: ReturnType<typeof useTranslations>;
   addresses: AddressModel[];
   onAdd: () => void;
   onEdit: (addr: AddressModel) => void;
@@ -66,6 +64,7 @@ export function AddressesTab({
   deletingId?: number | null;
   settingDefaultId?: number | null;
 }>) {
+  const t = useTranslations();
   const [errors, setErrors] = useState<Record<string, string>>({});
 
   const validate = (): boolean => {

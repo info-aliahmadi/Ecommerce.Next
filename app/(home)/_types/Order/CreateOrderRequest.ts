@@ -6,9 +6,10 @@ export default interface CreateOrderRequest {
   paymentMethodId?: number | null;
   discountId?: number | null;
   orderNote?: string;
-  items: {
-    productVariantId: number;
-    quantity: number;
-    unitPrice: number;
-  } [];
+  items: CreateOrderItemRequest[];
+}
+export interface CreateOrderItemRequest {
+  productVariantId: number;
+  quantity: number;
+  unitPrice: number;
 }

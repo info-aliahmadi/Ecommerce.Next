@@ -11,7 +11,6 @@ import { Avatar, AvatarFallback, AvatarImage } from '../../_components/ui/avatar
 import { ActivityItem, TabId, ACTIVITY_ICONS, ACTIVITY_COLORS, staggerContainer, staggerItem } from './types';
 
 export function DashboardTab({
-  t,
   userName,
   userEmail,
   userAvatar,
@@ -19,7 +18,6 @@ export function DashboardTab({
   activities,
   setActiveTab,
 }: {
-  t: ReturnType<typeof useTranslations>;
   userName: string;
   userEmail: string;
   userAvatar: string;
@@ -27,6 +25,7 @@ export function DashboardTab({
   activities: ActivityItem[];
   setActiveTab: (tab: TabId) => void;
 }) {
+  const t = useTranslations();
   return (
     <div className="space-y-6">
       {/* Welcome */}

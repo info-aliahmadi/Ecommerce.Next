@@ -15,12 +15,8 @@ import { Footer } from '../_components/ecommerce/footer';
 import { BackToTop } from '../_components/ecommerce/back-to-top';
 import { MobileBottomNav } from '../_components/ecommerce/mobile-bottom-nav';
 import { useCartStore, useCheckoutPersistStore } from '../_lib/store';
-import { getCustomerIp } from '../_lib/utils';
-
 import { Card, CardContent } from '../_components/ui/card';
-import {
-  Accordion, AccordionItem, AccordionTrigger, AccordionContent,
-} from '../_components/ui/accordion';
+import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from '../_components/ui/accordion';
 import ProfileService from '../_services/ProfileService';
 import AccountService from '@root/app/dashboard/(auth)/_service/AccountService';
 import AddressModel from '@root/app/dashboard/(ecommerce)/_types/Common/AddressModel';
@@ -43,7 +39,7 @@ import {
 } from './_components';
 import ShippingMethod from '@root/app/types/enums/ShippingMethod';
 import OrderService from '../_services/OrderService';
-import CreateOrderRequest from '../_types/Order/CreateOrderRequest';
+import CreateOrderRequest, { CreateOrderItemRequest } from '../_types/Order/CreateOrderRequest';
 import PaymentMethod from '@root/app/types/enums/PaymentMethod';
 
 /* ──────────────────────────────────────────────────────────────── */
@@ -207,7 +203,7 @@ function CheckoutPageInner() {
               checkoutPersist.setCheckoutPersist({ selectedAddressId: String(addrToSelect.id) });
             }
           }
-        }else{
+        } else {
           setSavedAddresses([]);
           setSelectedAddressId('new');
           checkoutPersist.setCheckoutPersist({ selectedAddressId: 'new' });
@@ -448,7 +444,6 @@ function CheckoutPageInner() {
     try {
       // Build order model using OrderDisplayModel
       const orderService = new OrderService(session.user.accessToken);
-      const customerIp = await getCustomerIp();
       const order: CreateOrderRequest = {
         addressId: shipping.addressId || null,
         shippingMethodId: ShippingMethod.Ground,
@@ -456,17 +451,10 @@ function CheckoutPageInner() {
         orderNote: shipping.note || '',
         discountId: null,
         items: items.map((item) => ({
-          id: 0,
-          orderId: 0,
           productVariantId: item.variant.id,
-          productSku: item.variant.sku,
-          productName: item.name,
           quantity: item.quantity,
           unitPrice: item.variant.sellPrice,
-          discountAmount: item.variant.oldSellPrice > 0 ? item.variant.sellPrice - item.variant.oldSellPrice : 0,
-          totalPrice: item.variant.sellPrice * item.quantity,
-          totalPriceTax: 0,
-        })),
+        } as CreateOrderItemRequest)),
       };
 
       const result = await orderService.createOrder(order);

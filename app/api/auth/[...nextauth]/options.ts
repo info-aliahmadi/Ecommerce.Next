@@ -92,15 +92,18 @@ export const options: NextAuthOptions = {
         password: { label: 'Password', type: 'password' }
       },
       async authorize(credentials): Promise<User | null> {
-        const authenticationService = new AuthenticationService();
-        var loginModel : LoginModel = {
-          username : credentials?.username as string,
-          password : credentials?.password as string,
-          rememberMe : true
+        try {
+          const authenticationService = new AuthenticationService();
+          const loginModel: LoginModel = {
+            username: credentials?.username as string,
+            password: credentials?.password as string,
+            rememberMe: true
+          };
+          const result = await authenticationService.login(loginModel);
+          return result.succeeded === true ? result.data ?? null : null;
+        } catch {
+          return null;
         }
-        const result = await authenticationService.login(loginModel);
-
-        return result.succeeded === true ? result.data ?? null : null;
       }
     }),
     CredentialsProvider({
@@ -111,15 +114,18 @@ export const options: NextAuthOptions = {
         code: { label: 'Code', type: 'text' }
       },
       async authorize(credentials): Promise<User | null> {
-        const authenticationService = new AuthenticationService();
-        const verifyModel: VerifyPhoneNumberModel = {
-          phoneNumber: credentials?.phone as string,
-          code: credentials?.code as string,
-          rememberMe: true
-        };
-        const result = await authenticationService.verifyOtpAndLogin(verifyModel);
-
-        return result.succeeded === true ? result.data ?? null : null;
+        try {
+          const authenticationService = new AuthenticationService();
+          const verifyModel: VerifyPhoneNumberModel = {
+            phoneNumber: credentials?.phone as string,
+            code: credentials?.code as string,
+            rememberMe: true
+          };
+          const result = await authenticationService.verifyOtpAndLogin(verifyModel);
+          return result.succeeded === true ? result.data ?? null : null;
+        } catch {
+          return null;
+        }
       }
     })
   ],

@@ -863,6 +863,7 @@
       "addressLine2": "العنوان السطر ٢ (اختياري)",
       "saveAddress": "حفظ العنوان",
       "phoneNumber": "رقم الهاتف",
+      "phonePlaceholder": "أدخل رقم الهاتف",
       "geoLocation": "الموقع الجغرافي",
       "orderPlaced": "تم تقديم الطلب #{number}",
       "reviewWritten": "تمت كتابة مراجعة لـ {product}",
