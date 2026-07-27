@@ -11,6 +11,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { SizeGuideModal } from './size-guide-modal';
 import { useTranslations } from 'next-intl';
+import { useAddToWishlist, useRemoveFromWishlist } from '../../_hooks/use-wishlist-queries';
 import ProductDisplayModel from '../../_types/Product/ProductDisplayModel';
 import ProductVariantDisplayModel from '../../_types/ProductVariantDisplayModel';
 import { getCheapestVariant, getProductPricing } from '../../_types/Product/ProductDisplayModel';
@@ -306,6 +307,8 @@ function QuickViewContent({ product, onClose }: { product: ProductDisplayModel; 
   const { addItem } = useCartStore();
   const { toggleItem, isInWishlist } = useWishlistStore();
   const { addItem: addRecent } = useRecentStore();
+  const addToWishlist = useAddToWishlist();
+  const removeFromWishlist = useRemoveFromWishlist();
   const [quantity, setQuantity] = useState(1);
   const [activeTab, setActiveTab] = useState<'description' | 'reviews' | 'shipping'>('description');
   const [isSizeGuideOpen, setIsSizeGuideOpen] = useState(false);
@@ -419,13 +422,17 @@ function QuickViewContent({ product, onClose }: { product: ProductDisplayModel; 
   };
 
   const handleWishlist = () => {
-    toggleItem({
-      id: product.id,
-      name: product.name,
-      variant: activeVariant,
-      image: product.imagePreview,
-      categories: product.categories,
-    });
+    if (wishlisted) {
+      removeFromWishlist.mutate({ variantId: activeVariant.id });
+    } else {
+      addToWishlist.mutate({
+        id: product.id,
+        name: product.name,
+        variant: activeVariant,
+        image: product.imagePreview,
+        categories: product.categories,
+      });
+    }
     toast.success(wishlisted ? t('homepage.common.removeFromWishlist') : t('homepage.common.addToWishlist'));
   };
   const handleNavigateToMoreDetail = (productId: number) => {

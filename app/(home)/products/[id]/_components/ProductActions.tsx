@@ -11,9 +11,10 @@ import {
   useCompareStore,
 } from '../../../_lib/store';
 import { useFlyToCart } from '../../../_hooks/use-fly-to-cart';
+import { useAddToWishlist, useRemoveFromWishlist } from '../../../_hooks/use-wishlist-queries';
 import { GetImage } from '../../../_lib/utils';
 import ProductDisplayModel, { getProductPricing } from '../../../_types/Product/ProductDisplayModel';
-import ProductVariantDisplayModel from '../../../_types/ProductVariantDisplayModel';
+import ProductVariantDisplayModel from '@root/app/(home)/_types/Product/ProductVariantDisplayModel';
 
 export default function ProductActions({
   product,
@@ -21,19 +22,21 @@ export default function ProductActions({
   quantity = 1,
   isOutOfStock = false,
   isVariantUnavailable = false,
-}: {
+}: Readonly<{
   product: ProductDisplayModel;
   selectedVariant?: ProductVariantDisplayModel | null;
   quantity?: number;
   isOutOfStock?: boolean;
   isVariantUnavailable?: boolean;
-}) {
+}>) {
   const t = useTranslations('');
   const addItem = useCartStore((s) => s.addItem);
   const setCartOpen = useCartStore((s) => s.setCartOpen);
   const { toggleItem, isInWishlist } = useWishlistStore();
   const { addItem: addCompareItem } = useCompareStore();
   const { handleAddToCartWithAnimation } = useFlyToCart();
+  const addToWishlist = useAddToWishlist();
+  const removeFromWishlist = useRemoveFromWishlist();
 
   const { cheapestVariant, totalStock } = getProductPricing(product.variants ?? []);
   const activeVariant = selectedVariant ?? cheapestVariant;
@@ -72,17 +75,21 @@ export default function ProductActions({
   }, [product, addItem, setCartOpen, activeVariant, quantity]);
 
   const handleWishlist = useCallback(() => {
-    toggleItem({
-      id: product.id,
-      name: product.name,
-      variant: activeVariant,
-      image: product.imagePreview,
-      categories: product.categories
-    });
+    if (wishlisted) {
+      removeFromWishlist.mutate({ variantId: activeVariant.id });
+    } else {
+      addToWishlist.mutate({
+        id: product.id,
+        name: product.name,
+        variant: activeVariant,
+        image: product.imagePreview,
+        categories: product.categories
+      });
+    }
     toast.success(
       wishlisted ? t('homepage.productDetail.removeFromWishlistSuccess') : t('homepage.productDetail.addToWishlistSuccess'),
     );
-  }, [product, toggleItem, wishlisted, t, activeVariant]);
+  }, [product, wishlisted, t, activeVariant, addToWishlist, removeFromWishlist]);
 
   const handleShare = useCallback(() => {
     navigator.clipboard.writeText(window.location.href).then(() => {

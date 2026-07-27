@@ -84,7 +84,7 @@ export function useCartMerge() {
         const { mergedItems, itemsToAddToServer, itemsToUpdateOnServer } = mergeCart(
           localItems,
           serverItems,
-          'server-wins'
+          'local-wins'
         );
 
         for (const addItem of itemsToAddToServer) {

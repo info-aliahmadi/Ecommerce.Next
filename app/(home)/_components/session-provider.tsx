@@ -5,6 +5,8 @@ import { type ReactNode, useEffect, useRef } from 'react';
 import { useSession } from 'next-auth/react';
 import { useCartStore } from '../_lib/store';
 import { useCartMerge } from '../_hooks/use-cart-merge';
+import { useWishlistMerge } from '../_hooks/use-wishlist-merge';
+import { useWishlistStore } from '../_lib/store';
 
 export function SessionProvider({ children }: { children: ReactNode }) {
   return (
@@ -17,7 +19,9 @@ export function SessionProvider({ children }: { children: ReactNode }) {
 function InnerSync({ children }: { children: ReactNode }) {
   const { data: session } = useSession();
   const setJwt = useCartStore((s) => s.setJwt);
+  const setWishlistJwt = useWishlistStore((s) => s.setJwt);
   const { mergeLocalCartWithServer } = useCartMerge();
+  const { mergeLocalWishlistWithServer } = useWishlistMerge();
   const prevSessionRef = useRef(session);
   const hasMergedRef = useRef(false);
 
@@ -25,6 +29,7 @@ function InnerSync({ children }: { children: ReactNode }) {
     const prevSession = prevSessionRef.current;
 
     setJwt(session?.user?.accessToken);
+    setWishlistJwt(session?.user?.accessToken);
 
     const wasUnauthenticated = !prevSession?.user?.accessToken;
     const isAuthenticated = !!session?.user?.accessToken;
@@ -32,6 +37,7 @@ function InnerSync({ children }: { children: ReactNode }) {
     if (wasUnauthenticated && isAuthenticated && !hasMergedRef.current) {
       hasMergedRef.current = true;
       mergeLocalCartWithServer(session.user.accessToken);
+      mergeLocalWishlistWithServer(session.user.accessToken);
     }
 
     if (!isAuthenticated) {
@@ -39,7 +45,7 @@ function InnerSync({ children }: { children: ReactNode }) {
     }
 
     prevSessionRef.current = session;
-  }, [session, setJwt, mergeLocalCartWithServer]);
+  }, [session, setJwt, setWishlistJwt, mergeLocalCartWithServer]);
 
   return <>{children}</>;
 }

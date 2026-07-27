@@ -8,6 +8,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useState, useRef, useEffect, useCallback } from 'react';
 import { toast } from 'sonner';
 import { useFlyToCart } from '../../_hooks/use-fly-to-cart';
+import { useAddToWishlist, useRemoveFromWishlist } from '../../_hooks/use-wishlist-queries';
 import { useTranslations } from 'next-intl';
 import ProductDisplayModel, { getProductPricing } from '../../_types/Product/ProductDisplayModel';
 import { GetImage } from '../../_lib/utils';
@@ -35,6 +36,8 @@ export function ProductCard({ product, index = 0 }: Readonly<ProductCardProps>) 
   const { setQuickViewProduct } = useUIStore();
   const { addItem: addCompareItem, isInCompare } = useCompareStore();
   const { handleAddToCartWithAnimation } = useFlyToCart();
+  const addToWishlist = useAddToWishlist();
+  const removeFromWishlist = useRemoveFromWishlist();
   const [isImageLoaded, setIsImageLoaded] = useState(false);
   const [justAdded, setJustAdded] = useState(false);
   const [heartBurst, setHeartBurst] = useState(false);
@@ -106,13 +109,17 @@ export function ProductCard({ product, index = 0 }: Readonly<ProductCardProps>) 
   const handleWishlist = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
-    toggleItem({
-      id: product.id,
-      name: product.name,
-      variant: cheapestVariant,
-      image: product.imagePreview,
-      categories: product.categories || [],
-    } as WishlistItem);
+    if (wishlisted) {
+      removeFromWishlist.mutate({ variantId: cheapestVariant.id });
+    } else {
+      addToWishlist.mutate({
+        id: product.id,
+        name: product.name,
+        variant: cheapestVariant,
+        image: product.imagePreview,
+        categories: product.categories || [],
+      });
+    }
     toast.success(wishlisted ? t('homepage.common.removeFromWishlist') : t('homepage.common.addToWishlist'));
     setHeartBurst(true);
     setTimeout(() => setHeartBurst(false), 600);

@@ -104,9 +104,12 @@ export const useCartStore = create<CartStore>()(
 
 interface WishlistStore {
   items: WishlistItem[];
+  jwt?: string;
+  setJwt: (jwt: string | undefined) => void;
   addItem: (item: WishlistItem) => void;
   removeItem: (variantId: number) => void;
   toggleItem: (item: WishlistItem) => void;
+  setItems: (items: WishlistItem[]) => void;
   isInWishlist: (variantId: number) => boolean;
   totalCount: () => number;
 }
@@ -115,6 +118,9 @@ export const useWishlistStore = create<WishlistStore>()(
   persist(
     (set, get) => ({
       items: [],
+      jwt: undefined,
+
+      setJwt: (jwt) => set({ jwt }),
 
       addItem: (item) => {
         set((state) => {
@@ -138,6 +144,8 @@ export const useWishlistStore = create<WishlistStore>()(
         }
       },
 
+      setItems: (items) => set({ items }),
+
       isInWishlist: (variantId) => get().items.some((i) => i.variant.id === variantId),
       totalCount: () => get().items.length,
     }),
@@ -148,12 +156,6 @@ export const useWishlistStore = create<WishlistStore>()(
   )
 );
 
-export type PageName = 'home' | 'checkout' | 'products' | 'product-detail' | 'profile';
-
-export interface PageParams {
-  productId?: string;
-  [key: string]: string | undefined;
-}
 
 interface UIStore {
   searchQuery: string;
@@ -170,10 +172,6 @@ interface UIStore {
   setQuickViewProduct: (product: ProductDisplayModel | null) => void;
   isCatalogOpen: boolean;
   setCatalogOpen: (open: boolean) => void;
-  currentPage: PageName;
-  pageParams: PageParams;
-  navigate: (page: PageName, params?: PageParams) => void;
-  goHome: () => void;
 }
 
 export const useUIStore = create<UIStore>((set) => ({
@@ -190,11 +188,7 @@ export const useUIStore = create<UIStore>((set) => ({
   quickViewProduct: null,
   setQuickViewProduct: (product) => set({ quickViewProduct: product }),
   isCatalogOpen: false,
-  setCatalogOpen: (open) => set({ isCatalogOpen: open }),
-  currentPage: 'home' as PageName,
-  pageParams: {} as PageParams,
-  navigate: (page, params) => set({ currentPage: page, pageParams: params || {} }),
-  goHome: () => set({ currentPage: 'home', pageParams: {} }),
+  setCatalogOpen: (open) => set({ isCatalogOpen: open })
 }));
 
 

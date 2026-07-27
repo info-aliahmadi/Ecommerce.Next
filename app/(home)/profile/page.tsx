@@ -29,6 +29,8 @@ import { CompareDrawer } from '../_components/ecommerce/compare-drawer';
 import { FlyToCart } from '../_components/ecommerce/fly-to-cart';
 import { MobileBottomNav } from '../_components/ecommerce/mobile-bottom-nav';
 import { useCartStore, useWishlistStore } from '../_lib/store';
+import { useAddToCart } from '../_hooks/use-cart-queries';
+import { useRemoveFromWishlist } from '../_hooks/use-wishlist-queries';
 
 import { Card, CardContent } from '../_components/ui/card';
 import { Button } from '../_components/ui/button';
@@ -101,8 +103,8 @@ function ProfilePageContent() {
   // Stores
   const wishlistItems = useWishlistStore((s) => s.items);
   const wishlistCount = wishlistItems.length;
-  const addToCart = useCartStore((s) => s.addItem);
-  const removeWishlistItem = useWishlistStore((s) => s.removeItem);
+  const addToCart = useAddToCart();
+  const removeFromWishlist = useRemoveFromWishlist();
 
   const fetchAddresses = async () => {
     if (!session?.user?.accessToken) return;
@@ -238,7 +240,7 @@ function ProfilePageContent() {
   };
 
   const handleWishlistAddToCart = (item: typeof wishlistItems[0]) => {
-    addToCart({
+    addToCart.mutate({
       id: item.id,
       name: item.name,
       variant: item.variant,
@@ -383,7 +385,7 @@ function ProfilePageContent() {
                   <WishlistTab
                     items={wishlistItems}
                     onAddToCart={handleWishlistAddToCart}
-                    onRemove={removeWishlistItem}
+                    onRemove={(variantId) => removeFromWishlist.mutate({ variantId })}
                   />
                 </motion.div>
               )}

@@ -5,7 +5,7 @@ import CurrencyTypes from "@root/app/types/enums/CurrencyTypes";
 import MeasureType from "@root/app/types/enums/MeasureType";
 import CategoryDisplayModel from "./CategoryDisplayModel";
 import ProductAttributeDisplayModel from "./ProductAttributeDisplayModel";
-import ProductVariantDisplayModel from "../ProductVariantDisplayModel";
+import ProductVariantDisplayModel from "./ProductVariantDisplayModel";
 /**
  * Represents a product.
  */

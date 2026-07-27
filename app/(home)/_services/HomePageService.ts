@@ -16,11 +16,11 @@ import ManufacturerDisplayModel from "../_types/Product/ManufacturerDisplayModel
 import PaginatedDisplayList from "../_types/PaginatedList";
 import ProductTags from "@root/app/types/enums/ProductTags";
 import SortingType from "@root/app/types/enums/SortingType";
-import CuratedStyleProductModel from "../_types/CuratedStyleProductModel";
-import BundleDisplayModel from "../_types/BundleDisplayModel";
 import ProductTagDisplayModel from "../_types/Product/ProductTagDisplayModel";
 import ProductAttributeDisplayModel from "../_types/Product/ProductAttributeDisplayModel";
 import AttributeType from "@root/app/types/enums/AttributeType";
+import CuratedStyleProductModel from "../_types/Product/CuratedStyleProductModel";
+import BundleDisplayModel from "../_types/Product/BundleDisplayModel";
 
 export default class HomePageService {
 
