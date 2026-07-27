@@ -16,6 +16,7 @@ import CONFIG from '@root/config';
 import { getCheapestVariant } from '../../_types/Product/ProductDisplayModel';
 import { Badge } from '../ui/badge';
 import { useRouter } from 'next/navigation';
+import { useAddToCart, useUpdateCartQuantity, useRemoveFromCart } from '../../_hooks/use-cart-queries';
 
 const PROMO_CODES: Record<string, { type: 'percentage' | 'freeship'; value: number; label: string }> = {
   WELCOME15: { type: 'percentage', value: 15, label: '15% off' },
@@ -26,6 +27,7 @@ const PROMO_CODES: Record<string, { type: 'percentage' | 'freeship'; value: numb
 function YouMightAlsoLike() {
   const { items } = useCartStore();
   const { items: recentItems } = useRecentStore();
+  const addToCart = useAddToCart();
   const t = useTranslations();
 
   // Get product suggestions based on recent views not already in cart
@@ -51,7 +53,7 @@ function YouMightAlsoLike() {
             animate={{ opacity: 1, y: 0 }}
             className="flex items-center gap-2.5 p-2 rounded-xl bg-ecommerce-surface-hover/60 hover:bg-ecommerce-surface-hover transition-colors cursor-pointer group"
             onClick={() => {
-              useCartStore.getState().addItem({
+              addToCart.mutate({
                 id: cheapestVariant.id, name: item.name, variant: cheapestVariant,
                 image: item.imagePreview, categories: item.categories,
               });
@@ -68,7 +70,7 @@ function YouMightAlsoLike() {
             <div className="w-7 h-7 rounded-lg bg-ecommerce-red/10 text-ecommerce-red flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity shrink-0">
               <ShoppingCart size={12} />
             </div>
-          </motion.div>
+          </motion.div>;
         })}
       </div>
     </div>
@@ -76,7 +78,9 @@ function YouMightAlsoLike() {
 }
 
 export function CartDrawer() {
-  const { items, isCartOpen, setCartOpen, updateQuantity, removeItem, totalItems, totalPrice, totalSavings } = useCartStore();
+  const { items, isCartOpen, setCartOpen, totalItems, totalPrice, totalSavings } = useCartStore();
+  const updateCartQuantity = useUpdateCartQuantity();
+  const removeFromCart = useRemoveFromCart();
   const router = useRouter();
   const t = useTranslations();
   const total = totalItems();
@@ -246,7 +250,7 @@ export function CartDrawer() {
                           <div className="flex items-center justify-between mt-2">
                             <div className="flex items-center gap-1 bg-white dark:bg-ecommerce-surface rounded-lg border border-ecommerce-border">
                               <button
-                                onClick={() => updateQuantity(item.variant.id, item.quantity - 1)}
+                                onClick={() => updateCartQuantity.mutate({ variantId: item.variant.id, quantity: item.quantity - 1 })}
                                 className="w-7 h-7 flex items-center justify-center hover:bg-ecommerce-surface-hover rounded-s-lg transition-colors"
                                 aria-label={t('homepage.common.previous')}
                               >
@@ -254,7 +258,7 @@ export function CartDrawer() {
                               </button>
                               <span className="w-8 text-center text-sm font-medium">{item.quantity}</span>
                               <button
-                                onClick={() => updateQuantity(item.variant.id, item.quantity + 1)}
+                                onClick={() => updateCartQuantity.mutate({ variantId: item.variant.id, quantity: item.quantity + 1 })}
                                 className="w-7 h-7 flex items-center justify-center hover:bg-ecommerce-surface-hover rounded-e-lg transition-colors"
                                 aria-label={t('homepage.common.next')}
                               >
@@ -282,7 +286,7 @@ export function CartDrawer() {
 
                       {/* Remove */}
                       <button
-                        onClick={() => removeItem(item.variant.id)}
+                        onClick={() => removeFromCart.mutate({ variantId: item.variant.id })}
                         className="self-start p-1 text-ecommerce-text-muted hover:text-ecommerce-red transition-colors"
                         aria-label={t('homepage.cart.remove')}
                       >

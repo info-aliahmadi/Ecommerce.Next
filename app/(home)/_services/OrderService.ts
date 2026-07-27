@@ -2,7 +2,6 @@ import Fetch from '@root/utils/Fetch';
 import Result from '@root/app/types/Result';
 import CONFIG from '@root/config';
 import AddressModel from '@root/app/dashboard/(ecommerce)/_types/Common/AddressModel';
-import ShoppingCartItemModel from '@root/app/(home)/_types/Order/ShoppingCartItemModel';
 import OrderModel from '@root/app/dashboard/(ecommerce)/_types/Order/OrderModel';
 import OrderItemModel from '@root/app/dashboard/(ecommerce)/_types/Order/OrderItemModel';
 import PaymentModel, { PaymentViewModel } from '@root/app/(home)/_types/Order/PaymentModel';
@@ -13,6 +12,7 @@ import RemoveFromWishlistRequest from '@root/app/(home)/_types/Order/RemoveFromW
 import UpdateQuantityRequest from '@root/app/(home)/_types/Order/UpdateQuantityRequest';
 import CreateOrderRequest from '@root/app/(home)/_types/Order/CreateOrderRequest';
 import ProcessPaymentRequest from '@root/app/(home)/_types/Order/ProcessPaymentRequest';
+import CartItem from '../_types/Order/CartItem';
 
 export default class OrderService {
   config?: RequestInit;
@@ -26,24 +26,24 @@ export default class OrderService {
 
   // ========================= SHOPPING CART & WISHLIST =========================
 
-  getMyCartItems = async (): Promise<Result<ShoppingCartItemModel[]>> => {
-    return Fetch.Get<Result<ShoppingCartItemModel[]>>(CONFIG.API_BASEPATH + `/Order/GetMyCartItems`, this.config);
+  getMyCartItems = async (): Promise<Result<CartItem[]>> => {
+    return Fetch.Get<Result<CartItem[]>>(CONFIG.API_BASEPATH + `/Order/GetMyCartItems`, this.config);
   };
 
-  getMyWishlistItems = async (): Promise<Result<ShoppingCartItemModel[]>> => {
-    return Fetch.Get<Result<ShoppingCartItemModel[]>>(CONFIG.API_BASEPATH + `/Order/GetMyWishlistItems`, this.config);
+  getMyWishlistItems = async (): Promise<Result<CartItem[]>> => {
+    return Fetch.Get<Result<CartItem[]>>(CONFIG.API_BASEPATH + `/Order/GetMyWishlistItems`, this.config);
   };
 
-  getAllMyShoppingItems = async (): Promise<Result<ShoppingCartItemModel[]>> => {
-    return Fetch.Get<Result<ShoppingCartItemModel[]>>(CONFIG.API_BASEPATH + `/Order/GetAllMyShoppingItems`, this.config);
+  getAllMyShoppingItems = async (): Promise<Result<CartItem[]>> => {
+    return Fetch.Get<Result<CartItem[]>>(CONFIG.API_BASEPATH + `/Order/GetAllMyShoppingItems`, this.config);
   };
 
-  addToCart = async (request: AddToCartRequest): Promise<Result<ShoppingCartItemModel>> => {
-    return Fetch.Post<Result<ShoppingCartItemModel>>(CONFIG.API_BASEPATH + `/Order/AddToCart`, request, this.config);
+  addToCart = async (request: AddToCartRequest): Promise<Result<CartItem>> => {
+    return Fetch.Post<Result<CartItem>>(CONFIG.API_BASEPATH + `/Order/AddToCart`, request, this.config);
   };
 
-  addToWishlist = async (request: AddToWishlistRequest): Promise<Result<ShoppingCartItemModel>> => {
-    return Fetch.Post<Result<ShoppingCartItemModel>>(CONFIG.API_BASEPATH + `/Order/AddToWishlist`, request, this.config);
+  addToWishlist = async (request: AddToWishlistRequest): Promise<Result<CartItem>> => {
+    return Fetch.Post<Result<CartItem>>(CONFIG.API_BASEPATH + `/Order/AddToWishlist`, request, this.config);
   };
 
   removeFromCart = async (request: RemoveFromCartRequest): Promise<Result<void>> => {
@@ -62,8 +62,8 @@ export default class OrderService {
     return Fetch.Post<Result<void>>(CONFIG.API_BASEPATH + `/Order/ClearWishlist`, {}, this.config);
   };
 
-  updateCartItemQuantity = async (request: UpdateQuantityRequest): Promise<Result<ShoppingCartItemModel>> => {
-    return Fetch.Post<Result<ShoppingCartItemModel>>(CONFIG.API_BASEPATH + `/Order/UpdateCartItemQuantity`, request, this.config);
+  updateCartItemQuantity = async (request: UpdateQuantityRequest): Promise<Result<CartItem>> => {
+    return Fetch.Post<Result<CartItem>>(CONFIG.API_BASEPATH + `/Order/UpdateCartItemQuantity`, request, this.config);
   };
 
   // ========================= ORDERS =========================

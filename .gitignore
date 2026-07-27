@@ -114,3 +114,4 @@ build
 /.cloud
 .env.production
 .kilo/kilo.json
+.kilo/plans/1785089114765-cart-sync-plan.md

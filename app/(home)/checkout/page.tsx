@@ -15,6 +15,7 @@ import { Footer } from '../_components/ecommerce/footer';
 import { BackToTop } from '../_components/ecommerce/back-to-top';
 import { MobileBottomNav } from '../_components/ecommerce/mobile-bottom-nav';
 import { useCartStore, useCheckoutPersistStore } from '../_lib/store';
+import { useClearCart } from '../_hooks/use-cart-queries';
 import { Card, CardContent } from '../_components/ui/card';
 import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from '../_components/ui/accordion';
 import ProfileService from '../_services/ProfileService';
@@ -62,7 +63,8 @@ function CheckoutPageInner() {
     }
   }, [status, router]);
 
-  const { items, totalPrice, totalSavings, clearCart, totalItems } = useCartStore();
+  const { items, totalPrice, totalSavings, totalItems } = useCartStore();
+  const clearCartMutation = useClearCart();
   const checkoutPersist = useCheckoutPersistStore();
 
   // Promo code
@@ -460,9 +462,9 @@ function CheckoutPageInner() {
       const result = await orderService.createOrder(order);
 
       if (result.succeeded && result.data) {
-        setOrderNumber(`ORD-${result.data.id}`);
-        clearCart();
-        checkoutPersist.clearCheckoutPersist();
+         setOrderNumber(`ORD-${result.data.id}`);
+         clearCartMutation.mutate();
+         checkoutPersist.clearCheckoutPersist();
         toast.success(t('orderPlaced'));
         goToStep(4, 1);
       } else {
@@ -473,7 +475,7 @@ function CheckoutPageInner() {
     } finally {
       setIsPlacing(false);
     }
-  }, [session, shipping, payment, total, shippingCost, tax, discountAmount, items, clearCart, checkoutPersist.clearCheckoutPersist, goToStep, router, t]);
+  }, [session, shipping, payment, total, shippingCost, tax, discountAmount, items, clearCartMutation, checkoutPersist.clearCheckoutPersist, goToStep, router, t]);
 
   /* ── Auth Loading / Redirect ──────────────────────────────────── */
   if (status === 'loading' || status === 'unauthenticated') {

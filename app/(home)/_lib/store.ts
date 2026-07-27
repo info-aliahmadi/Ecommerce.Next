@@ -18,10 +18,13 @@ interface CartStore {
   isCartOpen: boolean;
   setCartOpen: (open: boolean) => void;
   toggleCart: () => void;
+  jwt?: string;
+  setJwt: (jwt: string | undefined) => void;
   addItem: (item: Omit<CartItem, 'quantity'>) => void;
   removeItem: (variantId: number) => void;
   updateQuantity: (variantId: number, quantity: number) => void;
   clearCart: () => void;
+  setItems: (items: CartItem[]) => void;
   totalItems: () => number;
   totalPrice: () => number;
   totalSavings: () => number;
@@ -32,14 +35,17 @@ export const useCartStore = create<CartStore>()(
     (set, get) => ({
       items: [],
       isCartOpen: false,
+      jwt: undefined,
 
       setCartOpen: (open) => set({ isCartOpen: open }),
       toggleCart: () => set((state) => ({ isCartOpen: !state.isCartOpen })),
+      setJwt: (jwt) => set({ jwt }),
 
       addItem: (item) => {
+        const existingItem = get().items.find((i) => i.variant.id === item.variant.id);
+
         set((state) => {
-          const existing = state.items.some((i) => i.variant.id === item.variant.id);
-          if (existing) {
+          if (existingItem) {
             return {
               items: state.items.map((i) =>
                 i.variant.id === item.variant.id ? { ...i, quantity: i.quantity + 1 } : i,
@@ -58,12 +64,12 @@ export const useCartStore = create<CartStore>()(
 
       updateQuantity: (variantId: number, quantity) => {
         if (quantity <= 0) {
-          // remove based on variant id
           set((state) => ({
             items: state.items.filter((i) => i.variant.id !== variantId),
           }));
           return;
         }
+
         set((state) => ({
           items: state.items.map((i) =>
             i.variant.id === variantId ? { ...i, quantity } : i
@@ -72,6 +78,8 @@ export const useCartStore = create<CartStore>()(
       },
 
       clearCart: () => set({ items: [] }),
+
+      setItems: (items) => set({ items }),
 
       totalItems: () => get().items.reduce((sum, i) => sum + i.quantity, 0),
 

@@ -2,6 +2,7 @@
 
 import { Eye, X, ShoppingCart, ChevronLeft, ChevronRight } from 'lucide-react';
 import { useUIStore, useCartStore, useRecentStore } from '../../_lib/store';
+import { useAddToCart } from '../../_hooks/use-cart-queries';
 import { Button } from '../ui/button';
 import { useEffect, useState, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -14,7 +15,8 @@ export function RecentlyViewed() {
   const t = useTranslations();
   const { items } = useRecentStore();
   const { setQuickViewProduct } = useUIStore();
-  const { addItem } = useCartStore();
+  const addToCart = useAddToCart();
+  const jwt = useCartStore((s) => s.jwt);
   const [scrollEl, setScrollEl] = useState<HTMLDivElement | null>(null);
 
   useEffect(() => {
@@ -125,20 +127,20 @@ export function RecentlyViewed() {
                           </span>
                         );
                       })()}
-                      <button
-                        disabled={item.stockQuantity === 0}
-                        onClick={() => {
-                          const { cheapestVariant } = getProductPricing(item.variants ?? []);
-                          if (!cheapestVariant) return;
-                          addItem({
-                            id: item.id,
-                            name: item.name,
-                            variant: cheapestVariant,
-                            image: item.imagePreview,
-                            categories: item.categories
-                          });
-                          toast.success(t('homepage.cart.itemAdded', { name: item.name }));
-                        }}
+                       <button
+                         disabled={item.stockQuantity === 0}
+                         onClick={() => {
+                           const { cheapestVariant } = getProductPricing(item.variants ?? []);
+                           if (!cheapestVariant) return;
+                           addToCart.mutate({
+                             id: item.id,
+                             name: item.name,
+                             variant: cheapestVariant,
+                             image: item.imagePreview,
+                             categories: item.categories
+                           });
+                           toast.success(t('homepage.cart.itemAdded', { name: item.name }));
+                         }}
                         className="mt-3 w-full h-9 rounded-lg bg-ecommerce-red/10 text-ecommerce-red text-xs font-semibold flex items-center justify-center gap-1.5 hover:bg-ecommerce-red hover:text-white transition-all duration-200 disabled:opacity-50"
                       >
                         <ShoppingCart size={13} />

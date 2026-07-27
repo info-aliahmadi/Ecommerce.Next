@@ -1,4 +1,4 @@
 export default interface UpdateQuantityRequest {
-  itemId: number;
+  variantId: number;
   quantity: number;
 }

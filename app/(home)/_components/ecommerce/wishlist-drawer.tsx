@@ -5,6 +5,7 @@ import { Sheet, SheetContent, SheetHeader, SheetTitle } from '../ui/sheet';
 import { Button } from '../ui/button';
 import { Badge } from '../ui/badge';
 import { useWishlistStore, useCartStore } from '../../_lib/store';
+import { useAddToCart } from '../../_hooks/use-cart-queries';
 import { motion, AnimatePresence } from 'framer-motion';
 import { toast } from 'sonner';
 import { useTranslations } from 'next-intl';
@@ -14,11 +15,11 @@ import CONFIG from '@root/config';
 
 export function WishlistDrawer({ open, onClose }: { open: boolean; onClose: () => void }) {
   const { items, removeItem, totalCount } = useWishlistStore();
-  const { addItem } = useCartStore();
+  const addToCart = useAddToCart();
   const t = useTranslations();
 
   const handleMoveToCart = (item: typeof items[0]) => {
-    addItem({
+    addToCart.mutate({
       id: item.id,
       name: item.name,
       variant: item.variant,
@@ -117,7 +118,7 @@ export function WishlistDrawer({ open, onClose }: { open: boolean; onClose: () =
               <Button
                 onClick={() => {
                   items.forEach((item) => {
-                    addItem({
+                    addToCart.mutate({
                       id: item.id,
                       name: item.name,
                       variant: item.variant,

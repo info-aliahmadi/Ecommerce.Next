@@ -5,11 +5,14 @@ import { triggerFlyToCart } from '../_components/ecommerce/fly-to-cart';
 import { useCartStore } from '../_lib/store';
 import { toast } from 'sonner';
 import CartItem from '../_types/Order/CartItem';
+import { useAddToCart } from './use-cart-queries';
 
 
 export function useFlyToCart() {
-  
-  const { addItem } = useCartStore();
+
+  const addToCart = useAddToCart();
+  const { addItem: addItemStore } = useCartStore();
+  const jwt = useCartStore((s) => s.jwt);
 
   const handleAddToCartWithAnimation = useCallback(
     (e: React.MouseEvent, imageUrl : string, cartItem: CartItem) => {
@@ -20,8 +23,11 @@ export function useFlyToCart() {
       const target = e.currentTarget as HTMLElement;
       const sourceElement = target.closest('homepage.button') || target;
 
-      // Add item to cart store
-      addItem(cartItem);
+      if (jwt) {
+        addToCart.mutate(cartItem);
+      } else {
+        addItemStore(cartItem);
+      }
 
       // Show toast
       toast.success(`${cartItem.name} added to cart!`, {
@@ -35,7 +41,7 @@ export function useFlyToCart() {
       // Trigger fly-to-cart animation
       triggerFlyToCart(imageUrl , sourceElement as HTMLElement);
     },
-    [addItem],
+    [jwt, addToCart, addItemStore],
   );
 
   return { handleAddToCartWithAnimation };

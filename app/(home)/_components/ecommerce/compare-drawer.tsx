@@ -5,6 +5,7 @@ import { Sheet, SheetContent, SheetHeader, SheetTitle } from '../ui/sheet';
 import { ScrollArea } from '../ui/scroll-area';
 import { Button } from '../ui/button';
 import { useCompareStore, useCartStore } from '../../_lib/store';
+import { useAddToCart } from '../../_hooks/use-cart-queries';
 import { GetImage } from '../../_lib/utils';
 import { motion } from 'framer-motion';
 import { toast } from 'sonner';
@@ -44,11 +45,11 @@ function ComparisonCell({ children, delay = 0 }: { children: React.ReactNode; de
 
 export function CompareDrawer() {
   const { items, removeItem, clearAll, isCompareOpen, setCompareOpen } = useCompareStore();
-  const { addItem } = useCartStore();
+  const addToCart = useAddToCart();
   const t = useTranslations();
 
   const handleAddToCart = (item: typeof items[0]) => {
-    addItem({
+    addToCart.mutate({
       id: item.id,
       name: item.name,
       variant: item.variant,

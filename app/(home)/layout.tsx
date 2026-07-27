@@ -51,13 +51,13 @@ export default function RootLayout({
       enableSystem={false}
       disableTransitionOnChange={false}
     >
-      <SessionProvider>
-        <QueryProvider>
+      <QueryProvider>
+        <SessionProvider>
           {children}
           <Toaster position="top-center" />
           <SharedOverlays />
-        </QueryProvider>
-      </SessionProvider>
+        </SessionProvider>
+      </QueryProvider>
     </ThemeProvider>
   );
 }

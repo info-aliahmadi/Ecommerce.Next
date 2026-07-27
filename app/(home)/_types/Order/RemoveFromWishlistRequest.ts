@@ -1,3 +1,3 @@
 export default interface RemoveFromWishlistRequest {
-  productVariantId: number;
+  variantId: number;
 }

@@ -1,4 +1,4 @@
 export default interface AddToCartRequest {
-  productVariantId: number;
+  variantId: number;
   quantity?: number;
 }
