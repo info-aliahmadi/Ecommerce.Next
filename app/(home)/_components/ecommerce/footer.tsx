@@ -10,11 +10,44 @@ import { motion } from 'framer-motion';
 import { useTranslations } from 'next-intl';
 import HomePageService from '../../_services/HomePageService';
 
+const FOOTER_LINK_KEYS = ['shop', 'support', 'company'] as const;
+
+function useFooterLinks() {
+  return useQuery({
+    queryKey: ['footerLinks'],
+    queryFn: async () => {
+      const service = new HomePageService();
+      const results = await Promise.all(
+        FOOTER_LINK_KEYS.map((key) => service.getLinksByKeyList(key))
+      );
+
+      const footerLinks: Record<string, { label: string; href: string }[]> = {};
+
+      results.forEach((result, index) => {
+        const key = FOOTER_LINK_KEYS[index];
+        if (result.succeeded && result.data && result.data.length > 0) {
+          footerLinks[key] = result.data
+            .sort((a, b) => a.order - b.order)
+            .map((link) => ({
+              label: link.title,
+              href: link.url,
+            }));
+        }
+      });
+
+      return footerLinks;
+    },
+    staleTime: 5 * 60 * 1000,
+  });
+}
+
 export function Footer() {
   const t = useTranslations();
   const { setSelectedCategory } = useUIStore();
   const { totalItems } = useCartStore();
   const [email, setEmail] = useState('');
+
+  const { data: footerLinks } = useFooterLinks();
 
   const { data: categories = [] } = useQuery({
     queryKey: ['categories'],
@@ -33,22 +66,22 @@ export function Footer() {
     toast.success(t('homepage.newsletter.success'));
   };
 
-  const footerLinks = {
-    shop: [
+  const links = {
+    shop: footerLinks?.shop?.length ? footerLinks.shop : [
       { label: t('homepage.footer.allProducts'), href: '#products' },
       { label: t('homepage.footer.newArrivals'), href: '#products' },
       { label: t('homepage.footer.bestSellers'), href: '#products' },
       { label: t('homepage.footer.dealsAndOffers'), href: '#deals' },
       { label: t('homepage.footer.giftCards'), href: '#' },
     ],
-    support: [
+    support: footerLinks?.support?.length ? footerLinks.support : [
       { label: t('homepage.footer.helpCenter'), href: '#' },
       { label: t('homepage.footer.shippingInfo'), href: '#' },
       { label: t('homepage.footer.returns'), href: '#' },
       { label: t('homepage.footer.orderTrackingLink'), href: '#' },
       { label: t('homepage.footer.contactUs'), href: '#' },
     ],
-    company: [
+    company: footerLinks?.company?.length ? footerLinks.company : [
       { label: t('homepage.footer.aboutUs'), href: '#' },
       { label: t('homepage.footer.careers'), href: '#' },
       { label: t('homepage.footer.press'), href: '#' },
@@ -104,7 +137,7 @@ export function Footer() {
                 <span className="text-white font-bold text-sm">S</span>
               </div>
               <span className="text-xl font-bold tracking-tight">
-                <span className="text-ecommerce-red">Shop</span>Sphere
+                <span className="text-ecommerce-red">Hydra</span>Shop
               </span>
             </Link>
             <p className="text-sm text-white/60 leading-relaxed max-w-sm mb-6">
@@ -175,7 +208,7 @@ export function Footer() {
           <div>
             <p className="text-xs font-semibold uppercase tracking-wider text-white/40 mb-4 flex items-center gap-2">{t('homepage.footer.shop')}<span className="w-1 h-1 rounded-full bg-ecommerce-red" /></p>
             <ul className="space-y-2.5">
-              {footerLinks.shop.map((link) => (
+              {links.shop.map((link) => (
                 <li key={link.label}>
                   <Link href={link.href} className="text-sm text-white/60 hover:text-ecommerce-red hover:translate-x-0.5 transition-all duration-200 inline-block">
                     {link.label}
@@ -189,7 +222,7 @@ export function Footer() {
           <div>
             <p className="text-xs font-semibold uppercase tracking-wider text-white/40 mb-4 flex items-center gap-2">{t('homepage.footer.support')}<span className="w-1 h-1 rounded-full bg-ecommerce-red" /></p>
             <ul className="space-y-2.5">
-              {footerLinks.support.map((link) => (
+              {links.support.map((link) => (
                 <li key={link.label}>
                   <Link href={link.href} className="text-sm text-white/60 hover:text-ecommerce-red hover:translate-x-0.5 transition-all duration-200 inline-block">
                     {link.label}
@@ -203,7 +236,7 @@ export function Footer() {
           <div>
             <p className="text-xs font-semibold uppercase tracking-wider text-white/40 mb-4 flex items-center gap-2">{t('homepage.footer.company')}<span className="w-1 h-1 rounded-full bg-ecommerce-red" /></p>
             <ul className="space-y-2.5">
-              {footerLinks.company.map((link) => (
+              {links.company.map((link) => (
                 <li key={link.label}>
                   <Link href={link.href} className="text-sm text-white/60 hover:text-ecommerce-red hover:translate-x-0.5 transition-all duration-200 inline-block">
                     {link.label}

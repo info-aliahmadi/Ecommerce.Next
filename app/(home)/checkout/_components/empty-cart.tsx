@@ -36,9 +36,6 @@ export function EmptyCart() {
           </Link>
         </motion.div>
       </main>
-      <div className="mt-auto">
-        <Footer />
-      </div>
       <BackToTop />
       <MobileBottomNav />
     </div>

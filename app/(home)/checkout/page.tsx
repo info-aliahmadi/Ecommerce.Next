@@ -462,9 +462,9 @@ function CheckoutPageInner() {
       const result = await orderService.createOrder(order);
 
       if (result.succeeded && result.data) {
-         setOrderNumber(`ORD-${result.data.id}`);
-         clearCartMutation.mutate();
-         checkoutPersist.clearCheckoutPersist();
+        setOrderNumber(`ORD-${result.data.id}`);
+        clearCartMutation.mutate();
+        checkoutPersist.clearCheckoutPersist();
         toast.success(t('orderPlaced'));
         goToStep(4, 1);
       } else {
@@ -492,7 +492,6 @@ function CheckoutPageInner() {
   /* ── Empty Cart ───────────────────────────────────────────── */
   if (items.length === 0 && currentStep < 4) {
     return <>
-      <Header />
       <EmptyCart />
     </>;
   }
@@ -507,200 +506,194 @@ function CheckoutPageInner() {
 
   /* ── Render ───────────────────────────────────────────────── */
   return (
-    <>
-      <Header />
-      <div className="min-h-screen flex flex-col bg-white dark:bg-ecommerce-surface">
-        {/* Breadcrumb bar */}
-        <div className="border-b border-ecommerce-border bg-ecommerce-surface">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
-            <nav aria-label="Breadcrumb" className="flex items-center gap-2 text-sm">
-              <Link
-                href="/products"
-                className="text-ecommerce-text-muted hover:text-ecommerce-text-primary transition-colors"
-              >
-                {t('breadcrumbHome')}
-              </Link>
-              <ChevronRight size={14} className="text-ecommerce-text-muted" />
-              <span className="text-ecommerce-text-muted">{t('breadcrumbCart')}</span>
-              <ChevronRight size={14} className="text-ecommerce-text-muted" />
-              <span className="font-medium text-ecommerce-text-primary">{t('breadcrumbCheckout')}</span>
-            </nav>
-          </div>
+    <div className="min-h-screen flex flex-col bg-white dark:bg-ecommerce-surface">
+      {/* Breadcrumb bar */}
+      <div className="border-b border-ecommerce-border bg-ecommerce-surface">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
+          <nav aria-label="Breadcrumb" className="flex items-center gap-2 text-sm">
+            <Link
+              href="/products"
+              className="text-ecommerce-text-muted hover:text-ecommerce-text-primary transition-colors"
+            >
+              {t('breadcrumbHome')}
+            </Link>
+            <ChevronRight size={14} className="text-ecommerce-text-muted" />
+            <span className="text-ecommerce-text-muted">{t('breadcrumbCart')}</span>
+            <ChevronRight size={14} className="text-ecommerce-text-muted" />
+            <span className="font-medium text-ecommerce-text-primary">{t('breadcrumbCheckout')}</span>
+          </nav>
         </div>
-
-        {/* Page header */}
-        <div className="bg-ecommerce-surface border-b border-ecommerce-border">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5">
-            <div className="flex items-center gap-4">
-              {currentStep < 4 && (
-                <Link href="/products" className="hidden sm:block">
-                  <button className="w-9 h-9 rounded-lg bg-ecommerce-surface-hover flex items-center justify-center hover:bg-ecommerce-border transition-colors">
-                    <ArrowLeft size={16} className="text-ecommerce-text-secondary" />
-                  </button>
-                </Link>
-              )}
-              <div>
-                <h1 className="text-xl sm:text-2xl font-extrabold text-ecommerce-text-primary">
-                  {currentStep === 4 ? t('orderConfirmed') : t('title')}
-                </h1>
-                <p className="text-xs text-ecommerce-text-muted mt-0.5 hidden sm:block">
-                  {t('itemsInCart', { count: totalItems() })}
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <main className="flex-1">
-          {currentStep < 4 && (
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-              {/* Step Progress Indicator */}
-              <StepProgress currentStep={currentStep} steps={steps} />
-
-              {/* Mobile Order Summary (collapsible accordion) */}
-              <Accordion type="single" collapsible defaultValue="summary" className="md:hidden mb-6">
-                <AccordionItem value="summary" className="border-ecommerce-border">
-                  <AccordionTrigger className="text-sm font-bold text-ecommerce-text-primary hover:no-underline py-3">
-                    <div className="flex items-center gap-2">
-                      {t('cartSummary')} ({totalItems()} {t('itemsCount', { count: totalItems() })})
-                    </div>
-                  </AccordionTrigger>
-                  <AccordionContent>
-                    <OrderSummary
-                      items={items}
-                      appliedPromo={appliedPromo}
-                      showPromoInput={showPromoInput}
-                      promoInput={promoInput}
-                      promoError={promoError}
-                      subtotal={subtotal}
-                      savings={savings}
-                      shippingCost={shippingCost}
-                      tax={tax}
-                      discountAmount={discountAmount}
-                      total={total}
-                      onApplyPromo={handleApplyPromo}
-                      onRemovePromo={handleRemovePromo}
-                      onPromoInputChange={setPromoInput}
-                      onPromoInputClearError={() => setPromoError('')}
-                      onShowPromoInput={() => setShowPromoInput(true)}
-                      onKeyDown={(e) => e.key === 'Enter' && handleApplyPromo()}
-                    />
-                  </AccordionContent>
-                </AccordionItem>
-              </Accordion>
-
-              {/* Main layout: content + sidebar */}
-              <div className="flex flex-col lg:flex-row gap-8">
-                {/* Main content (left) */}
-                <div className="flex-1 min-w-0">
-                  <Card className="border-ecommerce-border bg-white dark:bg-ecommerce-surface">
-                    <CardContent className="p-4 sm:p-6 lg:p-8">
-                      <AnimatePresence mode="wait" custom={direction}>
-                        <motion.div
-                          key={currentStep}
-                          custom={direction}
-                          initial={{ opacity: 0, x: direction * 40 }}
-                          animate={{ opacity: 1, x: 0 }}
-                          exit={{ opacity: 0, x: direction * -40 }}
-                          transition={{ duration: 0.25, ease: 'easeInOut' }}
-                        >
-                          {currentStep === 1 && (
-                            <ShippingStep
-                              shipping={shipping}
-                              errors={errors}
-                              savedAddresses={savedAddresses}
-                              selectedAddressId={selectedAddressId}
-                              addrForm={addrForm}
-                              isSaving={isPlacing}
-                              onSetShippingField={setShippingField}
-                              onSetAddrForm={setAddrForm}
-                              onAddressSelect={handleAddressSelect}
-                              onContinue={handleContinueShipping}
-                            />
-                          )}
-                          {currentStep === 2 && (
-                            <PaymentStep
-                              payment={payment}
-                              errors={errors}
-                              onSetPaymentField={setPaymentField}
-                              onBack={() => goToStep(1, -1)}
-                              onContinue={handleContinuePayment}
-                            />
-                          )}
-                          {currentStep === 3 && (
-                            <ReviewStep
-                              items={items}
-                              shipping={shipping}
-                              payment={payment}
-                              subtotal={subtotal}
-                              savings={savings}
-                              shippingCost={shippingCost}
-                              tax={tax}
-                              discountAmount={discountAmount}
-                              total={total}
-                              appliedPromo={appliedPromo}
-                              showPromoInput={showPromoInput}
-                              promoInput={promoInput}
-                              promoError={promoError}
-                              isPlacing={isPlacing}
-                              onGoToStep={goToStep}
-                              onApplyPromo={handleApplyPromo}
-                              onRemovePromo={handleRemovePromo}
-                              onPlaceOrder={handlePlaceOrder}
-                            />
-                          )}
-                        </motion.div>
-                      </AnimatePresence>
-                    </CardContent>
-                  </Card>
-                </div>
-
-                {/* Sticky sidebar (desktop only) */}
-                <div className="hidden md:block w-full lg:w-[380px] xl:w-[400px] shrink-0">
-                  <div className="lg:sticky lg:top-6">
-                    <OrderSummary
-                      items={items}
-                      appliedPromo={appliedPromo}
-                      showPromoInput={showPromoInput}
-                      promoInput={promoInput}
-                      promoError={promoError}
-                      subtotal={subtotal}
-                      savings={savings}
-                      shippingCost={shippingCost}
-                      tax={tax}
-                      discountAmount={discountAmount}
-                      total={total}
-                      onApplyPromo={handleApplyPromo}
-                      onRemovePromo={handleRemovePromo}
-                      onPromoInputChange={setPromoInput}
-                      onPromoInputClearError={() => setPromoError('')}
-                      onShowPromoInput={() => setShowPromoInput(true)}
-                      onKeyDown={(e) => e.key === 'Enter' && handleApplyPromo()}
-                    />
-                  </div>
-                </div>
-              </div>
-            </div>
-          )}
-
-          {/* Confirmation Step - full width */}
-          {currentStep === 4 && (
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-              <Card className="border-ecommerce-border bg-white dark:bg-ecommerce-surface">
-                <CardContent className="p-4 sm:p-6 lg:p-8">
-                  <ConfirmationStep orderNumber={orderNumber} email={shipping.email} />
-                </CardContent>
-              </Card>
-            </div>
-          )}
-        </main>
-
-        <div className="mt-auto">
-          <Footer />
-        </div>
-        <BackToTop />
-        <MobileBottomNav />
       </div>
-    </>
+
+      {/* Page header */}
+      <div className="bg-ecommerce-surface border-b border-ecommerce-border">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5">
+          <div className="flex items-center gap-4">
+            {currentStep < 4 && (
+              <Link href="/products" className="hidden sm:block">
+                <button className="w-9 h-9 rounded-lg bg-ecommerce-surface-hover flex items-center justify-center hover:bg-ecommerce-border transition-colors">
+                  <ArrowLeft size={16} className="text-ecommerce-text-secondary" />
+                </button>
+              </Link>
+            )}
+            <div>
+              <h1 className="text-xl sm:text-2xl font-extrabold text-ecommerce-text-primary">
+                {currentStep === 4 ? t('orderConfirmed') : t('title')}
+              </h1>
+              <p className="text-xs text-ecommerce-text-muted mt-0.5 hidden sm:block">
+                {t('itemsInCart', { count: totalItems() })}
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <main className="flex-1">
+        {currentStep < 4 && (
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+            {/* Step Progress Indicator */}
+            <StepProgress currentStep={currentStep} steps={steps} />
+
+            {/* Mobile Order Summary (collapsible accordion) */}
+            <Accordion type="single" collapsible defaultValue="summary" className="md:hidden mb-6">
+              <AccordionItem value="summary" className="border-ecommerce-border">
+                <AccordionTrigger className="text-sm font-bold text-ecommerce-text-primary hover:no-underline py-3">
+                  <div className="flex items-center gap-2">
+                    {t('cartSummary')} ({totalItems()} {t('itemsCount', { count: totalItems() })})
+                  </div>
+                </AccordionTrigger>
+                <AccordionContent>
+                  <OrderSummary
+                    items={items}
+                    appliedPromo={appliedPromo}
+                    showPromoInput={showPromoInput}
+                    promoInput={promoInput}
+                    promoError={promoError}
+                    subtotal={subtotal}
+                    savings={savings}
+                    shippingCost={shippingCost}
+                    tax={tax}
+                    discountAmount={discountAmount}
+                    total={total}
+                    onApplyPromo={handleApplyPromo}
+                    onRemovePromo={handleRemovePromo}
+                    onPromoInputChange={setPromoInput}
+                    onPromoInputClearError={() => setPromoError('')}
+                    onShowPromoInput={() => setShowPromoInput(true)}
+                    onKeyDown={(e) => e.key === 'Enter' && handleApplyPromo()}
+                  />
+                </AccordionContent>
+              </AccordionItem>
+            </Accordion>
+
+            {/* Main layout: content + sidebar */}
+            <div className="flex flex-col lg:flex-row gap-8">
+              {/* Main content (left) */}
+              <div className="flex-1 min-w-0">
+                <Card className="border-ecommerce-border bg-white dark:bg-ecommerce-surface">
+                  <CardContent className="p-4 sm:p-6 lg:p-8">
+                    <AnimatePresence mode="wait" custom={direction}>
+                      <motion.div
+                        key={currentStep}
+                        custom={direction}
+                        initial={{ opacity: 0, x: direction * 40 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        exit={{ opacity: 0, x: direction * -40 }}
+                        transition={{ duration: 0.25, ease: 'easeInOut' }}
+                      >
+                        {currentStep === 1 && (
+                          <ShippingStep
+                            shipping={shipping}
+                            errors={errors}
+                            savedAddresses={savedAddresses}
+                            selectedAddressId={selectedAddressId}
+                            addrForm={addrForm}
+                            isSaving={isPlacing}
+                            onSetShippingField={setShippingField}
+                            onSetAddrForm={setAddrForm}
+                            onAddressSelect={handleAddressSelect}
+                            onContinue={handleContinueShipping}
+                          />
+                        )}
+                        {currentStep === 2 && (
+                          <PaymentStep
+                            payment={payment}
+                            errors={errors}
+                            onSetPaymentField={setPaymentField}
+                            onBack={() => goToStep(1, -1)}
+                            onContinue={handleContinuePayment}
+                          />
+                        )}
+                        {currentStep === 3 && (
+                          <ReviewStep
+                            items={items}
+                            shipping={shipping}
+                            payment={payment}
+                            subtotal={subtotal}
+                            savings={savings}
+                            shippingCost={shippingCost}
+                            tax={tax}
+                            discountAmount={discountAmount}
+                            total={total}
+                            appliedPromo={appliedPromo}
+                            showPromoInput={showPromoInput}
+                            promoInput={promoInput}
+                            promoError={promoError}
+                            isPlacing={isPlacing}
+                            onGoToStep={goToStep}
+                            onApplyPromo={handleApplyPromo}
+                            onRemovePromo={handleRemovePromo}
+                            onPlaceOrder={handlePlaceOrder}
+                          />
+                        )}
+                      </motion.div>
+                    </AnimatePresence>
+                  </CardContent>
+                </Card>
+              </div>
+
+              {/* Sticky sidebar (desktop only) */}
+              <div className="hidden md:block w-full lg:w-[380px] xl:w-[400px] shrink-0">
+                <div className="lg:sticky lg:top-6">
+                  <OrderSummary
+                    items={items}
+                    appliedPromo={appliedPromo}
+                    showPromoInput={showPromoInput}
+                    promoInput={promoInput}
+                    promoError={promoError}
+                    subtotal={subtotal}
+                    savings={savings}
+                    shippingCost={shippingCost}
+                    tax={tax}
+                    discountAmount={discountAmount}
+                    total={total}
+                    onApplyPromo={handleApplyPromo}
+                    onRemovePromo={handleRemovePromo}
+                    onPromoInputChange={setPromoInput}
+                    onPromoInputClearError={() => setPromoError('')}
+                    onShowPromoInput={() => setShowPromoInput(true)}
+                    onKeyDown={(e) => e.key === 'Enter' && handleApplyPromo()}
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Confirmation Step - full width */}
+        {currentStep === 4 && (
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+            <Card className="border-ecommerce-border bg-white dark:bg-ecommerce-surface">
+              <CardContent className="p-4 sm:p-6 lg:p-8">
+                <ConfirmationStep orderNumber={orderNumber} email={shipping.email} />
+              </CardContent>
+            </Card>
+          </div>
+        )}
+      </main>
+
+      <BackToTop />
+      <MobileBottomNav />
+    </div>
   );
 }

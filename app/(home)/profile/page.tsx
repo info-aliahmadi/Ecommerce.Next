@@ -260,7 +260,6 @@ function ProfilePageContent() {
 
   return (
     <div className="min-h-screen flex flex-col pb-16 lg:pb-0">
-      <Header />
       {/* Header */}
       <header className="sticky top-0 z-40 bg-white/80 dark:bg-ecommerce-surface/80 backdrop-blur-xl border-b border-ecommerce-border">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-14 flex items-center justify-between">
@@ -420,7 +419,6 @@ function ProfilePageContent() {
         </div>
       </main>
 
-      <Footer />
       <CartDrawer />
       <QuickViewModal />
       <BackToTop />

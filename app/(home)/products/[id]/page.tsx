@@ -153,8 +153,6 @@ export default async function ProductDetailPage({
 
   return (
     <div className="min-h-screen bg-white dark:bg-ecommerce-surface flex flex-col">
-      <Header />
-
       <main className="flex-1 w-full">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4 sm:py-6">
           {/* Breadcrumb - Server rendered */}
@@ -351,7 +349,6 @@ export default async function ProductDetailPage({
         </div>
       </main>
 
-      <Footer />
       <CartDrawer />
       <QuickViewModal />
       <BackToTop />

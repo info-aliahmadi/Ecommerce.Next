@@ -28,13 +28,12 @@ import { Header } from './_components/ecommerce/header';
 
 
 /* ─── Home page ─────────────────────────────────────────────── */
-function HomePage() {
+export default function HomePage() {
   const scrollRef = useScrollReveal();
   return (
     <div className="min-h-screen flex flex-col pb-16 lg:pb-0" ref={scrollRef}>
       <ScrollProgress />
       <WelcomeToast />
-      <Header />
       {/* <StickyCategoryNav /> */}
       <main className="flex-1">
         <HeroSection />
@@ -59,7 +58,6 @@ function HomePage() {
         <ProductGrid />
         <NewsletterSection />
       </main>
-      <Footer />
       <StockAlert />
       <ProductQuickStats />
       {/* <ProductCatalog /> */}
@@ -72,22 +70,7 @@ function PageShell({ children }: { children: React.ReactNode }) {
   return (
     <div className="min-h-screen flex flex-col pb-16 lg:pb-0">
       <ScrollProgress />
-      <Header />
       <main className="flex-1">{children}</main>
-      <Footer />
     </div>
-  );
-}
-
-/* ─── Client-side page router ───────────────────────────────── */
-function PageRouter() {
-  return (
-    <HomePage />
-  );
-}
-
-export default function Home() {
-  return (
-    <PageRouter />
   );
 }

@@ -1128,8 +1128,6 @@ function ProductsPageContent() {
   // ── Render ──────────────────────────────────────────
   return (
     <div className="min-h-screen flex flex-col pb-16 lg:pb-0 bg-background">
-      <Header />
-
       <main className="flex-1">
         {/* Page Header */}
         <div className="border-b border-ecommerce-border bg-ecommerce-surface/50">
@@ -1350,8 +1348,6 @@ function ProductsPageContent() {
           </div>
         </div>
       </main>
-
-      <Footer />
 
       {/* Mobile Filter Sheet */}
       <Sheet open={sheetOpen} onOpenChange={setSheetOpen}>
