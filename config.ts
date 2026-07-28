@@ -21,15 +21,15 @@ const CONFIG = {
   AVATAR_BASEPATH: `${process.env.NEXT_PUBLIC_API_BASE_URL}/avatar/`,
   PRODUCT_BASEPATH: `${process.env.NEXT_PUBLIC_API_BASE_URL}/productimage/`,
   CATEGORY_BASEPATH: `${process.env.NEXT_PUBLIC_API_BASE_URL}/categoryimage/`,
-  UPLOAD_BASEPATH:  `${process.env.NEXT_PUBLIC_API_BASE_URL}/`,
+  UPLOAD_BASEPATH: `${process.env.NEXT_PUBLIC_API_BASE_URL}/`,
   IMAGES_EXTENSIONS: ['.jpg', '.jpeg', '.tiff', '.tif', '.gif', '.bmp', '.png'],
   VIDEOS_EXTENSIONS: ['.mp4', '.h264', '.wmv', '.wav', '.avi', '.flv', '.mov', '.mkv', '.webm', '.ogg'],
   LOGIN_API_PATH: `${process.env.NEXT_PUBLIC_API_BASE_URL}/Auth/Login`,
   REFRESH_TOKEN_API_PATH: `${process.env.NEXT_PUBLIC_API_BASE_URL}/Auth/RefreshToken`,
   LOGOUT_API_PATH: `${process.env.NEXT_PUBLIC_API_BASE_URL}/Auth/SignOut`,
-  FRONT_PATH: process.env.NEXT_PUBLIC_FRONT_URL ,
+  FRONT_PATH: process.env.NEXT_PUBLIC_FRONT_URL,
   DASHBOARD_PATH: `${process.env.NEXT_PUBLIC_FRONT_URL}/dashboard/`,
-  LOGIN_PATH:  `${process.env.NEXT_PUBLIC_FRONT_URL}/login`,
+  LOGIN_PATH: `${process.env.NEXT_PUBLIC_FRONT_URL}/login`,
   ADMIN_ROLES: ['ADMIN', 'SUPERADMIN'],
   AUTHENTICATION_DEFAULT_STORAGE: 'localStorage', //'cookie',
   AUTHENTICATION_STORAGE_NAME: 'HydraAuthenticationStorage',
@@ -43,7 +43,8 @@ const CONFIG = {
   DATE_STYLE: "short", // "full" | "long" | "medium" | "short",
   TIME_STYLE: 'short', // "full" | "long" | "medium" | "short"
   LTR_FONTS_EDITOR: '"Poppins", Arial, tohoma',
-  RTL_FONTS_EDITOR: '"Iran Sans", Arial, tohoma'
+  RTL_FONTS_EDITOR: '"Iran Sans", Arial, tohoma',
+  POPULAR_TERMS: ['Headphones', 'T-Shirt', 'Lamp', 'Yoga', 'Perfume', 'Keyboard']
 };
 
 

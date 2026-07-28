@@ -27,10 +27,10 @@ interface SearchResult {
 
 const MAX_RECENT = 5;
 const STORAGE_KEY = 'ecommerce-recent-searches';
-const POPULAR_TERMS = ['Headphones', 'T-Shirt', 'Lamp', 'Yoga', 'Perfume', 'Keyboard'];
 
 export function SearchSuggestions({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) {
   const t = useTranslations();
+  const router = useRouter();
   const { searchQuery, setSearchQuery, setSelectedCategory } = useUIStore();
   const [recentSearches, setRecentSearches] = useState<RecentSearch[]>([]);
   const [activeIndex, setActiveIndex] = useState(-1);
@@ -138,12 +138,9 @@ export function SearchSuggestions({ isOpen, onClose }: { isOpen: boolean; onClos
   const handleProductClick = (product: SearchResult) => {
     addRecentSearch(product.name);
     setActiveIndex(-1);
-    const productsSection = document.getElementById('products-section') || document.getElementById('product-grid-section');
-    if (productsSection) {
-      productsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }
     setSearchQuery(product.name);
     onClose();
+    router.push(`/products/${product.id}`);
   };
 
   const handleSearchForQuery = () => {
@@ -165,7 +162,7 @@ export function SearchSuggestions({ isOpen, onClose }: { isOpen: boolean; onClos
 
   const suggestionCount = showSuggestions ? results.length : 0;
   const hasSearchLink = searchQuery.length >= 2;
-  const totalNavItems = showSuggestions ? suggestionCount + (hasSearchLink ? 1 : 0) : showRecent ? recentSearches.length : showPopular ? POPULAR_TERMS.length : 0;
+  const totalNavItems = showSuggestions ? suggestionCount + (hasSearchLink ? 1 : 0) : showRecent ? recentSearches.length : showPopular ? CONFIG.POPULAR_TERMS.length : 0;
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === 'ArrowDown') {
@@ -184,8 +181,8 @@ export function SearchSuggestions({ isOpen, onClose }: { isOpen: boolean; onClos
         }
       } else if (showRecent && activeIndex >= 0 && activeIndex < recentSearches.length) {
         handleSelect(recentSearches[activeIndex].query);
-      } else if (showPopular && activeIndex >= 0 && activeIndex < POPULAR_TERMS.length) {
-        handleSelect(POPULAR_TERMS[activeIndex]);
+      } else if (showPopular && activeIndex >= 0 && activeIndex < CONFIG.POPULAR_TERMS.length) {
+        handleSelect(CONFIG.POPULAR_TERMS[activeIndex]);
       }
       setActiveIndex(-1);
     } else if (e.key === 'Escape') {
@@ -264,7 +261,7 @@ export function SearchSuggestions({ isOpen, onClose }: { isOpen: boolean; onClos
               {t('homepage.searchSuggestions.tryDifferent')}
             </p>
             <div className="flex flex-wrap gap-2 justify-center mt-4">
-              {POPULAR_TERMS.slice(0, 4).map((term) => (
+              {CONFIG.POPULAR_TERMS.slice(0, 4).map((term) => (
                 <button
                   key={term}
                   onClick={() => handleSelect(term)}
@@ -307,7 +304,7 @@ export function SearchSuggestions({ isOpen, onClose }: { isOpen: boolean; onClos
           <div className="px-4 py-1.5">
             <p className="text-[10px] font-semibold text-ecommerce-text-muted uppercase tracking-wider">{t('homepage.searchSuggestions.trendingSearches')}</p>
           </div>
-          {POPULAR_TERMS.map((term, index) => (
+          {CONFIG.POPULAR_TERMS.map((term, index) => (
             <button
               key={term}
               onClick={() => handleSelect(term)}
