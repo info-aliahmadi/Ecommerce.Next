@@ -59,11 +59,26 @@ export function Footer() {
     },
   });
 
-  const handleMiniSubscribe = (e: React.FormEvent) => {
+  const handleMiniSubscribe = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!email) return;
-    setEmail('');
-    toast.success(t('homepage.newsletter.success'));
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      toast.error(t('homepage.newsletter.invalidEmail') || 'Please enter a valid email');
+      return;
+    }
+    try {
+      const service = new HomePageService();
+      const result = await service.subscribe({ email });
+      if (result.succeeded) {
+        setEmail('');
+        toast.success(t('homepage.newsletter.success'));
+      } else {
+        toast.error(result.message || t('homepage.newsletter.error'));
+      }
+    } catch {
+      toast.error(t('homepage.newsletter.error'));
+    }
   };
 
   const links = {

@@ -21,6 +21,7 @@ import AttributeType from "@root/app/types/enums/AttributeType";
 import CuratedStyleProductModel from "../_types/Product/CuratedStyleProductModel";
 import BundleDisplayModel from "../_types/Product/BundleDisplayModel";
 import SlideshowDisplayModel from "../_types/SlideshowDisplayModel";
+import SubscribeUserModel from "../_types/SubscribeUserModel";
 
 export default class HomePageService {
 
@@ -59,12 +60,12 @@ export default class HomePageService {
     let result = await this.getProducts(filter);
     return result;
   }
-// it means product
+  // it means product
   async getFeaturedProducts(): Promise<Result<PaginatedDisplayList<ProductDisplayModel>>> {
-     let filter: ProductFilterModel = {
+    let filter: ProductFilterModel = {
       pageIndex: 1,
       pageSize: 8,
-      productTagIds : [ProductTags.Featured]
+      productTagIds: [ProductTags.Featured]
     }
     let result = await this.getProducts(filter);
     return result;
@@ -263,7 +264,7 @@ export default class HomePageService {
    * Get links by key list
    */
   async getLinksByKeyList(sectionKey: string): Promise<Result<LinkModel[]>> {
-    
+
     const params = new URLSearchParams({ sectionKey: sectionKey.toString() });
     let result = await Fetch.Get<Result<LinkModel[]>>(`${this.baseUrl}/Cms/GetLinksByKey?${params.toString()}`, this.config);
     return result;
@@ -271,8 +272,13 @@ export default class HomePageService {
   /**
    * Get slideshows
    */
-  async getSlideshows(keys: string[]): Promise<Result<SlideshowDisplayModel[]>> {
+  async getSlideshows(): Promise<Result<SlideshowDisplayModel[]>> {
     let result = await Fetch.Get<Result<SlideshowDisplayModel[]>>(`${this.baseUrl}/Cms/GetSlideshows`, this.config);
     return result;
   }
+
+  subscribe = async (subscribeUser: SubscribeUserModel): Promise<Result<SubscribeUserModel>> => {
+    return Fetch.Post<Result<SubscribeUserModel>>(CONFIG.API_BASEPATH + `/Crm/SubscribeUser`, subscribeUser, this.config);
+  };
+
 }

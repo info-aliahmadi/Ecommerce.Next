@@ -7,6 +7,7 @@ import { useState, useEffect, useRef, useCallback } from 'react';
 import { toast } from 'sonner';
 import { motion, useInView, AnimatePresence } from 'framer-motion';
 import { useTranslations } from 'next-intl';
+import HomePageService from '../../_services/HomePageService';
 
 function AnimatedCounter({ target, suffix = '' }: { target: number; suffix?: string }) {
   const [count, setCount] = useState(0);
@@ -84,20 +85,31 @@ export function NewsletterSection() {
   const handleSubmit = useCallback(async (e: React.FormEvent) => {
     e.preventDefault();
     if (!email) return;
-
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      toast.error(t('homepage.newsletter.invalidEmail') || 'Please enter a valid email');
+      return;
+    }
     setIsLoading(true);
-    await new Promise(resolve => setTimeout(resolve, 1000));
-    setIsLoading(false);
-    setEmail('');
-    setIsSubscribed(true);
-
-    toast.success(t('homepage.newsletter.success'));
-
-    // Revert to form after 3 seconds
-    if (revertTimerRef.current) clearTimeout(revertTimerRef.current);
-    revertTimerRef.current = setTimeout(() => {
-      setIsSubscribed(false);
-    }, 3000);
+    try {
+      const service = new HomePageService();
+      const result = await service.subscribe({ email });
+      if (result.succeeded) {
+        setIsSubscribed(true);
+        setEmail('');
+        toast.success(t('homepage.newsletter.success'));
+      } else {
+        toast.error(result.message || t('homepage.newsletter.error'));
+      }
+    } catch {
+      toast.error(t('homepage.newsletter.error'));
+    } finally {
+      setIsLoading(false);
+      if (revertTimerRef.current) clearTimeout(revertTimerRef.current);
+      revertTimerRef.current = setTimeout(() => {
+        setIsSubscribed(false);
+      }, 3000);
+    }
   }, [email, t]);
 
   // Cleanup timer on unmount

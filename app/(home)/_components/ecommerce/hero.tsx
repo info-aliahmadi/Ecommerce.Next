@@ -4,8 +4,13 @@ import { ArrowRight, Truck, Shield, RotateCcw, Headphones, Sparkles, Zap, Clock 
 import { Button } from '../ui/button';
 import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useState, useEffect, useCallback, useRef } from 'react';
+import { useState, useEffect, useCallback, useRef, useMemo } from 'react';
 import { useTranslations } from 'next-intl';
+import { useQuery } from '@tanstack/react-query';
+import HomePageService from '../../_services/HomePageService';
+import CONFIG from '@root/config';
+import SlideshowDisplayModel from '../../_types/SlideshowDisplayModel';
+import { GetImage } from '../../_lib/utils';
 
 const liveActivities = [
   { name: 'Sarah', city: 'NY', product: 'Wireless Headphones', color: '#E63946' },
@@ -15,6 +20,89 @@ const liveActivities = [
   { name: 'Lisa', city: 'Miami', product: 'Skincare Kit', color: '#FF69B4' },
   { name: 'James', city: 'Seattle', product: 'Bluetooth Speaker', color: '#10B981' },
 ];
+
+const badgeEmojis = ['🔥', '✨', '⌚', '👟', '👜', '💎', '🎁', '⚡', '🌟', '🎯'];
+const badgeBgs = [
+  'bg-ecommerce-amber/20',
+  'bg-ecommerce-emerald/20',
+  'bg-ecommerce-purple/20',
+  'bg-ecommerce-teal/20',
+  'bg-ecommerce-rose/20',
+  'bg-ecommerce-red/20',
+];
+const badgePositions = [
+  'absolute -bottom-2 start-6',
+  'absolute -top-3 -end-3',
+  'absolute top-1/3 -start-5',
+  'absolute -bottom-2 end-6',
+  'absolute top-5 -start-3',
+  'absolute bottom-8 end-8',
+];
+const badgeSizes = [
+  'w-12 h-12 rounded-xl',
+  'w-10 h-10 rounded-xl',
+  'w-8 h-8 rounded-lg',
+  'w-11 h-11 rounded-xl',
+  'w-9 h-9 rounded-lg',
+];
+const textSizes = ['text-2xl', 'text-xl', 'text-sm', 'text-lg'];
+const titleSizes = ['text-sm', 'text-xs', 'text-[11px]'];
+const subSizes = ['text-xs', 'text-[10px]', 'text-[9px]'];
+const paddings = [
+  'p-4 gap-3 rounded-2xl',
+  'p-3 gap-2.5 rounded-2xl',
+  'p-2.5 gap-2 rounded-xl',
+  'p-3.5 gap-2.5 rounded-2xl',
+];
+
+function randomItem<T>(arr: readonly T[]): T {
+  return arr[Math.floor(Math.random() * arr.length)];
+}
+
+const floatAnimPresets: { y: number[] }[] = [
+  { y: [0, -8, 0] },
+  { y: [0, 6, 0] },
+  { y: [0, -5, 0] },
+  { y: [0, -7, 0] },
+];
+
+function randomizeSlidePadding(index: number) {
+  const seed = index * 17 + 3;
+  return {
+    badgeEmoji: badgeEmojis[seed % badgeEmojis.length],
+    badgeBg: badgeBgs[(seed + 2) % badgeBgs.length],
+    badgePos: badgePositions[(seed + 5) % badgePositions.length],
+    floatAnim: floatAnimPresets[(seed + 1) % floatAnimPresets.length],
+    floatDur: 3 + ((seed + 7) % 3),
+    badgeSize: badgeSizes[(seed + 3) % badgeSizes.length],
+    textSize: textSizes[(seed + 4) % textSizes.length],
+    titleSize: titleSizes[(seed + 1) % titleSizes.length],
+    subSize: subSizes[(seed + 6) % subSizes.length],
+    padding: paddings[(seed + 2) % paddings.length],
+  };
+}
+
+function mapBackendSlides(slides: SlideshowDisplayModel[]) {
+  return slides.map((slide, index) => {
+    const random = randomizeSlidePadding(index);
+    return {
+      image: GetImage(slide.previewImage),
+      alt: slide.header || `Slide ${index + 1}`,
+      badgeEmoji: random.badgeEmoji,
+      badgeTitle: slide.header || '',
+      badgeSub: slide.description || '',
+      badgeBg: random.badgeBg,
+      badgePos: random.badgePos,
+      floatAnim: random.floatAnim,
+      floatDur: random.floatDur,
+      badgeSize: random.badgeSize,
+      textSize: random.textSize,
+      titleSize: random.titleSize,
+      subSize: random.subSize,
+      padding: random.padding,
+    };
+  });
+}
 
 function CountdownTimer() {
   const t = useTranslations();
@@ -215,74 +303,19 @@ function SocialProofAvatars() {
 }
 
 function HeroCarousel() {
-  const t = useTranslations();
+  const { data: slideshows = [], isLoading } = useQuery({
+    queryKey: ['slideshows'],
+    queryFn: async () => {
+      const service = new HomePageService();
+      const result = await service.getSlideshows();
+      const items = result.succeeded ? result?.data || [] : [];
+      items.sort((a: SlideshowDisplayModel, b: SlideshowDisplayModel) => (a.order ?? 0) - (b.order ?? 0));
+      return items;
+    },
+  });
 
-  const heroSlides = [
-    {
-      image: 'https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=600&h=500&fit=crop',
-      alt: 'Hot Deals collection',
-      badgeEmoji: '🔥',
-      badgeTitle: t('homepage.hero.slideHotDeals'),
-      badgeSub: t('homepage.hero.slideHotDealsSub'),
-      badgeBg: 'bg-ecommerce-amber/20',
-      badgePos: 'absolute -bottom-2 start-6',
-      floatAnim: { y: [0, -8, 0] },
-      floatDur: 3,
-      badgeSize: 'w-12 h-12 rounded-xl',
-      textSize: 'text-2xl',
-      titleSize: 'text-sm',
-      subSize: 'text-xs',
-      padding: 'p-4 gap-3 rounded-2xl',
-    },
-    {
-      image: 'https://images.unsplash.com/photo-1483985988355-763728e1935b?w=600&h=500&fit=crop',
-      alt: 'New Arrivals collection',
-      badgeEmoji: '✨',
-      badgeTitle: t('homepage.hero.slideNewArrivals'),
-      badgeSub: t('homepage.hero.slideNewArrivalsSub'),
-      badgeBg: 'bg-ecommerce-emerald/20',
-      badgePos: 'absolute -top-3 -end-3',
-      floatAnim: { y: [0, 6, 0] },
-      floatDur: 4,
-      badgeSize: 'w-10 h-10 rounded-xl',
-      textSize: 'text-xl',
-      titleSize: 'text-xs',
-      subSize: 'text-[10px]',
-      padding: 'p-3 gap-2.5 rounded-2xl',
-    },
-    {
-      image: 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=600&h=500&fit=crop',
-      alt: 'Premium Watches collection',
-      badgeEmoji: '⌚',
-      badgeTitle: t('homepage.hero.slidePremium'),
-      badgeSub: t('homepage.hero.slidePremiumSub'),
-      badgeBg: 'bg-ecommerce-purple/20',
-      badgePos: 'absolute top-1/3 -start-5',
-      floatAnim: { y: [0, -5, 0] },
-      floatDur: 3.5,
-      badgeSize: 'w-8 h-8 rounded-lg',
-      textSize: 'text-sm',
-      titleSize: 'text-[11px]',
-      subSize: 'text-[9px]',
-      padding: 'p-2.5 gap-2 rounded-xl',
-    },
-    {
-      image: 'https://images.unsplash.com/photo-1572635196237-14b3f281503f?w=600&h=500&fit=crop',
-      alt: 'Athletic Gear collection',
-      badgeEmoji: '👟',
-      badgeTitle: t('homepage.hero.slideAthletic'),
-      badgeSub: t('homepage.hero.slideAthleticSub'),
-      badgeBg: 'bg-ecommerce-teal/20',
-      badgePos: 'absolute -bottom-2 end-6',
-      floatAnim: { y: [0, -7, 0] },
-      floatDur: 3.8,
-      badgeSize: 'w-11 h-11 rounded-xl',
-      textSize: 'text-lg',
-      titleSize: 'text-xs',
-      subSize: 'text-[10px]',
-      padding: 'p-3.5 gap-2.5 rounded-2xl',
-    },
-  ];
+  const heroSlides = useMemo(() => mapBackendSlides(slideshows), [slideshows]);
+
   const [activeIndex, setActiveIndex] = useState(0);
   const pauseRef = useRef(false);
 
@@ -301,7 +334,13 @@ function HeroCarousel() {
       }
     }, 5000);
     return () => clearInterval(interval);
-  }, []);
+  }, [heroSlides.length]);
+
+  if (isLoading || heroSlides.length === 0) {
+    return (
+      <div className="relative rounded-2xl shadow-2xl w-full h-[420px] overflow-hidden bg-gradient-to-br from-ecommerce-red/20 via-rose-500/10 to-ecommerce-purple/20" />
+    );
+  }
 
   const slide = heroSlides[activeIndex];
 
