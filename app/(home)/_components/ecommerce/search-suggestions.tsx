@@ -1,11 +1,14 @@
 'use client';
 
 import { useState, useEffect, useRef, useCallback } from 'react';
+import { useRouter } from 'next/navigation';
 import { Search, Clock, TrendingUp, ArrowRight, AlertCircle } from 'lucide-react';
 import { useUIStore } from '../../_lib/store';
-import { useQuery } from '@tanstack/react-query';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTranslations } from 'next-intl';
+import HomePageService from '../../_services/HomePageService';
+import CONFIG from '@root/config';
+import ProductDisplayModel from '../../_types/Product/ProductDisplayModel';
 
 interface RecentSearch {
   query: string;
@@ -32,19 +35,21 @@ export function SearchSuggestions({ isOpen, onClose }: { isOpen: boolean; onClos
   const [recentSearches, setRecentSearches] = useState<RecentSearch[]>([]);
   const [activeIndex, setActiveIndex] = useState(-1);
   const containerRef = useRef<HTMLDivElement>(null);
-  const [debouncedQuery, setDebouncedQuery] = useState(searchQuery);
+  const [results, setResults] = useState<SearchResult[]>([]);
+  const [isSearching, setIsSearching] = useState(false);
+  const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  // Reset activeIndex when isOpen changes to false
   useEffect(() => {
-    if (!isOpen) setActiveIndex(-1);
+    if (!isOpen) {
+      if (debounceRef.current) clearTimeout(debounceRef.current);
+      setActiveIndex(-1);
+    }
   }, [isOpen]);
 
-  // Reset activeIndex when searchQuery changes
   useEffect(() => {
     setActiveIndex(-1);
   }, [searchQuery]);
 
-  // Load recent searches from localStorage
   useEffect(() => {
     try {
       const stored = localStorage.getItem(STORAGE_KEY);
@@ -52,54 +57,72 @@ export function SearchSuggestions({ isOpen, onClose }: { isOpen: boolean; onClos
     } catch { /* ignore */ }
   }, []);
 
-  // Debounce query for API search
   useEffect(() => {
-    const timer = setTimeout(() => {
-      setDebouncedQuery(searchQuery);
-    }, 300);
-    return () => clearTimeout(timer);
-  }, [searchQuery]);
-
-  // Fetch from dedicated search API (debounced)
-  const { data: apiResults = [], isLoading: isApiLoading } = useQuery({
-    queryKey: ['api-search', debouncedQuery],
-    queryFn: () => {
-      const params = new URLSearchParams({ q: debouncedQuery });
-      return fetch(`/api/search?${params}`).then(r => r.json()).then(d => (d.products || []) as SearchResult[]);
-    },
-    enabled: debouncedQuery.length >= 2,
-    staleTime: 10000,
-  });
-
-  // Fetch search suggestions from existing products API (immediate)
-  const { data: localSuggestions = [] } = useQuery({
-    queryKey: ['search-suggestions', searchQuery],
-    queryFn: () => {
-      if (!searchQuery || searchQuery.length < 2) return [];
-      const params = new URLSearchParams({ search: searchQuery, limit: '5' });
-      return fetch(`/api/products?${params}`).then(r => r.json()).then(d => (d.products || []) as SearchResult[]);
-    },
-    enabled: searchQuery.length >= 2,
-  });
-
-  // Merge API results with local (deduplicate by id)
-  const mergedResults = (() => {
-    const seen = new Set<string>();
-    const merged: SearchResult[] = [];
-    for (const item of [...apiResults, ...localSuggestions]) {
-      if (!seen.has(item.id)) {
-        seen.add(item.id);
-        merged.push(item);
-      }
+    if (!isOpen) {
+      if (debounceRef.current) clearTimeout(debounceRef.current);
+      return;
     }
-    // Cap at 8
-    return merged.slice(0, 8);
-  })();
+
+    if (debounceRef.current) clearTimeout(debounceRef.current);
+
+    const query = searchQuery.trim();
+    if (query.length < 2) {
+      setResults([]);
+      setIsSearching(false);
+      return;
+    }
+
+    debounceRef.current = setTimeout(async () => {
+      setIsSearching(true);
+      try {
+        const service = new HomePageService();
+        const result = await service.searchProducts(query);
+        if (result.succeeded && result.data?.items) {
+          const mapped: SearchResult[] = result.data.items.map((product: ProductDisplayModel) => {
+            const price =
+              product.variants.length > 0
+                ? Math.min(...product.variants.map((v) => v.sellPrice))
+                : 0;
+            const image =
+              product.imagePaths && product.imagePaths.length > 0
+                ? CONFIG.API_BASEPATH + product.imagePaths[0]
+                : CONFIG.UNKNOWN_IMAGE_BASEPATH;
+            const category =
+              product.categories.length > 0
+                ? { name: product.categories[0].name, color: product.categories[0].color }
+                : { name: '' };
+            const reviewCount = product.approvedTotalReviews;
+            const rating = reviewCount > 0 ? product.approvedRatingSum / reviewCount : 0;
+            return {
+              id: String(product.id),
+              name: product.name,
+              price,
+              image,
+              category,
+              rating,
+              reviewCount,
+            };
+          });
+          setResults(mapped);
+        } else {
+          setResults([]);
+        }
+      } catch {
+        setResults([]);
+      } finally {
+        setIsSearching(false);
+      }
+    }, 1000);
+
+    return () => {
+      if (debounceRef.current) clearTimeout(debounceRef.current);
+    };
+  }, [searchQuery, isOpen]);
 
   const addRecentSearch = (query: string) => {
     const updated: RecentSearch[] = [
       { query, timestamp: Date.now() },
-      ...recentSearches.filter(r => r.query.toLowerCase() !== query.toLowerCase()),
+      ...recentSearches.filter((r) => r.query.toLowerCase() !== query.toLowerCase()),
     ].slice(0, MAX_RECENT);
     setRecentSearches(updated);
     try { localStorage.setItem(STORAGE_KEY, JSON.stringify(updated)); } catch { /* ignore */ }
@@ -115,7 +138,6 @@ export function SearchSuggestions({ isOpen, onClose }: { isOpen: boolean; onClos
   const handleProductClick = (product: SearchResult) => {
     addRecentSearch(product.name);
     setActiveIndex(-1);
-    // Scroll to products section
     const productsSection = document.getElementById('products-section') || document.getElementById('product-grid-section');
     if (productsSection) {
       productsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -136,29 +158,27 @@ export function SearchSuggestions({ isOpen, onClose }: { isOpen: boolean; onClos
     }
   };
 
-  // Calculate total items for keyboard nav
-  const showSuggestions = searchQuery.length >= 2 && (mergedResults.length > 0 || isApiLoading);
-  const showNoResults = searchQuery.length >= 2 && !isApiLoading && mergedResults.length === 0;
+  const showSuggestions = searchQuery.length >= 2 && (results.length > 0 || isSearching);
+  const showNoResults = searchQuery.length >= 2 && !isSearching && results.length === 0;
   const showRecent = !showSuggestions && !showNoResults && searchQuery.length === 0 && recentSearches.length > 0;
   const showPopular = !showSuggestions && !showNoResults && !showRecent;
 
-  // Total navigable items: suggestions + optional "Search for..." link
-  const suggestionCount = showSuggestions ? mergedResults.length : 0;
+  const suggestionCount = showSuggestions ? results.length : 0;
   const hasSearchLink = searchQuery.length >= 2;
   const totalNavItems = showSuggestions ? suggestionCount + (hasSearchLink ? 1 : 0) : showRecent ? recentSearches.length : showPopular ? POPULAR_TERMS.length : 0;
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === 'ArrowDown') {
       e.preventDefault();
-      setActiveIndex(prev => Math.min(prev + 1, totalNavItems - 1));
+      setActiveIndex((prev) => Math.min(prev + 1, totalNavItems - 1));
     } else if (e.key === 'ArrowUp') {
       e.preventDefault();
-      setActiveIndex(prev => Math.max(prev - 1, -1));
+      setActiveIndex((prev) => Math.max(prev - 1, -1));
     } else if (e.key === 'Enter') {
       e.preventDefault();
       if (showSuggestions) {
         if (activeIndex >= 0 && activeIndex < suggestionCount) {
-          handleProductClick(mergedResults[activeIndex]);
+          handleProductClick(results[activeIndex]);
         } else if (activeIndex === suggestionCount && hasSearchLink) {
           handleSearchForQuery();
         }
@@ -187,15 +207,14 @@ export function SearchSuggestions({ isOpen, onClose }: { isOpen: boolean; onClos
       onKeyDown={handleKeyDown}
       className="search-dropdown absolute top-full start-0 end-0 mt-2 bg-white dark:bg-ecommerce-surface rounded-xl shadow-xl border border-ecommerce-border overflow-hidden z-50"
     >
-      {/* Search suggestions from API + local */}
       {showSuggestions && (
         <div className="py-2 max-h-96 overflow-y-auto scrollbar-thin">
           <div className="px-4 py-1.5">
             <p className="text-[10px] font-semibold text-ecommerce-text-muted uppercase tracking-wider">
-              {isApiLoading ? `${t('homepage.common.searchPlaceholder').split('homepage. ')[0]}...` : `${t('homepage.common.searchPlaceholder').split('homepage. ')[0]} (${mergedResults.length})`}
+              {isSearching ? `${t('homepage.common.searchPlaceholder').split('homepage. ')[0]}...` : `${t('homepage.common.searchPlaceholder').split('homepage. ')[0]} (${results.length})`}
             </p>
           </div>
-          {mergedResults.map((item, index) => (
+          {results.map((item, index) => (
             <button
               key={item.id}
               onClick={() => handleProductClick(item)}
@@ -213,7 +232,6 @@ export function SearchSuggestions({ isOpen, onClose }: { isOpen: boolean; onClos
             </button>
           ))}
 
-          {/* "Search for '{query}'" link */}
           {hasSearchLink && (
             <button
               onClick={handleSearchForQuery}
@@ -229,7 +247,6 @@ export function SearchSuggestions({ isOpen, onClose }: { isOpen: boolean; onClos
         </div>
       )}
 
-      {/* No results state */}
       <AnimatePresence>
         {showNoResults && (
           <motion.div
@@ -261,7 +278,6 @@ export function SearchSuggestions({ isOpen, onClose }: { isOpen: boolean; onClos
         )}
       </AnimatePresence>
 
-      {/* Recent searches */}
       {showRecent && (
         <div className="py-2">
           <div className="px-4 py-1.5 flex items-center justify-between">
@@ -286,7 +302,6 @@ export function SearchSuggestions({ isOpen, onClose }: { isOpen: boolean; onClos
         </div>
       )}
 
-      {/* Popular searches */}
       {showPopular && (
         <div className="py-2">
           <div className="px-4 py-1.5">
@@ -305,7 +320,6 @@ export function SearchSuggestions({ isOpen, onClose }: { isOpen: boolean; onClos
         </div>
       )}
 
-      {/* Search hint at bottom */}
       {!showNoResults && (
         <div className="border-t border-ecommerce-border px-4 py-2.5 bg-ecommerce-surface-hover/50">
           <p className="text-[11px] text-ecommerce-text-muted">
