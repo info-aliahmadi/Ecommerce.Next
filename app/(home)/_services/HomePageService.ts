@@ -119,7 +119,13 @@ export default class HomePageService {
   /**
    * Search products by query
    */
-  async searchProducts(filter: ProductFilterModel): Promise<Result<PaginatedDisplayList<ProductDisplayModel>>> {
+  async searchProducts(input: string): Promise<Result<PaginatedDisplayList<ProductDisplayModel>>> {
+    let filter: ProductFilterModel = {
+      searchInput: input,
+      pageIndex: 1,
+      pageSize: 10,
+      sorting: SortingType.SortNewest
+    }
     const response = await this.getProducts(filter);
     return response;
   }

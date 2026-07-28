@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect, useRef, useSyncExternalStore, useCallback } from 'react';
+import { useRouter } from 'next/navigation';
 import { Search, ShoppingCart, Menu, X, User, Heart, ChevronDown, Sun, Moon, Bell } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { Input } from '../ui/input';
@@ -144,6 +145,7 @@ function ThemeToggle() {
 
 export function Header() {
   const t = useTranslations();
+  const router = useRouter();
   const { totalItems, toggleCart } = useCartStore();
   const { totalCount: wishlistTotal } = useWishlistStore();
   const { searchQuery, setSearchQuery,  isMobileMenuOpen, setMobileMenuOpen, isWishlistOpen, setWishlistOpen } = useUIStore();
@@ -189,8 +191,14 @@ export function Header() {
   const handleSearchKeyDown = useCallback((e: React.KeyboardEvent) => {
     if (e.key === 'Escape') {
       setIsSearchFocused(false);
+    } else if (e.key === 'Enter') {
+      const query = searchQuery.trim();
+      if (query) {
+        setIsSearchFocused(false);
+        router.push(`/products?search=${encodeURIComponent(query)}`);
+      }
     }
-  }, []);
+  }, [searchQuery, router]);
 
   return (
     <>
@@ -397,6 +405,12 @@ export function Header() {
                     placeholder={t('homepage.common.searchPlaceholder')}
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter' && searchQuery.trim()) {
+                        router.push(`/products?search=${encodeURIComponent(searchQuery.trim())}`);
+                        setIsSearchOpen(false);
+                      }
+                    }}
                     className="ps-10 pe-4 h-10 bg-ecommerce-surface-hover border-ecommerce-border rounded-xl text-sm"
                     autoFocus
                   />
