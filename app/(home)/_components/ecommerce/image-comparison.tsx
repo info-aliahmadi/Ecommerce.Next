@@ -12,15 +12,15 @@ interface ImageComparisonProps {
   afterLabel?: string;
 }
 
-const BEFORE_IMG = 'https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=800&h=500&fit=crop&q=80';
-const AFTER_IMG = 'https://images.unsplash.com/photo-1483985988355-763728e1935b?w=800&h=500&fit=crop&q=80';
+const BEFORE_IMG = '/images/before.jpg';
+const AFTER_IMG = '/images/after.jpg';
 
 export function ImageComparison({
   beforeImage = BEFORE_IMG,
   afterImage = AFTER_IMG,
   beforeLabel,
   afterLabel,
-}: ImageComparisonProps) {
+}: Readonly<ImageComparisonProps>) {
   const t = useTranslations();
   const resolvedBeforeLabel = beforeLabel ?? t('homepage.imageComparison.before');
   const resolvedAfterLabel = afterLabel ?? t('homepage.imageComparison.after');
@@ -117,8 +117,7 @@ export function ImageComparison({
               <img
                 src={beforeImage}
                 alt={resolvedBeforeLabel}
-                className="absolute top-0 start-0 h-full object-cover"
-                style={{ width: '200vw', maxWidth: 'none' }}
+                className="absolute inset-0 w-full h-full object-cover"
                 draggable={false}
               />
             </div>

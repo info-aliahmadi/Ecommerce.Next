@@ -109,10 +109,11 @@ export function TrendingCarousel() {
         </button>
 
         {/* Scroll Container */}
-        <div
-          ref={scrollRef}
-          className="flex gap-4 sm:gap-6 overflow-x-auto scrollbar-thin snap-x snap-mandatory pb-4 -mx-4 px-4 sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8"
-        >
+        <div className="overflow-hidden -px-4 px-4 sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8">
+          <div
+            ref={scrollRef}
+            className="flex gap-4 sm:gap-6 overflow-x-auto scrollbar-thin snap-x snap-mandatory pb-4"
+          >
           {isLoading
             ? Array.from({ length: 4 }).map((_, i) => (
               <div
@@ -228,6 +229,7 @@ export function TrendingCarousel() {
                 </div>
               </motion.div>
             ))}
+          </div>
         </div>
       </div>
     </section>

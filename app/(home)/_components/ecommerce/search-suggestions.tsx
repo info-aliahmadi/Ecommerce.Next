@@ -129,10 +129,10 @@ export function SearchSuggestions({ isOpen, onClose }: { isOpen: boolean; onClos
   };
 
   const handleSelect = (query: string) => {
-    setSearchQuery(query);
     addRecentSearch(query);
     setActiveIndex(-1);
     onClose();
+    router.push(`/products?search=${encodeURIComponent(query)}`);
   };
 
   const handleProductClick = (product: SearchResult) => {
