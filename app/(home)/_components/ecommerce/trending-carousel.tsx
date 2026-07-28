@@ -60,7 +60,7 @@ export function TrendingCarousel() {
   if (products.length === 0 && !isLoading) return null;
 
   return (
-    <section className="py-12 sm:py-16 bg-ecommerce-surface-hover/30 dark:bg-[#0F1117]/20 relative">
+    <section className="py-12 sm:py-16 bg-ecommerce-surface-hover/30 dark:bg-[#0F1117]/20 relative overflow-x-hidden">
       {/* Section Header */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-8">
         <div className="text-center">
@@ -93,7 +93,7 @@ export function TrendingCarousel() {
         {/* Left Arrow */}
         <button
           onClick={() => scroll('left')}
-          className="hidden md:flex absolute left-0 top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-full bg-white dark:bg-ecommerce-surface shadow-xl border border-ecommerce-border hover:bg-ecommerce-red hover:text-white items-center justify-center text-ecommerce-text-secondary transition-colors -translate-x-3"
+          className="hidden md:flex absolute start-0 top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-full bg-white dark:bg-ecommerce-surface shadow-xl border border-ecommerce-border hover:bg-ecommerce-red hover:text-white items-center justify-center text-ecommerce-text-secondary transition-colors -translate-x-3"
           aria-label={t('homepage.trending.scrollLeft')}
         >
           <ChevronLeft size={18} />
@@ -102,18 +102,17 @@ export function TrendingCarousel() {
         {/* Right Arrow */}
         <button
           onClick={() => scroll('right')}
-          className="hidden md:flex absolute right-0 top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-full bg-white dark:bg-ecommerce-surface shadow-xl border border-ecommerce-border hover:bg-ecommerce-red hover:text-white items-center justify-center text-ecommerce-text-secondary transition-colors translate-x-3"
+          className="hidden md:flex absolute end-0 top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-full bg-white dark:bg-ecommerce-surface shadow-xl border border-ecommerce-border hover:bg-ecommerce-red hover:text-white items-center justify-center text-ecommerce-text-secondary transition-colors translate-x-3"
           aria-label={t('homepage.trending.scrollRight')}
         >
           <ChevronRight size={18} />
         </button>
 
         {/* Scroll Container */}
-        <div className="overflow-hidden -px-4 px-4 sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8">
-          <div
-            ref={scrollRef}
-            className="flex gap-4 sm:gap-6 overflow-x-auto scrollbar-thin snap-x snap-mandatory pb-4"
-          >
+        <div
+          ref={scrollRef}
+          className="flex gap-4 sm:gap-6 overflow-x-auto scrollbar-thin snap-x snap-mandatory pb-4 -mx-4 px-4 sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8"
+        >
           {isLoading
             ? Array.from({ length: 4 }).map((_, i) => (
               <div
@@ -230,7 +229,6 @@ export function TrendingCarousel() {
               </motion.div>
             ))}
           </div>
-        </div>
       </div>
     </section>
   );
