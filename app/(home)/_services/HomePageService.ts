@@ -7,7 +7,6 @@ import PageModel from "@root/app/dashboard/(cms)/_types/Page/PageModel";
 import TopicModel from "@root/app/dashboard/(cms)/_types/Topic/TopicModel";
 import TagModel from "@root/app/dashboard/(cms)/_types/Tag/TagModel";
 import LinkModel from "@root/app/dashboard/(cms)/_types/Link/LinkModel";
-import SlideshowModel from "@root/app/dashboard/(cms)/_types/Slideshow/SlideshowModel";
 import SiteSettingsModel from "@root/app/dashboard/(cms)/_types/SiteSetting/SiteSettingsModel";
 import MenuModel from "@root/app/dashboard/(cms)/_types/Menu/MenuModel";
 import ProductDisplayModel from "../_types/Product/ProductDisplayModel";
@@ -21,6 +20,7 @@ import ProductAttributeDisplayModel from "../_types/Product/ProductAttributeDisp
 import AttributeType from "@root/app/types/enums/AttributeType";
 import CuratedStyleProductModel from "../_types/Product/CuratedStyleProductModel";
 import BundleDisplayModel from "../_types/Product/BundleDisplayModel";
+import SlideshowDisplayModel from "../_types/SlideshowDisplayModel";
 
 export default class HomePageService {
 
@@ -271,8 +271,8 @@ export default class HomePageService {
   /**
    * Get slideshows
    */
-  async getSlideshows(keys: string[]): Promise<Result<SlideshowModel[]>> {
-    let result = await Fetch.Get<Result<SlideshowModel[]>>(`${this.baseUrl}/Cms/GetSlideshows`, this.config);
+  async getSlideshows(keys: string[]): Promise<Result<SlideshowDisplayModel[]>> {
+    let result = await Fetch.Get<Result<SlideshowDisplayModel[]>>(`${this.baseUrl}/Cms/GetSlideshows`, this.config);
     return result;
   }
 }

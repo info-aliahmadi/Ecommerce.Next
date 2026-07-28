@@ -31,46 +31,40 @@ import { Header } from './_components/ecommerce/header';
 export default function HomePage() {
   const scrollRef = useScrollReveal();
   return (
-    <div className="min-h-screen flex flex-col pb-16 lg:pb-0" ref={scrollRef}>
-      <ScrollProgress />
-      <WelcomeToast />
-      {/* <StickyCategoryNav /> */}
-      <main className="flex-1">
-        <HeroSection />
-        <WaveDivider variant="subtle" color="#E63946" />
-        <BrandMarquee />
-        {/* <CategoryNavSentinel /> */}
-        <FeaturedCategories />
-        <WaveDivider variant="gradient" color="#6A5ACD" />
-        <ImageComparison />
-        <FeaturedProducts />
-        <TrendingCarousel />
-        <ShopTheLook />
-        <ProductBundles />
-        <DealsSection />
-        <DealTicker />
-        <WaveDivider variant="subtle" flip color="#20B2AA" />
-        <TestimonialsSection />
-        <WaveDivider variant="gradient" flip color="#FF69B4" />
-        <TrustSection />
-        <RecentlyViewed />
-        <WaveDivider variant="default" color="#FFC107" />
-        <ProductGrid />
-        <NewsletterSection />
-      </main>
-      <StockAlert />
-      <ProductQuickStats />
-      {/* <ProductCatalog /> */}
-    </div>
-  );
-}
-
-/* ─── Inner page shell (header + main + footer + overlays) ──── */
-function PageShell({ children }: { children: React.ReactNode }) {
-  return (
-    <div className="min-h-screen flex flex-col pb-16 lg:pb-0">
-      <ScrollProgress />
-      <main className="flex-1">{children}</main>
-    </div>
+    <>
+      <Header />
+      <div className="min-h-screen flex flex-col pb-16 lg:pb-0" ref={scrollRef}>
+        <ScrollProgress />
+        <WelcomeToast />
+        {/* <StickyCategoryNav /> */}
+        <main className="flex-1">
+          <HeroSection />
+          <WaveDivider variant="subtle" color="#E63946" />
+          <BrandMarquee />
+          {/* <CategoryNavSentinel /> */}
+          <FeaturedCategories />
+          <WaveDivider variant="gradient" color="#6A5ACD" />
+          <ImageComparison />
+          <FeaturedProducts />
+          <TrendingCarousel />
+          <ShopTheLook />
+          <ProductBundles />
+          <DealsSection />
+          <DealTicker />
+          <WaveDivider variant="subtle" flip color="#20B2AA" />
+          <TestimonialsSection />
+          <WaveDivider variant="gradient" flip color="#FF69B4" />
+          <TrustSection />
+          <RecentlyViewed />
+          <WaveDivider variant="default" color="#FFC107" />
+          <ProductGrid />
+          <NewsletterSection />
+        </main>
+        <StockAlert />
+        <ProductQuickStats />
+        {/* <ProductCatalog /> */}
+      </div>
+      <Footer />
+    </>
   );
 }

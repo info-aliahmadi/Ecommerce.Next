@@ -1868,7 +1868,7 @@
       "requiredMenuUrl": "آدرس URL الزامی است"
     },
     "slideshow": {
-      "requiredMenuHeader": "هدر الزامی است"
+      "requiredSlideshowheader": "هدر الزامی است"
     },
     "linkSection": {
       "requiredKey": "کلید الزامی است",

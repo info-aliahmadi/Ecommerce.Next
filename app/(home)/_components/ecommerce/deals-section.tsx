@@ -118,7 +118,7 @@ export function DealsSection() {
             variant="ghost"
             className="hidden sm:flex text-ecommerce-red hover:text-ecommerce-red/80 hover:bg-ecommerce-red/5 rounded-xl gap-1.5"
           >
-            <Link href="#products">
+            <Link href="/products?discount=1&sort=price-asc">
               {t('homepage.deals.shopDeals')} <ArrowRight size={16} />
             </Link>
           </Button>

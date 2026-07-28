@@ -65,7 +65,7 @@ export function FeaturedProducts() {
             variant="ghost"
             className="hidden sm:flex text-ecommerce-red hover:text-ecommerce-red/80 hover:bg-ecommerce-red/5 rounded-xl gap-1.5"
           >
-            <a href="#products">{t('homepage.common.viewAll')} <ArrowRight size={16} /></a>
+            <a href="/products">{t('homepage.common.viewAll')} <ArrowRight size={16} /></a>
           </Button>
         </div>
 

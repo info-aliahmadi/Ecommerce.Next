@@ -1127,272 +1127,276 @@ function ProductsPageContent() {
 
   // ── Render ──────────────────────────────────────────
   return (
-    <div className="min-h-screen flex flex-col pb-16 lg:pb-0 bg-background">
-      <main className="flex-1">
-        {/* Page Header */}
-        <div className="border-b border-ecommerce-border bg-ecommerce-surface/50">
-          <div className="max-w-[1600px] mx-auto px-4 sm:px-6 py-5">
-            {/* Breadcrumb */}
-            <Breadcrumb className="mb-4">
-              <BreadcrumbList>
-                <BreadcrumbItem>
-                  <BreadcrumbLink href="/" className="text-ecommerce-text-muted hover:text-ecommerce-text-primary text-sm flex items-center gap-1.5">
-                    <Home size={14} />
-                    {t('homepage.shopPage.breadcrumbHome')}
-                  </BreadcrumbLink>
-                </BreadcrumbItem>
-                <BreadcrumbSeparator />
-                <BreadcrumbItem>
-                  <BreadcrumbPage className="text-ecommerce-text-primary font-medium text-sm">
-                    {t('homepage.shopPage.breadcrumbShop')}
-                  </BreadcrumbPage>
-                </BreadcrumbItem>
-              </BreadcrumbList>
-            </Breadcrumb>
+    <>
+      <Header />
+      <div className="min-h-screen flex flex-col pb-16 lg:pb-0 bg-background">
+        <main className="flex-1">
+          {/* Page Header */}
+          <div className="border-b border-ecommerce-border bg-ecommerce-surface/50">
+            <div className="max-w-[1600px] mx-auto px-4 sm:px-6 py-5">
+              {/* Breadcrumb */}
+              <Breadcrumb className="mb-4">
+                <BreadcrumbList>
+                  <BreadcrumbItem>
+                    <BreadcrumbLink href="/" className="text-ecommerce-text-muted hover:text-ecommerce-text-primary text-sm flex items-center gap-1.5">
+                      <Home size={14} />
+                      {t('homepage.shopPage.breadcrumbHome')}
+                    </BreadcrumbLink>
+                  </BreadcrumbItem>
+                  <BreadcrumbSeparator />
+                  <BreadcrumbItem>
+                    <BreadcrumbPage className="text-ecommerce-text-primary font-medium text-sm">
+                      {t('homepage.shopPage.breadcrumbShop')}
+                    </BreadcrumbPage>
+                  </BreadcrumbItem>
+                </BreadcrumbList>
+              </Breadcrumb>
 
-            {/* Title & Description */}
-            <div className="mb-5">
-              <h1 className="text-2xl sm:text-3xl font-bold text-ecommerce-text-primary">
-                {t('homepage.shopPage.title')}
-              </h1>
-              <p className="text-sm text-ecommerce-text-muted mt-1">
-                {t('homepage.shopPage.subtitle')}
-              </p>
-            </div>
-
-            {/* Search Bar */}
-            <div className="relative max-w-xl">
-              <Search
-                size={18}
-                className="absolute start-4 top-1/2 -translate-y-1/2 text-ecommerce-text-muted"
-              />
-              <Input
-                type="text"
-                value={searchInput}
-                onChange={(e) => setSearchInput(e.target.value)}
-                placeholder={t('homepage.shopPage.searchProducts')}
-                className="h-11 ps-11 pe-10 rounded-xl bg-white dark:bg-ecommerce-surface border-ecommerce-border text-sm text-ecommerce-text-primary placeholder:text-ecommerce-text-muted focus-visible:ring-ecommerce-red/30 focus-visible:border-ecommerce-red/50 transition-all"
-              />
-              {searchInput && (
-                <button
-                  onClick={() => setSearchInput('')}
-                  className="absolute end-4 top-1/2 -translate-y-1/2 text-ecommerce-text-muted hover:text-ecommerce-text-primary transition-colors"
-                >
-                  <X size={16} />
-                </button>
-              )}
-            </div>
-          </div>
-        </div>
-
-        {/* Toolbar & Content */}
-        <div className="max-w-[1600px] mx-auto px-4 sm:px-6 py-5">
-          {/* Toolbar Row */}
-          <div className="flex items-center justify-between gap-3 mb-5 flex-wrap">
-            {/* Left: Results count + Mobile filter button */}
-            <div className="flex items-center gap-3">
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => setSheetOpen(true)}
-                className="lg:hidden shrink-0 rounded-xl border-ecommerce-border gap-2 relative h-9"
-              >
-                <SlidersHorizontal size={15} />
-                {t('homepage.shopPage.openFilters')}
-                {activeFilterCount > 0 && (
-                  <span className="absolute -top-1.5 -end-1.5 w-5 h-5 rounded-full bg-ecommerce-red text-white text-[10px] font-bold flex items-center justify-center">
-                    {activeFilterCount}
-                  </span>
-                )}
-              </Button>
-              <div className="text-sm text-ecommerce-text-muted">
-                {isLoading ? (
-                  <Skeleton className="h-4 w-40 inline-block" />
-                ) : (
-                  <span>
-                    {t('homepage.shopPage.showingResults', {
-                      shown: total === 0 ? 0 : `${showingStart}-${showingEnd}`,
-                      total,
-                    })}
-                  </span>
-                )}
+              {/* Title & Description */}
+              <div className="mb-5">
+                <h1 className="text-2xl sm:text-3xl font-bold text-ecommerce-text-primary">
+                  {t('homepage.shopPage.title')}
+                </h1>
+                <p className="text-sm text-ecommerce-text-muted mt-1">
+                  {t('homepage.shopPage.subtitle')}
+                </p>
               </div>
-            </div>
 
-            {/* Right: Sort, Per Page, View Mode */}
-            <div className="flex items-center gap-2 sm:gap-3">
-              {/* Sort */}
-              <Select
-                value={filters.sort}
-                onValueChange={(v) => updateFilter('sort', v as SortOption)}
-              >
-                <SelectTrigger className="h-9 min-w-[140px] rounded-xl bg-ecommerce-surface border-ecommerce-border text-sm">
-                  <SlidersHorizontal size={14} className="me-1.5 text-ecommerce-text-muted" />
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent className="rounded-xl">
-                  {sortOptions.map((opt) => (
-                    <SelectItem key={opt.value} value={opt.value} className="text-sm">
-                      {opt.label}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-
-              {/* Per Page (desktop only) */}
-              <Select
-                value={String(filters.perPage)}
-                onValueChange={(v) => updateFilter('perPage', Number(v))}
-              >
-                <SelectTrigger className="hidden sm:flex h-9 w-auto min-w-[90px] rounded-xl bg-ecommerce-surface border-ecommerce-border text-sm">
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent className="rounded-xl">
-                  {PER_PAGE_OPTIONS.map((n) => (
-                    <SelectItem key={n} value={String(n)} className="text-sm">
-                      {n}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-
-              {/* View Mode Toggle */}
-              <div className="flex items-center bg-ecommerce-surface rounded-xl p-1 border border-ecommerce-border">
-                <button
-                  onClick={() => updateFilter('viewMode', 'grid')}
-                  className={`p-2 rounded-lg transition-all ${filters.viewMode === 'grid'
-                    ? 'bg-ecommerce-red text-white shadow-sm'
-                    : 'text-ecommerce-text-muted hover:text-ecommerce-text-primary'
-                    }`}
-                  aria-label={t('homepage.shopPage.gridView')}
-                >
-                  <Grid3X3 size={16} />
-                </button>
-                <button
-                  onClick={() => updateFilter('viewMode', 'list')}
-                  className={`p-2 rounded-lg transition-all ${filters.viewMode === 'list'
-                    ? 'bg-ecommerce-red text-white shadow-sm'
-                    : 'text-ecommerce-text-muted hover:text-ecommerce-text-primary'
-                    }`}
-                  aria-label={t('homepage.shopPage.listView')}
-                >
-                  <LayoutList size={16} />
-                </button>
-              </div>
-            </div>
-          </div>
-
-          {/* Active Filters Bar */}
-          <AnimatePresence>
-            {activeFilterChips.length > 0 && (
-              <motion.div
-                initial={{ height: 0, opacity: 0 }}
-                animate={{ height: 'auto', opacity: 1 }}
-                exit={{ height: 0, opacity: 0 }}
-                className="mb-5 overflow-hidden"
-              >
-                <div className="flex items-center gap-2 flex-wrap">
-                  <span className="text-xs font-semibold text-ecommerce-text-muted shrink-0">
-                    {t('homepage.shopPage.activeFilters')}:
-                  </span>
-                  {activeFilterChips.map((chip) => (
-                    <Badge
-                      key={chip.key}
-                      variant="secondary"
-                      className="shrink-0 rounded-lg px-2.5 py-1 text-xs bg-ecommerce-red/10 text-ecommerce-red border-ecommerce-red/20 hover:bg-ecommerce-red/20 cursor-pointer gap-1 transition-colors"
-                      onClick={chip.onRemove}
-                    >
-                      {chip.label}
-                      <X size={12} />
-                    </Badge>
-                  ))}
+              {/* Search Bar */}
+              <div className="relative max-w-xl">
+                <Search
+                  size={18}
+                  className="absolute start-4 top-1/2 -translate-y-1/2 text-ecommerce-text-muted"
+                />
+                <Input
+                  type="text"
+                  value={searchInput}
+                  onChange={(e) => setSearchInput(e.target.value)}
+                  placeholder={t('homepage.shopPage.searchProducts')}
+                  className="h-11 ps-11 pe-10 rounded-xl bg-white dark:bg-ecommerce-surface border-ecommerce-border text-sm text-ecommerce-text-primary placeholder:text-ecommerce-text-muted focus-visible:ring-ecommerce-red/30 focus-visible:border-ecommerce-red/50 transition-all"
+                />
+                {searchInput && (
                   <button
-                    onClick={resetFilters}
-                    className="text-xs text-ecommerce-text-muted hover:text-ecommerce-red shrink-0 font-medium transition-colors"
+                    onClick={() => setSearchInput('')}
+                    className="absolute end-4 top-1/2 -translate-y-1/2 text-ecommerce-text-muted hover:text-ecommerce-text-primary transition-colors"
                   >
-                    {t('homepage.shopPage.clearAll')}
+                    <X size={16} />
+                  </button>
+                )}
+              </div>
+            </div>
+          </div>
+
+          {/* Toolbar & Content */}
+          <div className="max-w-[1600px] mx-auto px-4 sm:px-6 py-5">
+            {/* Toolbar Row */}
+            <div className="flex items-center justify-between gap-3 mb-5 flex-wrap">
+              {/* Left: Results count + Mobile filter button */}
+              <div className="flex items-center gap-3">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => setSheetOpen(true)}
+                  className="lg:hidden shrink-0 rounded-xl border-ecommerce-border gap-2 relative h-9"
+                >
+                  <SlidersHorizontal size={15} />
+                  {t('homepage.shopPage.openFilters')}
+                  {activeFilterCount > 0 && (
+                    <span className="absolute -top-1.5 -end-1.5 w-5 h-5 rounded-full bg-ecommerce-red text-white text-[10px] font-bold flex items-center justify-center">
+                      {activeFilterCount}
+                    </span>
+                  )}
+                </Button>
+                <div className="text-sm text-ecommerce-text-muted">
+                  {isLoading ? (
+                    <Skeleton className="h-4 w-40 inline-block" />
+                  ) : (
+                    <span>
+                      {t('homepage.shopPage.showingResults', {
+                        shown: total === 0 ? 0 : `${showingStart}-${showingEnd}`,
+                        total,
+                      })}
+                    </span>
+                  )}
+                </div>
+              </div>
+
+              {/* Right: Sort, Per Page, View Mode */}
+              <div className="flex items-center gap-2 sm:gap-3">
+                {/* Sort */}
+                <Select
+                  value={filters.sort}
+                  onValueChange={(v) => updateFilter('sort', v as SortOption)}
+                >
+                  <SelectTrigger className="h-9 min-w-[140px] rounded-xl bg-ecommerce-surface border-ecommerce-border text-sm">
+                    <SlidersHorizontal size={14} className="me-1.5 text-ecommerce-text-muted" />
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent className="rounded-xl">
+                    {sortOptions.map((opt) => (
+                      <SelectItem key={opt.value} value={opt.value} className="text-sm">
+                        {opt.label}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+
+                {/* Per Page (desktop only) */}
+                <Select
+                  value={String(filters.perPage)}
+                  onValueChange={(v) => updateFilter('perPage', Number(v))}
+                >
+                  <SelectTrigger className="hidden sm:flex h-9 w-auto min-w-[90px] rounded-xl bg-ecommerce-surface border-ecommerce-border text-sm">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent className="rounded-xl">
+                    {PER_PAGE_OPTIONS.map((n) => (
+                      <SelectItem key={n} value={String(n)} className="text-sm">
+                        {n}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+
+                {/* View Mode Toggle */}
+                <div className="flex items-center bg-ecommerce-surface rounded-xl p-1 border border-ecommerce-border">
+                  <button
+                    onClick={() => updateFilter('viewMode', 'grid')}
+                    className={`p-2 rounded-lg transition-all ${filters.viewMode === 'grid'
+                      ? 'bg-ecommerce-red text-white shadow-sm'
+                      : 'text-ecommerce-text-muted hover:text-ecommerce-text-primary'
+                      }`}
+                    aria-label={t('homepage.shopPage.gridView')}
+                  >
+                    <Grid3X3 size={16} />
+                  </button>
+                  <button
+                    onClick={() => updateFilter('viewMode', 'list')}
+                    className={`p-2 rounded-lg transition-all ${filters.viewMode === 'list'
+                      ? 'bg-ecommerce-red text-white shadow-sm'
+                      : 'text-ecommerce-text-muted hover:text-ecommerce-text-primary'
+                      }`}
+                    aria-label={t('homepage.shopPage.listView')}
+                  >
+                    <LayoutList size={16} />
                   </button>
                 </div>
-              </motion.div>
-            )}
-          </AnimatePresence>
+              </div>
+            </div>
 
-          {/* Main Content Grid: Sidebar + Products */}
-          <div className="flex gap-6">
-            {/* Desktop Sidebar */}
-            <aside className="hidden lg:block w-72 shrink-0">
-              <div className="sticky top-24">
-                <div className="flex items-center justify-between mb-4">
-                  <h2 className="text-sm font-bold text-ecommerce-text-primary">
-                    {t('homepage.shopPage.filterBy')}
-                  </h2>
-                  {activeFilterCount > 0 && (
-                    <Badge
-                      variant="secondary"
-                      className="bg-ecommerce-red text-white rounded-full px-2 text-[10px]"
+            {/* Active Filters Bar */}
+            <AnimatePresence>
+              {activeFilterChips.length > 0 && (
+                <motion.div
+                  initial={{ height: 0, opacity: 0 }}
+                  animate={{ height: 'auto', opacity: 1 }}
+                  exit={{ height: 0, opacity: 0 }}
+                  className="mb-5 overflow-hidden"
+                >
+                  <div className="flex items-center gap-2 flex-wrap">
+                    <span className="text-xs font-semibold text-ecommerce-text-muted shrink-0">
+                      {t('homepage.shopPage.activeFilters')}:
+                    </span>
+                    {activeFilterChips.map((chip) => (
+                      <Badge
+                        key={chip.key}
+                        variant="secondary"
+                        className="shrink-0 rounded-lg px-2.5 py-1 text-xs bg-ecommerce-red/10 text-ecommerce-red border-ecommerce-red/20 hover:bg-ecommerce-red/20 cursor-pointer gap-1 transition-colors"
+                        onClick={chip.onRemove}
+                      >
+                        {chip.label}
+                        <X size={12} />
+                      </Badge>
+                    ))}
+                    <button
+                      onClick={resetFilters}
+                      className="text-xs text-ecommerce-text-muted hover:text-ecommerce-red shrink-0 font-medium transition-colors"
                     >
-                      {t('homepage.shopPage.filtersCount', { count: activeFilterCount })}
+                      {t('homepage.shopPage.clearAll')}
+                    </button>
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
+
+            {/* Main Content Grid: Sidebar + Products */}
+            <div className="flex gap-6">
+              {/* Desktop Sidebar */}
+              <aside className="hidden lg:block w-72 shrink-0 z-10">
+                <div className="sticky top-24">
+                  <div className="flex items-center justify-between mb-4">
+                    <h2 className="text-sm font-bold text-ecommerce-text-primary">
+                      {t('homepage.shopPage.filterBy')}
+                    </h2>
+                    {activeFilterCount > 0 && (
+                      <Badge
+                        variant="secondary"
+                        className="bg-ecommerce-red text-white rounded-full px-2 text-[10px]"
+                      >
+                        {t('homepage.shopPage.filtersCount', { count: activeFilterCount })}
+                      </Badge>
+                    )}
+                  </div>
+                  <ScrollArea className="max-h-[calc(100vh-220px)]">
+                    {filterSidebarContent}
+                  </ScrollArea>
+                </div>
+              </aside>
+
+              {/* Product Grid Area */}
+              <div className="flex-1 min-w-0">
+                {productGridContent}
+              </div>
+            </div>
+          </div>
+        </main>
+
+        {/* Mobile Filter Sheet */}
+        <Sheet open={sheetOpen} onOpenChange={setSheetOpen}>
+          <SheetContent
+            side="left"
+            className="w-[85vw] max-w-sm p-0 bg-background overflow-y-auto"
+          >
+            <SheetHeader className="px-5 pt-5 pb-3 sticky top-0 bg-background z-10 border-b border-ecommerce-border">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <SheetTitle className="text-base font-bold text-ecommerce-text-primary">
+                    {t('homepage.shopPage.filterBy')}
+                  </SheetTitle>
+                  {activeFilterCount > 0 && (
+                    <Badge className="bg-ecommerce-red text-white rounded-full px-2 text-[10px]">
+                      {activeFilterCount}
                     </Badge>
                   )}
                 </div>
-                <ScrollArea className="max-h-[calc(100vh-220px)]">
-                  {filterSidebarContent}
-                </ScrollArea>
-              </div>
-            </aside>
-
-            {/* Product Grid Area */}
-            <div className="flex-1 min-w-0">
-              {productGridContent}
-            </div>
-          </div>
-        </div>
-      </main>
-
-      {/* Mobile Filter Sheet */}
-      <Sheet open={sheetOpen} onOpenChange={setSheetOpen}>
-        <SheetContent
-          side="left"
-          className="w-[85vw] max-w-sm p-0 bg-background overflow-y-auto"
-        >
-          <SheetHeader className="px-5 pt-5 pb-3 sticky top-0 bg-background z-10 border-b border-ecommerce-border">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <SheetTitle className="text-base font-bold text-ecommerce-text-primary">
-                  {t('homepage.shopPage.filterBy')}
-                </SheetTitle>
                 {activeFilterCount > 0 && (
-                  <Badge className="bg-ecommerce-red text-white rounded-full px-2 text-[10px]">
-                    {activeFilterCount}
-                  </Badge>
+                  <button
+                    onClick={resetFilters}
+                    className="text-xs text-ecommerce-red font-medium hover:underline"
+                  >
+                    {t('homepage.shopPage.clearAll')}
+                  </button>
                 )}
               </div>
-              {activeFilterCount > 0 && (
-                <button
-                  onClick={resetFilters}
-                  className="text-xs text-ecommerce-red font-medium hover:underline"
-                >
-                  {t('homepage.shopPage.clearAll')}
-                </button>
-              )}
-            </div>
-            <SheetDescription className="sr-only">
-              {t('homepage.shopPage.filterBy')}
-            </SheetDescription>
-          </SheetHeader>
-          <div className="px-4 py-4">{filterSidebarContent}</div>
-        </SheetContent>
-      </Sheet>
+              <SheetDescription className="sr-only">
+                {t('homepage.shopPage.filterBy')}
+              </SheetDescription>
+            </SheetHeader>
+            <div className="px-4 py-4">{filterSidebarContent}</div>
+          </SheetContent>
+        </Sheet>
 
-      {/* Global Components */}
-      <CartDrawer />
-      <QuickViewModal />
-      <BackToTop />
-      <MobileBottomNav />
-      <FlyToCart />
-      <CompareBar />
-      <CompareDrawer />
-    </div>
+        {/* Global Components */}
+        <CartDrawer />
+        <QuickViewModal />
+        <BackToTop />
+        <MobileBottomNav />
+        <FlyToCart />
+        <CompareBar />
+        <CompareDrawer />
+      </div>
+      <Footer />
+    </>
   );
 }
 

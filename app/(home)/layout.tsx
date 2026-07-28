@@ -55,10 +55,8 @@ export default function RootLayout({
     >
       <QueryProvider>
         <SessionProvider>
-          <Header />
-          {children}
           <div className="mt-auto">
-            <Footer />
+            {children}
           </div>
           <Toaster position="top-center" />
           <SharedOverlays />

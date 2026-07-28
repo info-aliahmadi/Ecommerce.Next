@@ -130,6 +130,7 @@
         "title": "Create Account",
         "subtitle": "Fill in the details below to register",
         "name": "Full Name",
+        "backToHome": "Back to Home",
         "namePlaceholder": "Enter your full name",
         "email": "Email Address",
         "emailPlaceholder": "you@example.com",
@@ -1887,7 +1888,7 @@
       "requiredMenuUrl": "Url Address Is Required"
     },
     "slideshow": {
-      "requiredMenuHeader": "Header Is Required"
+      "requiredSlideshowheader": "Header Is Required"
     },
     "linkSection": {
       "requiredKey": "Key Is Required",

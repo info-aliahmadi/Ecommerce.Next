@@ -25,6 +25,7 @@ import { MRT_Row } from 'material-react-table';
 import { MRT_Column } from '@root/app/types/MRT_Column';
 import SlideshowModel from '../../_types/Slideshow/SlideshowModel';
 import FileUploadModel from '@root/app/dashboard/(filestorage)/_types/FileUploadModel';
+import { GetImage } from '@root/app/(home)/_lib/utils';
 
 function SlideshowDataGrid() {
   const t = useTranslations("");
@@ -43,9 +44,9 @@ function SlideshowDataGrid() {
   let mediaExtensions = CONFIG.IMAGES_EXTENSIONS.concat(CONFIG.VIDEOS_EXTENSIONS);
 
   const ImagePreviewRow = ({ renderedCellValue, row }: { renderedCellValue: any, row: MRT_Row<SlideshowModel> }) => {
-   let fileUploadModel = renderedCellValue as FileUploadModel;
+    let fileUploadModel = renderedCellValue as FileUploadModel;
     let src = fileUploadModel?.fileName
-    ? mediaExtensions.some((extension) => extension == fileUploadModel.extension.toLocaleLowerCase())
+      ? mediaExtensions.some((extension) => extension == fileUploadModel.extension.toLocaleLowerCase())
         ? CONFIG.UPLOAD_BASEPATH + fileUploadModel.directory + fileUploadModel?.thumbnail
         : row.original.previewImageUrl
           ? row.original.previewImageUrl
@@ -77,7 +78,26 @@ function SlideshowDataGrid() {
         accessorKey: 'previewImage',
         header: t('fields.slideshow.previewImage'),
         type: 'string',
-        Cell: ({ renderedCellValue, row }) => <ImagePreviewRow renderedCellValue={renderedCellValue} row={row} />
+        Cell: ({ row }: { row: MRT_Row<SlideshowModel> }) => <Box
+          sx={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: '1rem'
+          }}
+        >
+          {row.original.previewImageId ? (
+            <Avatar
+              variant="rounded"
+              alt={row.original.description}
+              src={GetImage(row.original.previewImage, true)}
+              sx={{ width: 80, height: 80 }}
+            ></Avatar>
+          ) : (
+            <Avatar variant="rounded">
+              <ImageNotSupported />
+            </Avatar>
+          )}
+        </Box>
       },
       {
         accessorKey: 'header',
@@ -234,7 +254,7 @@ function SlideshowDataGrid() {
             // renderTopToolbarCustomActions={() => AddOrOrderRow(showSaveBtn, data)}
             enableRowOrdering={true}
             autoResetPageIndex={false}
-            muiTableBodyRowDragHandleProps={({ table } : { table : any }) => ({
+            muiTableBodyRowDragHandleProps={({ table }: { table: any }) => ({
               onDragEnd: () => {
                 const { draggingRow, hoveredRow } = table.getState();
                 if (hoveredRow && draggingRow) {

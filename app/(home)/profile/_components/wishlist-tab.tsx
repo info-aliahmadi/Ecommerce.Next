@@ -55,7 +55,7 @@ export function WishlistTab({
   return (
     <div className="space-y-4">
       <h2 className="text-xl font-bold text-ecommerce-text-primary">{t('homepage.profile.wishlist')}</h2>
-      <motion.div variants={staggerContainer} initial="initial" animate="animate" className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4">
+      <motion.div variants={staggerContainer} initial="initial" animate="animate" className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-3 gap-3 sm:gap-4">
         {items.map((item, i) => (
           <motion.div key={item.id} variants={staggerItem} className="group relative">
             <ProductCard
@@ -98,7 +98,7 @@ export function WishlistTab({
                 updatedOnUtc: null,
                 measureType: 0 as any,
                 displayStockQuantity: false,
-                stockQuantity: item.variant.productInventory.stockQuantity,
+                //stockQuantity: item.variant.productInventory.stockQuantity,
                 minStockQuantity: 0,
                 categories: item.categories,
                 manufacturerNames: [],

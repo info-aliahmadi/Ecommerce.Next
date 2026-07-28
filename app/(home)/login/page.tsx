@@ -96,12 +96,12 @@ const Login = () => {
         {/* Top section – Logo & tagline */}
         <div className="relative z-10">
           <div className="flex items-center gap-3 mb-6">
-            <div className="w-10 h-10 rounded-xl bg-white/20 backdrop-blur-sm flex items-center justify-center">
-              <Image
-                src="/images/apple-touch-icon.png"
+            <div className="w-16 h-16 rounded-xl bg-white/20 backdrop-blur-sm flex items-center justify-center">
+              <img
+                src="/images/hydrashop.png"
                 alt="Logo"
-                width={24}
-                height={24}
+                width={120}
+                height={120}
               />
             </div>
           </div>
@@ -132,7 +132,7 @@ const Login = () => {
 
         {/* Bottom attribution */}
         <p className="relative z-10 text-purple-300/40 text-xs">
-          &copy; {new Date().getFullYear()} Hydra Cashier System
+          &copy; {new Date().getFullYear()} HydraShop
         </p>
       </motion.div>
 

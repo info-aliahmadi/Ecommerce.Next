@@ -63,7 +63,7 @@ const pageVariants: any = {
 };
 
 // ─── Profile Page Component ───────────────────────────────────────
-function ProfilePageContent() {
+export default function ProfilePage() {
   const t = useTranslations();
   const router = useRouter();
   const { data: session, status } = useSession();
@@ -259,180 +259,177 @@ function ProfilePageContent() {
   ];
 
   return (
-    <div className="min-h-screen flex flex-col pb-16 lg:pb-0">
-      {/* Header */}
-      <header className="sticky top-0 z-40 bg-white/80 dark:bg-ecommerce-surface/80 backdrop-blur-xl border-b border-ecommerce-border">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-14 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <Link href="/" className="text-ecommerce-text-secondary hover:text-ecommerce-text-primary transition-colors">
-              <ChevronRight className="w-5 h-5 rtl:rotate-180" />
-            </Link>
-            <h1 className="text-lg font-bold text-ecommerce-text-primary">{t('homepage.profile.title')}</h1>
-          </div>
-          <div className="hidden md:flex items-center gap-2">
-            <Button variant="ghost" size="sm" className="text-ecommerce-text-secondary hover:text-ecommerce-red" onClick={() => signOut()}>
-              <LogOut className="w-4 h-4" />
-              <span className="ms-2">{t('homepage.profile.logout')}</span>
-            </Button>
-          </div>
-        </div>
-      </header>
-
-      <main className="flex-1 max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-6">
-        {/* Mobile Tab Navigation */}
-        <nav className="md:hidden mb-6 overflow-x-auto -mx-4 px-4 scrollbar-hide" aria-label="Profile tabs">
-          <div className="flex gap-1 bg-ecommerce-surface rounded-xl p-1 min-w-max">
-            {NAV_ITEMS.map((item) => {
-              const Icon = item.icon;
-              const isActive = activeTab === item.id;
-              return (
-                <button
-                  key={item.id}
-                  onClick={() => setActiveTab(item.id)}
-                  className={`flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-medium transition-all duration-200 whitespace-nowrap ${isActive
-                    ? 'bg-white dark:bg-ecommerce-surface-hover text-ecommerce-red shadow-sm'
-                    : 'text-ecommerce-text-secondary hover:text-ecommerce-text-primary'
-                    }`}
-                >
-                  <Icon className="w-3.5 h-3.5" />
-                  {t(item.labelKey)}
-                </button>
-              );
-            })}
-          </div>
-        </nav>
-
-        <div className="flex gap-6">
-          {/* Desktop Sidebar */}
-          <aside className="hidden md:block w-72 shrink-0">
-            <div className="sticky top-24">
-              {/* User Card */}
-              <Card className="bg-ecommerce-surface border-ecommerce-border overflow-hidden mb-4">
-                <div className="h-20 bg-gradient-to-r from-ecommerce-red to-ecommerce-rose" />
-                <div className="px-5 pb-5 -mt-8">
-                  <Avatar className="w-16 h-16 border-4 border-ecommerce-surface shadow-lg">
-                    {userAvatar && <AvatarImage src={userAvatar} alt={userName} />}
-                    <AvatarFallback className="bg-ecommerce-red/10 text-ecommerce-red font-bold text-lg">
-                      {userName.split(' ').map((n: any) => n[0]).join('').slice(0, 2).toUpperCase()}
-                    </AvatarFallback>
-                  </Avatar>
-                  <h3 className="mt-3 font-bold text-ecommerce-text-primary">{userName}</h3>
-                  <p className="text-sm text-ecommerce-text-muted mt-0.5">{userEmail}</p>
-                </div>
-              </Card>
-
-              {/* Nav */}
-              <Card className="bg-ecommerce-surface border-ecommerce-border p-2">
-                <nav className="flex flex-col gap-1">
-                  {NAV_ITEMS.map((item) => {
-                    const Icon = item.icon;
-                    const isActive = activeTab === item.id;
-                    return (
-                      <button
-                        key={item.id}
-                        onClick={() => setActiveTab(item.id)}
-                        className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-200 ${isActive
-                          ? 'bg-ecommerce-red/10 text-ecommerce-red'
-                          : 'text-ecommerce-text-secondary hover:bg-ecommerce-surface-hover hover:text-ecommerce-text-primary'
-                          }`}
-                      >
-                        <Icon className="w-4.5 h-4.5" />
-                        {t(item.labelKey)}
-                        {item.id === 'wishlist' && wishlistCount > 0 && (
-                          <Badge className="ms-auto bg-ecommerce-red text-white text-[10px] px-1.5 py-0 h-5 min-w-5 flex items-center justify-center">
-                            {wishlistCount}
-                          </Badge>
-                        )}
-                      </button>
-                    );
-                  })}
-                </nav>
-                <Separator className="my-2 bg-ecommerce-border" />
-                <button
-                  onClick={() => signOut()}
-                  className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-ecommerce-text-secondary hover:bg-red-50 dark:hover:bg-red-500/10 hover:text-red-500 transition-all duration-200 w-full"
-                >
-                  <LogOut className="w-4.5 h-4.5" onClick={() => signOut()} />
-                  {t('homepage.profile.logout')}
-                </button>
-              </Card>
+    <>
+      <Header />
+      <div className="min-h-screen flex flex-col pb-16 lg:pb-0">
+        {/* Header */}
+        <header className="sticky top-0 z-40 bg-white/80 dark:bg-ecommerce-surface/80 backdrop-blur-xl border-b border-ecommerce-border">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-14 flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <Link href="/" className="text-ecommerce-text-secondary hover:text-ecommerce-text-primary transition-colors">
+                <ChevronRight className="w-5 h-5 rtl:rotate-180" />
+              </Link>
+              <h1 className="text-lg font-bold text-ecommerce-text-primary">{t('homepage.profile.title')}</h1>
             </div>
-          </aside>
-
-          {/* Content Area */}
-          <div className="flex-1 min-w-0">
-            <AnimatePresence mode="wait">
-              {activeTab === 'dashboard' && (
-                <motion.div key="dashboard" variants={pageVariants} initial="initial" animate="animate" exit="exit">
-                  <DashboardTab
-                    userName={userName}
-                    userEmail={userEmail}
-                    userAvatar={userAvatar}
-                    stats={stats}
-                    activities={activities}
-                    setActiveTab={setActiveTab}
-                  />
-                </motion.div>
-              )}
-              {activeTab === 'orders' && (
-                <motion.div key="orders" variants={pageVariants} initial="initial" animate="animate" exit="exit">
-                  <OrdersTab />
-                </motion.div>
-              )}
-              {activeTab === 'wishlist' && (
-                <motion.div key="wishlist" variants={pageVariants} initial="initial" animate="animate" exit="exit">
-                  <WishlistTab
-                    items={wishlistItems}
-                    onAddToCart={handleWishlistAddToCart}
-                    onRemove={(variantId) => removeFromWishlist.mutate({ variantId })}
-                  />
-                </motion.div>
-              )}
-              {activeTab === 'addresses' && (
-                <motion.div key="addresses" variants={pageVariants} initial="initial" animate="animate" exit="exit">
-                  <AddressesTab
-                    addresses={addresses}
-                    onAdd={openAddAddress}
-                    onEdit={openEditAddress}
-                    onDelete={handleDeleteAddress}
-                    onSetDefault={handleSetDefault}
-                    dialogOpen={addressDialogOpen}
-                    setDialogOpen={setAddressDialogOpen}
-                    editingAddress={editingAddress}
-                    addrForm={addrForm}
-                    setAddrForm={setAddrForm}
-                    onSave={handleSaveAddress}
-                    loading={addressesLoading}
-                    saving={addressSaving}
-                    deletingId={addressDeleting}
-                    settingDefaultId={addressSettingDefault}
-                  />
-                </motion.div>
-              )}
-              {activeTab === 'settings' && (
-                <motion.div key="settings" variants={pageVariants} initial="initial" animate="animate" exit="exit">
-                  <SettingsTab />
-                </motion.div>
-              )}
-            </AnimatePresence>
+            <div className="hidden md:flex items-center gap-2">
+              <Button variant="ghost" size="sm" className="text-ecommerce-text-secondary hover:text-ecommerce-red" onClick={() => signOut()}>
+                <LogOut className="w-4 h-4" />
+                <span className="ms-2">{t('homepage.profile.logout')}</span>
+              </Button>
+            </div>
           </div>
-        </div>
-      </main>
+        </header>
 
-      <CartDrawer />
-      <QuickViewModal />
-      <BackToTop />
-      <MobileBottomNav />
-      <FlyToCart />
-      <CompareBar />
-      <CompareDrawer />
-    </div>
-  );
-}
+        <main className="flex-1 max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-6">
+          {/* Mobile Tab Navigation */}
+          <nav className="md:hidden mb-6 overflow-x-auto -mx-4 px-4 scrollbar-hide" aria-label="Profile tabs">
+            <div className="flex gap-1 bg-ecommerce-surface rounded-xl p-1 min-w-max">
+              {NAV_ITEMS.map((item) => {
+                const Icon = item.icon;
+                const isActive = activeTab === item.id;
+                return (
+                  <button
+                    key={item.id}
+                    onClick={() => setActiveTab(item.id)}
+                    className={`flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-medium transition-all duration-200 whitespace-nowrap ${isActive
+                      ? 'bg-white dark:bg-ecommerce-surface-hover text-ecommerce-red shadow-sm'
+                      : 'text-ecommerce-text-secondary hover:text-ecommerce-text-primary'
+                      }`}
+                  >
+                    <Icon className="w-3.5 h-3.5" />
+                    {t(item.labelKey)}
+                  </button>
+                );
+              })}
+            </div>
+          </nav>
 
-// ─── Page Export ──────────────────────────────────────────────────
-export default function ProfilePage() {
-  return (
-    <ProfilePageContent />
+          <div className="flex gap-6">
+            {/* Desktop Sidebar */}
+            <aside className="hidden md:block w-72 shrink-0">
+              <div className="sticky top-24">
+                {/* User Card */}
+                <Card className="bg-ecommerce-surface border-ecommerce-border overflow-hidden mb-4">
+                  <div className="h-20 bg-gradient-to-r from-ecommerce-red to-ecommerce-rose" />
+                  <div className="px-5 pb-5 -mt-8">
+                    <Avatar className="w-16 h-16 border-4 border-ecommerce-surface shadow-lg">
+                      {userAvatar && <AvatarImage src={userAvatar} alt={userName} />}
+                      <AvatarFallback className="bg-ecommerce-red/10 text-ecommerce-red font-bold text-lg">
+                        {userName.split(' ').map((n: any) => n[0]).join('').slice(0, 2).toUpperCase()}
+                      </AvatarFallback>
+                    </Avatar>
+                    <h3 className="mt-3 font-bold text-ecommerce-text-primary">{userName}</h3>
+                    <p className="text-sm text-ecommerce-text-muted mt-0.5">{userEmail}</p>
+                  </div>
+                </Card>
+
+                {/* Nav */}
+                <Card className="bg-ecommerce-surface border-ecommerce-border p-2">
+                  <nav className="flex flex-col gap-1">
+                    {NAV_ITEMS.map((item) => {
+                      const Icon = item.icon;
+                      const isActive = activeTab === item.id;
+                      return (
+                        <button
+                          key={item.id}
+                          onClick={() => setActiveTab(item.id)}
+                          className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-200 ${isActive
+                            ? 'bg-ecommerce-red/10 text-ecommerce-red'
+                            : 'text-ecommerce-text-secondary hover:bg-ecommerce-surface-hover hover:text-ecommerce-text-primary'
+                            }`}
+                        >
+                          <Icon className="w-4.5 h-4.5" />
+                          {t(item.labelKey)}
+                          {item.id === 'wishlist' && wishlistCount > 0 && (
+                            <Badge className="ms-auto bg-ecommerce-red text-white text-[10px] px-1.5 py-0 h-5 min-w-5 flex items-center justify-center">
+                              {wishlistCount}
+                            </Badge>
+                          )}
+                        </button>
+                      );
+                    })}
+                  </nav>
+                  <Separator className="my-2 bg-ecommerce-border" />
+                  <button
+                    onClick={() => signOut()}
+                    className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-ecommerce-text-secondary hover:bg-red-50 dark:hover:bg-red-500/10 hover:text-red-500 transition-all duration-200 w-full"
+                  >
+                    <LogOut className="w-4.5 h-4.5" onClick={() => signOut()} />
+                    {t('homepage.profile.logout')}
+                  </button>
+                </Card>
+              </div>
+            </aside>
+
+            {/* Content Area */}
+            <div className="flex-1 min-w-0">
+              <AnimatePresence mode="wait">
+                {activeTab === 'dashboard' && (
+                  <motion.div key="dashboard" variants={pageVariants} initial="initial" animate="animate" exit="exit">
+                    <DashboardTab
+                      userName={userName}
+                      userEmail={userEmail}
+                      userAvatar={userAvatar}
+                      stats={stats}
+                      activities={activities}
+                      setActiveTab={setActiveTab}
+                    />
+                  </motion.div>
+                )}
+                {activeTab === 'orders' && (
+                  <motion.div key="orders" variants={pageVariants} initial="initial" animate="animate" exit="exit">
+                    <OrdersTab />
+                  </motion.div>
+                )}
+                {activeTab === 'wishlist' && (
+                  <motion.div key="wishlist" variants={pageVariants} initial="initial" animate="animate" exit="exit">
+                    <WishlistTab
+                      items={wishlistItems}
+                      onAddToCart={handleWishlistAddToCart}
+                      onRemove={(variantId) => removeFromWishlist.mutate({ variantId })}
+                    />
+                  </motion.div>
+                )}
+                {activeTab === 'addresses' && (
+                  <motion.div key="addresses" variants={pageVariants} initial="initial" animate="animate" exit="exit">
+                    <AddressesTab
+                      addresses={addresses}
+                      onAdd={openAddAddress}
+                      onEdit={openEditAddress}
+                      onDelete={handleDeleteAddress}
+                      onSetDefault={handleSetDefault}
+                      dialogOpen={addressDialogOpen}
+                      setDialogOpen={setAddressDialogOpen}
+                      editingAddress={editingAddress}
+                      addrForm={addrForm}
+                      setAddrForm={setAddrForm}
+                      onSave={handleSaveAddress}
+                      loading={addressesLoading}
+                      saving={addressSaving}
+                      deletingId={addressDeleting}
+                      settingDefaultId={addressSettingDefault}
+                    />
+                  </motion.div>
+                )}
+                {activeTab === 'settings' && (
+                  <motion.div key="settings" variants={pageVariants} initial="initial" animate="animate" exit="exit">
+                    <SettingsTab />
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
+          </div>
+        </main>
+
+        <CartDrawer />
+        <QuickViewModal />
+        <BackToTop />
+        <MobileBottomNav />
+        <FlyToCart />
+        <CompareBar />
+        <CompareDrawer />
+      </div>
+      <Footer />
+    </>
   );
 }

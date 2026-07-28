@@ -199,11 +199,11 @@ export default function AddOrEditSlideshow({ row, isNew, open, setOpen, refetch 
                     <Stack spacing={1}>
                       <InputLabel htmlFor="previewImageId">{t(fieldsName + 'previewImage')}</InputLabel>
                       <ImageUpload
-                        key={'previewImageId' + values?.previewImageId || 'new'}
                         name="previewImageId"
                         setFieldValue={setFieldValue}
-                        value={values?.previewImageId || ''}
-                        filePosterMaxHeight={400}
+                        value={values?.previewImageId || null}
+                        filePosterMaxHeight={200}
+                        allowMultiple={false}
                       />
                       {(values?.previewImageId == null || values?.previewImageId == undefined) && (
                         <OutlinedInput
