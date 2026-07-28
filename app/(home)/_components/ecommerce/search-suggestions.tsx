@@ -144,14 +144,12 @@ export function SearchSuggestions({ isOpen, onClose }: { isOpen: boolean; onClos
   };
 
   const handleSearchForQuery = () => {
-    if (searchQuery.trim().length > 0) {
-      addRecentSearch(searchQuery);
-      const section = document.getElementById('products-section') || document.getElementById('product-grid-section');
-      if (section) {
-        section.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      }
+    const query = searchQuery.trim();
+    if (query) {
+      addRecentSearch(query);
       setActiveIndex(-1);
       onClose();
+      router.push(`/products?search=${encodeURIComponent(query)}`);
     }
   };
 
@@ -199,7 +197,7 @@ export function SearchSuggestions({ isOpen, onClose }: { isOpen: boolean; onClos
   if (!isOpen) return null;
 
   return (
-    <div
+    <motion.div
       ref={containerRef}
       onKeyDown={handleKeyDown}
       className="search-dropdown absolute top-full start-0 end-0 mt-2 bg-white dark:bg-ecommerce-surface rounded-xl shadow-xl border border-ecommerce-border overflow-hidden z-50"
@@ -331,6 +329,6 @@ export function SearchSuggestions({ isOpen, onClose }: { isOpen: boolean; onClos
           </p>
         </div>
       )}
-    </div>
+    </motion.div>
   );
 }

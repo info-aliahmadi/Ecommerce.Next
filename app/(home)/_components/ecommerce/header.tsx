@@ -397,7 +397,7 @@ export function Header() {
                 initial={{ height: 0, opacity: 0 }}
                 animate={{ height: 'auto', opacity: 1 }}
                 exit={{ height: 0, opacity: 0 }}
-                className="md:hidden overflow-hidden"
+                className="md:hidden"
               >
                 <div className="pb-3 relative">
                   <Search size={16} className="absolute start-3.5 top-1/2 -translate-y-1/2 text-ecommerce-text-muted" />
@@ -405,6 +405,7 @@ export function Header() {
                     placeholder={t('homepage.common.searchPlaceholder')}
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
+                    onFocus={() => setIsSearchOpen(true)}
                     onKeyDown={(e) => {
                       if (e.key === 'Enter' && searchQuery.trim()) {
                         router.push(`/products?search=${encodeURIComponent(searchQuery.trim())}`);
@@ -413,6 +414,10 @@ export function Header() {
                     }}
                     className="ps-10 pe-4 h-10 bg-ecommerce-surface-hover border-ecommerce-border rounded-xl text-sm"
                     autoFocus
+                  />
+                  <SearchSuggestions
+                    isOpen={isSearchOpen}
+                    onClose={() => setIsSearchOpen(false)}
                   />
                 </div>
               </motion.div>
