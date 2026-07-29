@@ -69,7 +69,8 @@
       "retry": "تلاش مجدد",
       "newArrivalsBadge": "New",
       "loading": "در حال بارگذاری...",
-      "login": "ورود"
+      "login": "ورود",
+      "pending": "در انتظار تایید"
     },
     "auth": {
       "login": {

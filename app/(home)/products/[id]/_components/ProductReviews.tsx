@@ -1,10 +1,12 @@
 'use client';
 
+import { useState } from 'react';
 import { useSession } from 'next-auth/react';
 import { useTranslations } from 'next-intl';
 import ProductReviewDisplayModel from '../../../_types/Product/ProductReviewDisplayModel';
-import { Star, User } from 'lucide-react';
+import { Star, User, Pencil, X } from 'lucide-react';
 import { useLocaleStore } from '../../../_lib/store';
+import CONFIG from '@root/config';
 import ReviewForm from './ReviewForm';
 
 export default function ProductReviews({ productId, reviews = [] }: { productId: number; reviews?: ProductReviewDisplayModel[] }) {
@@ -17,8 +19,10 @@ export default function ProductReviews({ productId, reviews = [] }: { productId:
     ? reviews.find((r) => r.userId === currentUserId)
     : undefined;
 
-  const approvedReviews = reviews.filter((r) => r.isApproved && r.userId !== currentUserId);
-  const total = approvedReviews.length;
+  const [editingReviewId, setEditingReviewId] = useState<number | null>(null);
+
+  const visibleReviews = reviews.filter((r) => r.isApproved || r.userId === currentUserId);
+  const total = visibleReviews.filter((r) => r.isApproved).length;
 
   const formatDate = (date?: Date) => {
     if (!date) return '';
@@ -27,6 +31,18 @@ export default function ProductReviews({ productId, reviews = [] }: { productId:
       month: 'short',
       day: 'numeric',
     });
+  };
+
+  const getReviewerName = (review: ProductReviewDisplayModel) => {
+    return review.user?.name || review.user?.userName || review.user?.email || 'Anonymous';
+  };
+
+  const getReviewerAvatar = (review: ProductReviewDisplayModel) => {
+    const avatar = review.user?.avatar;
+    if (avatar) {
+      return CONFIG.AVATAR_BASEPATH + avatar;
+    }
+    return null;
   };
 
   return (
@@ -41,7 +57,7 @@ export default function ProductReviews({ productId, reviews = [] }: { productId:
         ) : (
           <div className="space-y-2">
             {[5, 4, 3, 2, 1].map((star) => {
-              const count = approvedReviews.filter((r) => r.rating === star).length;
+              const count = visibleReviews.filter((r) => r.isApproved && r.rating === star).length;
               const percentage = total > 0 ? Math.round((count / total) * 100) : 0;
               return (
                 <div key={star} className="flex items-center gap-2">
@@ -58,19 +74,106 @@ export default function ProductReviews({ productId, reviews = [] }: { productId:
         )}
       </div>
 
-      {/* User's Existing Review */}
-      {userReview && (
-        <div className="bg-ecommerce-surface/50 dark:bg-ecommerce-surface rounded-2xl border border-ecommerce-border p-5">
-          <div className="flex items-center justify-between mb-2">
-            <h4 className="text-sm font-semibold text-ecommerce-text-primary">
-              {t('homepage.productDetail.updateReview') || 'Your Review'}
-            </h4>
+      {/* Reviews List */}
+      <div className="space-y-4">
+        {visibleReviews.length === 0 ? (
+          <div className="text-center py-8">
+            <p className="text-sm text-ecommerce-text-muted">{t('homepage.productDetail.noReviewsYet')}</p>
           </div>
-          <ReviewForm productId={userReview.productId} existingReview={userReview} />
-        </div>
-      )}
+        ) : (
+          visibleReviews.map((review) => {
+            const isCurrentUserReview = review.userId === currentUserId;
+            const isEditing = editingReviewId === review.id;
+            const reviewerName = getReviewerName(review);
+            const avatarUrl = getReviewerAvatar(review);
 
-      {/* Write Review (only if user is logged in and hasn't reviewed yet) */}
+            return (
+              <div
+                key={review.id}
+                className="bg-ecommerce-surface/50 dark:bg-ecommerce-surface rounded-2xl border border-ecommerce-border p-5"
+              >
+                {isEditing ? (
+                  <div>
+                    <div className="flex items-center justify-between mb-3">
+                      <h4 className="text-sm font-semibold text-ecommerce-text-primary">
+                        {t('homepage.productDetail.updateReview') || 'Edit Your Review'}
+                      </h4>
+                      <button
+                        onClick={() => setEditingReviewId(null)}
+                        className="text-ecommerce-text-muted hover:text-ecommerce-text-primary"
+                      >
+                        <X size={16} />
+                      </button>
+                    </div>
+                    <ReviewForm productId={productId} existingReview={review} />
+                  </div>
+                ) : (
+                  <>
+                    <div className="flex items-center justify-between mb-2">
+                      <div className="flex items-center gap-2">
+                        {avatarUrl ? (
+                          <img
+                            src={avatarUrl}
+                            alt={reviewerName}
+                            className="w-7 h-7 rounded-full object-cover shrink-0"
+                          />
+                        ) : (
+                          <div className="w-7 h-7 rounded-full bg-ecommerce-border/50 flex items-center justify-center shrink-0">
+                            <User size={14} className="text-ecommerce-text-muted" />
+                          </div>
+                        )}
+                        <span className="text-sm font-medium text-ecommerce-text-primary">
+                          {reviewerName}
+                        </span>
+                        {!review.isApproved && isCurrentUserReview && (
+                          <span className="text-[10px] text-ecommerce-text-muted bg-ecommerce-border/50 px-2 py-0.5 rounded-full">
+                            {t('homepage.common.pending')}
+                          </span>
+                        )}
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <span className="text-xs text-ecommerce-text-muted">
+                          {formatDate(review.createdOnUtc)}
+                        </span>
+                        {isCurrentUserReview && (
+                          <button
+                            onClick={() => setEditingReviewId(review.id)}
+                            className="text-ecommerce-text-muted hover:text-ecommerce-red transition-colors"
+                            title={t('homepage.common.edit')}
+                          >
+                            <Pencil size={14} />
+                          </button>
+                        )}
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-0.5 mb-2">
+                      {Array.from({ length: 5 }).map((_, i) => (
+                        <Star
+                          key={i}
+                          size={14}
+                          className={
+                            i < review.rating
+                              ? 'fill-ecommerce-amber text-ecommerce-amber'
+                              : 'text-ecommerce-border'
+                          }
+                        />
+                      ))}
+                    </div>
+                    <p className="text-sm text-ecommerce-text-secondary leading-relaxed">{review.reviewText}</p>
+                    {review.replyText && (
+                      <div className="mt-3 pt-3 border-t border-ecommerce-border">
+                        <p className="text-xs text-ecommerce-text-muted">{review.replyText}</p>
+                      </div>
+                    )}
+                  </>
+                )}
+              </div>
+            );
+          })
+        )}
+      </div>
+
+      {/* Write Review - only if user hasn't reviewed yet and is logged in */}
       {!userReview && session?.user?.accessToken && (
         <div className="bg-ecommerce-surface/50 dark:bg-ecommerce-surface rounded-2xl border border-ecommerce-border p-5">
           <h4 className="text-sm font-semibold text-ecommerce-text-primary mb-4">
@@ -81,71 +184,22 @@ export default function ProductReviews({ productId, reviews = [] }: { productId:
       )}
 
       {/* Login prompt for non-authenticated users */}
-      {!userReview && !session?.user?.accessToken && (
+      {!session?.user?.accessToken && (
         <div className="bg-ecommerce-surface/50 dark:bg-ecommerce-surface rounded-2xl border border-ecommerce-border p-6 text-center">
           <h4 className="text-sm font-semibold text-ecommerce-text-primary mb-2">
             {t('homepage.productDetail.writeReview')}
           </h4>
           <p className="text-sm text-ecommerce-text-muted mb-3">
-            {t('homepage.productDetail.loginToReview') || 'Please login to write a review'}
+            {t('homepage.productDetail.loginToReview')}
           </p>
           <button
-            onClick={() => window.location.href = '/login?callbackUrl=/products/' + productId}
+            onClick={() => window.location.href = '/login'}
             className="h-9 px-4 bg-ecommerce-red hover:bg-ecommerce-red/90 text-white text-sm font-medium rounded-lg"
           >
-            {t('homepage.common.login') || 'Login'}
+            {t('homepage.common.login')}
           </button>
         </div>
       )}
-
-      {/* Reviews List */}
-      <div className="space-y-4">
-        {approvedReviews.length === 0 && !userReview ? (
-          <div className="text-center py-8">
-            <p className="text-sm text-ecommerce-text-muted">{t('homepage.productDetail.noReviewsYet')}</p>
-          </div>
-        ) : (
-          approvedReviews.map((review) => (
-            <div
-              key={review.id}
-              className="bg-ecommerce-surface/50 dark:bg-ecommerce-surface rounded-2xl border border-ecommerce-border p-5"
-            >
-              <div className="flex items-center justify-between mb-2">
-                <div className="flex items-center gap-2">
-                  <div className="w-7 h-7 rounded-full bg-ecommerce-border/50 flex items-center justify-center">
-                    <User size={14} className="text-ecommerce-text-muted" />
-                  </div>
-                  <span className="text-sm font-medium text-ecommerce-text-primary">
-                    {review.fullName || 'Anonymous'}
-                  </span>
-                </div>
-                <span className="text-xs text-ecommerce-text-muted">
-                  {formatDate(review.createdOnUtc)}
-                </span>
-              </div>
-              <div className="flex items-center gap-0.5 mb-2">
-                {Array.from({ length: 5 }).map((_, i) => (
-                  <Star
-                    key={i}
-                    size={14}
-                    className={
-                      i < review.rating
-                        ? 'fill-ecommerce-amber text-ecommerce-amber'
-                        : 'text-ecommerce-border'
-                    }
-                  />
-                ))}
-              </div>
-              <p className="text-sm text-ecommerce-text-secondary leading-relaxed">{review.reviewText}</p>
-              {review.replyText && (
-                <div className="mt-3 pt-3 border-t border-ecommerce-border">
-                  <p className="text-xs text-ecommerce-text-muted">{review.replyText}</p>
-                </div>
-              )}
-            </div>
-          ))
-        )}
-      </div>
     </div>
   );
 }

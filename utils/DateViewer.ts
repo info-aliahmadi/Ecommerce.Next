@@ -55,7 +55,8 @@ export const DateTimeViewer = (
   }).format(moment(dateTime).toDate());
 };
 
-export const showDistanceToNow = (date: Date, locale: LanguageInput) => {
+export const showDistanceToNow = (locale: LanguageInput, date?: Date,) => {
+  if (!date) return '';
   // Only run on client side to avoid hydration mismatch
   if (typeof window === 'undefined') {
     return moment(date).fromNow();

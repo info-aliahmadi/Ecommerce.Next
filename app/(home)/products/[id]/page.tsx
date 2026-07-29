@@ -286,7 +286,7 @@ export default async function ProductDetailPage({
                     {/* Rating Summary - Server rendered */}
                     <div className="bg-ecommerce-surface/50 dark:bg-ecommerce-surface rounded-2xl border border-ecommerce-border p-6 flex flex-col items-center justify-center text-center">
                       <div className="text-5xl font-bold text-ecommerce-text-primary">
-                        {(product.approvedRatingSum || 0).toFixed(1)}
+                        {(product.approvedRatingSum > 0 ? (product.approvedRatingSum / product.approvedTotalReviews) : 0).toFixed(1)}
                       </div>
                       <div className="flex items-center gap-0.5 mt-2 mb-1">
                         {Array.from({ length: 5 }).map((_, i) => (
@@ -294,7 +294,7 @@ export default async function ProductDetailPage({
                             key={i}
                             size={18}
                             className={
-                              i < Math.floor(product.approvedRatingSum || 0)
+                              i < Math.round(product.approvedRatingSum > 0 ? (product.approvedRatingSum / product.approvedTotalReviews) : 0)
                                 ? 'fill-ecommerce-amber text-ecommerce-amber'
                                 : 'text-ecommerce-border'
                             }

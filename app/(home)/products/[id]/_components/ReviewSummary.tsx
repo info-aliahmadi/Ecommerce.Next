@@ -8,18 +8,18 @@ export default function ReviewSummary({
   rating,
   reviewCount,
   children,
-}: {
+}: Readonly<{
   rating: number;
   reviewCount: number;
   children?: React.ReactNode;
-}) {
+}>) {
   const t = useTranslations('');
   const reviewsRef = useRef<HTMLDivElement>(null);
 
   const scrollToReviews = () => {
     reviewsRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
-
+ const ratingResult = rating > 0 ? (rating / reviewCount) : 0;
   return (
     <>
       <button
@@ -33,9 +33,9 @@ export default function ReviewSummary({
               key={i}
               size={16}
               className={
-                i < Math.floor(rating)
+                i < Math.floor(ratingResult)
                   ? 'fill-ecommerce-amber text-ecommerce-amber'
-                  : i < rating
+                  : i < ratingResult
                     ? 'fill-ecommerce-amber/50 text-ecommerce-amber'
                     : 'text-ecommerce-border'
               }
@@ -43,7 +43,7 @@ export default function ReviewSummary({
           ))}
         </div>
         <span className="text-sm font-medium text-ecommerce-text-primary">
-          {rating.toFixed(1)}
+          {ratingResult.toFixed(1)}
         </span>
         <span className="text-sm text-ecommerce-text-muted group-hover:text-ecommerce-red transition-colors">
           ({reviewCount} {t('homepage.productDetail.reviewsTab').toLowerCase()})

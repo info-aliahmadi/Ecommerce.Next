@@ -69,7 +69,8 @@
       "retry": "Retry",
       "newArrivalsBadge": "New",
       "loading": "Loading...",
-      "login": "Login"
+      "login": "Login",
+      "pending": "Pending"
     },
     "auth": {
       "login": {

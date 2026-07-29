@@ -69,7 +69,8 @@
       "retry": "إعادة المحاولة",
       "newArrivalsBadge": "New",
       "loading": "جاري التحميل...",
-      "login": "تسجيل الدخول"
+      "login": "تسجيل الدخول",
+      "pending": "قيد المراجعة"
     },
     "auth": {
       "login": {

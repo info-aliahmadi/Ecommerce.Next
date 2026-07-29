@@ -129,20 +129,12 @@ export default interface ProductDisplayModel {
    */
   approvedRatingSum: number;
 
-  /**
-   * The sum of not approved ratings.
-   */
-  notApprovedRatingSum: number;
 
   /**
    * The total number of approved reviews.
    */
   approvedTotalReviews: number;
 
-  /**
-   * The total number of not approved reviews.
-   */
-  notApprovedTotalReviews: number;
 
   /**
    * Indicates whether discounts have been applied.
