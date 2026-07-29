@@ -25,7 +25,6 @@ import ProductListCard from './product-list';
 import CurrencyViewer, { GetCurrencySymbol } from '@root/utils/CurrencyViewer';
 import CONFIG from '@root/config';
 
-const PAGE_SIZE = 8;
 
 const SORT_MAP: Record<SortOption, SortingType> = {
   'newest': SortingType.SortNewest,
@@ -73,7 +72,7 @@ export function ProductGrid() {
   const [sliderValue, setSliderValue] = useState<[number, number]>([0, 9999]);
 
   const filter = useMemo((): Omit<ProductFilterModel, 'pageIndex'> => ({
-    pageSize: PAGE_SIZE,
+    pageSize: CONFIG.PRODUCTS_PER_PAGE,
     searchInput: searchQuery,
     categoryIds: selectedCategoryId ? [selectedCategoryId] : undefined,
     sorting: SORT_MAP[sortBy] ?? SortingType.SortNewest,

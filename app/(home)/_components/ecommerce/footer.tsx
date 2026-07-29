@@ -107,13 +107,12 @@ export function Footer() {
     ],
   };
 
-  const socialLinks = [
-    { icon: Facebook, href: '#', label: 'Facebook' },
-    { icon: Twitter, href: '#', label: 'Twitter' },
-    { icon: Instagram, href: '#', label: 'Instagram' },
-    { icon: Youtube, href: '#', label: 'YouTube' },
-  ];
-
+  const socialLinks: Array<{ icon: any; href: string; label: string, color: string }> = [];
+  // push into social links if not empty
+  if (CONFIG.FACEBOOK_LINK) socialLinks.push({ icon: Facebook, href: CONFIG.FACEBOOK_LINK, label: 'Facebook', color: '#3b5998' });
+  if (CONFIG.TWITTER_LINK) socialLinks.push({ icon: Twitter, href: CONFIG.TWITTER_LINK, label: 'Twitter', color: '#1DA1F2' });
+  if (CONFIG.INSTAGRAM_LINK) socialLinks.push({ icon: Instagram, href: CONFIG.INSTAGRAM_LINK, label: 'Instagram', color: '#e44840' });
+  if (CONFIG.YOUTUBE_LINK) socialLinks.push({ icon: Youtube, href: CONFIG.YOUTUBE_LINK, label: 'YouTube', color: '#ff0000' });
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
@@ -207,19 +206,19 @@ export function Footer() {
                 <div className="w-7 h-7 rounded-lg bg-white/[0.05] flex items-center justify-center group-hover:bg-white/10 transition-colors">
                   <Phone size={12} />
                 </div>
-                +1 (234) 567-890
+                {CONFIG.CONTACT_PHONE_NUMBER}
               </a>
               <a href="mailto:hello@hydrashop.com" className="flex items-center gap-2.5 text-sm text-white/50 hover:text-white/80 transition-colors group">
                 <div className="w-7 h-7 rounded-lg bg-white/[0.05] flex items-center justify-center group-hover:bg-white/10 transition-colors">
                   <Mail size={12} />
                 </div>
-                hello@hydrashop.com
+                {CONFIG.CONTACT_EMAIL}
               </a>
               <div className="flex items-center gap-2.5 text-sm text-white/50">
                 <div className="w-7 h-7 rounded-lg bg-white/[0.05] flex items-center justify-center">
                   <MapPin size={12} />
                 </div>
-                {t('homepage.footer.address')}
+                {CONFIG.CONTACT_ADDRESS}
               </div>
             </div>
           </div>
@@ -338,12 +337,13 @@ export function Footer() {
             <div className="flex items-center gap-2">
               {socialLinks.map((social) => (
                 <a
-                  key={social.label}
-                  href={social.href}
-                  aria-label={social.label}
+                  key={social?.label ?? ''}
+                  href={social?.href}
+                  aria-label={social?.label}
+                  style={{ backgroundColor: social.color }}
                   className="w-9 h-9 rounded-xl bg-white/[0.04] flex items-center justify-center hover:bg-ecommerce-red hover:text-white text-white/40 transition-all duration-200 hover:scale-110 hover:-translate-y-0.5 border border-white/[0.04] hover:border-ecommerce-red"
                 >
-                  <social.icon size={16} />
+                  <social.icon size={16}  className="text-white" />
                 </a>
               ))}
             </div>

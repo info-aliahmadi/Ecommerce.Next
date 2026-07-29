@@ -59,6 +59,17 @@ export function SearchSuggestions({ isOpen, onClose }: { isOpen: boolean; onClos
   }, []);
 
   useEffect(() => {
+    if (!isOpen) return;
+    const handleClickOutside = (e: MouseEvent) => {
+      if (containerRef.current && !containerRef.current.contains(e.target as Node)) {
+        onClose();
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, [isOpen, onClose]);
+
+  useEffect(() => {
     if (!isOpen) {
       if (debounceRef.current) clearTimeout(debounceRef.current);
       return;

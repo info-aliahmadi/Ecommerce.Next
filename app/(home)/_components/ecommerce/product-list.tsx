@@ -33,9 +33,9 @@ export default function ProductListCard({ product, index = 0 }: Readonly<Product
   const removeFromWishlist = useRemoveFromWishlist();
 
   const rating = product.approvedTotalReviews > 0 ? product.approvedRatingSum / product.approvedTotalReviews : 0;
-  const wishlisted = isInWishlist(product.id);
-  const inCompare = isInCompare(product.id);
   const { cheapestVariant, hasMultipleVariants, minSellPrice, maxSellPrice, totalStock } = getProductPricing(product.variants ?? []);
+  const wishlisted = isInWishlist(cheapestVariant.id);
+  const inCompare = isInCompare(cheapestVariant.id);
   const discount = cheapestVariant?.oldSellPrice ? Math.round(((cheapestVariant.oldSellPrice - cheapestVariant.sellPrice) / cheapestVariant.oldSellPrice) * 100) : 0;
   const savings = cheapestVariant?.oldSellPrice && cheapestVariant.oldSellPrice > cheapestVariant.sellPrice ? cheapestVariant.oldSellPrice - cheapestVariant.sellPrice : 0;
 

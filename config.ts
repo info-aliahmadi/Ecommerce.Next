@@ -47,6 +47,14 @@ const CONFIG = {
   POPULAR_TERMS: ['Headphones', 'T-Shirt', 'Lamp', 'Yoga', 'Perfume', 'Keyboard'],
   PRODUCTS_PER_PAGE: 10,
   FREE_SHIPPING_THRESHOLD: 500, // total amount of product in cart for free shipping
+  CONTACT_PHONE_NUMBER: '+989123456789',
+  CONTACT_EMAIL: 'support@hydrashop.com',
+  CONTACT_LINK: 'https://support.hydrashop.com',
+  CONTACT_ADDRESS: '123 Commerce Street, NY 10001',
+  FACEBOOK_LINK: 'https://www.facebook.com/hydrashop',
+  TWITTER_LINK: 'https://twitter.com/hydrashop',
+  INSTAGRAM_LINK: 'https://www.instagram.com/hydrashop',
+  YOUTUBE_LINK: '',
 };
 
 

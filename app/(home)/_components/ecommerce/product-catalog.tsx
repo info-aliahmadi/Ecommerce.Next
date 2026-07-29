@@ -34,6 +34,7 @@ import {
   SelectValue,
 } from '../ui/select';
 import { toast } from 'sonner';
+import CONFIG from '@root/config';
 
 // ── Types ──────────────────────────────────────────────
 type SortOption = 'newest' | 'oldest' | 'price-asc' | 'price-desc' | 'popular' | 'rating' | 'name-asc' | 'name-desc';
@@ -67,8 +68,6 @@ const DEFAULT_FILTERS: FilterState = {
   viewMode: 'grid',
 };
 
-const PAGE_SIZE = 12;
-
 // ── Helper: getDateRange ──────────────────────────────
 function getDateRange(filter: DateFilter): { from?: string; to?: string } {
   const now = new Date();
@@ -99,7 +98,7 @@ export function ProductCatalog() {
   const t = useTranslations();
   const { isCatalogOpen, setCatalogOpen } = useUIStore();
   const [filters, setFilters] = useState<FilterState>(DEFAULT_FILTERS);
-  const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
+  const [visibleCount, setVisibleCount] = useState(CONFIG.PRODUCTS_PER_PAGE);
   const [showMobileFilters, setShowMobileFilters] = useState(false);
   const [expandedSections, setExpandedSections] = useState<Record<string, boolean>>({
     category: true,
@@ -156,7 +155,7 @@ export function ProductCatalog() {
   // Filter update helpers
   const updateFilter = useCallback(<K extends keyof FilterState>(key: K, value: FilterState[K]) => {
     setFilters(prev => ({ ...prev, [key]: value }));
-    setVisibleCount(PAGE_SIZE);
+    setVisibleCount(CONFIG.PRODUCTS_PER_PAGE);
   }, []);
 
   const toggleCategory = useCallback((slug: string) => {
@@ -166,12 +165,12 @@ export function ProductCatalog() {
         : [...prev.categories, slug];
       return { ...prev, categories: cats };
     });
-    setVisibleCount(PAGE_SIZE);
+    setVisibleCount(CONFIG.PRODUCTS_PER_PAGE);
   }, []);
 
   const resetFilters = useCallback(() => {
     setFilters(DEFAULT_FILTERS);
-    setVisibleCount(PAGE_SIZE);
+    setVisibleCount(CONFIG.PRODUCTS_PER_PAGE);
   }, []);
 
   // Count active filters
@@ -337,7 +336,7 @@ export function ProductCatalog() {
                   step={10}
                   onValueChange={([min, max]) => {
                     setFilters(p => ({ ...p, minPrice: min, maxPrice: max }));
-                    setVisibleCount(PAGE_SIZE);
+                    setVisibleCount(CONFIG.PRODUCTS_PER_PAGE);
                   }}
                   className="py-2"
                 />
@@ -807,7 +806,7 @@ export function ProductCatalog() {
                     <div className="flex justify-center mt-10">
                       <Button
                         variant="outline"
-                        onClick={() => setVisibleCount(prev => prev + PAGE_SIZE)}
+                        onClick={() => setVisibleCount(prev => prev + CONFIG.PRODUCTS_PER_PAGE)}
                         className="rounded-xl border-ecommerce-red text-ecommerce-red hover:bg-ecommerce-red/5 px-8 gap-2 h-11"
                       >
                         {t('homepage.common.loadMore')}

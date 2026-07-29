@@ -4,6 +4,7 @@ import CONFIG from '@root/config';
 import AddressModel from '@root/app/dashboard/(ecommerce)/_types/Common/AddressModel';
 import CountryModel from '@root/app/dashboard/(ecommerce)/_types/Common/CountryModel';
 import StateProvinceModel from '@root/app/dashboard/(ecommerce)/_types/Common/StateProvinceModel';
+import ProductReviewDisplayModel from '../_types/Product/ProductReviewDisplayModel';
 
 export default class ProfileService {
   config?: RequestInit;
@@ -42,4 +43,11 @@ export default class ProfileService {
     return Fetch.Get<Result<StateProvinceModel[]>>(CONFIG.API_BASEPATH + `/Common/GetStateProvincesForSelect?${params.toString()}`, this.config);
   };
 
+  addUserReview = async (review: ProductReviewDisplayModel): Promise<Result<ProductReviewDisplayModel>> => {
+    return Fetch.Post<Result<ProductReviewDisplayModel>>(CONFIG.API_BASEPATH + '/Product/AddUserReview', review, this.config);
+  };
+  
+  updateUserReview = async (review: ProductReviewDisplayModel): Promise<Result<ProductReviewDisplayModel>> => {
+    return Fetch.Post<Result<ProductReviewDisplayModel>>(CONFIG.API_BASEPATH + '/Product/UpdateUserReview', review, this.config);
+  };
 }

@@ -13,11 +13,11 @@ function StarRatingInput({
   value,
   onChange,
   size = 24,
-}: {
+}: Readonly<{
   value: number;
   onChange: (v: number) => void;
   size?: number;
-}) {
+}>) {
   const [hover, setHover] = useState(0);
   return (
     <div className="flex items-center gap-1">

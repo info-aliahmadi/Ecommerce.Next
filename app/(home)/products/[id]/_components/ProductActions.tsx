@@ -33,11 +33,11 @@ export default function ProductActions({
   const addItem = useCartStore((s) => s.addItem);
   const setCartOpen = useCartStore((s) => s.setCartOpen);
   const { toggleItem, isInWishlist } = useWishlistStore();
-  const { addItem: addCompareItem } = useCompareStore();
+  const { addItem: addCompareItem, isInCompare } = useCompareStore();
   const { handleAddToCartWithAnimation } = useFlyToCart();
   const addToWishlist = useAddToWishlist();
   const removeFromWishlist = useRemoveFromWishlist();
-
+  const inCompare = isInCompare(selectedVariant?.id ?? 0);
   const { cheapestVariant, totalStock } = getProductPricing(product.variants ?? []);
   const activeVariant = selectedVariant ?? cheapestVariant;
 
@@ -166,10 +166,10 @@ export default function ProductActions({
           variant="outline"
           size="icon"
           onClick={handleAddToCompare}
-          className="h-10 w-10 rounded-lg border-ecommerce-border text-ecommerce-text-secondary hover:border-ecommerce-purple hover:text-ecommerce-purple transition-all"
+          className={`flex-1 h-10 rounded-lg gap-2 text-sm border-ecommerce-border text-ecommerce-text-secondary hover:border-ecommerce-teal hover:text-ecommerce-teal transition-all ${inCompare ? 'bg-ecommerce-teal/10 dark:bg-ecommerce-teal/10' : 'hover:bg-ecommerce-teal hover:text-white'}`}
           aria-label={t('homepage.common.compare')}
         >
-          <GitCompare size={15} />
+          <GitCompare size={15} className={inCompare ? 'text-ecommerce-teal' : 'text-ecommerce-text-secondary'} />
         </Button>
       </div>
     </>

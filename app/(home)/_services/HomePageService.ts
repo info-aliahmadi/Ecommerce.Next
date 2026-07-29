@@ -22,6 +22,7 @@ import CuratedStyleProductModel from "../_types/Product/CuratedStyleProductModel
 import BundleDisplayModel from "../_types/Product/BundleDisplayModel";
 import SlideshowDisplayModel from "../_types/SlideshowDisplayModel";
 import SubscribeUserModel from "../_types/SubscribeUserModel";
+import ProductReviewDisplayModel from "../_types/Product/ProductReviewDisplayModel";
 
 export default class HomePageService {
 
@@ -188,8 +189,18 @@ export default class HomePageService {
    */
   async getProductAttributesByType(attributeTypes: AttributeType[]): Promise<Result<ProductAttributeDisplayModel[]>> {
     // convert the attribute types to joined string
-    let joinedAttributeTypes = attributeTypes.join(',')
-    let result = await Fetch.Get<Result<ProductAttributeDisplayModel[]>>(`${this.baseUrl}/Product/GetProductAttributesByType?attributeTypes=${joinedAttributeTypes}`, this.config);
+    let joinedAttributeTypes = attributeTypes.join(',');
+    const params = new URLSearchParams({ attributeTypes: joinedAttributeTypes.toString() });
+    let result = await Fetch.Get<Result<ProductAttributeDisplayModel[]>>(`${this.baseUrl}/Product/GetProductAttributesByType?${params.toString()}`, this.config);
+    return result;
+  }
+
+  /**
+   * Get Product Reviews
+   */
+  async getProductReviews(productId: number): Promise<Result<ProductReviewDisplayModel[]>> {
+    const params = new URLSearchParams({ productId: productId.toString() });
+    let result = await Fetch.Get<Result<ProductReviewDisplayModel[]>>(`${this.baseUrl}/Product/GetProductReviews?${params.toString()}`, this.config);
     return result;
   }
 

@@ -6,13 +6,12 @@ import { Separator } from '../../../_components/ui/separator';
 import { Badge } from '../../../_components/ui/badge';
 import CurrencyViewer from '@root/utils/CurrencyViewer';
 import CONFIG from '@root/config';
-import ProductDisplayModel from '../../../_types/Product/ProductDisplayModel';
-import ProductVariantDisplayModel from '../../../_types/ProductVariantDisplayModel';
-import { getProductPricing } from '../../../_types/Product/ProductDisplayModel';
 import AttributeType from '@root/app/types/enums/AttributeType';
 import VariantSelector from './VariantSelector';
 import QuantitySelector from './QuantitySelector';
 import ProductActions from './ProductActions';
+import ProductDisplayModel, { getProductPricing } from '@root/app/(home)/_types/Product/ProductDisplayModel';
+import ProductVariantDisplayModel from '@root/app/(home)/_types/Product/ProductVariantDisplayModel';
 
 interface ProductPurchaseSectionProps {
   product: ProductDisplayModel;
