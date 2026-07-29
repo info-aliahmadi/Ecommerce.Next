@@ -809,6 +809,8 @@
       "scrollToReviews": "Scroll to reviews",
       "writeReview": "Write a Review",
       "yourReview": "Your Review",
+      "loginToReview": "Please login to write a review",
+      "updateReview": "Update Review",
       "submitReview": "Submit Review",
       "reviewSubmitted": "Review submitted successfully!",
       "productDescription": "Product Description",

@@ -9,6 +9,7 @@ import { GetImage } from '../../_lib/utils';
 // Client components (only for interactive parts)
 import ImageGallery from './_components/ImageGallery';
 import ProductPurchaseSection from './_components/ProductPurchaseSection';
+import ReviewSummary from './_components/ReviewSummary';
 import ProductReviews from './_components/ProductReviews';
 import { Header } from '../../_components/ecommerce/header';
 import { Footer } from '../../_components/ecommerce/footer';
@@ -307,7 +308,7 @@ export default async function ProductDetailPage({
 
                      {/* Reviews - Breakdown + List */}
                      <div className="md:col-span-2">
-                       <ProductReviews reviews={reviews} />
+                       <ProductReviews productId={product.id} reviews={reviews} />
                      </div>
                   </div>
                 </TabsContent>

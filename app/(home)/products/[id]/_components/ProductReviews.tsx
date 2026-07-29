@@ -3,11 +3,11 @@
 import { useSession } from 'next-auth/react';
 import { useTranslations } from 'next-intl';
 import ProductReviewDisplayModel from '../../../_types/Product/ProductReviewDisplayModel';
-import { Star, User, Pencil } from 'lucide-react';
+import { Star, User } from 'lucide-react';
 import { useLocaleStore } from '../../../_lib/store';
 import ReviewForm from './ReviewForm';
 
-export default function ProductReviews({ reviews = [] }: { reviews?: ProductReviewDisplayModel[] }) {
+export default function ProductReviews({ productId, reviews = [] }: { productId: number; reviews?: ProductReviewDisplayModel[] }) {
   const { data: session } = useSession();
   const t = useTranslations('');
   const locale = useLocaleStore((s) => s.locale);
@@ -58,7 +58,7 @@ export default function ProductReviews({ reviews = [] }: { reviews?: ProductRevi
         )}
       </div>
 
-      {/* User's Existing Review / Form */}
+      {/* User's Existing Review */}
       {userReview && (
         <div className="bg-ecommerce-surface/50 dark:bg-ecommerce-surface rounded-2xl border border-ecommerce-border p-5">
           <div className="flex items-center justify-between mb-2">
@@ -67,6 +67,34 @@ export default function ProductReviews({ reviews = [] }: { reviews?: ProductRevi
             </h4>
           </div>
           <ReviewForm productId={userReview.productId} existingReview={userReview} />
+        </div>
+      )}
+
+      {/* Write Review (only if user is logged in and hasn't reviewed yet) */}
+      {!userReview && session?.user?.accessToken && (
+        <div className="bg-ecommerce-surface/50 dark:bg-ecommerce-surface rounded-2xl border border-ecommerce-border p-5">
+          <h4 className="text-sm font-semibold text-ecommerce-text-primary mb-4">
+            {t('homepage.productDetail.writeReview')}
+          </h4>
+          <ReviewForm productId={productId} />
+        </div>
+      )}
+
+      {/* Login prompt for non-authenticated users */}
+      {!userReview && !session?.user?.accessToken && (
+        <div className="bg-ecommerce-surface/50 dark:bg-ecommerce-surface rounded-2xl border border-ecommerce-border p-6 text-center">
+          <h4 className="text-sm font-semibold text-ecommerce-text-primary mb-2">
+            {t('homepage.productDetail.writeReview')}
+          </h4>
+          <p className="text-sm text-ecommerce-text-muted mb-3">
+            {t('homepage.productDetail.loginToReview') || 'Please login to write a review'}
+          </p>
+          <button
+            onClick={() => window.location.href = '/login'}
+            className="h-9 px-4 bg-ecommerce-red hover:bg-ecommerce-red/90 text-white text-sm font-medium rounded-lg"
+          >
+            {t('homepage.common.login') || 'Login'}
+          </button>
         </div>
       )}
 
