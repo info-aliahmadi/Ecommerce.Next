@@ -67,7 +67,9 @@
       "saveFrom": "وفّر من ${amount}",
       "pleaseTryAgain": "يرجى المحاولة لاحقاً",
       "retry": "إعادة المحاولة",
-      "newArrivalsBadge": "New"
+      "newArrivalsBadge": "New",
+      "loading": "جاري التحميل...",
+      "login": "تسجيل الدخول"
     },
     "auth": {
       "login": {

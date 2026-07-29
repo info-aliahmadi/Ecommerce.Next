@@ -132,6 +132,7 @@ export default function ReviewForm({ productId, existingReview }: { productId: n
         value={reviewText}
         onChange={(e) => setReviewText(e.target.value)}
         rows={3}
+        maxLength={300}
         className="text-sm border-ecommerce-border resize-none"
         required
       />

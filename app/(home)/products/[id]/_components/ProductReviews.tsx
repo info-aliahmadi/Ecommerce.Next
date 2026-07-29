@@ -90,7 +90,7 @@ export default function ProductReviews({ productId, reviews = [] }: { productId:
             {t('homepage.productDetail.loginToReview') || 'Please login to write a review'}
           </p>
           <button
-            onClick={() => window.location.href = '/login'}
+            onClick={() => window.location.href = '/login?callbackUrl=/products/' + productId}
             className="h-9 px-4 bg-ecommerce-red hover:bg-ecommerce-red/90 text-white text-sm font-medium rounded-lg"
           >
             {t('homepage.common.login') || 'Login'}

@@ -67,7 +67,9 @@
       "saveFrom": "Saving from ${amount}",
       "pleaseTryAgain": "Please try again later",
       "retry": "Retry",
-      "newArrivalsBadge": "New"
+      "newArrivalsBadge": "New",
+      "loading": "Loading...",
+      "login": "Login"
     },
     "auth": {
       "login": {
