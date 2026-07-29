@@ -1,15 +1,15 @@
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
-import { getLocale, getTranslations } from 'next-intl/server';
+import { getTranslations } from 'next-intl/server';
 import CONFIG from '@root/config';
 import ProductDisplayModel from '../../_types/Product/ProductDisplayModel';
+import ProductReviewDisplayModel from '../../_types/Product/ProductReviewDisplayModel';
 import { GetImage } from '../../_lib/utils';
 
 // Client components (only for interactive parts)
 import ImageGallery from './_components/ImageGallery';
 import ProductPurchaseSection from './_components/ProductPurchaseSection';
-import ReviewForm from './_components/ReviewForm';
-import ReviewSummary from './_components/ReviewSummary';
+import ProductReviews from './_components/ProductReviews';
 import { Header } from '../../_components/ecommerce/header';
 import { Footer } from '../../_components/ecommerce/footer';
 import { CartDrawer } from '../../_components/ecommerce/cart-drawer';
@@ -39,30 +39,28 @@ import {
   Calendar,
 } from 'lucide-react';
 import DeliveryDateType from '@root/app/types/enums/DeliveryDateType';
+import HomePageService from '../../_services/HomePageService';
 
 // ── Server-side data fetch ─────────────────────────────
 async function getProduct(id: number): Promise<ProductDisplayModel | null> {
   try {
-    const locale = await getLocale();
-    const response = await fetch(
-      `${CONFIG.API_BASEPATH}/Product/GetProduct?productId=${id}`,
-      {
-        headers: {
-          Accept: 'application/json',
-          'Accept-Language': locale,
-        },
-        next: { revalidate: 60 },
-      }
-    );
-
-    if (!response.ok) return null;
-
-    const result = await response.json();
-    if (!result.succeeded) return null;
-
-    return result.data;
+    const service = new HomePageService();
+    const result = await service.getProductById(id);
+    if (result.succeeded && result.data) return result.data;
+    return null;
   } catch {
     return null;
+  }
+}
+
+async function getReviews(productId: number): Promise<ProductReviewDisplayModel[]> {
+  try {
+    const service = new HomePageService();
+    const result = await service.getProductReviews(productId);
+    if (result.succeeded && result.data) return result.data;
+    return [];
+  } catch {
+    return [];
   }
 }
 
@@ -79,9 +77,7 @@ export async function generateMetadata({
     return { title: 'Product Not Found' };
   }
 
-  const imageUrl = product.imagePaths?.[0]
-    ? `${CONFIG.API_BASEPATH}${product.imagePaths[0]}`
-    : CONFIG.UNKNOWN_IMAGE_BASEPATH;
+  const imageUrl = GetImage(product.imagePreview, true);
 
   return {
     title: product.metaTitle || product.name,
@@ -109,10 +105,11 @@ export default async function ProductDetailPage({
 }) {
   const { id } = await params;
   const product = await getProduct(Number(id));
-
   if (!product) {
     notFound();
   }
+
+  const reviews = await getReviews(Number(id));
 
   const t = await getTranslations('');
   const now = new Date();
@@ -288,7 +285,7 @@ export default async function ProductDetailPage({
                     {/* Rating Summary - Server rendered */}
                     <div className="bg-ecommerce-surface/50 dark:bg-ecommerce-surface rounded-2xl border border-ecommerce-border p-6 flex flex-col items-center justify-center text-center">
                       <div className="text-5xl font-bold text-ecommerce-text-primary">
-                        {product.approvedRatingSum.toFixed(1)}
+                        {(product.approvedRatingSum || 0).toFixed(1)}
                       </div>
                       <div className="flex items-center gap-0.5 mt-2 mb-1">
                         {Array.from({ length: 5 }).map((_, i) => (
@@ -296,7 +293,7 @@ export default async function ProductDetailPage({
                             key={i}
                             size={18}
                             className={
-                              i < Math.floor(product.approvedRatingSum)
+                              i < Math.floor(product.approvedRatingSum || 0)
                                 ? 'fill-ecommerce-amber text-ecommerce-amber'
                                 : 'text-ecommerce-border'
                             }
@@ -308,20 +305,10 @@ export default async function ProductDetailPage({
                       </p>
                     </div>
 
-                    {/* Rating Breakdown - Server rendered */}
-                    <div className="bg-ecommerce-surface/50 dark:bg-ecommerce-surface rounded-2xl border border-ecommerce-border p-6">
-                      <h4 className="text-sm font-semibold text-ecommerce-text-primary mb-4">
-                        {t('homepage.productDetail.rating')} {t('homepage.productDetail.reviewsTab').toLowerCase()}
-                      </h4>
-                    </div>
-
-                    {/* Write Review - Client form */}
-                    <div className="bg-ecommerce-surface/50 dark:bg-ecommerce-surface rounded-2xl border border-ecommerce-border p-6">
-                      <h4 className="text-sm font-semibold text-ecommerce-text-primary mb-4">
-                        {t('homepage.productDetail.writeReview')}
-                      </h4>
-                      <ReviewForm productId={product.id} />
-                    </div>
+                     {/* Reviews - Breakdown + List */}
+                     <div className="md:col-span-2">
+                       <ProductReviews reviews={reviews} />
+                     </div>
                   </div>
                 </TabsContent>
 
