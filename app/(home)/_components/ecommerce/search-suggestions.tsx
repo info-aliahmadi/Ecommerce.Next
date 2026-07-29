@@ -9,6 +9,7 @@ import { useTranslations } from 'next-intl';
 import HomePageService from '../../_services/HomePageService';
 import CONFIG from '@root/config';
 import ProductDisplayModel from '../../_types/Product/ProductDisplayModel';
+import CurrencyViewer from '@root/utils/CurrencyViewer';
 
 interface RecentSearch {
   query: string;
@@ -222,7 +223,7 @@ export function SearchSuggestions({ isOpen, onClose }: { isOpen: boolean; onClos
               />
               <div className="flex-1 min-w-0">
                 <p className="text-sm text-ecommerce-text-primary truncate group-hover:text-ecommerce-red transition-colors">{item.name}</p>
-                <p className="text-[11px] text-ecommerce-text-muted">{item.category.name} · ${item.price.toFixed(2)}</p>
+                <p className="text-[11px] text-ecommerce-text-muted">{item.category.name} · {CurrencyViewer(item.price, CONFIG.DEFAULT_CURRENCY)}</p>
               </div>
             </button>
           ))}

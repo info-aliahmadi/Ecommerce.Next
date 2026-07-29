@@ -95,7 +95,7 @@ export function CartDrawer() {
   const [discount, setDiscount] = useState(0);
 
   // Free shipping progress
-  const freeShippingThreshold = 50;
+  const freeShippingThreshold = CONFIG.FREE_SHIPPING_THRESHOLD;
   const progress = Math.min((price / freeShippingThreshold) * 100, 100);
   const remainingForFreeShipping = Math.max(freeShippingThreshold - price, 0);
 
@@ -112,7 +112,7 @@ export function CartDrawer() {
     }
 
     if (promo.type === 'percentage') {
-      const discountAmount = parseFloat(((price * promo.value) / 100).toFixed(2));
+      const discountAmount = parseFloat(( price * promo.value / 100 ).toFixed(2));
       setDiscount(discountAmount);
     } else {
       // Free shipping - no monetary discount, just free shipping

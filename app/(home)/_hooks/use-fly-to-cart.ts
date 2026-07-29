@@ -6,6 +6,8 @@ import { useCartStore } from '../_lib/store';
 import { toast } from 'sonner';
 import CartItem from '../_types/Order/CartItem';
 import { useAddToCart } from './use-cart-queries';
+import CurrencyViewer from '@root/utils/CurrencyViewer';
+import CONFIG from '@root/config';
 
 
 export function useFlyToCart() {
@@ -15,7 +17,7 @@ export function useFlyToCart() {
   const jwt = useCartStore((s) => s.jwt);
 
   const handleAddToCartWithAnimation = useCallback(
-    (e: React.MouseEvent, imageUrl : string, cartItem: CartItem) => {
+    (e: React.MouseEvent, imageUrl: string, cartItem: CartItem) => {
       e.preventDefault();
       e.stopPropagation();
 
@@ -31,7 +33,7 @@ export function useFlyToCart() {
 
       // Show toast
       toast.success(`${cartItem.name} added to cart!`, {
-        description: `$${cartItem.variant.sellPrice.toFixed(2)}`,
+        description: `${CurrencyViewer(cartItem.variant.sellPrice, CONFIG.DEFAULT_CURRENCY)}`,
         action: {
           label: 'View Cart',
           onClick: () => useCartStore.getState().setCartOpen(true),
@@ -39,7 +41,7 @@ export function useFlyToCart() {
       });
 
       // Trigger fly-to-cart animation
-      triggerFlyToCart(imageUrl , sourceElement as HTMLElement);
+      triggerFlyToCart(imageUrl, sourceElement as HTMLElement);
     },
     [jwt, addToCart, addItemStore],
   );

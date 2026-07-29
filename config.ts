@@ -44,7 +44,9 @@ const CONFIG = {
   TIME_STYLE: 'short', // "full" | "long" | "medium" | "short"
   LTR_FONTS_EDITOR: '"Poppins", Arial, tohoma',
   RTL_FONTS_EDITOR: '"Iran Sans", Arial, tohoma',
-  POPULAR_TERMS: ['Headphones', 'T-Shirt', 'Lamp', 'Yoga', 'Perfume', 'Keyboard']
+  POPULAR_TERMS: ['Headphones', 'T-Shirt', 'Lamp', 'Yoga', 'Perfume', 'Keyboard'],
+  PRODUCTS_PER_PAGE: 10,
+  FREE_SHIPPING_THRESHOLD: 500, // total amount of product in cart for free shipping
 };
 
 

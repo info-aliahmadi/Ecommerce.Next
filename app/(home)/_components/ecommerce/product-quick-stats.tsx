@@ -5,8 +5,10 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { BarChart3, Eye, Heart, ShoppingCart, ChevronUp } from 'lucide-react';
 import { useCartStore, useWishlistStore, useRecentStore } from '../../_lib/store';
 import { useTranslations } from 'next-intl';
+import CurrencyViewer from '@root/utils/CurrencyViewer';
+import CONFIG from '@root/config';
 
-const emptySubscribe = () => () => {};
+const emptySubscribe = () => () => { };
 function useHasMounted() {
   return useSyncExternalStore(
     emptySubscribe,
@@ -127,7 +129,7 @@ export function ProductQuickStats() {
                   <div className="flex-1 min-w-0">
                     <p className="text-[11px] text-ecommerce-text-muted">{t('homepage.quickStats.inCart')}</p>
                     <p className="text-sm font-bold text-ecommerce-text-primary tabular-nums">
-                      ${totalCartPrice.toFixed(2)}
+                      {CurrencyViewer(totalCartPrice, CONFIG.DEFAULT_CURRENCY)}
                     </p>
                   </div>
                 </div>

@@ -12,6 +12,10 @@ import { Separator } from '@(home)/_components/ui/separator';
 import CartItem from '@root/app/(home)/_types/Order/CartItem';
 import { GetImage } from '@(home)/_lib/utils';
 import { ShippingForm, PaymentForm, VALID_PROMOS } from './types';
+import PaymentType from '@root/app/types/enums/PaymentType';
+import PaymentMethod from '@root/app/types/enums/PaymentMethod';
+import CurrencyViewer from '@root/utils/CurrencyViewer';
+import CONFIG from '@root/config';
 
 interface ReviewStepProps {
   items: CartItem[];
@@ -77,11 +81,11 @@ export function ReviewStep({
                   {item.name}
                 </p>
                 <p className="text-xs text-ecommerce-text-muted mt-0.5">
-                  ${item.variant.sellPrice.toFixed(2)} × {item.quantity}
+                  {CurrencyViewer(item.variant.sellPrice, CONFIG.DEFAULT_CURRENCY)} × {item.quantity}
                 </p>
               </div>
               <span className="text-sm font-bold text-ecommerce-text-primary shrink-0">
-                ${(item.variant.sellPrice * item.quantity).toFixed(2)}
+                {CurrencyViewer((item.variant.sellPrice * item.quantity), CONFIG.DEFAULT_CURRENCY)}
               </span>
             </div>
           ))}
@@ -137,9 +141,9 @@ export function ReviewStep({
         <div className="p-3 rounded-xl bg-ecommerce-surface-hover border border-ecommerce-border text-sm text-ecommerce-text-secondary">
           <div className="flex items-center gap-3">
             <div className="w-9 h-9 rounded-lg bg-ecommerce-red/10 flex items-center justify-center">
-              {payment.method === 'card' ? (
+              {payment.method === PaymentMethod.CreditCard ? (
                 <CreditCard size={16} className="text-ecommerce-red" />
-              ) : payment.method === 'paypal' ? (
+              ) : payment.method === PaymentMethod.PayPal ? (
                 <Shield size={16} className="text-ecommerce-red" />
               ) : (
                 <Truck size={16} className="text-ecommerce-red" />
@@ -147,17 +151,12 @@ export function ReviewStep({
             </div>
             <div>
               <p className="font-medium text-ecommerce-text-primary">
-                {payment.method === 'card'
+                {payment.method === PaymentMethod.CreditCard
                   ? t('creditCard')
-                  : payment.method === 'paypal'
+                  : payment.method === PaymentMethod.PayPal
                     ? t('paypal')
                     : t('cashOnDelivery')}
               </p>
-              {payment.method === 'card' && payment.cardNumber && (
-                <p className="text-xs text-ecommerce-text-muted mt-0.5">
-                  **** {payment.cardNumber.replace(/\s/g, '').slice(-4)}
-                </p>
-              )}
             </div>
           </div>
         </div>
@@ -169,13 +168,13 @@ export function ReviewStep({
       <section className="space-y-2.5 text-sm">
         <div className="flex justify-between">
           <span className="text-ecommerce-text-muted">{t('subtotal')}</span>
-          <span className="font-medium text-ecommerce-text-primary">${subtotal.toFixed(2)}</span>
+          <span className="font-medium text-ecommerce-text-primary">{CurrencyViewer(subtotal, CONFIG.DEFAULT_CURRENCY)}</span>
         </div>
         {savings > 0 && (
           <div className="flex justify-between">
             <span className="text-ecommerce-emerald">{t('youSave')}</span>
             <span className="font-medium text-ecommerce-emerald">
-              -${savings.toFixed(2)}
+              {CurrencyViewer(savings, CONFIG.DEFAULT_CURRENCY)}
             </span>
           </div>
         )}
@@ -185,19 +184,19 @@ export function ReviewStep({
             {shippingCost === 0 ? (
               <span className="text-ecommerce-emerald">{t('freeShipping')}</span>
             ) : (
-              `$${shippingCost.toFixed(2)}`
+              `${CurrencyViewer(shippingCost, CONFIG.DEFAULT_CURRENCY)}`
             )}
           </span>
         </div>
-        <div className="flex justify-between">
+        {/* <div className="flex justify-between">
           <span className="text-ecommerce-text-muted">{t('tax')} (8%)</span>
-          <span className="font-medium text-ecommerce-text-primary">${tax.toFixed(2)}</span>
-        </div>
+          <span className="font-medium text-ecommerce-text-primary">{CurrencyViewer(tax, CONFIG.DEFAULT_CURRENCY)}</span>
+        </div> */}
         {discountAmount > 0 && (
           <div className="flex justify-between">
             <span className="text-ecommerce-emerald">{t('discount')}</span>
             <span className="font-medium text-ecommerce-emerald">
-              -${discountAmount.toFixed(2)}
+              {CurrencyViewer(discountAmount, CONFIG.DEFAULT_CURRENCY)}
             </span>
           </div>
         )}
@@ -205,7 +204,7 @@ export function ReviewStep({
         <div className="flex justify-between">
           <span className="text-base font-bold text-ecommerce-text-primary">{t('total')}</span>
           <span className="text-xl font-extrabold text-ecommerce-red">
-            ${total.toFixed(2)}
+            {CurrencyViewer(total, CONFIG.DEFAULT_CURRENCY)}
           </span>
         </div>
       </section>
@@ -283,7 +282,7 @@ export function ReviewStep({
         ) : (
           <>
             <Lock size={18} />
-            {t('placeOrder')} — ${total.toFixed(2)}
+            {t('placeOrder')} — {CurrencyViewer(total, CONFIG.DEFAULT_CURRENCY)}
           </>
         )}
       </Button>

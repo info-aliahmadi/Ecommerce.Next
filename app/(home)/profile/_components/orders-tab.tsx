@@ -8,6 +8,8 @@ import { Package, ChevronRight } from 'lucide-react';
 import { Card, CardContent } from '../../_components/ui/card';
 import { Button } from '../../_components/ui/button';
 import { MockOrder, STATUS_CONFIG, staggerContainer, staggerItem } from './types';
+import CurrencyViewer from '@root/utils/CurrencyViewer';
+import CONFIG from '@root/config';
 
 const MOCK_ORDERS: MockOrder[] = [
   { id: 'o1', orderNum: 1247, date: '2024-12-15', status: 'delivered', items: 3, total: 289.97 },
@@ -67,7 +69,7 @@ export function OrdersTab() {
                     </div>
                     <div className="flex items-center gap-4">
                       <span className="text-base font-bold text-ecommerce-text-primary">
-                        {t('homepage.profile.orderTotal', { amount: order.total.toFixed(2) })}
+                        {t('homepage.profile.orderTotal', { amount: CurrencyViewer(order.total, CONFIG.DEFAULT_CURRENCY) })}
                       </span>
                       <Button variant="outline" size="sm" className="border-ecommerce-border hover:border-ecommerce-red hover:text-ecommerce-red transition-colors shrink-0">
                         {t('homepage.profile.viewOrder')}

@@ -10,6 +10,8 @@ import { toast } from 'sonner';
 import { useTranslations } from 'next-intl';
 import ProductDisplayModel, { getProductPricing } from '../../_types/Product/ProductDisplayModel';
 import { GetImage } from '../../_lib/utils';
+import CurrencyViewer from '@root/utils/CurrencyViewer';
+import CONFIG from '@root/config';
 
 export function RecentlyViewed() {
   const t = useTranslations();
@@ -123,24 +125,24 @@ export function RecentlyViewed() {
                         const { hasMultipleVariants, minSellPrice, maxSellPrice } = getProductPricing(item.variants ?? []);
                         return (
                           <span className="text-sm font-bold text-ecommerce-text-primary mt-2">
-                            {hasMultipleVariants ? `$${minSellPrice.toFixed(2)} - $${maxSellPrice.toFixed(2)}` : `$${minSellPrice.toFixed(2)}`}
+                            {hasMultipleVariants ? `${CurrencyViewer(minSellPrice, CONFIG.DEFAULT_CURRENCY)} - ${CurrencyViewer(maxSellPrice, CONFIG.DEFAULT_CURRENCY)}` : CurrencyViewer(minSellPrice, CONFIG.DEFAULT_CURRENCY)}
                           </span>
                         );
                       })()}
-                       <button
-                         disabled={item.stockQuantity === 0}
-                         onClick={() => {
-                           const { cheapestVariant } = getProductPricing(item.variants ?? []);
-                           if (!cheapestVariant) return;
-                           addToCart.mutate({
-                             id: item.id,
-                             name: item.name,
-                             variant: cheapestVariant,
-                             image: item.imagePreview,
-                             categories: item.categories
-                           });
-                           toast.success(t('homepage.cart.itemAdded', { name: item.name }));
-                         }}
+                      <button
+                        disabled={item.stockQuantity === 0}
+                        onClick={() => {
+                          const { cheapestVariant } = getProductPricing(item.variants ?? []);
+                          if (!cheapestVariant) return;
+                          addToCart.mutate({
+                            id: item.id,
+                            name: item.name,
+                            variant: cheapestVariant,
+                            image: item.imagePreview,
+                            categories: item.categories
+                          });
+                          toast.success(t('homepage.cart.itemAdded', { name: item.name }));
+                        }}
                         className="mt-3 w-full h-9 rounded-lg bg-ecommerce-red/10 text-ecommerce-red text-xs font-semibold flex items-center justify-center gap-1.5 hover:bg-ecommerce-red hover:text-white transition-all duration-200 disabled:opacity-50"
                       >
                         <ShoppingCart size={13} />

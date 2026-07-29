@@ -10,6 +10,8 @@ import { Separator } from '@(home)/_components/ui/separator';
 import CartItem from '@root/app/(home)/_types/Order/CartItem';
 import { GetImage } from '@(home)/_lib/utils';
 import { VALID_PROMOS } from './types';
+import CurrencyViewer from '@root/utils/CurrencyViewer';
+import CONFIG from '@root/config';
 
 interface OrderSummaryProps {
   items: CartItem[];
@@ -49,7 +51,7 @@ export function OrderSummary({
   onPromoInputClearError,
   onShowPromoInput,
   onKeyDown,
-}: OrderSummaryProps) {
+}: Readonly<OrderSummaryProps>) {
   const t = useTranslations('homepage.paymentPage');
 
   return (
@@ -78,7 +80,7 @@ export function OrderSummary({
                 </p>
               </div>
               <span className="text-sm font-bold text-ecommerce-text-primary shrink-0">
-                ${(item.variant.sellPrice * item.quantity).toFixed(2)}
+                {CurrencyViewer((item.variant.sellPrice * item.quantity), CONFIG.DEFAULT_CURRENCY)}
               </span>
             </div>
           ))}
@@ -146,13 +148,13 @@ export function OrderSummary({
         <div className="space-y-2.5 text-sm">
           <div className="flex justify-between">
             <span className="text-ecommerce-text-muted">{t('subtotal')}</span>
-            <span className="font-medium text-ecommerce-text-primary">${subtotal.toFixed(2)}</span>
+            <span className="font-medium text-ecommerce-text-primary">{CurrencyViewer(subtotal, CONFIG.DEFAULT_CURRENCY)}</span>
           </div>
           {savings > 0 && (
             <div className="flex justify-between">
               <span className="text-ecommerce-emerald">{t('youSave')}</span>
               <span className="font-medium text-ecommerce-emerald">
-                -${savings.toFixed(2)}
+                -{CurrencyViewer(savings, CONFIG.DEFAULT_CURRENCY)}
               </span>
             </div>
           )}
@@ -162,19 +164,19 @@ export function OrderSummary({
               {shippingCost === 0 ? (
                 <span className="text-ecommerce-emerald">{t('freeShipping')}</span>
               ) : (
-                `$${shippingCost.toFixed(2)}`
+                `${CurrencyViewer(shippingCost, CONFIG.DEFAULT_CURRENCY)}`
               )}
             </span>
           </div>
-          <div className="flex justify-between">
+          {tax > 0 && <div className="flex justify-between">
             <span className="text-ecommerce-text-muted">{t('tax')}</span>
-            <span className="font-medium text-ecommerce-text-primary">${tax.toFixed(2)}</span>
-          </div>
+            <span className="font-medium text-ecommerce-text-primary">{CurrencyViewer(tax, CONFIG.DEFAULT_CURRENCY)}</span>
+          </div>}
           {discountAmount > 0 && (
             <div className="flex justify-between">
               <span className="text-ecommerce-emerald">{t('discount')}</span>
               <span className="font-medium text-ecommerce-emerald">
-                -${discountAmount.toFixed(2)}
+                -{CurrencyViewer(discountAmount, CONFIG.DEFAULT_CURRENCY)}
               </span>
             </div>
           )}
@@ -182,7 +184,7 @@ export function OrderSummary({
           <div className="flex justify-between">
             <span className="text-base font-bold text-ecommerce-text-primary">{t('total')}</span>
             <span className="text-xl font-extrabold text-ecommerce-red">
-              ${total.toFixed(2)}
+              {CurrencyViewer(total, CONFIG.DEFAULT_CURRENCY)}
             </span>
           </div>
         </div>

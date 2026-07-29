@@ -9,6 +9,8 @@ import { toast } from 'sonner';
 import { motion } from 'framer-motion';
 import { useTranslations } from 'next-intl';
 import HomePageService from '../../_services/HomePageService';
+import CurrencyViewer from '@root/utils/CurrencyViewer';
+import CONFIG from '@root/config';
 
 const FOOTER_LINK_KEYS = ['shop', 'support', 'company'] as const;
 
@@ -127,7 +129,10 @@ export function Footer() {
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             {[
               { icon: CreditCard, title: t('homepage.footer.securePayments'), desc: t('homepage.footer.sslEncryptedCheckout') },
-              { icon: Truck, title: t('homepage.footer.expressDelivery'), desc: t('homepage.footer.freeOnOrders') },
+              {
+                icon: Truck, title: t('homepage.footer.expressDelivery'),
+                desc: t('homepage.footer.freeOnOrders', { amount: CurrencyViewer(CONFIG.FREE_SHIPPING_THRESHOLD, CONFIG.DEFAULT_CURRENCY) })
+              },
               { icon: RotateCcw, title: t('homepage.footer.easyReturnsFooter'), desc: t('homepage.footer.returnGuarantee') },
             ].map((item) => (
               <div key={item.title} className="flex items-center gap-3 px-4 py-3 rounded-xl bg-white/[0.03] border border-white/[0.05] hover:bg-white/[0.06] transition-colors">

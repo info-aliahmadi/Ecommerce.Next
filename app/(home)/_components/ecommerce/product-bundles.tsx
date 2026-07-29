@@ -10,10 +10,10 @@ import { useTranslations } from 'next-intl';
 import ProductDisplayModel, { getProductPricing } from '../../_types/Product/ProductDisplayModel';
 import HomePageService from '../../_services/HomePageService';
 import { useQuery } from '@tanstack/react-query';
-import BundleDisplayModel from '../../_types/BundleDisplayModel';
 import { GetImage } from '../../_lib/utils';
 import CurrencyViewer from '@root/utils/CurrencyViewer';
 import CONFIG from '@root/config';
+import BundleDisplayModel from '../../_types/Product/BundleDisplayModel';
 
 
 
