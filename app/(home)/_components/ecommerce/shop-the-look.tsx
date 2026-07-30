@@ -6,11 +6,11 @@ import { Sparkles, ShoppingCart, Plus } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import ProductDisplayModel from '../../_types/Product/ProductDisplayModel';
 import { GetImage } from '../../_lib/utils';
-import CuratedStyleProductModel from '../../_types/CuratedStyleProductModel';
 import { useQuery } from '@tanstack/react-query';
 import HomePageService from '../../_services/HomePageService';
 import Link from 'next/link';
 import { useUIStore } from '../../_lib/store';
+import CuratedStyleProductModel from '../../_types/Product/CuratedStyleProductModel';
 
 function ProductThumbnails({ products }: { products: ProductDisplayModel[] }) {
   const t = useTranslations();
@@ -104,7 +104,7 @@ function LookCard({
         <div className="flex items-center justify-between gap-3">
           <ProductThumbnails products={look.products} />
           <Link
-            href={`/products?attributes=${look.attributeId}`}
+            href={`/products?attributes=${look.attributeKey}`}
             className="inline-flex items-center gap-2 px-4 py-2.5 bg-ecommerce-red hover:bg-ecommerce-red/90 text-white text-sm font-semibold rounded-xl transition-all duration-200 hover:scale-[1.02] active:scale-95 shrink-0"
           >
             <ShoppingCart size={15} />
