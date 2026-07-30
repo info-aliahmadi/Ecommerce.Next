@@ -1,6 +1,7 @@
 'use client';
 
-import { Star, ChevronLeft, ChevronRight, Truck, Shield, RotateCcw, Headphones, Sparkles, TrendingUp, Award, Clock } from 'lucide-react';
+import { StarRating } from '../ui/star-rating';
+import { ChevronLeft, ChevronRight, Truck, Shield, RotateCcw, Headphones, Sparkles, TrendingUp, Award, Clock, Star } from 'lucide-react';
 import { useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTranslations } from 'next-intl';
@@ -159,13 +160,7 @@ export function TestimonialsSection() {
                     </div>
 
                     <div className="flex items-center gap-0.5 mb-4 relative">
-                      {Array.from({ length: 5 }).map((_, i) => (
-                        <Star
-                          key={i}
-                          size={14}
-                          className={`transition-colors duration-200 ${i < t.rating ? 'star-gradient' : 'text-ecommerce-border'}`}
-                        />
-                      ))}
+                      <StarRating rating={t.rating} size={14} />
                       <span className="ms-1.5 text-xs font-semibold text-ecommerce-amber">{t.rating}.0</span>
                     </div>
 

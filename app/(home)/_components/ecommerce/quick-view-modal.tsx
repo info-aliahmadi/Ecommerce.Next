@@ -1,6 +1,7 @@
 'use client';
 
-import { Star, ShoppingCart, Heart, X, Truck, Shield, RotateCcw, Check, Minus, Plus, ChevronLeft, ChevronRight, ZoomIn, BarChart3, Send, User, Link2, Share2, Ruler, Package, Clock, Undo2, Loader2 } from 'lucide-react';
+import { Heart, ShoppingCart, Check, Minus, Plus, Shield, Truck, RotateCcw } from 'lucide-react';
+import { StarRating } from '../ui/star-rating';
 import { Button } from '../ui/button';
 import { Badge } from '../ui/badge';
 import { Dialog, DialogContent } from '../ui/dialog';
@@ -8,301 +9,24 @@ import { useUIStore, useCartStore, useWishlistStore, useRecentStore } from '../.
 import { toast } from 'sonner';
 import { useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
 import { SizeGuideModal } from './size-guide-modal';
 import { useTranslations } from 'next-intl';
 import { useAddToWishlist, useRemoveFromWishlist } from '../../_hooks/use-wishlist-queries';
-import ProductDisplayModel from '../../_types/Product/ProductDisplayModel';
-import ProductVariantDisplayModel from '../../_types/ProductVariantDisplayModel';
-import { getCheapestVariant, getProductPricing } from '../../_types/Product/ProductDisplayModel';
 import { GetImage } from '../../_lib/utils';
 import CartItem from '../../_types/Order/CartItem';
 import CONFIG from '@root/config';
+import HomePageService from '../../_services/HomePageService';
 import { redirect } from 'next/navigation';
 import CurrencyViewer from '@root/utils/CurrencyViewer';
 import VariantSelector from '@root/app/(home)/products/[id]/_components/VariantSelector';
-interface ReviewData {
-  id: string;
-  productId: string;
-  author: string;
-  rating: number;
-  title: string;
-  comment: string;
-  verified: boolean;
-  createdAt: string;
-}
+import ProductVariantDisplayModel from '../../_types/Product/ProductVariantDisplayModel';
+import { QuickViewGallery } from './quick-view-modal-gallery';
+import { QuickViewTabs } from './quick-view-modal-tabs';
+import ProductDisplayModel, { getProductPricing } from '../../_types/Product/ProductDisplayModel';
+import ReviewSummary from '../../products/[id]/_components/ReviewSummary';
 
-function RatingBreakdown({ rating, reviewCount }: { rating: number; reviewCount: number }) {
-  const t = useTranslations();
-  // Generate fake but realistic distribution based on the rating
-  const base5 = rating >= 4.5 ? 65 : rating >= 4 ? 40 : 20;
-  const base4 = rating >= 4.5 ? 20 : rating >= 4 ? 35 : 25;
-  const base3 = rating >= 4.5 ? 10 : rating >= 4 ? 15 : 25;
-  const base2 = rating >= 4.5 ? 3 : rating >= 4 ? 7 : 15;
-  const base1 = rating >= 4.5 ? 2 : rating >= 4 ? 3 : 15;
-
-  const distribution = [
-    { stars: 5, percentage: base5 + Math.floor(Math.random() * 10) },
-    { stars: 4, percentage: base4 + Math.floor(Math.random() * 10) },
-    { stars: 3, percentage: base3 + Math.floor(Math.random() * 8) },
-    { stars: 2, percentage: base2 + Math.floor(Math.random() * 5) },
-    { stars: 1, percentage: base1 + Math.floor(Math.random() * 3) },
-  ];
-
-  return (
-    <div className="flex gap-4 p-3 rounded-xl bg-ecommerce-surface-hover/60 border border-ecommerce-border/50">
-      {/* Average Rating */}
-      <div className="text-center shrink-0 w-20">
-        <p className="text-3xl font-extrabold text-ecommerce-text-primary">{rating.toFixed(1)}</p>
-        <div className="flex items-center justify-center gap-0.5 mt-1">
-          {Array.from({ length: 5 }).map((_, i) => (
-            <Star key={i} size={10} className={i < Math.floor(rating) ? 'fill-ecommerce-amber text-ecommerce-amber' : 'text-ecommerce-border'} />
-          ))}
-        </div>
-        <p className="text-[10px] text-ecommerce-text-muted mt-1">{t('homepage.quickView.reviews', { count: reviewCount })}</p>
-      </div>
-
-      {/* Breakdown Bars */}
-      <div className="flex-1 space-y-1.5">
-        {distribution.map((item) => (
-          <div key={item.stars} className="flex items-center gap-2">
-            <span className="text-[10px] text-ecommerce-text-muted w-3 text-end">{item.stars}</span>
-            <Star size={9} className="fill-ecommerce-amber text-ecommerce-amber shrink-0" />
-            <div className="flex-1 h-2 bg-ecommerce-border/50 rounded-full overflow-hidden">
-              <div
-                className="h-full bg-ecommerce-amber rounded-full transition-all duration-700"
-                style={{ width: `${item.percentage}%` }}
-              />
-            </div>
-            <span className="text-[10px] text-ecommerce-text-muted w-7 text-end">{item.percentage}%</span>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-}
-
-function ReviewForm({ productId, productName }: { productId: number; productName: string }) {
-  const t = useTranslations();
-  const queryClient = useQueryClient();
-  const [rating, setRating] = useState(0);
-  const [hoveredRating, setHoveredRating] = useState(0);
-  const [title, setTitle] = useState('');
-  const [author, setAuthor] = useState('');
-  const [reviewText, setReviewText] = useState('');
-
-  const mutation = useMutation({
-    mutationFn: async (data: { productId: number; author: string; rating: number; title: string; comment: string }) => {
-      const res = await fetch('/api/reviews', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(data),
-      });
-      const json = await res.json();
-      if (!json.success) throw new Error(json.error || t('homepage.quickView.reviewForm.error'));
-      return json;
-    },
-    onSuccess: () => {
-      toast.success(t('homepage.quickView.reviewForm.success'));
-      setRating(0);
-      setHoveredRating(0);
-      setTitle('');
-      setAuthor('');
-      setReviewText('');
-      queryClient.invalidateQueries({ queryKey: ['reviews', productId] });
-    },
-    onError: (error) => {
-      toast.error(t('homepage.quickView.reviewForm.error'), { description: error.message });
-    },
-  });
-
-  const handleSubmit = () => {
-    if (rating === 0 || !reviewText.trim()) return;
-    mutation.mutate({
-      productId,
-      author: author.trim() || 'Anonymous',
-      rating,
-      title: title.trim(),
-      comment: reviewText.trim(),
-    });
-  };
-
-  return (
-    <div className="space-y-3">
-      {/* Author */}
-      <div>
-        <label className="text-xs text-ecommerce-text-muted mb-1 block">{t('homepage.quickView.reviewForm.name')}</label>
-        <input
-          value={author}
-          onChange={(e) => setAuthor(e.target.value)}
-          placeholder={t('homepage.quickView.reviewForm.namePlaceholder')}
-          maxLength={50}
-          className="w-full px-3 py-2 rounded-xl bg-ecommerce-surface-hover border border-ecommerce-border text-sm text-ecommerce-text-primary placeholder:text-ecommerce-text-muted focus:outline-none focus:border-ecommerce-purple/40 transition-colors"
-        />
-      </div>
-      {/* Title */}
-      <div>
-        <label className="text-xs text-ecommerce-text-muted mb-1 block">{t('homepage.quickView.reviewForm.reviewTitle')}</label>
-        <input
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
-          placeholder={t('homepage.quickView.reviewForm.titlePlaceholder')}
-          maxLength={100}
-          className="w-full px-3 py-2 rounded-xl bg-ecommerce-surface-hover border border-ecommerce-border text-sm text-ecommerce-text-primary placeholder:text-ecommerce-text-muted focus:outline-none focus:border-ecommerce-purple/40 transition-colors"
-        />
-      </div>
-      {/* Rating */}
-      <div className="flex items-center gap-1">
-        <span className="text-xs text-ecommerce-text-muted me-1">{t('homepage.quickView.ratingBreakdown').replace(' Breakdown', '')}:</span>
-        {Array.from({ length: 5 }).map((_, i) => (
-          <button
-            key={i}
-            onMouseEnter={() => setHoveredRating(i + 1)}
-            onMouseLeave={() => setHoveredRating(0)}
-            onClick={() => setRating(i + 1)}
-            className="transition-transform hover:scale-125"
-            aria-label={`Rate ${i + 1} stars`}
-          >
-            <Star
-              size={18}
-              className={`transition-colors ${i < (hoveredRating || rating)
-                ? 'fill-ecommerce-amber text-ecommerce-amber'
-                : 'text-ecommerce-border'
-                }`}
-            />
-          </button>
-        ))}
-        {rating > 0 && <span className="text-xs text-ecommerce-text-muted ms-1">{rating}/5</span>}
-      </div>
-      {/* Comment */}
-      <textarea
-        value={reviewText}
-        onChange={(e) => setReviewText(e.target.value)}
-        placeholder={t('homepage.quickView.reviewForm.commentPlaceholder')}
-        rows={3}
-        className="w-full px-3 py-2.5 rounded-xl bg-ecommerce-surface-hover border border-ecommerce-border text-sm text-ecommerce-text-primary placeholder:text-ecommerce-text-muted resize-none focus:outline-none focus:border-ecommerce-purple/40 transition-colors"
-      />
-      <div className="flex justify-end">
-        <Button
-          onClick={handleSubmit}
-          disabled={rating === 0 || !reviewText.trim() || mutation.isPending}
-          size="sm"
-          className="h-8 px-4 bg-ecommerce-purple hover:bg-ecommerce-purple/90 text-white rounded-lg text-xs font-medium gap-1.5 transition-all"
-        >
-          {mutation.isPending ? <Loader2 size={12} className="animate-spin" /> : <Send size={12} />}
-          {mutation.isPending ? '...' : t('homepage.quickView.reviewForm.submit')}
-        </Button>
-      </div>
-    </div>
-  );
-}
-
-function ReviewsSkeleton() {
-  return (
-    <div className="space-y-3">
-      {Array.from({ length: 3 }).map((_, i) => (
-        <div key={i} className="p-3 rounded-xl bg-ecommerce-surface-hover/40 border border-ecommerce-border/30">
-          <div className="flex items-center gap-2 mb-2">
-            <div className="w-6 h-6 rounded-full skeleton-shimmer" />
-            <div className="w-20 h-3 rounded skeleton-shimmer" />
-            <div className="w-16 h-3 rounded skeleton-shimmer" />
-          </div>
-          <div className="w-full h-3 rounded skeleton-shimmer mb-1.5" />
-          <div className="w-3/4 h-3 rounded skeleton-shimmer" />
-        </div>
-      ))}
-    </div>
-  );
-}
-
-function ReviewItem({ review }: { review: ReviewData }) {
-  const t = useTranslations();
-  const initial = review.author.charAt(0).toUpperCase();
-  const dateStr = new Date(review.createdAt).toLocaleDateString('en-US', {
-    month: 'short',
-    day: 'numeric',
-    year: 'numeric',
-  });
-
-  return (
-    <motion.div
-      initial={{ opacity: 0, y: 5 }}
-      animate={{ opacity: 1, y: 0 }}
-      className="p-3 rounded-xl bg-ecommerce-surface-hover/40 border border-ecommerce-border/30"
-    >
-      <div className="flex items-center justify-between mb-1.5">
-        <div className="flex items-center gap-2">
-          <div className="w-6 h-6 rounded-full bg-gradient-to-br from-ecommerce-red to-ecommerce-purple flex items-center justify-center text-white text-[10px] font-bold">
-            {initial}
-          </div>
-          <span className="text-xs font-semibold text-ecommerce-text-primary">{review.author}</span>
-          {review.verified && (
-            <Badge className="bg-ecommerce-emerald/10 text-ecommerce-emerald border-0 text-[9px] px-1.5 py-0 h-4 font-medium">
-              ✓
-            </Badge>
-          )}
-          <div className="flex items-center gap-0.5">
-            {Array.from({ length: 5 }).map((_, j) => (
-              <Star key={j} size={9} className={j < review.rating ? 'fill-ecommerce-amber text-ecommerce-amber' : 'text-ecommerce-border'} />
-            ))}
-          </div>
-        </div>
-        <span className="text-[10px] text-ecommerce-text-muted">{dateStr}</span>
-      </div>
-      {review.title && (
-        <p className="text-xs font-semibold text-ecommerce-text-primary mb-1">{review.title}</p>
-      )}
-      <p className="text-xs text-ecommerce-text-secondary leading-relaxed">{review.comment}</p>
-    </motion.div>
-  );
-}
-
-function ShippingTab() {
-  const t = useTranslations();
-  const items = [
-    {
-      icon: Truck,
-      title: t('homepage.quickView.shippingInfo.freeShipping'),
-      desc: t('homepage.quickView.shippingInfo.freeShippingDesc'),
-    },
-    {
-      icon: Clock,
-      title: t('homepage.quickView.shippingInfo.express'),
-      desc: t('homepage.quickView.shippingInfo.expressDesc'),
-    },
-    {
-      icon: Undo2,
-      title: t('homepage.quickView.shippingInfo.returns'),
-      desc: t('homepage.quickView.shippingInfo.returnsDesc'),
-    },
-    {
-      icon: Package,
-      title: t('homepage.quickView.shippingInfo.support'),
-      desc: t('homepage.quickView.shippingInfo.supportDesc'),
-    },
-  ];
-
-  return (
-    <div className="space-y-3">
-      {items.map((item) => (
-        <div
-          key={item.title}
-          className="flex items-start gap-3 p-3 rounded-xl bg-ecommerce-surface-hover/40 border border-ecommerce-border/30"
-        >
-          <div className="w-8 h-8 rounded-lg bg-ecommerce-red/10 flex items-center justify-center shrink-0 mt-0.5">
-            <item.icon size={16} className="text-ecommerce-red" />
-          </div>
-          <div>
-            <p className="text-xs font-semibold text-ecommerce-text-primary">{item.title}</p>
-            <p className="text-[11px] text-ecommerce-text-secondary mt-0.5 leading-relaxed">{item.desc}</p>
-          </div>
-        </div>
-      ))}
-    </div>
-  );
-}
-
-function QuickViewContent({ product, onClose }: { product: ProductDisplayModel; onClose: () => void }) {
+function QuickViewContent({ product, onClose }: Readonly<{ product: ProductDisplayModel; onClose: () => void }>) {
   const t = useTranslations();
   const { addItem } = useCartStore();
   const { toggleItem, isInWishlist } = useWishlistStore();
@@ -322,23 +46,22 @@ function QuickViewContent({ product, onClose }: { product: ProductDisplayModel; 
   const [addedToCart, setAddedToCart] = useState(false);
   const addedTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  const { cheapestVariant: defaultCheapest, minSellPrice, maxSellPrice, totalStock } = getProductPricing(product.variants ?? []);
+  const { cheapestVariant: defaultCheapest, totalStock } = getProductPricing(product.variants ?? []);
   const [selectedVariant, setSelectedVariant] = useState<ProductVariantDisplayModel | null>(defaultCheapest ?? null);
   const activeVariant = selectedVariant ?? defaultCheapest;
   const hasMultipleVariants = (product.variants?.length ?? 0) > 1;
-  const discount = activeVariant?.oldSellPrice ? Math.round(((activeVariant.oldSellPrice - activeVariant.sellPrice) / activeVariant.oldSellPrice) * 100) : 0;
+  const discount = activeVariant?.oldSellPrice ? Math.round(((activeVariant?.oldSellPrice - activeVariant.sellPrice) / activeVariant.oldSellPrice) * 100) : 0;
   const parsedTags: string[] = product.productTags || [];
   const stock = activeVariant?.productInventory?.stockQuantity ?? 0;
 
   const wishlisted = isInWishlist(activeVariant.id);
-  // Fetch reviews from API
   const { data: reviewsData, isLoading: reviewsLoading } = useQuery({
     queryKey: ['reviews', product.id],
     queryFn: async () => {
-      const res = await fetch(`/api/reviews?productId=${product.id}`);
-      const json = await res.json();
-      if (!json.success) throw new Error(json.error);
-      return json.reviews as ReviewData[];
+      const service = new HomePageService();
+      const result = await service.getProductReviews(product.id);
+      if (!result.succeeded) throw new Error(result.message || 'Failed to fetch reviews');
+      return result.data;
     },
     enabled: activeTab === 'reviews',
     staleTime: 30 * 1000,
@@ -347,38 +70,31 @@ function QuickViewContent({ product, onClose }: { product: ProductDisplayModel; 
   const reviews = reviewsData || [];
   const reviewCount = reviews.length;
 
-  // Build image gallery with fallback placeholders
   const imageList = useMemo(() => {
     let images: string[] = product.imagePaths || [];
     if (images.length === 0) {
-      // add preview image in
       const base = GetImage(product.imagePreview);
-      images = [
-        base];
+      images = [base];
     }
     return images.map(x => CONFIG.API_BASEPATH + x);
   }, [product.imagePaths]);
 
-  // Detect touch device on mount
   useEffect(() => {
     if (typeof window !== 'undefined') {
       setIsTouchDevice('ontouchstart' in window || navigator.maxTouchPoints > 0);
     }
   }, []);
 
-  // Reset selected image when product changes
   useEffect(() => {
     setSelectedImageIndex(0);
   }, [product.id]);
 
-  // Cleanup added-to-cart timer
   useEffect(() => {
     return () => {
       if (addedTimerRef.current) clearTimeout(addedTimerRef.current);
     };
   }, []);
 
-  // Track recently viewed
   useEffect(() => {
     addRecent(product);
   }, [product, addRecent]);
@@ -414,7 +130,6 @@ function QuickViewContent({ product, onClose }: { product: ProductDisplayModel; 
       description: `${t('homepage.quickView.quantity')}: ${quantity} × ${CurrencyViewer(activeVariant.sellPrice, CONFIG.DEFAULT_CURRENCY)}`,
       action: { label: t('homepage.common.addToCart'), onClick: () => useCartStore.getState().setCartOpen(true) },
     });
-    // Show checkmark animation
     setAddedToCart(true);
     if (addedTimerRef.current) clearTimeout(addedTimerRef.current);
     addedTimerRef.current = setTimeout(() => setAddedToCart(false), 1500);
@@ -435,10 +150,12 @@ function QuickViewContent({ product, onClose }: { product: ProductDisplayModel; 
     }
     toast.success(wishlisted ? t('homepage.common.removeFromWishlist') : t('homepage.common.addToWishlist'));
   };
+
   const handleNavigateToMoreDetail = (productId: number) => {
     onClose();
     redirect('products/' + productId);
   };
+
   const tabs = [
     { key: 'description' as const, label: t('homepage.quickView.description') },
     { key: 'reviews' as const, label: t('homepage.quickView.reviews', { count: reviewCount || product.approvedTotalReviews }) },
@@ -448,155 +165,33 @@ function QuickViewContent({ product, onClose }: { product: ProductDisplayModel; 
   return (
     <>
       <div className="flex flex-col md:grid md:grid-cols-[55%_45%]">
-        {/* Image Gallery Section */}
-        <div className="flex flex-col">
-          {/* Main Image Container with zoom-lens */}
-          <div
-            ref={mainImageRef}
-            className="zoom-container relative aspect-square overflow-hidden rounded-2xl bg-ecommerce-surface-hover cursor-zoom-in"
-            onMouseEnter={() => {
-              if (!isTouchDevice) {
-                setIsZoomed(true);
-                setShowNavArrows(true);
-              }
-            }}
-            onMouseLeave={() => {
-              setIsZoomed(false);
-              setShowNavArrows(false);
-            }}
-            onMouseMove={handleMouseMove}
-          >
-            {/* Main image with fade transition */}
-            <AnimatePresence mode="wait">
-              <motion.img
-                key={selectedImageIndex}
-                src={imageList[selectedImageIndex]}
-                alt={`${product.name} - Image ${selectedImageIndex + 1}`}
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: 0.25 }}
-                className="w-full h-full object-cover"
-                style={
-                  isZoomed
-                    ? {
-                      transform: 'scale(2)',
-                      transformOrigin: `${zoomPosition.x}% ${zoomPosition.y}%`,
-                      transition: 'transform-origin 0.05s ease-out',
-                    }
-                    : {
-                      transform: 'scale(1)',
-                      transition: 'transform 0.3s ease-out',
-                    }
-                }
-              />
-            </AnimatePresence>
+        <QuickViewGallery
+          product={product}
+          selectedImageIndex={selectedImageIndex}
+          setSelectedImageIndex={setSelectedImageIndex}
+          isZoomed={isZoomed}
+          setIsZoomed={setIsZoomed}
+          zoomPosition={zoomPosition}
+          setZoomPosition={setZoomPosition}
+          showNavArrows={showNavArrows}
+          setShowNavArrows={setShowNavArrows}
+          isTouchDevice={isTouchDevice}
+          imageList={imageList}
+          discount={discount}
+          totalStock={totalStock}
+          wishlisted={wishlisted}
+          handleWishlist={handleWishlist}
+          handlePrevImage={handlePrevImage}
+          handleNextImage={handleNextImage}
+          t={t}
+          mainImageRef={mainImageRef}
+        />
 
-            {/* Zoom lens element (CSS class from globals.css) */}
-            {isZoomed && !isTouchDevice && (
-              <div
-                className="zoom-lens"
-                style={{
-                  left: `${zoomPosition.x}%`,
-                  top: `${zoomPosition.y}%`,
-                }}
-              />
-            )}
-
-            {/* Zoom icon overlay on main image */}
-            <div className="absolute top-4 start-4 flex items-center gap-1.5 glass rounded-lg px-2.5 py-1 z-10">
-              <ZoomIn size={12} className="text-white/70" />
-              <span className="text-[10px] text-white/70 font-medium">
-                {isZoomed ? t('homepage.quickView.moveToPan') : t('homepage.quickView.hoverToZoom')}
-              </span>
-            </div>
-
-            {/* Discount & stock badges */}
-            <div className="absolute top-4 end-12 flex flex-col gap-1.5 z-10">
-              {discount > 0 && (
-                <Badge className="bg-ecommerce-red text-white border-0 text-xs font-bold px-2.5 py-1 rounded-lg shadow-sm">
-                  {t('homepage.common.off', { percent: discount })}
-                </Badge>
-              )}
-              {totalStock > 0 && totalStock < 10 && (
-                <Badge className="bg-ecommerce-amber text-ecommerce-text-primary border-0 text-xs font-bold px-2.5 py-1 rounded-lg shadow-sm">
-                  {t('homepage.common.onlyLeft', { count: totalStock })}
-                </Badge>
-              )}
-            </div>
-
-            {/* Wishlist button */}
-            <button
-              onClick={handleWishlist}
-              className="absolute top-4 end-4 w-10 h-10 rounded-xl glass shadow-md flex items-center justify-center hover:scale-110 transition-transform z-10"
-              aria-label={t('homepage.common.addToWishlist')}
-            >
-              <Heart size={18} className={wishlisted ? 'fill-ecommerce-red text-ecommerce-red' : 'text-white'} />
-            </button>
-
-            {/* Navigation arrows - show on hover */}
-            {imageList.length > 1 && (
-              <>
-                <button
-                  onClick={handlePrevImage}
-                  className={`absolute start-3 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-white/90 dark:bg-ecommerce-surface/90 shadow-lg flex items-center justify-center hover:bg-white transition-all z-10 ${showNavArrows ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-2'
-                    }`}
-                  aria-label={t('homepage.common.previous')}
-                >
-                  <ChevronLeft size={16} className="text-ecommerce-text-primary" />
-                </button>
-                <button
-                  onClick={handleNextImage}
-                  className={`absolute end-3 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-white/90 dark:bg-ecommerce-surface/90 shadow-lg flex items-center justify-center hover:bg-white transition-all z-10 ${showNavArrows ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-2'
-                    }`}
-                  aria-label={t('homepage.common.next')}
-                >
-                  <ChevronRight size={16} className="text-ecommerce-text-primary" />
-                </button>
-              </>
-            )}
-          </div>
-
-          {/* Thumbnails */}
-          {imageList.length > 1 && (
-            <div className="flex gap-2 mt-3 px-1 overflow-x-auto pb-1 scrollbar-hide">
-              {imageList.map((img, i) => (
-                <button
-                  key={i}
-                  onClick={() => setSelectedImageIndex(i)}
-                  className={`w-16 h-16 rounded-lg overflow-hidden border-2 cursor-pointer transition-all shrink-0 ${i === selectedImageIndex
-                    ? 'border-ecommerce-red ring-2 ring-ecommerce-red/20 opacity-100'
-                    : 'border-transparent opacity-60 hover:opacity-100'
-                    }`}
-                  aria-label={`Image ${i + 1}`}
-                >
-                  <img
-                    src={img}
-                    alt={`${product.name} thumbnail ${i + 1}`}
-                    className="w-full h-full object-cover"
-                  />
-                </button>
-              ))}
-            </div>
-          )}
-        </div>
-
-        {/* Details */}
         <div className="p-6 flex flex-col overflow-y-auto max-h-[70vh]">
-          {/* Close button */}
-          {/* <button
-            onClick={onClose}
-            className="absolute top-4 end-4 md:top-3 md:end-3 w-8 h-8 rounded-lg bg-ecommerce-surface-hover flex items-center justify-center hover:bg-ecommerce-border transition-colors z-10"
-            aria-label={t('homepage.common.close')}
-          >
-            <X size={16} />
-          </button> */}
-
-          {/* Category */}
           <div className="flex items-center gap-1.5 mb-2">
             {product.categories?.map(category => category && (
               <span key={"category-" + category.key} className="text-xs font-medium text-ecommerce-text-muted uppercase tracking-wider">
-                <span className="inline-block w-2 h-2 mx-2 rounded-full " style={{ backgroundColor: category.color}} > </span>
+                <span className="inline-block w-2 h-2 mx-2 rounded-full " style={{ backgroundColor: category.color }} > </span>
                 <span className="text-xs font-medium text-ecommerce-text-muted uppercase tracking-wider">{category.name}</span>
               </span>))}
             {product.sku && (
@@ -604,12 +199,10 @@ function QuickViewContent({ product, onClose }: { product: ProductDisplayModel; 
             )}
           </div>
 
-          {/* Name */}
           <h2
             onClick={() => handleNavigateToMoreDetail(product.id)}
             className="text-xl font-bold text-ecommerce-text-primary leading-tight cursor-pointer"
           >{product.name}</h2>
-          {/* Tags */}
           {parsedTags.length > 0 && (
             <div className="flex gap-1.5 mt-2 flex-wrap">
               {parsedTags.map(tag => (
@@ -618,22 +211,13 @@ function QuickViewContent({ product, onClose }: { product: ProductDisplayModel; 
             </div>
           )}
 
-          {/* Rating */}
           <div className="flex items-center gap-2 mt-3">
-            <div className="flex items-center gap-0.5">
-              {Array.from({ length: 5 }).map((_, i) => (
-                <Star
-                  key={"sklet-rating-" + i}
-                  size={14}
-                  className={i < Math.floor(product.approvedRatingSum) ? 'fill-ecommerce-amber text-ecommerce-amber' : 'text-ecommerce-border'}
-                />
-              ))}
-            </div>
-            <span className="text-sm text-ecommerce-text-secondary font-medium">{product.approvedRatingSum}</span>
-            <span className="text-sm text-ecommerce-text-muted">({product.approvedTotalReviews})</span>
+            <ReviewSummary
+              rating={product.approvedRatingSum ? product.approvedRatingSum / product.approvedTotalReviews : 0}
+              reviewCount={product.approvedTotalReviews} />
           </div>
 
-          {/* Price */}
+
           {product.callForPrice ? (
             <div className="flex items-center gap-2 mt-4">
               <span className="text-xl font-bold text-ecommerce-amber">
@@ -649,14 +233,13 @@ function QuickViewContent({ product, onClose }: { product: ProductDisplayModel; 
                 <>
                   <span className="text-lg text-ecommerce-text-muted line-through">{CurrencyViewer(activeVariant.oldSellPrice, CONFIG.DEFAULT_CURRENCY)}</span>
                   <Badge className="bg-ecommerce-emerald/10 text-ecommerce-emerald border-0 text-xs font-semibold">
-                    {t('homepage.cart.savings')} { CurrencyViewer(activeVariant.oldSellPrice - activeVariant.sellPrice, CONFIG.DEFAULT_CURRENCY) }
+                    {t('homepage.cart.savings')} {CurrencyViewer(activeVariant.oldSellPrice - activeVariant.sellPrice, CONFIG.DEFAULT_CURRENCY)}
                   </Badge>
                 </>
               )}
             </div>
           )}
 
-          {/* Short description */}
           {product.shortDescription && (
             <div
               className="text-sm text-ecommerce-text-secondary mt-3 px-3 py-2.5 rounded-xl bg-ecommerce-surface-hover border border-ecommerce-border/50 leading-relaxed"
@@ -664,7 +247,6 @@ function QuickViewContent({ product, onClose }: { product: ProductDisplayModel; 
             />
           )}
 
-          {/* Stock status */}
           <div className="flex items-center gap-2 mt-4">
             {stock > 0 ? (
               <>
@@ -679,7 +261,6 @@ function QuickViewContent({ product, onClose }: { product: ProductDisplayModel; 
             )}
           </div>
 
-          {/* Variant Selector */}
           <VariantSelector
             variants={product.variants ?? []}
             onVariantChange={(options) => {
@@ -697,7 +278,6 @@ function QuickViewContent({ product, onClose }: { product: ProductDisplayModel; 
             }}
           />
 
-          {/* Quantity */}
           <div className="flex items-center gap-4 mt-5">
             <span className="text-sm font-medium text-ecommerce-text-primary">{t('homepage.quickView.quantity')}</span>
             <div className="flex items-center border border-ecommerce-border rounded-xl overflow-hidden">
@@ -722,7 +302,6 @@ function QuickViewContent({ product, onClose }: { product: ProductDisplayModel; 
             </span>
           </div>
 
-          {/* Selected options summary */}
           <div className="mt-3 px-3 py-2 rounded-lg bg-ecommerce-surface-hover/60 border border-ecommerce-border/40">
             <span className="text-xs text-ecommerce-text-muted">{t('homepage.quickView.selected', { value: '' }).replace(/:\s*$/, '')} </span>
             {activeVariant?.productAttributes?.map((attr, i) => (
@@ -734,7 +313,6 @@ function QuickViewContent({ product, onClose }: { product: ProductDisplayModel; 
             <span className="text-xs text-ecommerce-text-muted"> × {quantity}</span>
           </div>
 
-          {/* Actions */}
           <div className="flex gap-3 mt-4">
             <Button
               onClick={handleAddToCart}
@@ -777,10 +355,8 @@ function QuickViewContent({ product, onClose }: { product: ProductDisplayModel; 
             </Button>
           </div>
 
-          {/* Share Product */}
           <div className="flex items-center gap-3 mt-4 pt-4 border-t border-ecommerce-border">
             <span className="text-xs font-medium text-ecommerce-text-muted flex items-center gap-1.5">
-              <Share2 size={13} />
               {t('homepage.common.share')}
             </span>
             <div className="flex items-center gap-2">
@@ -794,7 +370,7 @@ function QuickViewContent({ product, onClose }: { product: ProductDisplayModel; 
                 className="w-9 h-9 rounded-xl flex items-center justify-center transition-all hover:scale-110 bg-ecommerce-surface-hover hover:bg-ecommerce-purple/10 text-ecommerce-text-secondary hover:text-ecommerce-purple"
                 title={t('homepage.common.copyLink')}
               >
-                {copied ? <Check size={15} className="text-green-500" /> : <Link2 size={15} />}
+                {copied ? <Check size={15} className="text-green-500" /> : <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" width="15" height="15"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" /><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" /></svg>}
               </button>
               <button
                 onClick={() => window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(product.name)}&url=${encodeURIComponent(window.location.href)}`, '_blank')}
@@ -820,7 +396,6 @@ function QuickViewContent({ product, onClose }: { product: ProductDisplayModel; 
             </div>
           </div>
 
-          {/* Trust badges */}
           <div className="flex flex-wrap justify-center gap-4 mt-5 pt-5 border-t border-ecommerce-border">
             <div className="flex flex-col items-center gap-1 text-center">
               <Shield size={16} className="text-ecommerce-text-muted" />
@@ -840,81 +415,16 @@ function QuickViewContent({ product, onClose }: { product: ProductDisplayModel; 
             )}
           </div>
 
-          {/* Description / Reviews / Shipping tabs */}
-          <div className="mt-5 pt-5 border-t border-ecommerce-border">
-            {/* Tab buttons with red underline indicator */}
-            <div className="flex gap-4 mb-4 border-b border-ecommerce-border/50">
-              {tabs.map((tab) => (
-                <button
-                  key={tab.key}
-                  onClick={() => setActiveTab(tab.key)}
-                  className={`text-sm font-medium pb-2.5 border-b-2 transition-all duration-200 flex items-center gap-1.5 -mb-px ${activeTab === tab.key
-                    ? 'border-ecommerce-red text-ecommerce-red'
-                    : 'border-transparent text-ecommerce-text-muted hover:text-ecommerce-text-secondary'
-                    }`}
-                >
-                  {tab.key === 'reviews' && <BarChart3 size={13} />}
-                  {tab.label}
-                </button>
-              ))}
-            </div>
-
-            {/* Tab content with smooth transition */}
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={activeTab}
-                initial={{ opacity: 0, y: 6 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -6 }}
-                transition={{ duration: 0.2 }}
-                className="min-h-[120px]"
-              >
-                {activeTab === 'description' ? (
-                  <div
-                    className="text-sm text-ecommerce-text-secondary leading-relaxed"
-                    dangerouslySetInnerHTML={{ __html: product.fullDescription }}
-                  />
-                ) : activeTab === 'reviews' ? (
-                  <div className="space-y-4">
-                    <RatingBreakdown rating={product.approvedRatingSum} reviewCount={product.approvedTotalReviews} />
-
-                    {/* Write a Review Form */}
-                    <div className="pt-4 border-t border-ecommerce-border/50">
-                      <h4 className="text-sm font-semibold text-ecommerce-text-primary mb-3">{t('homepage.quickView.reviewForm.title')}</h4>
-                      <ReviewForm productId={product.id} productName={product.name} />
-                    </div>
-
-                    {/* Reviews list from API */}
-                    <div className="pt-4 border-t border-ecommerce-border/50">
-                      <h4 className="text-sm font-semibold text-ecommerce-text-primary mb-3">
-                        {t('homepage.quickView.customerReviews')} {reviews.length > 0 && `(${reviews.length})`}
-                      </h4>
-
-                      {reviewsLoading ? (
-                        <ReviewsSkeleton />
-                      ) : reviews.length > 0 ? (
-                        <div className="space-y-3 max-h-72 overflow-y-auto scrollbar-thin">
-                          {reviews.map((review) => (
-                            <ReviewItem key={review.id} review={review} />
-                          ))}
-                        </div>
-                      ) : (
-                        <div className="text-center py-6">
-                          <div className="w-12 h-12 rounded-full bg-ecommerce-surface-hover flex items-center justify-center mx-auto mb-3">
-                            <BarChart3 size={20} className="text-ecommerce-text-muted" />
-                          </div>
-                          <p className="text-sm text-ecommerce-text-secondary font-medium">{t('homepage.quickView.reviewForm.beFirst')}</p>
-                          <p className="text-xs text-ecommerce-text-muted mt-1">{t('homepage.quickView.reviewForm.commentPlaceholder')}</p>
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                ) : (
-                  <ShippingTab />
-                )}
-              </motion.div>
-            </AnimatePresence>
-          </div>
+          <QuickViewTabs
+            product={product}
+            reviews={reviews}
+            reviewsLoading={reviewsLoading}
+            activeTab={activeTab}
+            setActiveTab={setActiveTab}
+            tabs={tabs}
+            t={t}
+            reviewCount={reviewCount}
+          />
         </div>
       </div>
       <SizeGuideModal open={isSizeGuideOpen} onClose={() => setIsSizeGuideOpen(false)} />

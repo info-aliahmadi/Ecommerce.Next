@@ -2,88 +2,80 @@
 
 ## Commands
 
-- `npm run dev` — starts dev server on port 3000
-- `npm run build` — production build (TypeScript errors are ignored via `ignoreBuildErrors: true`)
-- `npm run lint` — ESLint (next config)
+- `npm run dev` — Next.js dev server on port 3000 (auto-opens `http://localhost:3000`)
+- `npm run build` — production build; TypeScript errors are silently ignored via `ignoreBuildErrors: true`
+- `npm run lint` — `next lint` using the legacy `.eslintrc` config
+- `npx tsc --noEmit` — typecheck without emit
 - No test suite exists
 
 ## Architecture
 
-This is a **Next.js 16 App Router** e-commerce app with two distinct UI areas sharing the same root layout:
+Two UI areas share `app/layout.tsx` as the root:
 
-| Area | Route | UI library | State |
-|------|-------|-----------|-------|
-| Storefront | `(home)/` | shadcn/ui (Radix + Tailwind) | Zustand |
-| Admin dashboard | `dashboard/` | MUI (Material UI v9) | Redux Toolkit |
+| Area | Route | UI | State |
+|------|-------|----|-------|
+| Storefront | `(home)/` | shadcn/ui (Radix + Tailwind v4 + animate plugin) | Zustand (persisted) + React Query |
+| Admin dashboard | `dashboard/` | MUI v9 | Redux Toolkit |
 
-**Root layout** (`app/layout.tsx`) handles i18n (next-intl), RTL direction, and locale-aware fonts. The `(home)` layout adds ThemeProvider + React Query. The `dashboard` layout adds SessionProvider, ReduxProvider, and AuthorizationProvider.
+`app/(home)/layout.tsx` wraps children in `ThemeProvider` (next-themes), `QueryProvider` (React Query), and `SessionProvider` (next-auth).
 
-### Path aliases (tsconfig.json)
+Dashboard route groups: `(ecommerce)`, `(crm)`, `(cms)`, `(auth)`, `(settings)`, `(filestorage)`.
+
+## Imports
+
+Path aliases from `tsconfig.json`:
 
 ```
-@root/*   → ./*
+@root/*      → ./*
 @dashboard/* → ./app/dashboard/*
 @(home)/*    → ./app/(home)/*
 @api/*       → ./app/api/*
 ```
 
-Always use `@root/` for cross-area imports (e.g., `@root/config`, `@root/utils/Fetch`). Never use relative `../../` chains.
+Always use `@root/` for cross-area imports. Never use relative `../../` chains.
 
-### Auth flow
+## Auth
 
-- **next-auth** with `CredentialsProvider` (username/password via backend API)
-- JWT strategy; tokens stored in session callbacks
-- Route protection in `proxy.ts` — checks `AllRoutes.routes` permission map against backend `/Auth/GetPermissionsOfCurrentUser`
-- Dashboard pages wrap children in `AuthorizationProvider` which exposes a `permissions` context
-- Guard components: use `<Authorize permission="PERMISSION_NAME">` from `app/dashboard/_components/Authorization/`
-- All permission constants live in `app/dashboard/_lib/Permissions.ts`
+- **next-auth** `CredentialsProvider` + JWT strategy.
+- Middleware is in `proxy.ts` and uses **`withAuth`** from `next-auth/middleware`, not the default export.
+- Dashboard access requires `ADMIN` or `SUPERADMIN` role; then `AllRoutes.routes` permission is checked server-side against `/Auth/GetPermissionsOfCurrentUser`.
+- Storefront uses `<SessionProvider>` from `app/(home)/_components/session-provider.tsx`.
+- `useSession()` works in any client component under `(home)/`.
 
-### Service pattern
+## Services
 
-Every dashboard service class follows this exact pattern:
+- **Storefront** (`HomePageService`, `ProfileService`, etc.): public endpoints. Calling `Fetch.SetDefaultHeader()` with **no arguments** already sets `Content-Type: application/json`, `Accept-Language: fa`, etc. Pass `jwt` only for authenticated calls.
+- **Dashboard** service classes always take `jwt: string` in their constructor; they call `Fetch.SetDefaultHeader(jwt)`.
+- All API responses use `Result<T>` = `{ succeeded, data, message }`.
 
-```typescript
-import Fetch from '@root/utils/Fetch';
-import Result from '@root/app/types/Result';
-import CONFIG from '@root/config';
+## i18n
 
-export default class SomeService {
-  config?: RequestInit;
-  constructor(jwt: string) {
-    if (jwt) this.config = Fetch.SetDefaultHeader(jwt);
-  }
-  // methods use Fetch.Get / Fetch.Post with CONFIG.API_BASEPATH + '/Endpoint'
-}
-```
+- Locales: `en`, `fa` (default), `ar` — RTL for `fa` and `ar`.
+- `next-intl` v4 configured via `i18n/request.ts` which reads the `NEXT_LOCALE` cookie.
+- Translation files live in `public/locales/{locale}/translation.json`.
+- **Quirk:** `i18n/request.ts` contains a stray `debugger;` statement.
+- Persian dates use `moment-jalaali` (`showDistanceToNow` helper).
 
-- `Fetch.SetDefaultHeader(jwt)` sets `Authorization: Bearer <jwt>`, `Content-Type: application/json`, `Accept-Language: fa`
-- All API responses use the `Result<T>` type (`app/types/Result.ts`): `{ succeeded, data, message }`
-- Homepage services (e.g., `HomePageService`) are public (no JWT required)
+## State
 
-### i18n
+- **Zustand** in `app/(home)/_lib/store.ts`: cart, wishlist, compare, locale, stock alerts, UI. All persisted via `zustand/persist`.
+- **Redux Toolkit** in `store/`. Dashboard only.
 
-- Locales: `en`, `fa` (default), `ar` — defined in `locales/languageList.ts`
-- RTL locales: `fa`, `ar` — handled by `DirectionProvider` and `HTML dir` attribute
-- Translation files: `public/locales/{locale}/translation.json`
-- `next-intl` configured via `i18n/request.ts` (reads `NEXT_LOCALE` cookie)
-- Persian calendar (`moment-jalaali`) used for `fa` locale
+## Key Config
 
-### State management
-
-- **Zustand** stores in `app/(home)/_lib/store.ts`: cart, wishlist, compare, locale, stock alerts, UI state. All persisted via `zustand/persist`.
-- **Redux Toolkit** in `store/` for dashboard state only (menu, etc.)
-
-### Key config
-
-- `config.ts` (root) — all API paths, storage keys, theme defaults, image paths
-- `NEXT_PUBLIC_API_BASE_URL` — backend API base (default `https://localhost:7134`)
-- `NEXT_PUBLIC_FRONT_URL` — frontend URL (default `http://localhost:3000`)
+- `config.ts` — all paths (`API_BASEPATH`, `LOGIN_API_PATH`, etc.), storage keys, theme defaults, image paths.
+- Env vars: `NEXT_PUBLIC_API_BASE_URL` (backend, default `https://localhost:7134`), `NEXT_PUBLIC_FRONT_URL` (frontend, default `http://localhost:3000`).
 
 ## Conventions
 
-- **Prettier**: no bracket spacing, single quotes, trailing commas, 80 char width (`prettierrc.js`)
-- **ESLint**: relaxed rules — no unescaped entities warnings, no img-element warnings, exhaustive-deps off
-- Dashboard modules follow a consistent structure under each route group: `_components/`, `_hooks/`, `_lib/`, `_service/`, `_types/`, then page directories
-- `_` prefix directories are private/infrastructure (not routes): `_components`, `_hooks`, `_lib`, `_service`, `_types`, `_layout`, `_theme`
-- Dashboard route groups use parentheses: `(ecommerce)`, `(crm)`, `(cms)`, `(auth)`, `(settings)`, `(filestorage)`
-- New dashboard pages register routes in their module's `_lib/routes.ts`, then aggregate in `app/dashboard/_lib/routes.ts`
+- Prettier: `bracketSpacing: false`, `singleQuote: true`, `bracketSameLine: true`, `printWidth: 80`, `trailingComma: 'all'`.
+- ESLint: `react/no-unescaped-entities` off, `@next/next/no-img-element` off, `react-hooks/exhaustive-deps` off, `@next/next/no-page-custom-font` off.
+- `_`-prefixed folders are private (not routes): `_components`, `_hooks`, `_lib`, `_service`, `_types`, `_layout`, `_theme`.
+- Dashboard module route registration: each module has `_lib/routes.ts`, aggregated in `app/dashboard/_lib/routes.ts`.
+
+## Important quirks
+
+- `ReviewForm` (`app/(home)/products/[id]/_components/ReviewForm.tsx`) accepts optional `existingReview` (edit mode) and `onSuccess` callbacks. Older callers may still reload; do not add unconditional `window.location.reload()` in new flows.
+- `(home)` client components import icons from `lucide-react`; do not add new icon libraries without confirming existing patterns.
+- Images from the backend require explicit `remotePatterns` in `next.config.ts` for localhost dev.
+- `app/dashboard/` uses MUI styling only; never introduce shadcn/tailwind classes there.

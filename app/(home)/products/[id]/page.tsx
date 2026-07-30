@@ -5,6 +5,7 @@ import CONFIG from '@root/config';
 import ProductDisplayModel from '../../_types/Product/ProductDisplayModel';
 import ProductReviewDisplayModel from '../../_types/Product/ProductReviewDisplayModel';
 import { GetImage } from '../../_lib/utils';
+import { StarRating } from '../../_components/ui/star-rating';
 
 // Client components (only for interactive parts)
 import ImageGallery from './_components/ImageGallery';
@@ -36,7 +37,6 @@ import {
   Shield,
   Headphones,
   Award,
-  Star,
   Calendar,
 } from 'lucide-react';
 import DeliveryDateType from '@root/app/types/enums/DeliveryDateType';
@@ -111,6 +111,9 @@ export default async function ProductDetailPage({
   }
 
   const reviews = await getReviews(Number(id));
+  const reviewCount = product.approvedTotalReviews;
+  const ratingSum = product.approvedRatingSum;
+  const averageRating = reviewCount > 0 ? ratingSum / reviewCount : 0;
 
   const t = await getTranslations('');
   const now = new Date();
@@ -210,9 +213,8 @@ export default async function ProductDetailPage({
 
                   {/* Rating - Server rendered */}
                   <ReviewSummary
-                    rating={product.approvedRatingSum}
-                    reviewCount={product.approvedTotalReviews}
-                  ></ReviewSummary>
+                    rating={averageRating}
+                    reviewCount={reviewCount} />
 
                   {/* Interactive purchase section (price, stock, variants, quantity, actions) */}
                   <ProductPurchaseSection product={product} />
@@ -286,30 +288,20 @@ export default async function ProductDetailPage({
                     {/* Rating Summary - Server rendered */}
                     <div className="bg-ecommerce-surface/50 dark:bg-ecommerce-surface rounded-2xl border border-ecommerce-border p-6 flex flex-col items-center justify-center text-center">
                       <div className="text-5xl font-bold text-ecommerce-text-primary">
-                        {(product.approvedRatingSum > 0 ? (product.approvedRatingSum / product.approvedTotalReviews) : 0).toFixed(1)}
+                        {averageRating.toFixed(1)}
                       </div>
                       <div className="flex items-center gap-0.5 mt-2 mb-1">
-                        {Array.from({ length: 5 }).map((_, i) => (
-                          <Star
-                            key={i}
-                            size={18}
-                            className={
-                              i < Math.round(product.approvedRatingSum > 0 ? (product.approvedRatingSum / product.approvedTotalReviews) : 0)
-                                ? 'fill-ecommerce-amber text-ecommerce-amber'
-                                : 'text-ecommerce-border'
-                            }
-                          />
-                        ))}
+                        <StarRating rating={averageRating} size={18} />
                       </div>
                       <p className="text-sm text-ecommerce-text-muted">
-                        {t('homepage.productDetail.viewAllReviews', { count: product.approvedTotalReviews })}
+                        {t('homepage.productDetail.viewAllReviews', { count: reviewCount })}
                       </p>
                     </div>
 
-                     {/* Reviews - Breakdown + List */}
-                     <div className="md:col-span-2">
-                       <ProductReviews productId={product.id} reviews={reviews} />
-                     </div>
+                    {/* Reviews - Breakdown + List */}
+                    <div className="md:col-span-2">
+                      <ProductReviews productId={product.id} reviews={reviews} ratingSum={ratingSum} reviewCount={reviewCount} />
+                    </div>
                   </div>
                 </TabsContent>
 

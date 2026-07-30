@@ -1,6 +1,7 @@
 'use client';
 
-import { Star, ShoppingCart, Heart, Eye, GitCompareArrows, Check } from 'lucide-react';
+import { ShoppingCart, Heart, Eye, GitCompareArrows, Check } from 'lucide-react';
+import { StarRating } from '../ui/star-rating';
 import { Button } from '../ui/button';
 import { Badge } from '../ui/badge';
 import { useWishlistStore, useUIStore, useCompareStore } from '../../_lib/store';
@@ -329,18 +330,8 @@ export function ProductCard({ product, index = 0 }: Readonly<ProductCardProps>) 
               <p className="text-xs text-ecommerce-text-muted mt-1 truncate">{product.shortDescription}</p>
             )}
 
-            {/* Rating with animated stars */}
             <div className="flex items-center gap-1.5 mt-2">
-              <div className="flex items-center gap-px">
-                {Array.from({ length: 5 }).map((_, i) => (
-                  <Star
-                    key={i}
-                    size={11}
-                    className={`transition-transform duration-300 ${i < Math.floor(rating) ? 'fill-ecommerce-amber text-ecommerce-amber star-twinkle' : 'text-ecommerce-border'}`}
-                    style={{ animationDelay: `${i * 0.15}s` }}
-                  />
-                ))}
-              </div>
+              <StarRating rating={rating} size={11} />
               <span className="text-[11px] text-ecommerce-text-muted">{rating.toFixed(1)}</span>
               <span className="text-[11px] text-ecommerce-text-muted">({product.approvedTotalReviews})</span>
             </div>

@@ -1,6 +1,7 @@
 'use client';
 
-import { X, Star, ShoppingCart, GitCompareArrows, Package } from 'lucide-react';
+import { X, ShoppingCart, GitCompareArrows, Package } from 'lucide-react';
+import { StarRating } from '../ui/star-rating';
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from '../ui/sheet';
 import { ScrollArea } from '../ui/scroll-area';
 import { Button } from '../ui/button';
@@ -187,13 +188,7 @@ export function CompareDrawer() {
                         <ComparisonCell key={item.variant.id} delay={i * 0.05}>
                           <div className="flex flex-col items-center gap-0.5">
                             <div className="flex items-center gap-px">
-                              {Array.from({ length: 5 }).map((_, si) => (
-                                <Star
-                                  key={si}
-                                  size={11}
-                                  className={si < Math.floor(item.rating) ? 'fill-ecommerce-amber text-ecommerce-amber' : 'text-ecommerce-border'}
-                                />
-                              ))}
+                              <StarRating rating={item.rating} size={11} />
                             </div>
                             <span className="text-[10px] text-ecommerce-text-muted">
                               {item.rating} ({item.reviewCount})

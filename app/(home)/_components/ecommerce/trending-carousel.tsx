@@ -2,7 +2,8 @@
 
 import { useQuery } from '@tanstack/react-query';
 import { useUIStore } from '../../_lib/store';
-import { Eye, TrendingUp, Star, ChevronLeft, ChevronRight, ShoppingCart } from 'lucide-react';
+import { Eye, TrendingUp, ChevronLeft, ChevronRight, ShoppingCart } from 'lucide-react';
+import { StarRating } from '../ui/star-rating';
 import { motion } from 'framer-motion';
 import { useRef, useCallback } from 'react';
 import { toast } from 'sonner';
@@ -200,25 +201,14 @@ export function TrendingCarousel() {
 
                     </div>))}
 
-                  {/* Rating stars */}
-                  < div className="flex items-center gap-1.5 mb-1.5" >
-                    <div className="flex items-center gap-px">
-                      {Array.from({ length: 5 }).map((_, i) => (
-                        <Star
-                          key={i}
-                          size={11}
-                          className={
-                            i < Math.floor(product.approvedRatingSum)
-                              ? 'fill-ecommerce-amber text-ecommerce-amber'
-                              : 'text-ecommerce-border'
-                          }
-                        />
-                      ))}
+                    <div className="flex items-center gap-1.5 mb-1.5">
+                      <div className="flex items-center gap-px">
+                        <StarRating rating={product.approvedRatingSum} size={11} />
+                      </div>
+                      <span className="text-[11px] text-ecommerce-text-muted">
+                        {product.approvedRatingSum}
+                      </span>
                     </div>
-                    <span className="text-[11px] text-ecommerce-text-muted">
-                      {product.approvedRatingSum}
-                    </span>
-                  </div>
 
                   {/* Sold count */}
                   <p className="text-[11px] text-ecommerce-text-muted">

@@ -4,15 +4,15 @@ import { useState } from 'react';
 import { useSession } from 'next-auth/react';
 import { useTranslations } from 'next-intl';
 import ProductReviewDisplayModel from '../../../_types/Product/ProductReviewDisplayModel';
-import { Star, User, Pencil, X } from 'lucide-react';
-import { useLocaleStore } from '../../../_lib/store';
+import { User, Pencil, X } from 'lucide-react';
 import CONFIG from '@root/config';
+import { StarRating } from '../../../_components/ui/star-rating';
 import ReviewForm from './ReviewForm';
+import { showDistanceToNow } from '@root/utils/DateViewer';
 
-export default function ProductReviews({ productId, reviews = [] }: { productId: number; reviews?: ProductReviewDisplayModel[] }) {
+export default function ProductReviews({ ratingSum, reviewCount, productId, reviews = [] }: Readonly<{ productId: number; reviews?: ProductReviewDisplayModel[]; ratingSum: number; reviewCount: number }>) {
   const { data: session } = useSession();
   const t = useTranslations('');
-  const locale = useLocaleStore((s) => s.locale);
 
   const currentUserId = (session?.user as any)?.id;
   const userReview = currentUserId != null
@@ -23,15 +23,6 @@ export default function ProductReviews({ productId, reviews = [] }: { productId:
 
   const visibleReviews = reviews.filter((r) => r.isApproved || r.userId === currentUserId);
   const total = visibleReviews.filter((r) => r.isApproved).length;
-
-  const formatDate = (date?: Date) => {
-    if (!date) return '';
-    return new Date(date).toLocaleDateString(locale === 'fa' ? 'fa-IR' : locale === 'ar' ? 'ar-SA' : undefined, {
-      year: 'numeric',
-      month: 'short',
-      day: 'numeric',
-    });
-  };
 
   const getReviewerName = (review: ProductReviewDisplayModel) => {
     return review.user?.name || review.user?.userName || review.user?.email || 'Anonymous';
@@ -44,7 +35,7 @@ export default function ProductReviews({ productId, reviews = [] }: { productId:
     }
     return null;
   };
-
+  const averageRating = reviewCount > 0 ? ratingSum / reviewCount : 0;
   return (
     <div className="space-y-6">
       {/* Rating Breakdown */}
@@ -53,7 +44,7 @@ export default function ProductReviews({ productId, reviews = [] }: { productId:
           {t('homepage.productDetail.rating')} {t('homepage.productDetail.reviewsTab').toLowerCase()}
         </h4>
         {total === 0 && !userReview ? (
-          <p className="text-xs text-ecommerce-text-muted">{t('homepage.productDetail.noReviewsYet')}</p>
+          <p className="text-xs ">{t('homepage.productDetail.noReviewsYet')}</p>
         ) : (
           <div className="space-y-2">
             {[5, 4, 3, 2, 1].map((star) => {
@@ -62,7 +53,7 @@ export default function ProductReviews({ productId, reviews = [] }: { productId:
               return (
                 <div key={star} className="flex items-center gap-2">
                   <span className="text-xs text-ecommerce-text-muted w-6">{star}</span>
-                  <Star size={12} className="text-ecommerce-amber fill-ecommerce-amber shrink-0" />
+                  <StarRating rating={averageRating} size={12} maxStars={1} />
                   <div className="flex-1 h-2 bg-ecommerce-border rounded-full overflow-hidden">
                     <div className="h-full bg-ecommerce-amber rounded-full transition-all" style={{ width: `${percentage}%` }} />
                   </div>
@@ -78,7 +69,8 @@ export default function ProductReviews({ productId, reviews = [] }: { productId:
       <div className="space-y-4">
         {visibleReviews.length === 0 ? (
           <div className="text-center py-8">
-            <p className="text-sm text-ecommerce-text-muted">{t('homepage.productDetail.noReviewsYet')}</p>
+            <p className="text-md text-ecommerce-text-muted">{t('homepage.productDetail.beFirst')}</p>
+            <p className="text-sm text-ecommerce-text-muted mt-1">{t('homepage.productDetail.commentPlaceholder')}</p>
           </div>
         ) : (
           visibleReviews.map((review) => {
@@ -133,7 +125,7 @@ export default function ProductReviews({ productId, reviews = [] }: { productId:
                       </div>
                       <div className="flex items-center gap-2">
                         <span className="text-xs text-ecommerce-text-muted">
-                          {formatDate(review.createdOnUtc)}
+                          {showDistanceToNow(session?.user.defaultLanguage ?? CONFIG.DEFAULT_LANGUAGE, review.createdOnUtc)}
                         </span>
                         {isCurrentUserReview && (
                           <button
@@ -147,17 +139,7 @@ export default function ProductReviews({ productId, reviews = [] }: { productId:
                       </div>
                     </div>
                     <div className="flex items-center gap-0.5 mb-2">
-                      {Array.from({ length: 5 }).map((_, i) => (
-                        <Star
-                          key={i}
-                          size={14}
-                          className={
-                            i < review.rating
-                              ? 'fill-ecommerce-amber text-ecommerce-amber'
-                              : 'text-ecommerce-border'
-                          }
-                        />
-                      ))}
+                      <StarRating rating={review.rating} size={14} />
                     </div>
                     <p className="text-sm text-ecommerce-text-secondary leading-relaxed">{review.reviewText}</p>
                     {review.replyText && (

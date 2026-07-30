@@ -3,51 +3,25 @@
 import { useState, useCallback } from 'react';
 import { useTranslations } from 'next-intl';
 import { toast } from 'sonner';
-import { Check, Loader2, Star } from 'lucide-react';
+import { Check, Loader2 } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import { Button } from '../../../_components/ui/button';
 import { Textarea } from '../../../_components/ui/textarea';
+import { StarRating } from '../../../_components/ui/star-rating';
 import ProfileService from '../../../_services/ProfileService';
 import ProductReviewDisplayModel from '../../../_types/Product/ProductReviewDisplayModel';
 
-function StarRatingInput({
-  value,
-  onChange,
-  size = 24,
+export default function ReviewForm({
+  productId,
+  existingReview,
+  isQuickView,
+  onSuccess,
 }: Readonly<{
-  value: number;
-  onChange: (v: number) => void;
-  size?: number;
+  productId: number;
+  existingReview?: ProductReviewDisplayModel;
+  isQuickView?: boolean;
+  onSuccess?: (review: ProductReviewDisplayModel) => void;
 }>) {
-  const [hover, setHover] = useState(0);
-  return (
-    <div className="flex items-center gap-1">
-      {Array.from({ length: 5 }).map((_, i) => {
-        const starVal = i + 1;
-        return (
-          <button
-            key={i}
-            type="button"
-            onClick={() => onChange(starVal)}
-            onMouseEnter={() => setHover(starVal)}
-            onMouseLeave={() => setHover(0)}
-            className="transition-transform hover:scale-110 focus:outline-none"
-          >
-            <Star
-              size={size}
-              className={`transition-colors ${starVal <= (hover || value)
-                ? 'fill-ecommerce-amber text-ecommerce-amber'
-                : 'text-ecommerce-border'
-                }`}
-            />
-          </button>
-        );
-      })}
-    </div>
-  );
-}
-
-export default function ReviewForm({ productId, existingReview }: { productId: number; existingReview?: ProductReviewDisplayModel }) {
   const { data: session } = useSession();
   const t = useTranslations('');
   const [reviewText, setReviewText] = useState(existingReview?.reviewText || '');
@@ -86,7 +60,7 @@ export default function ReviewForm({ productId, existingReview }: { productId: n
             setReviewText('');
             setRating(0);
           }
-          setTimeout(() => window.location.reload(), 800);
+          onSuccess?.(result.data ?? review);
         } else {
           toast.error(result.message || 'Failed to submit review');
         }
@@ -121,11 +95,7 @@ export default function ReviewForm({ productId, existingReview }: { productId: n
         <label className="text-xs text-ecommerce-text-muted mb-1.5 block">
           {t('homepage.productDetail.rating')}
         </label>
-        <StarRatingInput
-          value={rating}
-          onChange={(v) => setRating(v)}
-          size={22}
-        />
+        <StarRating rating={rating} size={22} onChange={setRating} />
       </div>
       <Textarea
         placeholder="Your review..."
@@ -139,7 +109,8 @@ export default function ReviewForm({ productId, existingReview }: { productId: n
       <Button
         type="submit"
         disabled={submittingReview || rating === 0 || !reviewText.trim()}
-        className="w-full h-9 bg-ecommerce-red hover:bg-ecommerce-red/90 text-white text-sm font-medium rounded-lg gap-2 disabled:opacity-50"
+        size="lg"
+        className={"h-9 px-5 bg-ecommerce-purple hover:bg-ecommerce-purple/90 text-white rounded-lg text-sm font-medium gap-1.5 transition-all" + (isQuickView ? " sm" : "")}
       >
         {submittingReview ? (
           <Loader2 size={14} className="animate-spin" />

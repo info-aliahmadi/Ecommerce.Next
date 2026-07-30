@@ -1,6 +1,7 @@
 'use client';
 
-import { Star, ShoppingCart, Heart, Eye, GitCompareArrows, Check } from 'lucide-react';
+import { StarRating } from '../../_components/ui/star-rating';
+import { ShoppingCart, Heart, Eye, GitCompareArrows, Check } from 'lucide-react';
 import { Button } from '../ui/button';
 import { Badge } from '../ui/badge';
 import { useWishlistStore, useUIStore, useCompareStore } from '../../_lib/store';
@@ -225,12 +226,9 @@ export default function ProductListCard({ product, index = 0 }: Readonly<Product
                 </div>
               </div>
 
-              {/* Rating */}
               <div className="flex items-center gap-1.5 mt-3">
                 <div className="flex items-center gap-px">
-                  {Array.from({ length: 5 }).map((_, i) => (
-                    <Star key={"star-" + i} size={12} className={i < Math.floor(rating) ? 'fill-ecommerce-amber text-ecommerce-amber' : 'text-ecommerce-border'} />
-                  ))}
+                  <StarRating rating={rating} size={12} />
                 </div>
                 <span className="text-xs text-ecommerce-text-muted">{rating.toFixed(1)} ({product.approvedTotalReviews})</span>
               </div>

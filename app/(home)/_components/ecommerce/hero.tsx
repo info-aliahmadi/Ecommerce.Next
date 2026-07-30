@@ -11,6 +11,7 @@ import HomePageService from '../../_services/HomePageService';
 import CONFIG from '@root/config';
 import SlideshowDisplayModel from '../../_types/SlideshowDisplayModel';
 import { GetImage } from '../../_lib/utils';
+import CurrencyViewer from '@root/utils/CurrencyViewer';
 
 const liveActivities = [
   { name: 'Sarah', city: 'NY', product: 'Wireless Headphones', color: '#E63946' },
@@ -409,7 +410,7 @@ export function HeroSection() {
   const t = useTranslations();
 
   const features = [
-    { icon: Truck, title: t('homepage.hero.freeShipping'), desc: t('homepage.hero.onOrders') },
+    { icon: Truck, title: t('homepage.hero.freeShipping'), desc: t('homepage.hero.onOrders', { amount: CurrencyViewer(CONFIG.FREE_SHIPPING_THRESHOLD, CONFIG.DEFAULT_CURRENCY) }) },
     { icon: Shield, title: t('homepage.hero.securePayment'), desc: t('homepage.hero.protected') },
     { icon: RotateCcw, title: t('homepage.hero.easyReturns'), desc: t('homepage.hero.returnPolicy') },
     { icon: Headphones, title: t('homepage.hero.support247'), desc: t('homepage.hero.helpCenter') },
