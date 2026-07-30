@@ -3,15 +3,8 @@ import { notFound } from 'next/navigation';
 import { getTranslations } from 'next-intl/server';
 import CONFIG from '@root/config';
 import ProductDisplayModel from '../../_types/Product/ProductDisplayModel';
-import ProductReviewDisplayModel from '../../_types/Product/ProductReviewDisplayModel';
 import { GetImage } from '../../_lib/utils';
-import { StarRating } from '../../_components/ui/star-rating';
-
-// Client components (only for interactive parts)
-import ImageGallery from './_components/ImageGallery';
-import ProductPurchaseSection from './_components/ProductPurchaseSection';
-import ReviewSummary from './_components/ReviewSummary';
-import ProductReviews from './_components/ProductReviews';
+import ProductReviews from '@root/app/(home)/_components/ecommerce/ProductReviews';
 import { Header } from '../../_components/ecommerce/header';
 import { Footer } from '../../_components/ecommerce/footer';
 import { CartDrawer } from '../../_components/ecommerce/cart-drawer';
@@ -41,6 +34,11 @@ import {
 } from 'lucide-react';
 import DeliveryDateType from '@root/app/types/enums/DeliveryDateType';
 import HomePageService from '../../_services/HomePageService';
+import { StarRating } from '../../_components/ui/star-rating';
+import ProductPurchaseSection from './_components/ProductPurchaseSection';
+import ReviewSummary from './_components/ReviewSummary';
+import ImageGallery from './_components/ImageGallery';
+import ProductReviewDisplayModel from '../../_types/Product/ProductReviewDisplayModel';
 
 // ── Server-side data fetch ─────────────────────────────
 async function getProduct(id: number): Promise<ProductDisplayModel | null> {
@@ -300,7 +298,7 @@ export default async function ProductDetailPage({
 
                     {/* Reviews - Breakdown + List */}
                     <div className="md:col-span-2">
-                      <ProductReviews productId={product.id} reviews={reviews} ratingSum={ratingSum} reviewCount={reviewCount} />
+                       <ProductReviews productId={product.id} reviews={reviews} ratingSum={ratingSum} reviewCount={reviewCount} variant="full" />
                     </div>
                   </div>
                 </TabsContent>

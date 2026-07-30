@@ -16,6 +16,6 @@ export default interface ProductFilterModel {
   categoryIds?: number[];
   manufacturerIds?: number[];
   attributeTypes?: AttributeType[];
-  attributeIds?: number[];
+  attributeKeys?: string[];
   productTagIds?: ProductTags[];
 }

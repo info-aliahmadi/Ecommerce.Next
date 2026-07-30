@@ -76,6 +76,7 @@ Always use `@root/` for cross-area imports. Never use relative `../../` chains.
 ## Important quirks
 
 - `ReviewForm` (`app/(home)/products/[id]/_components/ReviewForm.tsx`) accepts optional `existingReview` (edit mode) and `onSuccess` callbacks. Older callers may still reload; do not add unconditional `window.location.reload()` in new flows.
+- Shared reviews state lives in `app/(home)/_components/ecommerce/ProductReviews.tsx` (`variant="full"` on product pages, `variant="quick"` in Quick View). Both product detail and quick view should use this instead of local review lists.
 - `(home)` client components import icons from `lucide-react`; do not add new icon libraries without confirming existing patterns.
 - Images from the backend require explicit `remotePatterns` in `next.config.ts` for localhost dev.
 - `app/dashboard/` uses MUI styling only; never introduce shadcn/tailwind classes there.

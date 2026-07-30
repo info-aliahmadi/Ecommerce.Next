@@ -90,7 +90,7 @@ interface FilterState {
   stock: StockFilter;
   dateAdded: DateFilter;
   tags: number[];
-  attributes: number[];
+  attributes: string[];
   sort: SortOption;
   viewMode: ViewMode;
   page: number;
@@ -177,7 +177,7 @@ function paramsToFilters(params: URLSearchParams): Partial<FilterState> {
   const tags = params.get('tags');
   if (tags) partial.tags = tags.split(',').map(Number).filter(Boolean);
   const attributes = params.get('attributes');
-  if (attributes) partial.attributes = attributes.split(',').map(Number).filter(Boolean);
+  if (attributes) partial.attributes = attributes.split(',');
   const sort = params.get('sort');
   if (sort) partial.sort = sort as SortOption;
   const view = params.get('view');
@@ -341,7 +341,7 @@ function ProductsPageContent() {
       hasStockQuantity: filters.stock === 'inStock' ? true : filters.stock === 'outOfStock' ? false : undefined,
       dateFilter: DATE_FILTER_MAP[filters.dateAdded],
       productTagIds: filters.tags.length > 0 ? filters.tags as ProductTags[] : undefined,
-      attributeIds: filters.attributes.length > 0 ? filters.attributes : undefined,
+      attributeKeys: filters.attributes.length > 0 ? filters.attributes : undefined,
     };
   }, [filters, selectedCategoryIds]);
 
@@ -401,11 +401,11 @@ function ProductsPageContent() {
     });
   }, []);
 
-  const toggleAttribute = useCallback((attrId: number) => {
+  const toggleAttribute = useCallback((attrKey: string) => {
     setFilters((prev) => {
-      const attributes = prev.attributes.includes(attrId)
-        ? prev.attributes.filter((a) => a !== attrId)
-        : [...prev.attributes, attrId];
+      const attributes = prev.attributes.includes(attrKey)
+        ? prev.attributes.filter((a) => a !== attrKey)
+        : [...prev.attributes, attrKey];
       return { ...prev, attributes, page: 1 };
     });
   }, []);
@@ -528,12 +528,12 @@ function ProductsPageContent() {
         onRemove: () => toggleTag(tagId),
       });
     });
-    filters.attributes.forEach((attrId) => {
-      const attr = attributesData?.find((a) => a.id === attrId);
+    filters.attributes.forEach((attrKey) => {
+      const attr = attributesData?.find((a) => a.key === attrKey);
       chips.push({
-        key: `attr-${attrId}`,
-        label: attr?.displayName ?? String(attrId),
-        onRemove: () => toggleAttribute(attrId),
+        key: `attr-${attrKey}`,
+        label: attr?.displayName ?? String(attrKey),
+        onRemove: () => toggleAttribute(attrKey),
       });
     });
     return chips;
@@ -832,8 +832,8 @@ function ProductsPageContent() {
                   {attributesData.map((attr) => (
                     <label key={"attr-" + attr.id} className="flex items-center gap-2.5 cursor-pointer group py-1">
                       <Checkbox
-                        checked={filters.attributes.includes(attr.id)}
-                        onCheckedChange={() => toggleAttribute(attr.id)}
+                        checked={filters.attributes.includes(attr.key)}
+                        onCheckedChange={() => toggleAttribute(attr.key)}
                         className="rounded-md data-[state=checked]:bg-ecommerce-red data-[state=checked]:border-ecommerce-red"
                       />
                       <span className="text-sm text-ecommerce-text-secondary group-hover:text-ecommerce-text-primary transition-colors capitalize">
