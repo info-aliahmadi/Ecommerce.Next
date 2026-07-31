@@ -1,20 +1,57 @@
-import SingleSelect from '@root/app/dashboard/_components/Select/SingleSelect';
-import Result from '@root/app/types/Result';
+import React from 'react';
+import { FormControl, InputLabel } from '@mui/material';
+import { useTranslations } from 'next-intl';
+import EnumDropdown from '@dashboard/_components/EnumDropdown';
+import PaymentStatus from '@root/app/types/enums/PaymentStatus';
 
-export default function SelectPaymentStatus({ defaultValue, id, name, setFieldValue, error, disabled, label, optionLabel, dataApi }:
-   { defaultValue: string; id: string; name: string; setFieldValue: (field: string, value: any, shouldValidate?: boolean) => any; error: boolean; disabled: boolean; label: string; 
-    optionLabel: string; dataApi: () => Promise<Result<any>> }) {
-  return (
-    <SingleSelect
-      id={id}
-      name={name}
-      defaultValue={defaultValue}
-      setFieldValue={setFieldValue}
-      disabled={disabled}
-      error={error}
-      label={label}
-      optionLabel={optionLabel}
-      loadDataApi={dataApi}
-    />
-  );
+interface SelectPaymentStatusProps {
+  defaultValue?: PaymentStatus | null;
+  id: string;
+  setFieldValue?: (field: string, value: any, shouldValidate?: boolean) => void;
+  error?: boolean;
+  label: string;
+  disabled?: boolean;
+  showNoneOption?: boolean;
 }
+
+const SelectPaymentStatus: React.FC<SelectPaymentStatusProps> = ({
+  defaultValue,
+  id,
+  setFieldValue,
+  error,
+  label,
+  disabled = false,
+  showNoneOption = false,
+}) => {
+  const t = useTranslations('');
+
+  const handleChange = (newValue: number | null) => {
+    setFieldValue?.(id, newValue);
+  };
+
+  const paymentStatusLabels: Record<number, string> = {
+    [PaymentStatus.Pending]: t("fields.order.paymentStatusTypes.Pending"),
+    [PaymentStatus.Authorized]: t("fields.order.paymentStatusTypes.Authorized"),
+    [PaymentStatus.Paid]: t("fields.order.paymentStatusTypes.Paid"),
+    [PaymentStatus.PartiallyRefunded]: t("fields.order.paymentStatusTypes.PartiallyRefunded"),
+    [PaymentStatus.Refunded]: t("fields.order.paymentStatusTypes.Refunded"),
+    [PaymentStatus.Voided]: t("fields.order.paymentStatusTypes.Voided"),
+  };
+
+  return (
+    <FormControl error={error} key={id} fullWidth>
+      <InputLabel id={`${id}-label`}>{label}</InputLabel>
+      <EnumDropdown
+        defaultValue={defaultValue ?? undefined}
+        enumObject={PaymentStatus}
+        disabled={disabled}
+        customLabels={paymentStatusLabels}
+        onChange={handleChange}
+        showNoneOption={showNoneOption}
+        noneOptionLabel="-"
+      />
+    </FormControl>
+  );
+};
+
+export default SelectPaymentStatus;

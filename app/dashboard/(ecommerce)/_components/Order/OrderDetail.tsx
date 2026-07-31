@@ -22,17 +22,18 @@ import setServerErrors from '@root/utils/setServerErrors';
 import Notify from '@dashboard/_components/@extended/Notify';
 import OrderService from '../../_service/OrderService';
 import SelectPaymentStatus from './SelectPaymentStatus';
-import SelectShippingStatus from './SelectPaymentStatus';
+import SelectShippingStatus from './SelectShippingStatus';
 import SelectOrderStatus from './SelectOrderStatus';
-import SelectShippingMethod from '../ShippingMethod/SelectShippingMethod';
+import SelectShippingMethod from './SelectShippingMethod';
 import OrderItemData from '../OrderItem/OrderItemData';
 
 import { MRT_Row } from 'material-react-table';
 import OrderModel from '../../_types/Order/OrderModel';
 import AnimateButton from '@root/app/dashboard/_components/@extended/AnimateButton';
 import { Button } from '@mui/material';
+import OrderChangeStatusModel from '../../_types/Order/OrderChangeStatusModel';
 
-export default function OrderDetail({ row, refetch }: { row: MRT_Row<OrderModel>; refetch: () => void }) {
+export default function OrderDetail({ row, refetch }: Readonly<{ row: MRT_Row<OrderModel>; refetch: () => void }>) {
   const t = useTranslations("");
   const { data: session } = useSession();
   const jwt = session?.accessToken;
@@ -41,21 +42,9 @@ export default function OrderDetail({ row, refetch }: { row: MRT_Row<OrderModel>
   const [notify, setNotify] = useState<NotifyProps>({ open: false });
   //const row = props.row;
 
-  const getOrderStatusForSelect = () => {
-    return orderService.getAllOrderStatusForSelect();
-  };
-
-  const getPaymentStatusForSelect = () => {
-    return orderService.getAllPaymentStatusForSelect();
-  };
-
-  const getShippingStatusForSelect = () => {
-    return orderService.getAllShippingStatusForSelect();
-  };
-
-  const handleSubmit = (order: OrderModel, resetForm: (values: any) => void, setErrors: (errors: any) => void) => {
+  const handleSubmit = (order: OrderChangeStatusModel, resetForm: (values: any) => void, setErrors: (errors: any) => void) => {
     orderService
-      .updateOrder(order)
+      .updateOrderState(order)
       .then(() => {
         setNotify({ open: true });
         refetch();
@@ -72,19 +61,19 @@ export default function OrderDetail({ row, refetch }: { row: MRT_Row<OrderModel>
 
       <Formik
         initialValues={{
-          id: row.original.id,
+          orderId: row.original.id,
           paymentStatusId: row.original.paymentStatusId,
           shippingMethodId: row.original.shippingMethodId,
           orderStatusId: row.original.orderStatusId,
           shippingStatusId: row.original.shippingStatusId
-        }}
+        } as OrderChangeStatusModel}
         enableReinitialize={true}
         validatioOrderStatusIdnSchema={Yup.object().shape({
           paymentStatusTitle: Yup.string().max(255).required(t('validation.required-userName'))
         })}
         onSubmit={(values, { setErrors, setStatus, setSubmitting, resetForm }) => {
           try {
-            handleSubmit(values as OrderModel, resetForm, setErrors);
+            handleSubmit(values as OrderChangeStatusModel, resetForm, setErrors);
           } catch (err) {
             console.error(err);
             setStatus({ success: false });
@@ -105,13 +94,9 @@ export default function OrderDetail({ row, refetch }: { row: MRT_Row<OrderModel>
                           <Stack spacing={1}>
                             <InputLabel htmlFor="paymentStatusId">{t(fieldsName + 'paymentStatusId')}</InputLabel>
                             <SelectPaymentStatus
-                              disabled={true}
-                              dataApi={getPaymentStatusForSelect}
                               label={t(fieldsName + 'paymentStatusId')}
-                              optionLabel={t(fieldsName + 'paymentStatusId')}
-                              defaultValue={row.original.paymentStatusId.toString()}
+                              defaultValue={row.original.paymentStatusId ?? undefined}
                               id="paymentStatusId"
-                              name="paymentStatusId"
                               setFieldValue={setFieldValue}
                               error={Boolean(touched.paymentStatusId && errors.paymentStatusId)}
                             />
@@ -127,13 +112,9 @@ export default function OrderDetail({ row, refetch }: { row: MRT_Row<OrderModel>
                           <Stack spacing={1}>
                             <InputLabel htmlFor="shippingStatusId">{t(fieldsName + 'shippingStatusId')}</InputLabel>
                             <SelectShippingStatus
-                              disabled={true}
-                              dataApi={getShippingStatusForSelect}
                               label={t(fieldsName + 'shippingStatusId')}
-                              optionLabel={t(fieldsName + 'shippingStatusId')}
-                              defaultValue={row.original.shippingStatusId.toString()}
+                              defaultValue={row.original.shippingStatusId ?? undefined}
                               id="shippingStatusId"
-                              name="shippingStatusId"
                               setFieldValue={setFieldValue}
                               error={Boolean(touched.shippingStatusId && errors.shippingStatusId)}
                             />
@@ -149,14 +130,10 @@ export default function OrderDetail({ row, refetch }: { row: MRT_Row<OrderModel>
                           <Stack spacing={1}>
                             <InputLabel htmlFor="orderStatusId">{t(fieldsName + 'orderStatusId')}</InputLabel>
                             <SelectOrderStatus
-                              disabled={true}
-                              defaultValue={row.original.orderStatusId.toString()}
+                              defaultValue={row.original.orderStatusId ?? undefined}
                               id="orderStatusId"
-                              name="orderStatusId"
                               setFieldValue={setFieldValue}
-                              dataApi={getOrderStatusForSelect}
                               label={t(fieldsName + 'orderStatusId')}
-                              optionLabel={t(fieldsName + 'orderStatusId')}
                               error={Boolean(touched.orderStatusId && errors.orderStatusId)}
                             />
                             {touched.orderStatusId && errors.orderStatusId && (
@@ -170,11 +147,9 @@ export default function OrderDetail({ row, refetch }: { row: MRT_Row<OrderModel>
                           <Stack spacing={1}>
                             <InputLabel htmlFor="shippingMethodId">{t(fieldsName + 'shippingMethodId')}</InputLabel>
                             <SelectShippingMethod
-                              disabled={true}
                               label={t(fieldsName + 'shippingMethodId')}
-                              defaultValue={row.original.shippingMethodId ?? 0}
+                              defaultValue={row.original.shippingMethodId ?? undefined}
                               id="shippingMethodId"
-                              name="shippingMethodId"
                               setFieldValue={setFieldValue}
                               error={Boolean(touched.shippingMethodId && errors.shippingMethodId)}
                             />
@@ -186,17 +161,6 @@ export default function OrderDetail({ row, refetch }: { row: MRT_Row<OrderModel>
                           </Stack>
                         </Grid>
                         <Grid container spacing={3}>
-                          {/* <Grid size={{ xs: 12, sm: 12, md: 3, lg: 3, xl:3}}>
-                            <Stack spacing={1}>
-                              <TextField
-                                id="paymentStatusTitle"
-                                label={t(fieldsName + 'paymentStatusTitle')}
-                                defaultValue={row.original.paymentStatusTitle}
-                                disabled
-                              />
-                            </Stack>
-                          </Grid> */}
-
                           <Grid size={{ xs: 12, sm: 12, md: 3, lg: 3, xl: 3 }}>
                             <Stack spacing={1}>
                               <TextField
@@ -256,7 +220,7 @@ export default function OrderDetail({ row, refetch }: { row: MRT_Row<OrderModel>
         )}
       </Formik>
 
-      <OrderItemData orderId={row.original.id} currency={row.original.userCurrency as 'USD' | 'EUR' | 'GBP' | 'Rial'} />
+      <OrderItemData orderId={row.original.id} currency={row.original.userCurrencyType} />
     </>
   );
 }

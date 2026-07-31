@@ -2,10 +2,10 @@ import React from 'react';
 import { FormControl, InputLabel } from '@mui/material';
 import { useTranslations } from 'next-intl';
 import EnumDropdown from '@dashboard/_components/EnumDropdown';
-import ShippingStatus from '@root/app/types/enums/ShippingStatus';
+import ShippingMethod from '@root/app/types/enums/ShippingMethod';
 
-interface SelectShippingStatusProps {
-  defaultValue?: ShippingStatus | null;
+interface SelectShippingMethodProps {
+  defaultValue?: ShippingMethod | null;
   id: string;
   setFieldValue?: (field: string, value: any, shouldValidate?: boolean) => void;
   error?: boolean;
@@ -14,7 +14,7 @@ interface SelectShippingStatusProps {
   showNoneOption?: boolean;
 }
 
-const SelectShippingStatus: React.FC<SelectShippingStatusProps> = ({
+const SelectShippingMethod: React.FC<SelectShippingMethodProps> = ({
   defaultValue,
   id,
   setFieldValue,
@@ -29,13 +29,10 @@ const SelectShippingStatus: React.FC<SelectShippingStatusProps> = ({
     setFieldValue?.(id, newValue);
   };
 
-  const shippingStatusLabels: Record<number, string> = {
-    [ShippingStatus.ShippingNotRequired]: t("fields.order.shippingStatusTypes.ShippingNotRequired"),
-    [ShippingStatus.NotYetShipped]: t("fields.order.shippingStatusTypes.NotYetShipped"),
-    [ShippingStatus.PartiallyShipped]: t("fields.order.shippingStatusTypes.PartiallyShipped"),
-    [ShippingStatus.Shipped]: t("fields.order.shippingStatusTypes.Shipped"),
-    [ShippingStatus.Delivered]: t("fields.order.shippingStatusTypes.Delivered"),
-    [ShippingStatus.Backordered]: t("fields.order.shippingStatusTypes.Backordered"),
+  const shippingMethodLabels: Record<number, string> = {
+    [ShippingMethod.Ground]: t('fields.order.shippingMethodTypes.Ground'),
+    [ShippingMethod.NextDayAir]: t('fields.order.shippingMethodTypes.NextDayAir'),
+    [ShippingMethod.SecondDayAir]: t('fields.order.shippingMethodTypes.SecondDayAir'),
   };
 
   return (
@@ -43,9 +40,9 @@ const SelectShippingStatus: React.FC<SelectShippingStatusProps> = ({
       <InputLabel id={`${id}-label`}>{label}</InputLabel>
       <EnumDropdown
         defaultValue={defaultValue ?? undefined}
-        enumObject={ShippingStatus}
+        enumObject={ShippingMethod}
         disabled={disabled}
-        customLabels={shippingStatusLabels}
+        customLabels={shippingMethodLabels}
         onChange={handleChange}
         showNoneOption={showNoneOption}
         noneOptionLabel="-"
@@ -54,4 +51,4 @@ const SelectShippingStatus: React.FC<SelectShippingStatusProps> = ({
   );
 };
 
-export default SelectShippingStatus;
+export default SelectShippingMethod;

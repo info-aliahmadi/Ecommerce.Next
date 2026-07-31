@@ -49,14 +49,6 @@ export default class OrderService {
     return Fetch.Get<Result<OrderModel>>(CONFIG.API_BASEPATH + `/Order/deleteOrder?${params.toString()}`, this.config);
   };
 
-  getAllOrderStatusForSelect = async (): Promise<Result<any[]>> => {
-    return Fetch.Get<Result<any[]>>(CONFIG.API_BASEPATH + `/sale/GetAllOrderStatus`, this.config);
-  };
-
-  getAllShippingStatusForSelect = async (): Promise<Result<any[]>> => {
-    return Fetch.Get<Result<any[]>>(CONFIG.API_BASEPATH + `/sale/GetAllShippingStatus`, this.config);
-  };
-
   getAllShippingMethodForSelect = async (): Promise<Result<any[]>> => {
     return Fetch.Get<Result<any[]>>(CONFIG.API_BASEPATH + `/sale/GetAllShippingMethods`, this.config);
   };

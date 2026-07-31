@@ -1329,7 +1329,7 @@
       "transactionTrackingCode": "کد پیگیری تراکنش",
       "paymentTrackingCode": "کد پرداخت",
       "trackingNumber": "شماره پیگیری",
-      "paymentDateUtcToString": "تاریخ پرداخت",
+      "paymentDateUtc": "تاریخ پرداخت",
       "cardName": "نام کارت",
       "cardNumber": "شماره کارت",
       "paymentTypeTitle": "نوع پرداخت",
@@ -1351,12 +1351,12 @@
         "Cancelled": "Cancelled"
       },
       "shippingStatusTypes": {
-        "Pending": "Pending",
+        "ShippingNotRequired": "Shipping Not Required",
+        "NotYetShipped": "Not Yet Shipped",
         "Shipped": "Shipped",
         "PartiallyShipped": "Partially Shipped",
         "Delivered": "Delivered",
-        "Backordered": "Backordered",
-        "Cancelled": "Cancelled"
+        "Backordered": "Backordered"
       },
       "paymentStatusTypes": {
         "Pending": "Pending",

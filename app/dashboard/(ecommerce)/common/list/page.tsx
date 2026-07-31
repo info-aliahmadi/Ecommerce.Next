@@ -13,7 +13,6 @@ import DiscountDataGrid from '../../_components/Discount/DiscountDataGrid';
 import StateProvinceDataGrid from '../../_components/StateProvince/StateProvinceDataGrid';
 import TaxCategoryDataGrid from '../../_components/TaxCategory/TaxCategoryDataGrid';
 import TaxRateDataGrid from '../../_components/TaxRate/TaxRateDataGrid';
-import ShippingMethodDataGrid from '../../_components/ShippingMethod/ShippingMethodDataGrid';
 // ===============================|| COLOR BOX ||=============================== //
 function CommonList() {
   const t = useTranslations("");
@@ -98,23 +97,6 @@ function CommonList() {
             </AccordionSummary>
             <AccordionDetails>
               <TaxRateDataGrid />
-            </AccordionDetails>
-          </Accordion>
-          <Accordion expanded={expanded === 'shippingMethod'} onChange={handleChange('shippingMethod')}>
-            <AccordionSummary
-              expandIcon={<ExpandMoreIcon />}
-              aria-controls="panel5bh-content"
-              id="panel5bh-header"
-            >
-              <Typography component="span" sx={{ width: '33%', flexShrink: 0 }}>
-                {t("pages.shippingMethod")}
-              </Typography>
-              <Typography component="span" sx={{ color: 'text.secondary' }}>
-                {t("pages.shippingMethod")}
-              </Typography>
-            </AccordionSummary>
-            <AccordionDetails>
-              <ShippingMethodDataGrid />
             </AccordionDetails>
           </Accordion>
         </Grid>

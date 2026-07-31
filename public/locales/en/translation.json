@@ -1386,6 +1386,7 @@
       "shippingMethodId": "Shipping Method",
       "transactionTrackingCode": "Tracking Code",
       "paymentTrackingCode": "Payment Code",
+      "paymentDateUtc": "Payment Date",
       "trackingNumber": "Shipping Number",
       "cardName": "Card Name",
       "cardNumber": "Card Number",
@@ -1408,12 +1409,12 @@
         "Cancelled": "Cancelled"
       },
       "shippingStatusTypes": {
-        "Pending": "Pending",
+        "ShippingNotRequired": "Shipping Not Required",
+        "NotYetShipped": "Not Yet Shipped",
         "Shipped": "Shipped",
         "PartiallyShipped": "Partially Shipped",
         "Delivered": "Delivered",
-        "Backordered": "Backordered",
-        "Cancelled": "Cancelled"
+        "Backordered": "Backordered"
       },
       "paymentStatusTypes": {
         "Pending": "Pending",

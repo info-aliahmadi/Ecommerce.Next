@@ -84,15 +84,15 @@ function OrderDataGrid() {
         Cell: ({ row }: { row: MRT_Row<OrderModel> }) => row.original.finalPrice.toCurrency(row.original.userCurrencyType)
       },
       {
-        accessorKey: 'paymentStatusTitle',
-        header: t(fieldsName + 'paymentStatusTitle'),
+        accessorKey: 'paymentStatusId',
+        header: t(fieldsName + 'paymentStatusId'),
         enableClickToCopy: true,
         type: 'string',
         Cell: ({ row }: { row: MRT_Row<OrderModel> }) => <PaymentStatus paymentStatus={row.original.paymentStatusId} />
       },
       {
-        accessorKey: 'paymentDateUtcToString',
-        header: t(fieldsName + 'paymentDateUtcToString'),
+        accessorKey: 'paymentDateUtc',
+        header: t(fieldsName + 'paymentDateUtc'),
         enableClickToCopy: true,
         type: 'string'
       },
