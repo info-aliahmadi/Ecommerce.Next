@@ -10,8 +10,8 @@ export default function OrderItems({ orderId, currency }: Readonly<{ orderId: nu
   const t = useTranslations('');
 
   return (
-    <MainCard title={t('fields.order.orderItems')} sx={{ mt: 2 }}>
+    // <MainCard title={t('fields.order.orderItems')} sx={{ mt: 2 }}>
       <OrderItemData orderId={orderId} currency={currency} />
-    </MainCard>
+    // </MainCard>
   );
 }

@@ -9,7 +9,7 @@ interface SelectShippingMethodProps {
   id: string;
   setFieldValue?: (field: string, value: any, shouldValidate?: boolean) => void;
   error?: boolean;
-  label: string;
+  label?: string;
   disabled?: boolean;
   showNoneOption?: boolean;
 }

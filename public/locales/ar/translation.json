@@ -1382,7 +1382,12 @@
       "shippingAddressSnapshot": "عنوان الشحن",
       "shippedDateUtc": "تاريخ الشحن",
       "deliveryDateUtc": "تاريخ التسليم",
-      "readyForPickupDateUtc": "تاريخ الجاهزية للاستلام"
+      "readyForPickupDateUtc": "تاريخ الجاهزية للاستلام",
+      "tabs": {
+        "status": "حالة الطلب",
+        "shipment": "الشحن",
+        "items": "عناصر الطلب"
+      }
     },
     "orderItem": {
       "id": "معرف",

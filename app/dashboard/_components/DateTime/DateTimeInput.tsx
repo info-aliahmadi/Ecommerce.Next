@@ -4,7 +4,7 @@ import nextIntlService from '@root/locales/nextIntlService';
 
 interface DateTimeInputProps {
   name: string;
-  label: string;
+  label?: string;
   setFieldValue: (field: string, value: any) => void;
   defaultValue?: string | Date;
   error?: boolean;

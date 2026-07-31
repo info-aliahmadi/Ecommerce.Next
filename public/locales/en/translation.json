@@ -1441,7 +1441,12 @@
       "shippingAddressSnapshot": "Shipping Address",
       "shippedDateUtc": "Shipped Date",
       "deliveryDateUtc": "Delivery Date",
-      "readyForPickupDateUtc": "Ready for Pickup Date"
+      "readyForPickupDateUtc": "Ready for Pickup Date",
+      "tabs": {
+        "status": "Order Status",
+        "shipment": "Shipment",
+        "items": "Order Items"
+      }
     },
     "orderItem": {
       "id": "Id",

@@ -1414,7 +1414,12 @@
       "shippingAddressSnapshot": "آدرس ارسال",
       "shippedDateUtc": "تاریخ ارسال",
       "deliveryDateUtc": "تاریخ تحویل",
-      "readyForPickupDateUtc": "تاریخ آماده‌سازی برای ارسال"
+      "readyForPickupDateUtc": "تاریخ آماده‌سازی برای تحویل",
+      "tabs": {
+        "status": "وضعیت سفارش",
+        "shipment": "ارسال",
+        "items": "آیتم‌های سفارش"
+      }
     },
     "orderItem": {
       "id": "شناسه",

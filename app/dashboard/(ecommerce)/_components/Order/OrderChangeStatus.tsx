@@ -82,140 +82,105 @@ export default function OrderChangeStatus({ row, refetch }: Readonly<{ row: MRT_
         {({ errors, handleBlur, handleChange, setFieldValue, handleSubmit, isSubmitting, touched, values }) => (
           <form noValidate onSubmit={handleSubmit}>
             <Grid container direction="row" sx={{ justifyContent: "center", alignItems: "flex-start" }}>
-              <Grid container spacing={3} size={{ xs: 12, sm: 12, md: 12, lg: 12, xl: 12 }} >
+              <Grid container spacing={2} size={{ xs: 12, sm: 12, md: 12, lg: 12, xl: 12 }} >
                 <Grid size={12}>
-                  <MainCard>
-                    <Grid container spacing={3} >
-                      <Grid container spacing={3}>
-                        <Grid size={{ xs: 12, sm: 12, md: 3, lg: 3, xl: 3 }}>
-                          <Stack spacing={1}>
-                            <InputLabel htmlFor="paymentStatusId">{t(fieldsName + 'paymentStatusId')}</InputLabel>
-                            <SelectPaymentStatus
-                              label={t(fieldsName + 'paymentStatusId')}
-                              defaultValue={row.original.paymentStatusId ?? undefined}
-                              id="paymentStatusId"
-                              setFieldValue={setFieldValue}
-                              error={Boolean(touched.paymentStatusId && errors.paymentStatusId)}
-                            />
-                            {touched.paymentStatusId && errors.paymentStatusId && (
-                              <FormHelperText error id="helper-text-email">
-                                {errors.paymentStatusId}
-                              </FormHelperText>
-                            )}
-                          </Stack>
-                        </Grid>
-
-                        <Grid size={{ xs: 12, sm: 12, md: 3, lg: 3, xl: 3 }}>
-                          <Stack spacing={1}>
-                            <InputLabel htmlFor="shippingStatusId">{t(fieldsName + 'shippingStatusId')}</InputLabel>
-                            <SelectShippingStatus
-                              label={t(fieldsName + 'shippingStatusId')}
-                              defaultValue={row.original.shippingStatusId ?? undefined}
-                              id="shippingStatusId"
-                              setFieldValue={setFieldValue}
-                              error={Boolean(touched.shippingStatusId && errors.shippingStatusId)}
-                            />
-                            {touched.shippingStatusId && errors.shippingStatusId && (
-                              <FormHelperText error id="helper-text-email">
-                                {errors.shippingStatusId}
-                              </FormHelperText>
-                            )}
-                          </Stack>
-                        </Grid>
-
-                        <Grid size={{ xs: 12, sm: 12, md: 3, lg: 3, xl: 3 }}>
-                          <Stack spacing={1}>
-                            <InputLabel htmlFor="orderStatusId">{t(fieldsName + 'orderStatusId')}</InputLabel>
-                            <SelectOrderStatus
-                              defaultValue={row.original.orderStatusId ?? undefined}
-                              id="orderStatusId"
-                              setFieldValue={setFieldValue}
-                              label={t(fieldsName + 'orderStatusId')}
-                              error={Boolean(touched.orderStatusId && errors.orderStatusId)}
-                            />
-                            {touched.orderStatusId && errors.orderStatusId && (
-                              <FormHelperText error id="helper-text-email">
-                                {errors.orderStatusId}
-                              </FormHelperText>
-                            )}
-                          </Stack>
-                        </Grid>
-                        <Grid size={{ xs: 12, sm: 12, md: 3, lg: 3, xl: 3 }}>
-                          <Stack spacing={1}>
-                            <InputLabel htmlFor="shippingMethodId">{t(fieldsName + 'shippingMethodId')}</InputLabel>
-                            <SelectShippingMethod
-                              label={t(fieldsName + 'shippingMethodId')}
-                              defaultValue={row.original.shippingMethodId ?? undefined}
-                              id="shippingMethodId"
-                              setFieldValue={setFieldValue}
-                              error={Boolean(touched.shippingMethodId && errors.shippingMethodId)}
-                            />
-                            {touched.shippingMethodId && errors.shippingMethodId && (
-                              <FormHelperText error id="helper-text-email">
-                                {errors.shippingMethodId}
-                              </FormHelperText>
-                            )}
-                          </Stack>
-                        </Grid>
-                        <Grid container spacing={3}>
-                          <Grid size={{ xs: 12, sm: 12, md: 3, lg: 3, xl: 3 }}>
-                            <Stack spacing={1}>
-                              <TextField
-                                id="transactionTrackingCode"
-                                label={t(fieldsName + 'transactionTrackingCode')}
-                                defaultValue={row.original.transactionTrackingCode}
-                                disabled
-                              />
-                            </Stack>
-                          </Grid>
-                          <Grid size={{ xs: 12, sm: 12, md: 3, lg: 3, xl: 3 }}>
-                            <Stack spacing={1}>
-                              <TextField
-                                id="paymentTrackingCode"
-                                label={t(fieldsName + 'paymentTrackingCode')}
-                                defaultValue={row.original.paymentTrackingCode}
-                                disabled
-                              />
-                            </Stack>
-                          </Grid>
-
-                          <Grid size={{ xs: 12, sm: 12, md: 3, lg: 3, xl: 3 }}>
-                            <Stack spacing={1}>
-                              <TextField
-                                id="trackingNumber"
-                                label={t(fieldsName + 'trackingNumber')}
-                                defaultValue={row.original.trackingNumber}
-                                disabled
-                              />
-                            </Stack>
-                          </Grid>
-                        </Grid>
-                      </Grid>
+                  {/* <MainCard> */}
+                  <Grid container spacing={2} size={{ xs: 12, sm: 12, md: 12, lg: 12, xl: 12 }} >
+                    <Grid size={{ xs: 12, sm: 12, md: 3, lg: 3, xl: 3 }}>
+                      <Stack spacing={1}>
+                        <InputLabel htmlFor="paymentStatusId">{t(fieldsName + 'paymentStatusId')}</InputLabel>
+                        <SelectPaymentStatus
+                          // label={t(fieldsName + 'paymentStatusId')}
+                          defaultValue={row.original.paymentStatusId ?? undefined}
+                          id="paymentStatusId"
+                          setFieldValue={setFieldValue}
+                          error={Boolean(touched.paymentStatusId && errors.paymentStatusId)}
+                        />
+                        {touched.paymentStatusId && errors.paymentStatusId && (
+                          <FormHelperText error id="helper-text-email">
+                            {errors.paymentStatusId}
+                          </FormHelperText>
+                        )}
+                      </Stack>
                     </Grid>
-                     <Grid container direction="row" sx={{ justifyContent: "space-between", alignItems: "center", mt: 1 }}>
-                        <Grid size={12}>
-                          <Stack direction="row" spacing={2}>
-                            <AnimateButton>
-                              <Button
-                                disabled={isSubmitting}
-                                variant="contained"
-                                color="warning"
-                                type="submit"
-                                startIcon={<Save />}
-                              >
-                                {t(buttonName + 'save')}
-                              </Button>
-                            </AnimateButton>
-                          </Stack>
-                        </Grid>
-                      </Grid>
-                    </MainCard>
+
+                    <Grid size={{ xs: 12, sm: 12, md: 3, lg: 3, xl: 3 }}>
+                      <Stack spacing={1}>
+                        <InputLabel htmlFor="shippingStatusId">{t(fieldsName + 'shippingStatusId')}</InputLabel>
+                        <SelectShippingStatus
+                          // label={t(fieldsName + 'shippingStatusId')}
+                          defaultValue={row.original.shippingStatusId ?? undefined}
+                          id="shippingStatusId"
+                          setFieldValue={setFieldValue}
+                          error={Boolean(touched.shippingStatusId && errors.shippingStatusId)}
+                        />
+                        {touched.shippingStatusId && errors.shippingStatusId && (
+                          <FormHelperText error id="helper-text-email">
+                            {errors.shippingStatusId}
+                          </FormHelperText>
+                        )}
+                      </Stack>
+                    </Grid>
+
+                    <Grid size={{ xs: 12, sm: 12, md: 3, lg: 3, xl: 3 }}>
+                      <Stack spacing={1}>
+                        <InputLabel htmlFor="orderStatusId">{t(fieldsName + 'orderStatusId')}</InputLabel>
+                        <SelectOrderStatus
+                          defaultValue={row.original.orderStatusId ?? undefined}
+                          id="orderStatusId"
+                          setFieldValue={setFieldValue}
+                          // label={t(fieldsName + 'orderStatusId')}
+                          error={Boolean(touched.orderStatusId && errors.orderStatusId)}
+                        />
+                        {touched.orderStatusId && errors.orderStatusId && (
+                          <FormHelperText error id="helper-text-email">
+                            {errors.orderStatusId}
+                          </FormHelperText>
+                        )}
+                      </Stack>
+                    </Grid>
+                    <Grid size={{ xs: 12, sm: 12, md: 3, lg: 3, xl: 3 }}>
+                      <Stack spacing={1}>
+                        <InputLabel htmlFor="shippingMethodId">{t(fieldsName + 'shippingMethodId')}</InputLabel>
+                        <SelectShippingMethod
+                          // label={t(fieldsName + 'shippingMethodId')}
+                          defaultValue={row.original.shippingMethodId ?? undefined}
+                          id="shippingMethodId"
+                          setFieldValue={setFieldValue}
+                          error={Boolean(touched.shippingMethodId && errors.shippingMethodId)}
+                        />
+                        {touched.shippingMethodId && errors.shippingMethodId && (
+                          <FormHelperText error id="helper-text-email">
+                            {errors.shippingMethodId}
+                          </FormHelperText>
+                        )}
+                      </Stack>
+                    </Grid>
                   </Grid>
+                  <Grid container direction="row" sx={{ justifyContent: "space-between", alignItems: "center", mt: 1 }}>
+                    <Grid size={12}>
+                      <Stack direction="row" spacing={2}>
+                        <AnimateButton>
+                          <Button
+                            disabled={isSubmitting}
+                            variant="contained"
+                            color="warning"
+                            type="submit"
+                            startIcon={<Save />}
+                          >
+                            {t(buttonName + 'save')}
+                          </Button>
+                        </AnimateButton>
+                      </Stack>
+                    </Grid>
+                  </Grid>
+                  {/* </MainCard> */}
                 </Grid>
               </Grid>
-            </form>
-          )}
-        </Formik>
+            </Grid>
+          </form>
+        )}
+      </Formik>
     </>
   );
 }
