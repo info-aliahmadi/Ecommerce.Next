@@ -1342,6 +1342,7 @@
     },
     "order": {
       "id": "شناسه سفارش",
+      "orderItems" : "آیتم‌های سفارش",
       "orderStatusId": "وضعیت سفارش",
       "userName": "نام کاربر",
       "orderShippingTax": "مالیات حمل و نقل",
@@ -1414,6 +1415,7 @@
     },
     "orderItem": {
       "id": "شناسه",
+      "imagePreview": "پیش‌نمایش تصویر",
       "unitPrice": "قیمت واحد",
       "quantity": "تعداد",
       "productName": "نام محصول",
@@ -1639,6 +1641,7 @@
     "back": "بازگشت",
     "visitorlink": "لینک بازدیدکننده",
     "edit": "ویرایش",
+    "add": "افزودن",
     "delete": "حذف",
     "remove": "حذف",
     "detail": "جزئیات",

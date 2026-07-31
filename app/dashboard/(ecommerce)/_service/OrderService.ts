@@ -4,11 +4,9 @@ import GridDataBound from '@root/app/types/GridDataBound';
 import CONFIG from '@root/config';
 import OrderModel from '../_types/Order/OrderModel';
 
-import OrderItemModel, { SumOrderItemsModel } from '../_types/Order/OrderItemModel';
 import OrderChangeStatusModel from '../_types/Order/OrderChangeStatusModel';
+import OrderItemsResponse from '../_types/Order/OrderItemsResponse';
 
-// Define tuple type for the response
-type OrderItemsResponse = [OrderItemModel[], SumOrderItemsModel];
 
 export default class OrderService {
   config?: RequestInit;

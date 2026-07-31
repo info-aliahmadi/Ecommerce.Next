@@ -3,7 +3,7 @@
 import { useCallback } from 'react';
 import { useCartStore } from '../_lib/store';
 import { useQueryClient } from '@tanstack/react-query';
-import OrderService from '../_services/OrderService';
+import MyOrderService  from '../_services/MyOrderService';
 import CartItem from '../_types/Order/CartItem';
 
 export type MergeStrategy = 'additive' | 'server-wins' | 'local-wins';
@@ -71,7 +71,7 @@ export function useCartMerge() {
   const mergeLocalCartWithServer = useCallback(
     async (jwt: string) => {
       try {
-        const service = new OrderService(jwt);
+        const service = new MyOrderService(jwt);
         const result = await service.getMyCartItems();
 
         if (!result.succeeded) {

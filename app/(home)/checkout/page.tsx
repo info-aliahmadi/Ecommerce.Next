@@ -39,7 +39,7 @@ import {
   EmptyCart,
 } from './_components';
 import ShippingMethod from '@root/app/types/enums/ShippingMethod';
-import OrderService from '../_services/OrderService';
+import MyOrderService  from '../_services/MyOrderService';
 import CreateOrderRequest, { CreateOrderItemRequest } from '../_types/Order/CreateOrderRequest';
 import PaymentMethod from '@root/app/types/enums/PaymentMethod';
 
@@ -445,7 +445,7 @@ function CheckoutPageInner() {
     setIsPlacing(true);
     try {
       // Build order model using OrderDisplayModel
-      const orderService = new OrderService(session.user.accessToken);
+      const orderService = new MyOrderService(session.user.accessToken);
       const order: CreateOrderRequest = {
         addressId: shipping.addressId || null,
         shippingMethodId: ShippingMethod.Ground,

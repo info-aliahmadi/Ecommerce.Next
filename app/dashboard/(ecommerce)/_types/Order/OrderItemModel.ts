@@ -1,3 +1,5 @@
+import FileUploadModel from "@root/app/dashboard/(filestorage)/_types/FileUploadModel";
+
 /**
  * OrderItemModel - TypeScript equivalent of the C# model
  */
@@ -11,6 +13,11 @@ export default interface OrderItemModel {
    * Associated order ID
    */
   orderId: number;
+
+  /**
+   * Associated order ID
+   */
+  productImagePreview?: FileUploadModel;
 
   /**
    * Product ID

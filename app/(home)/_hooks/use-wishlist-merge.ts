@@ -3,7 +3,7 @@
 import { useCallback } from 'react';
 import { useWishlistStore } from '../_lib/store';
 import { useQueryClient } from '@tanstack/react-query';
-import OrderService from '../_services/OrderService';
+import MyOrderService  from '../_services/MyOrderService';
 import WishlistItem from '../_types/Order/WishlistItem';
 import CartItem from '../_types/Order/CartItem';
 
@@ -53,7 +53,7 @@ export function useWishlistMerge() {
   const mergeLocalWishlistWithServer = useCallback(
     async (jwt: string) => {
       try {
-        const service = new OrderService(jwt);
+        const service = new MyOrderService(jwt);
         const result = await service.getMyWishlistItems();
 
         if (!result.succeeded) {

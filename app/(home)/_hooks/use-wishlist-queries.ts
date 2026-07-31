@@ -1,7 +1,7 @@
 'use client';
 
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import OrderService from '../_services/OrderService';
+import MyOrderService  from '../_services/MyOrderService';
 import { useWishlistStore } from '../_lib/store';
 import { toast } from 'sonner';
 import RemoveFromWishlistRequest from '../_types/Order/RemoveFromWishlistRequest';
@@ -12,7 +12,7 @@ export function useServerWishlist(jwt: string | undefined) {
     queryKey: ['serverWishlist', jwt],
     queryFn: () => {
       if (!jwt) throw new Error('No JWT');
-      const service = new OrderService(jwt);
+      const service = new MyOrderService(jwt);
       return service.getMyWishlistItems().then((res) => {
         if (!res.succeeded) throw new Error(res.message || 'Failed to fetch wishlist');
         return (res.data || []).map((item: any) => ({
@@ -38,7 +38,7 @@ export function useAddToWishlist() {
       if (!jwt) {
         return Promise.resolve({} as WishlistItem);
       }
-      const service = new OrderService(jwt);
+      const service = new MyOrderService(jwt);
       return service.addToWishlist({ variantId: item.variant.id }).then((res) => {
         if (!res.succeeded) throw new Error(res.message || 'Failed to add to wishlist');
         return res.data as WishlistItem;
@@ -78,7 +78,7 @@ export function useRemoveFromWishlist() {
       if (!jwt) {
         return Promise.resolve();
       }
-      const service = new OrderService(jwt);
+      const service = new MyOrderService(jwt);
       return service.removeFromWishlist(request).then((res) => {
         if (!res.succeeded) throw new Error(res.message || 'Failed to remove from wishlist');
         return res.data;
@@ -115,7 +115,7 @@ export function useClearWishlist() {
       if (!jwt) {
         return Promise.resolve();
       }
-      const service = new OrderService(jwt);
+      const service = new MyOrderService(jwt);
       return service.clearWishlist().then((res) => {
         if (!res.succeeded) throw new Error(res.message || 'Failed to clear wishlist');
         return res.data;

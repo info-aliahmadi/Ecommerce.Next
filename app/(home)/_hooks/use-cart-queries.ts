@@ -1,7 +1,7 @@
 'use client';
 
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import OrderService from '../_services/OrderService';
+import MyOrderService  from '../_services/MyOrderService';
 import { useCartStore } from '../_lib/store';
 import { toast } from 'sonner';
 import UpdateQuantityRequest from '../_types/Order/UpdateQuantityRequest';
@@ -13,7 +13,7 @@ export function useServerCart(jwt: string | undefined) {
     queryKey: ['serverCart', jwt],
     queryFn: () => {
       if (!jwt) throw new Error('No JWT');
-      const service = new OrderService(jwt);
+      const service = new MyOrderService(jwt);
       return service.getMyCartItems().then((res) => {
         if (!res.succeeded) throw new Error(res.message || 'Failed to fetch cart');
         return res.data || [];
@@ -33,7 +33,7 @@ export function useAddToCart() {
       if (!jwt) {
         return Promise.resolve({} as CartItem);
       }
-      const service = new OrderService(jwt);
+      const service = new MyOrderService(jwt);
       return service.addToCart({ variantId: item.variant.id, quantity: 1 }).then((res) => {
         if (!res.succeeded) throw new Error(res.message || 'Failed to add to cart');
         return res.data as CartItem;
@@ -79,7 +79,7 @@ export function useUpdateCartQuantity() {
       if (!jwt) {
         return Promise.resolve({} as CartItem);
       }
-      const service = new OrderService(jwt);
+      const service = new MyOrderService(jwt);
       return service.updateCartItemQuantity(request).then((res) => {
         if (!res.succeeded) throw new Error(res.message || 'Failed to update quantity');
         return res.data as CartItem;
@@ -124,7 +124,7 @@ export function useRemoveFromCart() {
       if (!jwt) {
         return Promise.resolve();
       }
-      const service = new OrderService(jwt);
+      const service = new MyOrderService(jwt);
       return service.removeFromCart(request).then((res) => {
         if (!res.succeeded) throw new Error(res.message || 'Failed to remove from cart');
         return res.data;
@@ -161,7 +161,7 @@ export function useClearCart() {
       if (!jwt) {
         return Promise.resolve();
       }
-      const service = new OrderService(jwt);
+      const service = new MyOrderService(jwt);
       return service.clearCart().then((res) => {
         if (!res.succeeded) throw new Error(res.message || 'Failed to clear cart');
         return res.data;

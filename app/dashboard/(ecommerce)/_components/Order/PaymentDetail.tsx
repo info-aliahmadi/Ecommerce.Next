@@ -15,7 +15,7 @@ import Grid from '@mui/material/Grid';
 import { Stack } from '@mui/system';
 
 import MainCard from '@dashboard/_components/MainCard';
-import PaymentStatus from './PaymentStatus';
+import PaymentStatus from './PaymentStatusView';
 import OrderModel from '../../_types/Order/OrderModel';
 
 export default function PaymentDetail({ orderId, open, setOpen, refetch }: { orderId: number; open: boolean; setOpen: (open: boolean) => void; refetch: () => void }) {

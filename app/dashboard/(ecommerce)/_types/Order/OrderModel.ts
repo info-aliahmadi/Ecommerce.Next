@@ -89,11 +89,6 @@ export default interface OrderModel {
   allowStoringCreditCardNumber: boolean;
 
   /**
-   * The date and time the order was paid (nullable, UTC).
-   */
-  paidDateUtc: Date | null;
-
-  /**
    * Indicates whether the order is deleted.
    */
   deleted: boolean;
@@ -103,20 +98,12 @@ export default interface OrderModel {
    */
   createdOnUtc: Date;
 
-  /**
-   * The created on UTC string for display.
-   */
-  createdOnUtcString: string; // Type is string
 
   /**
    * The date and time of payment (nullable, UTC).
    */
-  paymentDateUtc: Date | null;
+  paymentDateUtc?: Date | null;
 
-  /**
-   * The payment date UTC string for display.
-   */
-  paymentDateUtcToString: string; // Type is string
 
   /**
    * Order notes.

@@ -1,5 +1,7 @@
+'use client';
+
 import Avatar from '@mui/material/Avatar';
-import { useEffect, useState } from 'react';
+import { useQuery } from '@tanstack/react-query';
 import { useTranslations } from 'next-intl';
 import { useSession } from 'next-auth/react';
 import OrderService from '../../_service/OrderService';
@@ -12,38 +14,37 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import { Divider } from '@mui/material';
-import OrderItemModel, { SumOrderItemsModel } from '../../_types/Order/OrderItemModel';
 import CurrencyTypes from '@root/app/types/enums/CurrencyTypes';
-
-// ===============================|| COLOR BOX ||=============================== //
+import { GetImage } from '@root/app/(home)/_lib/utils';
+import OrderItemModel from '../../_types/Order/OrderItemModel';
 
 export default function OrderItemData({ orderId, currency }: Readonly<{ orderId: number; currency: CurrencyTypes }>) {
   const t = useTranslations("");
   const { data: session } = useSession();
   const jwt = session?.accessToken;
-  const service = new OrderService(jwt ?? '');
-  const [values, setValues] = useState<OrderItemModel[]>([]);
-  const [valueAmounts, setValueSumAmounts] = useState<SumOrderItemsModel>();
   const [fieldsName, buttonName] = ['fields.orderItem.', 'buttons.orderItem.'];
 
-  useEffect(() => {
-    loadOrderItems();
-  }, []);
+  const { data: itemsResponse, isLoading, error } = useQuery({
+    queryKey: ['orderItems', orderId],
+    queryFn: async () => {
+      const service = new OrderService(jwt ?? '');
+      const result = await service.getOrderItemList(orderId);
+      // if (!result.succeeded) throw new Error(result.message ?? 'Failed to load order items');
+      return result.data ?? { orderItems: [] as OrderItemModel[], orderSummary: undefined };
+    },
+    enabled: orderId > 0 && !!jwt,
+  });
 
-  const loadOrderItems = () => {
-    if (orderId > 0) {
-      //setLoading(true);
+  const values = itemsResponse?.orderItems ?? [];
+  const valueAmounts = itemsResponse?.orderSummary;
 
+  if (isLoading) {
+    return <span>Loading...</span>;
+  }
 
-      service.getOrderItemList(orderId).then((result) => {
-        setValues(result.data?.[0] ?? []);
-        setValueSumAmounts(result.data?.[1] ?? undefined);
-      });
-    } else {
-      setValues([]);
-      setValueSumAmounts(undefined);
-    }
-  };
+  if (error) {
+    return <span>Error: {error instanceof Error ? error.message : 'Failed to load order items'}</span>;
+  }
 
   return (
     <>
@@ -52,33 +53,33 @@ export default function OrderItemData({ orderId, currency }: Readonly<{ orderId:
           <Table aria-label="simple table">
             <TableHead>
               <TableRow>
-                <TableCell>Photo</TableCell>
-                <TableCell align="center">{t(fieldsName + 'productName')}</TableCell>
-                <TableCell align="center">{t(fieldsName + 'quantity')}</TableCell>
-                <TableCell align="center">{t(fieldsName + 'unitPrice')}</TableCell>
-                <TableCell align="center">{t(fieldsName + 'discountAmount')}</TableCell>
-                <TableCell align="center">{t(fieldsName + 'totalPriceTax')}</TableCell>
-                <TableCell align="center">{t(fieldsName + 'totalPrice')}</TableCell>
+                <TableCell>{t(fieldsName + 'imagePreview')}</TableCell>
+                <TableCell>{t(fieldsName + 'productName')}</TableCell>
+                <TableCell>{t(fieldsName + 'quantity')}</TableCell>
+                <TableCell>{t(fieldsName + 'unitPrice')}</TableCell>
+                <TableCell>{t(fieldsName + 'discountAmount')}</TableCell>
+                <TableCell>{t(fieldsName + 'totalPriceTax')}</TableCell>
+                <TableCell>{t(fieldsName + 'totalPrice')}</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
               {values.map((res, index) => (
                 <TableRow key={index} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
                   <TableCell component="th" scope="row">
-                    <Avatar alt="" src={'/images/rez.jpg'} sx={{ width: 80, height: 80, borderRadius: 1 }}></Avatar>
+                    <Avatar alt="" src={GetImage(res.productImagePreview, true)} sx={{ width: 40, height: 40, borderRadius: 1 }}></Avatar>
                   </TableCell>
-                  <TableCell align="center">{res.productName}</TableCell>
-                  <TableCell align="center">{res.quantity}</TableCell>
-                  <TableCell align="center">
+                  <TableCell >{res.productName}</TableCell>
+                  <TableCell >{res.quantity}</TableCell>
+                  <TableCell >
                     {res.unitPrice.toCurrency(currency)}
                   </TableCell>
-                  <TableCell align="center">
+                  <TableCell >
                     {res.discountAmount.toCurrency(currency)}
                   </TableCell>
-                  <TableCell align="center">
+                  <TableCell >
                     {res.totalPriceTax.toCurrency(currency)}
                   </TableCell>
-                  <TableCell align="center">
+                  <TableCell >
                     {res.totalPrice.toCurrency(currency)}
                   </TableCell>
                 </TableRow>
@@ -86,32 +87,30 @@ export default function OrderItemData({ orderId, currency }: Readonly<{ orderId:
             </TableBody>
           </Table>
           <Divider />
-          <Table aria-label="simple table">
-            <TableHead>
-              <TableRow>
-                <TableCell align="center">Sum {t(fieldsName + 'unitPrice')}</TableCell>
-                <TableCell align="center">Sum {t(fieldsName + 'discountAmount')}</TableCell>
-                <TableCell align="center">Sum {t(fieldsName + 'totalPriceTax')}</TableCell>
-                <TableCell align="center">Sum {t(fieldsName + 'totalPrice')}</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              <TableRow sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
-                <TableCell align="center">
-                  {valueAmounts?.totalPrice.toCurrency(currency)}
-                </TableCell>
-                <TableCell align="center">
-                  {valueAmounts?.totalDiscountAmount?.toCurrency(currency)}
-                </TableCell>
-                <TableCell align="center">
-                  {valueAmounts?.totalPrice.toCurrency(currency)}
-                </TableCell>
-                <TableCell align="center">
-                  {valueAmounts?.totalPrice.toCurrency(currency)}
-                </TableCell>
-              </TableRow>
-            </TableBody>
-          </Table>
+          {valueAmounts && (
+            <Table aria-label="simple table">
+              <TableHead>
+                <TableRow>
+                  <TableCell align="center">Sum {t(fieldsName + 'discountAmount')}</TableCell>
+                  <TableCell align="center">Sum {t(fieldsName + 'totalPriceTax')}</TableCell>
+                  <TableCell align="center">Sum {t(fieldsName + 'totalPrice')}</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                <TableRow sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
+                  <TableCell align="center">
+                    {valueAmounts.totalDiscountAmount ? valueAmounts.totalDiscountAmount.toCurrency(currency) : '0'}
+                  </TableCell>
+                  <TableCell align="center">
+                    {valueAmounts.totalTax ? valueAmounts.totalTax.toCurrency(currency) : '0'}
+                  </TableCell>
+                  <TableCell align="center">
+                    {valueAmounts.totalPrice ? valueAmounts.totalPrice.toCurrency(currency) : '0'}
+                  </TableCell>
+                </TableRow>
+              </TableBody>
+            </Table>
+          )}
         </TableContainer>
       ) : (
         <span>There is no item.</span>

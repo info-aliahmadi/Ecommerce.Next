@@ -8,6 +8,7 @@ import { Suspense, useEffect, useState } from 'react';
 import Loader from './_components/Loader';
 import { SessionProvider } from 'next-auth/react'
 import AuthorizationProvider from './_components/Authorization/AuthorizationProvider';
+import { QueryProvider } from '@root/app/(home)/_components/query-provider';
 import '@root/utils/extensions/numberExtensions';
 import '@root/public/css/customStyle/dashboard.css'
 
@@ -32,6 +33,7 @@ export default function DashboardThemeLayout({ children }: { children: any }) {
   return (
     <SessionProvider>
       <ReduxProvider store={store}>
+        <QueryProvider>
         <ClientOnly>
           <Suspense fallback={<Loader />}>
             <Suspense fallback={<Loader />}>
@@ -47,6 +49,7 @@ export default function DashboardThemeLayout({ children }: { children: any }) {
             </Suspense>
           </Suspense>
         </ClientOnly>
+        </QueryProvider>
       </ReduxProvider>
     </SessionProvider>
     /* <link rel="preconnect" href="https://fonts.gstatic.com" /> */

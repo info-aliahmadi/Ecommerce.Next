@@ -1369,6 +1369,7 @@
     },
     "order": {
       "id": "Order Id",
+      "orderItems" : "Order Items",
       "orderStatusId": "Order Status",
       "userName": "User Name",
       "orderShippingTax": "Shipping Tax Amount",
@@ -1441,6 +1442,7 @@
     },
     "orderItem": {
       "id": "Id",
+      "imagePreview": "Image Preview",
       "unitPrice": "Unit Price",
       "quantity": "Quantity",
       "productName": "Product Name",
@@ -1666,6 +1668,7 @@
     "back": "Back",
     "visitorlink": "Visitor Link",
     "edit": "Edit",
+    "add": "Add",
     "delete": "Delete",
     "remove": "Remove",
     "detail": "Detail",

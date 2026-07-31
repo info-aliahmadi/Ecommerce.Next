@@ -14,7 +14,7 @@ import CreateOrderRequest from '@root/app/(home)/_types/Order/CreateOrderRequest
 import ProcessPaymentRequest from '@root/app/(home)/_types/Order/ProcessPaymentRequest';
 import CartItem from '../_types/Order/CartItem';
 
-export default class OrderService {
+export default class MyOrderService {
   config?: RequestInit;
   constructor(jwt: string) {
     if (jwt) this.config = Fetch.SetDefaultHeader(jwt);
