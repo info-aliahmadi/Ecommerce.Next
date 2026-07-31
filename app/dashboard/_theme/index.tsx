@@ -100,6 +100,9 @@ export default function DashboardThemeCustomization({ children }: { children: an
           paddingBottom: 8
         }
       },
+      shape: {
+        borderRadius: 5
+      },
       palette: themePallete.palette,
       customShadows: themeCustomShadows,
       shadows: themePallete.shadows,

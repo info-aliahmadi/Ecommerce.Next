@@ -7,8 +7,6 @@ import { Button, FormHelperText, Grid, InputLabel, Stack, TextField } from '@mui
 
 import { useTranslations } from 'next-intl';
 import { useSession } from 'next-auth/react';
-
-import MainCard from '@dashboard/_components/MainCard';
 import AnimateButton from '@dashboard/_components/@extended/AnimateButton';
 import Notify from '@dashboard/_components/@extended/Notify';
 import setServerErrors from '@root/utils/setServerErrors';

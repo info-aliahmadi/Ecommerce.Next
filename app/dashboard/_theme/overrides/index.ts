@@ -1,6 +1,7 @@
 // project import
 import Badge from './Badge';
 import Button from './Button';
+import Accordion from './Accordion';
 import CardContent from './CardContent';
 import Checkbox from './Checkbox';
 import Chip from './Chip';
@@ -27,6 +28,7 @@ export default function ComponentsOverrides(theme : Theme) {
   return {
     ...Button(theme),
     ...Badge(theme),
+    ...Accordion(theme),
     ...CardContent(),
     ...Checkbox(theme),
     ...Switch(theme),
