@@ -40,6 +40,7 @@ export default function OrderDetail({ row, refetch }: Readonly<{ row: MRT_Row<Or
   const orderService = new OrderService(jwt ?? '');
   const [fieldsName, validation, buttonName] = ['fields.order.', 'validation.order.', 'buttons.'];
   const [notify, setNotify] = useState<NotifyProps>({ open: false });
+  const [shipmentOpen, setShipmentOpen] = useState(false);
   //const row = props.row;
 
   const handleSubmit = (order: OrderChangeStatusModel, resetForm: (values: any) => void, setErrors: (errors: any) => void) => {

@@ -1090,7 +1090,7 @@
     "order": "Orders",
     "manufacturer": "Manufacturers",
     "bundles": "Bundles",
-    "common": "Common Information"
+    "common": "Commons"
   },
   "pages": {
     "edit-profile": "Edit Profile",
@@ -1134,11 +1134,13 @@
     "countries": "Countries",
     "product": "Products",
     "bundles": "Bundles",
+    "productAttributes": "Product Attributes",
+    "productTags": "Product Tags",
     "categories": "Categories",
     "orders": "Orders",
     "deliveryDates": "Delivery Dates",
     "manufacturers": "Manufacturers",
-    "common": "Common Information",
+    "common": "Commons",
     "discount": "Discounts",
     "productAttribute": "Product Attributes",
     "productTag": "Product Tags",

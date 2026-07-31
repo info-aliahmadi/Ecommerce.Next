@@ -59,8 +59,8 @@ export default function AddOrEditPage({ params } : { readonly params: Promise<{ 
     });
   };
   useEffect(() => {
-    if (operation == 'edit' && id > 0) loadPage();
-  }, [operation, id]);
+    document.title = t('pages.cards.page-' + operation) + " - " + CONFIG.APP_HEADER;
+  }, [operation, t]);
 
   const handleSubmit = async (page : PageModel, resetForm : any, setErrors: (errors: FormikErrors<LinkModel>) => void, setSubmitting: (open: boolean) => void) => {
     if (operation == 'add') {

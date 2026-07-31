@@ -52,8 +52,8 @@ export default function AddOrEditArticle({ params }: { readonly params: Promise<
     });
   };
   useEffect(() => {
-    if (operation == 'edit' && id > 0) loadArticle();
-  }, [operation, id]);
+    document.title = t('pages.cards.article-' + operation) + " - " + CONFIG.APP_HEADER;
+  }, [operation, t]);
 
   const handleSubmit = async (article: ArticleModel, resetForm: any, setErrors: (errors: FormikErrors<ArticleModel>) => void, setSubmitting: (open: boolean) => void) => {
     if (operation == 'add') {

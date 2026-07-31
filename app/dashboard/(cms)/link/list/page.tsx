@@ -5,10 +5,15 @@ import { Grid, Typography } from '@mui/material';
 // project import
 import LinkSectionDataGrid from '../../_components/Link/LinkSectionDataGrid';
 import { useTranslations } from 'next-intl';
+import { useEffect } from 'react';
+import CONFIG from '@root/config';
 // ===============================|| COLOR BOX ||=============================== //
 
 function MenuList() {
   const t = useTranslations("");
+  useEffect(() => {
+    document.title = t('pages.linkSection') + " - " + CONFIG.APP_HEADER;
+  }, [t]);
   return (
       <Grid container direction="row" sx={{ justifyContent: "center", alignItems: "flex-start" }}>
         <Grid container spacing={3} size={12} >

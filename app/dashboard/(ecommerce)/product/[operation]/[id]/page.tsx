@@ -141,12 +141,8 @@ export default function AddOrEditProduct({ params }: Readonly<{ params: Promise<
   const router = useRouter();
 
   useEffect(() => {
-    if (operation === 'edit' && id > 0) {
-      productService.getProductById(id).then((result) => {
-        setProduct(result.data ?? product);
-      });
-    }
-  }, [operation, id]);
+    document.title = t('pages.cards.product-' + operation) + " - " + CONFIG.APP_HEADER;
+  }, [operation, t]);
 
   const handleTabChange = (event: any, newValue: any) => {
     setTab(newValue);

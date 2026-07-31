@@ -69,6 +69,10 @@ export default function AddOrEditUser({ params }: { readonly params: Promise<{ i
   const [openDelete, setOpenDelete] = useState(false);
   const router = useRouter();
 
+  useEffect(() => {
+    document.title = t('pages.cards.user-' + operation) + " - " + CONFIG.APP_HEADER;
+  }, [operation, t]);
+
   const loadUser = () => {
     userService.getUserById(id).then((result) => {
       setUser(result.data);
