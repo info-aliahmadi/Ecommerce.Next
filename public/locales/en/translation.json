@@ -1431,7 +1431,13 @@
         "PayPal": "PayPal",
         "BankTransfer": "Bank Transfer",
         "CashOnDelivery": "Cash on Delivery"
-      }
+      },
+      "recipientName": "Recipient Name",
+      "phoneNumber": "Phone Number",
+      "email": "Email",
+      "adminComment": "Admin Comment",
+      "totalWeight": "Total Weight",
+      "shippingAddressSnapshot": "Shipping Address"
     },
     "orderItem": {
       "id": "Id",

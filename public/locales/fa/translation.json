@@ -1404,7 +1404,13 @@
         "PayPal": "پی‌پال",
         "BankTransfer": "انتقال بانکی",
         "CashOnDelivery": "پرداخت در محل"
-      }
+      },
+      "recipientName": "نام گیرنده",
+      "phoneNumber": "شماره تلفن",
+      "email": "ایمیل",
+      "adminComment": "توضیحات مدیر",
+      "totalWeight": "وزن کل",
+      "shippingAddressSnapshot": "آدرس ارسال"
     },
     "orderItem": {
       "id": "شناسه",

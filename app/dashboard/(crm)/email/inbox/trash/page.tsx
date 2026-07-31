@@ -1,9 +1,11 @@
 'use client';
 import { Button, Grid, Typography } from '@mui/material';
+import { useEffect } from 'react';
 
 // project import
 import { useTranslations } from 'next-intl';
 import { Send, Drafts } from '@mui/icons-material';
+import CONFIG from '@root/config';
 
 import MainCard from '@dashboard/_components/MainCard';
 import TableCard from '@dashboard/_components/TableCard';
@@ -14,6 +16,9 @@ import Link from 'next/link';
 
 function EmailInboxsInbox() {
   const t = useTranslations("");
+  useEffect(() => {
+    document.title = t('pages.emailInboxsInbox') + " - " + CONFIG.APP_HEADER;
+  }, [t]);
   const buttonName = 'buttons.emailInbox.emailInboxInbox.';
   const EmailInboxHeader = () => {
     return (

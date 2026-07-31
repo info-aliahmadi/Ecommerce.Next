@@ -1,9 +1,11 @@
 'use client';
 import { Button, Grid, Typography } from '@mui/material';
+import { useEffect } from 'react';
 
 // project import
 import { useTranslations } from 'next-intl';
 import ArrowBack from '@mui/icons-material/ArrowBack';
+import CONFIG from '@root/config';
 
 import { useRouter } from 'next/navigation';
 import MessagesDraftDataGrid from '@dashboard/(crm)/_components/Message/MessagesDraftDataGrid';
@@ -15,6 +17,9 @@ import AnimateButton from '@dashboard/_components/@extended/AnimateButton';
 
 export default function MessagesOutbox() {
   const t = useTranslations("");
+  useEffect(() => {
+    document.title = t('pages.messagesDraft') + " - " + CONFIG.APP_HEADER;
+  }, [t]);
   let router = useRouter();
 
   const MessageHeader = () => {

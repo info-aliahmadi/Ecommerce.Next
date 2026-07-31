@@ -3,9 +3,12 @@ import React, { useEffect, useState } from 'react';
 import ViewMessage from '@dashboard/(crm)/_components/Message/ViewMessage';
 import MessageService from '@dashboard/(crm)/_service/MessageService';
 import { useSession } from 'next-auth/react';
+import { useTranslations } from 'next-intl';
+import CONFIG from '@root/config';
 import MessageModel from '../../../_types/MessageModel';
 
 export default function ViewInboxMessage({ params }: { readonly params: Promise<{ id: number }> }) {
+  const t = useTranslations("");
   const { id } = React.use(params);
 
   const { data: session } = useSession();
@@ -22,6 +25,10 @@ export default function ViewInboxMessage({ params }: { readonly params: Promise<
   useEffect(() => {
     if (id > 0) loadMessage();
   }, [id]);
+
+  useEffect(() => {
+    document.title = t('pages.messagesInbox') + " - " + CONFIG.APP_HEADER;
+  }, [t]);
 
   return message && <ViewMessage fromPage={'inbox'} message={message} />;
 }

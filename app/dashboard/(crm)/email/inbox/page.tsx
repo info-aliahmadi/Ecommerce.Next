@@ -1,10 +1,12 @@
 'use client';
 import { Button, Chip, Grid, Typography } from '@mui/material';
+import { useState, useEffect } from 'react';
 
 // project import
 import { useTranslations } from 'next-intl';
 
 import { Email, RestoreFromTrash, Refresh } from '@mui/icons-material';
+import CONFIG from '@root/config';
 
 import MainCard from '@dashboard/_components/MainCard';
 import TableCard from '@dashboard/_components/TableCard';
@@ -12,17 +14,20 @@ import EmailInboxDataGrid from '@dashboard/(crm)/_components/Email/Inbox/EmailIn
 import Link from 'next/link';
 import { useSession } from 'next-auth/react';
 import EmailInboxService from '@dashboard/(crm)/_service/EmailInboxService';
-import { useState } from 'react';
 
 // ===============================|| COLOR BOX ||=============================== //
 
 function EmailInboxsInbox() {
-  
+   
   const t = useTranslations("");
   const { data: session } = useSession();
   const jwt = session?.accessToken;
   const [reload, setReload] = useState(false);
   const [reloadData, setReloadData] = useState<number | undefined>();
+
+  useEffect(() => {
+    document.title = t('pages.emailInboxs') + " - " + CONFIG.APP_HEADER;
+  }, [t]);
 
 
   const service = new EmailInboxService(jwt ?? '');

@@ -12,6 +12,7 @@ import { useTranslations } from 'next-intl';
 import Notify from '@dashboard/_components/@extended/Notify';
 import MainCard from '@dashboard/_components/MainCard';
 import setServerErrors from '@root/utils/setServerErrors';
+import CONFIG from '@root/config';
 import { useRouter } from 'next/navigation';
 import MessagesService from '@dashboard/(crm)/_service/MessageService';
 import Editor from '@root/app/dashboard/_components/Editor/Editor';
@@ -43,6 +44,10 @@ export default function SendMessage({ params }: { readonly params: Promise<{ id:
   useEffect(() => {
     if (id > 0) loadMessage();
   }, [id, toUserId]);
+
+  useEffect(() => {
+    document.title = t('pages.cards.sendMessage') + " - " + CONFIG.APP_HEADER;
+  }, [t]);
 
   const handleSubmit = async (message: MessageModel, resetForm: any, setErrors: (errors: FormikErrors<MessageModel>) => void, setSubmitting: (open: boolean) => void) => {
     if (!message.isDraft) {

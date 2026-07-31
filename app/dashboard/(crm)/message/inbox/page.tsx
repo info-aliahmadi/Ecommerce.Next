@@ -2,7 +2,7 @@
 import { Box, Button, Chip, Grid, Typography } from '@mui/material';
 // project import
 import { useTranslations } from 'next-intl';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Tab from '@mui/material/Tab';
 // import TabContext from '@mui/lab/TabContext';
 // import TabList from '@mui/lab/TabList';
@@ -10,6 +10,7 @@ import Tab from '@mui/material/Tab';
 import { RestoreFromTrash, Send, Drafts ,Inbox, Feed} from '@mui/icons-material';
 import MainCard from '@dashboard/_components/MainCard';
 import TableCard from '@dashboard/_components/TableCard';
+import CONFIG from '@root/config';
 import MessagesPrivateInboxDataGrid from '@dashboard/(crm)/_components/Message/MessagesPrivateInboxDataGrid';
 import MessagesPublicInboxDataGrid from '@dashboard/(crm)/_components/Message/MessagesPublicInboxDataGrid';
 import Link from 'next/link';
@@ -19,6 +20,10 @@ import Link from 'next/link';
 function MessagesInbox() {
   const t = useTranslations("");
   const [value, setValue] = useState('1');
+
+  useEffect(() => {
+    document.title = t('pages.messagesInbox') + " - " + CONFIG.APP_HEADER;
+  }, [t]);
 
   const buttonName = 'buttons.message.messageInbox.';
 

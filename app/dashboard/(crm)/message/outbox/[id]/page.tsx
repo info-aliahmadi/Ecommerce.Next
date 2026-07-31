@@ -6,9 +6,12 @@ import React, { useEffect, useState } from 'react';
 import MessageService from '@dashboard/(crm)/_service/MessageService';
 import ViewMessage from '@dashboard/(crm)/_components/Message/ViewMessage';
 import { useSession } from 'next-auth/react';
+import { useTranslations } from 'next-intl';
+import CONFIG from '@root/config';
 import MessageModel from '../../../_types/MessageModel';
 
 export default function ViewOutboxMessage({ params }: { readonly params: Promise<{ id: number }> }) {
+  const t = useTranslations("");
   const { id } = React.use(params);
 
   const { data: session } = useSession();
@@ -25,6 +28,10 @@ export default function ViewOutboxMessage({ params }: { readonly params: Promise
   useEffect(() => {
     if (id > 0) loadMessage();
   }, [id]);
+
+  useEffect(() => {
+    document.title = t('pages.messagesOutbox') + " - " + CONFIG.APP_HEADER;
+  }, [t]);
 
   return message && <ViewMessage fromPage={'outbox'} message={message} />
 }

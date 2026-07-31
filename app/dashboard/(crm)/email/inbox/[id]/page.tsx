@@ -4,9 +4,12 @@ import React, { useEffect, useState } from 'react';
 import ViewEmailInbox from '@dashboard/(crm)/_components/Email/Inbox/ViewEmailInbox';
 import EmailInboxService from '@dashboard/(crm)/_service/EmailInboxService';
 import { useSession } from 'next-auth/react';
+import { useTranslations } from 'next-intl';
+import CONFIG from '@root/config';
 import EmailInboxModel from '../../../_types/EmailInboxModel';
 
 export default function ViewInboxEmail({params}: { readonly params: Promise<{ id: number}> }) {
+  const t = useTranslations("");
   const { id } = React.use(params);
 
   const { data: session } = useSession();
@@ -24,6 +27,10 @@ export default function ViewInboxEmail({params}: { readonly params: Promise<{ id
   useEffect(() => {
     if (id > 0) loadEmailInbox();
   }, [id]);
+
+  useEffect(() => {
+    document.title = t('pages.emailInboxs') + " - " + CONFIG.APP_HEADER;
+  }, [t]);
 
   return emailInbox ? <ViewEmailInbox emailInbox={emailInbox} /> : null;
 }
