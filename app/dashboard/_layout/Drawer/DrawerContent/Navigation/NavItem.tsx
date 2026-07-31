@@ -45,7 +45,7 @@ const NavItem = ({ item, level }: { item: MenuItem, level: number }) => {
   };
 
   const Icon = item.icon;
-  const itemIcon = item.icon ? <Icon style={{ fontSize: drawerOpen ? '1rem' : '1.25rem' }} /> : false;
+  const itemIcon = item.icon ? <Icon style={{ fontSize: drawerOpen ? '1.15rem' : '1.25rem', opacity : '0.7' }} /> : false;
 
   const isSelected = openItem.findIndex((id: any) => id === item.id) > -1;
   // active menu item on page load

@@ -11,13 +11,13 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
-import Currency from '@dashboard/_components/Currency/Currency';
 import { Divider } from '@mui/material';
 import OrderItemModel, { SumOrderItemsModel } from '../../_types/Order/OrderItemModel';
+import CurrencyTypes from '@root/app/types/enums/CurrencyTypes';
 
 // ===============================|| COLOR BOX ||=============================== //
 
-export default function OrderItemData({ orderId, currency }: { orderId: number; currency: 'USD' | 'EUR' | 'GBP' | 'Rial' }) {
+export default function OrderItemData({ orderId, currency }: Readonly<{ orderId: number; currency: CurrencyTypes }>) {
   const t = useTranslations("");
   const { data: session } = useSession();
   const jwt = session?.accessToken;
@@ -33,9 +33,9 @@ export default function OrderItemData({ orderId, currency }: { orderId: number; 
   const loadOrderItems = () => {
     if (orderId > 0) {
       //setLoading(true);
-      
 
-      service.getOrderItemList(orderId).then((result ) => {
+
+      service.getOrderItemList(orderId).then((result) => {
         setValues(result.data?.[0] ?? []);
         setValueSumAmounts(result.data?.[1] ?? undefined);
       });
@@ -70,16 +70,16 @@ export default function OrderItemData({ orderId, currency }: { orderId: number; 
                   <TableCell align="center">{res.productName}</TableCell>
                   <TableCell align="center">{res.quantity}</TableCell>
                   <TableCell align="center">
-                    <Currency value={res.unitPrice} currency={currency} />
+                    {res.unitPrice.toCurrency(currency)}
                   </TableCell>
                   <TableCell align="center">
-                    <Currency value={res.discountAmount} currency={currency} />
+                    {res.discountAmount.toCurrency(currency)}
                   </TableCell>
                   <TableCell align="center">
-                    <Currency value={res.totalPriceTax} currency={currency} />
+                    {res.totalPriceTax.toCurrency(currency)}
                   </TableCell>
                   <TableCell align="center">
-                    <Currency value={res.totalPrice} currency={currency} />
+                    {res.totalPrice.toCurrency(currency)}
                   </TableCell>
                 </TableRow>
               ))}
@@ -98,16 +98,16 @@ export default function OrderItemData({ orderId, currency }: { orderId: number; 
             <TableBody>
               <TableRow sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
                 <TableCell align="center">
-                  <Currency value={valueAmounts?.totalPrice ?? 0} currency={currency} />
+                  {valueAmounts?.totalPrice.toCurrency(currency)}
                 </TableCell>
                 <TableCell align="center">
-                  <Currency value={valueAmounts?.totalDiscountAmount ?? 0} currency={currency} />
+                  {valueAmounts?.totalDiscountAmount?.toCurrency(currency)}
                 </TableCell>
                 <TableCell align="center">
-                  <Currency value={valueAmounts?.totalPrice ?? 0} currency={currency} />
+                  {valueAmounts?.totalPrice.toCurrency(currency)}
                 </TableCell>
                 <TableCell align="center">
-                  <Currency value={valueAmounts?.totalPrice ?? 0} currency={currency} />
+                  {valueAmounts?.totalPrice.toCurrency(currency)}
                 </TableCell>
               </TableRow>
             </TableBody>

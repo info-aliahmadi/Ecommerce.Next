@@ -4,6 +4,7 @@ export enum ShippingStatus {
   PartiallyShipped = 3,
   Shipped = 4,
   Delivered = 5,
+  Backordered = 6,
 }
 
 export default ShippingStatus;

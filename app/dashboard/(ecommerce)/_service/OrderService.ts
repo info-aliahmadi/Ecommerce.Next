@@ -3,9 +3,9 @@ import Result from '@root/app/types/Result';
 import GridDataBound from '@root/app/types/GridDataBound';
 import CONFIG from '@root/config';
 import OrderModel from '../_types/Order/OrderModel';
-import OrderDisplayModel from '@root/app/(home)/_types/OrderDisplayModel';
 
 import OrderItemModel, { SumOrderItemsModel } from '../_types/Order/OrderItemModel';
+import OrderChangeStatusModel from '../_types/Order/OrderChangeStatusModel';
 
 // Define tuple type for the response
 type OrderItemsResponse = [OrderItemModel[], SumOrderItemsModel];
@@ -41,12 +41,8 @@ export default class OrderService {
     return Fetch.Post<Result<OrderModel>>(CONFIG.API_BASEPATH + '/Order/addOrder', order, this.config);
   };
 
-  addOrderFromDisplay = async (order: OrderDisplayModel): Promise<Result<OrderDisplayModel>> => {
-    return Fetch.Post<Result<OrderDisplayModel>>(CONFIG.API_BASEPATH + '/Order/addOrder', order, this.config);
-  };
-
-  updateOrder = async (order: OrderModel): Promise<Result<OrderModel>> => {
-    return Fetch.Post<Result<OrderModel>>(CONFIG.API_BASEPATH + '/Order/UpdateOrderState', order, this.config);
+  updateOrderState = async (order: OrderChangeStatusModel): Promise<Result<OrderChangeStatusModel>> => {
+    return Fetch.Post<Result<OrderChangeStatusModel>>(CONFIG.API_BASEPATH + '/Order/UpdateOrderState', order, this.config);
   };
   deleteOrder = async (orderId : number): Promise<Result<OrderModel>> => {
     const params = new URLSearchParams({ orderId: orderId.toString() });
@@ -68,4 +64,5 @@ export default class OrderService {
   getAllPaymentStatusForSelect = async (): Promise<Result<any[]>> => {
     return Fetch.Get<Result<any[]>>(CONFIG.API_BASEPATH + `/sale/GetAllPaymentStatus`, this.config);
   };
+
 }

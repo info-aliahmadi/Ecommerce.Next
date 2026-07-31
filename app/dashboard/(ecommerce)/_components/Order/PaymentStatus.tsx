@@ -1,31 +1,28 @@
 import { Chip } from '@mui/material';
+import PaymentStatus from '@root/app/types/enums/PaymentStatus';
 
-export default function PaymentStatus({ status, id }: { status: string; id: number }) {
+export default function PaymentStatusView({ paymentStatus }: Readonly<{ paymentStatus: PaymentStatus }>) {
   let label = 'primary';
-  switch (id) {
-    case 1:
+  switch (paymentStatus) {
+    case PaymentStatus.Pending:
       label = 'secondary'; //Pending
       break;
-    case 2:
+    case PaymentStatus.Authorized:
       label = 'warning'; //Authorized
       break;
-    case 3:
+    case PaymentStatus.Paid:
       label = 'success'; //Paid
       break;
-    case 4:
-      label = 'primary'; //PartiallyRefunded
-      break;
-    case 5:
+    case PaymentStatus.PartiallyRefunded:
+    case PaymentStatus.Refunded:
       label = 'primary'; //Refunded
       break;
-    case 6:
+    case PaymentStatus.Voided:
       label = 'error'; //Voided
       break;
   }
 
   return (
-    <>
       <Chip label={status} color={label as 'primary' | 'secondary' | 'warning' | 'success' | 'error' | 'default' | 'info'} variant="outlined" />
-    </>
   );
 }

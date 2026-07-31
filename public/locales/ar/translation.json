@@ -1309,17 +1309,11 @@
     },
     "order": {
       "id": "شناسه سفارش",
-      "shippingStatusTitle": "وضعیت حمل و نقل",
       "orderStatusId": "وضعیت سفارش",
-      "shippingMethodTitle": "روش حمل و نقل",
       "userName": "نام کاربر",
-      "paymentStatusTitle": "وضعیت پرداخت",
-      "createdOnUtcString": "تاریخ ایجاد",
-      "userCurrencyTitle": "واحد پول",
       "orderShippingTax": "مالیات حمل و نقل",
       "orderTax": "مالیات",
       "orderDiscount": "تخفیف",
-      "orderTotal": "مجموع سفارش",
       "refundedAmount": "مبلغ بازپرداخت شده",
       "orderNote": "یادداشت سفارش",
       "shippingTax": "مالیات حمل و نقل",
@@ -1344,6 +1338,39 @@
         "ThreeDays": "Three Days",
         "OneWeek": "One Week",
         "OneMonth": "One Month"
+      },
+      "shippingMethodTypes": {
+        "Ground": "Ground",
+        "NextDayAir": "Next Day Air",
+        "SecondDayAir": "Second Day Air"
+      },
+      "orderStatusTypes": {
+        "Pending": "Pending",
+        "Processing" : "Processing",  
+        "Complete": "Complete",
+        "Cancelled": "Cancelled"
+      },
+      "shippingStatusTypes": {
+        "Pending": "Pending",
+        "Shipped": "Shipped",
+        "PartiallyShipped": "Partially Shipped",
+        "Delivered": "Delivered",
+        "Backordered": "Backordered",
+        "Cancelled": "Cancelled"
+      },
+      "paymentStatusTypes": {
+        "Pending": "Pending",
+        "Authorized": "Authorized",
+        "Paid": "Paid",
+        "PartiallyRefunded": "Partially Refunded",
+        "Refunded": "Refunded",
+        "Voided": "Voided"
+      },
+      "paymentMethodTypes": {
+        "CreditCard": "Credit Card",
+        "PayPal": "PayPal",
+        "BankTransfer": "Bank Transfer",
+        "CashOnDelivery": "Cash on Delivery"
       }
     },
     "orderItem": {

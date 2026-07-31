@@ -1342,17 +1342,11 @@
     },
     "order": {
       "id": "شناسه سفارش",
-      "shippingStatusTitle": "وضعیت حمل و نقل",
       "orderStatusId": "وضعیت سفارش",
-      "shippingMethodTitle": "روش حمل و نقل",
       "userName": "نام کاربر",
-      "paymentStatusTitle": "وضعیت پرداخت",
-      "createdOnUtcString": "تاریخ ایجاد",
-      "userCurrencyTitle": "واحد پول",
       "orderShippingTax": "مالیات حمل و نقل",
       "orderTax": "مالیات",
       "orderDiscount": "تخفیف",
-      "orderTotal": "مجموع سفارش",
       "refundedAmount": "مبلغ بازپرداخت شده",
       "orderNote": "یادداشت سفارش",
       "shippingTax": "مالیات حمل و نقل",
@@ -1377,6 +1371,39 @@
         "ThreeDays": "سه روز",
         "OneWeek": "یک هفته",
         "OneMonth": "یک ماه"
+      },
+      "shippingMethodTypes": {
+        "Ground": "زمینی",
+        "NextDayAir": "هوایی یک روزه",
+        "SecondDayAir": "هوایی دو روزه"
+      },
+      "orderStatusTypes": {
+        "Pending": "در انتظار",
+        "Processing": "در حال پردازش",
+        "Complete": "اتمام",
+        "Cancelled": "لغو شده"
+      },
+      "shippingStatusTypes": {
+        "Pending": "در انتظار",
+        "Shipped": "ارسال شده",
+        "PartiallyShipped": "بخشی از سفارش ارسال شده",
+        "Delivered": "تحویل شده",
+        "Backordered": "برگشت خورده",
+        "Cancelled": "باطل شد"
+      },
+      "paymentStatusTypes": {
+        "Pending": "در انتظار",
+        "Authorized": "موافق",
+        "Paid": "پرداخت شده",
+        "PartiallyRefunded": "بخشی برگشت شده",
+        "Refunded": "برگشت شده",
+        "Voided": "خرد شده"
+      },
+      "paymentMethodTypes": {
+        "CreditCard": "کارت اعتباری",
+        "PayPal": "پی‌پال",
+        "BankTransfer": "انتقال بانکی",
+        "CashOnDelivery": "پرداخت در محل"
       }
     },
     "orderItem": {

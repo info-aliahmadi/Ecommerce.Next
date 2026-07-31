@@ -1,3 +1,9 @@
+import CurrencyTypes from "@root/app/types/enums/CurrencyTypes";
+import OrderStatus from "@root/app/types/enums/OrderStatus";
+import PaymentMethod from "@root/app/types/enums/PaymentMethod";
+import PaymentStatus from "@root/app/types/enums/PaymentStatus";
+import ShippingMethod from "@root/app/types/enums/ShippingMethod";
+import ShippingStatus from "@root/app/types/enums/ShippingStatus";
 
 /**
  * Represents an order.
@@ -17,6 +23,10 @@ export default interface OrderModel {
    * The user name of the user who placed the order.
    */
   userName: string;
+  /**
+   * The user name of the user who placed the order.
+   */
+  userAvatar: string;
 
   /**
    * The ID of the shipment associated with the order (nullable).
@@ -31,52 +41,32 @@ export default interface OrderModel {
   /**
    * The ID of the shipping method used for the order (nullable).
    */
-  shippingMethodId: number | null;
-
-  /**
-   * The title of the shipping method.
-   */
-  shippingMethodTitle: string;
+  shippingMethodId: ShippingMethod | null;
 
   /**
    * The ID of the order status.
    */
-  orderStatusId: number; // Changed to number for consistency
+  orderStatusId: OrderStatus; // Changed to number for consistency
 
   /**
    * The ID of the shipping status.
    */
-  shippingStatusId: number; // Changed to number for consistency
-
-  /**
-   * The title of the shipping status (derived property - not stored).
-   */
-  shippingStatusTitle: string; // Type is string
+  shippingStatusId: ShippingStatus; // Changed to number for consistency
 
   /**
    * The ID of the payment status.
    */
-  paymentStatusId: number; // Changed to number for consistency
-
-  /**
-   * The title of the payment status (derived property - not stored).
-   */
-  paymentStatusTitle: string; // Type is string
+  paymentStatusId: PaymentStatus; // Changed to number for consistency
 
   /**
    * The ID of the payment method used for the order (nullable).
    */
-  paymentMethodId: number | null;
-
-  /**
-   * The ID of the user's currency used for the order (nullable).
-   */
-  userCurrencyId: number | null;
+  paymentMethodId: PaymentMethod | null;
 
   /**
    * The user's currency.
    */
-  userCurrency: string | null;
+  userCurrencyType: CurrencyTypes;
 
   /**
    * The final price of the order.

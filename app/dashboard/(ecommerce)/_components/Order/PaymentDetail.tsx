@@ -62,95 +62,83 @@ export default function PaymentDetail({ orderId, open, setOpen, refetch }: { ord
   };
 
   return (
-    <>
-      <Dialog open={open} fullWidth>
-        <DialogTitle>
-          {t('dialog.payment.title')}
-          <CloseDialog onClose={onClose} />
-        </DialogTitle>
-        <Grid container direction="row" sx={{ justifyContent: "center", alignItems: "flex-start" }}>
-          <Grid container spacing={3} size={{ xs: 12, sm: 12, md: 12, lg: 12, xl: 12 }} >
-            <Grid size={12}>
-              <MainCard>
-                <Grid container spacing={3} >
-                  <Grid container spacing={3}>
-                    <Grid size={{ xs: 12, sm: 12, md: 4, lg: 4, xl: 4 }} lg={4} xl={4}>
-                      <Stack spacing={1}>
-                        <TextField
-                          id="transactionTrackingCode"
-                          label={t(fieldsName + 'transactionTrackingCode')}
-                          defaultValue={payment?.transactionTrackingCode}
-                          InputProps={{
-                            readOnly: true
-                          }}
-                        />
-                      </Stack>
-                    </Grid>
+    <Dialog open={open} fullWidth>
+      <DialogTitle>
+        {t('dialog.payment.title')}
+        <CloseDialog onClose={onClose} />
+      </DialogTitle>
+      <Grid container direction="row" sx={{ justifyContent: "center", alignItems: "flex-start" }}>
+        <Grid container spacing={3} size={{ xs: 12, sm: 12, md: 12, lg: 12, xl: 12 }} >
+          <Grid size={12}>
+            <MainCard>
+              <Grid container spacing={3} >
+                <Grid container spacing={3}>
+                  <Grid size={{ xs: 12, sm: 12, md: 4, lg: 4, xl: 4 }}>
+                    <Stack spacing={1}>
+                      <TextField
+                        id="transactionTrackingCode"
+                        label={t(fieldsName + 'transactionTrackingCode')}
+                        defaultValue={payment?.transactionTrackingCode}
+                        disabled={true}
+                      />
+                    </Stack>
+                  </Grid>
 
-                    <Grid size={{ xs: 12, sm: 12, md: 4, lg: 4, xl: 4 }} lg={4} xl={4}>
-                      <Stack spacing={1}>
-                        <TextField
-                          id="paymentTrackingCode"
-                          label={t(fieldsName + 'paymentTrackingCode')}
-                          defaultValue={payment?.paymentTrackingCode}
-                          InputProps={{
-                            readOnly: true
-                          }}
-                        />
-                      </Stack>
-                    </Grid>
+                  <Grid size={{ xs: 12, sm: 12, md: 4, lg: 4, xl: 4 }}>
+                    <Stack spacing={1}>
+                      <TextField
+                        id="paymentTrackingCode"
+                        label={t(fieldsName + 'paymentTrackingCode')}
+                        defaultValue={payment?.paymentTrackingCode}
+                       disabled={true}
+                      />
+                    </Stack>
+                  </Grid>
 
-                    <Grid size={{ xs: 12, sm: 12, md: 4, lg: 4, xl: 4 }} lg={4} xl={4}>
-                      <Stack spacing={1}>
-                        <TextField
-                          id="paymentDateUtcToString"
-                          label={t(fieldsName + 'paymentDateUtcToString')}
-                          defaultValue={payment?.paymentDateUtcToString}
-                          InputProps={{
-                            readOnly: true
-                          }}
-                        />
-                      </Stack>
-                    </Grid>
+                  <Grid size={{ xs: 12, sm: 12, md: 4, lg: 4, xl: 4 }}>
+                    <Stack spacing={1}>
+                      <TextField
+                        id="paymentDateUtcToString"
+                        label={t(fieldsName + 'paymentDateUtcToString')}
+                        defaultValue={payment?.paymentDateUtcToString}
+                        disabled={true}
+                      />
+                    </Stack>
+                  </Grid>
 
-                    <Grid size={{ xs: 12, sm: 12, md: 4, lg: 4, xl: 4 }} lg={4} xl={4}>
-                      <Stack spacing={1}>
-                        <TextField
-                          id="paymentMethodId"
-                          label={t(fieldsName + 'paymentMethodId')}
-                          defaultValue={payment?.paymentMethodId}
-                          InputProps={{
-                            readOnly: true
-                          }}
-                        />
-                      </Stack>
-                    </Grid>
+                  {/* <Grid size={{ xs: 12, sm: 12, md: 4, lg: 4, xl: 4 }}>
+                    <Stack spacing={1}>
+                      <TextField
+                        id="paymentMethodId"
+                        label={t(fieldsName + 'paymentMethodId')}
+                        defaultValue={payment?.paymentMethodId}
+                        disabled={true}
+                      />
+                    </Stack>
+                  </Grid> */}
 
-                    <Grid size={{ xs: 12, sm: 12, md: 4, lg: 4, xl: 4 }} lg={4} xl={4}>
-                      <Stack spacing={1}>
-                        <TextField
-                          id="paymentStatusTitle"
-                          label={t(fieldsName + 'paymentStatusTitle')}
-                          defaultValue={payment?.paymentStatusTitle}
-                          InputProps={{
-                            readOnly: true
-                          }}
-                        />
-                      </Stack>
-                    </Grid>
+                  <Grid size={{ xs: 12, sm: 12, md: 4, lg: 4, xl: 4 }}>
+                    <Stack spacing={1}>
+                      <TextField
+                        id="paymentStatusTitle"
+                        label={t(fieldsName + 'paymentStatusTitle')}
+                        defaultValue={payment?.paymentStatusTitle}
+                        disabled={true}
+                      />
+                    </Stack>
+                  </Grid>
 
-                    <Grid size={{ xs: 12, sm: 12, md: 12, lg: 12, xl: 12}} lg={12} xl={12}>
-                      <Stack spacing={1}>
-                        <PaymentStatus status={payment?.paymentStatusTitle ?? ''} id={payment?.paymentStatusId ?? 0} />
-                      </Stack>
-                    </Grid>
+                  <Grid size={{ xs: 12, sm: 12, md: 12, lg: 12, xl: 12 }}>
+                    <Stack spacing={1}>
+                      <PaymentStatus status={payment?.paymentStatusTitle ?? ''} id={payment?.paymentStatusId ?? 0} />
+                    </Stack>
                   </Grid>
                 </Grid>
-              </MainCard>
-            </Grid>
+              </Grid>
+            </MainCard>
           </Grid>
         </Grid>
-      </Dialog>
-    </>
+      </Grid>
+    </Dialog>
   );
 }

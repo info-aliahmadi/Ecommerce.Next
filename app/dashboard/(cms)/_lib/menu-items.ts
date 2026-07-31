@@ -1,6 +1,8 @@
 // assets
-import { Article, Menu, Slideshow, Description, Topic, Link } from '@mui/icons-material';
+import { Article, Menu, Description, Topic, Link } from '@mui/icons-material';
 import { CMS_ARTICLE_MANAGEMENT, CMS_LINK_MANAGEMENT, CMS_MENU_MANAGEMENT, CMS_PAGE_MANAGEMENT, CMS_SLIDESHOW_MANAGEMENT, CMS_TOPIC_MANAGEMENT } from '../../_lib/Permissions';
+import Slideshow from '@mui/icons-material/SubscriptionsRounded';
+
 // icons
 const icons = {
   Article,

@@ -1,12 +1,10 @@
 // material-ui
 import Box from '@mui/material/Box';
-import MenuItem from '@mui/material/MenuItem';
-import ListItemIcon from '@mui/material/MenuItem';
+import { MenuItem, ListItemIcon } from '@mui/material';
 
 // project import
 import MainCard from '@dashboard/_components/MainCard';
 import TableCard from '@dashboard/_components/TableCard';
-import Currency from '@dashboard/_components/Currency/Currency';
 import { ReactNode, useCallback, useMemo, useState } from 'react';
 import { useTranslations } from 'next-intl';
 import MaterialTable from '@dashboard/_components/MaterialTable/MaterialTable';
@@ -20,6 +18,7 @@ import PaymentDetail from './PaymentDetail';
 import OrderModel from '../../_types/Order/OrderModel';
 import { MRT_Column } from '@root/app/types/MRT_Column';
 import { MRT_Row } from 'material-react-table';
+import GridDataBound from '@root/app/types/GridDataBound';
 
 
 // ===============================|| COLOR BOX ||=============================== //
@@ -56,7 +55,7 @@ function OrderDataGrid() {
               gap: '1rem'
             }}
           >
-            <OrderUserAvatar value={renderedCellValue as string} />
+            <OrderUserAvatar value={renderedCellValue as string} avatar={row.original.userAvatar} />
           </Box>
         )
       },
@@ -82,14 +81,14 @@ function OrderDataGrid() {
         header: t(fieldsName + 'finalPrice'),
         enableClickToCopy: true,
         type: 'string',
-        Cell: ({ row }: { row: MRT_Row<OrderModel> }) => <Currency value={row.original.finalPrice} currency={row.original.userCurrency as 'USD' | 'EUR' | 'GBP' | 'Rial'} />
+        Cell: ({ row }: { row: MRT_Row<OrderModel> }) => row.original.finalPrice.toCurrency(row.original.userCurrencyType)
       },
       {
         accessorKey: 'paymentStatusTitle',
         header: t(fieldsName + 'paymentStatusTitle'),
         enableClickToCopy: true,
         type: 'string',
-        Cell: ({ row }: { row: MRT_Row<OrderModel> }) => <PaymentStatus status={row.original.paymentStatusTitle} id={row.original.paymentStatusId} />
+        Cell: ({ row }: { row: MRT_Row<OrderModel> }) => <PaymentStatus paymentStatus={row.original.paymentStatusId} />
       },
       {
         accessorKey: 'paymentDateUtcToString',
@@ -120,7 +119,7 @@ function OrderDataGrid() {
     setRefetch(Date.now());
   };
 
-  const handlePaymentDetail = (row : MRT_Row<OrderModel>) => {
+  const handlePaymentDetail = (row: MRT_Row<OrderModel>) => {
     let orderId = row.original.id;
     setRowId(orderId);
     setOpen(true);
@@ -146,7 +145,7 @@ function OrderDataGrid() {
     []
   );
 
-  const handleOrderList = useCallback(async (filters : GridDataBound ) => {
+  const handleOrderList = useCallback(async (filters: GridDataBound) => {
     return await service.getOrderList(filters);
   }, []);
 
@@ -164,7 +163,7 @@ function OrderDataGrid() {
           />
         </TableCard>
       </MainCard>
-      <PaymentDetail orderId={rowId} open={open} setOpen={setOpen} refetch={handleRefetch} />
+      {/* <PaymentDetail orderId={rowId} open={open} setOpen={setOpen} refetch={handleRefetch} /> */}
     </>
   );
 }
