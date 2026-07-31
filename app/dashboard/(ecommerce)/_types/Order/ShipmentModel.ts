@@ -3,66 +3,61 @@
  */
 export default interface ShipmentModel {
   /**
-   * The ID of the tax category.
+   * The ID of the Shipment.
    */
   id: number;
 
   /**
-   * The name of the tax category.
+   * The ID of the order.
    */
   orderId: number;
 
   /**
-   * The name of the tax category.
+   * tracking number
    */
   trackingNumber: string;
 
   /**
-   * The display order of the tax category.
+   *  shipping address snapshot
    */
   shippingAddressSnapshot: string;
   /**
-   * The name of the tax category.
+   * total Weight of the shipment
    */
   totalWeight: number;
 
   /**
-   * The name of the tax category.
+   * shipped Date Utc
    */
   shippedDateUtc: Date;
 
   /**
-   * The name of the tax category.
+   * delivery Date Utc
    */
   deliveryDateUtc: Date;
   /**
-   * The name of the tax category.
+   * ready for pickup Date Utc
    */
   readyForPickupDateUtc: Date;
   /**
-   * The name of the tax category.
+   * recipient name
    */
   recipientName: string;
   /**
-   * The name of the tax category.
+   * phone number
    */
   phoneNumber: string;
   /**
-   * The name of the tax category.
+   * admin comment
    */
   email: string;
   /**
-   * The name of the tax category.
+   * admin comment
    */
   adminComment: string;
   /**
-   * The name of the tax category.
+   * created On Utc
    */
   createdOnUtc: Date;
-  /**
-   * The name of the tax category.
-   */
-  shipmentItems: number;
-
 
 }

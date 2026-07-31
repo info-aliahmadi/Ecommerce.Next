@@ -1,7 +1,7 @@
 import { Chip } from '@mui/material';
 import PaymentStatus from '@root/app/types/enums/PaymentStatus';
 
-export default function PaymentStatusView({ paymentStatus }: Readonly<{ paymentStatus: PaymentStatus }>) {
+export default function PaymentStatusView({ paymentStatus }: Readonly<{ paymentStatus?: PaymentStatus }>) {
   let label = 'primary';
   switch (paymentStatus) {
     case PaymentStatus.Pending:

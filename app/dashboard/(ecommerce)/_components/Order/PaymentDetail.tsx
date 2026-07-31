@@ -122,7 +122,7 @@ export default function PaymentDetail({ orderId, open, setOpen, refetch }: { ord
                       <TextField
                         id="paymentStatusTitle"
                         label={t(fieldsName + 'paymentStatusTitle')}
-                        defaultValue={payment?.paymentStatusTitle}
+                        defaultValue={payment?.paymentStatusId}
                         disabled={true}
                       />
                     </Stack>
@@ -130,7 +130,7 @@ export default function PaymentDetail({ orderId, open, setOpen, refetch }: { ord
 
                   <Grid size={{ xs: 12, sm: 12, md: 12, lg: 12, xl: 12 }}>
                     <Stack spacing={1}>
-                      <PaymentStatus status={payment?.paymentStatusTitle ?? ''} id={payment?.paymentStatusId ?? 0} />
+                      <PaymentStatus paymentStatus={payment?.paymentStatusId} />
                     </Stack>
                   </Grid>
                 </Grid>
