@@ -1411,7 +1411,10 @@
       "email": "ایمیل",
       "adminComment": "توضیحات مدیر",
       "totalWeight": "وزن کل",
-      "shippingAddressSnapshot": "آدرس ارسال"
+      "shippingAddressSnapshot": "آدرس ارسال",
+      "shippedDateUtc": "تاریخ ارسال",
+      "deliveryDateUtc": "تاریخ تحویل",
+      "readyForPickupDateUtc": "تاریخ آماده‌سازی برای ارسال"
     },
     "orderItem": {
       "id": "شناسه",
@@ -1421,7 +1424,10 @@
       "productName": "نام محصول",
       "discountAmount": "مبلغ تخفیف",
       "totalPrice": "قیمت کل",
-      "totalPriceTax": "مالیات قیمت کل"
+      "totalPriceTax": "مالیات قیمت کل",
+      "loading": "در حال بارگذاری...",
+      "loadError": "خطا: {message}",
+      "noItems": "هیچ آیتمی وجود ندارد."
     },
     "manufacturer": {
       "id": "شناسه",

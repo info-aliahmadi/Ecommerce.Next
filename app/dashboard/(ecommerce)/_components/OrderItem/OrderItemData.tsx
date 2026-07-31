@@ -39,11 +39,11 @@ export default function OrderItemData({ orderId, currency }: Readonly<{ orderId:
   const valueAmounts = itemsResponse?.orderSummary;
 
   if (isLoading) {
-    return <span>Loading...</span>;
+    return <span>{t('fields.orderItem.loading')}</span>;
   }
 
   if (error) {
-    return <span>Error: {error instanceof Error ? error.message : 'Failed to load order items'}</span>;
+    return <span>{t('fields.orderItem.loadError', { message: error instanceof Error ? error.message : '' })}</span>;
   }
 
   return (
@@ -113,7 +113,7 @@ export default function OrderItemData({ orderId, currency }: Readonly<{ orderId:
           )}
         </TableContainer>
       ) : (
-        <span>There is no item.</span>
+        <span>{t('fields.orderItem.noItems')}</span>
       )}
     </>
   );

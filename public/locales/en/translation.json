@@ -1438,7 +1438,10 @@
       "email": "Email",
       "adminComment": "Admin Comment",
       "totalWeight": "Total Weight",
-      "shippingAddressSnapshot": "Shipping Address"
+      "shippingAddressSnapshot": "Shipping Address",
+      "shippedDateUtc": "Shipped Date",
+      "deliveryDateUtc": "Delivery Date",
+      "readyForPickupDateUtc": "Ready for Pickup Date"
     },
     "orderItem": {
       "id": "Id",
@@ -1448,7 +1451,10 @@
       "productName": "Product Name",
       "discountAmount": "Discount Amount",
       "totalPrice": "Total Price",
-      "totalPriceTax": "Total PriceTax"
+      "totalPriceTax": "Total PriceTax",
+      "loading": "Loading...",
+      "loadError": "Error: {message}",
+      "noItems": "There is no item."
     },
     "manufacturer": {
       "id": "Id",

@@ -1373,16 +1373,29 @@
         "PayPal": "PayPal",
         "BankTransfer": "Bank Transfer",
         "CashOnDelivery": "Cash on Delivery"
-      }
+      },
+      "recipientName": "اسم المستلم",
+      "phoneNumber": "رقم الهاتف",
+      "email": "البريد الإلكتروني",
+      "adminComment": "تعليق المدير",
+      "totalWeight": "الوزن الكلي",
+      "shippingAddressSnapshot": "عنوان الشحن",
+      "shippedDateUtc": "تاريخ الشحن",
+      "deliveryDateUtc": "تاريخ التسليم",
+      "readyForPickupDateUtc": "تاريخ الجاهزية للاستلام"
     },
     "orderItem": {
-      "id": "شناسه",
-      "unitPrice": "قیمت واحد",
-      "quantity": "تعداد",
-      "productName": "نام محصول",
-      "discountAmount": "مبلغ تخفیف",
-      "totalPrice": "قیمت کل",
-      "totalPriceTax": "مالیات قیمت کل"
+      "id": "معرف",
+      "imagePreview": "معاينة الصورة",
+      "unitPrice": "سعر الوحدة",
+      "quantity": "الكمية",
+      "productName": "اسم المنتج",
+      "discountAmount": "مبلغ الخصم",
+      "totalPrice": "السعر الكلي",
+      "totalPriceTax": "ضريبة السعر الكلي",
+      "loading": "جارٍ التحميل...",
+      "loadError": "خطأ: {message}",
+      "noItems": "لا توجد عناصر."
     },
     "manufacturer": {
       "id": "شناسه",

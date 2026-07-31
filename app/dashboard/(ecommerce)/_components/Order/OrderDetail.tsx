@@ -13,7 +13,6 @@ export default function OrderDetail({ row, refetch }: Readonly<{ row: MRT_Row<Or
       <OrderShipment
         orderId={row.original.id}
         shipmentId={row.original.shipmentId}
-        trackingNumber={row.original.trackingNumber}
         refetch={refetch}
       />
       <OrderItems orderId={row.original.id} currency={row.original.userCurrencyType} />

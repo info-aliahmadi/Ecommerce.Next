@@ -20,7 +20,7 @@ export default interface ShipmentModel {
   /**
    *  shipping address snapshot
    */
-  shippingAddressSnapshot: string;
+  shippingAddressSnapshot?: string | null;
   /**
    * total Weight of the shipment
    */
@@ -42,22 +42,22 @@ export default interface ShipmentModel {
   /**
    * recipient name
    */
-  recipientName: string;
+  recipientName?: string| null;
   /**
    * phone number
    */
-  phoneNumber: string;
+  phoneNumber?: string| null;
   /**
    * admin comment
    */
-  email: string;
+  email?: string| null;
   /**
    * admin comment
    */
-  adminComment: string;
+  adminComment?: string| null;
   /**
    * created On Utc
    */
-  createdOnUtc: Date;
+  createdOnUtc?: Date | null;
 
 }
