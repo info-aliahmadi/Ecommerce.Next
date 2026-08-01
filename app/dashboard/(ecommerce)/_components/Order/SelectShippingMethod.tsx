@@ -5,7 +5,7 @@ import EnumDropdown from '@dashboard/_components/EnumDropdown';
 import ShippingMethod from '@root/app/types/enums/ShippingMethod';
 
 interface SelectShippingMethodProps {
-  defaultValue?: ShippingMethod | null;
+  value?: ShippingMethod | null;
   id: string;
   setFieldValue?: (field: string, value: any, shouldValidate?: boolean) => void;
   error?: boolean;
@@ -15,7 +15,7 @@ interface SelectShippingMethodProps {
 }
 
 const SelectShippingMethod: React.FC<SelectShippingMethodProps> = ({
-  defaultValue,
+  value,
   id,
   setFieldValue,
   error,
@@ -39,7 +39,7 @@ const SelectShippingMethod: React.FC<SelectShippingMethodProps> = ({
     <FormControl error={error} key={id} fullWidth>
       <InputLabel id={`${id}-label`}>{label}</InputLabel>
       <EnumDropdown
-        defaultValue={defaultValue ?? undefined}
+        defaultValue={value ?? 0}
         enumObject={ShippingMethod}
         disabled={disabled}
         customLabels={shippingMethodLabels}

@@ -56,6 +56,10 @@ export default interface ShipmentModel {
    */
   adminComment?: string| null;
   /**
+   * admin comment
+   */
+  customerNote?: string| null;
+  /**
    * created On Utc
    */
   createdOnUtc?: Date | null;

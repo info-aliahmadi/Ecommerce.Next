@@ -5,7 +5,7 @@ import EnumDropdown from '@dashboard/_components/EnumDropdown';
 import ShippingStatus from '@root/app/types/enums/ShippingStatus';
 
 interface SelectShippingStatusProps {
-  defaultValue?: ShippingStatus | null;
+  value?: ShippingStatus | null;
   id: string;
   setFieldValue?: (field: string, value: any, shouldValidate?: boolean) => void;
   error?: boolean;
@@ -15,7 +15,7 @@ interface SelectShippingStatusProps {
 }
 
 const SelectShippingStatus: React.FC<SelectShippingStatusProps> = ({
-  defaultValue,
+  value,
   id,
   setFieldValue,
   error,
@@ -42,7 +42,7 @@ const SelectShippingStatus: React.FC<SelectShippingStatusProps> = ({
     <FormControl error={error} key={id} fullWidth>
       <InputLabel id={`${id}-label`}>{label}</InputLabel>
       <EnumDropdown
-        defaultValue={defaultValue ?? undefined}
+        defaultValue={value ?? 0}
         enumObject={ShippingStatus}
         disabled={disabled}
         customLabels={shippingStatusLabels}

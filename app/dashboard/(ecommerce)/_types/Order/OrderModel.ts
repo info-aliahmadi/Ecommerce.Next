@@ -4,6 +4,7 @@ import PaymentMethod from "@root/app/types/enums/PaymentMethod";
 import PaymentStatus from "@root/app/types/enums/PaymentStatus";
 import ShippingMethod from "@root/app/types/enums/ShippingMethod";
 import ShippingStatus from "@root/app/types/enums/ShippingStatus";
+import AddressModel from "../Common/AddressModel";
 
 /**
  * Represents an order.
@@ -37,6 +38,15 @@ export default interface OrderModel {
    * The ID of the address associated with the order (nullable).
    */
   addressId: number | null;
+
+  /**
+   * The ID of the address associated with the order (nullable).
+   */
+  address: AddressModel | null;
+  /**
+   * The ID of the address associated with the order (nullable).
+   */
+  addressSnapshot: string | null;
 
   /**
    * The ID of the shipping method used for the order (nullable).

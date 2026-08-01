@@ -5,7 +5,7 @@ import EnumDropdown from '@dashboard/_components/EnumDropdown';
 import OrderStatus from '@root/app/types/enums/OrderStatus';
 
 interface SelectOrderStatusProps {
-  defaultValue?: OrderStatus | null;
+  value?: OrderStatus | null;
   id: string;
   setFieldValue?: (field: string, value: any, shouldValidate?: boolean) => void;
   error?: boolean;
@@ -15,7 +15,7 @@ interface SelectOrderStatusProps {
 }
 
 const SelectOrderStatus: React.FC<SelectOrderStatusProps> = ({
-  defaultValue,
+  value,
   id,
   setFieldValue,
   error,
@@ -40,7 +40,7 @@ const SelectOrderStatus: React.FC<SelectOrderStatusProps> = ({
     <FormControl error={error} key={id} fullWidth>
       <InputLabel id={`${id}-label`}>{label}</InputLabel>
       <EnumDropdown
-        defaultValue={defaultValue ?? undefined}
+        defaultValue={value ?? 0}
         enumObject={OrderStatus}
         disabled={disabled}
         customLabels={orderStatusLabels}

@@ -45,7 +45,7 @@ export default function OrderDetail({ row, refetch }: Readonly<{ row: MRT_Row<Or
         </AccordionSummary>
         <AccordionDetails>
           <OrderShipment
-            orderId={row.original.id}
+            order={row.original}
             shipmentId={row.original.shipmentId}
             refetch={refetch}
           />

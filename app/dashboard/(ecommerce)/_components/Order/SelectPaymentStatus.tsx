@@ -5,7 +5,7 @@ import EnumDropdown from '@dashboard/_components/EnumDropdown';
 import PaymentStatus from '@root/app/types/enums/PaymentStatus';
 
 interface SelectPaymentStatusProps {
-  defaultValue?: PaymentStatus | null;
+  value?: PaymentStatus | null;
   id: string;
   setFieldValue?: (field: string, value: any, shouldValidate?: boolean) => void;
   error?: boolean;
@@ -15,7 +15,7 @@ interface SelectPaymentStatusProps {
 }
 
 const SelectPaymentStatus: React.FC<SelectPaymentStatusProps> = ({
-  defaultValue,
+  value,
   id,
   setFieldValue,
   error,
@@ -42,7 +42,7 @@ const SelectPaymentStatus: React.FC<SelectPaymentStatusProps> = ({
     <FormControl error={error} key={id} fullWidth>
       <InputLabel id={`${id}-label`}>{label}</InputLabel>
       <EnumDropdown
-        defaultValue={defaultValue ?? undefined}
+        defaultValue={value ?? 0}
         enumObject={PaymentStatus}
         disabled={disabled}
         customLabels={paymentStatusLabels}

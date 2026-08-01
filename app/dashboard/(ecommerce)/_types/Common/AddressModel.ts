@@ -1,3 +1,5 @@
+import { UserModel } from "@root/app/dashboard/(auth)/_types/User/UserModel";
+
 /**
  * Represents an address.
  */
@@ -18,6 +20,11 @@ export default interface AddressModel {
      */
     userId: number;
   
+    /**
+     * Identifier of the user associated with this address.
+     */
+    user: UserModel;
+
     /**
      * Identifier of the country for this address.
      */

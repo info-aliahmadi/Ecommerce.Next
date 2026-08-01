@@ -86,12 +86,30 @@ export default function OrderChangeStatus({ row, refetch }: Readonly<{ row: MRT_
                 <Grid size={12}>
                   {/* <MainCard> */}
                   <Grid container spacing={2} size={{ xs: 12, sm: 12, md: 12, lg: 12, xl: 12 }} >
+
+                    <Grid size={{ xs: 12, sm: 12, md: 3, lg: 3, xl: 3 }}>
+                      <Stack spacing={1}>
+                        <InputLabel htmlFor="orderStatusId">{t(fieldsName + 'orderStatusId')}</InputLabel>
+                        <SelectOrderStatus
+                          value={values.orderStatusId ?? undefined}
+                          id="orderStatusId"
+                          setFieldValue={setFieldValue}
+                          // label={t(fieldsName + 'orderStatusId')}
+                          error={Boolean(touched.orderStatusId && errors.orderStatusId)}
+                        />
+                        {touched.orderStatusId && errors.orderStatusId && (
+                          <FormHelperText error id="helper-text-email">
+                            {errors.orderStatusId}
+                          </FormHelperText>
+                        )}
+                      </Stack>
+                    </Grid>
                     <Grid size={{ xs: 12, sm: 12, md: 3, lg: 3, xl: 3 }}>
                       <Stack spacing={1}>
                         <InputLabel htmlFor="paymentStatusId">{t(fieldsName + 'paymentStatusId')}</InputLabel>
                         <SelectPaymentStatus
                           // label={t(fieldsName + 'paymentStatusId')}
-                          defaultValue={row.original.paymentStatusId ?? undefined}
+                          value={values.paymentStatusId ?? undefined}
                           id="paymentStatusId"
                           setFieldValue={setFieldValue}
                           error={Boolean(touched.paymentStatusId && errors.paymentStatusId)}
@@ -109,7 +127,7 @@ export default function OrderChangeStatus({ row, refetch }: Readonly<{ row: MRT_
                         <InputLabel htmlFor="shippingStatusId">{t(fieldsName + 'shippingStatusId')}</InputLabel>
                         <SelectShippingStatus
                           // label={t(fieldsName + 'shippingStatusId')}
-                          defaultValue={row.original.shippingStatusId ?? undefined}
+                          value={values.shippingStatusId ?? undefined}
                           id="shippingStatusId"
                           setFieldValue={setFieldValue}
                           error={Boolean(touched.shippingStatusId && errors.shippingStatusId)}
@@ -124,27 +142,10 @@ export default function OrderChangeStatus({ row, refetch }: Readonly<{ row: MRT_
 
                     <Grid size={{ xs: 12, sm: 12, md: 3, lg: 3, xl: 3 }}>
                       <Stack spacing={1}>
-                        <InputLabel htmlFor="orderStatusId">{t(fieldsName + 'orderStatusId')}</InputLabel>
-                        <SelectOrderStatus
-                          defaultValue={row.original.orderStatusId ?? undefined}
-                          id="orderStatusId"
-                          setFieldValue={setFieldValue}
-                          // label={t(fieldsName + 'orderStatusId')}
-                          error={Boolean(touched.orderStatusId && errors.orderStatusId)}
-                        />
-                        {touched.orderStatusId && errors.orderStatusId && (
-                          <FormHelperText error id="helper-text-email">
-                            {errors.orderStatusId}
-                          </FormHelperText>
-                        )}
-                      </Stack>
-                    </Grid>
-                    <Grid size={{ xs: 12, sm: 12, md: 3, lg: 3, xl: 3 }}>
-                      <Stack spacing={1}>
                         <InputLabel htmlFor="shippingMethodId">{t(fieldsName + 'shippingMethodId')}</InputLabel>
                         <SelectShippingMethod
                           // label={t(fieldsName + 'shippingMethodId')}
-                          defaultValue={row.original.shippingMethodId ?? undefined}
+                          value={values.shippingMethodId ?? undefined}
                           id="shippingMethodId"
                           setFieldValue={setFieldValue}
                           error={Boolean(touched.shippingMethodId && errors.shippingMethodId)}

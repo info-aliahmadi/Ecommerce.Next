@@ -1331,6 +1331,7 @@
       "transactionTrackingCode": "کد پیگیری تراکنش",
       "paymentTrackingCode": "کد پرداخت",
       "trackingNumber": "شماره پیگیری",
+      "customerNote": "یادداشت مشتری",
       "paymentDateUtc": "تاریخ پرداخت",
       "cardName": "نام کارت",
       "cardNumber": "شماره کارت",

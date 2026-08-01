@@ -1391,6 +1391,7 @@
       "paymentTrackingCode": "Payment Code",
       "paymentDateUtc": "Payment Date",
       "trackingNumber": "Shipping Number",
+      "customerNote": "Customer Note",
       "cardName": "Card Name",
       "cardNumber": "Card Number",
       "paymentTypeTitle": "Payment Type",
