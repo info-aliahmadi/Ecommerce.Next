@@ -15,23 +15,81 @@ import CONFIG from '@root/config';
 import MyOrderService from '@root/app/(home)/_services/MyOrderService';
 import OrderModel from '@root/app/dashboard/(ecommerce)/_types/Order/OrderModel';
 import OrderStatus from '@root/app/types/enums/OrderStatus';
+import PaymentStatus from '@root/app/types/enums/PaymentStatus';
+import ShippingStatus from '@root/app/types/enums/ShippingStatus';
 import { GetImage } from '../../_lib/utils';
 import FileUploadModel from '@root/app/dashboard/(filestorage)/_types/FileUploadModel';
 
 function mapOrderStatus(status: OrderStatus): string {
   switch (status) {
     case OrderStatus.Pending:
-      return 'pending';
+      return 'Pending';
     case OrderStatus.Processing:
-      return 'processing';
+      return 'Processing';
     case OrderStatus.Complete:
-      return 'delivered';
+      return 'Complete';
     case OrderStatus.Cancelled:
-      return 'cancelled';
+      return 'Cancelled';
     default:
-      return 'pending';
+      return 'Pending';
   }
 }
+
+function mapPaymentStatus(status: PaymentStatus): string {
+  switch (status) {
+    case PaymentStatus.Pending:
+      return 'Pending';
+    case PaymentStatus.Authorized:
+      return 'Authorized';
+    case PaymentStatus.Paid:
+      return 'Paid';
+    case PaymentStatus.PartiallyRefunded:
+      return 'PartiallyRefunded';
+    case PaymentStatus.Refunded:
+      return 'Refunded';
+    case PaymentStatus.Voided:
+      return 'Voided';
+    default:
+      return 'Pending';
+  }
+}
+
+function mapShippingStatus(status: ShippingStatus): string {
+  switch (status) {
+    case ShippingStatus.ShippingNotRequired:
+      return 'ShippingNotRequired';
+    case ShippingStatus.NotYetShipped:
+      return 'NotYetShipped';
+    case ShippingStatus.PartiallyShipped:
+      return 'PartiallyShipped';
+    case ShippingStatus.Shipped:
+      return 'Shipped';
+    case ShippingStatus.Delivered:
+      return 'Delivered';
+    case ShippingStatus.Backordered:
+      return 'Backordered';
+    default:
+      return 'NotYetShipped';
+  }
+}
+
+const PAYMENT_STATUS_CONFIG: Record<string, { color: string; bg: string; labelKey: string }> = {
+  Pending: { color: 'text-ecommerce-amber', bg: 'bg-ecommerce-amber/10', labelKey: 'fields.order.paymentStatusTypes.Pending' },
+  Authorized: { color: 'text-blue-500', bg: 'bg-blue-500/10', labelKey: 'fields.order.paymentStatusTypes.Authorized' },
+  Paid: { color: 'text-ecommerce-emerald', bg: 'bg-ecommerce-emerald/10', labelKey: 'fields.order.paymentStatusTypes.Paid' },
+  PartiallyRefunded: { color: 'text-orange-500', bg: 'bg-orange-500/10', labelKey: 'fields.order.paymentStatusTypes.PartiallyRefunded' },
+  Refunded: { color: 'text-ecommerce-purple', bg: 'bg-ecommerce-purple/10', labelKey: 'fields.order.paymentStatusTypes.Refunded' },
+  Voided: { color: 'text-ecommerce-text-muted', bg: 'bg-ecommerce-text-muted/10', labelKey: 'fields.order.paymentStatusTypes.Voided' },
+};
+
+const SHIPPING_STATUS_CONFIG: Record<string, { color: string; bg: string; labelKey: string }> = {
+  ShippingNotRequired: { color: 'text-ecommerce-text-muted', bg: 'bg-ecommerce-text-muted/10', labelKey: 'fields.order.shippingStatusTypes.ShippingNotRequired' },
+  NotYetShipped: { color: 'text-ecommerce-amber', bg: 'bg-ecommerce-amber/10', labelKey: 'fields.order.shippingStatusTypes.NotYetShipped' },
+  PartiallyShipped: { color: 'text-blue-500', bg: 'bg-blue-500/10', labelKey: 'fields.order.shippingStatusTypes.PartiallyShipped' },
+  Shipped: { color: 'text-ecommerce-purple', bg: 'bg-ecommerce-purple/10', labelKey: 'fields.order.shippingStatusTypes.Shipped' },
+  Delivered: { color: 'text-ecommerce-emerald', bg: 'bg-ecommerce-emerald/10', labelKey: 'fields.order.shippingStatusTypes.Delivered' },
+  Backordered: { color: 'text-red-500', bg: 'bg-red-500/10', labelKey: 'fields.order.shippingStatusTypes.Backordered' },
+};
 
 export function OrdersTab() {
   const t = useTranslations();
@@ -67,8 +125,8 @@ export function OrdersTab() {
     fetchOrders();
   }, [session?.user?.accessToken]);
 
-  const statusBadge = (status: string) => {
-    const cfg = STATUS_CONFIG[status];
+  const statusBadge = (status: string, config: Record<string, { color: string; bg: string; labelKey: string }>) => {
+    const cfg = config[status];
     if (!cfg) return null;
     return (
       <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold ${cfg.color} ${cfg.bg}`}>
@@ -143,7 +201,7 @@ export function OrdersTab() {
                           <h3 className="font-semibold text-ecommerce-text-primary">
                             {t('homepage.profile.orderNumber', { number: order.id })}
                           </h3>
-                          {statusBadge(statusString)}
+                          {statusBadge(statusString, STATUS_CONFIG)}
                         </div>
                         <div className="flex items-center gap-4 mt-1.5 text-sm text-ecommerce-text-muted">
                           <span>{t('homepage.profile.orderDate', { date: new Date(order.createdOnUtc).toLocaleDateString() })}</span>
@@ -174,6 +232,27 @@ export function OrdersTab() {
                     {isExpanded && (
                       <div className="mt-4 pt-4 border-t border-ecommerce-border">
                         <div className="space-y-3">
+                          <div className="flex flex-wrap items-center gap-2">
+                            <span className="text-xs font-semibold text-ecommerce-text-muted uppercase tracking-wider">
+                              {t('homepage.profile.orderStatusLabel')}:
+                            </span>
+                            {statusBadge(mapOrderStatus(order.orderStatusId), STATUS_CONFIG)}
+                          </div>
+                          <div className="flex flex-wrap items-center gap-2">
+                            <span className="text-xs font-semibold text-ecommerce-text-muted uppercase tracking-wider">
+                              {t('homepage.profile.paymentStatusLabel')}:
+                            </span>
+                            {statusBadge(mapPaymentStatus(order.paymentStatusId), PAYMENT_STATUS_CONFIG)}
+                          </div>
+                          <div className="flex flex-wrap items-center gap-2">
+                            <span className="text-xs font-semibold text-ecommerce-text-muted uppercase tracking-wider">
+                              {t('homepage.profile.shippingStatusLabel')}:
+                            </span>
+                            {statusBadge(mapShippingStatus(order.shippingStatusId), SHIPPING_STATUS_CONFIG)}
+                          </div>
+                        </div>
+
+                        <div className="mt-4 space-y-3">
                           {order.items.map((item) => {
                             const imagePreview = item.productImagePreview as FileUploadModel | undefined;
                             const imageSrc = GetImage(imagePreview, true);

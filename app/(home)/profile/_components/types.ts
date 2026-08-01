@@ -28,11 +28,11 @@ export const NAV_ITEMS: { id: TabId; icon: typeof LayoutDashboard; labelKey: str
 ];
 
 export const STATUS_CONFIG: Record<string, { color: string; bg: string; labelKey: string }> = {
-  pending: { color: 'text-ecommerce-amber', bg: 'bg-ecommerce-amber/10', labelKey: 'homepage.profile.pending' },
-  processing: { color: 'text-blue-500', bg: 'bg-blue-500/10', labelKey: 'homepage.profile.processing' },
-  shipped: { color: 'text-ecommerce-purple', bg: 'bg-ecommerce-purple/10', labelKey: 'homepage.profile.shipped' },
-  delivered: { color: 'text-ecommerce-emerald', bg: 'bg-ecommerce-emerald/10', labelKey: 'homepage.profile.delivered' },
-  cancelled: { color: 'text-red-500', bg: 'bg-red-500/10', labelKey: 'homepage.profile.cancelled' },
+  Pending: { color: 'text-ecommerce-amber', bg: 'bg-ecommerce-amber/10', labelKey: 'fields.order.orderStatusTypes.Pending' },
+  Processing: { color: 'text-blue-500', bg: 'bg-blue-500/10', labelKey: 'fields.order.orderStatusTypes.Processing' },
+  Shipped: { color: 'text-ecommerce-purple', bg: 'bg-ecommerce-purple/10', labelKey: 'fields.order.shippingStatusTypes.Shipped' },
+  Complete: { color: 'text-ecommerce-emerald', bg: 'bg-ecommerce-emerald/10', labelKey: 'fields.order.orderStatusTypes.Complete' },
+  Cancelled: { color: 'text-red-500', bg: 'bg-red-500/10', labelKey: 'fields.order.orderStatusTypes.Cancelled' },
 };
 
 export const ACTIVITY_ICONS: Record<string, typeof Package> = {

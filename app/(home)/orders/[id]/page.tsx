@@ -15,21 +15,79 @@ import CONFIG from '@root/config';
 import MyOrderService from '@root/app/(home)/_services/MyOrderService';
 import OrderModel from '@root/app/dashboard/(ecommerce)/_types/Order/OrderModel';
 import OrderStatus from '@root/app/types/enums/OrderStatus';
+import PaymentStatus from '@root/app/types/enums/PaymentStatus';
+import ShippingStatus from '@root/app/types/enums/ShippingStatus';
 
 function mapOrderStatus(status: OrderStatus): string {
   switch (status) {
     case OrderStatus.Pending:
-      return 'pending';
+      return 'Pending';
     case OrderStatus.Processing:
-      return 'processing';
+      return 'Processing';
     case OrderStatus.Complete:
-      return 'delivered';
+      return 'Complete';
     case OrderStatus.Cancelled:
-      return 'cancelled';
+      return 'Cancelled';
     default:
-      return 'pending';
+      return 'Pending';
   }
 }
+
+function mapPaymentStatus(status: PaymentStatus): string {
+  switch (status) {
+    case PaymentStatus.Pending:
+      return 'Pending';
+    case PaymentStatus.Authorized:
+      return 'Authorized';
+    case PaymentStatus.Paid:
+      return 'Paid';
+    case PaymentStatus.PartiallyRefunded:
+      return 'PartiallyRefunded';
+    case PaymentStatus.Refunded:
+      return 'Refunded';
+    case PaymentStatus.Voided:
+      return 'Voided';
+    default:
+      return 'Pending';
+  }
+}
+
+function mapShippingStatus(status: ShippingStatus): string {
+  switch (status) {
+    case ShippingStatus.ShippingNotRequired:
+      return 'ShippingNotRequired';
+    case ShippingStatus.NotYetShipped:
+      return 'NotYetShipped';
+    case ShippingStatus.PartiallyShipped:
+      return 'PartiallyShipped';
+    case ShippingStatus.Shipped:
+      return 'Shipped';
+    case ShippingStatus.Delivered:
+      return 'Delivered';
+    case ShippingStatus.Backordered:
+      return 'Backordered';
+    default:
+      return 'NotYetShipped';
+  }
+}
+
+const PAYMENT_STATUS_COLORS: Record<string, { color: string; bg: string }> = {
+  Pending: 'text-ecommerce-amber bg-ecommerce-amber/10',
+  Authorized: 'text-blue-500 bg-blue-500/10',
+  Paid: 'text-ecommerce-emerald bg-ecommerce-emerald/10',
+  PartiallyRefunded: 'text-orange-500 bg-orange-500/10',
+  Refunded: 'text-ecommerce-purple bg-ecommerce-purple/10',
+  Voided: 'text-ecommerce-text-muted bg-ecommerce-text-muted/10',
+};
+
+const SHIPPING_STATUS_COLORS: Record<string, { color: string; bg: string }> = {
+  ShippingNotRequired: 'text-ecommerce-text-muted bg-ecommerce-text-muted/10',
+  NotYetShipped: 'text-ecommerce-amber bg-ecommerce-amber/10',
+  PartiallyShipped: 'text-blue-500 bg-blue-500/10',
+  Shipped: 'text-ecommerce-purple bg-ecommerce-purple/10',
+  Delivered: 'text-ecommerce-emerald bg-ecommerce-emerald/10',
+  Backordered: 'text-red-500 bg-red-500/10',
+};
 
 export default function OrderDetailPage() {
   const t = useTranslations();
@@ -108,6 +166,10 @@ export default function OrderDetailPage() {
   }
 
   const statusString = mapOrderStatus(order.orderStatusId);
+  const paymentString = mapPaymentStatus(order.paymentStatusId);
+  const shippingString = mapShippingStatus(order.shippingStatusId);
+  const paymentColors = PAYMENT_STATUS_COLORS[paymentString] || 'text-ecommerce-amber bg-ecommerce-amber/10';
+  const shippingColors = SHIPPING_STATUS_COLORS[shippingString] || 'text-ecommerce-amber bg-ecommerce-amber/10';
 
   return (
     <div className="space-y-4">
@@ -126,12 +188,31 @@ export default function OrderDetailPage() {
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="flex flex-wrap items-center gap-3">
-            <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold ${statusString === 'delivered' ? 'text-ecommerce-emerald bg-ecommerce-emerald/10' : statusString === 'shipped' ? 'text-ecommerce-purple bg-ecommerce-purple/10' : statusString === 'processing' ? 'text-blue-500 bg-blue-500/10' : statusString === 'pending' ? 'text-ecommerce-amber bg-ecommerce-amber/10' : 'text-red-500 bg-red-500/10'}`}>
-              {statusString}
+            <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold ${statusString === 'Complete' ? 'text-ecommerce-emerald bg-ecommerce-emerald/10' : statusString === 'Processing' ? 'text-blue-500 bg-blue-500/10' : statusString === 'Pending' ? 'text-ecommerce-amber bg-ecommerce-amber/10' : 'text-red-500 bg-red-500/10'}`}>
+              {t(`fields.order.orderStatusTypes.${statusString}`)}
             </span>
             <span className="text-sm text-ecommerce-text-muted">
               {new Date(order.createdOnUtc).toLocaleString()}
             </span>
+          </div>
+
+          <div className="flex flex-wrap items-center gap-4">
+            <div className="flex items-center gap-2">
+              <span className="text-xs font-semibold text-ecommerce-text-muted uppercase tracking-wider">
+                {t('homepage.profile.paymentStatusLabel')}:
+              </span>
+              <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold ${paymentColors}`}>
+                {t(`fields.order.paymentStatusTypes.${paymentString}`)}
+              </span>
+            </div>
+            <div className="flex items-center gap-2">
+              <span className="text-xs font-semibold text-ecommerce-text-muted uppercase tracking-wider">
+                {t('homepage.profile.shippingStatusLabel')}:
+              </span>
+              <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold ${shippingColors}`}>
+                {t(`fields.order.shippingStatusTypes.${shippingString}`)}
+              </span>
+            </div>
           </div>
 
           <Separator className="bg-ecommerce-border" />
