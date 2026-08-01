@@ -5,6 +5,7 @@ import PaymentStatus from "@root/app/types/enums/PaymentStatus";
 import ShippingMethod from "@root/app/types/enums/ShippingMethod";
 import ShippingStatus from "@root/app/types/enums/ShippingStatus";
 import AddressModel from "../Common/AddressModel";
+import OrderItemModel from "./OrderItemModel";
 
 /**
  * Represents an order.
@@ -164,4 +165,8 @@ export default interface OrderModel {
    * The shipping tracking number.
    */
   trackingNumber: string;
+  /**
+   * The shipping tracking number.
+   */
+  items: OrderItemModel[];
 }

@@ -23,7 +23,7 @@ export default interface AddressModel {
     /**
      * Identifier of the user associated with this address.
      */
-    user: UserModel;
+    user?: UserModel;
 
     /**
      * Identifier of the country for this address.

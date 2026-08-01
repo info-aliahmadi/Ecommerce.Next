@@ -161,7 +161,23 @@ export default function ProfilePage() {
 
   const openAddAddress = () => {
     setEditingAddress(null);
-    setAddrForm({ id: 0, userId: 0, title: '', address1: '', city: '', stateProvinceName: '', stateProvinceId: 0, zipPostalCode: '', countryName: '', countryId: 0, county: '', phoneNumber: '', geoLocation: '', isDefault: false, createdOnUtc: new Date() });
+    setAddrForm({
+      id: 0,
+      userId: 0,
+      title: '',
+      address1: '',
+      city: '',
+      stateProvinceName: '',
+      stateProvinceId: 0,
+      zipPostalCode: '',
+      countryName: '',
+      countryId: 0,
+      county: '',
+      phoneNumber: '',
+      geoLocation: '',
+      isDefault: false,
+      createdOnUtc: new Date()
+    });
     setAddressDialogOpen(true);
   };
 

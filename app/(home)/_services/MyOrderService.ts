@@ -68,8 +68,8 @@ export default class MyOrderService {
 
   // ========================= ORDERS =========================
 
-  getMyOrders = async (): Promise<Result<PaginatedList<OrderModel>>> => {
-    return Fetch.Get<Result<PaginatedList<OrderModel>>>(CONFIG.API_BASEPATH + `/Order/GetMyOrders`, this.config);
+  getMyOrders = async (): Promise<Result<OrderModel[]>> => {
+    return Fetch.Get<Result<OrderModel[]>>(CONFIG.API_BASEPATH + `/Order/GetMyOrders`, this.config);
   };
 
   getMyOrderById = async (orderId: number): Promise<Result<OrderModel>> => {
