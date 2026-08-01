@@ -39,7 +39,7 @@ import {
   EmptyCart,
 } from './_components';
 import ShippingMethod from '@root/app/types/enums/ShippingMethod';
-import MyOrderService  from '../_services/MyOrderService';
+import MyOrderService from '../_services/MyOrderService';
 import CreateOrderRequest, { CreateOrderItemRequest } from '../_types/Order/CreateOrderRequest';
 import PaymentMethod from '@root/app/types/enums/PaymentMethod';
 
@@ -468,7 +468,7 @@ function CheckoutPageInner() {
         toast.success(t('orderPlaced'));
         goToStep(4, 1);
       } else {
-        toast.error(result.message || t('orderFailed'));
+        toast.error(result.message || t('orderFailed'), { duration: 10000 });
       }
     } catch {
       toast.error(t('orderFailed'));

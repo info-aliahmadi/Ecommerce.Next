@@ -6,12 +6,10 @@ import Link from 'next/link';
 import { Package, ChevronRight, ChevronDown } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { useSession } from 'next-auth/react';
-
 import { Card, CardContent } from '../../_components/ui/card';
 import { Button } from '../../_components/ui/button';
 import { STATUS_CONFIG, staggerContainer, staggerItem } from './types';
 import CurrencyViewer from '@root/utils/CurrencyViewer';
-import CONFIG from '@root/config';
 import MyOrderService from '@root/app/(home)/_services/MyOrderService';
 import OrderModel from '@root/app/dashboard/(ecommerce)/_types/Order/OrderModel';
 import OrderStatus from '@root/app/types/enums/OrderStatus';
@@ -19,6 +17,8 @@ import PaymentStatus from '@root/app/types/enums/PaymentStatus';
 import ShippingStatus from '@root/app/types/enums/ShippingStatus';
 import { GetImage } from '../../_lib/utils';
 import FileUploadModel from '@root/app/dashboard/(filestorage)/_types/FileUploadModel';
+import { DateTimeViewer } from '@root/utils/DateViewer';
+import CONFIG from '@root/config';
 
 function mapOrderStatus(status: OrderStatus): string {
   switch (status) {
@@ -98,7 +98,7 @@ export function OrdersTab() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [expandedOrderId, setExpandedOrderId] = useState<number | null>(null);
-
+  const currentLanguage = session?.user?.defaultLanguage || CONFIG.DEFAULT_LANGUAGE;
   useEffect(() => {
     const fetchOrders = async () => {
       if (!session?.user?.accessToken) {
@@ -204,7 +204,7 @@ export function OrdersTab() {
                           {statusBadge(statusString, STATUS_CONFIG)}
                         </div>
                         <div className="flex items-center gap-4 mt-1.5 text-sm text-ecommerce-text-muted">
-                          <span>{t('homepage.profile.orderDate', { date: new Date(order.createdOnUtc).toLocaleDateString() })}</span>
+                          <span>{t('homepage.profile.orderDate', { date: DateTimeViewer(currentLanguage, order.createdOnUtc) })}</span>
                           <span className="hidden sm:inline">·</span>
                           <span>{t('homepage.profile.itemsLabel', { count: order.items.length })}</span>
                         </div>

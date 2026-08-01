@@ -96,10 +96,12 @@ export function ConfirmationStep({ orderNumber, email }: ConfirmationStepProps) 
         transition={{ delay: 0.9 }}
         className="flex flex-col sm:flex-row gap-3 w-full max-w-sm"
       >
-        <Button className="flex-1 h-12 bg-ecommerce-red hover:bg-ecommerce-red/90 text-white rounded-xl font-semibold text-sm gap-2 transition-all hover:scale-105">
-          <Truck size={16} />
-          {t('trackOrder')}
-        </Button>
+        <Link href="/profile" className="flex-1">
+          <Button className="flex-1 h-12 bg-ecommerce-red hover:bg-ecommerce-red/90 text-white rounded-xl font-semibold text-sm gap-2 transition-all hover:scale-105">
+            <Truck size={16} />
+            {t('trackOrder')}
+          </Button>
+        </Link>
         <Link href="/products" className="flex-1">
           <Button
             variant="outline"
