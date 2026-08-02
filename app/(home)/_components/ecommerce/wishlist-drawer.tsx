@@ -4,7 +4,7 @@ import { X, Heart, ShoppingCart, Trash2 } from 'lucide-react';
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from '../ui/sheet';
 import { Button } from '../ui/button';
 import { Badge } from '../ui/badge';
-import { useWishlistStore, useCartStore } from '../../_lib/store';
+import { useWishlistStore } from '../../_lib/store';
 import { useAddToCart } from '../../_hooks/use-cart-queries';
 import { useRemoveFromWishlist } from '../../_hooks/use-wishlist-queries';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -28,7 +28,7 @@ export function WishlistDrawer({ open, onClose }: { open: boolean; onClose: () =
       image: item.image,
       categories: item.categories,
     } as any);
-    removeFromWishlist.mutate({ variantId: item.variant.id });
+    // removeFromWishlist.mutate({ variantId: item.variant.id });
     toast.success(t('homepage.cart.itemAdded', { name: item.name }));
   };
 

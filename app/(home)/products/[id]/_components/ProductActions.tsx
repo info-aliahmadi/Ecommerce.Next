@@ -11,6 +11,8 @@ import {
   useCompareStore,
 } from '../../../_lib/store';
 import { useFlyToCart } from '../../../_hooks/use-fly-to-cart';
+import { useAddToCart } from '../../../_hooks/use-cart-queries';
+import { getAvailableStock } from '../../../_types/Product/InventoryDisplayModel';
 import { useAddToWishlist, useRemoveFromWishlist } from '../../../_hooks/use-wishlist-queries';
 import { GetImage } from '../../../_lib/utils';
 import ProductDisplayModel, { getProductPricing } from '../../../_types/Product/ProductDisplayModel';
@@ -30,7 +32,6 @@ export default function ProductActions({
   isVariantUnavailable?: boolean;
 }>) {
   const t = useTranslations('');
-  const addItem = useCartStore((s) => s.addItem);
   const setCartOpen = useCartStore((s) => s.setCartOpen);
   const { toggleItem, isInWishlist } = useWishlistStore();
   const { addItem: addCompareItem, isInCompare } = useCompareStore();
@@ -40,6 +41,8 @@ export default function ProductActions({
   const inCompare = isInCompare(selectedVariant?.id ?? 0);
   const { cheapestVariant, totalStock } = getProductPricing(product.variants ?? []);
   const activeVariant = selectedVariant ?? cheapestVariant;
+
+  const addToCart = useAddToCart();
 
   const wishlisted = isInWishlist(activeVariant.id);
 
@@ -60,24 +63,32 @@ export default function ProductActions({
     [product, handleAddToCartWithAnimation, activeVariant, quantity],
   );
 
-  const handleBuyNow = useCallback(() => {
+  const handleBuyNow = useCallback(async () => {
     if (!activeVariant) return;
     let addedCount = 0;
     for (let i = 0; i < quantity; i++) {
-      const added = addItem({
-        id: product.id,
-        name: product.name,
-        variant: activeVariant,
-        image: product.imagePreview,
-        categories: product.categories,
-      });
-      if (added) addedCount++;
-      else break;
+      try {
+        await addToCart.mutateAsync({
+          id: product.id,
+          name: product.name,
+          variant: activeVariant,
+          image: product.imagePreview,
+          categories: product.categories,
+        });
+        addedCount++;
+      } catch (error) {
+        if (error instanceof Error && error.message.includes('Insufficient stock')) {
+          toast.error('Insufficient stock', {
+            description: `Only ${getAvailableStock(activeVariant.productInventory)} items available in stock`,
+          });
+        }
+        break;
+      }
     }
     if (addedCount > 0) {
       setCartOpen(true);
     }
-  }, [product, addItem, setCartOpen, activeVariant, quantity]);
+  }, [product, addToCart, setCartOpen, activeVariant, quantity, toast]);
 
   const handleWishlist = useCallback(() => {
     if (wishlisted) {

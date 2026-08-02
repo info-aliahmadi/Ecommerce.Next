@@ -17,7 +17,7 @@ function useHasMounted() {
   );
 }
 
-function AnimatedNumber({ value, duration = 600 }: { value: number; duration?: number }) {
+function AnimatedNumber({ value, duration = 600 }: Readonly<{ value: number; duration?: number }>) {
   const [displayed, setDisplayed] = useState(value);
   const prevValue = useRef(value);
   const frameRef = useRef<number>(0);
@@ -54,7 +54,6 @@ export function ProductQuickStats() {
   const [expanded, setExpanded] = useState(false);
   const hasMounted = useHasMounted();
 
-  const cartItems = useCartStore((s) => s.items);
   const totalCartPrice = useCartStore((s) => s.totalPrice());
   const totalCartItems = useCartStore((s) => s.totalItems());
 

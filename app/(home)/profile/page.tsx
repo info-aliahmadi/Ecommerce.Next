@@ -28,7 +28,7 @@ import { CompareBar } from '../_components/ecommerce/compare-bar';
 import { CompareDrawer } from '../_components/ecommerce/compare-drawer';
 import { FlyToCart } from '../_components/ecommerce/fly-to-cart';
 import { MobileBottomNav } from '../_components/ecommerce/mobile-bottom-nav';
-import { useCartStore, useWishlistStore } from '../_lib/store';
+import { useWishlistStore } from '../_lib/store';
 import { useAddToCart } from '../_hooks/use-cart-queries';
 import { useRemoveFromWishlist } from '../_hooks/use-wishlist-queries';
 

@@ -6,6 +6,7 @@ import { Button } from '../ui/button';
 import { Badge } from '../ui/badge';
 import { Dialog, DialogContent } from '../ui/dialog';
 import { useUIStore, useCartStore, useWishlistStore, useRecentStore } from '../../_lib/store';
+import { useAddToCart } from '../../_hooks/use-cart-queries';
 import { toast } from 'sonner';
 import { useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -14,7 +15,6 @@ import { SizeGuideModal } from './size-guide-modal';
 import { useTranslations } from 'next-intl';
 import { useAddToWishlist, useRemoveFromWishlist } from '../../_hooks/use-wishlist-queries';
 import { GetImage } from '../../_lib/utils';
-import CartItem from '../../_types/Order/CartItem';
 import CONFIG from '@root/config';
 import HomePageService from '../../_services/HomePageService';
 import { redirect } from 'next/navigation';
@@ -29,7 +29,7 @@ import ReviewSummary from '../../products/[id]/_components/ReviewSummary';
 
 function QuickViewContent({ product, onClose }: Readonly<{ product: ProductDisplayModel; onClose: () => void }>) {
   const t = useTranslations();
-  const { addItem } = useCartStore();
+  const addToCart = useAddToCart();
   const { toggleItem, isInWishlist } = useWishlistStore();
   const { addItem: addRecent } = useRecentStore();
   const addToWishlist = useAddToWishlist();
@@ -118,15 +118,13 @@ function QuickViewContent({ product, onClose }: Readonly<{ product: ProductDispl
 
   const handleAddToCart = () => {
     if (!activeVariant) return;
-    for (let i = 0; i < quantity; i++) {
-      addItem({
-        id: product.id,
-        name: product.name,
-        variant: activeVariant,
-        image: product.imagePreview,
-        categories: product.categories,
-      } as CartItem);
-    }
+    addToCart.mutate({
+      id: product.id,
+      name: product.name,
+      variant: activeVariant,
+      image: product.imagePreview,
+      categories: product.categories,
+    });
     toast.success(t('homepage.cart.itemAdded', { name: product.name }), {
       description: `${t('homepage.quickView.quantity')}: ${quantity} × ${CurrencyViewer(activeVariant.sellPrice, CONFIG.DEFAULT_CURRENCY)}`,
       action: { label: t('homepage.common.addToCart'), onClick: () => useCartStore.getState().setCartOpen(true) },

@@ -4,7 +4,7 @@ import { motion } from 'framer-motion';
 import { ShoppingCart, Sparkles, Percent } from 'lucide-react';
 import { Button } from '../ui/button';
 import { Badge } from '../ui/badge';
-import { useCartStore } from '../../_lib/store';
+import { useAddToCart } from '../../_hooks/use-cart-queries';
 import { toast } from 'sonner';
 import { useTranslations } from 'next-intl';
 import ProductDisplayModel, { getProductPricing } from '../../_types/Product/ProductDisplayModel';
@@ -29,7 +29,7 @@ function getBundleSavings(products: ProductDisplayModel[]) {
 
 export function ProductBundles() {
   const t = useTranslations();
-  const addItem = useCartStore((s) => s.addItem);
+  const addToCart = useAddToCart();
 
   const { data: bundles } = useQuery({
     queryKey: ['products', 'bundles'],
@@ -45,8 +45,8 @@ export function ProductBundles() {
   const handleAddBundle = (bundle: BundleDisplayModel) => {
     bundle.products?.forEach((p) => {
       const { cheapestVariant } = getProductPricing(p.variants ?? []);
-      if (!cheapestVariant || getAvailableStock(cheapestVariant.productInventory) === 0) return;
-      addItem({
+      if (!cheapestVariant || getAvailableStock(cheapestVariant.productInventory) <= 0) return;
+      addToCart.mutate({
         id: p.id,
         name: p.name,
         variant: cheapestVariant,

@@ -6,12 +6,9 @@ import { Eye, TrendingUp, ChevronLeft, ChevronRight, ShoppingCart } from 'lucide
 import { StarRating } from '../ui/star-rating';
 import { motion } from 'framer-motion';
 import { useRef, useCallback } from 'react';
-import { toast } from 'sonner';
-import { useCartStore } from '../../_lib/store';
 import { useTranslations } from 'next-intl';
 import HomePageService from '../../_services/HomePageService';
 import ProductDisplayModel, { getProductPricing } from '../../_types/Product/ProductDisplayModel';
-import CartItem from '../../_types/Order/CartItem';
 import { GetImage } from '../../_lib/utils';
 import CurrencyViewer from '@root/utils/CurrencyViewer';
 import CONFIG from '@root/config';
@@ -20,7 +17,6 @@ export function TrendingCarousel() {
   const t = useTranslations();
   const scrollRef = useRef<HTMLDivElement>(null);
   const { setQuickViewProduct } = useUIStore();
-  const addItem = useCartStore((s) => s.addItem);
 
   const { data, isLoading } = useQuery({
     queryKey: ['products', 'trending'],
@@ -42,20 +38,6 @@ export function TrendingCarousel() {
 
   const handleQuickView = (product: ProductDisplayModel) => {
     setQuickViewProduct(product);
-  };
-
-  const handleAddToCart = (e: React.MouseEvent, product: ProductDisplayModel) => {
-    e.stopPropagation();
-    const { cheapestVariant } = getProductPricing(product.variants ?? []);
-    if (!cheapestVariant) return;
-    addItem({
-      id: product.id,
-      name: product.name,
-      variant: cheapestVariant,
-      image: product.imagePreview,
-      categories: product.categories
-    } as CartItem);
-    toast.success(t('homepage.flyToCart.added'));
   };
 
   if (products.length === 0 && !isLoading) return null;

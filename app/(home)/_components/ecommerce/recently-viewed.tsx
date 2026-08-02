@@ -1,9 +1,8 @@
 'use client';
 
 import { Eye, X, ShoppingCart, ChevronLeft, ChevronRight } from 'lucide-react';
-import { useUIStore, useCartStore, useRecentStore } from '../../_lib/store';
+import { useUIStore, useRecentStore } from '../../_lib/store';
 import { useAddToCart } from '../../_hooks/use-cart-queries';
-import { Button } from '../ui/button';
 import { useEffect, useState, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { toast } from 'sonner';
@@ -18,7 +17,6 @@ export function RecentlyViewed() {
   const { items } = useRecentStore();
   const { setQuickViewProduct } = useUIStore();
   const addToCart = useAddToCart();
-  const jwt = useCartStore((s) => s.jwt);
   const [scrollEl, setScrollEl] = useState<HTMLDivElement | null>(null);
 
   useEffect(() => {

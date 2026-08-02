@@ -42,6 +42,7 @@ export function useAddToCart() {
     },
     onMutate: (item) => {
       queryClient.cancelQueries({ queryKey: ['serverCart'] });
+      
       const previousItems = useCartStore.getState().items;
       const existingItem = previousItems.find((i) => i.variant.id === item.variant.id);
       if (existingItem) {
@@ -105,6 +106,7 @@ export function useUpdateCartQuantity() {
     },
     onMutate: (request) => {
       queryClient.cancelQueries({ queryKey: ['serverCart'] });
+      debugger
       const previousItems = useCartStore.getState().items;
       const cartItem = previousItems.find((i) => i.variant.id === request.variantId);
       if (cartItem) {
