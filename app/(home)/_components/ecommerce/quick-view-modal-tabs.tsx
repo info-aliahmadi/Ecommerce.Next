@@ -5,6 +5,8 @@ import { MessagesSquare, Truck } from 'lucide-react';
 import { StarRating } from '../ui/star-rating';
 import ProductReviewDisplayModel from '../../_types/Product/ProductReviewDisplayModel';
 import ProductReviews from '@root/app/(home)/_components/ecommerce/ProductReviews';
+import CONFIG from '@root/config';
+import { GetCurrencySymbol } from '@root/utils/CurrencyViewer';
 
 interface RatingBreakdownProps {
   reviews: ProductReviewDisplayModel[];
@@ -48,7 +50,7 @@ function RatingBreakdown({ reviews }: RatingBreakdownProps) {
 
 function ShippingTab() {
   const items = [
-    { title: 'Free Shipping', desc: 'Free shipping on all orders over $50' },
+    { title: 'Free Shipping', desc: 'Free shipping on all orders over ' + CONFIG.FREE_SHIPPING_THRESHOLD + '' + GetCurrencySymbol(CONFIG.DEFAULT_CURRENCY) },
     { title: 'Express Delivery', desc: 'Get your order in 1-2 business days' },
     { title: 'Easy Returns', desc: '30-day hassle-free return policy' },
     { title: '24/7 Support', desc: 'Dedicated support anytime you need' },
@@ -94,7 +96,7 @@ export function QuickViewTabs({
   tabs,
   t,
   reviewCount,
-  }: Readonly<QuickViewTabsProps>) {
+}: Readonly<QuickViewTabsProps>) {
   return (
     <div className="mt-5 pt-5 border-t border-ecommerce-border">
       {/* Tab buttons with red underline indicator */}
@@ -130,7 +132,7 @@ export function QuickViewTabs({
           ) : activeTab === 'reviews' ? (
             <div className="space-y-4">
               <ProductReviews
-                productId={product.id}
+                product={product}
                 reviews={reviews}
                 reviewsLoading={reviewsLoading}
                 reviewCount={reviewCount}

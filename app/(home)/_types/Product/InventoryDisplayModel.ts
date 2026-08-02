@@ -27,3 +27,8 @@ export function getAvailableStock(inventory: InventoryDisplayModel | undefined |
   if (!inventory) return 0;
   return Math.max(0, inventory.stockQuantity - inventory.reservedQuantity);
 }
+
+export function canAddToCart(inventory: InventoryDisplayModel | undefined | null, currentCartQuantity: number, addQuantity: number = 1): boolean {
+  const available = getAvailableStock(inventory);
+  return currentCartQuantity + addQuantity <= available;
+}

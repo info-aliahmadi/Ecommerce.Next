@@ -17,6 +17,7 @@ import { getCheapestVariant } from '../../_types/Product/ProductDisplayModel';
 import { Badge } from '../ui/badge';
 import { useRouter } from 'next/navigation';
 import { useAddToCart, useUpdateCartQuantity, useRemoveFromCart } from '../../_hooks/use-cart-queries';
+import { getAvailableStock } from '../../_types/Product/InventoryDisplayModel';
 
 const PROMO_CODES: Record<string, { type: 'percentage' | 'freeship'; value: number; label: string }> = {
   WELCOME15: { type: 'percentage', value: 15, label: '15% off' },
@@ -203,8 +204,11 @@ export function CartDrawer() {
 
             <ScrollArea className="flex-1 min-h-0 px-6 py-4">
               <AnimatePresence mode="popLayout">
-                {items.map((item) => (
-                  <motion.div
+                {items.map((item) => {
+                  const availableStock = getAvailableStock(item.variant.productInventory);
+                  const isMaxQuantity = item.quantity >= availableStock;
+                  return (
+                    <motion.div
                     key={item.variant.id}
                     layout
                     initial={{ opacity: 0, x: -20 }}
@@ -257,11 +261,12 @@ export function CartDrawer() {
                                 <Minus size={12} />
                               </button>
                               <span className="w-8 text-center text-sm font-medium">{item.quantity}</span>
-                              <button
-                                onClick={() => updateCartQuantity.mutate({ variantId: item.variant.id, quantity: item.quantity + 1 })}
-                                className="w-7 h-7 flex items-center justify-center hover:bg-ecommerce-surface-hover rounded-e-lg transition-colors"
-                                aria-label={t('homepage.common.next')}
-                              >
+                               <button
+                                 onClick={() => updateCartQuantity.mutate({ variantId: item.variant.id, quantity: item.quantity + 1 })}
+                                 disabled={isMaxQuantity}
+                                 className="w-7 h-7 flex items-center justify-center hover:bg-ecommerce-surface-hover rounded-e-lg transition-colors"
+                                 aria-label={t('homepage.common.next')}
+                               >
                                 <Plus size={12} />
                               </button>
                             </div>
@@ -294,7 +299,7 @@ export function CartDrawer() {
                       </button>
                     </div>
                   </motion.div>
-                ))}
+                )})}
               </AnimatePresence>
 
               {/* Suggestions */}

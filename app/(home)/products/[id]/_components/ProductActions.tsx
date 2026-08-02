@@ -62,16 +62,21 @@ export default function ProductActions({
 
   const handleBuyNow = useCallback(() => {
     if (!activeVariant) return;
+    let addedCount = 0;
     for (let i = 0; i < quantity; i++) {
-      addItem({
+      const added = addItem({
         id: product.id,
         name: product.name,
         variant: activeVariant,
         image: product.imagePreview,
-        categories: product.categories
+        categories: product.categories,
       });
+      if (added) addedCount++;
+      else break;
     }
-    setCartOpen(true);
+    if (addedCount > 0) {
+      setCartOpen(true);
+    }
   }, [product, addItem, setCartOpen, activeVariant, quantity]);
 
   const handleWishlist = useCallback(() => {

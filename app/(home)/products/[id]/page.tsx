@@ -298,7 +298,7 @@ export default async function ProductDetailPage({
 
                     {/* Reviews - Breakdown + List */}
                     <div className="md:col-span-2">
-                       <ProductReviews productId={product.id} reviews={reviews} ratingSum={ratingSum} reviewCount={reviewCount} variant="full" />
+                       <ProductReviews product={product} reviews={reviews} ratingSum={ratingSum} reviewCount={reviewCount} variant="full" />
                     </div>
                   </div>
                 </TabsContent>

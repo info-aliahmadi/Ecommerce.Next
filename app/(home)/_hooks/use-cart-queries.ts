@@ -7,6 +7,7 @@ import { toast } from 'sonner';
 import UpdateQuantityRequest from '../_types/Order/UpdateQuantityRequest';
 import RemoveFromCartRequest from '../_types/Order/RemoveFromCartRequest';
 import CartItem from '../_types/Order/CartItem';
+import { getAvailableStock } from '../_types/Product/InventoryDisplayModel';
 
 export function useServerCart(jwt: string | undefined) {
   return useQuery<CartItem[]>({
@@ -44,6 +45,23 @@ export function useAddToCart() {
       const previousItems = useCartStore.getState().items;
       const existingItem = previousItems.find((i) => i.variant.id === item.variant.id);
       if (existingItem) {
+        const availableStock = getAvailableStock(existingItem.variant.productInventory);
+        if (existingItem.quantity + 1 > availableStock) {
+          toast.error('Insufficient stock', {
+            description: `Only ${availableStock} items available in stock`,
+          });
+          throw new Error('Insufficient stock');
+        }
+      } else {
+        const availableStock = getAvailableStock(item.variant.productInventory);
+        if (availableStock <= 0) {
+          toast.error('Out of stock', {
+            description: 'This product is currently out of stock',
+          });
+          throw new Error('Out of stock');
+        }
+      }
+      if (existingItem) {
         useCartStore.setState({
           items: previousItems.map((i) =>
             i.variant.id === item.variant.id ? { ...i, quantity: i.quantity + 1 } : i
@@ -63,7 +81,7 @@ export function useAddToCart() {
       if (context?.previousItems) {
         useCartStore.setState({ items: context.previousItems });
       }
-      if (jwt) {
+      if (jwt && !error.message.includes('Insufficient stock') && !error.message.includes('Out of stock')) {
         toast.error('Failed to add item to cart', { description: error.message });
       }
     },
@@ -88,6 +106,16 @@ export function useUpdateCartQuantity() {
     onMutate: (request) => {
       queryClient.cancelQueries({ queryKey: ['serverCart'] });
       const previousItems = useCartStore.getState().items;
+      const cartItem = previousItems.find((i) => i.variant.id === request.variantId);
+      if (cartItem) {
+        const availableStock = getAvailableStock(cartItem.variant.productInventory);
+        if (request.quantity > availableStock) {
+          toast.error('Insufficient stock', {
+            description: `Only ${availableStock} items available in stock`,
+          });
+          throw new Error('Insufficient stock');
+        }
+      }
       if (request.quantity <= 0) {
         useCartStore.setState({
           items: previousItems.filter((i) => i.variant.id !== request.variantId),
@@ -108,7 +136,7 @@ export function useUpdateCartQuantity() {
       if (context?.previousItems) {
         useCartStore.setState({ items: context.previousItems });
       }
-      if (jwt) {
+      if (jwt && !error.message.includes('Insufficient stock')) {
         toast.error('Failed to update quantity', { description: error.message });
       }
     },

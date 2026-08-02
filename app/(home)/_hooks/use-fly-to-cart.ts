@@ -28,7 +28,13 @@ export function useFlyToCart() {
       if (jwt) {
         addToCart.mutate(cartItem);
       } else {
-        addItemStore(cartItem);
+        const added = addItemStore(cartItem);
+        if (!added) {
+          toast.error('Insufficient stock', {
+            description: 'Cannot add more items than available in stock',
+          });
+          return;
+        }
       }
 
       // Show toast

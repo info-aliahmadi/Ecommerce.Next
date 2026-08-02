@@ -10,14 +10,15 @@ import { Textarea } from '../../../_components/ui/textarea';
 import { StarRating } from '../../../_components/ui/star-rating';
 import ProfileService from '../../../_services/ProfileService';
 import ProductReviewDisplayModel from '../../../_types/Product/ProductReviewDisplayModel';
+import ProductDisplayModel from '@root/app/(home)/_types/Product/ProductDisplayModel';
 
 export default function ReviewForm({
-  productId,
+  product,
   existingReview,
   isQuickView,
   onSuccess,
 }: Readonly<{
-  productId: number;
+  product: ProductDisplayModel;
   existingReview?: ProductReviewDisplayModel;
   isQuickView?: boolean;
   onSuccess?: (review: ProductReviewDisplayModel) => void;
@@ -41,7 +42,7 @@ export default function ReviewForm({
         const service = new ProfileService(session.user.accessToken);
         const review: ProductReviewDisplayModel = {
           id: existingReview?.id || 0,
-          productId,
+          productId: product.id,
           isApproved: false,
           reviewText: reviewText.trim(),
           replyText: '',
@@ -55,6 +56,8 @@ export default function ReviewForm({
           : await service.addUserReview(review);
 
         if (result.succeeded) {
+          // product.approvedRatingSum = existingReview?.id ? product.approvedRatingSum + rating : product.approvedRatingSum;
+          // product.approvedTotalReviews = existingReview?.id ? product.approvedTotalReviews + 1 : product.approvedTotalReviews;
           toast.success(t('homepage.productDetail.reviewSubmitted'));
           if (!existingReview?.id) {
             setReviewText('');
@@ -70,7 +73,7 @@ export default function ReviewForm({
         setSubmittingReview(false);
       }
     },
-    [reviewText, rating, productId, session, existingReview, t],
+    [reviewText, rating, product, session, existingReview, t],
   );
 
   if (!session?.user?.accessToken) {

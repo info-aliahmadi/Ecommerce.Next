@@ -8,6 +8,7 @@ import CartItem from '../_types/Order/CartItem';
 import WishlistItem from '../_types/Order/WishlistItem';
 import CompareItem from '../_types/Product/CompareItem';
 import StockAlertType from '../_types/StockAlertType';
+import { canAddToCart } from '../_types/Product/InventoryDisplayModel';
 import { resolveLanguage } from '@root/utils/resolver';
 import LanguageType from '@root/app/types/enums/LanguageType';
 
@@ -20,7 +21,7 @@ interface CartStore {
   toggleCart: () => void;
   jwt?: string;
   setJwt: (jwt: string | undefined) => void;
-  addItem: (item: Omit<CartItem, 'quantity'>) => void;
+  addItem: (item: Omit<CartItem, 'quantity'>) => boolean;
   removeItem: (variantId: number) => void;
   updateQuantity: (variantId: number, quantity: number) => void;
   clearCart: () => void;
@@ -41,8 +42,11 @@ export const useCartStore = create<CartStore>()(
       toggleCart: () => set((state) => ({ isCartOpen: !state.isCartOpen })),
       setJwt: (jwt) => set({ jwt }),
 
-      addItem: (item) => {
+      addItem: (item): boolean => {
         const existingItem = get().items.find((i) => i.variant.id === item.variant.id);
+        if (!canAddToCart(item.variant.productInventory, existingItem?.quantity ?? 0, 1)) {
+          return false;
+        }
 
         set((state) => {
           if (existingItem) {
@@ -54,6 +58,7 @@ export const useCartStore = create<CartStore>()(
           }
           return { items: [...state.items, { ...item, quantity: 1 }] };
         });
+        return true;
       },
 
       removeItem: (variantId: number) => {

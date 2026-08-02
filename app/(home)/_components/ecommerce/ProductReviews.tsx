@@ -8,11 +8,12 @@ import ProductReviewDisplayModel from '@root/app/(home)/_types/Product/ProductRe
 import { StarRating } from '@root/app/(home)/_components/ui/star-rating';
 import ReviewForm from '@root/app/(home)/products/[id]/_components/ReviewForm';
 import { showDistanceToNow } from '@root/utils/DateViewer';
+import ProductDisplayModel from '../../_types/Product/ProductDisplayModel';
 
 export type ReviewVariant = 'full' | 'quick';
 
 interface ReviewSectionProps {
-  productId: number;
+  product: ProductDisplayModel;
   reviews: ProductReviewDisplayModel[];
   reviewsLoading?: boolean;
   reviewCount: number;
@@ -20,7 +21,7 @@ interface ReviewSectionProps {
   variant?: ReviewVariant;
 }
 
-export default function ProductReviews({ productId, reviews = [], reviewsLoading = false, reviewCount, ratingSum, variant = 'full' }: Readonly<ReviewSectionProps>) {
+export default function ProductReviews({ product, reviews = [], reviewsLoading = false, reviewCount, ratingSum, variant = 'full' }: Readonly<ReviewSectionProps>) {
   const { data: session } = useSession();
   const t = useTranslations('');
   const currentUserId = (session?.user as any)?.id;
@@ -70,7 +71,7 @@ export default function ProductReviews({ productId, reviews = [], reviewsLoading
               <X size={16} />
             </button>
           </div>
-          <ReviewForm productId={productId} existingReview={review} isQuickView={variant === 'quick'} onSuccess={handleUpdateReview} />
+          <ReviewForm product={product} existingReview={review} isQuickView={variant === 'quick'} onSuccess={handleUpdateReview} />
         </div>
       );
     }
@@ -212,7 +213,7 @@ export default function ProductReviews({ productId, reviews = [], reviewsLoading
       {!userReview && session?.user?.accessToken && (
         <div className={variant === 'full' ? 'bg-ecommerce-surface/50 dark:bg-ecommerce-surface rounded-2xl border border-ecommerce-border p-5' : 'pt-4 border-t border-ecommerce-border/50'}>
           <h4 className="text-sm font-semibold text-ecommerce-text-primary mb-3">{t('homepage.productDetail.writeReview')}</h4>
-          <ReviewForm productId={productId} isQuickView={variant === 'quick'} onSuccess={handleAddReview} />
+          <ReviewForm product={product} isQuickView={variant === 'quick'} onSuccess={handleAddReview} />
         </div>
       )}
 
