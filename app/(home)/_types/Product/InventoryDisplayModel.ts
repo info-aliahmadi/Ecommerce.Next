@@ -22,3 +22,8 @@ export default interface InventoryDisplayModel {
   reservedQuantity: number;
 
 }
+
+export function getAvailableStock(inventory: InventoryDisplayModel | undefined | null): number {
+  if (!inventory) return 0;
+  return Math.max(0, inventory.stockQuantity - inventory.reservedQuantity);
+}

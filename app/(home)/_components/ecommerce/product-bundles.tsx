@@ -8,6 +8,7 @@ import { useCartStore } from '../../_lib/store';
 import { toast } from 'sonner';
 import { useTranslations } from 'next-intl';
 import ProductDisplayModel, { getProductPricing } from '../../_types/Product/ProductDisplayModel';
+import { getAvailableStock } from '../../_types/Product/InventoryDisplayModel';
 import HomePageService from '../../_services/HomePageService';
 import { useQuery } from '@tanstack/react-query';
 import { GetImage } from '../../_lib/utils';
@@ -44,7 +45,7 @@ export function ProductBundles() {
   const handleAddBundle = (bundle: BundleDisplayModel) => {
     bundle.products?.forEach((p) => {
       const { cheapestVariant } = getProductPricing(p.variants ?? []);
-      if (!cheapestVariant || cheapestVariant.productInventory.stockQuantity === 0) return;
+      if (!cheapestVariant || getAvailableStock(cheapestVariant.productInventory) === 0) return;
       addItem({
         id: p.id,
         name: p.name,

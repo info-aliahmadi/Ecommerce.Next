@@ -10,7 +10,8 @@ import { toast } from 'sonner';
 import { useFlyToCart } from '../../_hooks/use-fly-to-cart';
 import { useAddToWishlist, useRemoveFromWishlist } from '../../_hooks/use-wishlist-queries';
 import { useTranslations } from 'next-intl';
-import ProductDisplayModel, { getProductPricing } from '../../_types/Product/ProductDisplayModel';
+import ProductDisplayModel, { getProductPricing, getInStockVariants } from '../../_types/Product/ProductDisplayModel';
+import { getAvailableStock } from '../../_types/Product/InventoryDisplayModel';
 import { GetImage } from '../../_lib/utils';
 import Link from 'next/link';
 import CurrencyViewer from '@root/utils/CurrencyViewer';
@@ -263,7 +264,7 @@ export default function ProductListCard({ product, index = 0 }: Readonly<Product
                     <span className="text-ecommerce-emerald text-[10px] font-medium">{t('homepage.common.saveAmount', { amount: CurrencyViewer(savings, CONFIG.DEFAULT_CURRENCY) })}</span>
                   )}
                   {hasMultipleVariants && (() => {
-                    const maxSavings = (product.variants ?? []).filter(v => (v.productInventory?.stockQuantity ?? 0) > 0).reduce((max, v) => {
+                    const maxSavings = getInStockVariants(product.variants ?? []).reduce((max, v) => {
                       const s = v.oldSellPrice > v.sellPrice ? v.oldSellPrice - v.sellPrice : 0;
                       return s > max ? s : max;
                     }, 0);

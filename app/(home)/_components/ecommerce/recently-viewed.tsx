@@ -8,7 +8,7 @@ import { useEffect, useState, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { toast } from 'sonner';
 import { useTranslations } from 'next-intl';
-import ProductDisplayModel, { getProductPricing } from '../../_types/Product/ProductDisplayModel';
+import ProductDisplayModel, { getProductPricing, getInStockVariants } from '../../_types/Product/ProductDisplayModel';
 import { GetImage } from '../../_lib/utils';
 import CurrencyViewer from '@root/utils/CurrencyViewer';
 import CONFIG from '@root/config';
@@ -130,7 +130,7 @@ export function RecentlyViewed() {
                         );
                       })()}
                       <button
-                        disabled={item.stockQuantity === 0}
+                        disabled={getInStockVariants(item.variants ?? []).length === 0}
                         onClick={() => {
                           const { cheapestVariant } = getProductPricing(item.variants ?? []);
                           if (!cheapestVariant) return;

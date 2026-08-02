@@ -24,6 +24,7 @@ import ProductVariantDisplayModel from '../../_types/Product/ProductVariantDispl
 import { QuickViewGallery } from './quick-view-modal-gallery';
 import { QuickViewTabs } from './quick-view-modal-tabs';
 import ProductDisplayModel, { getProductPricing } from '../../_types/Product/ProductDisplayModel';
+import { getAvailableStock } from '../../_types/Product/InventoryDisplayModel';
 import ReviewSummary from '../../products/[id]/_components/ReviewSummary';
 
 function QuickViewContent({ product, onClose }: Readonly<{ product: ProductDisplayModel; onClose: () => void }>) {
@@ -52,7 +53,7 @@ function QuickViewContent({ product, onClose }: Readonly<{ product: ProductDispl
   const hasMultipleVariants = (product.variants?.length ?? 0) > 1;
   const discount = activeVariant?.oldSellPrice ? Math.round(((activeVariant?.oldSellPrice - activeVariant.sellPrice) / activeVariant.oldSellPrice) * 100) : 0;
   const parsedTags: string[] = product.productTags || [];
-  const stock = activeVariant?.productInventory?.stockQuantity ?? 0;
+  const stock = getAvailableStock(activeVariant?.productInventory);
 
   const wishlisted = isInWishlist(activeVariant.id);
   const { data: reviewsData, isLoading: reviewsLoading } = useQuery({

@@ -248,7 +248,7 @@ export default function ProductDetail({ row }: { row: MRT_Row<ProductModel> }) {
                                                 <Grid size={12}>
                                                     <Stack direction="row" spacing={1} sx={{ flexWrap: 'wrap', gap: 0.5 }}>
                                                         {variant.productAttributes.map((attr) => (
-                                                            <Chip key={attr.id} label={`${attr.name}: ${attr.value}`} size="small" />
+                                                            <Chip key={attr.id} label={`${attr.name}: ${attr.key}`} size="small" />
                                                         ))}
                                                     </Stack>
                                                 </Grid>

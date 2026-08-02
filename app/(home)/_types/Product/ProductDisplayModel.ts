@@ -6,6 +6,7 @@ import MeasureType from "@root/app/types/enums/MeasureType";
 import CategoryDisplayModel from "./CategoryDisplayModel";
 import ProductAttributeDisplayModel from "./ProductAttributeDisplayModel";
 import ProductVariantDisplayModel from "./ProductVariantDisplayModel";
+import InventoryDisplayModel, { getAvailableStock } from "./InventoryDisplayModel";
 /**
  * Represents a product.
  */
@@ -278,7 +279,7 @@ export default interface ProductDisplayModel {
 }
 export function getCheapestVariant(variants: ProductVariantDisplayModel[]) : ProductVariantDisplayModel {
   if (variants.length === 1) return variants[0];
-  const inStock = variants?.filter(v => (v.productInventory.stockQuantity) > 0);
+  const inStock = variants?.filter(v => getAvailableStock(v.productInventory) > 0);
   if (!inStock || inStock.length === 0) return variants[0];
   return inStock.reduce((min, v) =>
     v.sellPrice < min.sellPrice ? v : min
@@ -286,7 +287,7 @@ export function getCheapestVariant(variants: ProductVariantDisplayModel[]) : Pro
 }
 
 export function getInStockVariants(variants: ProductVariantDisplayModel[]) {
-  return variants?.filter(v => (v.productInventory?.stockQuantity ?? 0) > 0) ?? [];
+  return variants?.filter(v => getAvailableStock(v.productInventory) > 0) ?? [];
 }
 
 export interface ProductPricing {
@@ -302,7 +303,7 @@ export function getProductPricing(variants: ProductVariantDisplayModel[]): Produ
   const inStockVariants = getInStockVariants(variants);
   const cheapestVariant = getCheapestVariant(variants);
   const sellPrices = inStockVariants.map(v => v.sellPrice).filter(p => p > 0);
-  const totalStock = variants?.reduce((sum, v) => sum + (v.productInventory?.stockQuantity ?? 0), 0) ?? 0;
+  const totalStock = variants?.reduce((sum, v) => sum + getAvailableStock(v.productInventory), 0) ?? 0;
 
   return {
     cheapestVariant,

@@ -53,6 +53,7 @@ export default function AddOrEditArticle({ params }: { readonly params: Promise<
   };
   useEffect(() => {
     document.title = t('pages.cards.article-' + operation) + " - " + CONFIG.APP_HEADER;
+     if (operation == 'edit' && id > 0) loadArticle();
   }, [operation, t]);
 
   const handleSubmit = async (article: ArticleModel, resetForm: any, setErrors: (errors: FormikErrors<ArticleModel>) => void, setSubmitting: (open: boolean) => void) => {
@@ -169,7 +170,7 @@ export default function AddOrEditArticle({ params }: { readonly params: Promise<
                             <Editor
                               id={'body'}
                               name={'body'}
-                              defaultValue={values?.body || ''}
+                              value={values?.body || ''}
                               setFieldValue={setFieldValue}
                             />
                             {operation == 'edit' && (
@@ -239,7 +240,7 @@ export default function AddOrEditArticle({ params }: { readonly params: Promise<
                             <ImageUpload
                               name="previewImageId"
                               setFieldValue={setFieldValue}
-                              value={values?.previewImageId ?? ''}
+                              value={values?.previewImageId ?? null}
                               filePosterMaxHeight={400}
                             />
                             {(values?.previewImageId == null || values?.previewImageId == undefined) && (

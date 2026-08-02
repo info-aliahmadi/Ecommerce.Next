@@ -12,6 +12,7 @@ import QuantitySelector from './QuantitySelector';
 import ProductActions from './ProductActions';
 import ProductDisplayModel, { getProductPricing } from '@root/app/(home)/_types/Product/ProductDisplayModel';
 import ProductVariantDisplayModel from '@root/app/(home)/_types/Product/ProductVariantDisplayModel';
+import { getAvailableStock } from '@root/app/(home)/_types/Product/InventoryDisplayModel';
 
 interface ProductPurchaseSectionProps {
   product: ProductDisplayModel;
@@ -29,7 +30,7 @@ export default function ProductPurchaseSection({ product }: ProductPurchaseSecti
 
   const isMatchValid = !hasUserSelected || selectedVariant !== null;
   const activeVariant = isMatchValid ? selectedVariant : null;
-  const stock = activeVariant?.productInventory?.stockQuantity ?? 0;
+  const stock = getAvailableStock(activeVariant?.productInventory);
 
   const discount = activeVariant?.oldSellPrice
     ? Math.round(((activeVariant.oldSellPrice - activeVariant.sellPrice) / activeVariant.oldSellPrice) * 100)

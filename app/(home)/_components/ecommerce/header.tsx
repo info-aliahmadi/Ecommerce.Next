@@ -18,6 +18,7 @@ import { NotificationPanel } from './notification-panel';
 import { LanguageSwitcher } from './language-switcher';
 import HomePageService from '../../_services/HomePageService';
 import MenuModel from '@root/app/dashboard/(cms)/_types/Menu/MenuModel';
+import CONFIG from '@root/config';
 
 function buildMenuTree(items: MenuModel[]) : MenuModel[] {
   const map = new Map<number, any>();
@@ -54,7 +55,7 @@ export function PromoBar() {
   const mounted = useMounted();
 
   const PROMO_MESSAGES = [
-    { full: t('homepage.header.promo1'), short: t('homepage.header.promo1Short') },
+    { full: t('homepage.header.promo1', { amount: CONFIG.FREE_SHIPPING_THRESHOLD }), short: t('homepage.header.promo1Short') },
     { full: t('homepage.header.promo2'), short: t('homepage.header.promo2Short') },
     { full: t('homepage.header.promo3'), short: t('homepage.header.promo3Short') },
   ];

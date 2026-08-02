@@ -7,6 +7,7 @@ import {
 import { useTranslations } from 'next-intl';
 import { Button } from '../ui/button';
 import { useRouter } from 'next/navigation';
+import CONFIG from '@root/config';
 
 export function CheckoutSheet() {
   const { items, isCartOpen, setCartOpen } = useCartStore();
@@ -37,7 +38,7 @@ export function CheckoutSheet() {
               <Shield size={10} /> {t('homepage.hero.securePayment')}
             </div>
             <div className="flex items-center gap-1 text-[10px] text-ecommerce-text-muted">
-              <Truck size={10} /> {t('homepage.hero.onOrders')}
+              <Truck size={10} /> {t('homepage.hero.onOrders', { amount: CONFIG.FREE_SHIPPING_THRESHOLD })}
             </div>
           </div>
         </div>

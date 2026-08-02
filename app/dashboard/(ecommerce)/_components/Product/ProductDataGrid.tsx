@@ -46,28 +46,6 @@ export default function ProductDataGrid() {
 
   const [fieldsName, buttonName] = ['fields.product.', 'buttons.product.'];
 
-  const ImagePreviewRow = (({ renderedCellValue, row }: { renderedCellValue: any, row: MRT_Row<ProductModel> }) => {
-    let src = row.original.imagePreview ? CONFIG.UPLOAD_BASEPATH + row.original.imagePreview?.directory + row.original.imagePreview?.fileName : null;
-
-    return (
-      <Box
-        sx={{
-          display: 'flex',
-          alignItems: 'center',
-          gap: '1rem'
-        }}
-      >
-        {src ? (
-          <Avatar alt="ImagePreview" variant="rounded" src={src} sx={{ width: 70, height: 70 }}></Avatar>
-        ) : (
-          <Avatar variant="rounded" sx={{ width: 70, height: 70 }}>
-            <ImageNotSupported />
-          </Avatar>
-        )}
-      </Box>
-    );
-  });
-
   const columns = useMemo<MRT_Column<ProductModel>[]>(
     () => [
       {
@@ -114,7 +92,7 @@ export default function ProductDataGrid() {
         type: 'number',
         enableResizing: true,
         Cell: ({ row }) => {
-          const totalStock = row.original.variants?.reduce((sum, v) => sum + (v.productInventory?.stockQuantity || 0), 0) || 0;
+          const totalStock = row.original.variants?.reduce((sum, v) => sum + ((v.productInventory?.stockQuantity - v.productInventory?.reservedQuantity) || 0), 0) || 0;
           return totalStock;
         }
       },

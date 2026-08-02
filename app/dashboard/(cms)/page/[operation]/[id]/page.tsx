@@ -60,6 +60,7 @@ export default function AddOrEditPage({ params } : { readonly params: Promise<{ 
   };
   useEffect(() => {
     document.title = t('pages.cards.page-' + operation) + " - " + CONFIG.APP_HEADER;
+       if (operation == 'edit' && id > 0) loadPage();
   }, [operation, t]);
 
   const handleSubmit = async (page : PageModel, resetForm : any, setErrors: (errors: FormikErrors<LinkModel>) => void, setSubmitting: (open: boolean) => void) => {
@@ -133,7 +134,7 @@ export default function AddOrEditPage({ params } : { readonly params: Promise<{ 
         {({ errors, handleBlur, handleChange, setFieldValue, handleSubmit, isSubmitting, touched, values }) => (
           <form noValidate onSubmit={handleSubmit}>
             <Grid container direction="row" sx={{ justifyContent: "center", alignItems: "flex-start" }}>
-              <Grid container spacing={3} size={12} xl={7} >
+              <Grid container spacing={3} size={12} >
                 <Grid size={12}>
                   <Typography variant="h5">{t('pages.cards.page-' + operation)}</Typography>
                 </Grid>
@@ -189,7 +190,7 @@ export default function AddOrEditPage({ params } : { readonly params: Promise<{ 
                             <Editor
                               id={'body'}
                               name={'body'}
-                              defaultValue={values?.body || ''}
+                              value={values?.body || ''}
                               setFieldValue={setFieldValue}
                             />
                             {operation == 'edit' && (

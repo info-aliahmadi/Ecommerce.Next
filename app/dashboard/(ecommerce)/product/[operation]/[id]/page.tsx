@@ -142,6 +142,12 @@ export default function AddOrEditProduct({ params }: Readonly<{ params: Promise<
 
   useEffect(() => {
     document.title = t('pages.cards.product-' + operation) + " - " + CONFIG.APP_HEADER;
+    
+    if (operation === 'edit' && id > 0) {
+      productService.getProductById(id).then((result) => {
+        setProduct(result.data ?? product);
+      });
+    }
   }, [operation, t]);
 
   const handleTabChange = (event: any, newValue: any) => {
