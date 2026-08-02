@@ -223,6 +223,13 @@ export default function ProductListCard({ product, index = 0 }: Readonly<Product
                     {product.sku && <span className="text-[10px] text-ecommerce-text-muted ms-auto sm:ms-2">{t('homepage.common.sku')}: {product.sku}</span>}
                   </div>
                   <h3 className="font-semibold text-base text-ecommerce-text-primary line-clamp-1 group-hover:text-ecommerce-red transition-colors">{product.name}</h3>
+                  <div className="min-h-[2rem]">
+                    {cheapestVariant?.productAttributes.map(attribute => (
+                      <Badge key={attribute.id} className="bg-ecommerce-emerald/5 text-ecommerce-emerald border-0 text-xs font-semibold mx-0.5">
+                        {attribute.displayName}
+                      </Badge>
+                    ))}
+                  </div>
                   {product.shortDescription && <p className="text-xs text-ecommerce-text-muted mt-1 line-clamp-2">{product.shortDescription}</p>}
                 </div>
               </div>

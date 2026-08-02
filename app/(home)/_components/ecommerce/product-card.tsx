@@ -14,7 +14,6 @@ import { useTranslations } from 'next-intl';
 import ProductDisplayModel, { getProductPricing } from '../../_types/Product/ProductDisplayModel';
 import { GetImage } from '../../_lib/utils';
 import CartItem from '../../_types/Order/CartItem';
-import WishlistItem from '../../_types/Order/WishlistItem';
 import CompareItem from '../../_types/Product/CompareItem';
 import Link from 'next/link';
 import CurrencyViewer from '@root/utils/CurrencyViewer';
@@ -31,7 +30,6 @@ export function ProductCard({ product, index = 0 }: Readonly<ProductCardProps>) 
   const rating = product.approvedTotalReviews > 0 ? product.approvedRatingSum / product.approvedTotalReviews : 0;
 
   const { cheapestVariant, hasMultipleVariants, minSellPrice, maxSellPrice, totalStock } = getProductPricing(product.variants ?? []);
-
   const t = useTranslations();
   const { toggleItem, isInWishlist } = useWishlistStore();
   const { setQuickViewProduct } = useUIStore();
@@ -321,9 +319,16 @@ export function ProductCard({ product, index = 0 }: Readonly<ProductCardProps>) 
             ))}
 
             {/* Name */}
-            <h3 className="font-semibold text-sm text-ecommerce-text-primary line-clamp-2 leading-snug min-h-[2.5rem] group-hover:text-ecommerce-red transition-colors">
+            <h3 className="font-semibold text-sm text-ecommerce-text-primary line-clamp-2 leading-snug min-h-[1.5rem] group-hover:text-ecommerce-red transition-colors">
               {product.name}
             </h3>
+            <div className="min-h-[2rem]">
+              {cheapestVariant?.productAttributes.map(attribute => (
+                <Badge key={attribute.id} className="bg-ecommerce-emerald/5 text-ecommerce-emerald border-0 text-xs font-semibold mx-0.5">
+                  {attribute.displayName}
+                </Badge>
+              ))}
+            </div>
 
             {/* Short Description */}
             {product.shortDescription && (
