@@ -2,7 +2,7 @@
 
 import { useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ZoomIn, ChevronLeft, ChevronRight, Heart } from 'lucide-react';
+import { ZoomIn, ChevronLeft, ChevronRight, Heart, X } from 'lucide-react';
 import { Badge } from '../ui/badge';
 import ProductDisplayModel from '../../_types/Product/ProductDisplayModel';
 
@@ -26,6 +26,7 @@ interface QuickViewGalleryProps {
   handleNextImage: () => void;
   t: any;
   mainImageRef: React.RefObject<HTMLDivElement | null>;
+  onClose: () => void;
 }
 
 export function QuickViewGallery({
@@ -48,6 +49,7 @@ export function QuickViewGallery({
   handleNextImage,
   t,
   mainImageRef,
+  onClose,
 }: Readonly<QuickViewGalleryProps>) {
   const handleMouseMove = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
     if (!isZoomed || isTouchDevice) return;
@@ -59,6 +61,7 @@ export function QuickViewGallery({
 
   return (
     <div className="flex flex-col">
+
       <div
         ref={mainImageRef}
         className="zoom-container relative aspect-square overflow-hidden rounded-2xl bg-ecommerce-surface-hover cursor-zoom-in"
@@ -109,14 +112,15 @@ export function QuickViewGallery({
           />
         )}
 
-        <div className="absolute top-4 start-4 flex items-center gap-1.5 glass rounded-lg px-2.5 py-1 z-10">
+        <div className="absolute top-6 start-14 flex items-center gap-1.5 glass rounded-lg px-2.5 py-1 z-10">
           <ZoomIn size={12} className="text-white/70" />
           <span className="text-[10px] text-white/70 font-medium">
             {isZoomed ? t('homepage.quickView.moveToPan') : t('homepage.quickView.hoverToZoom')}
           </span>
         </div>
 
-        <div className="absolute top-4 end-12 flex flex-col gap-1.5 z-10">
+
+        <div className="absolute top-4 end-26 flex flex-col gap-1.5 z-10">
           {discount > 0 && (
             <Badge className="bg-ecommerce-red text-white border-0 text-xs font-bold px-2.5 py-1 rounded-lg shadow-sm">
               {t('homepage.common.off', { percent: discount })}
@@ -128,10 +132,16 @@ export function QuickViewGallery({
             </Badge>
           )}
         </div>
-
+        {/* <button
+          onClick={onClose}
+          className="absolute top-8 end-4 w-10 h-10 rounded-xl glass shadow-md flex items-center justify-center hover:scale-110 transition-transform z-10 md:hidden"
+          aria-label={t('close')}
+        >
+          <X size={18} />
+        </button> */}
         <button
           onClick={handleWishlist}
-          className="absolute top-4 end-4 w-10 h-10 rounded-xl glass shadow-md flex items-center justify-center hover:scale-110 transition-transform z-10"
+          className="absolute top-4 end-14 w-10 h-10 rounded-xl glass shadow-md flex items-center justify-center hover:scale-110 transition-transform z-10"
           aria-label={t('homepage.common.addToWishlist')}
         >
           <Heart size={18} className={wishlisted ? 'fill-ecommerce-red text-ecommerce-red' : 'text-white'} />

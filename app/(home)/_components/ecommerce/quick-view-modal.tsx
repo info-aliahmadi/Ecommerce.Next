@@ -1,6 +1,6 @@
 'use client';
 
-import { Heart, ShoppingCart, Check, Minus, Plus, Shield, Truck, RotateCcw } from 'lucide-react';
+import { Heart, ShoppingCart, Check, Minus, Plus, Shield, Truck, RotateCcw, X } from 'lucide-react';
 import { StarRating } from '../ui/star-rating';
 import { Button } from '../ui/button';
 import { Badge } from '../ui/badge';
@@ -163,7 +163,7 @@ function QuickViewContent({ product, onClose }: Readonly<{ product: ProductDispl
 
   return (
     <>
-      <div className="flex flex-col md:grid md:grid-cols-[55%_45%]">
+      <div className="flex flex-col md:grid md:grid-cols-[55%_45%] max-h-[85vh]">
         <QuickViewGallery
           product={product}
           selectedImageIndex={selectedImageIndex}
@@ -184,24 +184,25 @@ function QuickViewContent({ product, onClose }: Readonly<{ product: ProductDispl
           handleNextImage={handleNextImage}
           t={t}
           mainImageRef={mainImageRef}
+          onClose={onClose}
         />
 
-        <div className="p-6 flex flex-col overflow-y-auto max-h-[70vh]">
-          <div className="flex items-center gap-1.5 mb-2">
-            {product.categories?.map(category => category && (
-              <span key={"category-" + category.key} className="text-xs font-medium text-ecommerce-text-muted uppercase tracking-wider">
-                <span className="inline-block w-2 h-2 mx-2 rounded-full " style={{ backgroundColor: category.color }} > </span>
-                <span className="text-xs font-medium text-ecommerce-text-muted uppercase tracking-wider">{category.name}</span>
-              </span>))}
-            {product.sku && (
-              <span className="text-xs text-ecommerce-text-muted ms-auto">{t('homepage.common.sku')}: {product.sku}</span>
-            )}
-          </div>
+        <div className="p-6 flex flex-col overflow-y-auto">
+
+          {product.categories?.map(category => category && (
+            <span key={"category-" + category.key} className="text-xs font-medium text-ecommerce-text-muted uppercase tracking-wider pb-2">
+              <span className="inline-block w-2 h-2 mx-2 rounded-full " style={{ backgroundColor: category.color }} > </span>
+              <span className="text-xs font-medium text-ecommerce-text-muted uppercase tracking-wider">{category.name}</span>
+            </span>))}
 
           <h2
             onClick={() => handleNavigateToMoreDetail(product.id)}
-            className="text-xl font-bold text-ecommerce-text-primary leading-tight cursor-pointer"
+            className="text-xl font-bold text-ecommerce-text-primary leading-tight cursor-pointer pb-2"
           >{product.name}</h2>
+
+          {product.sku && (
+            <span className="text-xs text-ecommerce-text-muted ">{t('homepage.common.sku')}: {product.sku}</span>
+          )}
           {parsedTags.length > 0 && (
             <div className="flex gap-1.5 mt-2 flex-wrap">
               {parsedTags.map(tag => (
@@ -436,7 +437,7 @@ export function QuickViewModal() {
 
   return (
     <Dialog open={!!quickViewProduct} onOpenChange={(open) => { if (!open) setQuickViewProduct(null); }}>
-      <DialogContent className="max-w-3xl p-0 gap-0 overflow-hidden rounded-2xl border-ecommerce-border sm:rounded-2xl" closeButtonClassName="z-[60]">
+      <DialogContent className="max-w-3xl p-0 gap-0 overflow-hidden rounded-2xl border-ecommerce-border sm:rounded-2xl">
         {quickViewProduct && (
           <QuickViewContent
             key={quickViewProduct.id}
