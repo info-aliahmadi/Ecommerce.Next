@@ -23,6 +23,7 @@ import BundleDisplayModel from "../_types/Product/BundleDisplayModel";
 import SlideshowDisplayModel from "../_types/SlideshowDisplayModel";
 import SubscribeUserModel from "../_types/SubscribeUserModel";
 import ProductReviewDisplayModel from "../_types/Product/ProductReviewDisplayModel";
+import ProductInventoryStockModel from "../_types/Product/ProductInventoryStockModel";
 
 export default class HomePageService {
 
@@ -133,6 +134,10 @@ export default class HomePageService {
 
   async getProductById(productId: number): Promise<Result<ProductDisplayModel>> {
     let result = await Fetch.Get<Result<ProductDisplayModel>>(`${this.baseUrl}/Product/GetProduct?productId=${productId}`);
+    return result;
+  }
+  async GetProductStockByIds(productIds: number[]): Promise<Result<ProductInventoryStockModel[]>> {
+    let result = await Fetch.Get<Result<ProductInventoryStockModel[]>>(`${this.baseUrl}/Product/GetProductStockByIds?productIds=${productIds.join(',')}`);
     return result;
   }
 
