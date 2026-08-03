@@ -122,12 +122,24 @@ export function TrendingCarousel() {
               >
                 {/* Image Container */}
                 <div className="relative aspect-[4/5] overflow-hidden bg-ecommerce-surface-hover dark:bg-[#252836]">
-                  <img
-                    src={GetImage(product.imagePreview, true)}
-                    alt={product.name}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
-                    loading="lazy"
-                  />
+                  {(() => {
+                    const { totalStock } = getProductPricing(product.variants ?? []);
+                    return (
+                      <>
+                        <img
+                          src={GetImage(product.imagePreview, true)}
+                          alt={product.name}
+                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                          loading="lazy"
+                        />
+                        {totalStock === 0 && (
+                          <div className="absolute inset-0 bg-black/40 z-10 flex items-center justify-center">
+                            <span className="text-sm font-bold text-white bg-black/60 px-4 py-2 rounded-xl">{t('homepage.common.outOfStock')}</span>
+                          </div>
+                        )}
+                      </>
+                    );
+                  })()}
 
                   {/* Gradient overlay on hover */}
                   <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
@@ -149,10 +161,14 @@ export function TrendingCarousel() {
                     </p>
                     <p className="text-white font-semibold text-base mb-3">
                       {(() => {
-                        const { hasMultipleVariants, minSellPrice, maxSellPrice } = getProductPricing(product.variants ?? []);
-                        return hasMultipleVariants
-                          ? `${CurrencyViewer(minSellPrice, CONFIG.DEFAULT_CURRENCY)} - ${CurrencyViewer(maxSellPrice, CONFIG.DEFAULT_CURRENCY)}`
-                          : CurrencyViewer(minSellPrice, CONFIG.DEFAULT_CURRENCY);
+                        const { hasMultipleVariants, minSellPrice, maxSellPrice, totalStock } = getProductPricing(product.variants ?? []);
+                        return totalStock === 0 ? (
+                          t('homepage.common.outOfStock')
+                        ) : hasMultipleVariants ? (
+                          `${CurrencyViewer(minSellPrice, CONFIG.DEFAULT_CURRENCY)} - ${CurrencyViewer(maxSellPrice, CONFIG.DEFAULT_CURRENCY)}`
+                        ) : (
+                          CurrencyViewer(minSellPrice, CONFIG.DEFAULT_CURRENCY)
+                        );
                       })()}
                     </p>
                     <button

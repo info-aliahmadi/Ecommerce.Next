@@ -436,7 +436,7 @@ export function QuickViewModal() {
 
   return (
     <Dialog open={!!quickViewProduct} onOpenChange={(open) => { if (!open) setQuickViewProduct(null); }}>
-      <DialogContent className="max-w-3xl p-0 gap-0 overflow-hidden rounded-2xl border-ecommerce-border sm:rounded-2xl">
+      <DialogContent className="max-w-3xl p-0 gap-0 overflow-hidden rounded-2xl border-ecommerce-border sm:rounded-2xl" closeButtonClassName="z-[60]">
         {quickViewProduct && (
           <QuickViewContent
             key={quickViewProduct.id}

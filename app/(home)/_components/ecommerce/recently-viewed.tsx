@@ -90,12 +90,24 @@ export function RecentlyViewed() {
                 >
                   <div className="card-lift category-glow bg-white dark:bg-ecommerce-surface rounded-xl border border-ecommerce-border overflow-hidden h-full flex flex-col">
                     <div className="relative aspect-[4/3] overflow-hidden bg-ecommerce-surface-hover dark:bg-[#252836]">
-                      <img
-                        src={GetImage(item.imagePreview, true)}
-                        alt={item.name}
-                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                        loading="lazy"
-                      />
+                      {(() => {
+                        const { cheapestVariant, totalStock } = getProductPricing(item.variants ?? []);
+                        return (
+                          <>
+                            <img
+                              src={GetImage(item.imagePreview, true)}
+                              alt={item.name}
+                              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                              loading="lazy"
+                            />
+                            {totalStock === 0 && (
+                              <div className="absolute inset-0 bg-black/40 z-10 flex items-center justify-center">
+                                <span className="text-sm font-bold text-white bg-black/60 px-4 py-2 rounded-xl">{t('homepage.common.outOfStock')}</span>
+                              </div>
+                            )}
+                          </>
+                        );
+                      })()}
                       {/* Quick View Eye Button */}
                       <button
                         onClick={() => setQuickViewProduct(item)}
@@ -120,11 +132,17 @@ export function RecentlyViewed() {
                       <p className="text-xs font-medium text-ecommerce-text-muted">{item.categories.map(p => p.name + ",")}</p>
                       <h4 className="text-sm font-semibold text-ecommerce-text-primary line-clamp-1 mt-0.5">{item.name}</h4>
                       {(() => {
-                        const { hasMultipleVariants, minSellPrice, maxSellPrice } = getProductPricing(item.variants ?? []);
+                        const { hasMultipleVariants, minSellPrice, maxSellPrice, totalStock } = getProductPricing(item.variants ?? []);
                         return (
-                          <span className="text-sm font-bold text-ecommerce-text-primary mt-2">
-                            {hasMultipleVariants ? `${CurrencyViewer(minSellPrice, CONFIG.DEFAULT_CURRENCY)} - ${CurrencyViewer(maxSellPrice, CONFIG.DEFAULT_CURRENCY)}` : CurrencyViewer(minSellPrice, CONFIG.DEFAULT_CURRENCY)}
-                          </span>
+                          <>
+                            {totalStock === 0 ? (
+                              <span className="text-sm font-bold text-ecommerce-text-muted mt-2">{t('homepage.common.outOfStock')}</span>
+                            ) : (
+                              <span className="text-sm font-bold text-ecommerce-text-primary mt-2">
+                                {hasMultipleVariants ? `${CurrencyViewer(minSellPrice, CONFIG.DEFAULT_CURRENCY)} - ${CurrencyViewer(maxSellPrice, CONFIG.DEFAULT_CURRENCY)}` : CurrencyViewer(minSellPrice, CONFIG.DEFAULT_CURRENCY)}
+                              </span>
+                            )}
+                          </>
                         );
                       })()}
                       <button

@@ -4,6 +4,7 @@ import DeliveryDateType from "@root/app/types/enums/DeliveryDateType";
 import CurrencyTypes from "@root/app/types/enums/CurrencyTypes";
 import MeasureType from "@root/app/types/enums/MeasureType";
 import CategoryDisplayModel from "./CategoryDisplayModel";
+import AttributeType from "@root/app/types/enums/AttributeType";
 import ProductAttributeDisplayModel from "./ProductAttributeDisplayModel";
 import ProductVariantDisplayModel from "./ProductVariantDisplayModel";
 import InventoryDisplayModel, { getAvailableStock } from "./InventoryDisplayModel";
@@ -313,4 +314,35 @@ export function getProductPricing(variants: ProductVariantDisplayModel[]): Produ
     maxSellPrice: sellPrices.length > 0 ? Math.max(...sellPrices) : 0,
     totalStock,
   };
+}
+
+export function getVariantSummary(variants: ProductVariantDisplayModel[]): Array<{ attributeType: AttributeType; count: number; translationKey: string }> {
+  if (!variants || variants.length === 0) return [];
+  const typeMap = new Map<AttributeType, Set<string>>();
+  for (const variant of variants) {
+    for (const attr of variant.productAttributes ?? []) {
+      if (!typeMap.has(attr.attributeType)) {
+        typeMap.set(attr.attributeType, new Set());
+      }
+      typeMap.get(attr.attributeType)!.add(attr.key);
+    }
+  }
+  const configs: Record<number, string> = {
+    [AttributeType.Color]: 'homepage.quickView.color',
+    [AttributeType.Size]: 'homepage.quickView.size',
+    [AttributeType.Weight]: 'homepage.quickView.weight',
+    [AttributeType.Length]: 'homepage.quickView.length',
+    [AttributeType.Width]: 'homepage.quickView.width',
+    [AttributeType.Height]: 'homepage.quickView.height',
+    [AttributeType.Material]: 'homepage.quickView.material',
+    [AttributeType.Pattern]: 'homepage.quickView.pattern',
+    [AttributeType.Brand]: 'homepage.quickView.brand',
+    [AttributeType.Model]: 'homepage.quickView.model',
+  };
+  return Array.from(typeMap.entries())
+    .map(([attributeType, keys]) => ({
+      attributeType,
+      count: keys.size,
+      translationKey: configs[attributeType] || attributeType.toString(),
+    }));
 }

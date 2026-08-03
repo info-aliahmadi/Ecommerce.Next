@@ -120,28 +120,48 @@ export function ProductBundles() {
                             key={product.id}
                             className="flex items-center gap-3 p-2 rounded-xl bg-ecommerce-surface-hover/60 hover:bg-ecommerce-surface-hover transition-colors"
                           >
-                            <img
-                              src={GetImage(product.imagePreview)}
-                              alt={product.name}
-                              className="w-12 h-12 rounded-lg object-cover shrink-0"
-                            />
+                            <div className="relative w-12 h-12 rounded-lg overflow-hidden shrink-0">
+                              <img
+                                src={GetImage(product.imagePreview)}
+                                alt={product.name}
+                                className="w-12 h-12 rounded-lg object-cover"
+                              />
+                              {(() => {
+                                const { cheapestVariant } = getProductPricing(product.variants ?? []);
+                                const isOutOfStock = !cheapestVariant || getAvailableStock(cheapestVariant.productInventory) <= 0;
+                                return isOutOfStock ? (
+                                  <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
+                                    <span className="text-[10px] font-bold text-white bg-black/60 px-1.5 py-0.5 rounded-md">
+                                      {t('homepage.common.outOfStock')}
+                                    </span>
+                                  </div>
+                                ) : null;
+                              })()}
+                            </div>
                             {(() => {
                               const { cheapestVariant } = getProductPricing(product.variants ?? []);
+                              const isOutOfStock = !cheapestVariant || getAvailableStock(cheapestVariant.productInventory) <= 0;
                               return (
                                 <div className="flex-1 min-w-0">
                                   <p className="text-sm font-medium text-ecommerce-text-primary truncate">
                                     {product.name}
                                   </p>
-                                  <div className="flex items-center gap-2">
-                                    <span className="text-sm font-semibold text-ecommerce-red">
-                                      {CurrencyViewer(cheapestVariant?.sellPrice ?? 0, CONFIG.DEFAULT_CURRENCY)}
-                                    </span>
-                                    {cheapestVariant && cheapestVariant.oldSellPrice != 0 && (
-                                      <span className="text-[11px] text-ecommerce-text-muted line-through">
-                                        {CurrencyViewer(cheapestVariant.oldSellPrice, CONFIG.DEFAULT_CURRENCY)}
+                                  {isOutOfStock ? (
+                                    <p className="text-xs text-ecommerce-text-muted">
+                                      {t('outOfStock')}
+                                    </p>
+                                  ) : (
+                                    <div className="flex items-center gap-2">
+                                      <span className="text-sm font-semibold text-ecommerce-red">
+                                        {CurrencyViewer(cheapestVariant.sellPrice ?? 0, CONFIG.DEFAULT_CURRENCY)}
                                       </span>
-                                    )}
-                                  </div>
+                                      {cheapestVariant.oldSellPrice != 0 && (
+                                        <span className="text-[11px] text-ecommerce-text-muted line-through">
+                                          {CurrencyViewer(cheapestVariant.oldSellPrice, CONFIG.DEFAULT_CURRENCY)}
+                                        </span>
+                                      )}
+                                    </div>
+                                  )}
                                 </div>
                               );
                             })()}

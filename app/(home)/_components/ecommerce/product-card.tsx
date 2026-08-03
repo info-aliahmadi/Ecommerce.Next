@@ -11,7 +11,7 @@ import { toast } from 'sonner';
 import { useFlyToCart } from '../../_hooks/use-fly-to-cart';
 import { useAddToWishlist, useRemoveFromWishlist } from '../../_hooks/use-wishlist-queries';
 import { useTranslations } from 'next-intl';
-import ProductDisplayModel, { getProductPricing } from '../../_types/Product/ProductDisplayModel';
+import ProductDisplayModel, { getProductPricing, getVariantSummary } from '../../_types/Product/ProductDisplayModel';
 import { GetImage } from '../../_lib/utils';
 import CartItem from '../../_types/Order/CartItem';
 import CompareItem from '../../_types/Product/CompareItem';
@@ -318,17 +318,47 @@ export function ProductCard({ product, index = 0 }: Readonly<ProductCardProps>) 
               </div>
             ))}
 
+
             {/* Name */}
             <h3 className="font-semibold text-sm text-ecommerce-text-primary line-clamp-2 leading-snug min-h-[1.5rem] group-hover:text-ecommerce-red transition-colors">
               {product.name}
             </h3>
+            {/* {hasMultipleVariants && (
+                <div className="text-[11px] text-ecommerce-text-muted mt-1">
+                  {getVariantSummary(product.variants ?? []).map((item) => (
+                    <span key={item.attributeType}>
+                      {item.count} {t(item.translationKey)}
+                      {' '}
+                    </span>
+                  ))}
+                </div>
+              ) : ( */}
             <div className="min-h-[2rem]">
               {cheapestVariant?.productAttributes.map(attribute => (
                 <Badge key={attribute.id} className="bg-ecommerce-emerald/5 text-ecommerce-emerald border-0 text-xs font-semibold mx-0.5">
                   {attribute.displayName}
                 </Badge>
               ))}
+              {hasMultipleVariants && <div className="text-[11px] text-ecommerce-text-muted mt-1">
+                {getVariantSummary(product.variants ?? []).map((item) => (
+                  <span key={item.attributeType}>
+                    {item.count} {t(item.translationKey)}
+                    {' '}
+                  </span>
+                ))}
+              </div>}
             </div>
+
+            {/*      <div className="text-[11px] text-ecommerce-text-muted mt-1">
+                  {getVariantSummary(product.variants ?? []).map((item) => (
+                    <span key={item.attributeType}>
+                      {item.count} {t(item.translationKey)}
+                      {' '}
+                    </span>
+                  ))}
+                 </div>
+            //   </div>
+            // )} */}
 
             {/* Short Description */}
             {product.shortDescription && (
