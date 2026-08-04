@@ -78,6 +78,7 @@ export function ReviewStep({
   onClearPlaceOrderError,
 }: Readonly<ReviewStepProps>) {
   const t = useTranslations('homepage.paymentPage');
+  const tRoot = useTranslations();
 
   const getStockIssue = (variantId: number) => stockIssues.find(i => i.variantId === variantId);
 
@@ -132,14 +133,14 @@ export function ReviewStep({
                     <button
                       onClick={() => onUpdateQuantity(item.variant.id, Math.max(1, item.quantity - 1))}
                       className="w-7 h-7 rounded-md bg-ecommerce-surface-hover hover:bg-ecommerce-border flex items-center justify-center transition-colors cursor-pointer"
-                      aria-label={t('homepage.common.previous')}
+                      aria-label={tRoot('homepage.common.previous')}
                     >
                       <Minus size={14} />
                     </button>
                     <button
                       onClick={() => onUpdateQuantity(item.variant.id, item.quantity + 1)}
                       className="w-7 h-7 rounded-md bg-ecommerce-surface-hover hover:bg-ecommerce-border flex items-center justify-center transition-colors cursor-pointer bg-ecommerce-border"
-                      aria-label={t('homepage.common.next')}
+                      aria-label={tRoot('homepage.common.next')}
                     >
                       <Plus size={14} />
                     </button>
@@ -345,7 +346,7 @@ export function ReviewStep({
               onClick={onClearPlaceOrderError}
               className="text-xs text-red-500 hover:text-red-700 underline shrink-0"
             >
-              {t('homepage.common.remove')}
+              {tRoot('homepage.common.remove')}
             </button>
           </div>
         </div>

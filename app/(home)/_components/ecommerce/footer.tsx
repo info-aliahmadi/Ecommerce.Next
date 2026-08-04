@@ -1,12 +1,11 @@
 'use client';
 
 import { useQuery } from '@tanstack/react-query';
-import { useUIStore, useCartStore } from '../../_lib/store';
+import { useUIStore } from '../../_lib/store';
 import Link from 'next/link';
 import { Facebook, Twitter, Instagram, Youtube, MapPin, Phone, Mail, CreditCard, Truck, Shield, RotateCcw, Send, ArrowUp, Heart, Zap, Tag, Package } from 'lucide-react';
 import { useState } from 'react';
 import { toast } from 'sonner';
-import { motion } from 'framer-motion';
 import { useTranslations } from 'next-intl';
 import HomePageService from '../../_services/HomePageService';
 import CurrencyViewer from '@root/utils/CurrencyViewer';
@@ -46,7 +45,6 @@ function useFooterLinks() {
 export function Footer() {
   const t = useTranslations();
   const { setSelectedCategory } = useUIStore();
-  const { totalItems } = useCartStore();
   const [email, setEmail] = useState('');
 
   const { data: footerLinks } = useFooterLinks();
@@ -206,18 +204,19 @@ export function Footer() {
                 <div className="w-7 h-7 rounded-lg bg-white/[0.05] flex items-center justify-center group-hover:bg-white/10 transition-colors">
                   <Phone size={12} />
                 </div>
-                {CONFIG.CONTACT_PHONE_NUMBER}
+                <span className="ltr-input">{CONFIG.CONTACT_PHONE_NUMBER}</span>
               </a>
               <a href="mailto:hello@hydrashop.com" className="flex items-center gap-2.5 text-sm text-white/50 hover:text-white/80 transition-colors group">
                 <div className="w-7 h-7 rounded-lg bg-white/[0.05] flex items-center justify-center group-hover:bg-white/10 transition-colors">
                   <Mail size={12} />
                 </div>
-                {CONFIG.CONTACT_EMAIL}
+                <span className="ltr-input">{CONFIG.CONTACT_EMAIL}</span>
               </a>
               <div className="flex items-center gap-2.5 text-sm text-white/50">
                 <div className="w-7 h-7 rounded-lg bg-white/[0.05] flex items-center justify-center">
                   <MapPin size={12} />
                 </div>
+
                 {CONFIG.CONTACT_ADDRESS}
               </div>
             </div>
@@ -362,8 +361,8 @@ export function Footer() {
           </div>
           {/* Made with love */}
           <div className="text-center mt-3">
-            <p className="text-[10px] text-white/20 flex items-center justify-center gap-1">
-              Made with <Heart size={10} className="text-ecommerce-red/50" /> using Next.js & Tailwind CSS
+            <p className="text-[10px] text-white/20 flex items-center justify-center gap-1 ltr-input">
+              Made with <Heart size={10} className="text-ecommerce-red/50" /> using <a href="https://github.com/info-aliahmadi/Ecommerce.Next" className="text-ecommerce-red/50 hover:underline">Hydra Ecommerce</a>. All rights reserved.
             </p>
           </div>
         </div>

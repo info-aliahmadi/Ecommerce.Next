@@ -9,13 +9,15 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { toast } from 'sonner';
 import {
   ChevronRight, ArrowLeft, Loader2,
+  ChevronLeft,
+  ArrowRight,
 } from 'lucide-react';
 
 import { Footer } from '../_components/ecommerce/footer';
 import { BackToTop } from '../_components/ecommerce/back-to-top';
 import { MobileBottomNav } from '../_components/ecommerce/mobile-bottom-nav';
 import { RTL_LOCALES, useCartStore, useCheckoutPersistStore } from '../_lib/store';
-import { useClearCart } from '../_hooks/use-cart-queries';
+import { useClearCart, useUpdateCartQuantity, useRemoveFromCart } from '../_hooks/use-cart-queries';
 import { Card, CardContent } from '../_components/ui/card';
 import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from '../_components/ui/accordion';
 import ProfileService from '../_services/ProfileService';
@@ -42,8 +44,6 @@ import ShippingMethod from '@root/app/types/enums/ShippingMethod';
 import MyOrderService from '../_services/MyOrderService';
 import CreateOrderRequest, { CreateOrderItemRequest } from '../_types/Order/CreateOrderRequest';
 import PaymentMethod from '@root/app/types/enums/PaymentMethod';
-import HomePageService from '../_services/HomePageService';
-import ProductInventoryStockModel from '../_types/Product/ProductInventoryStockModel';
 
 /* ──────────────────────────────────────────────────────────────── */
 
@@ -57,7 +57,7 @@ function CheckoutPageInner() {
   const t = useTranslations('homepage.paymentPage');
   const router = useRouter();
   const { data: session, status } = useSession();
-  
+
   // best way to get the current language is to use next-intl's useLocale hook
   const locale = useLocale();
   const isRtl = RTL_LOCALES.includes(locale as any);
@@ -70,6 +70,8 @@ function CheckoutPageInner() {
 
   const { items, totalPrice, totalSavings, totalItems } = useCartStore();
   const clearCartMutation = useClearCart();
+  const updateQuantityMutation = useUpdateCartQuantity();
+  const removeFromCartMutation = useRemoveFromCart();
   const checkoutPersist = useCheckoutPersistStore();
 
   // Promo code
@@ -116,12 +118,12 @@ function CheckoutPageInner() {
   const [stockIssues, setStockIssues] = useState<StockIssue[]>([]);
 
   const handleRemoveItem = useCallback((variantId: number) => {
-    useCartStore.getState().removeItem(variantId);
-  }, []);
+    removeFromCartMutation.mutate({ variantId });
+  }, [removeFromCartMutation]);
 
   const handleUpdateQuantity = useCallback((variantId: number, quantity: number) => {
-    useCartStore.getState().updateQuantity(variantId, quantity);
-  }, []);
+    updateQuantityMutation.mutate({ variantId, quantity });
+  }, [updateQuantityMutation]);
 
   useEffect(() => {
     if (currentStep !== 3) {
@@ -586,9 +588,9 @@ function CheckoutPageInner() {
               >
                 {t('breadcrumbHome')}
               </Link>
-              <ChevronRight size={14} className="text-ecommerce-text-muted" />
+              {isRtl ? <ChevronLeft size={14} className="text-ecommerce-text-muted" /> : <ChevronRight size={14} className="text-ecommerce-text-muted" />}
               <span className="text-ecommerce-text-muted">{t('breadcrumbCart')}</span>
-              <ChevronRight size={14} className="text-ecommerce-text-muted" />
+              {isRtl ? <ChevronLeft size={14} className="text-ecommerce-text-muted" /> : <ChevronRight size={14} className="text-ecommerce-text-muted" />}
               <span className="font-medium text-ecommerce-text-primary">{t('breadcrumbCheckout')}</span>
             </nav>
           </div>
@@ -601,7 +603,7 @@ function CheckoutPageInner() {
               {currentStep < 4 && (
                 <Link href="/products" className="hidden sm:block">
                   <button className="w-9 h-9 rounded-lg bg-ecommerce-surface-hover flex items-center justify-center hover:bg-ecommerce-border transition-colors">
-                    <ArrowLeft size={16} className="text-ecommerce-text-secondary" />
+                    {isRtl ? <ArrowRight size={16} className="text-ecommerce-text-secondary" /> : <ArrowLeft size={16} className="text-ecommerce-text-secondary" />}
                   </button>
                 </Link>
               )}
