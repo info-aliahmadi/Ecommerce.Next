@@ -34,7 +34,8 @@ export default class Result<T> {
       [ResultStatusEnum.FileIsTooLarge]: "File Is Too Large",
       [ResultStatusEnum.FileIsTooSmall]: "File Is Too Small",
       [ResultStatusEnum.RequiresTwoFactor]: "Requires Two Factor",
-      [ResultStatusEnum.IsLockedOut]: "User Is Locked"
+      [ResultStatusEnum.IsLockedOut]: "User Is Locked",
+      [ResultStatusEnum.InsufficientStock]: "Insufficient Stock"
     };
   
     export function description(val: ResultStatusEnum): string {

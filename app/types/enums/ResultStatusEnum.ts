@@ -11,6 +11,7 @@ enum ResultStatusEnum {
   FileIsTooLarge = 505,
   FileIsTooSmall = 506,
   RequiresTwoFactor = 507,
-  IsLockedOut = 508
+  IsLockedOut = 508,
+  InsufficientStock = 509
 }
 export default ResultStatusEnum;

@@ -104,6 +104,7 @@ function CheckoutPageInner() {
   const [currentStep, setCurrentStep] = useState<CheckoutStep>(1);
   const [direction, setDirection] = useState<1 | -1>(1);
   const [isPlacing, setIsPlacing] = useState(false);
+  const [placeOrderError, setPlaceOrderError] = useState<string | null>(null);
 
   // Stock validation for review step
   interface StockIssue {
@@ -403,6 +404,7 @@ function CheckoutPageInner() {
     setCurrentStep(step);
     checkoutPersist.setCheckoutPersist({ currentStep: step });
     setErrors({});
+    setPlaceOrderError(null);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }, [currentStep, checkoutPersist.setCheckoutPersist]);
 
@@ -506,6 +508,7 @@ function CheckoutPageInner() {
       return;
     }
 
+    setPlaceOrderError(null);
     setIsPlacing(true);
     try {
       // Build order model using OrderDisplayModel
@@ -532,14 +535,14 @@ function CheckoutPageInner() {
         toast.success(t('orderPlaced'));
         goToStep(4, 1);
       } else {
-        toast.error(result.message || t('orderFailed'), { duration: 10000 });
+        setPlaceOrderError(result.message || t('orderFailed'));
       }
     } catch {
-      toast.error(t('orderFailed'));
+      setPlaceOrderError(t('orderFailed'));
     } finally {
       setIsPlacing(false);
     }
-  }, [session, shipping, payment, total, shippingCost, tax, discountAmount, items, clearCartMutation, checkoutPersist.clearCheckoutPersist, goToStep, router, t]);
+  }, [session, shipping, payment, total, shippingCost, tax, discountAmount, items, clearCartMutation, checkoutPersist.clearCheckoutPersist, goToStep, router, t, stockIssues]);
 
   /* ── Auth Loading / Redirect ──────────────────────────────────── */
   if (status === 'loading' || status === 'unauthenticated') {
@@ -716,6 +719,8 @@ function CheckoutPageInner() {
                               stockIssues={stockIssues}
                               onRemoveItem={handleRemoveItem}
                               onUpdateQuantity={handleUpdateQuantity}
+                              placeOrderError={placeOrderError}
+                              onClearPlaceOrderError={() => setPlaceOrderError(null)}
                             />
                           )}
                         </motion.div>

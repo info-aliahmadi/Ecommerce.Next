@@ -4,7 +4,7 @@ import { useTranslations } from 'next-intl';
 import {
   CreditCard, Shield, Truck, Lock, CheckCircle2,
   Edit3, Tag, ChevronLeft, Loader2, Minus, X,
-  ChevronRight,
+  ChevronRight, Plus,
 } from 'lucide-react';
 
 import { Button } from '@(home)/_components/ui/button';
@@ -47,6 +47,8 @@ interface ReviewStepProps {
   }>;
   onRemoveItem: (variantId: number) => void;
   onUpdateQuantity: (variantId: number, quantity: number) => void;
+  placeOrderError: string | null;
+  onClearPlaceOrderError: () => void;
 }
 
 export function ReviewStep({
@@ -72,6 +74,8 @@ export function ReviewStep({
   stockIssues,
   onRemoveItem,
   onUpdateQuantity,
+  placeOrderError,
+  onClearPlaceOrderError,
 }: Readonly<ReviewStepProps>) {
   const t = useTranslations('homepage.paymentPage');
 
@@ -117,30 +121,28 @@ export function ReviewStep({
                     </p>
                   )}
                   <p className="text-sm text-ecommerce-text-muted mt-1 font-medium">
-                    {CurrencyViewer(item.variant.sellPrice, CONFIG.DEFAULT_CURRENCY)} × {item.quantity}
+                    {CurrencyViewer(item.variant.sellPrice, CONFIG.DEFAULT_CURRENCY)} × <span className="font-semibold text-ecommerce-text-primary">{item.quantity}</span>
                     {isOutOfStock && (
                       <span className="text-red-500 mr-1 p-1">
                         ({t('availableStock', { count: issue.availableStock })})
                       </span>
                     )}
                   </p>
-                  {isOutOfStock && (
-                    <div className="flex items-center gap-2 mt-2">
-                      <button
-                        onClick={() => onUpdateQuantity(item.variant.id, Math.max(1, item.quantity - 1))}
-                        className="w-7 h-7 rounded-md bg-ecommerce-surface-hover hover:bg-ecommerce-border flex items-center justify-center transition-colors"
-                        aria-label={t('homepage.common.previous')}
-                      >
-                        <Minus size={12} />
-                      </button>
-                      <button
-                        onClick={() => onRemoveItem(item.variant.id)}
-                        className="text-[11px] font-medium text-red-600 hover:text-red-700 hover:underline"
-                      >
-                        {t('removeItem')}
-                      </button>
-                    </div>
-                  )}
+                  <div className="flex items-center gap-2 mt-2">
+                    <button
+                      onClick={() => onUpdateQuantity(item.variant.id, Math.max(1, item.quantity - 1))}
+                      className="w-7 h-7 rounded-md bg-ecommerce-surface-hover hover:bg-ecommerce-border flex items-center justify-center transition-colors"
+                      aria-label={t('homepage.common.previous')}
+                    >
+                      <Minus size={12} />
+                    </button>
+                    <button
+                      onClick={() => onRemoveItem(item.variant.id)}
+                      className="text-[11px] font-medium text-red-600 hover:text-red-700 hover:underline"
+                    >
+                      {t('removeItem')}
+                    </button>
+                  </div>
                 </div>
                 <span className={`text-sm font-bold shrink-0 ${isOutOfStock ? 'text-red-600' : 'text-ecommerce-text-primary'}`}>
                   {CurrencyViewer((item.variant.sellPrice * item.quantity), CONFIG.DEFAULT_CURRENCY)}
@@ -315,6 +317,33 @@ export function ReviewStep({
         )}
       </section>
 
+      {/* Trust badges */}
+      <div className="flex items-center justify-center gap-6 py-2">
+        <div className="flex items-center gap-1.5 text-ecommerce-text-muted">
+          <Lock size={14} />
+          <span className="text-xs font-medium">{t('sslEncrypted')}</span>
+        </div>
+        <div className="flex items-center gap-1.5 text-ecommerce-text-muted">
+          <Shield size={14} />
+          <span className="text-xs font-medium">{t('secureBadge')}</span>
+        </div>
+      </div>
+
+      {/* Place order error */}
+      {placeOrderError && (
+        <div className="p-4 rounded-xl bg-red-50 dark:bg-red-950/30 border border-red-200 dark:border-red-800">
+          <div className="flex items-start gap-2">
+            <p className="text-sm font-medium text-red-700 dark:text-red-300">{placeOrderError}</p>
+            <button
+              onClick={onClearPlaceOrderError}
+              className="text-xs text-red-500 hover:text-red-700 underline shrink-0"
+            >
+              {t('homepage.common.remove')}
+            </button>
+          </div>
+        </div>
+      )}
+
       {/* Stock validation error */}
       {stockIssues.length > 0 && (
         <div className="p-4 rounded-xl bg-red-50 dark:bg-red-950/30 border border-red-200 dark:border-red-800">
@@ -331,22 +360,10 @@ export function ReviewStep({
         </div>
       )}
 
-      {/* Trust badges */}
-      <div className="flex items-center justify-center gap-6 py-2">
-        <div className="flex items-center gap-1.5 text-ecommerce-text-muted">
-          <Lock size={14} />
-          <span className="text-xs font-medium">{t('sslEncrypted')}</span>
-        </div>
-        <div className="flex items-center gap-1.5 text-ecommerce-text-muted">
-          <Shield size={14} />
-          <span className="text-xs font-medium">{t('secureBadge')}</span>
-        </div>
-      </div>
-
       {/* Place Order Button */}
       <Button
         onClick={onPlaceOrder}
-        disabled={isPlacing}
+        disabled={isPlacing || stockIssues.length > 0}
         className="w-full h-14 bg-ecommerce-red hover:bg-ecommerce-red/90 text-white rounded-xl font-bold text-base gap-2.5 transition-all hover:scale-[1.01] active:scale-95 disabled:opacity-70 disabled:cursor-not-allowed"
       >
         {isPlacing ? (
