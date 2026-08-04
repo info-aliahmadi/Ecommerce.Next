@@ -18,6 +18,7 @@ import { Badge } from '../ui/badge';
 import { useRouter } from 'next/navigation';
 import { useAddToCart, useUpdateCartQuantity, useRemoveFromCart } from '../../_hooks/use-cart-queries';
 import { getAvailableStock } from '../../_types/Product/InventoryDisplayModel';
+import Link from 'next/link';
 
 const PROMO_CODES: Record<string, { type: 'percentage' | 'freeship'; value: number; label: string }> = {
   WELCOME15: { type: 'percentage', value: 15, label: '15% off' },
@@ -113,7 +114,7 @@ export function CartDrawer() {
     }
 
     if (promo.type === 'percentage') {
-      const discountAmount = parseFloat(( price * promo.value / 100 ).toFixed(2));
+      const discountAmount = parseFloat((price * promo.value / 100).toFixed(2));
       setDiscount(discountAmount);
     } else {
       // Free shipping - no monetary discount, just free shipping
@@ -209,97 +210,102 @@ export function CartDrawer() {
                   const isMaxQuantity = item.quantity >= availableStock;
                   return (
                     <motion.div
-                    key={item.variant.id}
-                    layout
-                    initial={{ opacity: 0, x: -20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    exit={{ opacity: 0, x: 20, height: 0, marginBottom: 0 }}
-                    transition={{ duration: 0.2 }}
-                    className="mb-4"
-                  >
-                    <div className="flex gap-3 bg-ecommerce-surface-hover dark:bg-[#252836] rounded-xl p-3 hover:ring-1 hover:ring-ecommerce-border transition-all">
-                      {/* Product Image */}
-                      <div className="w-16 h-16 rounded-lg overflow-hidden shrink-0 bg-muted">
-                        <img src={GetImage(item.image, true)} alt={item.name} className="w-full h-full object-cover" />
-                      </div>
+                      key={item.variant.id}
+                      layout
+                      initial={{ opacity: 0, x: -20 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      exit={{ opacity: 0, x: 20, height: 0, marginBottom: 0 }}
+                      transition={{ duration: 0.2 }}
+                      className="mb-4"
+                    >
+                      <div className="flex gap-3 bg-ecommerce-surface-hover dark:bg-[#252836] rounded-xl p-3 hover:ring-1 hover:ring-ecommerce-border transition-all">
+                        {/* Product Image */}
+                        <div className="w-16 h-16 rounded-lg overflow-hidden shrink-0 bg-muted">
+                          <img src={GetImage(item.image, true)} alt={item.name} className="w-full h-full object-cover" />
+                        </div>
 
-                      {/* Details */}
-                      <div className="flex-1 min-w-0">
-                        <h4 className="text-sm font-medium text-ecommerce-text-primary line-clamp-1">{item.name}</h4>
-                        <p className="text-xs text-ecommerce-text-muted mt-0.5">
-                          {item.variant.productAttributes.map(attribute => (
-                            <Badge key={attribute.id} className="bg-ecommerce-emerald/10 text-ecommerce-emerald border-0 text-xs font-semibold mx-0.5">
-                              {attribute.displayName}
-                            </Badge>
+                        {/* Details */}
+                        <div className="flex-1 min-w-0">
+                          <Link href={`/products/${item.variant.productId}`} className="text-sm font-semibold text-ecommerce-text-primary truncate">
+                            <h4 className="text-sm font-medium text-ecommerce-text-primary line-clamp-1">
+                              {item.name}
+                            </h4>
+                          </Link>
+                          <p className="text-xs text-ecommerce-text-muted mt-0.5">
+                            {item.variant.productAttributes.map((attribute, index) => (
+                              <Badge key={attribute.id} className={`bg-ecommerce-emerald/10 text-ecommerce-emerald border-0 text-xs font-semibold mx-0.5 ${index > 0 ? 'mx-1' : ''}`}>
+                                {attribute.displayName}
+                              </Badge>
 
-                            /*  attribute.attributeType == AttributeType.Color ? <span key={attribute.id}
-                                className="inline-block w-8 h-8 rounded-full border-2 transition-all duration-200 hover:scale-120 border-ecommerce-border hover:border-ecommerce-text-muted"
-                                style={{ backgroundColor: 'var(--' + attribute.key + ')' }} />
-                                : <Badge key={attribute.id} className="bg-ecommerce-emerald/10 text-ecommerce-emerald border-0 text-xs font-semibold mx-0.5">
-                                  {attribute.displayName}
-                                </Badge>*/
-                          ))}
+                              /*  attribute.attributeType == AttributeType.Color ? <span key={attribute.id}
+                                  className="inline-block w-8 h-8 rounded-full border-2 transition-all duration-200 hover:scale-120 border-ecommerce-border hover:border-ecommerce-text-muted"
+                                  style={{ backgroundColor: 'var(--' + attribute.key + ')' }} />
+                                  : <Badge key={attribute.id} className="bg-ecommerce-emerald/10 text-ecommerce-emerald border-0 text-xs font-semibold mx-0.5">
+                                    {attribute.displayName}
+                                  </Badge>*/
+                            ))}
 
 
-                        </p>
-                        <p className="text-xs text-ecommerce-text-muted mt-0.5">{item.categories.map(x => x.name + ",")}</p>
-                        {item.variant.oldSellPrice > 0 && item.variant.oldSellPrice > item.variant.sellPrice && (
-                          <p className="text-[10px] text-ecommerce-emerald font-medium mt-0.5">
-                            {t('homepage.cart.couponApplied', { amount: `${CurrencyViewer((item.variant.oldSellPrice - item.variant.sellPrice), CONFIG.DEFAULT_CURRENCY)}` })}
                           </p>
-                        )}
+                          <p className="text-xs text-ecommerce-text-muted mt-0.5">{item.categories.map(x => x.name + ",")}</p>
+                          {item.variant.oldSellPrice > 0 && item.variant.oldSellPrice > item.variant.sellPrice && (
+                            <p className="text-[10px] text-ecommerce-emerald font-medium mt-0.5">
+                              {t('homepage.cart.couponApplied', { amount: `${CurrencyViewer((item.variant.oldSellPrice - item.variant.sellPrice), CONFIG.DEFAULT_CURRENCY)}` })}
+                            </p>
+                          )}
 
-                        <div className="flex items-center justify-between mt-2">
-                          {/* Quantity Controls */}
                           <div className="flex items-center justify-between mt-2">
-                            <div className="flex items-center gap-1 bg-white dark:bg-ecommerce-surface rounded-lg border border-ecommerce-border">
-                              <button
-                                onClick={() => updateCartQuantity.mutate({ variantId: item.variant.id, quantity: item.quantity - 1 })}
-                                className="w-7 h-7 flex items-center justify-center hover:bg-ecommerce-surface-hover rounded-s-lg transition-colors"
-                                aria-label={t('homepage.common.previous')}
-                              >
-                                <Minus size={12} />
-                              </button>
-                              <span className="w-8 text-center text-sm font-medium">{item.quantity}</span>
-                               <button
-                                 onClick={() => updateCartQuantity.mutate({ variantId: item.variant.id, quantity: item.quantity + 1 })}
-                                 disabled={isMaxQuantity}
-                                 className="w-7 h-7 flex items-center justify-center hover:bg-ecommerce-surface-hover rounded-e-lg transition-colors"
-                                 aria-label={t('homepage.common.next')}
-                               >
-                                <Plus size={12} />
-                              </button>
+                            {/* Quantity Controls */}
+                            <div className="flex items-center justify-between mt-2">
+                              <div className="flex items-center gap-1 bg-white dark:bg-ecommerce-surface rounded-lg border border-ecommerce-border">
+                                <button
+                                  onClick={() => updateCartQuantity.mutate({ variantId: item.variant.id, quantity: item.quantity - 1 })}
+                                  className="w-7 h-7 flex items-center justify-center hover:bg-ecommerce-surface-hover rounded-s-lg transition-colors"
+                                  aria-label={t('homepage.common.previous')}
+                                >
+                                  <Minus size={12} />
+                                </button>
+                                <span className="w-8 text-center text-sm font-medium">{item.quantity}</span>
+                                <button
+                                  onClick={() => updateCartQuantity.mutate({ variantId: item.variant.id, quantity: item.quantity + 1 })}
+                                  disabled={isMaxQuantity}
+                                  className="w-7 h-7 flex items-center justify-center hover:bg-ecommerce-surface-hover rounded-e-lg transition-colors"
+                                  aria-label={t('homepage.common.next')}
+                                >
+                                  <Plus size={12} />
+                                </button>
+                              </div>
+                              <span className="mx-2 text-sm ">
+                                × {CurrencyViewer(item.variant.sellPrice, CONFIG.DEFAULT_CURRENCY)}
+                              </span>
                             </div>
-                            <span className="mx-2 text-sm ">
-                              × {CurrencyViewer(item.variant.sellPrice, CONFIG.DEFAULT_CURRENCY)}
-                            </span>
-                          </div>
 
-                          {/* Price */}
-                          <div className="text-end">
-                            <span className="text-md font-bold text-ecommerce-text-primary">
-                              {CurrencyViewer(item.variant.sellPrice * item.quantity, CONFIG.DEFAULT_CURRENCY)}
-                            </span>
-                            {item.variant.oldSellPrice > 0 && (
-                              <p className="text-[11px] text-ecommerce-text-muted line-through">
-                                {CurrencyViewer(item.variant.oldSellPrice * item.quantity, CONFIG.DEFAULT_CURRENCY)}
-                              </p>
-                            )}
+                            {/* Price */}
+                            <div className="text-end">
+                              <span className="text-md font-bold text-ecommerce-text-primary">
+                                {CurrencyViewer(item.variant.sellPrice * item.quantity, CONFIG.DEFAULT_CURRENCY)}
+                              </span>
+                              {item.variant.oldSellPrice > 0 && (
+                                <p className="text-[11px] text-ecommerce-text-muted line-through">
+                                  {CurrencyViewer(item.variant.oldSellPrice * item.quantity, CONFIG.DEFAULT_CURRENCY)}
+                                </p>
+                              )}
+                            </div>
                           </div>
                         </div>
-                      </div>
 
-                      {/* Remove */}
-                      <button
-                        onClick={() => removeFromCart.mutate({ variantId: item.variant.id })}
-                        className="self-start p-1 text-ecommerce-text-muted hover:text-ecommerce-red transition-colors"
-                        aria-label={t('homepage.cart.remove')}
-                      >
-                        <X size={14} />
-                      </button>
-                    </div>
-                  </motion.div>
-                )})}
+                        {/* Remove */}
+                        <button
+                          onClick={() => removeFromCart.mutate({ variantId: item.variant.id })}
+                          className="self-start p-1 text-ecommerce-text-muted hover:text-ecommerce-red transition-colors"
+                          aria-label={t('homepage.cart.remove')}
+                        >
+                          <X size={14} />
+                        </button>
+                      </div>
+                    </motion.div>
+                  )
+                })}
               </AnimatePresence>
 
               {/* Suggestions */}

@@ -874,7 +874,7 @@
       "editAddress": "Edit Address",
       "deleteAddress": "Delete Address",
       "defaultBadge": "Default",
-      "addressLine1": "Address Line 1",
+      "addressLine1": "Address",
       "city": "City",
       "state": "State/Province",
       "zipCode": "ZIP/Postal Code",
@@ -989,6 +989,7 @@
       "state": "State/Province",
       "zipCode": "ZIP/Postal Code",
       "country": "Country",
+      "quantity": "Quantity",
       "addressTitle": "Address {number}",
       "saveAddress": "Save this address for next time",
       "creditCard": "Credit / Debit Card",
@@ -1041,7 +1042,12 @@
       "saving": "Saving...",
       "deliveryNote": "Delivery Note",
       "deliveryNotePlaceholder": "Any special instructions for delivery? (e.g., gate code, floor number, landmarks)",
-      "deliveryNoteHint": "Optional - help the courier find you easily"
+      "deliveryNoteHint": "Optional - help the courier find you easily",
+      "stockValidationError": "Some items in your cart are out of stock or exceed available quantity. Please update your cart before placing the order.",
+      "availableStock": "Available: {count}",
+      "decreaseQuantity": "Decrease",
+      "removeItem": "Remove",
+      "outOfStock": "Out of Stock"
     }
   },
   "title": "Welcome to react using react-i18next",

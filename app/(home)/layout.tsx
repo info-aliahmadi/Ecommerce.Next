@@ -16,8 +16,6 @@ import { CookieBanner } from "./_components/ecommerce/cookie-banner";
 import LoginPopup from "./_components/pages/login-popup";
 import RegisterPopup from "./_components/pages/register-popup";
 import { resolveThemeMode } from "@root/utils/resolver";
-import { Footer } from "./_components/ecommerce/footer";
-import { Header } from "./_components/ecommerce/header";
 
 export const metadata: Metadata = {
   title: "HydraShop — Discover Your Perfect Style",

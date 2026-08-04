@@ -11,6 +11,7 @@ import PaymentMethod from '@root/app/types/enums/PaymentMethod';
 import CONFIG from '@root/config';
 
 interface PaymentStepProps {
+  isRTL: boolean;
   payment: PaymentForm;
   errors: Record<string, string>;
   onSetPaymentField: (field: keyof PaymentForm, value: PaymentMethod) => void;
@@ -26,6 +27,7 @@ const PAYMENT_META: Record<PaymentMethod, { labelKey: string; icon: typeof Credi
 };
 
 export function PaymentStep({
+  isRTL,
   payment,
   errors,
   onSetPaymentField,
@@ -100,7 +102,7 @@ export function PaymentStep({
           onClick={onBack}
           className="flex-1 h-12 rounded-xl font-semibold text-sm gap-2 border-ecommerce-border text-ecommerce-text-primary hover:bg-ecommerce-surface-hover"
         >
-          <ChevronLeft size={16} />
+        {isRTL ? <ChevronRight size={16} /> : <ChevronLeft size={16} />}
           {t('step1')}
         </Button>
         <Button
@@ -108,7 +110,7 @@ export function PaymentStep({
           className="flex-1 h-12 bg-ecommerce-red hover:bg-ecommerce-red/90 text-white rounded-xl font-semibold text-sm gap-2 transition-all hover:scale-[1.01] active:scale-95"
         >
           {t('step3')}
-          <ChevronRight size={16} />
+          {isRTL ? <ChevronLeft size={16} /> : <ChevronRight size={16} />}
         </Button>
       </div>
     </div>

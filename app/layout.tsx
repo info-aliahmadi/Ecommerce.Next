@@ -1,4 +1,3 @@
-
 import { NextIntlClientProvider } from 'next-intl';
 import DirectionProvider from '@root/i18n/direction-provider';
 import { getLocale } from 'next-intl/server';
@@ -12,16 +11,16 @@ import { resolveLanguage } from '@root/utils/resolver';
 
 export default async function RootLayout({
   children,
-}: {
+}: Readonly<{
   children: React.ReactNode;
-}) {
+}>) {
   const locale = await getLocale() ?? "en";
   // Load messages for the current locale (use client)
   let messages;
   messages = (await import(`@root/public/locales/${locale}/translation.json`)).default;
 
   const dir = RTL_LOCALES.includes(locale as any) ? "rtl" : "ltr";
-
+  debugger
   const fontlocaleCssClass = dir === "rtl" ? "farsi-font" : "english-font";
 
   return (

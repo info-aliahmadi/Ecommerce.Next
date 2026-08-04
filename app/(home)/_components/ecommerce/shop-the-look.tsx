@@ -11,8 +11,10 @@ import HomePageService from '../../_services/HomePageService';
 import Link from 'next/link';
 import { useUIStore } from '../../_lib/store';
 import CuratedStyleProductModel from '../../_types/Product/CuratedStyleProductModel';
+import CurrencyViewer from '@root/utils/CurrencyViewer';
+import CONFIG from '@root/config';
 
-function ProductThumbnails({ products }: { products: ProductDisplayModel[] }) {
+function ProductThumbnails({ products }: Readonly<{ products: ProductDisplayModel[] }>) {
   const t = useTranslations();
   const setQuickViewProduct = useUIStore((s) => s.setQuickViewProduct);
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
@@ -89,7 +91,7 @@ function LookCard({
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
         <span className="absolute top-3 end-3 px-3 py-1 rounded-full bg-white/80 dark:bg-black/40 backdrop-blur-sm text-xs font-bold text-ecommerce-text-primary">
-          {t('homepage.shopTheLook.from')} ${Math.round(totalPrice)}
+          {t('homepage.shopTheLook.from')} {CurrencyViewer(totalPrice, look.products[0].currencyType ?? CONFIG.DEFAULT_CURRENCY)}
         </span>
         <h3 className="absolute bottom-3 start-3 text-lg font-bold text-white drop-shadow-lg">
           {look.attributeName}
@@ -118,7 +120,6 @@ function LookCard({
 
 export function ShopTheLook() {
   const t = useTranslations();
-
 
   const { data: looks, isLoading } = useQuery({
     queryKey: ['products', 'curatedstyle'],

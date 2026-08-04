@@ -13,6 +13,7 @@ import UpdateQuantityRequest from '@root/app/(home)/_types/Order/UpdateQuantityR
 import CreateOrderRequest from '@root/app/(home)/_types/Order/CreateOrderRequest';
 import ProcessPaymentRequest from '@root/app/(home)/_types/Order/ProcessPaymentRequest';
 import CartItem from '../_types/Order/CartItem';
+import ProductInventoryStockModel from '../_types/Product/ProductInventoryStockModel';
 
 export default class MyOrderService {
   config?: RequestInit;
@@ -65,6 +66,13 @@ export default class MyOrderService {
   updateCartItemQuantity = async (request: UpdateQuantityRequest): Promise<Result<CartItem>> => {
     return Fetch.Post<Result<CartItem>>(CONFIG.API_BASEPATH + `/Order/UpdateCartItemQuantity`, request, this.config);
   };
+
+  async GetProductStockByIds(productVariableIds: number[]): Promise<Result<ProductInventoryStockModel[]>> {
+    let productVariableIdsString = productVariableIds.join(',');
+    const params = new URLSearchParams({ productVariableIds: productVariableIdsString });
+    let result = await Fetch.Get<Result<ProductInventoryStockModel[]>>(CONFIG.API_BASEPATH + `/Product/GetProductStockByIds?${params.toString()}`, this.config );
+    return result;
+  }
 
   // ========================= ORDERS =========================
 

@@ -21,8 +21,6 @@ import { Language } from '@root/locales/Language';
 // ============================|| FIREBASE - REGISTER ||============================ //
 
 const ChangeLanguageForm = () => {
-
-
   const [currentLanguage, setCurrentLanguage] = useState<Language>();
 
   useEffect(() => {

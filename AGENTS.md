@@ -2,7 +2,7 @@
 
 ## Commands
 
-- `npm run dev` — Next.js dev server on port 3000 (auto-opens `http://localhost:3000`)
+- `npm run dev` — Next.js dev server on port 3000
 - `npm run build` — production build; TypeScript errors are silently ignored via `ignoreBuildErrors: true`
 - `npm run lint` — `next lint` using the legacy `.eslintrc` config
 - `npx tsc --noEmit` — typecheck without emit
@@ -65,6 +65,7 @@ Always use `@root/` for cross-area imports. Never use relative `../../` chains.
 
 - `config.ts` — all paths (`API_BASEPATH`, `LOGIN_API_PATH`, etc.), storage keys, theme defaults, image paths.
 - Env vars: `NEXT_PUBLIC_API_BASE_URL` (backend, default `https://localhost:7134`), `NEXT_PUBLIC_FRONT_URL` (frontend, default `http://localhost:3000`).
+- `.env.development` and `.env.production` are committed; `.env.local` is gitignored. Dev backend uses self-signed cert; `NODE_TLS_REJECT_UNAUTHORIZED=0` is set in development.
 
 ## Conventions
 
@@ -80,3 +81,5 @@ Always use `@root/` for cross-area imports. Never use relative `../../` chains.
 - `(home)` client components import icons from `lucide-react`; do not add new icon libraries without confirming existing patterns.
 - Images from the backend require explicit `remotePatterns` in `next.config.ts` for localhost dev.
 - `app/dashboard/` uses MUI styling only; never introduce shadcn/tailwind classes there.
+- `i18n/request.ts` has a stray `debugger;` statement — remove it before committing.
+- Build does not fail on TypeScript errors (`ignoreBuildErrors: true`). Always run `npx tsc --noEmit` locally before pushing.

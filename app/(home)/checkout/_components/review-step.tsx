@@ -3,7 +3,8 @@
 import { useTranslations } from 'next-intl';
 import {
   CreditCard, Shield, Truck, Lock, CheckCircle2,
-  Edit3, Tag, ChevronLeft, Loader2,
+  Edit3, Tag, ChevronLeft, Loader2, Minus, X,
+  ChevronRight,
 } from 'lucide-react';
 
 import { Button } from '@(home)/_components/ui/button';
@@ -12,12 +13,14 @@ import { Separator } from '@(home)/_components/ui/separator';
 import CartItem from '@root/app/(home)/_types/Order/CartItem';
 import { GetImage } from '@(home)/_lib/utils';
 import { ShippingForm, PaymentForm, VALID_PROMOS } from './types';
-import PaymentType from '@root/app/types/enums/PaymentType';
 import PaymentMethod from '@root/app/types/enums/PaymentMethod';
 import CurrencyViewer from '@root/utils/CurrencyViewer';
 import CONFIG from '@root/config';
+import { Badge } from '../../_components/ui/badge';
+import Link from 'next/link';
 
 interface ReviewStepProps {
+  isRTL: boolean;
   items: CartItem[];
   shipping: ShippingForm;
   payment: PaymentForm;
@@ -36,9 +39,18 @@ interface ReviewStepProps {
   onApplyPromo: () => void;
   onRemovePromo: () => void;
   onPlaceOrder: () => void;
+  stockIssues: Array<{
+    productId: number;
+    variantId: number;
+    availableStock: number;
+    cartQuantity: number;
+  }>;
+  onRemoveItem: (variantId: number) => void;
+  onUpdateQuantity: (variantId: number, quantity: number) => void;
 }
 
 export function ReviewStep({
+  isRTL,
   items,
   shipping,
   payment,
@@ -57,8 +69,13 @@ export function ReviewStep({
   onApplyPromo,
   onRemovePromo,
   onPlaceOrder,
-}: ReviewStepProps) {
+  stockIssues,
+  onRemoveItem,
+  onUpdateQuantity,
+}: Readonly<ReviewStepProps>) {
   const t = useTranslations('homepage.paymentPage');
+
+  const getStockIssue = (variantId: number) => stockIssues.find(i => i.variantId === variantId);
 
   return (
     <div className="space-y-6">
@@ -66,29 +83,71 @@ export function ReviewStep({
       <section>
         <h3 className="text-lg font-bold text-ecommerce-text-primary mb-4">{t('orderItems')}</h3>
         <div className="space-y-3 max-h-96 overflow-y-auto pe-1">
-          {items.map((item: CartItem) => (
-            <div
-              key={item.id}
-              className="flex items-center gap-4 p-3 rounded-xl bg-ecommerce-surface-hover border border-ecommerce-border"
-            >
-              <img
-                src={GetImage(item.image)}
-                alt={item.name}
-                className="w-16 h-16 rounded-lg object-cover border border-ecommerce-border shrink-0"
-              />
-              <div className="flex-1 min-w-0">
-                <p className="text-sm font-semibold text-ecommerce-text-primary truncate">
-                  {item.name}
-                </p>
-                <p className="text-xs text-ecommerce-text-muted mt-0.5">
-                  {CurrencyViewer(item.variant.sellPrice, CONFIG.DEFAULT_CURRENCY)} × {item.quantity}
-                </p>
+          {items.map((item: CartItem) => {
+            const issue = getStockIssue(item.variant.id);
+            const isOutOfStock = issue !== undefined;
+            return (
+              <div
+                key={item.variant.id}
+                className={`flex items-center gap-4 p-3 rounded-xl border ${isOutOfStock ? 'bg-red-50 dark:bg-red-950/20 border-red-200 dark:border-red-800' : 'bg-ecommerce-surface-hover border-ecommerce-border'}`}
+              >
+                <img
+                  src={GetImage(item.image)}
+                  alt={item.name}
+                  className={`w-16 h-16 rounded-lg object-cover border shrink-0 ${isOutOfStock ? 'border-red-200' : 'border-ecommerce-border'}`}
+                />
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center gap-2">
+                    <Link href={`/products/${item.variant.productId}`} className="text-sm font-semibold text-ecommerce-text-primary truncate">
+                      {item.name}
+                    </Link>
+                    {isOutOfStock && (
+                      <span className="text-[10px] font-bold px-2 py-0.5 rounded-md bg-red-100 text-red-700 dark:bg-red-900/40 dark:text-red-300 whitespace-nowrap">
+                        {t('outOfStock')}
+                      </span>
+                    )}
+                  </div>
+                  {item.variant.productAttributes?.length > 0 && (
+                    <p className="text-[11px] text-ecommerce-text-muted mt-0.5">
+                      {item.variant?.productAttributes.map((attribute, index) => (
+                        <Badge key={attribute.id} className={"bg-ecommerce-emerald/5 text-ecommerce-emerald border-0 text-xs" + (index > 0 ? " mx-1" : "")}>
+                          {attribute.displayName}
+                        </Badge>
+                      ))}
+                    </p>
+                  )}
+                  <p className="text-sm text-ecommerce-text-muted mt-1 font-medium">
+                    {CurrencyViewer(item.variant.sellPrice, CONFIG.DEFAULT_CURRENCY)} × {item.quantity}
+                    {isOutOfStock && (
+                      <span className="text-red-500 mr-1 p-1">
+                        ({t('availableStock', { count: issue.availableStock })})
+                      </span>
+                    )}
+                  </p>
+                  {isOutOfStock && (
+                    <div className="flex items-center gap-2 mt-2">
+                      <button
+                        onClick={() => onUpdateQuantity(item.variant.id, Math.max(1, item.quantity - 1))}
+                        className="w-7 h-7 rounded-md bg-ecommerce-surface-hover hover:bg-ecommerce-border flex items-center justify-center transition-colors"
+                        aria-label={t('homepage.common.previous')}
+                      >
+                        <Minus size={12} />
+                      </button>
+                      <button
+                        onClick={() => onRemoveItem(item.variant.id)}
+                        className="text-[11px] font-medium text-red-600 hover:text-red-700 hover:underline"
+                      >
+                        {t('removeItem')}
+                      </button>
+                    </div>
+                  )}
+                </div>
+                <span className={`text-sm font-bold shrink-0 ${isOutOfStock ? 'text-red-600' : 'text-ecommerce-text-primary'}`}>
+                  {CurrencyViewer((item.variant.sellPrice * item.quantity), CONFIG.DEFAULT_CURRENCY)}
+                </span>
               </div>
-              <span className="text-sm font-bold text-ecommerce-text-primary shrink-0">
-                {CurrencyViewer((item.variant.sellPrice * item.quantity), CONFIG.DEFAULT_CURRENCY)}
-              </span>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </section>
 
@@ -256,6 +315,22 @@ export function ReviewStep({
         )}
       </section>
 
+      {/* Stock validation error */}
+      {stockIssues.length > 0 && (
+        <div className="p-4 rounded-xl bg-red-50 dark:bg-red-950/30 border border-red-200 dark:border-red-800">
+          <p className="text-sm font-medium text-red-700 dark:text-red-300 mb-2">
+            {t('stockValidationError')}
+          </p>
+          <ul className="space-y-1">
+            {stockIssues.map(issue => (
+              <li key={issue.variantId} className="text-xs text-red-600 dark:text-red-400">
+                {items.find(i => i.variant.id === issue.variantId)?.name || `Product #${issue.productId}`}: {t('availableStock', { count: issue.availableStock })} {t('outOfStock')}
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+
       {/* Trust badges */}
       <div className="flex items-center justify-center gap-6 py-2">
         <div className="flex items-center gap-1.5 text-ecommerce-text-muted">
@@ -293,7 +368,7 @@ export function ReviewStep({
         onClick={() => onGoToStep(2, -1)}
         className="w-full h-10 text-ecommerce-text-muted hover:text-ecommerce-text-primary hover:bg-ecommerce-surface-hover rounded-xl text-sm gap-1"
       >
-        <ChevronLeft size={14} />
+      {isRTL ? <ChevronRight size={14} /> : <ChevronLeft size={14} />}
         {t('step2')}
       </Button>
     </div>

@@ -5,13 +5,12 @@ import { useEffect, useState } from 'react';
 import { useSession } from 'next-auth/react';
 import { useParams } from 'next/navigation';
 import Link from 'next/link';
-import { ArrowLeft, Package, Loader2 } from 'lucide-react';
+import { ArrowLeft, Loader2 } from 'lucide-react';
 
 import { Card, CardContent, CardHeader, CardTitle } from '../../_components/ui/card';
 import { Button } from '../../_components/ui/button';
 import { Separator } from '../../_components/ui/separator';
 import CurrencyViewer from '@root/utils/CurrencyViewer';
-import CONFIG from '@root/config';
 import MyOrderService from '@root/app/(home)/_services/MyOrderService';
 import OrderModel from '@root/app/dashboard/(ecommerce)/_types/Order/OrderModel';
 import OrderStatus from '@root/app/types/enums/OrderStatus';
@@ -71,7 +70,7 @@ function mapShippingStatus(status: ShippingStatus): string {
   }
 }
 
-const PAYMENT_STATUS_COLORS: Record<string, { color: string; bg: string }> = {
+const PAYMENT_STATUS_COLORS: Record<string, string> = {
   Pending: 'text-ecommerce-amber bg-ecommerce-amber/10',
   Authorized: 'text-blue-500 bg-blue-500/10',
   Paid: 'text-ecommerce-emerald bg-ecommerce-emerald/10',
@@ -80,7 +79,7 @@ const PAYMENT_STATUS_COLORS: Record<string, { color: string; bg: string }> = {
   Voided: 'text-ecommerce-text-muted bg-ecommerce-text-muted/10',
 };
 
-const SHIPPING_STATUS_COLORS: Record<string, { color: string; bg: string }> = {
+const SHIPPING_STATUS_COLORS: Record<string, string> = {
   ShippingNotRequired: 'text-ecommerce-text-muted bg-ecommerce-text-muted/10',
   NotYetShipped: 'text-ecommerce-amber bg-ecommerce-amber/10',
   PartiallyShipped: 'text-blue-500 bg-blue-500/10',
@@ -192,7 +191,7 @@ export default function OrderDetailPage() {
               {t(`fields.order.orderStatusTypes.${statusString}`)}
             </span>
             <span className="text-sm text-ecommerce-text-muted">
-              {new Date(order.createdOnUtc).toLocaleString()}
+              {CurrencyViewer(order.totalAmount, order.userCurrencyType)}
             </span>
           </div>
 
@@ -222,14 +221,14 @@ export default function OrderDetailPage() {
               {t('homepage.profile.orderItems') || 'Order Items'}
             </h3>
             {order.items.length === 0 ? (
-              <p className="text-sm text-ecommerce-text-muted">No items found</p>
+              <p className="text-sm text-ecommerce-text-muted">{t('homepage.paymentPage.emptyCart')}</p>
             ) : (
               <div className="space-y-2">
                 {order.items.map((item) => (
                   <div key={item.id} className="flex items-center justify-between py-2 border-b border-ecommerce-border last:border-0">
                     <div>
                       <p className="text-sm font-medium text-ecommerce-text-primary">{item.productName || `Item #${item.id}`}</p>
-                      <p className="text-xs text-ecommerce-text-muted">Qty: {item.quantity}</p>
+                      <p className="text-xs text-ecommerce-text-muted">{t('homepage.peymentPage.quantity')}: {item.quantity}</p>
                     </div>
                     <span className="text-sm font-bold text-ecommerce-text-primary">
                       {CurrencyViewer(item.unitPrice * item.quantity, order.userCurrencyType)}

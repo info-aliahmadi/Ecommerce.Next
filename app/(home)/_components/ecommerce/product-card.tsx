@@ -334,8 +334,8 @@ export function ProductCard({ product, index = 0 }: Readonly<ProductCardProps>) 
                 </div>
               ) : ( */}
             <div className="min-h-[2rem]">
-              {cheapestVariant?.productAttributes.map(attribute => (
-                <Badge key={attribute.id} className="bg-ecommerce-emerald/5 text-ecommerce-emerald border-0 text-xs font-semibold mx-0.5">
+              {cheapestVariant?.productAttributes.map((attribute, index) => (
+                <Badge key={attribute.id} className={"bg-ecommerce-emerald/5 text-ecommerce-emerald border-0 text-xs font-semibold" + (index > 0 ? " mx-1" : "")}>
                   {attribute.displayName}
                 </Badge>
               ))}

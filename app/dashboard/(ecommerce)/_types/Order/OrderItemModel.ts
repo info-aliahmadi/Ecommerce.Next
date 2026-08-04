@@ -1,3 +1,5 @@
+import ProductDisplayModel from "@root/app/(home)/_types/Product/ProductDisplayModel";
+import ProductVariantDisplayModel from "@root/app/(home)/_types/Product/ProductVariantDisplayModel";
 import FileUploadModel from "@root/app/dashboard/(filestorage)/_types/FileUploadModel";
 
 /**
@@ -29,6 +31,10 @@ export default interface OrderItemModel {
    */
   productName: string;
 
+  /**
+   * Product Variant
+   */
+  productVariant: ProductVariantDisplayModel;
   /**
    * Quantity of items
    */

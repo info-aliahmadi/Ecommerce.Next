@@ -3,7 +3,7 @@
 import { useState, useMemo, useCallback, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { useTranslations } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
 import { useSession } from 'next-auth/react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { toast } from 'sonner';
@@ -14,7 +14,7 @@ import {
 import { Footer } from '../_components/ecommerce/footer';
 import { BackToTop } from '../_components/ecommerce/back-to-top';
 import { MobileBottomNav } from '../_components/ecommerce/mobile-bottom-nav';
-import { useCartStore, useCheckoutPersistStore } from '../_lib/store';
+import { RTL_LOCALES, useCartStore, useCheckoutPersistStore } from '../_lib/store';
 import { useClearCart } from '../_hooks/use-cart-queries';
 import { Card, CardContent } from '../_components/ui/card';
 import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from '../_components/ui/accordion';
@@ -42,6 +42,8 @@ import ShippingMethod from '@root/app/types/enums/ShippingMethod';
 import MyOrderService from '../_services/MyOrderService';
 import CreateOrderRequest, { CreateOrderItemRequest } from '../_types/Order/CreateOrderRequest';
 import PaymentMethod from '@root/app/types/enums/PaymentMethod';
+import HomePageService from '../_services/HomePageService';
+import ProductInventoryStockModel from '../_types/Product/ProductInventoryStockModel';
 
 /* ──────────────────────────────────────────────────────────────── */
 
@@ -55,7 +57,10 @@ function CheckoutPageInner() {
   const t = useTranslations('homepage.paymentPage');
   const router = useRouter();
   const { data: session, status } = useSession();
-
+  
+  // best way to get the current language is to use next-intl's useLocale hook
+  const locale = useLocale();
+  const isRtl = RTL_LOCALES.includes(locale as any);
   // Redirect to login if not authenticated
   useEffect(() => {
     if (status === 'unauthenticated') {
@@ -85,7 +90,6 @@ function CheckoutPageInner() {
 
 
   const getNextAddressTitle = useCallback(() => {
-    debugger
     const existingTitles = savedAddresses.map((a) => a.title?.toLowerCase() || '');
     let counter = 1;
     let title: string;
@@ -100,6 +104,67 @@ function CheckoutPageInner() {
   const [currentStep, setCurrentStep] = useState<CheckoutStep>(1);
   const [direction, setDirection] = useState<1 | -1>(1);
   const [isPlacing, setIsPlacing] = useState(false);
+
+  // Stock validation for review step
+  interface StockIssue {
+    productId: number;
+    variantId: number;
+    availableStock: number;
+    cartQuantity: number;
+  }
+  const [stockIssues, setStockIssues] = useState<StockIssue[]>([]);
+
+  const handleRemoveItem = useCallback((variantId: number) => {
+    useCartStore.getState().removeItem(variantId);
+  }, []);
+
+  const handleUpdateQuantity = useCallback((variantId: number, quantity: number) => {
+    useCartStore.getState().updateQuantity(variantId, quantity);
+  }, []);
+
+  useEffect(() => {
+    if (currentStep !== 3) {
+      setStockIssues([]);
+      return;
+    }
+
+    const validateStock = async () => {
+
+      const service = new MyOrderService(session?.user.accessToken ?? "");
+      const productVariantIds = items.map(i => i.variant.id);
+
+      if (productVariantIds.length === 0) {
+        setStockIssues([]);
+        return;
+      }
+
+      try {
+        const result = await service.GetProductStockByIds(productVariantIds);
+        if (result.succeeded && result.data) {
+          const stockMap = result.data ?? [];
+          debugger
+          const issues = items
+            .filter(item => {
+              const available = stockMap.find(s => s.productVariableId === item.variant.id);
+              return item.quantity > (available?.stockQuantity ?? 0);
+            })
+            .map(item => ({
+              productId: item.id,
+              variantId: item.variant.id,
+              availableStock: stockMap.find(s => s.productVariableId === item.variant.id)?.stockQuantity ?? 0,
+              cartQuantity: item.quantity,
+            }));
+          setStockIssues(issues);
+        } else {
+          setStockIssues([]);
+        }
+      } catch {
+        setStockIssues([]);
+      }
+    };
+
+    validateStock();
+  }, [currentStep, items]);
 
   // Shipping form
   const [shipping, setShipping] = useState<ShippingForm>({
@@ -186,7 +251,6 @@ function CheckoutPageInner() {
       try {
         const service = new ProfileService(session.user.accessToken);
         const addrRes = await service.getUserAddresses();
-        debugger
         if (addrRes.succeeded && addrRes.data && addrRes.data.length > 0) {
           setSavedAddresses(addrRes.data);
           const persistedId = checkoutPersist.selectedAddressId;
@@ -605,6 +669,7 @@ function CheckoutPageInner() {
                         >
                           {currentStep === 1 && (
                             <ShippingStep
+                              isRTL={isRtl}
                               shipping={shipping}
                               errors={errors}
                               savedAddresses={savedAddresses}
@@ -619,6 +684,7 @@ function CheckoutPageInner() {
                           )}
                           {currentStep === 2 && (
                             <PaymentStep
+                              isRTL={isRtl}
                               payment={payment}
                               errors={errors}
                               onSetPaymentField={setPaymentField}
@@ -628,6 +694,7 @@ function CheckoutPageInner() {
                           )}
                           {currentStep === 3 && (
                             <ReviewStep
+                              isRTL={isRtl}
                               items={items}
                               shipping={shipping}
                               payment={payment}
@@ -646,6 +713,9 @@ function CheckoutPageInner() {
                               onApplyPromo={handleApplyPromo}
                               onRemovePromo={handleRemovePromo}
                               onPlaceOrder={handlePlaceOrder}
+                              stockIssues={stockIssues}
+                              onRemoveItem={handleRemoveItem}
+                              onUpdateQuantity={handleUpdateQuantity}
                             />
                           )}
                         </motion.div>

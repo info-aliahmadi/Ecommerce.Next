@@ -224,8 +224,8 @@ export default function ProductListCard({ product, index = 0 }: Readonly<Product
                   </div>
                   <h3 className="font-semibold text-base text-ecommerce-text-primary line-clamp-1 group-hover:text-ecommerce-red transition-colors">{product.name}</h3>
                   <div className="min-h-[2rem]">
-                    {cheapestVariant?.productAttributes.map(attribute => (
-                      <Badge key={attribute.id} className="bg-ecommerce-emerald/5 text-ecommerce-emerald border-0 text-xs font-semibold mx-0.5">
+                    {cheapestVariant?.productAttributes.map((attribute, index) => (
+                      <Badge key={attribute.id} className={"bg-ecommerce-emerald/5 text-ecommerce-emerald border-0 text-xs font-semibold" + (index > 0 ? " mx-1" : "")}>
                         {attribute.displayName}
                       </Badge>
                     ))}

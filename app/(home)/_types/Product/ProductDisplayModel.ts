@@ -7,7 +7,7 @@ import CategoryDisplayModel from "./CategoryDisplayModel";
 import AttributeType from "@root/app/types/enums/AttributeType";
 import ProductAttributeDisplayModel from "./ProductAttributeDisplayModel";
 import ProductVariantDisplayModel from "./ProductVariantDisplayModel";
-import InventoryDisplayModel, { getAvailableStock } from "./InventoryDisplayModel";
+import { getAvailableStock } from "./InventoryDisplayModel";
 /**
  * Represents a product.
  */

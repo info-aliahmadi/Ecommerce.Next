@@ -30,7 +30,7 @@ export function PhoneInput({
   maxLength = 10,
 }: Readonly<PhoneInputProps>) {
   return (
-    <div className={className}>
+    <div className={className + " ltr-input"}>
       <div className="relative flex">
         <span className="text-ecommerce-text-muted inline-flex items-center px-3 rounded-s-xl border border-r-0 border-ecommerce-border bg-ecommerce-surface text-sm shrink-0">
           {CONFIG.DEFAULT_PHONECOUNTRY}

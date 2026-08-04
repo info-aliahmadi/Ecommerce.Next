@@ -28,9 +28,10 @@ import { getAvailableStock } from '../../_types/Product/InventoryDisplayModel';
 import ReviewSummary from '../../products/[id]/_components/ReviewSummary';
 
 function QuickViewContent({ product, onClose }: Readonly<{ product: ProductDisplayModel; onClose: () => void }>) {
+  debugger
   const t = useTranslations();
   const addToCart = useAddToCart();
-  const { toggleItem, isInWishlist } = useWishlistStore();
+  const { isInWishlist } = useWishlistStore();
   const { addItem: addRecent } = useRecentStore();
   const addToWishlist = useAddToWishlist();
   const removeFromWishlist = useRemoveFromWishlist();

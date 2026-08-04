@@ -139,7 +139,7 @@ export function RecentlyViewed() {
                               <span className="text-sm font-bold text-ecommerce-text-muted mt-2">{t('homepage.common.outOfStock')}</span>
                             ) : (
                               <span className="text-sm font-bold text-ecommerce-text-primary mt-2">
-                                {hasMultipleVariants ? `${CurrencyViewer(minSellPrice, CONFIG.DEFAULT_CURRENCY)} - ${CurrencyViewer(maxSellPrice, CONFIG.DEFAULT_CURRENCY)}` : CurrencyViewer(minSellPrice, CONFIG.DEFAULT_CURRENCY)}
+                                {hasMultipleVariants ? `${CurrencyViewer(minSellPrice, item.currencyType ?? CONFIG.DEFAULT_CURRENCY)} - ${CurrencyViewer(maxSellPrice, item.currencyType ?? CONFIG.DEFAULT_CURRENCY)}` : CurrencyViewer(minSellPrice, item.currencyType ?? CONFIG.DEFAULT_CURRENCY)}
                               </span>
                             )}
                           </>

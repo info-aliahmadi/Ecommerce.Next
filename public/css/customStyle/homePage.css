@@ -13,3 +13,7 @@ html {
   --font-locale: 'Geist', "Geist Fallback", sans-serif;
   font-family: 'var(--font-locale, var(--font-geist-sans)), sans-serif'
 }
+.ltr-input,.ltr-input * {
+  direction: ltr !important;
+  text-align: left !important;
+}

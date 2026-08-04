@@ -133,14 +133,10 @@ export default class HomePageService {
   }
 
   async getProductById(productId: number): Promise<Result<ProductDisplayModel>> {
-    let result = await Fetch.Get<Result<ProductDisplayModel>>(`${this.baseUrl}/Product/GetProduct?productId=${productId}`);
+    const params = new URLSearchParams({ productId: productId.toString() });
+    let result = await Fetch.Get<Result<ProductDisplayModel>>(`${this.baseUrl}/Product/GetProduct?${params.toString()}`, this.config);
     return result;
   }
-  async GetProductStockByIds(productIds: number[]): Promise<Result<ProductInventoryStockModel[]>> {
-    let result = await Fetch.Get<Result<ProductInventoryStockModel[]>>(`${this.baseUrl}/Product/GetProductStockByIds?productIds=${productIds.join(',')}`);
-    return result;
-  }
-
   /**
    * Get site settings
    */
@@ -230,7 +226,8 @@ export default class HomePageService {
    * Get articles list for visitors
    */
   async getArticlesList(pageIndex: number = 0, pageSize: number = 10): Promise<Result<ArticleModel[]>> {
-    let result = await Fetch.Get<Result<ArticleModel[]>>(`${this.baseUrl}/Cms/GetArticles?pageIndex=${pageIndex}&pageSize=${pageSize}`, this.config);
+    const params = new URLSearchParams({ pageIndex: pageIndex.toString(), pageSize: pageSize.toString() });
+    let result = await Fetch.Get<Result<ArticleModel[]>>(`${this.baseUrl}/Cms/GetArticles?${params.toString()}`, this.config);
     return result;
   }
 
@@ -238,7 +235,8 @@ export default class HomePageService {
    * Get related articles for visitors
    */
   async getRelatedArticlesList(articleId: number): Promise<Result<ArticleModel[]>> {
-    let result = await Fetch.Get<Result<ArticleModel[]>>(`${this.baseUrl}/Cms/GetRelatedArticles?articleId=${articleId}`, this.config);
+    const params = new URLSearchParams({ articleId: articleId.toString() });    
+    let result = await Fetch.Get<Result<ArticleModel[]>>(`${this.baseUrl}/Cms/GetRelatedArticles?${params.toString()}`, this.config);
     return result;
   }
 
@@ -254,7 +252,8 @@ export default class HomePageService {
    * Get article by ID for visitors
    */
   async getArticle(articleId: number): Promise<Result<ArticleModel>> {
-    let result = await Fetch.Get<Result<ArticleModel>>(`${this.baseUrl}/Cms/GetArticle?articleId=${articleId}`, this.config);
+    const params = new URLSearchParams({ articleId: articleId.toString() });
+    let result = await Fetch.Get<Result<ArticleModel>>(`${this.baseUrl}/Cms/GetArticle?${params.toString()}`, this.config);
     return result;
   }
 
@@ -262,7 +261,8 @@ export default class HomePageService {
    * Get page by ID for visitors
    */
   async getPage(pageId: number): Promise<Result<PageModel>> {
-    let result = await Fetch.Get<Result<PageModel>>(`${this.baseUrl}/Cms/GetPage?pageId=${pageId}`, this.config);
+    const params = new URLSearchParams({ pageId: pageId.toString() });
+    let result = await Fetch.Get<Result<PageModel>>(`${this.baseUrl}/Cms/GetPage?${params.toString()}`, this.config);
     return result;
   }
 

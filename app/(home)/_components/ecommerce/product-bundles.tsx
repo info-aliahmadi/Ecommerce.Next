@@ -30,6 +30,7 @@ function getBundleSavings(products: ProductDisplayModel[]) {
 export function ProductBundles() {
   const t = useTranslations();
   const addToCart = useAddToCart();
+  
 
   const { data: bundles } = useQuery({
     queryKey: ['products', 'bundles'],
@@ -132,7 +133,7 @@ export function ProductBundles() {
                                 return isOutOfStock ? (
                                   <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
                                     <span className="text-[10px] font-bold text-white bg-black/60 px-1.5 py-0.5 rounded-md">
-                                      {t('homepage.common.outOfStock')}
+                                      {t('homepage.paymentPage.outOfStock')}
                                     </span>
                                   </div>
                                 ) : null;
@@ -148,16 +149,16 @@ export function ProductBundles() {
                                   </p>
                                   {isOutOfStock ? (
                                     <p className="text-xs text-ecommerce-text-muted">
-                                      {t('outOfStock')}
+                                      {t('homepage.paymentPage.outOfStock')}
                                     </p>
                                   ) : (
                                     <div className="flex items-center gap-2">
                                       <span className="text-sm font-semibold text-ecommerce-red">
-                                        {CurrencyViewer(cheapestVariant.sellPrice ?? 0, CONFIG.DEFAULT_CURRENCY)}
+                                        {CurrencyViewer(cheapestVariant.sellPrice ?? 0, bundle?.products?.[0]?.currencyType ?? CONFIG.DEFAULT_CURRENCY)}
                                       </span>
                                       {cheapestVariant.oldSellPrice != 0 && (
                                         <span className="text-[11px] text-ecommerce-text-muted line-through">
-                                          {CurrencyViewer(cheapestVariant.oldSellPrice, CONFIG.DEFAULT_CURRENCY)}
+                                          {CurrencyViewer(cheapestVariant.oldSellPrice, bundle?.products?.[0]?.currencyType ?? CONFIG.DEFAULT_CURRENCY)}
                                         </span>
                                       )}
                                     </div>
@@ -176,16 +177,16 @@ export function ProductBundles() {
                             <p className="text-xs text-ecommerce-text-muted">{t('homepage.bundles.bundlePrice')}</p>
                             <div className="flex items-baseline gap-2">
                               <span className="text-xl font-bold text-ecommerce-text-primary">
-                                { CurrencyViewer(totalPrice, CONFIG.DEFAULT_CURRENCY)}
+                                { CurrencyViewer(totalPrice, bundle?.products?.[0]?.currencyType ?? CONFIG.DEFAULT_CURRENCY) }
                               </span>
                               <span className="text-sm text-ecommerce-text-muted line-through">
-                                {CurrencyViewer(compareTotal, CONFIG.DEFAULT_CURRENCY)}
+                                {CurrencyViewer(compareTotal, bundle?.products?.[0]?.currencyType ?? CONFIG.DEFAULT_CURRENCY)}
                               </span>
                             </div>
                           </div>
                           <div className="text-right">
                             <p className="text-xs text-ecommerce-emerald font-semibold">
-                              {t('homepage.bundles.youSave', { amount: CurrencyViewer(savings, CONFIG.DEFAULT_CURRENCY) })}
+                              {t('homepage.bundles.youSave', { amount: CurrencyViewer(savings, bundle?.products?.[0]?.currencyType ?? CONFIG.DEFAULT_CURRENCY) })}
                             </p>
                           </div>
                         </div>

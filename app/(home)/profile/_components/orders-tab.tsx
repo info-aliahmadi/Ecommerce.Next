@@ -19,6 +19,7 @@ import { GetImage } from '../../_lib/utils';
 import FileUploadModel from '@root/app/dashboard/(filestorage)/_types/FileUploadModel';
 import { DateTimeViewer } from '@root/utils/DateViewer';
 import CONFIG from '@root/config';
+import { Badge } from '../../_components/ui/badge';
 
 function mapOrderStatus(status: OrderStatus): string {
   switch (status) {
@@ -259,7 +260,7 @@ export function OrdersTab() {
 
                             return (
                               <div key={item.id} className="flex items-center gap-3 py-2">
-                                <div className="w-12 h-12 rounded-md border border-ecommerce-border overflow-hidden bg-ecommerce-surface-hover shrink-0">
+                                <div className="w-14 h-14 rounded-md border border-ecommerce-border overflow-hidden bg-ecommerce-surface-hover shrink-0">
                                   <img
                                     src={imageSrc}
                                     alt={item.productName}
@@ -270,6 +271,11 @@ export function OrdersTab() {
                                   <p className="text-sm font-medium text-ecommerce-text-primary truncate">
                                     {item.productName || `Item #${item.id}`}
                                   </p>
+                                  {item.productVariant?.productAttributes.map((attribute, index) => (
+                                    <Badge key={attribute.id} className={"bg-ecommerce-emerald/5 text-ecommerce-emerald border-0 text-xs" + (index > 0 ? " mx-1" : "")}>
+                                      {attribute.displayName}
+                                    </Badge>
+                                  ))}
                                   <p className="text-xs text-ecommerce-text-muted">
                                     {t('homepage.profile.itemsLabel', { count: item.quantity })}
                                   </p>

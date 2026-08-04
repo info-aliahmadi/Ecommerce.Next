@@ -1,4 +1,4 @@
 export default interface ProductInventoryStockModel {
-  ProductId: number;
-  StockQuantity: number;
+  productVariableId: number;
+  stockQuantity: number;
 }

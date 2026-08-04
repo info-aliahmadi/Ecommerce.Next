@@ -12,6 +12,8 @@ import { GetImage } from '@(home)/_lib/utils';
 import { VALID_PROMOS } from './types';
 import CurrencyViewer from '@root/utils/CurrencyViewer';
 import CONFIG from '@root/config';
+import Link from 'next/link';
+import { Badge } from '../../_components/ui/badge';
 
 interface OrderSummaryProps {
   items: CartItem[];
@@ -72,11 +74,20 @@ export function OrderSummary({
                 className="w-12 h-12 rounded-lg object-cover border border-ecommerce-border shrink-0"
               />
               <div className="flex-1 min-w-0">
-                <p className="text-xs font-semibold text-ecommerce-text-primary truncate">
+                <Link href={`/products/${item.id}`} className="text-xs font-semibold text-ecommerce-text-primary truncate">
                   {item.name}
-                </p>
-                <p className="text-[11px] text-ecommerce-text-muted">
-                  Qty {item.quantity}
+                </Link>
+                {item.variant.productAttributes?.length > 0 && (
+                  <p className="text-[11px] text-ecommerce-text-muted mt-0.5">
+                    {item.variant?.productAttributes.map((attribute, index) => (
+                      <span key={attribute.id} className={"bg-ecommerce-emerald/5 text-ecommerce-emerald border-0 px-1 rounded-md" + (index > 0 ? " mx-1" : "")}>
+                        {attribute.displayName}
+                      </span>
+                    ))}
+                  </p>
+                )}
+                <p className="text-[12px] text-ecommerce-text-muted font-medium">
+                  {t("quantity")} {item.quantity}
                 </p>
               </div>
               <span className="text-sm font-bold text-ecommerce-text-primary shrink-0">

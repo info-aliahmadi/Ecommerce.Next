@@ -1,7 +1,7 @@
 'use client';
 
 import { useTranslations } from 'next-intl';
-import { ChevronRight, MapPin, Loader2 } from 'lucide-react';
+import { ChevronRight, MapPin, Loader2, ChevronLeft } from 'lucide-react';
 import { Button } from '@(home)/_components/ui/button';
 import { Label } from '@(home)/_components/ui/label';
 import { Separator } from '@(home)/_components/ui/separator';
@@ -13,6 +13,7 @@ import { FormField } from './form-field';
 import { ShippingForm } from './types';
 
 interface ShippingStepProps {
+  isRTL: boolean;
   shipping: ShippingForm;
   errors: Record<string, string>;
   savedAddresses: AddressModel[];
@@ -26,6 +27,7 @@ interface ShippingStepProps {
 }
 
 export function ShippingStep({
+  isRTL,
   shipping,
   errors,
   savedAddresses,
@@ -38,7 +40,7 @@ export function ShippingStep({
   onContinue,
 }: Readonly<ShippingStepProps>) {
   const t = useTranslations('homepage.paymentPage');
-
+  
   return (
     <div className="space-y-6">
       {/* Contact Info */}
@@ -156,7 +158,7 @@ export function ShippingStep({
         ) : (
           <>
             {t('step2')}
-            <ChevronRight size={16} />
+            {isRTL ? <ChevronLeft size={16} /> : <ChevronRight size={16} />}
           </>
         )}
       </Button>

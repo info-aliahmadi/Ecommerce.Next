@@ -24,9 +24,6 @@ import { ProductQuickStats } from './_components/ecommerce/product-quick-stats';
 import { useScrollReveal } from './_hooks/use-scroll-reveal';
 import { Header } from './_components/ecommerce/header';
 
-/* ─── Shared overlays (cart, quick-view, etc.) ──────────────── */
-
-
 /* ─── Home page ─────────────────────────────────────────────── */
 export default function HomePage() {
   const scrollRef = useScrollReveal();
