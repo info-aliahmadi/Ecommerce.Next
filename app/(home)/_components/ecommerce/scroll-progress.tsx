@@ -31,7 +31,7 @@ export function ScrollProgress() {
       className="fixed top-0 start-0 end-0 h-[3px] z-[60] origin-left"
       style={{
         scaleX,
-        background: 'linear-gradient(90deg, #E63946, #FF69B4, #6A5ACD, #20B2AA)',
+        background: 'linear-gradient(90deg, #2563EB, #E91E63, #7B4397, #00A99D))',
       }}
     />
   );

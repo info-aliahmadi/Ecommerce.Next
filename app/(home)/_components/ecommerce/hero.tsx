@@ -14,11 +14,11 @@ import { GetImage } from '../../_lib/utils';
 import CurrencyViewer from '@root/utils/CurrencyViewer';
 
 const liveActivities = [
-  { name: 'Sarah', city: 'NY', product: 'Wireless Headphones', color: '#E63946' },
-  { name: 'Michael', city: 'LA', product: 'Smart Watch Pro', color: '#6A5ACD' },
-  { name: 'Emily', city: 'Chicago', product: 'Leather Jacket', color: '#20B2AA' },
-  { name: 'David', city: 'Houston', product: 'Running Shoes', color: '#FFC107' },
-  { name: 'Lisa', city: 'Miami', product: 'Skincare Kit', color: '#FF69B4' },
+  { name: 'Sarah', city: 'NY', product: 'Wireless Headphones', color: '#2563EB' },
+  { name: 'Michael', city: 'LA', product: 'Smart Watch Pro', color: '#7B4397' },
+  { name: 'Emily', city: 'Chicago', product: 'Leather Jacket', color: '#00A99D' },
+  { name: 'David', city: 'Houston', product: 'Running Shoes', color: '#FFD600' },
+  { name: 'Lisa', city: 'Miami', product: 'Skincare Kit', color: '#E91E63' },
   { name: 'James', city: 'Seattle', product: 'Bluetooth Speaker', color: '#10B981' },
 ];
 
@@ -228,6 +228,7 @@ function MeshBackground() {
   );
 }
 
+
 function LiveActivityStrip() {
   const t = useTranslations();
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -425,7 +426,7 @@ export function HeroSection() {
   return (
     <section className="relative overflow-hidden">
       {/* Main Hero */}
-      <div className="relative bg-gradient-to-br from-ecommerce-red via-rose-500 to-ecommerce-purple dark:from-ecommerce-red/90 dark:via-rose-600/80 dark:to-ecommerce-purple/90">
+      <div className="relative bg-gradient-to-br from-ecommerce-red via-blue-500 to-ecommerce-purple dark:from-ecommerce-red/90 dark:via-blue-600/80 dark:to-ecommerce-purple/90">
         {/* Mesh + Particles */}
         <MeshBackground />
         <FloatingParticles />
