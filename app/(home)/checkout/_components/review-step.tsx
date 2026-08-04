@@ -112,7 +112,7 @@ export function ReviewStep({
                     )}
                   </div>
                   {item.variant.productAttributes?.length > 0 && (
-                    <p className="text-[11px] text-ecommerce-text-muted mt-0.5">
+                    <p className="text-[11px] text-ecommerce-text-muted mt-1">
                       {item.variant?.productAttributes.map((attribute, index) => (
                         <Badge key={attribute.id} className={"bg-ecommerce-emerald/5 text-ecommerce-emerald border-0 text-xs" + (index > 0 ? " mx-1" : "")}>
                           {attribute.displayName}
@@ -120,8 +120,8 @@ export function ReviewStep({
                       ))}
                     </p>
                   )}
-                  <p className="text-sm text-ecommerce-text-muted mt-1 font-medium">
-                    {CurrencyViewer(item.variant.sellPrice, CONFIG.DEFAULT_CURRENCY)} × <span className="font-semibold text-ecommerce-text-primary">{item.quantity}</span>
+                  <p className="text-sm text-ecommerce-text-muted mt-2 font-medium">
+                    <span className="text-ecommerce-text-primary"> {CurrencyViewer(item.variant.sellPrice, CONFIG.DEFAULT_CURRENCY)} × {item.quantity}</span>
                     {isOutOfStock && (
                       <span className="text-red-500 mr-1 p-1">
                         ({t('availableStock', { count: issue.availableStock })})
@@ -131,14 +131,21 @@ export function ReviewStep({
                   <div className="flex items-center gap-2 mt-2">
                     <button
                       onClick={() => onUpdateQuantity(item.variant.id, Math.max(1, item.quantity - 1))}
-                      className="w-7 h-7 rounded-md bg-ecommerce-surface-hover hover:bg-ecommerce-border flex items-center justify-center transition-colors"
+                      className="w-7 h-7 rounded-md bg-ecommerce-surface-hover hover:bg-ecommerce-border flex items-center justify-center transition-colors cursor-pointer"
                       aria-label={t('homepage.common.previous')}
                     >
-                      <Minus size={12} />
+                      <Minus size={14} />
+                    </button>
+                    <button
+                      onClick={() => onUpdateQuantity(item.variant.id, item.quantity + 1)}
+                      className="w-7 h-7 rounded-md bg-ecommerce-surface-hover hover:bg-ecommerce-border flex items-center justify-center transition-colors cursor-pointer bg-ecommerce-border"
+                      aria-label={t('homepage.common.next')}
+                    >
+                      <Plus size={14} />
                     </button>
                     <button
                       onClick={() => onRemoveItem(item.variant.id)}
-                      className="text-[11px] font-medium text-red-600 hover:text-red-700 hover:underline"
+                      className="text-[12px] font-medium px-2 py-0.5 rounded-md bg-red-100 text-red-700 dark:bg-red-900/40 dark:text-red-300 whitespace-nowrap cursor-pointer"
                     >
                       {t('removeItem')}
                     </button>
@@ -385,7 +392,7 @@ export function ReviewStep({
         onClick={() => onGoToStep(2, -1)}
         className="w-full h-10 text-ecommerce-text-muted hover:text-ecommerce-text-primary hover:bg-ecommerce-surface-hover rounded-xl text-sm gap-1"
       >
-      {isRTL ? <ChevronRight size={14} /> : <ChevronLeft size={14} />}
+        {isRTL ? <ChevronRight size={14} /> : <ChevronLeft size={14} />}
         {t('step2')}
       </Button>
     </div>
