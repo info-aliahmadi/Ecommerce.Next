@@ -208,6 +208,7 @@ const AddOrEditLink = ({ row, linkSection, data, setData, isNew, open, setOpen, 
                         placeholder={t(fieldsName + 'url')}
                         fullWidth
                         error={Boolean(touched.url && errors.url)}
+                        className="ltr-direction"
                       />
                       {touched.url && errors.url && (
                         <FormHelperText error id="helper-text-url">
@@ -244,7 +245,7 @@ const AddOrEditLink = ({ row, linkSection, data, setData, isNew, open, setOpen, 
                       <ImageUpload
                         name="imagePreviewId"
                         setFieldValue={setFieldValue}
-                        value={values?.imagePreviewId || ''}
+                        value={values?.imagePreviewId || null}
                         filePosterMaxHeight={400}
                       />
                     </Stack>

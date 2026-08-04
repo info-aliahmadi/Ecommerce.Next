@@ -215,6 +215,7 @@ export default function AddOrEditSlideshow({ row, isNew, open, setOpen, refetch 
                           onChange={handleChange}
                           placeholder={t(fieldsName + 'previewImageUrl')}
                           fullWidth
+                          className="ltr-direction"
                           error={Boolean(touched.previewImageUrl && errors.previewImageUrl)}
                         />
                       )}

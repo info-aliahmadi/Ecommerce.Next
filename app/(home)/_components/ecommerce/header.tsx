@@ -247,18 +247,18 @@ export function Header() {
             <nav className="hidden lg:flex items-center gap-1">
               {navItems.map((item) => (
                 <div key={item.id} className="relative group">
-                  <Link
+                  <a
                     href={item.url}
                     className="px-4 py-2 text-sm font-medium text-ecommerce-text-secondary hover:text-ecommerce-text-primary transition-colors rounded-lg hover:bg-ecommerce-surface-hover flex items-center gap-1 animated-underline cursor-pointer"
                   >
                     {item.title}
                     {item.childs && item.childs.length > 0 && <ChevronDown size={14} className="transition-transform group-hover:rotate-180 duration-200" />}
-                  </Link>
+                  </a>
                   {item.childs && item.childs.length > 0 && (
                     <div className="absolute top-full start-0 pt-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200">
                       <div className="bg-white dark:bg-ecommerce-surface rounded-xl shadow-xl border border-ecommerce-border py-2 min-w-[220px]">
                         {item.childs.sort((a, b) => a.order - b.order).map((child) => (
-                          <Link
+                          <a
                             key={child.id}
                             href={child.url}
                             className="w-full text-start px-4 py-2.5 text-sm hover:bg-ecommerce-surface-hover transition-colors  flex items-center justify-between text-ecommerce-text-secondary"
@@ -268,7 +268,7 @@ export function Header() {
                               {child.title}
                             </span>
                             
-                          </Link>
+                          </a>
                         ))}
                       </div>
                     </div>

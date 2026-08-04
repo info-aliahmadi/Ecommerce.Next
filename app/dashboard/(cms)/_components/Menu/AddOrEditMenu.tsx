@@ -195,6 +195,7 @@ const AddOrEditMenu = ({ row, isNew, open, setOpen, refetch }:
                         placeholder={t(fieldsName + 'url')}
                         fullWidth
                         error={Boolean(touched.url && errors.url)}
+                        className="ltr-direction"
                       />
                       {touched.url && errors.url && (
                         <FormHelperText error id="helper-text-url">
@@ -230,7 +231,7 @@ const AddOrEditMenu = ({ row, isNew, open, setOpen, refetch }:
                       <ImageUpload
                         name="previewImageId"
                         setFieldValue={setFieldValue}
-                        value={values?.previewImageId || ''}
+                        value={values?.previewImageId || null}
                         filePosterMaxHeight={400}
                       />
                     </Stack>

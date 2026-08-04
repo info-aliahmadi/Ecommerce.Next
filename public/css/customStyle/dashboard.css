@@ -146,3 +146,8 @@ border-color: #374151 !important;
 .dark.material-grid-container .MuiDivider-root:hover{
   border-color: #d1d5dbf3 !important;
 }
+
+.ltr-direction,.ltr-direction * {
+  direction: ltr !important;
+  text-align: left !important;
+}

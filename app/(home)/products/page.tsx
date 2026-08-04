@@ -61,15 +61,12 @@ import {
   LayoutList,
   ChevronDown,
   ChevronUp,
-  Star,
   RotateCcw,
   PackageSearch,
-  Filter,
   ChevronLeft,
   ChevronRight,
   Home,
 } from 'lucide-react';
-import { useCompareStore } from '../_lib/store';
 import ProductListCard from '../_components/ecommerce/product-list';
 import AttributeType from '@root/app/types/enums/AttributeType';
 import CurrencyViewer, { GetCurrencySymbol } from '@root/utils/CurrencyViewer';
@@ -192,8 +189,6 @@ function paramsToFilters(params: URLSearchParams): Partial<FilterState> {
 // ── Main Component ────────────────────────────────────
 function ProductsPageContent() {
   const t = useTranslations();
-  const isCompareOpen = useCompareStore((s) => s.isCompareOpen);
-  const setCompareOpen = useCompareStore((s) => s.setCompareOpen);
   const searchParams = useSearchParams();
   const router = useRouter();
   const pathname = usePathname();
