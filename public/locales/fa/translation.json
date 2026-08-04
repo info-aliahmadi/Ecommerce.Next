@@ -178,7 +178,7 @@
       "toggleTheme": "Toggle theme"
     },
     "hero": {
-      "badge": "کالکشن ۲۰۲۵",
+      "badge": "کالکشن 2026",
       "title1": "سبک",
       "title2": "مطلوب خود را کشف کنید",
       "subtitle": "کالکشن‌های منتخب محصولات باکیفیت را کاوش کنید. از تکنولوژی تا مد، همه آنچه نیاز دارید با تخفیف‌های ویژه.",
@@ -212,7 +212,9 @@
       "slideAthleticSub": "مجموعه قدرتمند"
     },
     "categories": {
-      "title": "خرید بر اساس دسته‌بندی",
+      "browse": "مرور",
+      "title": "خرید بر اساس ",
+      "category": "دسته‌بندی",
       "subtitle": "از میان طیف گسترده دسته‌بندی‌ها انتخاب کنید",
       "items": "محصول",
       "viewCategory": "مشاهده محصولات {name}",
@@ -229,7 +231,8 @@
       "subtitle": "برترین انتخاب‌های سردبیران برای شما"
     },
     "trending": {
-      "title": "محبوب‌ترین‌ها",
+      "trending" : "محبوب‌ترین‌ها",
+      "title": "محبوب‌ترین‌های حال حاضر",
       "subtitle": "محصولاتی که همه الان می‌خرند",
       "scrollLeft": "اسکرول به چپ",
       "scrollRight": "اسکرول به راست"
@@ -244,7 +247,7 @@
       "soldCount": "{count} فروش رفته",
       "shopDeals": "مشاهده همه تخفیف‌ها",
       "flashSaleLive": "فروش ویژه زنده",
-      "flashSaleDesc": "پیشنهادات محدودی برای محصولات انتخابی. قیمت‌های نمایش داده شده قبلاً تخفیف دارند.",
+      "flashSaleDesc": "محصولات منتخب با بیشترین تخفیف به مدت محدود",
       "endsToday": "پایان امروز در نیمه شب",
       "upToOff": "تا 60% تخفیف",
       "maxDiscount": "حداکثر تخفیف",
@@ -253,12 +256,18 @@
       "available": "در دسترس"
     },
     "testimonials": {
+      "testimonials": "نظر دیگران",
       "title": "مشتریان ما چه می‌گویند",
       "subtitle": "نظرات واقعی مشتریان واقعی",
       "prev": "نظر قبلی",
-      "next": "نظر بعدی"
+      "next": "نظر بعدی",
+      "averageRating": "میانگین امتیاز ",
+      "happyCustomers": "رضایت مشتریان",
+      "wouldRecommend": "پیشنهاد دیگران",
+      "supportAvailable": "پشتیبانی"
     },
     "newsletter": {
+      "exclusiveAccess": "دسترسی به تخفیف ها",
       "title": "۱۵٪ تخفیف اولین خرید",
       "subtitle": "در خبرنامه ما عضو شوید و از جدیدترین تخفیف‌ها و محصولات باخبر شوید.",
       "placeholder": "ایمیل شما",
@@ -266,14 +275,29 @@
       "subscribers": "{count}+ عضو",
       "privacyNote": "ما به حریم خصوصی شما احترام می‌گذاریم. هر زمان بخواهید لغو عضویت کنید.",
       "success": "با موفقیت عضو شدید! کدهای تخفیف به ایمیل شما ارسال خواهد شد!.",
-      "error": "خطایی رخ داد. لطفاً دوباره تلاش کنید."
+      "error": "خطایی رخ داد. لطفاً دوباره تلاش کنید.",
+      "trustedBy": "مورد اعتماد بیش از ۵۰,۰۰۰ عضو"
     },
     "trust": {
+      "trust": "چرا ما؟",
       "title": "چرا از ما خرید کنید؟",
+      "subtitle": "ما متعهد هستیم که در هر مرحله از خرید، امنیت، رضایت و راحتی را به همراه داشته باشید.",
       "productsLabel": "محصولات باکیفیت",
       "customersLabel": "مشتریان راضی",
       "countriesLabel": "کشور تحت پوشش",
-      "returnsLabel": "بازگشت آسان"
+      "returnsLabel": "بازگشت آسان",
+      "freeShipping": "ارسال رایگان",
+      "freeShippingDescription": "سفارش‌های بالای {amount}+",
+      "securePayment": "پرداخت امن",
+      "securePaymentDescription": " خرید امن با SSL encrypted",
+      "easyReturns": "بازگشت آسان",
+      "easyReturnsDescription": "امکان بازگشت کالا تا ۳۰ روز پس از خرید",
+      "support": "24/7 پشتیبانی",
+      "supportDescription": "مرکز کمک اختصاصی",
+      "bestPrices": "بهترین قیمت‌ها",
+      "bestPricesDescription": "قیمت های تضمین شده",
+      "fastDelivery": "تحویل سریع",
+      "fastDeliveryDescription": "ارسال سریع"
     },
     "cart": {
       "title": "سبد خرید شما",
@@ -465,7 +489,7 @@
       "individualPrice": "قیمت جداگانه",
       "bundlePrice": "قیمت بسته",
       "includes": "شامل",
-      "curated": "بسته‌های انتخاب شده",
+      "curated": "بسته‌های منتخب",
       "subtitleFull": "وقتی که بسته‌های انتخاب شده ما را خریداری می‌کنید، صرفه‌جویی بیشتری دارید — طراحی شده تا همدیگر را به‌طور کامل تکمیل کنند.",
       "youSave": "شما {amount} صرفه‌جویی می‌کنید",
       "itemsAtSpecialPrice": "{count} محصول با قیمت ویژه"
@@ -572,7 +596,7 @@
     "shopTheLook": {
       "title": "استایل را کامل کنید",
       "subtitle": "ترکیب‌های منتخب برای هر مناسبت",
-      "curated": "انتخاب شده",
+      "curated": "استایل منتخب",
       "from": "از",
       "getTheLook": "مشاهده استایل",
       "outfitDesc": "یک لباس کامل {name} با {count} قطعه انتخاب شده.",
@@ -676,7 +700,7 @@
       "priceMin": "حداقل قیمت",
       "priceMax": "حداکثر قیمت",
       "applyFilters": "اعمال",
-      "openCatalog": "خرید همه محصولات",
+      "openCatalog": "همه محصولات",
       "totalProducts": "{count} محصول"
     },
     "shopPage": {

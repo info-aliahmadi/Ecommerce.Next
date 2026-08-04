@@ -315,7 +315,7 @@ function HeroCarousel() {
     },
   });
 
-  const heroSlides = useMemo(() => mapBackendSlides(slideshows), [slideshows]);
+  const heroSlides = slideshows ?? [];
 
   const [activeIndex, setActiveIndex] = useState(0);
   const pauseRef = useRef(false);
@@ -343,7 +343,7 @@ function HeroCarousel() {
     );
   }
 
-  const slide = heroSlides[activeIndex];
+  const slide = mapBackendSlides([heroSlides[activeIndex]])[0];
 
   return (
     <div className="relative">

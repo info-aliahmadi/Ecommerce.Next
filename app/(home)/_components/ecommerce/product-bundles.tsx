@@ -19,7 +19,11 @@ import BundleDisplayModel from '../../_types/Product/BundleDisplayModel';
 
 
 function getBundleSavings(products: ProductDisplayModel[]) {
-  const pricings = products.map(p => getProductPricing(p.variants ?? []));
+  const inStockProducts = products.filter((p) => {
+    const { cheapestVariant } = getProductPricing(p.variants ?? []);
+    return cheapestVariant && getAvailableStock(cheapestVariant.productInventory) > 0;
+  });
+  const pricings = inStockProducts.map(p => getProductPricing(p.variants ?? []));
   const totalPrice = pricings.reduce((s, p) => s + (p.cheapestVariant?.sellPrice ?? 0), 0);
   const compareTotal = pricings.reduce((s, p) => s + (p.cheapestVariant?.oldSellPrice ?? p.cheapestVariant?.sellPrice ?? 0), 0);
   const savings = compareTotal - totalPrice;

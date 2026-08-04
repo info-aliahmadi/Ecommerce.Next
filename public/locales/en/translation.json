@@ -213,7 +213,9 @@
       "slideAthleticSub": "Performance Series"
     },
     "categories": {
-      "title": "Shop by Category",
+      "browse": "Browse",
+      "title": "Shop by",
+      "category": "Category",
       "subtitle": "Browse our wide range of categories",
       "items": "items",
       "viewCategory": "View {name} products",
@@ -230,6 +232,7 @@
       "subtitle": "Our editors' top picks for you"
     },
     "trending": {
+      "trending" : "Trending",
       "title": "Trending Now",
       "subtitle": "What everyone's buying right now",
       "scrollLeft": "Scroll left",
@@ -254,12 +257,18 @@
       "available": "available"
     },
     "testimonials": {
+      "testimonials": "What Our Customers Say",
       "title": "What Our Customers Say",
       "subtitle": "Real reviews from real customers",
       "prev": "Previous review",
-      "next": "Next review"
+      "next": "Next review",
+      "averageRating": "Average Rating",
+      "happyCustomers": "Happy Customers",
+      "wouldRecommend": "Would Recommend",
+      "supportAvailable": "Support Available"
     },
     "newsletter": {
+      "exclusiveAccess": "Exclusive Access",
       "title": "Get 15% Off Your First Order",
       "subtitle": "Subscribe to our newsletter and stay updated with the latest deals and new arrivals.",
       "placeholder": "your@email.com",
@@ -267,14 +276,29 @@
       "subscribers": "{count}+ subscribers",
       "privacyNote": "We respect your privacy. Unsubscribe at any time.",
       "success": "Successfully subscribed! We will send you a discount code via email.",
-      "error": "Something went wrong. Please try again."
+      "error": "Something went wrong. Please try again.",
+      "trustedBy": "Trusted by 50,000+ shoppers"
     },
     "trust": {
+      "trust": "Why Choose Us",
       "title": "Why Shop With Us",
+      "subtitle": "We&apos;re committed to making your shopping experience seamless, secure, and satisfying every step of the way.",
       "productsLabel": "Premium Products",
       "customersLabel": "Happy Customers",
       "countriesLabel": "Countries Served",
-      "returnsLabel": "Easy Returns"
+      "returnsLabel": "Easy Returns",
+      "freeShipping": "Free Shipping",
+      "freeShippingDescription": "On all orders over {amount}+",
+      "securePayment": "Secure Payment",
+      "securePaymentDescription": "SSL encrypted checkout",
+      "easyReturns": "Easy Returns",
+      "easyReturnsDescription": "30-Day Returns",
+      "support": "24/7 Support",
+      "supportDescription": "Dedicated help center",
+      "bestPrices": "Best Prices",
+      "bestPricesDescription": "Price match guarantee",
+      "fastDelivery": "Fast Delivery",
+      "fastDeliveryDescription": "Express shipping available"
     },
     "cart": {
       "title": "Your Cart",

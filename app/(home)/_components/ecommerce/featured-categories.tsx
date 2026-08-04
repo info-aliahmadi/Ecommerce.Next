@@ -6,8 +6,10 @@ import { motion } from 'framer-motion';
 import Link from 'next/link';
 import HomePageService from '../../_services/HomePageService';
 import CONFIG from '@root/config';
+import { useTranslations } from 'next-intl';
 
 export function FeaturedCategories() {
+  const t = useTranslations();
   const { data: categories = [] } = useQuery({
     queryKey: ['categories'],
     queryFn: async () => {
@@ -36,13 +38,13 @@ export function FeaturedCategories() {
             className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-ecommerce-red/10 text-ecommerce-red text-xs font-semibold uppercase tracking-widest mb-3"
           >
             <Layers size={12} />
-            Browse
+            {t('homepage.categories.browse')}
           </motion.div>
           <h2 className="text-2xl sm:text-3xl font-extrabold text-ecommerce-text-primary tracking-tight">
-            Shop by <span className="gradient-text">Category</span>
+          {t('homepage.categories.title')} <span className="gradient-text">{t('homepage.categories.category')}</span>
           </h2>
           <p className="text-sm text-ecommerce-text-muted mt-3 max-w-md mx-auto">
-            Find exactly what you&apos;re looking for in our curated collections
+          {t('homepage.categories.subtitle')}
           </p>
           <div className="mt-5 flex items-center justify-center gap-2">
             <div className="h-px w-8 bg-ecommerce-border" />

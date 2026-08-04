@@ -4,6 +4,8 @@ import { motion, useInView } from 'framer-motion';
 import { Truck, Shield, RotateCcw, Headphones, BadgePercent, Zap, ShieldCheck } from 'lucide-react';
 import { useState, useEffect, useRef } from 'react';
 import { useTranslations } from 'next-intl';
+import CurrencyViewer from '@root/utils/CurrencyViewer';
+import CONFIG from '@root/config';
 
 function AnimatedMetric({ value, suffix = '' }: { value: number; suffix: string }) {
   const [count, setCount] = useState(0);
@@ -27,81 +29,6 @@ function AnimatedMetric({ value, suffix = '' }: { value: number; suffix: string 
   return <span ref={ref} className="count-up">{count.toLocaleString()}{suffix}</span>;
 }
 
-const features = [
-  {
-    icon: Truck,
-    title: 'Free Shipping',
-    description: 'On all orders over $50',
-    metric: '$0',
-    metricValue: 0,
-    metricSuffix: '',
-    color: 'ecommerce-amber',
-    bgClass: 'bg-ecommerce-amber/10',
-    iconClass: 'text-ecommerce-amber',
-    metricClass: 'text-ecommerce-amber',
-  },
-  {
-    icon: Shield,
-    title: 'Secure Payment',
-    description: 'SSL encrypted checkout',
-    metric: '100%',
-    metricValue: 100,
-    metricSuffix: '%',
-    color: 'ecommerce-red',
-    bgClass: 'bg-ecommerce-red/10',
-    iconClass: 'text-ecommerce-red',
-    metricClass: 'text-ecommerce-red',
-  },
-  {
-    icon: RotateCcw,
-    title: 'Easy Returns',
-    description: 'Hassle-free 30-day returns',
-    metric: '30 Days',
-    metricValue: 30,
-    metricSuffix: ' Days',
-    color: 'ecommerce-teal',
-    bgClass: 'bg-ecommerce-teal/10',
-    iconClass: 'text-ecommerce-teal',
-    metricClass: 'text-ecommerce-teal',
-  },
-  {
-    icon: Headphones,
-    title: '24/7 Support',
-    description: 'Dedicated help center',
-    metric: '24/7',
-    metricValue: 0,
-    metricSuffix: '',
-    color: 'ecommerce-purple',
-    bgClass: 'bg-ecommerce-purple/10',
-    iconClass: 'text-ecommerce-purple',
-    metricClass: 'text-ecommerce-purple',
-  },
-  {
-    icon: BadgePercent,
-    title: 'Best Prices',
-    description: 'Price match guarantee',
-    metric: '50K+',
-    metricValue: 50000,
-    metricSuffix: 'K+',
-    color: 'ecommerce-rose',
-    bgClass: 'bg-ecommerce-rose/10',
-    iconClass: 'text-ecommerce-rose',
-    metricClass: 'text-ecommerce-rose',
-  },
-  {
-    icon: Zap,
-    title: 'Fast Delivery',
-    description: 'Express shipping available',
-    metric: '< 3 Days',
-    metricValue: 3,
-    metricSuffix: ' Days',
-    color: 'ecommerce-emerald',
-    bgClass: 'bg-ecommerce-emerald/10',
-    iconClass: 'text-ecommerce-emerald',
-    metricClass: 'text-ecommerce-emerald',
-  },
-];
-
 const containerVariants = {
   hidden: {},
   visible: {
@@ -111,7 +38,7 @@ const containerVariants = {
   },
 };
 
-const cardVariants : any = {
+const cardVariants: any = {
   hidden: { opacity: 0, y: 24 },
   visible: {
     opacity: 1,
@@ -122,6 +49,81 @@ const cardVariants : any = {
 
 export function TrustSection() {
   const t = useTranslations();
+
+  const features = [
+    {
+      icon: Truck,
+      title: t('homepage.trust.freeShipping'),
+      description: t('homepage.trust.freeShippingDescription', { amount: CurrencyViewer(CONFIG.FREE_SHIPPING_THRESHOLD, CONFIG.DEFAULT_CURRENCY) }),
+      metric: CurrencyViewer(0, CONFIG.DEFAULT_CURRENCY),
+      metricValue: 0,
+      metricSuffix: '',
+      color: 'ecommerce-amber',
+      bgClass: 'bg-ecommerce-amber/10',
+      iconClass: 'text-ecommerce-amber',
+      metricClass: 'text-ecommerce-amber',
+    },
+    {
+      icon: Shield,
+      title: t('homepage.trust.securePayment'),
+      description: t('homepage.trust.securePaymentDescription'),
+      metric: '100%',
+      metricValue: 100,
+      metricSuffix: '%',
+      color: 'ecommerce-red',
+      bgClass: 'bg-ecommerce-red/10',
+      iconClass: 'text-ecommerce-red',
+      metricClass: 'text-ecommerce-red',
+    },
+    {
+      icon: RotateCcw,
+      title: t('homepage.trust.easyReturns'),
+      description: t('homepage.trust.easyReturnsDescription'),
+      metric: '30 Days',
+      metricValue: 30,
+      metricSuffix: ' Days',
+      color: 'ecommerce-teal',
+      bgClass: 'bg-ecommerce-teal/10',
+      iconClass: 'text-ecommerce-teal',
+      metricClass: 'text-ecommerce-teal',
+    },
+    {
+      icon: Headphones,
+      title: t('homepage.trust.support'),
+      description: t('homepage.trust.supportDescription'),
+      metric: '24/7',
+      metricValue: 0,
+      metricSuffix: '',
+      color: 'ecommerce-purple',
+      bgClass: 'bg-ecommerce-purple/10',
+      iconClass: 'text-ecommerce-purple',
+      metricClass: 'text-ecommerce-purple',
+    },
+    {
+      icon: BadgePercent,
+      title: t('homepage.trust.bestPrices'),
+      description: t('homepage.trust.bestPricesDescription'),
+      metric: '50K+',
+      metricValue: 50000,
+      metricSuffix: 'K+',
+      color: 'ecommerce-rose',
+      bgClass: 'bg-ecommerce-rose/10',
+      iconClass: 'text-ecommerce-rose',
+      metricClass: 'text-ecommerce-rose',
+    },
+    {
+      icon: Zap,
+      title: t('homepage.trust.fastDelivery'),
+      description: t('homepage.trust.fastDeliveryDescription'),
+      metric: '< 3 Days',
+      metricValue: 3,
+      metricSuffix: ' Days',
+      color: 'ecommerce-emerald',
+      bgClass: 'bg-ecommerce-emerald/10',
+      iconClass: 'text-ecommerce-emerald',
+      metricClass: 'text-ecommerce-emerald',
+    },
+  ];
 
   return (
     <section className="py-14 sm:py-20 relative overflow-hidden bg-gradient-to-b from-transparent via-ecommerce-red/[0.02] to-transparent">
@@ -142,7 +144,7 @@ export function TrustSection() {
             className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-ecommerce-emerald/10 text-ecommerce-emerald text-xs font-semibold uppercase tracking-widest mb-3"
           >
             <ShieldCheck size={12} />
-            Why Choose Us
+            {t('homepage.trust.trust')}
           </motion.div>
           <motion.h2
             initial={{ opacity: 0, y: 10 }}
@@ -160,7 +162,7 @@ export function TrustSection() {
             transition={{ duration: 0.4, delay: 0.1 }}
             className="text-sm text-ecommerce-text-muted mt-3 max-w-lg mx-auto"
           >
-            We&apos;re committed to making your shopping experience seamless, secure, and satisfying every step of the way.
+            {t('homepage.trust.subtitle')}
           </motion.p>
           {/* Decorative dot divider */}
           <motion.div

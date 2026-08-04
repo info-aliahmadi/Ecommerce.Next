@@ -104,7 +104,7 @@ export function TestimonialsSection() {
         <div className="text-center mb-12 relative">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-ecommerce-red/10 text-ecommerce-red text-xs font-semibold uppercase tracking-widest mb-3">
             <Star size={12} className="fill-ecommerce-red" />
-            Testimonials
+            {t('homepage.testimonials.testimonials')}
           </div>
           <h2 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-ecommerce-text-primary tracking-tight">
             {t('homepage.testimonials.title')}
@@ -215,10 +215,10 @@ export function TestimonialsSection() {
         {/* Stats with icons and hover */}
         <div className="mt-14 grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4">
           {[
-            { icon: Star, value: '4.9/5', label: 'Average Rating', color: 'text-ecommerce-amber', bg: 'bg-ecommerce-amber/10' },
-            { icon: TrendingUp, value: '50K+', label: 'Happy Customers', color: 'text-ecommerce-emerald', bg: 'bg-ecommerce-emerald/10' },
-            { icon: Award, value: '98%', label: 'Would Recommend', color: 'text-ecommerce-purple', bg: 'bg-ecommerce-purple/10' },
-            { icon: Clock, value: '24/7', label: 'Support Available', color: 'text-ecommerce-red', bg: 'bg-ecommerce-red/10' },
+            { icon: Star, value: '4.9/5', label: t('homepage.testimonials.averageRating'), color: 'text-ecommerce-amber', bg: 'bg-ecommerce-amber/10' },
+            { icon: TrendingUp, value: '50K+', label: t('homepage.testimonials.happyCustomers'), color: 'text-ecommerce-emerald', bg: 'bg-ecommerce-emerald/10' },
+            { icon: Award, value: '98%', label: t('homepage.testimonials.wouldRecommend'), color: 'text-ecommerce-purple', bg: 'bg-ecommerce-purple/10' },
+            { icon: Clock, value: '24/7', label: t('homepage.testimonials.supportAvailable'), color: 'text-ecommerce-red', bg: 'bg-ecommerce-red/10' },
           ].map((stat) => (
             <div
               key={stat.label}

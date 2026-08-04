@@ -54,7 +54,7 @@ export function TrendingCarousel() {
             className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-ecommerce-teal/10 text-ecommerce-teal text-xs font-semibold uppercase tracking-widest mb-3"
           >
             <TrendingUp size={12} />
-            Trending
+            {t('homepage.trending.trending')}
           </motion.div>
           <h2 className="text-2xl sm:text-3xl font-extrabold text-ecommerce-text-primary tracking-tight">
             {t('homepage.trending.title')}

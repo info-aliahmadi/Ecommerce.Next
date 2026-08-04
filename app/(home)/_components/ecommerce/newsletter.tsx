@@ -197,7 +197,7 @@ export function NewsletterSection() {
               >
                 <Mail size={14} />
                 <Sparkles size={14} />
-                Exclusive Access
+                {t('homepage.newsletter.exclusiveAccess')}
               </motion.div>
               <h2 className="text-2xl sm:text-3xl font-bold text-white tracking-tight">
                 {t('homepage.newsletter.title')}
@@ -230,7 +230,7 @@ export function NewsletterSection() {
               {/* Social proof */}
               <div className="flex items-center gap-1.5 mt-3 justify-center lg:justify-start">
                 <ShieldCheck size={13} className="text-white/40" />
-                <span className="text-xs text-white/40">Trusted by 50,000+ shoppers</span>
+                <span className="text-xs text-white/40">{t('homepage.newsletter.trustedBy')}</span>
               </div>
             </div>
 

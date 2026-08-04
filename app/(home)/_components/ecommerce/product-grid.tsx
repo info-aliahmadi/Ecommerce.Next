@@ -2,11 +2,11 @@
 
 import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
 import { ProductCard } from './product-card';
-import { useUIStore } from '../../_lib/store';
+import { RTL_LOCALES, useUIStore } from '../../_lib/store';
 import { Button } from '../ui/button';
 import { Skeleton } from '../ui/skeleton';
 import { Slider } from '../ui/slider';
-import { SlidersHorizontal, Grid3X3, LayoutList, X, Filter, ArrowDown, PackageSearch, ArrowRight, Loader2 } from 'lucide-react';
+import { SlidersHorizontal, Grid3X3, LayoutList, X, Filter, ArrowDown, PackageSearch, ArrowRight, Loader2, ArrowLeft } from 'lucide-react';
 import {
   Select,
   SelectContent,
@@ -16,7 +16,7 @@ import {
 } from '../ui/select';
 import { useState, useMemo, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useTranslations } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
 import HomePageService from '../../_services/HomePageService';
 import ProductFilterModel from '../../_types/Product/ProductFilterModel';
 import SortingType, { SortOption } from '@root/app/types/enums/SortingType';
@@ -38,6 +38,8 @@ const SORT_MAP: Record<SortOption, SortingType> = {
 };
 export function ProductGrid() {
   const t = useTranslations();
+  const locale = useLocale();
+  const isRTL = RTL_LOCALES.includes(locale as any);
   const { searchQuery, selectedCategory, sortBy, setSortBy, setSelectedCategory } = useUIStore();
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
   const [showFilters, setShowFilters] = useState(false);
@@ -163,7 +165,7 @@ export function ProductGrid() {
           >
             <SlidersHorizontal size={16} />
             {t('homepage.catalog.openCatalog')}
-            <ArrowRight size={14} />
+           {isRTL ? <ArrowLeft size={14} /> : <ArrowRight size={14} />} 
           </Link>
         </div>
 
