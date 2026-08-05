@@ -2,10 +2,10 @@ import LanguageType from "@root/app/types/enums/LanguageType";
 
 interface Language {
     name: string,
-    key: string,
-    rtl: boolean,
+    key: Locale,
+    direction: "rtl" | "ltr",
     icon: string,
     description: string,
-    rtl: boolean,
     languageType : LanguageType
 }
+export type Locale = 'en' | 'fa' | 'ar';

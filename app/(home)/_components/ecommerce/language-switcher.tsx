@@ -2,14 +2,18 @@
 
 // import { useI18n } from '../../i18n/provider';
 import { Globe, ChevronDown } from 'lucide-react';
-import { LOCALE_CONFIG, LOCALES, type Locale } from '../../_lib/store';
 import { useEffect, useRef, useState } from 'react';
 import nextIntlService from '@root/locales/nextIntlService';
+import { useSession } from 'next-auth/react';
+import LocalizationService from '@root/locales/LocalizationService';
+import LanguageList from '@root/locales/LanguageList';
+import { Language, Locale } from '@root/locales/Language';
+import { useLocale } from 'next-intl';
 
 export function LanguageSwitcher() {
-  const [locale, setLocale] = useState<Locale>(nextIntlService.getNextIntlLocale() as Locale);
+  const [locale, setLocale] = useState<Locale>(useLocale() as Locale)
   const ref = useRef<HTMLDivElement>(null);
-
+  const { data: session } = useSession();
   // Close on outside click
   useEffect(() => {
     function handleClick(e: MouseEvent) {
@@ -26,10 +30,16 @@ export function LanguageSwitcher() {
     ref.current?.classList.toggle('lang-open');
   };
 
-  const handleSelect = (loc: Locale) => {
-    nextIntlService.setNextIntlLocale(loc);
-    setLocale(loc);
+  const handleSelect = async (loc: Language) => {
+    debugger
+    nextIntlService.setNextIntlLocale(loc.key);
+    setLocale(loc.key);
+
     ref.current?.classList.remove('lang-open');
+    if (session) {
+      let localizationService = new LocalizationService(session.accessToken);
+      await localizationService.setCurrentLanguage(loc.languageType);
+    }
     // Refresh the page to apply the new locale
     window.location.reload();
   };
@@ -51,23 +61,22 @@ export function LanguageSwitcher() {
       </button>
 
       <div className="lang-menu absolute end-0 top-full mt-1.5 bg-ecommerce-surface border border-ecommerce-border rounded-xl shadow-xl z-[999] min-w-[180px] py-1">
-        {LOCALES.map((loc) => {
-          const cfg = LOCALE_CONFIG[loc];
-          const isActive = locale === loc;
+        {LanguageList.map((loc) => {
+          const isActive = locale === loc.name;
           return (
             <button
-              key={loc}
+              key={loc.name}
               onClick={(e) => {
                 e.stopPropagation();
                 handleSelect(loc);
               }}
               className={`w-full flex items-center gap-3 px-4 py-2.5 text-sm transition-colors cursor-pointer text-start ${isActive
-                  ? 'bg-ecommerce-red/10 text-ecommerce-red font-semibold'
-                  : 'text-ecommerce-text-secondary hover:bg-ecommerce-surface-hover hover:text-ecommerce-text-primary'
+                ? 'bg-ecommerce-red/10 text-ecommerce-red font-semibold'
+                : 'text-ecommerce-text-secondary hover:bg-ecommerce-surface-hover hover:text-ecommerce-text-primary'
                 }`}
             >
-              <span className="text-lg">{loc === 'en' ? '🇺🇸' : loc === 'fa' ? '🇮🇷' : '🇸🇦'}</span>
-              <span>{cfg.nativeName}</span>
+              <span className="text-lg">{loc.name === 'en' ? '🇺🇸' : loc.name === 'fa' ? '🇮🇷' : '🇸🇦'}</span>
+              <span>{loc?.name}</span>
               {isActive && (
                 <span className="ms-auto w-1.5 h-1.5 rounded-full bg-ecommerce-red" />
               )}

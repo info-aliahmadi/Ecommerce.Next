@@ -1,26 +1,23 @@
 import { NextIntlClientProvider } from 'next-intl';
 import DirectionProvider from '@root/i18n/direction-provider';
 import { getLocale } from 'next-intl/server';
-import CONFIG from '@root/config';
-import { RTL_LOCALES } from './(home)/_lib/store';
 // import { I18nScript } from './(home)/i18n/provider';
 import "@root/public/fonts/IRANSans/iransans.css";
 import "@root/public/fonts/Geist/geist.css";
 import "@root/public/css/customStyle/homePage.css";
-import { resolveLanguage } from '@root/utils/resolver';
+import {  resolveLocale } from '@root/utils/resolver';
+import { Locale } from '@root/locales/Language';
 
 export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const locale = await getLocale() ?? "en";
+  const locale = await getLocale() ;
+  const language = resolveLocale(locale as Locale);
   // Load messages for the current locale (use client)
-  let messages;
-  messages = (await import(`@root/public/locales/${locale}/translation.json`)).default;
+  const dir = language.direction;
 
-  const dir = RTL_LOCALES.includes(locale as any) ? "rtl" : "ltr";
-  debugger
   const fontlocaleCssClass = dir === "rtl" ? "farsi-font" : "english-font";
 
   return (
@@ -36,7 +33,7 @@ export default async function RootLayout({
         className={`font-sans ${fontlocaleCssClass} antialiased`}
         style={{ fontFamily: 'var(--font-locale, var(--font-geist-sans)), sans-serif' }}
       >
-        <NextIntlClientProvider locale={locale ?? resolveLanguage(CONFIG.DEFAULT_LANGUAGE)} messages={messages}>
+        <NextIntlClientProvider>
           <DirectionProvider>
             {children}
           </DirectionProvider>

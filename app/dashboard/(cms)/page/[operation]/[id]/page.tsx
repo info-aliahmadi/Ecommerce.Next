@@ -23,7 +23,7 @@ import { Formik, FormikErrors } from 'formik';
 import AnimateButton from '@dashboard/_components/@extended/AnimateButton';
 
 // assets
-import { useTranslations } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
 import Notify from '@dashboard/_components/@extended/Notify';
 import CONFIG from '@root/config';
 import MainCard from '@dashboard/_components/MainCard';
@@ -36,8 +36,9 @@ import SelectTag from '@dashboard/(cms)/_components/Tag/SelectTag';
 import Editor from '@root/app/dashboard/_components/Editor/Editor';
 import { useSession } from 'next-auth/react';
 import PageModel from '../../../_types/Page/PageModel';
-import nextIntlService from '@root/locales/nextIntlService';
 import LinkModel from '../../../_types/Link/LinkModel';
+import { Locale } from '@root/locales/Language';
+import { DateTimeViewer } from '@root/utils/DateViewer';
 
 export default function AddOrEditPage({ params } : { readonly params: Promise<{ id: number, operation: 'edit' | 'add' }> }) {
   const t = useTranslations("");
@@ -45,7 +46,7 @@ export default function AddOrEditPage({ params } : { readonly params: Promise<{ 
 
   const { data: session } = useSession();
   const jwt = session?.accessToken;
-  let language = nextIntlService.getNextIntlLocale();
+  let language = useLocale() as Locale;
 
   let pageService = new PagesService(jwt ?? '');
   const [fieldsName, validation, buttonName] = ['fields.page.', 'validation.page.', 'buttons.page.'];
@@ -207,12 +208,7 @@ export default function AddOrEditPage({ params } : { readonly params: Promise<{ 
                                 <Chip
                                   icon={<EventNote />}
                                   title={t(fieldsName + 'registerDate')}
-                                  label={values.registerDate
-                                    ? new Intl.DateTimeFormat(language, {
-                                      dateStyle: 'long',
-                                      timeStyle: CONFIG.TIME_STYLE as "short" | "full" | "long" | "medium" | undefined,
-                                      hour12: false
-                                    }).format(moment(values.registerDate).toDate()) : ''}
+                                  label={DateTimeViewer(language, values.registerDate)}
                                   variant="filled"
                                   size="small"
                                   sx={{ borderRadius: '16px' }}
@@ -231,12 +227,7 @@ export default function AddOrEditPage({ params } : { readonly params: Promise<{ 
                                     <Chip
                                       icon={<EventNote />}
                                       title={t(fieldsName + 'editDate')}
-                                      label={values.editDate
-                                        ? new Intl.DateTimeFormat(language, {
-                                          dateStyle: 'long',
-                                          timeStyle: CONFIG.TIME_STYLE as "short" | "full" | "long" | "medium" | undefined,
-                                          hour12: false
-                                        }).format(moment(values.editDate).toDate()) : ''}
+                                      label={DateTimeViewer(language, values.editDate)}
                                       variant="filled"
                                       size="small"
                                       sx={{ borderRadius: '16px' }}

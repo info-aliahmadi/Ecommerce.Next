@@ -3,19 +3,19 @@ import { formatDistanceToNow } from 'date-fns';
 import moment from 'moment';
 import { enUS, faIR, ar } from 'date-fns/locale';
 import LanguageType from '@root/app/types/enums/LanguageType';
-import languageList from '@root/locales/languageList';
+import LanguageList from '@root/locales/LanguageList';
 
 type DateStyle = 'short' | 'full' | 'long' | 'medium';
 type LanguageInput = string | LanguageType;
 
 const resolveLocale = (lang: LanguageInput): string => {
   if (typeof lang === 'string') return lang;
-  return languageList.find((l) => l.languageType === lang)?.key ?? 'en';
+  return LanguageList.find((l) => l.languageType === lang)?.key ?? 'en';
 };
 
 export const DateViewer = (
   currentLanguage: LanguageInput,
-  date?: Date | number | undefined,
+  date?: Date | number | undefined | null,
   dateStyle?: DateStyle,
 ): string => {
   if (date === null || date === undefined) return '';
@@ -35,7 +35,7 @@ export const DateViewer = (
 
 export const DateTimeViewer = (
   currentLanguage: LanguageInput,
-  dateTime: Date | undefined,
+  dateTime?: Date | undefined | null,
 ): string => {
   if (dateTime === null || dateTime === undefined) return '';
 

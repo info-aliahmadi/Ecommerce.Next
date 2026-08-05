@@ -6,15 +6,16 @@ import moment from 'moment';
 import ImageUpload from '@dashboard/_components/FileUpload/ImageUpload';
 import SelectTopic from '../Topic/SelectTopic';
 import SelectTag from '../Tag/SelectTag';
-import { useTranslations } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
 import { MRT_Row } from 'material-react-table';
 import ArticleModel from '../../_types/Article/ArticleMode';
-import nextIntlService from '@root/locales/nextIntlService';
+import { Locale } from '@root/locales/Language';
+import { DateTimeViewer } from '@root/utils/DateViewer';
 
 // ===============================|| COLOR BOX ||=============================== //
 export default function ArticleDetail({ row }: Readonly<{ row: MRT_Row<ArticleModel> }>) {
   const t = useTranslations();
-  let language = nextIntlService.getNextIntlLocale();
+  let language = useLocale() as Locale;
 
   const fieldsName = 'fields.article.';
   return (
@@ -75,12 +76,7 @@ export default function ArticleDetail({ row }: Readonly<{ row: MRT_Row<ArticleMo
               <Chip
                 icon={<EventNote />}
                 title={t(fieldsName + 'registerDate')}
-                label={row.original.registerDate
-                  ? new Intl.DateTimeFormat(language, {
-                    dateStyle: 'long',
-                    timeStyle: CONFIG.TIME_STYLE as "short" | "full" | "long" | "medium" | undefined,
-                    hour12: false
-                  }).format(moment(row.original.registerDate).toDate()) : ''}
+                label={DateTimeViewer(language, row.original.registerDate)}
                 variant="filled"
                 size="small"
                 sx={{ borderRadius: '16px' }}
@@ -99,12 +95,7 @@ export default function ArticleDetail({ row }: Readonly<{ row: MRT_Row<ArticleMo
                   <Chip
                     icon={<EventNote />}
                     title={t(fieldsName + 'editDate')}
-                    label={row.original.registerDate
-                      ? new Intl.DateTimeFormat(language, {
-                        dateStyle: 'long',
-                        timeStyle: CONFIG.TIME_STYLE as "short" | "full" | "long" | "medium" | undefined,
-                        hour12: false
-                      }).format(moment(row.original.editDate).toDate()) : ''}
+                    label={DateTimeViewer(language, row.original.editDate)}
                     variant="filled"
                     size="small"
                     sx={{ borderRadius: '16px' }}
@@ -120,12 +111,7 @@ export default function ArticleDetail({ row }: Readonly<{ row: MRT_Row<ArticleMo
             <OutlinedInput
               id="publishDate"
               type="text"
-              value={row.original.registerDate
-                ? new Intl.DateTimeFormat(language, {
-                  dateStyle: 'long',
-                  timeStyle: CONFIG.TIME_STYLE as "short" | "full" | "long" | "medium" | undefined,
-                  hour12: false
-                }).format(moment(row.original.publishDate).toDate()) : ''}
+              value={DateTimeViewer(language, row.original.publishDate)}
               fullWidth
               disabled
             />

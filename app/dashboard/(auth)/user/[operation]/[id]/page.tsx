@@ -41,7 +41,7 @@ import AnimateButton from '@dashboard/_components/@extended/AnimateButton';
 import { useTranslations } from 'next-intl';
 import CONFIG from '@root/config';
 import MainCard from '@dashboard/_components/MainCard';
-import languageList from '@root/locales/languageList';
+import LanguageList from '@root/locales/LanguageList';
 import DeleteUser from '../../../_components/User/DeleteUser';
 import setServerErrors from '@root/utils/setServerErrors';
 import Notify from '@dashboard/_components/@extended/Notify';
@@ -50,7 +50,6 @@ import SelectRole from '@dashboard/(auth)/_components/Role/SelectRole';
 import { useRouter } from 'next/navigation';
 import { useSession } from 'next-auth/react';
 import { UserModel } from '../../../_types/User/UserModel';
-import SelectUsers from '../../../_components/User/SelectMultiUsers';
 
 export default function AddOrEditUser({ params }: { readonly params: Promise<{ id: number, operation: 'edit' | 'add' }> }) {
   const t = useTranslations("");
@@ -377,7 +376,7 @@ export default function AddOrEditUser({ params }: { readonly params: Promise<{ i
                               label="Default Language"
                               onChange={(e) => setFieldValue('defaultLanguage', e.target.value)}
                             >
-                              {languageList.map((language) => (
+                              {LanguageList.map((language) => (
                                 <MenuItem key={'page' + language.key} value={language.key}>
                                   <img src={language.icon} alt={language.name} style={{ width: '20px', margin: '0px 5px' }} />{' '}
                                   {language.name}

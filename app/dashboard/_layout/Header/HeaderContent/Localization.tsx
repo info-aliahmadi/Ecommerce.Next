@@ -1,13 +1,11 @@
 // material-ui
 import React from 'react';
-import { useTheme } from '@mui/material/styles';
 import { Box, IconButton, Menu, MenuItem, Tooltip } from '@mui/material';
 
 // project import
 
 // assets
-import languageList from '@root/locales/languageList';
-import { useTranslations } from 'next-intl';
+import LanguageList from '@root/locales/LanguageList';
 import LocalizationService from '@root/locales/LocalizationService';
 import { useSession } from 'next-auth/react';
 import CONFIG from '@root/config';
@@ -17,22 +15,19 @@ import { Language } from '@root/locales/Language';
 // ==============================|| HEADER CONTENT - NOTIFICATION ||============================== //
 
 const Localization = () => {
-  const theme = useTheme();
-  const t = useTranslations("");
   const { data: session, update } = useSession();
   const jwt = session?.accessToken;
 
-  
   let locale = session?.user?.defaultLanguage ?? CONFIG.DEFAULT_LANGUAGE;
 
-  let currentLanguage = languageList.find((l : any) => l.key === locale);
+  let currentLanguage = LanguageList.find((l : any) => l.key === locale);
 
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
 
   const changeLanguage = async (lng :Language) => {
     let locService = new LocalizationService(jwt ?? "");
-    locService.setCurrentLanguage(lng);
+    locService.setCurrentLanguage(lng.languageType);
     nextIntlService.setNextIntlLocale(lng.key);
 
     if (session) {
@@ -104,7 +99,7 @@ const Localization = () => {
         transformOrigin={{ horizontal: 'right', vertical: 'top' }}
         anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
       >
-        {languageList.map((language: any) => (
+        {LanguageList.map((language: any) => (
           <MenuItem key={language.key} onClick={() => changeLanguage(language)}>
             <img src={language.icon} alt={language.name} style={{ width: '20px', margin: '0px 5px' }} /> {language.name}
           </MenuItem>

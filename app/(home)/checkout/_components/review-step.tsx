@@ -12,7 +12,7 @@ import { Input } from '@(home)/_components/ui/input';
 import { Separator } from '@(home)/_components/ui/separator';
 import CartItem from '@root/app/(home)/_types/Order/CartItem';
 import { GetImage } from '@(home)/_lib/utils';
-import { ShippingForm, PaymentForm, VALID_PROMOS } from './types';
+import { ShippingForm, PaymentForm } from './types';
 import PaymentMethod from '@root/app/types/enums/PaymentMethod';
 import CurrencyViewer from '@root/utils/CurrencyViewer';
 import CONFIG from '@root/config';

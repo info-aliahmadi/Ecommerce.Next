@@ -1,11 +1,11 @@
 // material-ui
-import { Avatar, Box, Button, CardMedia, Chip, Grid, IconButton, InputAdornment, InputLabel, OutlinedInput, Tooltip } from '@mui/material';
+import { Avatar, Box, Button, Chip, Grid, IconButton, InputAdornment, InputLabel, OutlinedInput, Tooltip } from '@mui/material';
 
 // project import
 import MainCard from '@dashboard/_components/MainCard';
 import TableCard from '@dashboard/_components/TableCard';
 import { ReactNode, useCallback, useMemo, useState } from 'react';
-import { useTranslations } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
 import MaterialTable from '@dashboard/_components/MaterialTable/MaterialTable';
 import { Delete, Edit, Description, EventNote, Link } from '@mui/icons-material';
 import CONFIG from '@root/config';
@@ -21,7 +21,8 @@ import { MRT_Column } from '@root/app/types/MRT_Column';
 import { MRT_Row } from 'material-react-table';
 import PageModel from '../../_types/Page/PageModel';
 import GridDataBound from '@root/app/types/GridDataBound';
-import nextIntlService from '@root/locales/nextIntlService';
+import { Locale } from '@root/locales/Language';
+import { DateTimeViewer } from '@root/utils/DateViewer';
 // ===============================|| COLOR BOX ||=============================== //
 
 function PagesDataGrid() {
@@ -29,7 +30,7 @@ function PagesDataGrid() {
   const { data: session } = useSession();
   const jwt = session?.accessToken;
 
-  let language = nextIntlService.getNextIntlLocale();
+  let language = useLocale() as Locale;
 
   const [openDelete, setOpenDelete] = useState(false);
   const [row, setRow] = useState<MRT_Row<PageModel>>();
@@ -162,17 +163,13 @@ function PagesDataGrid() {
       <Grid container spacing={3} direction="row" sx={{ justifyContent: "center", alignItems: "flex-start" }}>
         <Grid
           container
-          item
           spacing={3}
-          size={12}
-          sm={6}
-          md={6}
-          lg={6}
+          size={{ sm: 6, md: 6, lg: 6 }}
           direction="row"
-          sx={{ justifyContent: "flex-start" }}
-          alignItems="flex-start"
+          sx={{ justifyContent: "flex-start", alignItems: "flex-start" }}
+
         >
-          <Grid size={{ xs: 12, sm: 12, md: 12, lg: 12, xl: 12}}>
+          <Grid size={{ xs: 12, sm: 12, md: 12, lg: 12, xl: 12 }}>
             <Stack spacing={1}>
               <InputLabel htmlFor="pageTitle">{t(fieldsName + 'pageTitle')}</InputLabel>
               <OutlinedInput
@@ -185,13 +182,13 @@ function PagesDataGrid() {
               />
             </Stack>
           </Grid>
-          <Grid size={{ xs: 12, sm: 12, md: 12, lg: 12, xl: 12}}>
+          <Grid size={{ xs: 12, sm: 12, md: 12, lg: 12, xl: 12 }}>
             <Stack spacing={1}>
               <InputLabel htmlFor="subject">{t(fieldsName + 'subject')}</InputLabel>
               <OutlinedInput id="subject" type="text" value={row.original.subject} fullWidth disabled />
             </Stack>
           </Grid>
-          <Grid size={{ xs: 12, sm: 12, md: 12, lg: 12, xl: 12}}>
+          <Grid size={{ xs: 12, sm: 12, md: 12, lg: 12, xl: 12 }}>
             <Stack spacing={1}>
               <InputLabel htmlFor="body">{t(fieldsName + 'body')}</InputLabel>
               <div className="MuiOutlinedvid-notchedOutline" dangerouslySetInnerHTML={{ __html: row.original.body }} />
@@ -208,12 +205,7 @@ function PagesDataGrid() {
                 <Chip
                   icon={<EventNote />}
                   title={t(fieldsName + 'registerDate')}
-                  label={row.original.registerDate
-                    ? new Intl.DateTimeFormat(language, {
-                      dateStyle: 'long',
-                      timeStyle: CONFIG.TIME_STYLE as "short" | "full" | "long" | "medium" | undefined,
-                      hour12: false
-                    }).format(moment(row.original.registerDate).toDate()) : ''}
+                  label={DateTimeViewer(language, row.original.registerDate)}
                   variant="filled"
                   size="small"
                   sx={{ borderRadius: '16px' }}
@@ -232,13 +224,7 @@ function PagesDataGrid() {
                     <Chip
                       icon={<EventNote />}
                       title={t(fieldsName + 'editDate')}
-                      label={row.original.registerDate
-                        ? new Intl.DateTimeFormat(language, {
-                          dateStyle: 'long',
-                          timeStyle: CONFIG.TIME_STYLE as "short" | "full" | "long" | "medium" | undefined,
-                          hour12: false
-                        }).format(moment(row.original.editDate).toDate()) : ''}
-                        
+                      label={DateTimeViewer(language, row.original.editDate)}
                       variant="filled"
                       size="small"
                       sx={{ borderRadius: '16px' }}
@@ -248,7 +234,7 @@ function PagesDataGrid() {
               </Grid>
             </Stack>
           </Grid>
-          <Grid size={{ xs: 12, sm: 12, md: 12, lg: 12, xl: 12}}>
+          <Grid size={{ xs: 12, sm: 12, md: 12, lg: 12, xl: 12 }}>
             <Stack spacing={1}>
               <InputLabel htmlFor="tags">{t(fieldsName + 'tags')}</InputLabel>
               <SelectTag defaultValues={row.original.tags || []} disabled={true} />

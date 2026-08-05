@@ -13,13 +13,15 @@ import {
   DialogTitle,
   DialogDescription,
 } from '@(home)/_components/ui/dialog';
-import { useAuthStore, useLocaleStore, RTL_LOCALES } from '@(home)/_lib/store';
-import { useTranslations } from 'next-intl';
+import { useAuthStore } from '@(home)/_lib/store';
+import { useLocale, useTranslations } from 'next-intl';
 import { useRouter } from 'next/navigation';
 import { useSession } from 'next-auth/react';
 import LoginForm from './login-form';
 import ForgotPasswordPopup from './forgot-password-popup';
 import CONFIG from '@root/config';
+import { Locale } from '@root/locales/Language';
+import { resolveLocale } from '@root/utils/resolver';
 
 export default function LoginPopup() {
   const router = useRouter();
@@ -30,8 +32,9 @@ export default function LoginPopup() {
   const setLoginOpen = useAuthStore((s) => s.setLoginOpen);
   const setRegisterOpen = useAuthStore((s) => s.setRegisterOpen);
   const setForgotPasswordOpen = useAuthStore((s) => s.setForgotPasswordOpen);
-  const locale = useLocaleStore((s) => s.locale);
-  const isRTL = RTL_LOCALES.includes(locale);
+
+  const locale = useLocale() as Locale;
+  const isRTL = resolveLocale(locale).direction === 'rtl';
 
   const t = useTranslations('homepage.auth.login');
 

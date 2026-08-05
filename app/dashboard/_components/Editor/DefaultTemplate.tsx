@@ -56,11 +56,12 @@ import { createPortal } from "react-dom";
 import { defaultTheme } from "./theme";
 import "./styles.css";
 import { useTheme } from "@mui/material";
-import { useTranslations } from "next-intl";
 import { useSession } from "next-auth/react";
 import CONFIG from "@root/config";
 import FileStorageService from "@dashboard/(filestorage)/_service/FileStorageService";
-import { RTL_LOCALES } from "@root/app/(home)/_lib/store";
+import { resolveLocale } from "@root/utils/resolver";
+import { Locale } from "@root/locales/Language";
+import { useLocale } from "next-intl";
 
 type TableConfig = {
   rows?: number;
@@ -516,18 +517,19 @@ function EditorContent({
   toggleTheme,
   onReady,
   onHtmlChange,
-  placeholder,
-  locale
-}: {
+  placeholder
+}: Readonly<{
   className?: string;
   isDark: boolean;
   toggleTheme: () => void;
   onReady?: (methods: DefaultTemplateRef) => void;
   onHtmlChange?: (html: string) => void;
   placeholder: string;
-  locale: string;
-}) {
-  const dir = RTL_LOCALES.includes(locale as any) == true ? 'rtl' : 'ltr';
+}>) {
+  const locale = useLocale() as Locale;
+  const language = resolveLocale(locale);
+
+  const dir = language.direction;
   const { commands, hasExtension, activeStates, lexical: editor } = useEditor();
   const [mode, setMode] = useState<EditorMode>("visual");
   const [content, setContent] = useState({ html: "", markdown: "" });
@@ -746,10 +748,9 @@ interface DefaultTemplateProps {
   onReady?: (methods: DefaultTemplateRef) => void;
   onHtmlChange?: (html: string) => void;
   placeholder: string;
-  locale: string;
 }
 
-export const DefaultTemplate = forwardRef<DefaultTemplateRef, DefaultTemplateProps>(({ className, onReady, onHtmlChange, placeholder, locale }, ref) => {
+export const DefaultTemplate = forwardRef<DefaultTemplateRef, DefaultTemplateProps>(({ className, onReady, onHtmlChange, placeholder }, ref) => {
   const theme = useTheme();
   let themeMode = theme.palette.mode;
   const [editorTheme, setEditorTheme] = useState<"light" | "dark">("light");
@@ -792,8 +793,7 @@ export const DefaultTemplate = forwardRef<DefaultTemplateRef, DefaultTemplatePro
           toggleTheme={toggleTheme}
           onReady={handleReady}
           onHtmlChange={onHtmlChange}
-          placeholder={placeholder}
-          locale={locale} />
+          placeholder={placeholder}/>
       </Provider>
     </div>
   );

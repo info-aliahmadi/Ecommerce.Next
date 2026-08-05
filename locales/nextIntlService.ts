@@ -1,7 +1,8 @@
 'use client';
 
-import { resolveLanguage } from '@root/utils/resolver';
+import { resolveLanguageType } from '@root/utils/resolver';
 import CONFIG from '../config';
+import { Locale } from './Language';
 
 class NextIntlService {
 
@@ -9,10 +10,10 @@ class NextIntlService {
    * Set the current language for next-intl (uses NEXT_LOCALE cookie)
    * @param newLocale - The language code to set (e.g., 'en', 'fa', 'ar')
    */
-  setNextIntlLocale(newLocale: string): void {
+  setNextIntlLocale(newLocale: Locale): void {
     if (typeof document !== 'undefined') {
       // Set the cookie that next-intl expects
-      document.cookie = `NEXT_LOCALE=${newLocale}; path=/; max-age=${60 * 60 * 24 * 365}; SameSite=Lax`;
+      document.cookie = `${CONFIG.LANGUAGE_STORAGE_NAME}=${newLocale}; path=/; max-age=${60 * 60 * 24 * 365}; SameSite=Lax`;
     }
   }
 
@@ -20,17 +21,17 @@ class NextIntlService {
    * Get the current next-intl locale from cookie
    * @returns The current locale or default language if not found
    */
-  getNextIntlLocale(): string {
+  getNextIntlLocale(): Locale {
     if (typeof document !== 'undefined') {
       const cookieValue = document.cookie
         .split('; ')
-        .find((row) => row.startsWith('NEXT_LOCALE='))
+        .find((row) => row.startsWith(`${CONFIG.LANGUAGE_STORAGE_NAME}=`))
         ?.split('=')[1];
       
-      return cookieValue || resolveLanguage(CONFIG.DEFAULT_LANGUAGE);
+      return cookieValue as Locale || resolveLanguageType(CONFIG.DEFAULT_LANGUAGE);
     }
     
-    return resolveLanguage(CONFIG.DEFAULT_LANGUAGE);
+    return resolveLanguageType(CONFIG.DEFAULT_LANGUAGE);
   }
 }
 

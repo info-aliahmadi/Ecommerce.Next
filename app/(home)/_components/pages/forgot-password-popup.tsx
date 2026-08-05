@@ -13,10 +13,12 @@ import {
 import { Button } from '@(home)/_components/ui/button';
 import { Input } from '@(home)/_components/ui/input';
 import { Label } from '@(home)/_components/ui/label';
-import { useAuthStore, useLocaleStore, RTL_LOCALES } from '@(home)/_lib/store';
-import { useTranslations } from 'next-intl';
+import { useAuthStore } from '@(home)/_lib/store';
+import { useLocale, useTranslations } from 'next-intl';
 import { toast } from 'sonner';
 import AuthenticationService from '@root/app/dashboard/(auth)/_service/AuthenticationService';
+import { resolveLocale } from '@root/utils/resolver';
+import { Locale } from '@root/locales/Language';
 
 export default function ForgotPasswordPopup() {
   const [email, setEmail] = useState('');
@@ -26,8 +28,9 @@ export default function ForgotPasswordPopup() {
   const isForgotPasswordOpen = useAuthStore((s) => s.isForgotPasswordOpen);
   const setForgotPasswordOpen = useAuthStore((s) => s.setForgotPasswordOpen);
   const setLoginOpen = useAuthStore((s) => s.setLoginOpen);
-  const locale = useLocaleStore((s) => s.locale);
-  const isRTL = RTL_LOCALES.includes(locale);
+
+  const locale = useLocale() as Locale;
+  const isRTL = resolveLocale(locale).direction === 'rtl';
 
   const t = useTranslations('homepage.auth.forgotPassword');
 
