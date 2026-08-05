@@ -2,7 +2,7 @@
 
 import { useCallback, useRef } from "react";
 import { DefaultTemplate, DefaultTemplateRef } from "./DefaultTemplate";
-import CONFIG from "@root/config";
+import { Locale } from "@root/locales/Language";
 
 type EditorProps = {
   id?: string;
@@ -11,7 +11,6 @@ type EditorProps = {
   setFieldValue?: (field: string, value: string) => void;
   onChange?: (value: string) => void;
   placeholder?: string,
-  locale?: string,
   className?: string;
 };
 
@@ -22,9 +21,8 @@ export default function Editor({
   setFieldValue,
   onChange,
   placeholder = "",
-  locale = CONFIG.DEFAULT_LANGUAGE,
   className,
-}: EditorProps) {
+}: Readonly<EditorProps>) {
   const editorRef = useRef<DefaultTemplateRef>(null);
   const initialValueLoadedRef = useRef(false);
   const fieldName = name || id;
@@ -57,7 +55,6 @@ export default function Editor({
       onReady={handleReady}
       onHtmlChange={updateValue}
       placeholder={placeholder}
-      locale={locale}
     />
   );
 }

@@ -1,19 +1,19 @@
 import LanguageType from "@root/app/types/enums/LanguageType";
 import { Language } from "./Language";
 
-const languageList: Language[] = [
+const LanguageList: Language[] = [
   {
     name: 'English',
     key: 'en',
-    rtl: false,
+    direction: "ltr",
     icon: '/locales/en/us.svg',
     description: 'description of the language',
-    languageType: LanguageType.English
+    languageType: LanguageType.English,
   },
   {
     name: 'Farsi',
     key: 'fa',
-    rtl: true,
+    direction: "rtl",
     icon: '/locales/fa/ir.svg',
     description: 'description of the language',
     languageType: LanguageType.Persian
@@ -21,10 +21,10 @@ const languageList: Language[] = [
   {
     name: 'Arabic',
     key: 'ar',
-    rtl: true,
+    direction: "rtl",
     icon: '/locales/ar/sy.svg',
     description: 'description of the language',
     languageType: LanguageType.Arabic
   }
 ];
-export default languageList;
+export default LanguageList;

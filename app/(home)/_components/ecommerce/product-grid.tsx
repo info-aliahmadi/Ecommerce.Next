@@ -2,7 +2,7 @@
 
 import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
 import { ProductCard } from './product-card';
-import { RTL_LOCALES, useUIStore } from '../../_lib/store';
+import { useUIStore } from '../../_lib/store';
 import { Button } from '../ui/button';
 import { Skeleton } from '../ui/skeleton';
 import { Slider } from '../ui/slider';
@@ -24,6 +24,8 @@ import Link from 'next/link';
 import ProductListCard from './product-list';
 import CurrencyViewer, { GetCurrencySymbol } from '@root/utils/CurrencyViewer';
 import CONFIG from '@root/config';
+import { resolveLocale } from '@root/utils/resolver';
+import { Locale } from '@root/locales/Language';
 
 
 const SORT_MAP: Record<SortOption, SortingType> = {
@@ -38,8 +40,8 @@ const SORT_MAP: Record<SortOption, SortingType> = {
 };
 export function ProductGrid() {
   const t = useTranslations();
-  const locale = useLocale();
-  const isRTL = RTL_LOCALES.includes(locale as any);
+  const locale = useLocale() as Locale;
+  const isRTL = resolveLocale(locale).direction === 'rtl';
   const { searchQuery, selectedCategory, sortBy, setSortBy, setSelectedCategory } = useUIStore();
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
   const [showFilters, setShowFilters] = useState(false);

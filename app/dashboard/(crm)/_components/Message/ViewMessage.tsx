@@ -4,21 +4,21 @@ import { ArrowBack, Reply, EventNote, Person } from '@mui/icons-material';
 import AnimateButton from '@dashboard/_components/@extended/AnimateButton';
 
 import MainCard from '@dashboard/_components/MainCard';
-
 import MessageTypeChip from './MessageTypeChip';
 import CONFIG from '@root/config';
 import moment from 'moment';
-import { useTranslations } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
 import { useRouter } from 'next/navigation';
 import FileUpload from '@dashboard/_components/FileUpload/FileUpload';
 import MessageModel from '../../_types/MessageModel';
-import nextIntlService from '@root/locales/nextIntlService';
+import { Locale } from '@root/locales/Language';
+import { DateTimeViewer } from '@root/utils/DateViewer';
 
 export default function ViewMessage({ message, fromPage }: Readonly<{ message: MessageModel, fromPage: 'inbox' | 'outbox' }>) {
   const [fieldsName, buttonName] = ['fields.message.messageInbox.', 'buttons.message.messageInbox.'];
   const router = useRouter();
   const t = useTranslations("");
-  let language = nextIntlService.getNextIntlLocale();
+  let language =  useLocale() as Locale;
   return (
     <>
       {/* <Notify notify={notify} setNotify={setNotify}></Notify> */}
@@ -107,12 +107,7 @@ export default function ViewMessage({ message, fromPage }: Readonly<{ message: M
                         <Chip
                           icon={<EventNote />}
                           title={t(fieldsName + 'registerDate')}
-                          label={message?.registerDate
-                            ? new Intl.DateTimeFormat(language, {
-                              dateStyle: 'long',
-                              timeStyle: CONFIG.TIME_STYLE as "short" | "full" | "long" | "medium" | undefined,
-                              hour12: false
-                            }).format(moment(message?.registerDate).toDate()) : ''}
+                          label={DateTimeViewer(language, message?.registerDate)}
                           variant="filled"
                           size="small"
                           sx={{ borderRadius: '16px' }}

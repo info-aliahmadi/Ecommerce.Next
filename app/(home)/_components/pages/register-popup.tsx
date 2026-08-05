@@ -10,18 +10,21 @@ import {
   DialogTitle,
   DialogDescription,
 } from '@(home)/_components/ui/dialog';
-import { useAuthStore, useLocaleStore, RTL_LOCALES } from '@(home)/_lib/store';
-import { useTranslations } from 'next-intl';
+import { useAuthStore} from '@(home)/_lib/store';
+import { useLocale, useTranslations } from 'next-intl';
 import { useRouter } from 'next/navigation';
 import RegisterForm from './register-form';
+import { Locale } from '@root/locales/Language';
+import { resolveLocale } from '@root/utils/resolver';
 
 export default function RegisterPopup() {
   const router = useRouter();
 
   const isRegisterOpen = useAuthStore((s) => s.isRegisterOpen);
   const setRegisterOpen = useAuthStore((s) => s.setRegisterOpen);
-  const locale = useLocaleStore((s) => s.locale);
-  const isRTL = RTL_LOCALES.includes(locale);
+
+    const locale = useLocale() as Locale;
+    const isRTL = resolveLocale(locale).direction === 'rtl';
 
   const t = useTranslations('homepage.auth.register');
 

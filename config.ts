@@ -34,7 +34,7 @@ const CONFIG = {
   AUTHENTICATION_DEFAULT_STORAGE: 'localStorage', //'cookie',
   AUTHENTICATION_STORAGE_NAME: 'HydraAuthenticationStorage',
   AUTHORIZATION_STORAGE_NAME: 'HydraAuthorizationStorage',
-  LANGUAGE_STORAGE_NAME: 'NEXT_LOCALE',
+  LANGUAGE_STORAGE_NAME: 'locale',
   DEFAULT_LANGUAGE: LanguageType.English,
   DEFAULT_CURRENCY: CurrencyTypes.Dollar,
   DEFAULT_MEASURETYPE: MeasureType.Number,

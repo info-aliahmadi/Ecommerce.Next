@@ -1,18 +1,19 @@
 import { MaterialReactTable, MRT_ColumnFiltersState, MRT_RowData, MRT_SortingState } from 'material-react-table';
 import { useEffect, useState, memo } from 'react';
-import {  Checkbox, IconButton } from '@mui/material';
+import { Checkbox, IconButton } from '@mui/material';
 import RefreshIcon from '@mui/icons-material/Refresh';
 import { DatePicker } from '@mui/x-date-pickers';
 import moment from 'moment-jalaali';
 import { DateTimeViewer, DateViewer } from '@root/utils/DateViewer';
 import { useTheme } from '@mui/material/styles';
-import nextIntlService from '@root/locales/nextIntlService';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { MobileGrid } from './MobileGrid';
 import GridDataBound from '@root/app/types/GridDataBound';
 import { MRT_Column } from '@root/app/types/MRT_Column';
 import { GridDataBoundFilter } from '@root/app/types/GridDataBoundFilter';
-import { RTL_LOCALES } from '@root/app/(home)/_lib/store';
+import { useLocale } from 'next-intl';
+import { Locale } from '@root/locales/Language';
+import { resolveLocale } from '@root/utils/resolver';
 
 // Components
 const dateFilter = ({ header, rangeFilterIndex }: { header: any, rangeFilterIndex: any }) => {
@@ -84,11 +85,10 @@ function MaterialTable({
 
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
 
-  let currentLanguage =  nextIntlService.getNextIntlLocale();
+  let locale = useLocale() as Locale;
+  let language = resolveLocale(locale);
+  const dir = language.direction;
 
-  const dir = RTL_LOCALES.includes(currentLanguage as any) == true ? 'rtl' : 'ltr';
-
-  //let timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
   //data and fetching state
   const [data, setData] = useState<PaginatedList<MRT_RowData>>();
   const [isError, setIsError] = useState(false);
@@ -125,13 +125,13 @@ function MaterialTable({
     dateFields.forEach((element: any) => {
       if (!element.Cell) {
         element.Cell = ({ renderedCellValue }: { renderedCellValue: any }) =>
-          renderedCellValue != null && <span>{DateViewer(currentLanguage, renderedCellValue)}</span>;
+          renderedCellValue != null && <span>{DateViewer(language.languageType, renderedCellValue)}</span>;
       }
     });
     dateTimeFields.forEach((element: any) => {
       if (!element.Cell) {
         element.Cell = ({ renderedCellValue }: { renderedCellValue: any }) =>
-          renderedCellValue != null && <span>{DateTimeViewer(currentLanguage, renderedCellValue)}</span>;
+          renderedCellValue != null && <span>{DateTimeViewer(language.languageType, renderedCellValue)}</span>;
       }
     });
     // Add Filter Mode Options
@@ -241,18 +241,18 @@ function MaterialTable({
     const filterMap = new Map(
       columnFilters.map((item) => [item.id, item])
     );
-  
+
     const columnMap = new Map(
       columns.map((col) => [col.accessorKey, col])
     );
-  
+
     for (const [fieldName, fieldValue] of Object.entries(columnFilterF)) {
       const element = filterMap.get(fieldName);
-  
+
       if (!element) continue;
-  
+
       element.operation = fieldValue;
-  
+
       const column = columnMap.get(fieldName);
       element.type = column?.type;
     }
@@ -300,16 +300,16 @@ function MaterialTable({
       fetchData();
     }
 
-  }, [columnFilters, globalFilter, pagination.pageIndex, pagination.pageSize, sorting, refetch, dataSet,internalRefetch]);
+  }, [columnFilters, globalFilter, pagination.pageIndex, pagination.pageSize, sorting, refetch, dataSet, internalRefetch]);
 
   const supportedLanguage = ['de', 'en', 'es', 'fa', 'ar', 'fr', 'it', 'nl', 'pt'];
 
   useEffect(() => {
     setFilterMode();
     setCells();
-    if (supportedLanguage.find((x) => x == currentLanguage)) {
+    if (supportedLanguage.find((x) => x == language.key)) {
       let loadedLanguage;
-      switch (currentLanguage) {
+      switch (language.key) {
         case 'en':
           loadedLanguage = require('material-react-table/locales/en');
           break;
@@ -319,29 +319,29 @@ function MaterialTable({
         case 'fa':
           loadedLanguage = require('material-react-table/locales/fa');
           break;
-        case 'de':
-          loadedLanguage = require('material-react-table/locales/de');
-          break;
-        case 'es':
-          loadedLanguage = require('material-react-table/locales/es');
-          break;
-        case 'it':
-          loadedLanguage = require('material-react-table/locales/it');
-          break;
-        case 'fr':
-          loadedLanguage = require('material-react-table/locales/fr');
-          break;
-        case 'nl':
-          loadedLanguage = require('material-react-table/locales/nl');
-          break;
-        case 'pt':
-          loadedLanguage = require('material-react-table/locales/pt');
-          break;
+        // case 'de':
+        //   loadedLanguage = require('material-react-table/locales/de');
+        //   break;
+        // case 'es':
+        //   loadedLanguage = require('material-react-table/locales/es');
+        //   break;
+        // case 'it':
+        //   loadedLanguage = require('material-react-table/locales/it');
+        //   break;
+        // case 'fr':
+        //   loadedLanguage = require('material-react-table/locales/fr');
+        //   break;
+        // case 'nl':
+        //   loadedLanguage = require('material-react-table/locales/nl');
+        //   break;
+        // case 'pt':
+        //   loadedLanguage = require('material-react-table/locales/pt');
+        //   break;
       }
-      let parentName = 'MRT_Localization_' + currentLanguage.toUpperCase();
+      let parentName = 'MRT_Localization_' + language.key.toUpperCase();
       setTableLocale(loadedLanguage[parentName]);
     } else {
-      let path = 'locales/' + currentLanguage + '/table.json';
+      let path = 'locales/' + language.key + '/table.json';
       fetch(path)
         .then(function (res) {
           return res.json();
@@ -350,7 +350,7 @@ function MaterialTable({
           setTableLocale(data);
         });
     }
-  }, [currentLanguage]);
+  }, [language.key]);
 
   const handleRefresh = () => {
     //setIsRefetching(true);

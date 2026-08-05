@@ -10,24 +10,29 @@ import * as Yup from 'yup';
 import { Formik } from 'formik';
 
 // assets
-import languageList from '@root/locales/languageList';
+import LanguageList from '@root/locales/LanguageList';
 import LocalizationService from '@root/locales/LocalizationService';
 import Notify from '@dashboard/_components/@extended/Notify';
 import { useSession } from 'next-auth/react';
 import CONFIG from '@root/config';
 import nextIntlService from '@root/locales/nextIntlService';
-import { Language } from '@root/locales/Language';
+import { Language, Locale } from '@root/locales/Language';
+import { resolveLanguage, resolveLocale } from '@root/utils/resolver';
+import { useLocale } from 'next-intl';
 
 // ============================|| FIREBASE - REGISTER ||============================ //
 
 const ChangeLanguageForm = () => {
-  const [currentLanguage, setCurrentLanguage] = useState<Language>();
+  const defaultLanguage = resolveLocale(useLocale() as Locale);
+  const [currentLanguage, setCurrentLanguage] = useState<Language>(defaultLanguage);
 
   useEffect(() => {
     if (typeof document !== 'undefined') {
-      let locale = session?.user?.defaultLanguage ?? CONFIG.DEFAULT_LANGUAGE;
-      let cl = languageList.find((l) => l.languageType === locale);
-      setCurrentLanguage(cl);
+      if (session?.user?.defaultLanguage != defaultLanguage.languageType) {
+        let languageType = session?.user?.defaultLanguage;
+        let cl = resolveLanguage(languageType ?? CONFIG.DEFAULT_LANGUAGE);
+        setCurrentLanguage(cl);
+      }
     }
   }, [])
 
@@ -39,7 +44,8 @@ const ChangeLanguageForm = () => {
 
   const changeLanguage = async (lng: Language) => {
     let locService = new LocalizationService(accessToken ?? '');
-    locService.setCurrentLanguage(lng);
+
+    locService.setCurrentLanguage(lng?.languageType ?? CONFIG.DEFAULT_LANGUAGE);
     // Set both cookies for compatibility
     nextIntlService.setNextIntlLocale(lng.key);
     if (session) {
@@ -83,7 +89,7 @@ const ChangeLanguageForm = () => {
                         label="Default Language"
                         onChange={handleChange}
                       >
-                        {languageList.map((language) => (
+                        {LanguageList.map((language) => (
                           <MenuItem key={'page' + language.key} value={language.key} onClick={() => changeLanguage(language)}>
                             <img src={language.icon} alt={language.name} style={{ width: '20px', margin: '0px 5px' }} /> {language.name}
                           </MenuItem>

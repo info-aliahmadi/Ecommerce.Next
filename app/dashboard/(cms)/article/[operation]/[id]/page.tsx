@@ -11,7 +11,7 @@ import { Formik, FormikErrors } from 'formik';
 import AnimateButton from '@dashboard/_components/@extended/AnimateButton';
 
 // assets
-import { useTranslations } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
 import Notify from '@dashboard/_components/@extended/Notify';
 import CONFIG from '@root/config';
 import MainCard from '@dashboard/_components/MainCard';
@@ -27,7 +27,8 @@ import DateTimeInput from '@dashboard/_components/DateTime/DateTimeInput';
 import Editor from '@root/app/dashboard/_components/Editor/Editor';
 import { useSession } from 'next-auth/react';
 import ArticleModel from '../../../_types/Article/ArticleMode';
-import nextIntlService from '@root/locales/nextIntlService';
+import { Locale } from '@root/locales/Language';
+import { DateTimeViewer } from '@root/utils/DateViewer';
 
 
 
@@ -38,7 +39,7 @@ export default function AddOrEditArticle({ params }: { readonly params: Promise<
   const { data: session } = useSession();
   const jwt = session?.accessToken;
 
-  let language = nextIntlService.getNextIntlLocale();
+  let language = useLocale() as Locale;
 
   let articleService = new ArticlesService(jwt ?? '');
   const [fieldsName, validation, buttonName] = ['fields.article.', 'validation.article.', 'buttons.article.'];
@@ -187,12 +188,7 @@ export default function AddOrEditArticle({ params }: { readonly params: Promise<
                                 <Chip
                                   icon={<EventNote />}
                                   title={t(fieldsName + 'registerDate')}
-                                  label={values.registerDate
-                                    ? new Intl.DateTimeFormat(language, {
-                                      dateStyle: 'long',
-                                      timeStyle: CONFIG.TIME_STYLE as "short" | "full" | "long" | "medium" | undefined,
-                                      hour12: false
-                                    }).format(moment(values.registerDate).toDate()) : ''}
+                                  label={DateTimeViewer(language, values.registerDate)}
                                   variant="filled"
                                   size="small"
                                   sx={{ borderRadius: '16px' }}
@@ -211,12 +207,7 @@ export default function AddOrEditArticle({ params }: { readonly params: Promise<
                                     <Chip
                                       icon={<EventNote />}
                                       title={t(fieldsName + 'editDate')}
-                                      label={values.editDate
-                                        ? new Intl.DateTimeFormat(language, {
-                                          dateStyle: 'long',
-                                          timeStyle: CONFIG.TIME_STYLE as "short" | "full" | "long" | "medium" | undefined,
-                                          hour12: false
-                                        }).format(moment(values.editDate).toDate()) : ''}
+                                      label={DateTimeViewer(language, values.editDate)}
                                       variant="filled"
                                       size="small"
                                       sx={{ borderRadius: '16px' }}

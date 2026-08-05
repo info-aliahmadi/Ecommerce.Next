@@ -15,12 +15,11 @@ import {
 // project import
 import MainCard from '@dashboard/_components/MainCard';
 import { ReactNode, useCallback, useMemo, useState } from 'react';
-import { useTranslations } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
 import UsersService from '@dashboard/(auth)/_service/UsersService';
 import { AccountCircle, Send, PersonAdd } from '@mui/icons-material';
 import CONFIG from '@root/config';
 import { Stack } from '@mui/system';
-import moment from 'moment';
 import MaterialTable from '@dashboard/_components/MaterialTable/MaterialTable';
 import TableCard from '@dashboard/_components/TableCard';
 import { useRouter } from 'next/navigation';
@@ -28,11 +27,10 @@ import { useSession } from 'next-auth/react';
 import { MRT_Cell, MRT_Row, MRT_RowData, MRT_TableInstance } from 'material-react-table';
 import { UserModel } from '../../_types/User/UserModel';
 
-
-import nextIntlService from '@root/locales/nextIntlService';
 import { MRT_Column } from '@root/app/types/MRT_Column';
 import GridDataBound from '@root/app/types/GridDataBound';
 import { DateTimeViewer } from '@root/utils/DateViewer';
+import { Locale } from '@root/locales/Language';
 // ===============================|| COLOR BOX ||=============================== //
 
 const UserDetail = ({ row, t, fieldsName, language }: { row: MRT_Row<UserModel>, t: any, fieldsName: string, language: string }) => {
@@ -182,7 +180,7 @@ const UserDetail = ({ row, t, fieldsName, language }: { row: MRT_Row<UserModel>,
 function UsersDataGrid() {
   const t = useTranslations("");
 
-  let language = nextIntlService.getNextIntlLocale();
+  let language = useLocale() as Locale;
 
   const { data: session } = useSession();
 

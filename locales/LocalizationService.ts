@@ -1,9 +1,7 @@
 'use client';
 import Result from '@root/app/types/Result';
 import CONFIG from '@root/config';
-import nextIntlService from '@root/locales/nextIntlService';
 import Fetch from '@root/utils/Fetch';
-import { Language } from './Language';
 import LanguageType from '@root/app/types/enums/LanguageType';
 
 
@@ -18,25 +16,14 @@ export default class LocalizationService {
       if (response) {
         return response;
       } else {
-        return this.getDefaultLanguage();
+        return CONFIG.DEFAULT_LANGUAGE;
       }
     });
   };
 
-  setCurrentLanguage = async (lang: Language): Promise<Result<null>> => {
-    const params = new URLSearchParams({ defaultLanguage: lang.languageType.toString() });
+  setCurrentLanguage = async (languageType: LanguageType): Promise<Result<null>> => {
+    const params = new URLSearchParams({ defaultLanguage: languageType.toString() });
     return Fetch.Get<Result<null>>(CONFIG.API_BASEPATH + `/auth/SetDefaultLanguage?${params.toString()}`, this.config);
-  };
-
-  getSavedLanguage = () => {
-    let currentLang = nextIntlService.getNextIntlLocale();
-    if (currentLang == undefined || currentLang == null) {
-      return CONFIG.DEFAULT_LANGUAGE;
-    }
-    return currentLang
-  };
-  getDefaultLanguage = async () => {
-    return CONFIG.DEFAULT_LANGUAGE;
   };
 
 }

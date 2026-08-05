@@ -16,7 +16,7 @@ import {
 import { Footer } from '../_components/ecommerce/footer';
 import { BackToTop } from '../_components/ecommerce/back-to-top';
 import { MobileBottomNav } from '../_components/ecommerce/mobile-bottom-nav';
-import { RTL_LOCALES, useCartStore, useCheckoutPersistStore } from '../_lib/store';
+import { useCartStore, useCheckoutPersistStore } from '../_lib/store';
 import { useClearCart, useUpdateCartQuantity, useRemoveFromCart } from '../_hooks/use-cart-queries';
 import { Card, CardContent } from '../_components/ui/card';
 import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from '../_components/ui/accordion';
@@ -44,6 +44,8 @@ import ShippingMethod from '@root/app/types/enums/ShippingMethod';
 import MyOrderService from '../_services/MyOrderService';
 import CreateOrderRequest, { CreateOrderItemRequest } from '../_types/Order/CreateOrderRequest';
 import PaymentMethod from '@root/app/types/enums/PaymentMethod';
+import { Locale } from '@root/locales/Language';
+import { resolveLocale } from '@root/utils/resolver';
 
 /* ──────────────────────────────────────────────────────────────── */
 
@@ -59,8 +61,8 @@ function CheckoutPageInner() {
   const { data: session, status } = useSession();
 
   // best way to get the current language is to use next-intl's useLocale hook
-  const locale = useLocale();
-  const isRtl = RTL_LOCALES.includes(locale as any);
+  const locale = useLocale() as Locale;
+  const isRTL = resolveLocale(locale).direction === 'rtl';
   // Redirect to login if not authenticated
   useEffect(() => {
     if (status === 'unauthenticated') {
@@ -588,9 +590,9 @@ function CheckoutPageInner() {
               >
                 {t('breadcrumbHome')}
               </Link>
-              {isRtl ? <ChevronLeft size={14} className="text-ecommerce-text-muted" /> : <ChevronRight size={14} className="text-ecommerce-text-muted" />}
+              {isRTL ? <ChevronLeft size={14} className="text-ecommerce-text-muted" /> : <ChevronRight size={14} className="text-ecommerce-text-muted" />}
               <span className="text-ecommerce-text-muted">{t('breadcrumbCart')}</span>
-              {isRtl ? <ChevronLeft size={14} className="text-ecommerce-text-muted" /> : <ChevronRight size={14} className="text-ecommerce-text-muted" />}
+              {isRTL ? <ChevronLeft size={14} className="text-ecommerce-text-muted" /> : <ChevronRight size={14} className="text-ecommerce-text-muted" />}
               <span className="font-medium text-ecommerce-text-primary">{t('breadcrumbCheckout')}</span>
             </nav>
           </div>
@@ -603,7 +605,7 @@ function CheckoutPageInner() {
               {currentStep < 4 && (
                 <Link href="/products" className="hidden sm:block">
                   <button className="w-9 h-9 rounded-lg bg-ecommerce-surface-hover flex items-center justify-center hover:bg-ecommerce-border transition-colors">
-                    {isRtl ? <ArrowRight size={16} className="text-ecommerce-text-secondary" /> : <ArrowLeft size={16} className="text-ecommerce-text-secondary" />}
+                    {isRTL ? <ArrowRight size={16} className="text-ecommerce-text-secondary" /> : <ArrowLeft size={16} className="text-ecommerce-text-secondary" />}
                   </button>
                 </Link>
               )}
@@ -674,7 +676,7 @@ function CheckoutPageInner() {
                         >
                           {currentStep === 1 && (
                             <ShippingStep
-                              isRTL={isRtl}
+                              isRTL={isRTL}
                               shipping={shipping}
                               errors={errors}
                               savedAddresses={savedAddresses}
@@ -689,7 +691,7 @@ function CheckoutPageInner() {
                           )}
                           {currentStep === 2 && (
                             <PaymentStep
-                              isRTL={isRtl}
+                              isRTL={isRTL}
                               payment={payment}
                               errors={errors}
                               onSetPaymentField={setPaymentField}
@@ -699,7 +701,7 @@ function CheckoutPageInner() {
                           )}
                           {currentStep === 3 && (
                             <ReviewStep
-                              isRTL={isRtl}
+                              isRTL={isRTL}
                               items={items}
                               shipping={shipping}
                               payment={payment}

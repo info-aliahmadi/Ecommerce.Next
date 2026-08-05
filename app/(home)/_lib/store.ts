@@ -1,4 +1,3 @@
-import CONFIG from '@root/config';
 import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
 import { CheckoutStep } from '../checkout/_components/types';
@@ -9,8 +8,6 @@ import WishlistItem from '../_types/Order/WishlistItem';
 import CompareItem from '../_types/Product/CompareItem';
 import StockAlertType from '../_types/StockAlertType';
 import { canAddToCart } from '../_types/Product/InventoryDisplayModel';
-import { resolveLanguage } from '@root/utils/resolver';
-import LanguageType from '@root/app/types/enums/LanguageType';
 
 
 
@@ -368,35 +365,22 @@ export const useCheckoutPersistStore = create<CheckoutPersistState>()(
 );
 
 // ── Locale Store ──────────────────────────────────────────────
-export type Locale = 'en' | 'fa' | 'ar';
+// export type Locale = 'en' | 'fa' | 'ar';
 
-export const LOCALES = ['en', 'ar', 'fa'] as const;
+// export const LOCALES = ['en', 'ar', 'fa'] as const;
+// interface LocaleStore {
+//   locale: Locale;
+//   setLocale: (locale: Locale) => void;
+// }
 
-export const DEFAULT_LOCALE = resolveLanguage(CONFIG.DEFAULT_LANGUAGE);
-
-export const PERSIAN_CALENDAR: Locale[] = ['fa'];
-
-export const RTL_LOCALES: Locale[] = ['fa', 'ar'];
-
-export const LOCALE_CONFIG: Record<Locale, { name: string; dir: 'ltr' | 'rtl'; nativeName: string; type: LanguageType }> = {
-  en: { name: 'English', dir: 'ltr', nativeName: 'English' , type: LanguageType.English },
-  fa: { name: 'Farsi', dir: 'rtl', nativeName: 'فارسی' , type: LanguageType.Persian },
-  ar: { name: 'Arabic', dir: 'rtl', nativeName: 'العربية' , type: LanguageType.Arabic },
-};
-
-interface LocaleStore {
-  locale: Locale;
-  setLocale: (locale: Locale) => void;
-}
-
-export const useLocaleStore = create<LocaleStore>()(
-  persist(
-    (set) => ({
-      locale: 'en' as Locale,
-      setLocale: (locale) => set({ locale }),
-    }),
-    {
-      name: 'ecommerce-locale',
-    }
-  )
-);
+// export const useLocaleStore = create<LocaleStore>()(
+//   persist(
+//     (set) => ({
+//       locale: 'en' as Locale,
+//       setLocale: (locale) => set({ locale }),
+//     }),
+//     {
+//       name: 'ecommerce-locale',
+//     }
+//   )
+// );

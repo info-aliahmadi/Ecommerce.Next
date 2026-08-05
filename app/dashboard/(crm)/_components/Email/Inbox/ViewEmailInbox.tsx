@@ -2,22 +2,21 @@ import { Button, Chip, Grid, InputLabel, Link, OutlinedInput, Stack, Tooltip, Ty
 import { ArrowBack, Reply, EventNote, Person } from '@mui/icons-material';
 
 import AnimateButton from '@dashboard/_components/@extended/AnimateButton';
-
 import MainCard from '@dashboard/_components/MainCard';
-
 import CONFIG from '@root/config';
 import moment from 'moment';
-import { useTranslations } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
 import { useRouter } from 'next/navigation';
 import FileUpload from '@dashboard/_components/FileUpload/FileUpload';
 import EmailInboxModel from '../../../_types/EmailInboxModel';
-import nextIntlService from '@root/locales/nextIntlService';
+import { Locale } from '@root/locales/Language';
+import { DateTimeViewer } from '@root/utils/DateViewer';
 
 export default function ViewEmailInbox({ emailInbox }: Readonly<{ emailInbox: EmailInboxModel }>) {
   const [fieldsName, buttonName] = ['fields.email.emailInbox.', 'buttons.email.emailInbox.'];
   const router = useRouter();
   const t = useTranslations("");
-  let language = nextIntlService.getNextIntlLocale();
+  let language = useLocale() as Locale;
   return (
     <Grid container direction="row" sx={{ justifyContent: "center", alignItems: "flex-start" }} key={emailInbox.id}>
       <Grid container size={{ xs: 12, sm: 12, md: 12, lg: 12, xl: 12 }} spacing={3} >
@@ -32,7 +31,7 @@ export default function ViewEmailInbox({ emailInbox }: Readonly<{ emailInbox: Em
                   <Stack spacing={1}>
                     <InputLabel htmlFor="fromAddress">{t(fieldsName + 'fromAddress')}</InputLabel>
                     {emailInbox?.fromAddress.map((fromAddress, index) => {
-                      return <Link key={index} display="block">
+                      return <Link key={index} sx={{ display: "block" }}>
                         <Tooltip title={t('tooltips.reply')}>
                           <Chip
                             onClick={() => {
@@ -71,12 +70,7 @@ export default function ViewEmailInbox({ emailInbox }: Readonly<{ emailInbox: Em
                         <Chip
                           icon={<EventNote />}
                           title={t(fieldsName + 'registerDate')}
-                          label={emailInbox?.registerDate
-                            ? new Intl.DateTimeFormat(language, {
-                              dateStyle: 'long',
-                              timeStyle: CONFIG.TIME_STYLE as "short" | "full" | "long" | "medium" | undefined,
-                              hour12: false
-                            }).format(moment(emailInbox?.registerDate).toDate()) : ''}
+                          label={DateTimeViewer(language, emailInbox?.registerDate)}
                           variant="filled"
                           size="small"
                           sx={{ borderRadius: '16px' }}
@@ -87,12 +81,7 @@ export default function ViewEmailInbox({ emailInbox }: Readonly<{ emailInbox: Em
                         <Chip
                           icon={<EventNote />}
                           title={t(fieldsName + 'date')}
-                          label={emailInbox?.date
-                            ? new Intl.DateTimeFormat(language, {
-                              dateStyle: 'long',
-                              timeStyle: CONFIG.TIME_STYLE as "short" | "full" | "long" | "medium" | undefined,
-                              hour12: false
-                            }).format(moment(emailInbox?.date).toDate()) : ''}
+                          label={DateTimeViewer(language, emailInbox?.date)}
                           variant="filled"
                           size="small"
                           sx={{ borderRadius: '16px' }}
@@ -103,7 +92,7 @@ export default function ViewEmailInbox({ emailInbox }: Readonly<{ emailInbox: Em
                   </Stack>
                 </Grid>
               </Grid>
-              <Grid container spacing={3} size={12} xl={4} sx={{ justifyContent: "flex-start", alignItems: "flex-start" }}>
+              <Grid container spacing={3} size={{ xl: 4, sm: 12 }} sx={{ justifyContent: "flex-start", alignItems: "flex-start" }}>
                 <Grid size={12}>
                   <Stack spacing={1}>
                     <InputLabel htmlFor="attachments">{t(fieldsName + 'attachments')}</InputLabel>

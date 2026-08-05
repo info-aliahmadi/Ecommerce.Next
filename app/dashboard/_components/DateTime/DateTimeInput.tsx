@@ -1,6 +1,7 @@
 import { DateTimePicker, DatePicker, PickersActionBarAction } from '@mui/x-date-pickers';
 import moment from 'moment-jalaali';
-import nextIntlService from '@root/locales/nextIntlService';
+import { useLocale } from 'next-intl';
+import { Locale } from '@root/locales/Language';
 
 interface DateTimeInputProps {
   name: string;
@@ -20,7 +21,7 @@ export default function DateTimeInput({
   showTime = true,
 }: Readonly<DateTimeInputProps>) {
 
-  const currentLanguage = nextIntlService.getNextIntlLocale();
+  const currentLanguage = useLocale() as Locale;
 
   return showTime ? (
     <DateTimePicker

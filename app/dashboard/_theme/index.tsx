@@ -3,7 +3,7 @@ import { useLayoutEffect, useMemo, useState } from 'react';
 
 // material-ui
 import { CssBaseline, StyledEngineProvider, ThemeOptions } from '@mui/material';
-import { createTheme, Shadows, ThemeProvider } from '@mui/material/styles';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
 
 // project import
 import Palette from './palette';
@@ -26,9 +26,10 @@ import { useSession } from 'next-auth/react';
 import Loader from '@dashboard/_components/Loader';
 import { Options } from '@emotion/cache';
 import nextIntlService from '@root/locales/nextIntlService';
-import { PERSIAN_CALENDAR, RTL_LOCALES } from '@root/app/(home)/_lib/store';
-import ThemeType from '@root/app/types/enums/ThemeType';
-import { resolveLanguage, resolveThemeMode } from '@root/utils/resolver';
+import { resolveLanguage, resolveLanguageType, resolveLocale, resolveThemeMode } from '@root/utils/resolver';
+import LanguageType from '@root/app/types/enums/LanguageType';
+import { Locale } from '@root/locales/Language';
+import { useLocale } from 'next-intl';
 
 // ==============================|| DEFAULT THEME - MAIN  ||============================== //
 
@@ -42,26 +43,30 @@ export default function DashboardThemeCustomization({ children }: { children: an
     session?.user?.defaultTheme ?? CONFIG.DEFAULT_THEME
   );
 
-  const [direction, setDirection] = useState<'ltr' | 'rtl'>('ltr'); // Default to LTR
-  const [isPersianCalendar, setIsPersianCalendar] = useState<boolean>(false);
-  const initFonts = direction === 'rtl' ? CONFIG.RTL_FONTS_EDITOR : CONFIG.LTR_FONTS_EDITOR;
-  const [fonts, setFonts] = useState(initFonts);
+  const locale = useLocale() as Locale | undefined;
+  const language = resolveLanguage(CONFIG.DEFAULT_LANGUAGE);
+  const defaultLanguage = resolveLocale(locale ?? language.key);
+  const defaultDirection = defaultLanguage.direction;
 
-  // useLayoutEffect(() => {
-  //   setDirection(dir)
-  //   document.dir = dir;
-  //   //i18n.changeLanguage(session?.user?.defaultLanguage);
-  // }, [dir, session]);
+  const [direction, setDirection] = useState<'ltr' | 'rtl'>(defaultDirection); // Default to LTR
+  const [isPersianCalendar] = useState<boolean>(defaultLanguage.languageType === LanguageType.Persian);
+
+  const initFonts = defaultDirection === 'rtl' ? CONFIG.RTL_FONTS_EDITOR : CONFIG.LTR_FONTS_EDITOR;
+  const [fonts, setFonts] = useState(initFonts);
 
   useLayoutEffect(() => {
     // Only run on client side
     if (typeof window === 'undefined') return;
 
-    let locale: string = resolveLanguage(session?.user?.defaultLanguage ?? CONFIG.DEFAULT_LANGUAGE);
-    nextIntlService.setNextIntlLocale(locale);
-    const dir = RTL_LOCALES.includes(locale as any) == true ? 'rtl' : 'ltr';
-    setDirection(dir)
-    setIsPersianCalendar(PERSIAN_CALENDAR.includes(locale as any) == true ? true : false);
+    if (session?.user?.defaultLanguage) {
+      const languageServer = resolveLanguage(session.user.defaultLanguage);
+      if (locale) {
+        if (locale !== languageServer.key) {
+          nextIntlService.setNextIntlLocale(languageServer.key);
+          window.location.reload();
+        }
+      }
+    }
 
   }, [session]);
 

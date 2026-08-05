@@ -33,7 +33,7 @@ export function PaymentStep({
   onSetPaymentField,
   onBack,
   onContinue,
-}: PaymentStepProps) {
+}: Readonly<PaymentStepProps>) {
   const t = useTranslations('homepage.paymentPage');
 
   const paymentMethods = CONFIG.DEFAULT_PAYMENT_METHODS.map((method) => ({

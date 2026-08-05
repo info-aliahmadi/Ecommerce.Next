@@ -4,18 +4,18 @@ import Accordion from '@mui/material/Accordion';
 import AccordionSummary from '@mui/material/AccordionSummary';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import { useTranslations } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
 import CONFIG from '@root/config';
 import ProductModel from '../../_types/Product/ProductModel';
 import { MRT_Row } from 'material-react-table';
-import nextIntlService from "@root/locales/nextIntlService";
 import { DateTimeViewer } from "@root/utils/DateViewer";
 import DeliveryDateType from '@root/app/types/enums/DeliveryDateType';
+import { Locale } from "@root/locales/Language";
 
 export default function ProductDetail({ row }: { row: MRT_Row<ProductModel> }) {
     const t = useTranslations("");
     const fieldsName = 'fields.product.';
-    const language = nextIntlService.getNextIntlLocale();
+    const language = useLocale() as Locale;
 
     const deliveryDateLabels: Record<number, string> = {
         [DeliveryDateType.OneDay]: t("fields.order.deliveryDate.OneDay"),
