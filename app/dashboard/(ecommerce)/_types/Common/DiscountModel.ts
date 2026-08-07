@@ -23,7 +23,7 @@ export default interface DiscountModel {
   /**
    * Administrative comments about the discount.
    */
-  adminComment: string;
+  adminComment?: string;
 
   /**
    * The type of discount.
@@ -38,12 +38,12 @@ export default interface DiscountModel {
   /**
    * The discount percentage.
    */
-  discountPercentage: number;
+  discountPercentage?: number;
 
   /**
    * The discount amount.
    */
-  discountAmount: number;
+  discountAmount?: number;
 
   /**
    * The maximum discount amount (nullable).
@@ -73,17 +73,17 @@ export default interface DiscountModel {
   /**
    * The number of times the discount can be used.
    */
-  limitationTimes: number;
+  limitationTimes?: number;
 
   /**
    * The maximum discounted quantity (nullable).
    */
-  maximumDiscountedQuantity: number | null;
+  maximumDiscountedQuantity?: number;
 
   /**
    * Indicates whether the discount is active.
    */
-  orderTotal: number;
+  orderTotal?: number;
 
   /**
    * Indicates whether the discount is active.

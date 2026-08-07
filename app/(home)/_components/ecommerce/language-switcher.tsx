@@ -31,7 +31,6 @@ export function LanguageSwitcher() {
   };
 
   const handleSelect = async (loc: Language) => {
-    debugger
     nextIntlService.setNextIntlLocale(loc.key);
     setLocale(loc.key);
 

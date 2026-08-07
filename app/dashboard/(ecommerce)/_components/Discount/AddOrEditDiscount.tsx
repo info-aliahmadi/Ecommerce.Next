@@ -185,7 +185,7 @@ const AddOrEditDiscount = ({ discountId, isNew, open, setOpen, refetch }: { disc
             limitationTimes: discount?.limitationTimes,
             maximumDiscountedQuantity: discount?.maximumDiscountedQuantity,
             isActive: discount?.isActive ?? true,
-            orderTotal: discount?.orderTotal ?? 0,
+            orderTotal: discount?.orderTotal,
             productIds: discount?.productIds || [],
             categoryIds: discount?.categoryIds || [],
             manufacturerIds: discount?.manufacturerIds || []
@@ -194,7 +194,7 @@ const AddOrEditDiscount = ({ discountId, isNew, open, setOpen, refetch }: { disc
           validationSchema={Yup.object().shape({
             name: Yup.string().max(70).required(t(validation + 'requiredName')),
             couponCode: Yup.string().max(100, t(validation + 'maxLengthCouponCode')).required(t(validation + 'requiredCouponCode')),
-            adminComment: Yup.string().max(300, t(validation + 'maxLengthAdminComment')),
+            adminComment: Yup.string().nullable().max(300, t(validation + 'maxLengthAdminComment')),
             maximumDiscountAmount: Yup.number().nullable(),
             maximumDiscountedQuantity: Yup.number().nullable()
           })}

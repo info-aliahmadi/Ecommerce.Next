@@ -239,14 +239,14 @@ export function ReviewStep({
           <span className="text-ecommerce-text-muted">{t('subtotal')}</span>
           <span className="font-medium text-ecommerce-text-primary">{CurrencyViewer(subtotal, CONFIG.DEFAULT_CURRENCY)}</span>
         </div>
-        {savings > 0 && (
+        {/* {savings > 0 && (
           <div className="flex justify-between">
             <span className="text-ecommerce-emerald">{t('youSave')}</span>
             <span className="font-medium text-ecommerce-emerald">
               {CurrencyViewer(savings, CONFIG.DEFAULT_CURRENCY)}
             </span>
           </div>
-        )}
+        )} */}
         <div className="flex justify-between">
           <span className="text-ecommerce-text-muted">{t('shipping')}</span>
           <span className="font-medium text-ecommerce-text-primary">

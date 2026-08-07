@@ -192,7 +192,6 @@ export function Header() {
     if (e.key === 'Escape') {
       setIsSearchFocused(false);
     } else if (e.key === 'Enter') {
-       debugger;
       const query = searchQuery.trim();
       if (query) {
         setIsSearchFocused(false);

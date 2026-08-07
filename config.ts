@@ -46,6 +46,7 @@ const CONFIG = {
   RTL_FONTS_EDITOR: '"Iran Sans", Arial, tohoma',
   POPULAR_TERMS: ['Headphones', 'T-Shirt', 'Lamp', 'Yoga', 'Perfume', 'Keyboard'],
   PRODUCTS_PER_PAGE: 10,
+  SHIPPING_COST: 50, // fixed shipping price for orders below free shipping threshold
   FREE_SHIPPING_THRESHOLD: 500, // total amount of product in cart for free shipping
   CONTACT_PHONE_NUMBER: '+989123456789',
   CONTACT_EMAIL: 'support@hydrashop.com',
