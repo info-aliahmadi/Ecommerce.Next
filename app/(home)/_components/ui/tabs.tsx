@@ -4,15 +4,22 @@ import * as React from "react"
 import * as TabsPrimitive from "@radix-ui/react-tabs"
 
 import { cn } from "../../_lib/utils"
+import { useLocale } from "next-intl";
+import { resolveLocale } from "@root/utils/resolver";
+import { Locale } from "@root/locales/Language";
 
 function Tabs({
   className,
   ...props
 }: React.ComponentProps<typeof TabsPrimitive.Root>) {
+
+  const locale = useLocale() as Locale;
+  const direction = resolveLocale(locale).direction;
   return (
     <TabsPrimitive.Root
       data-slot="tabs"
       className={cn("flex flex-col gap-2", className)}
+      style={{direction : direction}}
       {...props}
     />
   )
