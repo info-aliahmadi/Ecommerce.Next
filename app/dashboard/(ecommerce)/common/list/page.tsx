@@ -52,23 +52,6 @@ function CommonList() {
               <StateProvinceDataGrid />
             </AccordionDetails>
           </Accordion>
-          <Accordion expanded={expanded === 'discount'} onChange={handleChange('discount')}>
-            <AccordionSummary
-              expandIcon={<ExpandMoreIcon />}
-              aria-controls="discountbh-content"
-              id="discountbh-header"
-            >
-              <Typography component="span" sx={{ width: '33%', flexShrink: 0 }}>
-                {t("pages.discount")}
-              </Typography>
-              <Typography component="span" sx={{ color: 'text.secondary' }}>
-                {t("pages.discount")}
-              </Typography>
-            </AccordionSummary>
-            <AccordionDetails>
-              <DiscountDataGrid />
-            </AccordionDetails>
-          </Accordion>
           <Accordion expanded={expanded === 'taxCategory'} onChange={handleChange('taxCategory')}>
             <AccordionSummary
               expandIcon={<ExpandMoreIcon />}

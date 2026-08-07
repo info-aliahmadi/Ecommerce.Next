@@ -8,7 +8,7 @@ interface MultiSelectProps {
   readonly defaultValues: any[];
   readonly id: string;
   readonly name: string;
-  readonly label: string;
+  readonly label?: string;
   readonly optionLabel: string;
   readonly setFieldValue?: (field: string, value: any) => void;
   readonly onChange?: (event: React.ChangeEvent<{ value: unknown }>, options: any[]) => void;

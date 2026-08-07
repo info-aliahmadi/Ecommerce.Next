@@ -9,7 +9,7 @@ interface SelectDiscountTypeProps {
   id: string;
   setFieldValue: (field: string, value: any, shouldValidate?: boolean) => void;
   error: boolean;
-  label: string;
+  label?: string;
   disabled?: boolean;
   showNoneOption?: boolean;
 }
@@ -30,12 +30,11 @@ const SelectDiscountType: React.FC<SelectDiscountTypeProps> = ({
   };
 
   const discountTypeLabels = {
+    [DiscountType.AssignedToCouponCode]: t('fields.discount.discountTypes.AssignedToCouponCode'),
     [DiscountType.AssignedToOrderTotal]: t('fields.discount.discountTypes.AssignedToOrderTotal'),
-    [DiscountType.AssignedToSkus]: t('fields.discount.discountTypes.AssignedToSkus'),
+    [DiscountType.AssignedToProducts]: t('fields.discount.discountTypes.AssignedToProducts'),
     [DiscountType.AssignedToCategories]: t('fields.discount.discountTypes.AssignedToCategories'),
-    [DiscountType.AssignedToManufacturers]: t('fields.discount.discountTypes.AssignedToManufacturers'),
-    [DiscountType.AssignedToShipping]: t('fields.discount.discountTypes.AssignedToShipping'),
-    [DiscountType.AssignedToOrderSubTotal]: t('fields.discount.discountTypes.AssignedToOrderSubTotal')
+    [DiscountType.AssignedToManufacturers]: t('fields.discount.discountTypes.AssignedToManufacturers')
   };
 
   return (

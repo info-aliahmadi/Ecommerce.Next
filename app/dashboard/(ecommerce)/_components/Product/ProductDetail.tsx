@@ -12,7 +12,7 @@ import { DateTimeViewer } from "@root/utils/DateViewer";
 import DeliveryDateType from '@root/app/types/enums/DeliveryDateType';
 import { Locale } from "@root/locales/Language";
 
-export default function ProductDetail({ row }: { row: MRT_Row<ProductModel> }) {
+export default function ProductDetail({ row }: Readonly<{ row: MRT_Row<ProductModel> }>) {
     const t = useTranslations("");
     const fieldsName = 'fields.product.';
     const language = useLocale() as Locale;

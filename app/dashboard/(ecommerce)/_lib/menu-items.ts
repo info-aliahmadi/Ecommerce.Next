@@ -8,6 +8,7 @@ import Category from '@mui/icons-material/GridViewRounded';
 import Attribute from '@mui/icons-material/ListAltRounded';
 import Tags from '@mui/icons-material/BookmarksRounded';
 import Common from '@mui/icons-material/TuneRounded';
+import Discount from '@mui/icons-material/DiscountRounded';
 
 // icons
 const icons = {
@@ -18,6 +19,7 @@ const icons = {
   Category,
   Attribute,
   Tags,
+  Discount,
   Common
 };
 
@@ -84,6 +86,14 @@ const pages = {
       type: 'item',
       url: '/dashboard/productTag/list',
       icon: icons.Tags,
+      breadcrumbs: false,
+      permission: SALE_PRODUCT_TAG_MANAGEMENT
+    }, {
+      id: 'discount',
+      title: 'Discounts',
+      type: 'item',
+      url: '/dashboard/discount/list',
+      icon: icons.Discount,
       breadcrumbs: false,
       permission: SALE_PRODUCT_TAG_MANAGEMENT
     }, {

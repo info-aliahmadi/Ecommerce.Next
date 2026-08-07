@@ -7,7 +7,7 @@ export default function SelectManufacturer({ defaultValues, id, name, label, set
     defaultValues: number[],
     id: string,
     name: string,
-    label: string,
+    label?: string,
     setFieldValue?: any,
     error?: boolean,
     disabled?: boolean
