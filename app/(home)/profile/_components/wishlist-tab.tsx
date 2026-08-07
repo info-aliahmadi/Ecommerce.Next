@@ -13,6 +13,7 @@ import FileUploadModel from '@root/app/dashboard/(filestorage)/_types/FileUpload
 import CategoryDisplayModel from '../../_types/Product/CategoryDisplayModel';
 import { staggerContainer, staggerItem } from './types';
 import ProductVariantDisplayModel from '../../_types/Product/ProductVariantDisplayModel';
+import ManufacturerDisplayModel from '../../_types/Product/ManufacturerDisplayModel';
 
 export function WishlistTab({
   items,
@@ -25,6 +26,7 @@ export function WishlistTab({
     variant: ProductVariantDisplayModel;
     image?: FileUploadModel;
     categories: CategoryDisplayModel[];
+    manufacturers: ManufacturerDisplayModel[];
   }[];
   onAddToCart: (item: typeof items[0]) => void;
   onRemove: (variantId: number) => void;
@@ -101,7 +103,7 @@ export function WishlistTab({
                 //stockQuantity: item.variant.productInventory.stockQuantity,
                 minStockQuantity: 0,
                 categories: item.categories,
-                manufacturerNames: [],
+                manufacturers: item.manufacturers,
                 attributes: [],
                 imagePaths: [],
                 variants: [item.variant],

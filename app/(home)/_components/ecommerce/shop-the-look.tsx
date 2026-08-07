@@ -28,6 +28,7 @@ function ProductThumbnails({ products }: Readonly<{ products: ProductDisplayMode
       <div className="flex items-center" style={{ marginInlineStart: '-12px' }}>
         {visibleProducts.map((product, i) => (
           <button
+            type="button"
             key={product.id}
             onClick={() =>
               setQuickViewProduct(product)

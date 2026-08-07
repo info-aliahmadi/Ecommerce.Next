@@ -41,6 +41,7 @@ export function mergeWishlist(
       variant: serverItem.variant,
       image: serverItem.image,
       categories: serverItem.categories,
+      manufacturers: serverItem.manufacturers,
     });
   }
 

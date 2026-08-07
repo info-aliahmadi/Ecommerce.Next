@@ -17,14 +17,14 @@ export function DashboardTab({
   stats,
   activities,
   setActiveTab,
-}: {
+}: Readonly<{
   userName: string;
   userEmail: string;
   userAvatar: string;
   stats: { icon: typeof Package; label: string; value: string; color: string; bg: string }[];
   activities: ActivityItem[];
   setActiveTab: (tab: TabId) => void;
-}) {
+}>) {
   const t = useTranslations();
   return (
     <div className="space-y-6">

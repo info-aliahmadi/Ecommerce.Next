@@ -100,6 +100,7 @@ export function ProductCard({ product, index = 0 }: Readonly<ProductCardProps>) 
       variant: cheapestVariant!,
       image: product.imagePreview,
       categories: product.categories || [],
+      manufacturers: product.manufacturers || [],
     } as CartItem);
     setJustAdded(true);
     setTimeout(() => setJustAdded(false), 1200);
@@ -117,6 +118,7 @@ export function ProductCard({ product, index = 0 }: Readonly<ProductCardProps>) 
         variant: cheapestVariant,
         image: product.imagePreview,
         categories: product.categories || [],
+        manufacturers: product.manufacturers || [],
       });
     }
     toast.success(wishlisted ? t('homepage.common.removeFromWishlist') : t('homepage.common.addToWishlist'));
@@ -136,6 +138,7 @@ export function ProductCard({ product, index = 0 }: Readonly<ProductCardProps>) 
         rating: product.approvedRatingSum,
         reviewCount: product.approvedTotalReviews,
         categories: product.categories || [],
+        manufacturers: product.manufacturers || [],
         stock: totalStock,
         description: product.fullDescription || ''
       } as CompareItem);
@@ -153,6 +156,7 @@ export function ProductCard({ product, index = 0 }: Readonly<ProductCardProps>) 
         rating: product.approvedRatingSum,
         reviewCount: product.approvedTotalReviews,
         categories: product.categories || [],
+        manufacturers: product.manufacturers || [],
         stock: totalStock,
         description: product.fullDescription || ''
       } as CompareItem);

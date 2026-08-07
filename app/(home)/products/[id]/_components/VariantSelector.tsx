@@ -2,12 +2,12 @@
 
 import { useState, useMemo } from 'react';
 import { useTranslations } from 'next-intl';
-import ProductVariantDisplayModel from '../../../_types/ProductVariantDisplayModel';
 import ProductAttributeDisplayModel from '../../../_types/Product/ProductAttributeDisplayModel';
 import { getCheapestVariant } from '../../../_types/Product/ProductDisplayModel';
 import AttributeType from '@root/app/types/enums/AttributeType';
 import { SizeGuideModal } from '@root/app/(home)/_components/ecommerce/size-guide-modal';
 import { Ruler } from 'lucide-react';
+import ProductVariantDisplayModel from '@root/app/(home)/_types/Product/ProductVariantDisplayModel';
 
 interface VariantOption {
   id: number;
@@ -194,6 +194,7 @@ export default function VariantSelector({ variants, onVariantChange }: VariantSe
               <div className="flex gap-2 flex-wrap">
                 {options.map((opt) => (
                   <button
+                    type='button'
                     key={opt.id}
                     onClick={() => {
                       const next = computeAutoSelection(variants, attributesByType, selectedByType, config.type, opt);
@@ -227,6 +228,7 @@ export default function VariantSelector({ variants, onVariantChange }: VariantSe
               {config.type === AttributeType.Size &&
                 (
                   <button
+                    type='button'
                     onClick={() => setIsSizeGuideOpen(true)}
                     className="text-xs text-ecommerce-purple hover:text-ecommerce-purple/80 hover:underline cursor-pointer flex items-center gap-1"
                   >
@@ -242,6 +244,7 @@ export default function VariantSelector({ variants, onVariantChange }: VariantSe
                 const isAvailable = available.has(opt.key);
                 return (
                   <button
+                    type='button'
                     key={opt.id}
                     onClick={() => {
                       if (!isAvailable) return;

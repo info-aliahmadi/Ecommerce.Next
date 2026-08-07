@@ -29,8 +29,6 @@ import {
   CheckoutStep,
   ShippingForm,
   PaymentForm,
-} from './_components';
-import {
   OrderSummary,
   StepProgress,
   ShippingStep,
@@ -60,6 +58,7 @@ function CheckoutPageInner() {
   const t = useTranslations('homepage.paymentPage');
   const router = useRouter();
   const { data: session, status } = useSession();
+  const orderService = new MyOrderService(session?.user.accessToken ?? "");
 
   // best way to get the current language is to use next-intl's useLocale hook
   const locale = useLocale() as Locale;
@@ -137,7 +136,6 @@ function CheckoutPageInner() {
 
     const validateStock = async () => {
 
-      const service = new MyOrderService(session?.user.accessToken ?? "");
       const productVariantIds = items.map(i => i.variant.id);
 
       if (productVariantIds.length === 0) {
@@ -146,7 +144,7 @@ function CheckoutPageInner() {
       }
 
       try {
-        const result = await service.GetProductStockByIds(productVariantIds);
+        const result = await orderService.GetProductStockByIds(productVariantIds);
         if (result.succeeded && result.data) {
           const stockMap = result.data ?? [];
           const issues = items
@@ -229,6 +227,7 @@ function CheckoutPageInner() {
   useEffect(() => {
     if (sessionPrefilledRef.current) return;
     if (status !== 'authenticated' || !session?.user?.accessToken) return;
+
     sessionPrefilledRef.current = true;
     const accountService = new AccountService(session.user.accessToken);
     accountService.getCurrentUser().then((user) => {
@@ -362,8 +361,8 @@ function CheckoutPageInner() {
 
   const discountAmount = useMemo(() => {
     if (!discountModel || !items || items.length === 0) return 0;
-    const service = new MyOrderService('');
-    return service.calculateDiscount(discountModel, items);
+    debugger
+    return orderService.calculateDiscount(discountModel, items);
   }, [discountModel, items]);
 
   const total = subtotal + shippingCost + tax - discountAmount;
@@ -372,10 +371,9 @@ function CheckoutPageInner() {
   const handleApplyPromo = useCallback(async () => {
     const code = promoInput.trim().toUpperCase();
     if (!code) return;
-    
-    const service = new MyOrderService(session?.user.accessToken ?? '');
+
     try {
-      const result = await service.getDiscount({ couponCode: code });
+      const result = await orderService.getDiscount({ couponCode: code });
       if (result.succeeded && result.data) {
         setAppliedPromo(code);
         setDiscountModel(result.data);
@@ -526,13 +524,13 @@ function CheckoutPageInner() {
     setIsPlacing(true);
     try {
       // Build order model using OrderDisplayModel
-      const orderService = new MyOrderService(session.user.accessToken);
       const order: CreateOrderRequest = {
         addressId: shipping.addressId || null,
         shippingMethodId: ShippingMethod.Ground,
         paymentMethodId: payment.method,
         orderNote: shipping.note || '',
         discountId: discountModel?.id ?? null,
+        finalPrice: total,
         items: items.map((item) => ({
           productVariantId: item.variant.id,
           quantity: item.quantity,
@@ -572,9 +570,7 @@ function CheckoutPageInner() {
 
   /* ── Empty Cart ───────────────────────────────────────────── */
   if (items.length === 0 && currentStep < 4) {
-    return <>
-      <EmptyCart />
-    </>;
+    return <EmptyCart />;
   }
 
   /* ── Step progress data ───────────────────────────────────── */
@@ -614,7 +610,7 @@ function CheckoutPageInner() {
             <div className="flex items-center gap-4">
               {currentStep < 4 && (
                 <Link href="/products" className="hidden sm:block">
-                  <button className="w-9 h-9 rounded-lg bg-ecommerce-surface-hover flex items-center justify-center hover:bg-ecommerce-border transition-colors">
+                  <button type='button' className="w-9 h-9 rounded-lg bg-ecommerce-surface-hover flex items-center justify-center hover:bg-ecommerce-border transition-colors">
                     {isRTL ? <ArrowRight size={16} className="text-ecommerce-text-secondary" /> : <ArrowLeft size={16} className="text-ecommerce-text-secondary" />}
                   </button>
                 </Link>

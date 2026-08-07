@@ -7,7 +7,7 @@ import { useTranslations } from 'next-intl';
 import CurrencyViewer from '@root/utils/CurrencyViewer';
 import CONFIG from '@root/config';
 
-function AnimatedMetric({ value, suffix = '' }: { value: number; suffix: string }) {
+function AnimatedMetric({ value, suffix = '' }: Readonly<{ value: number; suffix: string }>) {
   const [count, setCount] = useState(0);
   const ref = useRef<HTMLSpanElement>(null);
   const isInView = useInView(ref, { once: true });

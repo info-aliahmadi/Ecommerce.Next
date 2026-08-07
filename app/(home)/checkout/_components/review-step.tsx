@@ -131,6 +131,7 @@ export function ReviewStep({
                   </p>
                   <div className="flex items-center gap-2 mt-2">
                     <button
+                      type='button'
                       onClick={() => onUpdateQuantity(item.variant.id, Math.max(1, item.quantity - 1))}
                       className="w-7 h-7 rounded-md bg-ecommerce-surface-hover hover:bg-ecommerce-border flex items-center justify-center transition-colors cursor-pointer"
                       aria-label={tRoot('homepage.common.previous')}
@@ -138,6 +139,7 @@ export function ReviewStep({
                       <Minus size={14} />
                     </button>
                     <button
+                      type='button'
                       onClick={() => onUpdateQuantity(item.variant.id, item.quantity + 1)}
                       className="w-7 h-7 rounded-md bg-ecommerce-surface-hover hover:bg-ecommerce-border flex items-center justify-center transition-colors cursor-pointer bg-ecommerce-border"
                       aria-label={tRoot('homepage.common.next')}
@@ -145,6 +147,7 @@ export function ReviewStep({
                       <Plus size={14} />
                     </button>
                     <button
+                      type='button'
                       onClick={() => onRemoveItem(item.variant.id)}
                       className="text-[12px] font-medium px-2 py-0.5 rounded-md bg-red-100 text-red-700 dark:bg-red-900/40 dark:text-red-300 whitespace-nowrap cursor-pointer"
                     >
@@ -168,6 +171,7 @@ export function ReviewStep({
         <div className="flex items-center justify-between mb-3">
           <h4 className="text-sm font-bold text-ecommerce-text-primary">{t('deliveryAddress')}</h4>
           <button
+            type='button'
             onClick={() => onGoToStep(1, -1)}
             className="text-xs font-medium text-ecommerce-red hover:underline flex items-center gap-1"
           >
@@ -200,6 +204,7 @@ export function ReviewStep({
         <div className="flex items-center justify-between mb-3">
           <h4 className="text-sm font-bold text-ecommerce-text-primary">{t('selectPayment')}</h4>
           <button
+            type='button'
             onClick={() => onGoToStep(2, -1)}
             className="text-xs font-medium text-ecommerce-red hover:underline flex items-center gap-1"
           >
@@ -210,21 +215,15 @@ export function ReviewStep({
         <div className="p-3 rounded-xl bg-ecommerce-surface-hover border border-ecommerce-border text-sm text-ecommerce-text-secondary">
           <div className="flex items-center gap-3">
             <div className="w-9 h-9 rounded-lg bg-ecommerce-red/10 flex items-center justify-center">
-              {payment.method === PaymentMethod.CreditCard ? (
-                <CreditCard size={16} className="text-ecommerce-red" />
-              ) : payment.method === PaymentMethod.PayPal ? (
-                <Shield size={16} className="text-ecommerce-red" />
-              ) : (
-                <Truck size={16} className="text-ecommerce-red" />
-              )}
+              {payment.method === PaymentMethod.CreditCard && <CreditCard size={16} className="text-ecommerce-red" />}
+              {payment.method === PaymentMethod.PayPal && <Shield size={16} className="text-ecommerce-red" />}
+              {payment.method === PaymentMethod.CashOnDelivery && <Truck size={16} className="text-ecommerce-red" />}
             </div>
             <div>
               <p className="font-medium text-ecommerce-text-primary">
-                {payment.method === PaymentMethod.CreditCard
-                  ? t('creditCard')
-                  : payment.method === PaymentMethod.PayPal
-                    ? t('paypal')
-                    : t('cashOnDelivery')}
+                {payment.method === PaymentMethod.CreditCard && t('creditCard')}
+                {payment.method === PaymentMethod.PayPal && t('paypal')}
+                {payment.method === PaymentMethod.CashOnDelivery && t('cashOnDelivery')}
               </p>
             </div>
           </div>
@@ -282,6 +281,7 @@ export function ReviewStep({
       <section>
         {!appliedPromo && !showPromoInput && (
           <button
+            type='button'
             onClick={() => onGoToStep(3)}
             className="text-xs font-medium text-ecommerce-red hover:underline flex items-center gap-1"
           >
@@ -316,6 +316,7 @@ export function ReviewStep({
               </span>
             </div>
             <button
+              type='button'
               onClick={onRemovePromo}
               className="text-[11px] font-medium text-red-500 hover:underline"
             >
@@ -343,6 +344,7 @@ export function ReviewStep({
           <div className="flex items-start gap-2">
             <p className="text-sm font-medium text-red-700 dark:text-red-300">{placeOrderError}</p>
             <button
+              type='button'
               onClick={onClearPlaceOrderError}
               className="text-xs text-red-500 hover:text-red-700 underline shrink-0"
             >

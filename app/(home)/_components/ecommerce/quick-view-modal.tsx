@@ -124,6 +124,7 @@ function QuickViewContent({ product, onClose }: Readonly<{ product: ProductDispl
       variant: activeVariant,
       image: product.imagePreview,
       categories: product.categories,
+      manufacturers: product.manufacturers,
     });
     toast.success(t('homepage.cart.itemAdded', { name: product.name }), {
       description: `${t('homepage.quickView.quantity')}: ${quantity} × ${CurrencyViewer(activeVariant.sellPrice, CONFIG.DEFAULT_CURRENCY)}`,
@@ -145,6 +146,7 @@ function QuickViewContent({ product, onClose }: Readonly<{ product: ProductDispl
         variant: activeVariant,
         image: product.imagePreview,
         categories: product.categories,
+        manufacturers: product.manufacturers,
       });
     }
     toast.success(wishlisted ? t('homepage.common.removeFromWishlist') : t('homepage.common.addToWishlist'));

@@ -99,9 +99,9 @@ export async function generateMetadata({
 // ── Page component (Server Component) ─────────────────
 export default async function ProductDetailPage({
   params,
-}: {
+}: Readonly<{
   params: Promise<{ id: string }>;
-}) {
+}>) {
   const { id } = await params;
   const product = await getProduct(Number(id));
   if (!product) {

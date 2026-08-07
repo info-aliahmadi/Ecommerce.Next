@@ -566,6 +566,7 @@ function ProductsPageContent() {
       {/* Category Filter */}
       <div className="border border-ecommerce-border rounded-xl overflow-hidden">
         <button
+          type='button'
           onClick={() => toggleSection('category')}
           className="w-full flex items-center justify-between px-4 py-3 text-sm font-semibold text-ecommerce-text-primary hover:bg-ecommerce-surface-hover transition-colors"
         >
@@ -619,6 +620,7 @@ function ProductsPageContent() {
       {/* Price Range */}
       <div className="border border-ecommerce-border rounded-xl overflow-hidden">
         <button
+          type='button'
           onClick={() => toggleSection('price')}
           className="w-full flex items-center justify-between px-4 py-3 text-sm font-semibold text-ecommerce-text-primary hover:bg-ecommerce-surface-hover transition-colors"
         >
@@ -724,6 +726,7 @@ function ProductsPageContent() {
       {brandsData && brandsData.length > 0 && (
         <div className="border border-ecommerce-border rounded-xl overflow-hidden">
           <button
+            type='button'
             onClick={() => toggleSection('brand')}
             className="w-full flex items-center justify-between px-4 py-3 text-sm font-semibold text-ecommerce-text-primary hover:bg-ecommerce-surface-hover transition-colors"
           >
@@ -766,6 +769,7 @@ function ProductsPageContent() {
       {tagsData?.length > 0 && (
         <div className="border border-ecommerce-border rounded-xl overflow-hidden">
           <button
+            type='button'
             onClick={() => toggleSection('tags')}
             className="w-full flex items-center justify-between px-4 py-3 text-sm font-semibold text-ecommerce-text-primary hover:bg-ecommerce-surface-hover transition-colors"
           >
@@ -808,6 +812,7 @@ function ProductsPageContent() {
       {attributesData?.length > 0 && (
         <div className="border border-ecommerce-border rounded-xl overflow-hidden">
           <button
+            type='button'
             onClick={() => toggleSection('attributes')}
             className="w-full flex items-center justify-between px-4 py-3 text-sm font-semibold text-ecommerce-text-primary hover:bg-ecommerce-surface-hover transition-colors"
           >
@@ -846,6 +851,7 @@ function ProductsPageContent() {
       {/* Stock Filter */}
       <div className="border border-ecommerce-border rounded-xl overflow-hidden">
         <button
+          type='button'
           onClick={() => toggleSection('stock')}
           className="w-full flex items-center justify-between px-4 py-3 text-sm font-semibold text-ecommerce-text-primary hover:bg-ecommerce-surface-hover transition-colors"
         >
@@ -892,6 +898,7 @@ function ProductsPageContent() {
       {/* Date Filter */}
       <div className="border border-ecommerce-border rounded-xl overflow-hidden">
         <button
+          type='button'
           onClick={() => toggleSection('date')}
           className="w-full flex items-center justify-between px-4 py-3 text-sm font-semibold text-ecommerce-text-primary hover:bg-ecommerce-surface-hover transition-colors"
         >
@@ -1172,6 +1179,7 @@ function ProductsPageContent() {
                 />
                 {searchInput && (
                   <button
+                    type='button'
                     onClick={() => setSearchInput('')}
                     className="absolute end-4 top-1/2 -translate-y-1/2 text-ecommerce-text-muted hover:text-ecommerce-text-primary transition-colors"
                   >
@@ -1256,6 +1264,7 @@ function ProductsPageContent() {
                 {/* View Mode Toggle */}
                 <div className="flex items-center bg-ecommerce-surface rounded-xl p-1 border border-ecommerce-border">
                   <button
+                    type='button'
                     onClick={() => updateFilter('viewMode', 'grid')}
                     className={`p-2 rounded-lg transition-all ${filters.viewMode === 'grid'
                       ? 'bg-ecommerce-red text-white shadow-sm'
@@ -1266,6 +1275,7 @@ function ProductsPageContent() {
                     <Grid3X3 size={16} />
                   </button>
                   <button
+                    type='button'
                     onClick={() => updateFilter('viewMode', 'list')}
                     className={`p-2 rounded-lg transition-all ${filters.viewMode === 'list'
                       ? 'bg-ecommerce-red text-white shadow-sm'

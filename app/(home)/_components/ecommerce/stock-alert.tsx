@@ -9,7 +9,7 @@ import StockAlertType from '../../_types/StockAlertType';
 
 const AUTO_DISMISS_MS = 5000;
 
-function AlertCard({ alert, onDismiss }: { alert: StockAlertType; onDismiss: () => void }) {
+function AlertCard({ alert, onDismiss }: Readonly<{ alert: StockAlertType; onDismiss: () => void }>) {
   const t = useTranslations();
   useEffect(() => {
     const timer = setTimeout(onDismiss, AUTO_DISMISS_MS);
@@ -47,6 +47,7 @@ function AlertCard({ alert, onDismiss }: { alert: StockAlertType; onDismiss: () 
             </p>
           </div>
           <button
+            type="button"
             onClick={onDismiss}
             className="absolute top-2.5 end-2.5 w-6 h-6 rounded-full flex items-center justify-center text-ecommerce-text-muted hover:text-ecommerce-text-primary hover:bg-ecommerce-surface-hover transition-colors"
             aria-label={t('homepage.stockAlert.dismiss')}

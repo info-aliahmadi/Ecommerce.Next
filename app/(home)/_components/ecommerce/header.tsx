@@ -19,7 +19,7 @@ import HomePageService from '../../_services/HomePageService';
 import MenuModel from '@root/app/dashboard/(cms)/_types/Menu/MenuModel';
 import CONFIG from '@root/config';
 
-function buildMenuTree(items: MenuModel[]) : MenuModel[] {
+function buildMenuTree(items: MenuModel[]): MenuModel[] {
   const map = new Map<number, any>();
   const roots: any[] = [];
 
@@ -41,7 +41,7 @@ function buildMenuTree(items: MenuModel[]) : MenuModel[] {
 
 function useMounted() {
   return useSyncExternalStore(
-    () => () => {},
+    () => () => { },
     () => true,
     () => false,
   );
@@ -74,7 +74,7 @@ export function PromoBar() {
   return (
     <div className="bg-ecommerce-red text-white text-center py-2 px-4 text-sm font-medium relative overflow-hidden">
       {/* Subtle gradient shimmer effect on promo bar */}
-      <div className="absolute inset-0" style={{background: 'linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.15) 50%, transparent 100%)', backgroundSize: '200% 100%', animation: 'shimmer 3s ease-in-out infinite'}} />
+      <div className="absolute inset-0" style={{ background: 'linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.15) 50%, transparent 100%)', backgroundSize: '200% 100%', animation: 'shimmer 3s ease-in-out infinite' }} />
       <div className="relative flex items-center justify-center gap-2 h-5">
         <AnimatePresence mode="wait">
           <motion.span
@@ -91,6 +91,7 @@ export function PromoBar() {
         </AnimatePresence>
       </div>
       <button
+        type="button"
         onClick={() => setIsVisible(false)}
         className="absolute end-3 top-1/2 -translate-y-1/2 text-white/60 hover:text-white transition-colors p-1 hover:rotate-90 transition-transform duration-200 z-10"
         aria-label={t('homepage.common.close')}
@@ -112,6 +113,7 @@ function ThemeToggle() {
 
   return (
     <button
+      type="button"
       onClick={() => setTheme(isDark ? 'light' : 'dark')}
       className="p-2 rounded-lg hover:bg-ecommerce-surface-hover transition-colors relative group"
       aria-label={t('homepage.header.toggleTheme')}
@@ -147,7 +149,7 @@ export function Header() {
   const t = useTranslations();
   const { totalItems, toggleCart } = useCartStore();
   const { totalCount: wishlistTotal } = useWishlistStore();
-  const { searchQuery, setSearchQuery,  isMobileMenuOpen, setMobileMenuOpen, isWishlistOpen, setWishlistOpen } = useUIStore();
+  const { searchQuery, setSearchQuery, isMobileMenuOpen, setMobileMenuOpen, isWishlistOpen, setWishlistOpen } = useUIStore();
   const setLoginOpen = useAuthStore((s) => s.setLoginOpen);
   const { data: session } = useSession();
   const [isScrolled, setIsScrolled] = useState(false);
@@ -188,7 +190,7 @@ export function Header() {
   }, []);
 
   const handleSearchKeyDown = useCallback((e: React.KeyboardEvent) => {
-   
+
     if (e.key === 'Escape') {
       setIsSearchFocused(false);
     } else if (e.key === 'Enter') {
@@ -204,16 +206,16 @@ export function Header() {
     <>
       <PromoBar />
       <header
-        className={`sticky top-0 z-50 theme-transition ${
-          isScrolled
-            ? 'bg-background/80 backdrop-blur-xl shadow-sm border-b border-ecommerce-border/50 shadow-[0_1px_0_0_rgba(230,57,70,0.08)] dark:shadow-[0_1px_0_0_rgba(255,107,107,0.06)]'
-            : 'bg-white dark:bg-ecommerce-surface'
-        }`}
+        className={`sticky top-0 z-50 theme-transition ${isScrolled
+          ? 'bg-background/80 backdrop-blur-xl shadow-sm border-b border-ecommerce-border/50 shadow-[0_1px_0_0_rgba(230,57,70,0.08)] dark:shadow-[0_1px_0_0_rgba(255,107,107,0.06)]'
+          : 'bg-white dark:bg-ecommerce-surface'
+          }`}
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16 gap-4">
             {/* Mobile Menu Button */}
             <button
+              type="button"
               onClick={() => setMobileMenuOpen(!isMobileMenuOpen)}
               className="lg:hidden p-2 rounded-lg hover:bg-ecommerce-surface-hover transition-colors"
               aria-label={isMobileMenuOpen ? t('homepage.header.closeMenu') : t('homepage.header.menu')}
@@ -262,11 +264,11 @@ export function Header() {
                             href={child.url}
                             className="w-full text-start px-4 py-2.5 text-sm hover:bg-ecommerce-surface-hover transition-colors  flex items-center justify-between text-ecommerce-text-secondary"
                           >
-                              <span className="flex items-center gap-2">
+                            <span className="flex items-center gap-2">
                               <span className="w-2 h-2 rounded-full" style={{ backgroundColor: child.color }} />
                               {child.title}
                             </span>
-                            
+
                           </a>
                         ))}
                       </div>
@@ -290,6 +292,7 @@ export function Header() {
                 />
                 {searchQuery && (
                   <button
+                    type="button"
                     onClick={() => { setSearchQuery(''); setIsSearchFocused(false); }}
                     className="absolute end-3 top-1/2 -translate-y-1/2 text-ecommerce-text-muted hover:text-ecommerce-text-primary transition-colors"
                     aria-label={t('homepage.common.clear')}
@@ -309,6 +312,7 @@ export function Header() {
             <div className="flex items-center gap-0.5 sm:gap-1">
               {/* Mobile Search Toggle */}
               <button
+                type="button"
                 onClick={() => setIsSearchOpen(!isSearchOpen)}
                 className="md:hidden p-2 rounded-lg hover:bg-ecommerce-surface-hover transition-colors"
                 aria-label={t('homepage.common.searchPlaceholder').replace('...', '')}
@@ -324,6 +328,7 @@ export function Header() {
 
               {/* Notifications */}
               <button
+                type="button"
                 onClick={() => setIsNotifOpen(true)}
                 className="relative p-2 rounded-lg hover:bg-ecommerce-surface-hover transition-colors group"
                 aria-label={t('homepage.header.notifications')}
@@ -335,6 +340,7 @@ export function Header() {
 
               {/* Wishlist */}
               <button
+                type="button"
                 onClick={() => setWishlistOpen(true)}
                 className="relative p-2 rounded-lg hover:bg-ecommerce-surface-hover transition-colors duration-200 group"
                 aria-label={t('homepage.mobileNav.wishlist')}
@@ -360,6 +366,7 @@ export function Header() {
                 </Link>
               ) : (
                 <button
+                  type="button"
                   onClick={() => setLoginOpen(true)}
                   className="flex p-2 rounded-lg hover:bg-ecommerce-surface-hover transition-colors duration-200"
                   aria-label={t('homepage.header.account')}
@@ -370,6 +377,7 @@ export function Header() {
 
               {/* Cart Button */}
               <button
+                type="button"
                 onClick={toggleCart}
                 className="relative p-2 rounded-lg hover:bg-ecommerce-surface-hover transition-colors duration-200 group"
                 aria-label={t('homepage.header.cart')}

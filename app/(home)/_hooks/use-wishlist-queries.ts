@@ -21,6 +21,7 @@ export function useServerWishlist(jwt: string | undefined) {
           variant: item.variant,
           image: item.image,
           categories: item.categories,
+          manufacturers: item.manufacturers,
         })) as WishlistItem[];
       });
     },

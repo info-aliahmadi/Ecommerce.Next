@@ -7,7 +7,7 @@ import CONFIG from '@root/config';
 import ProductReviewDisplayModel from '@root/app/(home)/_types/Product/ProductReviewDisplayModel';
 import { StarRating } from '@root/app/(home)/_components/ui/star-rating';
 import ReviewForm from '@root/app/(home)/products/[id]/_components/ReviewForm';
-import { showDistanceToNow } from '@root/utils/DateViewer';
+import { DateTimeViewer, showDistanceToNow } from '@root/utils/DateViewer';
 import ProductDisplayModel from '../../_types/Product/ProductDisplayModel';
 
 export type ReviewVariant = 'full' | 'quick';
@@ -67,7 +67,8 @@ export default function ProductReviews({ product, reviews = [], reviewsLoading =
         <div className={variant === 'full' ? 'bg-ecommerce-surface/50 dark:bg-ecommerce-surface rounded-2xl border border-ecommerce-border p-5' : 'p-3 rounded-xl bg-ecommerce-surface-hover/40 border border-ecommerce-border/30'}>
           <div className="flex items-center justify-between mb-3">
             <h4 className="text-sm font-semibold text-ecommerce-text-primary">{t('homepage.productDetail.updateReview')}</h4>
-            <button onClick={() => setEditingReviewId(null)} className="text-ecommerce-text-muted hover:text-ecommerce-text-primary">
+            <button
+              type="button" onClick={() => setEditingReviewId(null)} className="text-ecommerce-text-muted hover:text-ecommerce-text-primary">
               <X size={16} />
             </button>
           </div>
@@ -97,17 +98,13 @@ export default function ProductReviews({ product, reviews = [], reviewsLoading =
             )}
           </div>
           <div className="flex items-center gap-2">
-            {variant === 'full' ? (
-              <span className="text-xs text-ecommerce-text-muted">
-                {showDistanceToNow(session?.user.defaultLanguage ?? CONFIG.DEFAULT_LANGUAGE, review.createdOnUtc)}
-              </span>
-            ) : review.createdOnUtc ? (
-              <span className="text-[10px] text-ecommerce-text-muted">
-                {new Date(review.createdOnUtc).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
-              </span>
-            ) : null}
+            <span className="text-xs text-ecommerce-text-muted">
+              {showDistanceToNow(session?.user.defaultLanguage ?? CONFIG.DEFAULT_LANGUAGE, review.createdOnUtc)}
+            </span>
+
             {isCurrentUserReview && (
               <button
+                type="button"
                 onClick={() => setEditingReviewId(review.id)}
                 className="text-ecommerce-text-muted hover:text-ecommerce-red transition-colors"
                 title={t('homepage.common.edit')}

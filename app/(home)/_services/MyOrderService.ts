@@ -109,7 +109,7 @@ export default class MyOrderService {
 
   calculateDiscount = (discount: DiscountDisplayModel, cartItems: CartItem[]): number => {
     if (!discount || !cartItems || cartItems.length === 0) return 0;
-    debugger
+    
     const eligibleItems = this.getEligibleCartItems(discount, cartItems);
     if (eligibleItems.length === 0) return 0;
 
@@ -122,7 +122,7 @@ export default class MyOrderService {
     let discountAmount: number;
 
     if (discount.usePercentage) {
-      discountAmount = eligibleSubtotal * (discount.discountPercentage / 100);
+      discountAmount = eligibleSubtotal /100 * discount.discountPercentage;
     } else {
       discountAmount = Math.min(discount.discountAmount, eligibleSubtotal);
     }
@@ -136,6 +136,7 @@ export default class MyOrderService {
 
   private getEligibleCartItems = (discount: DiscountDisplayModel, cartItems: CartItem[]): CartItem[] => {
     switch (discount.discountTypeId) {
+      case DiscountType.AssignedToCouponCode:
       case DiscountType.AssignedToOrderTotal:
         return cartItems;
       case DiscountType.AssignedToProducts:
@@ -146,8 +147,10 @@ export default class MyOrderService {
         return cartItems.filter(item =>
           item.categories.some(cat => discount.categoryIds.includes(cat.id))
         );
-      case DiscountType.AssignedToManufacturers:
-        return [];
+      case DiscountType.AssignedToManufacturers: 
+      return cartItems.filter(item =>
+          item.manufacturers.some(man => discount.manufacturerIds.includes(man.id))
+        );
       default:
         return [];
     }

@@ -223,6 +223,7 @@ export function SearchSuggestions({ isOpen, onClose }: { isOpen: boolean; onClos
           </div>
           {results.map((item, index) => (
             <button
+              type="button"
               key={item.id}
               onClick={() => handleProductClick(item)}
               className={`w-full flex items-center gap-3 px-4 py-2.5 ${index === activeIndex ? 'bg-ecommerce-surface-hover ring-1 ring-ecommerce-red/20 ring-inset' : ''} hover:bg-ecommerce-surface-hover transition-colors text-start group`}
@@ -241,6 +242,7 @@ export function SearchSuggestions({ isOpen, onClose }: { isOpen: boolean; onClos
 
           {hasSearchLink && (
             <button
+              type="button"
               onClick={handleSearchForQuery}
               className={`w-full flex items-center gap-3 px-4 py-2.5 border-t border-ecommerce-border ${activeIndex === suggestionCount ? 'bg-ecommerce-surface-hover ring-1 ring-ecommerce-red/20 ring-inset' : ''} hover:bg-ecommerce-surface-hover transition-colors text-start group`}
             >
@@ -273,6 +275,7 @@ export function SearchSuggestions({ isOpen, onClose }: { isOpen: boolean; onClos
             <div className="flex flex-wrap gap-2 justify-center mt-4">
               {CONFIG.POPULAR_TERMS.slice(0, 4).map((term) => (
                 <button
+                  type="button"
                   key={term}
                   onClick={() => handleSelect(term)}
                   className="px-3 py-1.5 rounded-full bg-ecommerce-surface-hover text-xs text-ecommerce-text-secondary hover:bg-ecommerce-red/10 hover:text-ecommerce-red transition-colors"
@@ -290,6 +293,7 @@ export function SearchSuggestions({ isOpen, onClose }: { isOpen: boolean; onClos
           <div className="px-4 py-1.5 flex items-center justify-between">
             <p className="text-[10px] font-semibold text-ecommerce-text-muted uppercase tracking-wider">{t('homepage.searchSuggestions.recentSearches')}</p>
             <button
+              type="button"
               onClick={clearRecent}
               className="text-[10px] text-ecommerce-red hover:underline"
             >
@@ -298,6 +302,7 @@ export function SearchSuggestions({ isOpen, onClose }: { isOpen: boolean; onClos
           </div>
           {recentSearches.map((recent, index) => (
             <button
+              type="button"
               key={recent.query}
               onClick={() => handleSelect(recent.query)}
               className={`w-full flex items-center gap-3 px-4 py-2.5 ${index === activeIndex ? 'bg-ecommerce-surface-hover' : ''} hover:bg-ecommerce-surface-hover transition-colors text-start`}
@@ -316,6 +321,7 @@ export function SearchSuggestions({ isOpen, onClose }: { isOpen: boolean; onClos
           </div>
           {CONFIG.POPULAR_TERMS.map((term, index) => (
             <button
+              type="button"
               key={term}
               onClick={() => handleSelect(term)}
               className={`w-full flex items-center gap-3 px-4 py-2.5 ${index === activeIndex ? 'bg-ecommerce-surface-hover' : ''} hover:bg-ecommerce-surface-hover transition-colors text-start`}

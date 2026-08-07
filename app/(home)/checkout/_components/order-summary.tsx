@@ -105,6 +105,7 @@ export function OrderSummary({
         <div>
           {!appliedPromo && !showPromoInput && (
             <button
+              type='button'
               onClick={onShowPromoInput}
               className="text-xs font-medium text-ecommerce-red hover:underline"
             >
@@ -140,12 +141,20 @@ export function OrderSummary({
                   {appliedPromo}
                 </span>
                 {discount && discount.usePercentage && (
-                  <span className="text-[10px] text-ecommerce-emerald/70">
-                    -{discount.discountPercentage}%
-                  </span>
+                  <>
+                    <span className="text-[10px] text-ecommerce-emerald/70">
+                      -{discount.discountPercentage}%
+                    </span>
+                    {discount.maximumDiscountAmount != null && discount.maximumDiscountAmount > 0 && (
+                      <span className="text-[10px] text-ecommerce-emerald/70 mx-1">
+                        {t("maxDiscount")} {CurrencyViewer(discount.maximumDiscountAmount, CONFIG.DEFAULT_CURRENCY)}
+                      </span>
+                    )}
+                  </>
                 )}
               </div>
               <button
+                type='button'
                 onClick={onRemovePromo}
                 className="text-[11px] font-medium text-red-500 hover:underline"
               >

@@ -57,6 +57,7 @@ export function RecentlyViewed() {
         <div className="relative">
           {/* Left Arrow */}
           <button
+            type="button"
             onClick={() => handleScroll('left')}
             className="hidden md:flex absolute start-0 top-1/2 -translate-y-1/2 -translate-x-4 z-10 w-9 h-9 rounded-full bg-white dark:bg-ecommerce-surface shadow-lg border border-ecommerce-border items-center justify-center text-ecommerce-text-primary hover:bg-ecommerce-surface-hover transition-colors"
             aria-label={t('homepage.trending.scrollLeft')}
@@ -66,6 +67,7 @@ export function RecentlyViewed() {
 
           {/* Right Arrow */}
           <button
+            type="button"
             onClick={() => handleScroll('right')}
             className="hidden md:flex absolute end-0 top-1/2 -translate-y-1/2 translate-x-4 z-10 w-9 h-9 rounded-full bg-white dark:bg-ecommerce-surface shadow-lg border border-ecommerce-border items-center justify-center text-ecommerce-text-primary hover:bg-ecommerce-surface-hover transition-colors"
             aria-label={t('homepage.trending.scrollRight')}
@@ -110,6 +112,7 @@ export function RecentlyViewed() {
                       })()}
                       {/* Quick View Eye Button */}
                       <button
+                        type="button"
                         onClick={() => setQuickViewProduct(item)}
                         className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white/90 dark:bg-ecommerce-surface/90 text-ecommerce-text-primary flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 hover:bg-white hover:scale-110 shadow-lg"
                         aria-label={t('homepage.common.quickView')}
@@ -118,6 +121,7 @@ export function RecentlyViewed() {
                       </button>
                       {/* Remove Button */}
                       <button
+                        type="button"
                         onClick={() => {
                           const store = useRecentStore.getState();
                           store.items = store.items.filter((i) => i.id !== item.id);
@@ -146,6 +150,7 @@ export function RecentlyViewed() {
                         );
                       })()}
                       <button
+                        type="button"
                         disabled={getInStockVariants(item.variants ?? []).length === 0}
                         onClick={() => {
                           const { cheapestVariant } = getProductPricing(item.variants ?? []);
@@ -155,7 +160,8 @@ export function RecentlyViewed() {
                             name: item.name,
                             variant: cheapestVariant,
                             image: item.imagePreview,
-                            categories: item.categories
+                            categories: item.categories,
+                            manufacturers: item.manufacturers,
                           });
                           toast.success(t('homepage.cart.itemAdded', { name: item.name }));
                         }}

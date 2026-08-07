@@ -12,7 +12,7 @@ interface RatingBreakdownProps {
   reviews: ProductReviewDisplayModel[];
 }
 
-function RatingBreakdown({ reviews }: RatingBreakdownProps) {
+function RatingBreakdown({ reviews }: Readonly<RatingBreakdownProps>) {
   const approved = reviews.filter((r) => r.isApproved);
   const total = approved.length;
   const rating = total > 0 ? approved.reduce((sum, r) => sum + r.rating, 0) / total : 0;
@@ -103,6 +103,7 @@ export function QuickViewTabs({
       <div className="flex gap-4 mb-4 border-b border-ecommerce-border/50">
         {tabs.map((tab) => (
           <button
+            type='button'
             key={tab.key}
             onClick={() => setActiveTab(tab.key)}
             className={getTabClassName(activeTab === tab.key)}
@@ -124,12 +125,13 @@ export function QuickViewTabs({
           transition={{ duration: 0.2 }}
           className="min-h-[120px]"
         >
-          {activeTab === 'description' ? (
+          {activeTab === 'description' && (
             <div
               className="text-sm text-ecommerce-text-secondary leading-relaxed"
               dangerouslySetInnerHTML={{ __html: product.fullDescription }}
             />
-          ) : activeTab === 'reviews' ? (
+          )}
+          {activeTab === 'reviews' && (
             <div className="space-y-4">
               <ProductReviews
                 product={product}
@@ -140,7 +142,8 @@ export function QuickViewTabs({
                 variant="quick"
               />
             </div>
-          ) : (
+          )}
+          {activeTab === 'shipping' && (
             <ShippingTab />
           )}
         </motion.div>

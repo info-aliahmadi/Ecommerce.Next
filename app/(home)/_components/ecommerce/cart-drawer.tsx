@@ -51,8 +51,12 @@ function YouMightAlsoLike() {
             className="flex items-center gap-2.5 p-2 rounded-xl bg-ecommerce-surface-hover/60 hover:bg-ecommerce-surface-hover transition-colors cursor-pointer group"
             onClick={() => {
               addToCart.mutate({
-                id: cheapestVariant.id, name: item.name, variant: cheapestVariant,
-                image: item.imagePreview, categories: item.categories,
+                id: cheapestVariant.id,
+                name: item.name,
+                variant: cheapestVariant,
+                image: item.imagePreview,
+                categories: item.categories,
+                manufacturers: item.manufacturers,
               });
               toast.success(t('homepage.cart.itemAdded', { name: item.name }));
             }}
@@ -90,7 +94,7 @@ export function CartDrawer() {
   const progress = Math.min((price / freeShippingThreshold) * 100, 100);
   const remainingForFreeShipping = Math.max(freeShippingThreshold - price, 0);
 
-  const finalPrice = price ;
+  const finalPrice = price;
 
   return (
     <Sheet open={isCartOpen} onOpenChange={setCartOpen}>

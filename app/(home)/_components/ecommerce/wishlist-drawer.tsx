@@ -14,7 +14,7 @@ import { GetImage } from '../../_lib/utils';
 import CurrencyViewer from '@root/utils/CurrencyViewer';
 import CONFIG from '@root/config';
 
-export function WishlistDrawer({ open, onClose }: { open: boolean; onClose: () => void }) {
+export function WishlistDrawer({ open, onClose }: Readonly<{ open: boolean; onClose: () => void }>) {
   const { items, totalCount } = useWishlistStore();
   const addToCart = useAddToCart();
   const removeFromWishlist = useRemoveFromWishlist();
@@ -98,6 +98,7 @@ export function WishlistDrawer({ open, onClose }: { open: boolean; onClose: () =
                   </div>
                   <div className="flex flex-col gap-1.5 shrink-0">
                     <button
+                      type="button"
                       onClick={() => handleMoveToCart(item)}
                       className="w-8 h-8 rounded-lg bg-ecommerce-red/10 text-ecommerce-red flex items-center justify-center hover:bg-ecommerce-red hover:text-white transition-colors"
                       aria-label={t('homepage.wishlist.moveToCart')}
@@ -105,6 +106,7 @@ export function WishlistDrawer({ open, onClose }: { open: boolean; onClose: () =
                       <ShoppingCart size={14} />
                     </button>
                     <button
+                      type="button"
                       onClick={() => handleRemove(item.variant.id)}
                       className="w-8 h-8 rounded-lg bg-ecommerce-surface text-ecommerce-text-muted flex items-center justify-center hover:bg-ecommerce-red/10 hover:text-ecommerce-red transition-colors"
                       aria-label={t('homepage.wishlist.remove')}
