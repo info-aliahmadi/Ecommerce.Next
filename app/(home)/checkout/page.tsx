@@ -78,10 +78,10 @@ function CheckoutPageInner() {
 
   // Promo code
   const [promoInput, setPromoInput] = useState('');
-  const [appliedPromo, setAppliedPromo] = useState<string | null>(checkoutPersist.appliedPromo);
+  const [appliedPromo, setAppliedPromo] = useState<string | null>(checkoutPersist.appliedDiscount?.couponCode ?? null);
   const [promoError, setPromoError] = useState('');
   const [showPromoInput, setShowPromoInput] = useState(false);
-  const [discountModel, setDiscountModel] = useState<DiscountDisplayModel | null>(null);
+  const [discountModel, setDiscountModel] = useState<DiscountDisplayModel | null>(checkoutPersist.appliedDiscount);
 
   // Order confirmation
   const [orderNumber, setOrderNumber] = useState('');
@@ -377,7 +377,7 @@ function CheckoutPageInner() {
       if (result.succeeded && result.data) {
         setAppliedPromo(code);
         setDiscountModel(result.data);
-        checkoutPersist.setCheckoutPersist({ appliedPromo: code });
+        checkoutPersist.setCheckoutPersist({ appliedDiscount: result.data });
         setPromoError('');
         setPromoInput('');
         setShowPromoInput(false);
@@ -392,7 +392,7 @@ function CheckoutPageInner() {
   const handleRemovePromo = useCallback(() => {
     setAppliedPromo(null);
     setDiscountModel(null);
-    checkoutPersist.setCheckoutPersist({ appliedPromo: null });
+    checkoutPersist.setCheckoutPersist({ appliedDiscount: null });
     setPromoInput('');
   }, [checkoutPersist.setCheckoutPersist]);
 
@@ -547,6 +547,7 @@ function CheckoutPageInner() {
         toast.success(t('orderPlaced'));
         goToStep(4, 1);
       } else {
+        debugger
         setPlaceOrderError(result.message || t('orderFailed'));
       }
     } catch {
