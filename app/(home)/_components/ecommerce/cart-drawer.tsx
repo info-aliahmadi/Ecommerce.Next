@@ -20,11 +20,6 @@ import { useAddToCart, useUpdateCartQuantity, useRemoveFromCart } from '../../_h
 import { getAvailableStock } from '../../_types/Product/InventoryDisplayModel';
 import Link from 'next/link';
 
-const PROMO_CODES: Record<string, { type: 'percentage' | 'freeship'; value: number; label: string }> = {
-  WELCOME15: { type: 'percentage', value: 15, label: '15% off' },
-  SAVE10: { type: 'percentage', value: 10, label: '10% off' },
-  FREESHIP: { type: 'freeship', value: 0, label: 'Free shipping' },
-};
 
 function YouMightAlsoLike() {
   const { items } = useCartStore();
@@ -89,57 +84,13 @@ export function CartDrawer() {
   const price = totalPrice();
   const savings = totalSavings();
 
-  // Promo code state
-  const [promoCode, setPromoCode] = useState('');
-  const [appliedCode, setAppliedCode] = useState<string | null>(null);
-  const [promoError, setPromoError] = useState('');
-  const [isPromoOpen, setIsPromoOpen] = useState(false);
-  const [discount, setDiscount] = useState(0);
 
   // Free shipping progress
   const freeShippingThreshold = CONFIG.FREE_SHIPPING_THRESHOLD;
   const progress = Math.min((price / freeShippingThreshold) * 100, 100);
   const remainingForFreeShipping = Math.max(freeShippingThreshold - price, 0);
 
-  const handleApplyPromo = useCallback(() => {
-    const code = promoCode.trim().toUpperCase();
-    setPromoError('');
-
-    if (!code) return;
-
-    const promo = PROMO_CODES[code];
-    if (!promo) {
-      setPromoError(t('homepage.cart.invalidCoupon'));
-      return;
-    }
-
-    if (promo.type === 'percentage') {
-      const discountAmount = parseFloat((price * promo.value / 100).toFixed(2));
-      setDiscount(discountAmount);
-    } else {
-      // Free shipping - no monetary discount, just free shipping
-      setDiscount(0);
-    }
-
-    setAppliedCode(code);
-    setIsPromoOpen(false);
-    setPromoCode('');
-  }, [promoCode, price, t]);
-
-  const handleRemovePromo = useCallback(() => {
-    setAppliedCode(null);
-    setDiscount(0);
-    setPromoError('');
-  }, []);
-
-  const handlePromoKeyDown = useCallback((e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Enter') {
-      handleApplyPromo();
-    }
-  }, [handleApplyPromo]);
-
-  const appliedPromo = appliedCode ? PROMO_CODES[appliedCode] : null;
-  const finalPrice = price - discount;
+  const finalPrice = price ;
 
   return (
     <Sheet open={isCartOpen} onOpenChange={setCartOpen}>
@@ -311,82 +262,6 @@ export function CartDrawer() {
               {/* Suggestions */}
               <YouMightAlsoLike />
 
-              {/* Promo Code Section */}
-              <div className="mt-4 pt-4 border-t border-ecommerce-border">
-                {/* Applied code badge */}
-                {appliedCode && appliedPromo && (
-                  <div className="mb-3">
-                    <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-ecommerce-emerald/10 text-ecommerce-emerald text-xs font-medium">
-                      <span>{appliedCode}</span>
-                      <span>·</span>
-                      <span>{appliedPromo.label}</span>
-                      {appliedPromo.type === 'percentage' && (
-                        <>
-                          <span>·</span>
-                          <span>-{CurrencyViewer(discount, CONFIG.DEFAULT_CURRENCY)}</span>
-                        </>
-                      )}
-                      <button
-                        onClick={handleRemovePromo}
-                        className="ms-0.5 hover:text-red-500 transition-colors"
-                        aria-label={t('homepage.cart.remove')}
-                      >
-                        <X size={12} />
-                      </button>
-                    </span>
-                  </div>
-                )}
-
-                {/* Toggle button */}
-                {!appliedCode && (
-                  <button
-                    onClick={() => {
-                      setIsPromoOpen(!isPromoOpen);
-                      setPromoError('');
-                    }}
-                    className="text-xs text-ecommerce-purple hover:text-ecommerce-purple/80 font-medium cursor-pointer flex items-center gap-1"
-                  >
-                    {t('homepage.cart.promoCode')}
-                    {isPromoOpen ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
-                  </button>
-                )}
-
-                {/* Expandable input */}
-                <AnimatePresence>
-                  {isPromoOpen && !appliedCode && (
-                    <motion.div
-                      initial={{ height: 0, opacity: 0 }}
-                      animate={{ height: 'auto', opacity: 1 }}
-                      exit={{ height: 0, opacity: 0 }}
-                      transition={{ duration: 0.2 }}
-                      className="overflow-hidden"
-                    >
-                      <div className="flex gap-2 mt-2">
-                        <input
-                          type="text"
-                          value={promoCode}
-                          onChange={(e) => {
-                            setPromoCode(e.target.value);
-                            setPromoError('');
-                          }}
-                          onKeyDown={handlePromoKeyDown}
-                          placeholder={t('homepage.cart.promoCode')}
-                          className="h-10 rounded-xl bg-ecommerce-surface-hover border border-ecommerce-border text-sm px-3 flex-1 outline-none focus:ring-2 focus:ring-ecommerce-purple/30 placeholder:text-ecommerce-text-muted text-ecommerce-text-primary"
-                        />
-                        <button
-                          onClick={handleApplyPromo}
-                          className="h-10 px-4 bg-ecommerce-purple hover:bg-ecommerce-purple/90 text-white rounded-xl text-sm font-medium transition-colors shrink-0"
-                        >
-                          {t('homepage.cart.applyCode')}
-                        </button>
-                      </div>
-                      {promoError && (
-                        <p className="text-xs text-red-500 mt-1.5">{promoError}</p>
-                      )}
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </div>
             </ScrollArea>
 
             {/* Static Bottom - Pricing & Checkout */}
@@ -403,15 +278,8 @@ export function CartDrawer() {
                 <span className="text-xl font-bold text-ecommerce-text-primary">{CurrencyViewer(price, CONFIG.DEFAULT_CURRENCY)}</span>
               </div>
 
-              {discount > 0 && (
-                <div className="flex items-center justify-between">
-                  <span className="text-sm text-ecommerce-emerald font-medium">{t('homepage.cart.discount')}</span>
-                  <span className="text-sm font-bold text-ecommerce-emerald">-{CurrencyViewer(discount, CONFIG.DEFAULT_CURRENCY)}</span>
-                </div>
-              )}
-
               <p className="text-xs text-ecommerce-text-muted">
-                {(price >= freeShippingThreshold || appliedCode === 'FREESHIP')
+                {(price >= freeShippingThreshold)
                   ? `✅ ${t('homepage.cart.freeShippingMsg')}`
                   : ''}
               </p>

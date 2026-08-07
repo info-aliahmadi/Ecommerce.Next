@@ -36,7 +36,7 @@ const CONFIG = {
   AUTHORIZATION_STORAGE_NAME: 'HydraAuthorizationStorage',
   LANGUAGE_STORAGE_NAME: 'locale',
   DEFAULT_LANGUAGE: LanguageType.Persian,
-  DEFAULT_CURRENCY: CurrencyTypes.Toman,
+  DEFAULT_CURRENCY: CurrencyTypes.Dollar,
   DEFAULT_MEASURETYPE: MeasureType.Number,
   DEFAULT_PHONECOUNTRY: '+98',
   DEFAULT_PAYMENT_METHODS: [PaymentMethod.CreditCard, PaymentMethod.CashOnDelivery],
