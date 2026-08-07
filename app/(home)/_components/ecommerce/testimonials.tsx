@@ -123,6 +123,7 @@ export function TestimonialsSection() {
         {/* Testimonial Cards */}
         <div className="relative">
           <button
+            type="button"
             onClick={prev}
             disabled={currentIndex === 0}
             className="absolute -start-2 lg:-start-5 top-1/2 -translate-y-1/2 z-10 w-11 h-11 rounded-full bg-white dark:bg-ecommerce-surface shadow-xl border border-ecommerce-border flex items-center justify-center hover:bg-ecommerce-red hover:text-white hover:border-ecommerce-red hover:shadow-lg hover:shadow-ecommerce-red/20 transition-all duration-200 disabled:opacity-20 disabled:cursor-not-allowed disabled:hover:bg-white disabled:hover:text-ecommerce-text-primary disabled:hover:border-ecommerce-border disabled:hover:shadow-xl hidden md:flex"
@@ -131,6 +132,7 @@ export function TestimonialsSection() {
             <ChevronLeft size={18} />
           </button>
           <button
+            type="button"
             onClick={next}
             disabled={currentIndex >= maxIndex}
             className="absolute -end-2 lg:-end-5 top-1/2 -translate-y-1/2 z-10 w-11 h-11 rounded-full bg-white dark:bg-ecommerce-surface shadow-xl border border-ecommerce-border flex items-center justify-center hover:bg-ecommerce-red hover:text-white hover:border-ecommerce-red hover:shadow-lg hover:shadow-ecommerce-red/20 transition-all duration-200 disabled:opacity-20 disabled:cursor-not-allowed disabled:hover:bg-white disabled:hover:text-ecommerce-text-primary disabled:hover:border-ecommerce-border disabled:hover:shadow-xl hidden md:flex"
@@ -199,13 +201,13 @@ export function TestimonialsSection() {
           <div className="flex items-center justify-center gap-2 mt-8">
             {Array.from({ length: maxIndex + 1 }).map((_, i) => (
               <button
+                type="button"
                 key={i}
                 onClick={() => { setDirection(i > currentIndex ? 1 : -1); setCurrentIndex(i); }}
-                className={`transition-all duration-300 rounded-full ${
-                  i === currentIndex
+                className={`transition-all duration-300 rounded-full ${i === currentIndex
                     ? 'w-8 h-2.5 bg-ecommerce-red shadow-sm shadow-ecommerce-red/30'
                     : 'w-2.5 h-2.5 bg-ecommerce-border hover:bg-ecommerce-text-muted/50'
-                }`}
+                  }`}
                 aria-label={`Go to slide ${i + 1}`}
               />
             ))}

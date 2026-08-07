@@ -1,6 +1,7 @@
 import FileUploadModel from "@root/app/dashboard/(filestorage)/_types/FileUploadModel";
 import CategoryDisplayModel from "../Product/CategoryDisplayModel";
 import ProductVariantDisplayModel from "../Product/ProductVariantDisplayModel";
+import ManufacturerDisplayModel from "../Product/ManufacturerDisplayModel";
 
 export default interface CartItem {
   id: number;
@@ -9,4 +10,5 @@ export default interface CartItem {
   image?: FileUploadModel | undefined;
   quantity: number;
   categories: CategoryDisplayModel[];
+  manufacturers: ManufacturerDisplayModel[];
 }

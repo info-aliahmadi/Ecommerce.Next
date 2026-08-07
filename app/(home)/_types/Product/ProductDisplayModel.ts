@@ -8,6 +8,7 @@ import AttributeType from "@root/app/types/enums/AttributeType";
 import ProductAttributeDisplayModel from "./ProductAttributeDisplayModel";
 import ProductVariantDisplayModel from "./ProductVariantDisplayModel";
 import { getAvailableStock } from "./InventoryDisplayModel";
+import ManufacturerDisplayModel from "./ManufacturerDisplayModel";
 /**
  * Represents a product.
  */
@@ -239,12 +240,10 @@ export default interface ProductDisplayModel {
    * The IDs of the categories the product belongs to.
    */
   categories: CategoryDisplayModel[];
-
-
   /**
    * The names of the manufacturers the product belongs to.
    */
-  manufacturerNames: string[];
+  manufacturers: ManufacturerDisplayModel[];
 
   /**
    * The IDs of the attributes the product has.

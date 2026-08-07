@@ -27,7 +27,8 @@ export default function ReviewSummary({
         <span className="text-sm font-medium text-ecommerce-text-primary">
           {rating.toFixed(1)}
         </span>
-        <button onClick={scrollToReviews} className="text-sm text-ecommerce-text-muted group-hover:text-ecommerce-red transition-colors" aria-label={t('homepage.productDetail.scrollToReviews')}>
+        <button
+            type='button' onClick={scrollToReviews} className="text-sm text-ecommerce-text-muted group-hover:text-ecommerce-red transition-colors" aria-label={t('homepage.productDetail.scrollToReviews')}>
           ({reviewCount ?? 0} {t('homepage.productDetail.reviewsTab').toLowerCase()})
         </button>
       </div>

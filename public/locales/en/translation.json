@@ -43,6 +43,7 @@
       "maxPrice": "Max",
       "apply": "Apply",
       "clear": "Clear",
+      "remove": "Remove",
       "close": "Close",
       "save": "Save",
       "cancel": "Cancel",
@@ -315,6 +316,7 @@
       "awayFromFree": "You're {amount} away from free shipping!",
       "promoCode": "Promo Code",
       "applyCode": "Apply",
+      "maxDiscount": "Max Discount",
       "remove": "Remove",
       "quantity": "Qty",
       "suggestions": "You Might Also Like",
@@ -999,6 +1001,7 @@
       "youSave": "You Save",
       "promoCode": "Promo Code",
       "applyCode": "Apply",
+      "maxDiscount": "Max Discount",
       "havePromoCode": "Have a promo code?",
       "enterCode": "Enter promo code",
       "invalidCode": "Invalid promo code",
@@ -1123,6 +1126,7 @@
     "order": "Orders",
     "manufacturer": "Manufacturers",
     "bundles": "Bundles",
+    "discount": "Discounts",
     "common": "Commons"
   },
   "pages": {
@@ -1173,6 +1177,7 @@
     "orders": "Orders",
     "deliveryDates": "Delivery Dates",
     "manufacturers": "Manufacturers",
+    "discounts": "Discounts",
     "common": "Commons",
     "discount": "Discounts",
     "productAttribute": "Product Attributes",
@@ -1521,14 +1526,7 @@
       "couponCode": "Coupon Code",
       "adminComment": "Admin Comment",
       "discountTypeId": "Discount Type",
-      "discountTypes": {
-        "AssignedToOrderTotal": "Assigned to order total",
-        "AssignedToSkus": "Assigned to products",
-        "AssignedToCategories": "Assigned to categories",
-        "AssignedToManufacturers": "Assigned to manufacturers",
-        "AssignedToShipping": "Assigned to shipping",
-        "AssignedToOrderSubTotal": "Assigned to order subtotal"
-      },
+      "orderTotal": "مجموع سفارش",
       "usePercentage": "Use Percentage",
       "discountPercentage": "Discount Percentage",
       "discountAmount": "Discount Amount",
@@ -1537,18 +1535,25 @@
       "endDateUtc": "End Date",
       "requiresCouponCode": "Requires Coupon Code",
       "discountLimitationId": "Discount Limitation",
-      "discountLimitationTypes": {
-        "Unlimited": "Unlimited",
-        "NTimesOnly": "N times only",
-        "NTimesPerCustomer": "N times per customer"
-      },
       "limitationTimes": "Limitation Times",
       "maximumDiscountedQuantity": "Maximum Discounted Quantity",
       "isActive": "Active",
       "orderDiscounts": "Order Discounts",
       "categories": "Categories",
       "manufacturers": "Manufacturers",
-      "products": "Products"
+      "products": "Products",
+      "discountLimitationTypes": {
+        "Unlimited": "Unlimited",
+        "NTimesOnly": "N times only",
+        "NTimesPerCustomer": "N times per customer"
+      },
+      "discountTypes": {
+        "AssignedToCouponCode": "Assigned to coupon code",
+        "AssignedToOrderTotal": "Assigned to order total",
+        "AssignedToProducts": "Assigned to products",
+        "AssignedToCategories": "Assigned to categories",
+        "AssignedToManufacturers": "Assigned to manufacturers"
+      }
     },
     "category": {
       "id": "Id",
@@ -2024,6 +2029,21 @@
       "maxLengthMetaDescription": "The max of Category Meta Description length is 300 Characters",
       "maxLengthDescription": "The max of Category Description length is 300 Characters",
       "requiredDisplayOrder": "Display Order is require"
+    },
+    "discount": {
+      "requiredName": "Discount name is require",
+      "requiredCouponCode": "Coupon Code is require",
+      "maxLengthCouponCode": "The max of Discount Coupon Code length is 70 Characters",
+      "maxLengthAdminComment": "The max of Discount Admin Comment length is 300 Characters",
+      "requiredDiscountLimitationId": "Discount Limitation Id is require",
+      "requiredOrderTotal": "Order Total is require",
+      "requiredProducts": "Products is require",
+      "requiredCategories": "Categories is require",
+      "requiredManufacturers": "Manufacturers is require",
+      "requiredDiscountLimitationId": "Discount Limitation Id is require",
+      "requiredLimitationTimes": "Limitation Times is require",
+      "requiredDiscountPercentage": "Discount Percentage is require",
+      "requiredDiscountAmount": "Discount Amount is require"
     }
   },
   "tooltips": {

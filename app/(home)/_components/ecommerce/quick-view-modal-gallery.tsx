@@ -140,6 +140,7 @@ export function QuickViewGallery({
           <X size={18} />
         </button> */}
         <button
+          type='button'
           onClick={handleWishlist}
           className="absolute top-4 end-14 w-10 h-10 rounded-xl glass shadow-md flex items-center justify-center hover:scale-110 transition-transform z-10"
           aria-label={t('homepage.common.addToWishlist')}
@@ -150,6 +151,7 @@ export function QuickViewGallery({
         {imageList.length > 1 && (
           <>
             <button
+              type='button'
               onClick={handlePrevImage}
               className={`absolute start-3 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-white/90 dark:bg-ecommerce-surface/90 shadow-lg flex items-center justify-center hover:bg-white transition-all z-10 ${showNavArrows ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-2'
                 }`}
@@ -158,6 +160,7 @@ export function QuickViewGallery({
               <ChevronLeft size={16} className="text-ecommerce-text-primary" />
             </button>
             <button
+              type='button'
               onClick={handleNextImage}
               className={`absolute end-3 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-white/90 dark:bg-ecommerce-surface/90 shadow-lg flex items-center justify-center hover:bg-white transition-all z-10 ${showNavArrows ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-2'
                 }`}
@@ -173,6 +176,7 @@ export function QuickViewGallery({
         <div className="flex gap-2 mt-3 px-1 overflow-x-auto pb-1 scrollbar-hide">
           {imageList.map((img, i) => (
             <button
+              type='button'
               key={i}
               onClick={() => setSelectedImageIndex(i)}
               className={`w-16 h-16 rounded-lg overflow-hidden border-2 cursor-pointer transition-all shrink-0 ${i === selectedImageIndex

@@ -119,8 +119,8 @@ export function StickyCategoryNav() {
                 transition={{ delay: 0.05, duration: 0.2 }}
                 onClick={() => handleCategoryClick(null)}
                 className={`shrink-0 px-4 py-1.5 rounded-full text-sm font-medium transition-colors cursor-pointer ${selectedCategory === null
-                    ? 'bg-ecommerce-red text-white'
-                    : 'bg-ecommerce-surface-hover text-ecommerce-text-secondary hover:bg-ecommerce-surface-hover/80'
+                  ? 'bg-ecommerce-red text-white'
+                  : 'bg-ecommerce-surface-hover text-ecommerce-text-secondary hover:bg-ecommerce-surface-hover/80'
                   }`}
               >
                 {t('homepage.common.allCategories')}
@@ -140,8 +140,8 @@ export function StickyCategoryNav() {
                     }}
                     onClick={() => handleCategoryClick(cat.key)}
                     className={`shrink-0 flex items-center gap-2 px-4 py-1.5 rounded-full text-sm font-medium transition-colors cursor-pointer ${isActive
-                        ? 'bg-ecommerce-red/10 text-ecommerce-red border border-ecommerce-red/20'
-                        : 'text-ecommerce-text-secondary hover:bg-ecommerce-surface-hover'
+                      ? 'bg-ecommerce-red/10 text-ecommerce-red border border-ecommerce-red/20'
+                      : 'text-ecommerce-text-secondary hover:bg-ecommerce-surface-hover'
                       }`}
                   >
                     <span
@@ -167,6 +167,7 @@ export function StickyCategoryNav() {
               >
                 <span className="max-w-[120px] truncate">&ldquo;{searchQuery}&rdquo;</span>
                 <button
+                  type="button"
                   onClick={handleClearSearch}
                   className="p-0.5 rounded-full hover:bg-ecommerce-border/50 transition-colors cursor-pointer"
                   aria-label={t('homepage.common.clear')}

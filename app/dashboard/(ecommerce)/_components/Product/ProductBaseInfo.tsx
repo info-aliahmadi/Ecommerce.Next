@@ -1,12 +1,9 @@
 'use client'
 import { Avatar, Chip, FormHelperText, Grid, InputLabel, TextField, Stack } from '@mui/material';
 import { EventNote } from '@mui/icons-material';
-
 // assets
 import { useLocale, useTranslations } from 'next-intl';
 import CONFIG from '@root/config';
-
-import moment from 'moment';
 import ImageUpload from '@dashboard/_components/FileUpload/ImageUpload';
 import DateTimeInput from '@dashboard/_components/DateTime/DateTimeInput';
 import SelectDeliveryDate from '../DeliveryDate/SelectDeliveryDate';

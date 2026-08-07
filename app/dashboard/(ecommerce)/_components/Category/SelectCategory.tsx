@@ -8,7 +8,7 @@ export default function SelectCategory({ defaultValues, id, name, label, setFiel
     defaultValues: number[],
     id: string,
     name: string,
-    label: string,
+    label?: string,
     setFieldValue?: any,
     error?: boolean,
     disabled?: boolean

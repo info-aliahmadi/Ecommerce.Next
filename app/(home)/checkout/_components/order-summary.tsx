@@ -9,11 +9,11 @@ import { Input } from '@(home)/_components/ui/input';
 import { Separator } from '@(home)/_components/ui/separator';
 import CartItem from '@root/app/(home)/_types/Order/CartItem';
 import { GetImage } from '@(home)/_lib/utils';
-import { VALID_PROMOS } from './types';
 import CurrencyViewer from '@root/utils/CurrencyViewer';
 import CONFIG from '@root/config';
 import Link from 'next/link';
 import { Badge } from '../../_components/ui/badge';
+import DiscountDisplayModel from '@root/app/(home)/_types/Order/DiscountDisplayModel';
 
 interface OrderSummaryProps {
   items: CartItem[];
@@ -27,6 +27,7 @@ interface OrderSummaryProps {
   tax: number;
   discountAmount: number;
   total: number;
+  discount?: DiscountDisplayModel | null;
   onApplyPromo: () => void;
   onRemovePromo: () => void;
   onPromoInputChange: (value: string) => void;
@@ -47,6 +48,7 @@ export function OrderSummary({
   tax,
   discountAmount,
   total,
+  discount,
   onApplyPromo,
   onRemovePromo,
   onPromoInputChange,
@@ -74,7 +76,7 @@ export function OrderSummary({
                 className="w-12 h-12 rounded-lg object-cover border border-ecommerce-border shrink-0"
               />
               <div className="flex-1 min-w-0">
-                <Link href={`/products/${item.id}`} className="text-xs font-semibold text-ecommerce-text-primary truncate">
+                <Link href={`/products/${item.id}`} className="text-sm font-semibold text-ecommerce-text-primary truncate">
                   {item.name}
                 </Link>
                 {item.variant.productAttributes?.length > 0 && (
@@ -86,8 +88,8 @@ export function OrderSummary({
                     ))}
                   </p>
                 )}
-                <p className="text-[12px] text-ecommerce-text-muted font-medium">
-                  {t("quantity")} {item.quantity}
+                <p className="text-ecommerce-text-muted text-sm">
+                  {t("quantity")} {item.quantity} × {CurrencyViewer(item.variant.sellPrice, CONFIG.DEFAULT_CURRENCY)}
                 </p>
               </div>
               <span className="text-sm font-bold text-ecommerce-text-primary shrink-0">
@@ -103,6 +105,7 @@ export function OrderSummary({
         <div>
           {!appliedPromo && !showPromoInput && (
             <button
+              type='button'
               onClick={onShowPromoInput}
               className="text-xs font-medium text-ecommerce-red hover:underline"
             >
@@ -137,13 +140,21 @@ export function OrderSummary({
                 <span className="text-xs font-medium text-ecommerce-emerald">
                   {appliedPromo}
                 </span>
-                {VALID_PROMOS[appliedPromo]?.type === 'percent' && (
-                  <span className="text-[10px] text-ecommerce-emerald/70">
-                    -{VALID_PROMOS[appliedPromo].value}%
-                  </span>
+                {discount && discount.usePercentage && (
+                  <>
+                    <span className="text-[10px] text-ecommerce-emerald/70">
+                      -{discount.discountPercentage}%
+                    </span>
+                    {discount.maximumDiscountAmount != null && discount.maximumDiscountAmount > 0 && (
+                      <span className="text-[10px] text-ecommerce-emerald/70 mx-1">
+                        {t("maxDiscount")} {CurrencyViewer(discount.maximumDiscountAmount, CONFIG.DEFAULT_CURRENCY)}
+                      </span>
+                    )}
+                  </>
                 )}
               </div>
               <button
+                type='button'
                 onClick={onRemovePromo}
                 className="text-[11px] font-medium text-red-500 hover:underline"
               >
@@ -161,14 +172,14 @@ export function OrderSummary({
             <span className="text-ecommerce-text-muted">{t('subtotal')}</span>
             <span className="font-medium text-ecommerce-text-primary">{CurrencyViewer(subtotal, CONFIG.DEFAULT_CURRENCY)}</span>
           </div>
-          {savings > 0 && (
+          {/* {savings > 0 && (
             <div className="flex justify-between">
               <span className="text-ecommerce-emerald">{t('youSave')}</span>
               <span className="font-medium text-ecommerce-emerald">
                 -{CurrencyViewer(savings, CONFIG.DEFAULT_CURRENCY)}
               </span>
             </div>
-          )}
+          )} */}
           <div className="flex justify-between">
             <span className="text-ecommerce-text-muted">{t('shipping')}</span>
             <span className="font-medium text-ecommerce-text-primary">

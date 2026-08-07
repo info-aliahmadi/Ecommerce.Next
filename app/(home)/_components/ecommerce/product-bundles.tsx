@@ -57,6 +57,7 @@ export function ProductBundles() {
         variant: cheapestVariant,
         image: p.imagePreview,
         categories: p.categories,
+        manufacturers: p.manufacturers,
       });
     });
     toast.success(t('homepage.cart.itemAdded', { name: bundle.name }), {

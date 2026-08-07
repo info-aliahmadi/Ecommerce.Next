@@ -255,7 +255,8 @@ export function ProductCatalog() {
           className="w-full h-10 ps-9 pe-3 rounded-xl bg-ecommerce-surface border border-ecommerce-border text-sm text-ecommerce-text-primary placeholder:text-ecommerce-text-muted focus:outline-none focus:ring-2 focus:ring-ecommerce-red/30 focus:border-ecommerce-red/50 transition-all"
         />
         {filters.search && (
-          <button onClick={() => updateFilter('search', '')} className="absolute end-3 top-1/2 -translate-y-1/2 text-ecommerce-text-muted hover:text-ecommerce-text-primary">
+          <button
+            type="button" onClick={() => updateFilter('search', '')} className="absolute end-3 top-1/2 -translate-y-1/2 text-ecommerce-text-muted hover:text-ecommerce-text-primary">
             <X size={14} />
           </button>
         )}
@@ -264,6 +265,7 @@ export function ProductCatalog() {
       {/* Category Filter */}
       <div className="border border-ecommerce-border rounded-xl overflow-hidden">
         <button
+          type="button"
           onClick={() => toggleSection('category')}
           className="w-full flex items-center justify-between px-4 py-3 text-sm font-semibold text-ecommerce-text-primary hover:bg-ecommerce-surface-hover transition-colors"
         >
@@ -313,6 +315,7 @@ export function ProductCatalog() {
       {/* Price Range */}
       <div className="border border-ecommerce-border rounded-xl overflow-hidden">
         <button
+          type="button"
           onClick={() => toggleSection('price')}
           className="w-full flex items-center justify-between px-4 py-3 text-sm font-semibold text-ecommerce-text-primary hover:bg-ecommerce-surface-hover transition-colors"
         >
@@ -378,6 +381,7 @@ export function ProductCatalog() {
       {/* Discount Filter */}
       <div className="border border-ecommerce-border rounded-xl overflow-hidden">
         <button
+          type="button"
           onClick={() => toggleSection('discount')}
           className="w-full flex items-center justify-between px-4 py-3 text-sm font-semibold text-ecommerce-text-primary hover:bg-ecommerce-surface-hover transition-colors"
         >
@@ -403,8 +407,8 @@ export function ProductCatalog() {
                   return (
                     <label key={val} className="flex items-center gap-2.5 cursor-pointer group py-1">
                       <div className={`w-4 h-4 rounded-full border-2 flex items-center justify-center transition-colors ${filters.discount === val
-                          ? 'border-ecommerce-red bg-ecommerce-red'
-                          : 'border-ecommerce-border group-hover:border-ecommerce-text-muted'
+                        ? 'border-ecommerce-red bg-ecommerce-red'
+                        : 'border-ecommerce-border group-hover:border-ecommerce-text-muted'
                         }`}>
                         {filters.discount === val && <div className="w-1.5 h-1.5 rounded-full bg-white" />}
                       </div>
@@ -423,6 +427,7 @@ export function ProductCatalog() {
       {/* Stock Filter */}
       <div className="border border-ecommerce-border rounded-xl overflow-hidden">
         <button
+          type="button"
           onClick={() => toggleSection('stock')}
           className="w-full flex items-center justify-between px-4 py-3 text-sm font-semibold text-ecommerce-text-primary hover:bg-ecommerce-surface-hover transition-colors"
         >
@@ -446,8 +451,8 @@ export function ProductCatalog() {
                 ]).map(({ val, label }) => (
                   <label key={val} className="flex items-center gap-2.5 cursor-pointer group py-1">
                     <div className={`w-4 h-4 rounded-full border-2 flex items-center justify-center transition-colors ${filters.stock === val
-                        ? 'border-ecommerce-red bg-ecommerce-red'
-                        : 'border-ecommerce-border group-hover:border-ecommerce-text-muted'
+                      ? 'border-ecommerce-red bg-ecommerce-red'
+                      : 'border-ecommerce-border group-hover:border-ecommerce-text-muted'
                       }`}>
                       {filters.stock === val && <div className="w-1.5 h-1.5 rounded-full bg-white" />}
                     </div>
@@ -465,6 +470,7 @@ export function ProductCatalog() {
       {/* Date Filter */}
       <div className="border border-ecommerce-border rounded-xl overflow-hidden">
         <button
+          type="button"
           onClick={() => toggleSection('date')}
           className="w-full flex items-center justify-between px-4 py-3 text-sm font-semibold text-ecommerce-text-primary hover:bg-ecommerce-surface-hover transition-colors"
         >
@@ -490,8 +496,8 @@ export function ProductCatalog() {
                 ]).map(({ val, label }) => (
                   <label key={val} className="flex items-center gap-2.5 cursor-pointer group py-1">
                     <div className={`w-4 h-4 rounded-full border-2 flex items-center justify-center transition-colors ${filters.dateAdded === val
-                        ? 'border-ecommerce-red bg-ecommerce-red'
-                        : 'border-ecommerce-border group-hover:border-ecommerce-text-muted'
+                      ? 'border-ecommerce-red bg-ecommerce-red'
+                      : 'border-ecommerce-border group-hover:border-ecommerce-text-muted'
                       }`}>
                       {filters.dateAdded === val && <div className="w-1.5 h-1.5 rounded-full bg-white" />}
                     </div>
@@ -509,6 +515,7 @@ export function ProductCatalog() {
       {/* Rating Filter */}
       <div className="border border-ecommerce-border rounded-xl overflow-hidden">
         <button
+          type="button"
           onClick={() => toggleSection('rating')}
           className="w-full flex items-center justify-between px-4 py-3 text-sm font-semibold text-ecommerce-text-primary hover:bg-ecommerce-surface-hover transition-colors"
         >
@@ -528,8 +535,8 @@ export function ProductCatalog() {
                 {[0, 4, 4.5, 3, 2].map(r => (
                   <label key={r} className="flex items-center gap-2.5 cursor-pointer group py-1">
                     <div className={`w-4 h-4 rounded-full border-2 flex items-center justify-center transition-colors ${filters.minRating === r
-                        ? 'border-ecommerce-red bg-ecommerce-red'
-                        : 'border-ecommerce-border group-hover:border-ecommerce-text-muted'
+                      ? 'border-ecommerce-red bg-ecommerce-red'
+                      : 'border-ecommerce-border group-hover:border-ecommerce-text-muted'
                       }`}>
                       {filters.minRating === r && <div className="w-1.5 h-1.5 rounded-full bg-white" />}
                     </div>
@@ -615,7 +622,8 @@ export function ProductCatalog() {
                   className="w-full h-10 ps-9 pe-3 rounded-xl bg-ecommerce-surface border border-ecommerce-border text-sm text-ecommerce-text-primary placeholder:text-ecommerce-text-muted focus:outline-none focus:ring-2 focus:ring-ecommerce-red/30 focus:border-ecommerce-red/50 transition-all"
                 />
                 {filters.search && (
-                  <button onClick={() => updateFilter('search', '')} className="absolute end-3 top-1/2 -translate-y-1/2 text-ecommerce-text-muted hover:text-ecommerce-text-primary">
+                  <button
+                    type="button" onClick={() => updateFilter('search', '')} className="absolute end-3 top-1/2 -translate-y-1/2 text-ecommerce-text-muted hover:text-ecommerce-text-primary">
                     <X size={14} />
                   </button>
                 )}
@@ -637,6 +645,7 @@ export function ProductCatalog() {
               {/* View Toggle */}
               <div className="hidden sm:flex items-center bg-ecommerce-surface rounded-xl p-1 border border-ecommerce-border">
                 <button
+                  type="button"
                   onClick={() => updateFilter('viewMode', 'grid')}
                   className={`p-2 rounded-lg transition-all ${filters.viewMode === 'grid' ? 'bg-ecommerce-red text-white shadow-sm' : 'text-ecommerce-text-muted hover:text-ecommerce-text-primary'}`}
                   aria-label={t('homepage.catalog.gridView')}
@@ -644,6 +653,7 @@ export function ProductCatalog() {
                   <Grid3X3 size={16} />
                 </button>
                 <button
+                  type="button"
                   onClick={() => updateFilter('viewMode', 'list')}
                   className={`p-2 rounded-lg transition-all ${filters.viewMode === 'list' ? 'bg-ecommerce-red text-white shadow-sm' : 'text-ecommerce-text-muted hover:text-ecommerce-text-primary'}`}
                   aria-label={t('homepage.catalog.listView')}
@@ -692,6 +702,7 @@ export function ProductCatalog() {
                       </Badge>
                     ))}
                     <button
+                      type="button"
                       onClick={resetFilters}
                       className="text-xs text-ecommerce-text-muted hover:text-ecommerce-red shrink-0 font-medium transition-colors"
                     >
@@ -733,12 +744,14 @@ export function ProductCatalog() {
                 <div className="flex sm:hidden items-center gap-2">
                   <div className="flex items-center bg-ecommerce-surface rounded-lg p-0.5 border border-ecommerce-border">
                     <button
+                      type="button"
                       onClick={() => updateFilter('viewMode', 'grid')}
                       className={`p-1.5 rounded-md transition-all ${filters.viewMode === 'grid' ? 'bg-ecommerce-red text-white' : 'text-ecommerce-text-muted'}`}
                     >
                       <Grid3X3 size={14} />
                     </button>
                     <button
+                      type="button"
                       onClick={() => updateFilter('viewMode', 'list')}
                       className={`p-1.5 rounded-md transition-all ${filters.viewMode === 'list' ? 'bg-ecommerce-red text-white' : 'text-ecommerce-text-muted'}`}
                     >

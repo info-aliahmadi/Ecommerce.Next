@@ -29,9 +29,6 @@ import {
   CheckoutStep,
   ShippingForm,
   PaymentForm,
-  VALID_PROMOS,
-} from './_components';
-import {
   OrderSummary,
   StepProgress,
   ShippingStep,
@@ -46,6 +43,8 @@ import CreateOrderRequest, { CreateOrderItemRequest } from '../_types/Order/Crea
 import PaymentMethod from '@root/app/types/enums/PaymentMethod';
 import { Locale } from '@root/locales/Language';
 import { resolveLocale } from '@root/utils/resolver';
+import DiscountDisplayModel from '../_types/Order/DiscountDisplayModel';
+import CONFIG from '@root/config';
 
 /* ──────────────────────────────────────────────────────────────── */
 
@@ -59,6 +58,7 @@ function CheckoutPageInner() {
   const t = useTranslations('homepage.paymentPage');
   const router = useRouter();
   const { data: session, status } = useSession();
+  const orderService = new MyOrderService(session?.user.accessToken ?? "");
 
   // best way to get the current language is to use next-intl's useLocale hook
   const locale = useLocale() as Locale;
@@ -78,9 +78,10 @@ function CheckoutPageInner() {
 
   // Promo code
   const [promoInput, setPromoInput] = useState('');
-  const [appliedPromo, setAppliedPromo] = useState<string | null>(checkoutPersist.appliedPromo);
+  const [appliedPromo, setAppliedPromo] = useState<string | null>(checkoutPersist.appliedDiscount?.couponCode ?? null);
   const [promoError, setPromoError] = useState('');
   const [showPromoInput, setShowPromoInput] = useState(false);
+  const [discountModel, setDiscountModel] = useState<DiscountDisplayModel | null>(checkoutPersist.appliedDiscount);
 
   // Order confirmation
   const [orderNumber, setOrderNumber] = useState('');
@@ -135,7 +136,6 @@ function CheckoutPageInner() {
 
     const validateStock = async () => {
 
-      const service = new MyOrderService(session?.user.accessToken ?? "");
       const productVariantIds = items.map(i => i.variant.id);
 
       if (productVariantIds.length === 0) {
@@ -144,10 +144,9 @@ function CheckoutPageInner() {
       }
 
       try {
-        const result = await service.GetProductStockByIds(productVariantIds);
+        const result = await orderService.GetProductStockByIds(productVariantIds);
         if (result.succeeded && result.data) {
           const stockMap = result.data ?? [];
-          debugger
           const issues = items
             .filter(item => {
               const available = stockMap.find(s => s.productVariableId === item.variant.id);
@@ -228,6 +227,7 @@ function CheckoutPageInner() {
   useEffect(() => {
     if (sessionPrefilledRef.current) return;
     if (status !== 'authenticated' || !session?.user?.accessToken) return;
+
     sessionPrefilledRef.current = true;
     const accountService = new AccountService(session.user.accessToken);
     accountService.getCurrentUser().then((user) => {
@@ -356,35 +356,43 @@ function CheckoutPageInner() {
   /* ── Calculations ─────────────────────────────────────────── */
   const subtotal = totalPrice();
   const savings = totalSavings();
-  const shippingCost = subtotal >= 50 ? 0 : 5.99;
-  const tax = subtotal * 0.08;
+  const shippingCost = subtotal >= CONFIG.FREE_SHIPPING_THRESHOLD ? 0 : CONFIG.SHIPPING_COST;
+  const tax = 0;
 
   const discountAmount = useMemo(() => {
-    if (!appliedPromo || !VALID_PROMOS[appliedPromo]) return 0;
-    const promo = VALID_PROMOS[appliedPromo];
-    if (promo.type === 'percent') return subtotal * (promo.value / 100);
-    return promo.value;
-  }, [appliedPromo, subtotal]);
+    if (!discountModel || !items || items.length === 0) return 0;
+    debugger
+    return orderService.calculateDiscount(discountModel, items);
+  }, [discountModel, items]);
 
   const total = subtotal + shippingCost + tax - discountAmount;
 
   /* ── Promo Code ───────────────────────────────────────────── */
-  const handleApplyPromo = useCallback(() => {
+  const handleApplyPromo = useCallback(async () => {
     const code = promoInput.trim().toUpperCase();
-    if (!VALID_PROMOS[code]) {
+    if (!code) return;
+
+    try {
+      const result = await orderService.getDiscount({ couponCode: code });
+      if (result.succeeded && result.data) {
+        setAppliedPromo(code);
+        setDiscountModel(result.data);
+        checkoutPersist.setCheckoutPersist({ appliedDiscount: result.data });
+        setPromoError('');
+        setPromoInput('');
+        setShowPromoInput(false);
+      } else {
+        setPromoError(t('invalidCode'));
+      }
+    } catch {
       setPromoError(t('invalidCode'));
-      return;
     }
-    setAppliedPromo(code);
-    checkoutPersist.setCheckoutPersist({ appliedPromo: code });
-    setPromoError('');
-    setPromoInput('');
-    setShowPromoInput(false);
-  }, [promoInput, t, checkoutPersist.setCheckoutPersist]);
+  }, [promoInput, t, checkoutPersist.setCheckoutPersist, session]);
 
   const handleRemovePromo = useCallback(() => {
     setAppliedPromo(null);
-    checkoutPersist.setCheckoutPersist({ appliedPromo: null });
+    setDiscountModel(null);
+    checkoutPersist.setCheckoutPersist({ appliedDiscount: null });
     setPromoInput('');
   }, [checkoutPersist.setCheckoutPersist]);
 
@@ -516,13 +524,13 @@ function CheckoutPageInner() {
     setIsPlacing(true);
     try {
       // Build order model using OrderDisplayModel
-      const orderService = new MyOrderService(session.user.accessToken);
       const order: CreateOrderRequest = {
         addressId: shipping.addressId || null,
         shippingMethodId: ShippingMethod.Ground,
         paymentMethodId: payment.method,
         orderNote: shipping.note || '',
-        discountId: null,
+        discountId: discountModel?.id ?? null,
+        finalPrice: total,
         items: items.map((item) => ({
           productVariantId: item.variant.id,
           quantity: item.quantity,
@@ -539,6 +547,7 @@ function CheckoutPageInner() {
         toast.success(t('orderPlaced'));
         goToStep(4, 1);
       } else {
+        debugger
         setPlaceOrderError(result.message || t('orderFailed'));
       }
     } catch {
@@ -546,7 +555,7 @@ function CheckoutPageInner() {
     } finally {
       setIsPlacing(false);
     }
-  }, [session, shipping, payment, total, shippingCost, tax, discountAmount, items, clearCartMutation, checkoutPersist.clearCheckoutPersist, goToStep, router, t, stockIssues]);
+  }, [session, shipping, payment, total, shippingCost, tax, discountAmount, items, clearCartMutation, checkoutPersist.clearCheckoutPersist, goToStep, router, t, stockIssues, discountModel]);
 
   /* ── Auth Loading / Redirect ──────────────────────────────────── */
   if (status === 'loading' || status === 'unauthenticated') {
@@ -562,9 +571,7 @@ function CheckoutPageInner() {
 
   /* ── Empty Cart ───────────────────────────────────────────── */
   if (items.length === 0 && currentStep < 4) {
-    return <>
-      <EmptyCart />
-    </>;
+    return <EmptyCart />;
   }
 
   /* ── Step progress data ───────────────────────────────────── */
@@ -604,7 +611,7 @@ function CheckoutPageInner() {
             <div className="flex items-center gap-4">
               {currentStep < 4 && (
                 <Link href="/products" className="hidden sm:block">
-                  <button className="w-9 h-9 rounded-lg bg-ecommerce-surface-hover flex items-center justify-center hover:bg-ecommerce-border transition-colors">
+                  <button type='button' className="w-9 h-9 rounded-lg bg-ecommerce-surface-hover flex items-center justify-center hover:bg-ecommerce-border transition-colors">
                     {isRTL ? <ArrowRight size={16} className="text-ecommerce-text-secondary" /> : <ArrowLeft size={16} className="text-ecommerce-text-secondary" />}
                   </button>
                 </Link>
@@ -648,6 +655,7 @@ function CheckoutPageInner() {
                       tax={tax}
                       discountAmount={discountAmount}
                       total={total}
+                      discount={discountModel}
                       onApplyPromo={handleApplyPromo}
                       onRemovePromo={handleRemovePromo}
                       onPromoInputChange={setPromoInput}
@@ -748,6 +756,7 @@ function CheckoutPageInner() {
                       tax={tax}
                       discountAmount={discountAmount}
                       total={total}
+                      discount={discountModel}
                       onApplyPromo={handleApplyPromo}
                       onRemovePromo={handleRemovePromo}
                       onPromoInputChange={setPromoInput}

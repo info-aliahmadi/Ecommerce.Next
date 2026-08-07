@@ -8,7 +8,8 @@ interface SelectProductProps {
   name: string;
   defaultValues: any;
   setFieldValue: (field: string, value: any) => void;
-  label: string
+  label?: string,
+  error?: boolean
 
 }
 
@@ -17,7 +18,8 @@ export default function SelectProduct(
     name,
     defaultValues,
     setFieldValue,
-    label
+    label,
+    error
   }:
     Readonly<SelectProductProps>) {
 
@@ -35,6 +37,7 @@ export default function SelectProduct(
       inputDataApi={(input: string) => service.getProductsByInput(input)}
       loadDataApi={(input: number[]) => service.getProductsByIds(input)}
       disabled={false}
+      error={error}
     />
   );
 }

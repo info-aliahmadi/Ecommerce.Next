@@ -2,11 +2,9 @@ import React, {useState, useCallback} from 'react';
 import {
   TextField,
   TextFieldProps,
-  IconButton,
   InputAdornment,
   Typography,
 } from '@mui/material';
-import ClearIcon from '@mui/icons-material/Clear';
 import CurrencyTypes from '@root/app/types/enums/CurrencyTypes';
 
 interface CurrencyInputProps extends Omit<

@@ -11,25 +11,30 @@ interface MultiAutoCompleteProps {
   id: string;
   defaultValues: number[];
   setFieldValue: (field: string, value: any) => void;
-  label: string;
+  label?: string;
   optionLabel: string;
   inputDataApi: (input: string) => Promise<Result<any[]>>;
   loadDataApi: (ids: number[]) => Promise<Result<any[]>>;
   disabled: boolean;
+  error?: boolean;
 }
 
-export default function MultiAutoComplete({ id, defaultValues, setFieldValue, label, optionLabel, inputDataApi, loadDataApi, disabled }: Readonly<MultiAutoCompleteProps>) {
+export default function MultiAutoComplete({
+  id,
+  defaultValues,
+  setFieldValue,
+  label,
+  optionLabel,
+  inputDataApi,
+  loadDataApi,
+  disabled,
+  error
+}: Readonly<MultiAutoCompleteProps>) {
 
   const [open, setOpen] = useState(false);
   const [options, setOptions] = useState<readonly Option[]>([]);
   const [values, setValues] = useState<Option[]>([]);
   const [loading, setLoading] = useState(false);
-
-  // useEffect(() => {
-  //   if (!open) {
-  //     setOptions([]);
-  //   }
-  // }, [open]);
 
   const loadAllData = (ids: number[]) => {
     setLoading(true);
@@ -42,7 +47,7 @@ export default function MultiAutoComplete({ id, defaultValues, setFieldValue, la
   };
 
   useEffect(() => {
-    
+
     if (defaultValues == null || defaultValues === undefined || (Array.isArray(defaultValues) && defaultValues.length === 0)) {
       setOptions([]);
     } else {
@@ -108,15 +113,16 @@ export default function MultiAutoComplete({ id, defaultValues, setFieldValue, la
           variant="outlined"
           size="small"
           label={label}
-          // InputProps={{
-          //   ...params.InputProps,
-          //   endAdornment: (
-          //     <React.Fragment>
-          //       {loading && <CircularProgress color="inherit" size={15} />}
-          //       {params.InputProps.endAdornment}
-          //     </React.Fragment>
-          //   )
-          // }}
+          error={error}
+        // InputProps={{
+        //   ...params.InputProps,
+        //   endAdornment: (
+        //     <React.Fragment>
+        //       {loading && <CircularProgress color="inherit" size={15} />}
+        //       {params.InputProps.endAdornment}
+        //     </React.Fragment>
+        //   )
+        // }}
         />
       )}
     />

@@ -8,7 +8,7 @@ interface StepProgressProps {
   steps: { num: CheckoutStep; label: string }[];
 }
 
-export function StepProgress({ currentStep, steps }: StepProgressProps) {
+export function StepProgress({ currentStep, steps }: Readonly<StepProgressProps>) {
   return (
     <div className="mb-8">
       <div className="flex items-center justify-center">

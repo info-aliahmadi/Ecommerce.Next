@@ -17,3 +17,13 @@ html {
   direction: ltr !important;
   text-align: left !important;
 }
+
+.ltr-direction,.ltr-direction * {
+  direction: ltr !important;
+  text-align: left !important;
+}
+
+.rtl-direction,.rtl-direction * {
+  direction: rtl !important;
+  text-align: right !important;
+}

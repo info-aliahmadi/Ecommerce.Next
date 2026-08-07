@@ -8,6 +8,7 @@ import WishlistItem from '../_types/Order/WishlistItem';
 import CompareItem from '../_types/Product/CompareItem';
 import StockAlertType from '../_types/StockAlertType';
 import { canAddToCart } from '../_types/Product/InventoryDisplayModel';
+import DiscountDisplayModel from '../_types/Order/DiscountDisplayModel';
 
 
 
@@ -40,6 +41,7 @@ export const useCartStore = create<CartStore>()(
       setJwt: (jwt) => set({ jwt }),
 
       addItem: (item): boolean => {
+        debugger;
         const existingItem = get().items.find((i) => i.variant.id === item.variant.id);
         if (!canAddToCart(item.variant.productInventory, existingItem?.quantity ?? 0, 1)) {
           return false;
@@ -326,7 +328,7 @@ interface CheckoutPersistState {
   currentStep: CheckoutStep;
   paymentMethod: PaymentMethod | null;
   selectedAddressId: string | null;
-  appliedPromo: string | null;
+  appliedDiscount: DiscountDisplayModel | null;
   shippingNote: string;
   setCheckoutPersist: (partial: Partial<CheckoutPersistState>) => void;
   clearCheckoutPersist: () => void;
@@ -338,7 +340,7 @@ export const useCheckoutPersistStore = create<CheckoutPersistState>()(
       currentStep: 1 as CheckoutStep,
       paymentMethod: null,
       selectedAddressId: null,
-      appliedPromo: null,
+      appliedDiscount: null,
       shippingNote: '',
       setCheckoutPersist: (partial) => set(partial),
       clearCheckoutPersist: () =>
@@ -346,7 +348,7 @@ export const useCheckoutPersistStore = create<CheckoutPersistState>()(
           currentStep: 1,
           paymentMethod: null,
           selectedAddressId: null,
-          appliedPromo: null,
+          appliedDiscount: null,
           shippingNote: '',
         }),
     }),
@@ -357,7 +359,7 @@ export const useCheckoutPersistStore = create<CheckoutPersistState>()(
         currentStep: state.currentStep,
         paymentMethod: state.paymentMethod,
         selectedAddressId: state.selectedAddressId,
-        appliedPromo: state.appliedPromo,
+        appliedDiscount: state.appliedDiscount,
         shippingNote: state.shippingNote,
       }),
     }

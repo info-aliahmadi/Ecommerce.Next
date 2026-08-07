@@ -14,6 +14,9 @@ import CreateOrderRequest from '@root/app/(home)/_types/Order/CreateOrderRequest
 import ProcessPaymentRequest from '@root/app/(home)/_types/Order/ProcessPaymentRequest';
 import CartItem from '../_types/Order/CartItem';
 import ProductInventoryStockModel from '../_types/Product/ProductInventoryStockModel';
+import DiscountDisplayModel from '../_types/Order/DiscountDisplayModel';
+import { DiscountType } from '@root/app/types/enums/DiscountType';
+import GetDiscountRequest from '../_types/Order/GetDiscountRequest';
 
 export default class MyOrderService {
   config?: RequestInit;
@@ -70,7 +73,7 @@ export default class MyOrderService {
   async GetProductStockByIds(productVariableIds: number[]): Promise<Result<ProductInventoryStockModel[]>> {
     let productVariableIdsString = productVariableIds.join(',');
     const params = new URLSearchParams({ productVariableIds: productVariableIdsString });
-    let result = await Fetch.Get<Result<ProductInventoryStockModel[]>>(CONFIG.API_BASEPATH + `/Product/GetProductStockByIds?${params.toString()}`, this.config );
+    let result = await Fetch.Get<Result<ProductInventoryStockModel[]>>(CONFIG.API_BASEPATH + `/Product/GetProductStockByIds?${params.toString()}`, this.config);
     return result;
   }
 
@@ -95,8 +98,62 @@ export default class MyOrderService {
   };
 
   cancelMyOrder = async (orderId: number): Promise<Result<void>> => {
-    const params = new URLSearchParams({ orderId: orderId.toString() });
-    return Fetch.Post<Result<void>>(CONFIG.API_BASEPATH + `/Order/CancelMyOrder?${params.toString()}`, {}, this.config);
+    return Fetch.Post<Result<void>>(CONFIG.API_BASEPATH + `/Order/CancelMyOrder`, { orderId: orderId }, this.config);
+  };
+
+  // ========================= DISCOUNT =========================
+
+  getDiscount = async (discountRequest: GetDiscountRequest): Promise<Result<DiscountDisplayModel>> => {
+    return Fetch.Post<Result<DiscountDisplayModel>>(CONFIG.API_BASEPATH + `/Common/GetDiscount`, discountRequest, this.config);
+  };
+
+  calculateDiscount = (discount: DiscountDisplayModel, cartItems: CartItem[]): number => {
+    if (!discount || !cartItems || cartItems.length === 0) return 0;
+    
+    const eligibleItems = this.getEligibleCartItems(discount, cartItems);
+    if (eligibleItems.length === 0) return 0;
+
+    const eligibleSubtotal = eligibleItems.reduce((sum, item) => {
+      return sum + (item.variant.sellPrice * item.quantity);
+    }, 0);
+
+    if (eligibleSubtotal <= 0) return 0;
+
+    let discountAmount: number;
+
+    if (discount.usePercentage) {
+      discountAmount = eligibleSubtotal /100 * discount.discountPercentage;
+    } else {
+      discountAmount = Math.min(discount.discountAmount, eligibleSubtotal);
+    }
+
+    if (discount.maximumDiscountAmount != null && discount.maximumDiscountAmount > 0) {
+      discountAmount = Math.min(discountAmount, discount.maximumDiscountAmount);
+    }
+
+    return Math.round(discountAmount * 100) / 100;
+  };
+
+  private getEligibleCartItems = (discount: DiscountDisplayModel, cartItems: CartItem[]): CartItem[] => {
+    switch (discount.discountTypeId) {
+      case DiscountType.AssignedToCouponCode:
+      case DiscountType.AssignedToOrderTotal:
+        return cartItems;
+      case DiscountType.AssignedToProducts:
+        if (!discount.productIds || discount.productIds.length === 0) return [];
+        return cartItems.filter(item => discount.productIds.includes(item.variant.productId));
+      case DiscountType.AssignedToCategories:
+        if (!discount.categoryIds || discount.categoryIds.length === 0) return [];
+        return cartItems.filter(item =>
+          item.categories.some(cat => discount.categoryIds.includes(cat.id))
+        );
+      case DiscountType.AssignedToManufacturers: 
+      return cartItems.filter(item =>
+          item.manufacturers.some(man => discount.manufacturerIds.includes(man.id))
+        );
+      default:
+        return [];
+    }
   };
 
   // ========================= PAYMENTS =========================

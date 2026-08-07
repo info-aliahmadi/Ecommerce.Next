@@ -56,6 +56,7 @@ export default function ProductActions({
           variant: activeVariant,
           image: product.imagePreview,
           categories: product.categories,
+          manufacturers: product.manufacturers,
           quantity: 1
         });
       }
@@ -74,6 +75,7 @@ export default function ProductActions({
           variant: activeVariant,
           image: product.imagePreview,
           categories: product.categories,
+          manufacturers: product.manufacturers,
         });
         addedCount++;
       } catch (error) {
@@ -99,7 +101,8 @@ export default function ProductActions({
         name: product.name,
         variant: activeVariant,
         image: product.imagePreview,
-        categories: product.categories
+        categories: product.categories,
+        manufacturers: product.manufacturers,
       });
     }
     toast.success(

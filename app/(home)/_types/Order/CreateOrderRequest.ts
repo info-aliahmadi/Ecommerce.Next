@@ -5,6 +5,7 @@ export default interface CreateOrderRequest {
   shippingMethodId?: ShippingMethod;
   paymentMethodId?: number | null;
   discountId?: number | null;
+  finalPrice: number;
   orderNote?: string;
   items: CreateOrderItemRequest[];
 }

@@ -8,10 +8,10 @@ import { getThumbnailName } from '../../../_lib/utils';
 export default function ImageGallery({
   images,
   productName,
-}: {
+}: Readonly<{
   images: string[];
   productName: string;
-}) {
+}>) {
   const [selectedImage, setSelectedImage] = useState(0);
   const [isZoomed, setIsZoomed] = useState(false);
   const [zoomPos, setZoomPos] = useState({ x: 50, y: 50 });
@@ -60,6 +60,8 @@ export default function ImageGallery({
         {images.length > 1 && (
           <>
             <button
+
+              type='button'
               onClick={() => setSelectedImage((prev) => (prev - 1 + images.length) % images.length)}
               className="absolute start-3 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-white/80 dark:bg-ecommerce-surface/80 flex items-center justify-center shadow-lg hover:bg-white dark:hover:bg-ecommerce-surface transition-colors z-10"
               aria-label="Previous image"
@@ -67,6 +69,7 @@ export default function ImageGallery({
               <ChevronLeft size={18} className="text-ecommerce-text-primary rtl:rotate-180" />
             </button>
             <button
+              type='button'
               onClick={() => setSelectedImage((prev) => (prev + 1) % images.length)}
               className="absolute end-3 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-white/80 dark:bg-ecommerce-surface/80 flex items-center justify-center shadow-lg hover:bg-white dark:hover:bg-ecommerce-surface transition-colors z-10"
               aria-label="Next image"
@@ -82,6 +85,7 @@ export default function ImageGallery({
         <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-thin">
           {images.map((img, idx) => (
             <button
+              type='button'
               key={idx}
               onClick={() => setSelectedImage(idx)}
               className={`flex-shrink-0 w-16 h-16 sm:w-20 sm:h-20 rounded-xl overflow-hidden border-2 transition-all duration-200 ${idx === selectedImage

@@ -167,7 +167,7 @@ export function ProductGrid() {
           >
             <SlidersHorizontal size={16} />
             {t('homepage.catalog.openCatalog')}
-           {isRTL ? <ArrowLeft size={14} /> : <ArrowRight size={14} />} 
+            {isRTL ? <ArrowLeft size={14} /> : <ArrowRight size={14} />}
           </Link>
         </div>
 
@@ -184,19 +184,22 @@ export function ProductGrid() {
                 {selectedCategory && (
                   <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-ecommerce-red/10 text-ecommerce-red text-xs font-medium">
                     {t('homepage.common.category')}: {categories.find((c) => c.key === selectedCategory)?.name || selectedCategory}
-                    <button onClick={() => setSelectedCategory(null)} className="hover:bg-ecommerce-red/20 rounded-full p-0.5 transition-colors"><X size={12} /></button>
+                    <button
+                      type="button" onClick={() => setSelectedCategory(null)} className="hover:bg-ecommerce-red/20 rounded-full p-0.5 transition-colors"><X size={12} /></button>
                   </span>
                 )}
                 {searchQuery && (
                   <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-ecommerce-red/10 text-ecommerce-red text-xs font-medium">
                     {t('homepage.common.searchPlaceholder').replace('...', '').replace('...', '')}: &quot;{searchQuery}&quot;
-                    <button onClick={() => useUIStore.getState().setSearchQuery('')} className="hover:bg-ecommerce-red/20 rounded-full p-0.5 transition-colors"><X size={12} /></button>
+                    <button
+                      type="button" onClick={() => useUIStore.getState().setSearchQuery('')} className="hover:bg-ecommerce-red/20 rounded-full p-0.5 transition-colors"><X size={12} /></button>
                   </span>
                 )}
                 {sortBy && sortBy !== 'newest' && (
                   <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-ecommerce-red/10 text-ecommerce-red text-xs font-medium">
                     {t('homepage.common.sortBy')}: {sortOptions.find(x => x.value == sortBy)?.label}
-                    <button onClick={() => setSortBy('newest')} className="hover:bg-ecommerce-red/20 rounded-full p-0.5 transition-colors"><X size={12} /></button>
+                    <button
+                      type="button" onClick={() => setSortBy('newest')} className="hover:bg-ecommerce-red/20 rounded-full p-0.5 transition-colors"><X size={12} /></button>
                   </span>
                 )}
                 {(priceRange[0] > 0 || priceRange[1] < maxRange) && (
@@ -207,6 +210,7 @@ export function ProductGrid() {
                   </span>
                 )}
                 <button
+                  type="button"
                   onClick={handleClearAll}
                   className="text-xs text-ecommerce-red hover:underline font-medium ms-1"
                 >
@@ -257,6 +261,7 @@ export function ProductGrid() {
 
             <div className="hidden sm:flex items-center border border-ecommerce-border rounded-xl overflow-hidden">
               <button
+                type="button"
                 onClick={() => setViewMode('grid')}
                 className={`p-2.5 transition-all duration-200 ${viewMode === 'grid' ? 'bg-ecommerce-red text-white shadow-sm' : 'text-ecommerce-text-muted hover:bg-ecommerce-surface-hover'}`}
                 aria-label={t('homepage.common.grid')}
@@ -264,6 +269,7 @@ export function ProductGrid() {
                 <Grid3X3 size={16} />
               </button>
               <button
+                type="button"
                 onClick={() => setViewMode('list')}
                 className={`p-2.5 transition-all duration-200 ${viewMode === 'list' ? 'bg-ecommerce-red text-white shadow-sm' : 'text-ecommerce-text-muted hover:bg-ecommerce-surface-hover'}`}
                 aria-label={t('homepage.common.list')}
@@ -278,6 +284,7 @@ export function ProductGrid() {
         <div className="mb-6 -mx-4 px-4 sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8">
           <div className="flex gap-2 overflow-x-auto scrollbar-thin pb-2">
             <button
+              type="button"
               onClick={() => handleCategoryClick(null)}
               className={`shrink-0 px-4 py-2 rounded-xl text-sm font-medium transition-all duration-200 border whitespace-nowrap ${!selectedCategory
                 ? 'bg-ecommerce-red text-white border-ecommerce-red shadow-sm shadow-ecommerce-red/20'
@@ -288,6 +295,7 @@ export function ProductGrid() {
             </button>
             {categories.map((cat) => (
               <button
+                type="button"
                 key={"cat-" + cat.id}
                 onClick={() => handleCategoryClick(cat.key)}
                 className={`shrink-0 px-4 py-2 rounded-xl text-sm font-medium transition-all duration-200 border whitespace-nowrap flex items-center gap-2 ${selectedCategory === cat.key
@@ -313,6 +321,7 @@ export function ProductGrid() {
                 <span className="text-xs font-semibold text-ecommerce-text-muted uppercase tracking-wider">{t('homepage.common.priceRange')}</span>
                 {(priceRange[0] > 0 || priceRange[1] < maxRange) && (
                   <button
+                    type="button"
                     onClick={handleClearPrice}
                     className="text-xs text-ecommerce-text-muted hover:text-ecommerce-red transition-colors flex items-center gap-1"
                   >

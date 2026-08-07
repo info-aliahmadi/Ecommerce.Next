@@ -13,6 +13,27 @@ import SlideshowDisplayModel from '../../_types/SlideshowDisplayModel';
 import { GetImage } from '../../_lib/utils';
 import CurrencyViewer from '@root/utils/CurrencyViewer';
 
+interface SlideModel {
+  header?: string;
+  description?: string;
+  alt?: string;
+  image?: string;
+  badgeEmoji?: string;
+  badgeTitle?: string;
+  badgeSub?: string;
+  badgeBg?: string;
+  badgePos?: string;
+  floatAnim: {
+    y: number[];
+  };
+  floatDur?: number;
+  badgeSize?: string;
+  textSize?: string;
+  titleSize?: string;
+  subSize?: string;
+  padding?: string;
+}
+
 const liveActivities = [
   { name: 'Sarah', city: 'NY', product: 'Wireless Headphones', color: '#2563EB' },
   { name: 'Michael', city: 'LA', product: 'Smart Watch Pro', color: '#7B4397' },
@@ -87,6 +108,8 @@ function mapBackendSlides(slides: SlideshowDisplayModel[]) {
   return slides.map((slide, index) => {
     const random = randomizeSlidePadding(index);
     return {
+      header: slide.header,
+      description: slide.description,
       image: GetImage(slide.previewImage),
       alt: slide.header || `Slide ${index + 1}`,
       badgeEmoji: random.badgeEmoji,
@@ -101,7 +124,7 @@ function mapBackendSlides(slides: SlideshowDisplayModel[]) {
       titleSize: random.titleSize,
       subSize: random.subSize,
       padding: random.padding,
-    };
+    } as SlideModel;
   });
 }
 
@@ -316,7 +339,7 @@ function HeroCarousel() {
     },
   });
 
-  const heroSlides = slideshows ?? [];
+  const heroSlides = mapBackendSlides(slideshows ?? []);
 
   const [activeIndex, setActiveIndex] = useState(0);
   const pauseRef = useRef(false);
@@ -330,12 +353,14 @@ function HeroCarousel() {
   }, []);
 
   useEffect(() => {
+    if (heroSlides.length === 0) return;
     const interval = setInterval(() => {
       if (!pauseRef.current) {
         setActiveIndex((prev) => (prev + 1) % heroSlides.length);
       }
     }, 5000);
     return () => clearInterval(interval);
+
   }, [heroSlides.length]);
 
   if (isLoading || heroSlides.length === 0) {
@@ -344,8 +369,7 @@ function HeroCarousel() {
     );
   }
 
-  const slide = mapBackendSlides([heroSlides[activeIndex]])[0];
-
+  const slide = heroSlides[activeIndex];
   return (
     <div className="relative">
       {/* Animated gradient border */}
@@ -365,22 +389,22 @@ function HeroCarousel() {
             className="absolute inset-0"
           >
             <img
-              src={slide.image}
-              alt={slide.alt}
+              src={slide?.image}
+              alt={slide?.alt}
               className="w-full h-full object-cover"
             />
             {/* Floating badge */}
             <motion.div
-              animate={slide.floatAnim}
-              transition={{ duration: slide.floatDur, repeat: Infinity, ease: 'easeInOut' }}
-              className={`${slide.badgePos} glass shadow-xl flex items-center ${slide.padding}`}
+              animate={slide?.floatAnim}
+              transition={{ duration: slide?.floatDur, repeat: Infinity, ease: 'easeInOut' }}
+              className={`${slide?.badgePos} glass shadow-xl flex items-center ${slide?.padding}`}
             >
-              <div className={`${slide.badgeSize} ${slide.badgeBg} flex items-center justify-center shrink-0`}>
-                <span className={slide.textSize}>{slide.badgeEmoji}</span>
+              <div className={`${slide?.badgeSize} ${slide?.badgeBg} flex items-center justify-center shrink-0`}>
+                <span className={slide?.textSize}>{slide?.badgeEmoji}</span>
               </div>
               <div>
-                <p className={`${slide.titleSize} font-bold text-ecommerce-text-primary`}>{slide.badgeTitle}</p>
-                <p className={`${slide.subSize} text-ecommerce-text-muted`}>{slide.badgeSub}</p>
+                <p className={`${slide?.titleSize} font-bold text-ecommerce-text-primary`}>{slide?.badgeTitle}</p>
+                <p className={`${slide?.subSize} text-ecommerce-text-muted`}>{slide?.badgeSub}</p>
               </div>
             </motion.div>
           </motion.div>
@@ -388,8 +412,9 @@ function HeroCarousel() {
 
         {/* Dot indicators */}
         <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex items-center gap-2 z-10">
-          {heroSlides.map((_, i) => (
+          {heroSlides?.map((_, i) => (
             <button
+              type="button"
               key={i}
               onClick={() => goToSlide(i)}
               aria-label={`Go to slide ${i + 1}`}

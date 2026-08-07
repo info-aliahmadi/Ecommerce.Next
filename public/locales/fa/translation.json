@@ -43,6 +43,7 @@
       "maxPrice": "حداکثر",
       "apply": "اعمال",
       "clear": "پاک کردن",
+      "remove": "حذف",
       "close": "بستن",
       "save": "ذخیره",
       "cancel": "انصراف",
@@ -315,6 +316,7 @@
       "promoCode": "کد تخفیف",
       "applyCode": "اعمال",
       "remove": "حذف",
+      "maxDiscount": "حداکثر تخفیف",
       "quantity": "تعداد",
       "suggestions": "شاید این‌ها را بپسندید",
       "couponApplied": "کد تخفیف اعمال شد! {amount} صرفه‌جویی کردید",
@@ -998,6 +1000,7 @@
       "youSave": "صرفه‌جویی شما",
       "promoCode": "کد تخفیف",
       "applyCode": "اعمال",
+      "maxDiscount": "حداکثر تخفیف",
       "havePromoCode": "کد تخفیف دارید؟",
       "enterCode": "کد تخفیف را وارد کنید",
       "invalidCode": "کد تخفیف نامعتبر",
@@ -1122,7 +1125,8 @@
     "category": "دسته‌بندی‌ها",
     "product-tag": "برچسب‌ها",
     "product-attribute": "خصوصیات محصول",
-    "common": "اطلاعات پایه"
+    "common": "اطلاعات پایه",
+    "discount": "تخفیف‌ها"
   },
   "pages": {
     "edit-profile": "ویرایش پروفایل",
@@ -1156,6 +1160,7 @@
     "orders": "سفارش‌ها",
     "deliveryDates": "تاریخ‌های تحویل",
     "manufacturers": "تولیدکنندگان",
+    "discounts": "تخفیف‌ها",
     "bundles": "ست های منتخب",
     "productAttributes": "خصوصیات محصول",
     "productTags": "برچسب‌ها",
@@ -1513,7 +1518,7 @@
       "couponCode": "کد تخفیف",
       "adminComment": "توضیحات مدیر",
       "discountTypeId": "نوع تخفیف",
-      "usePercentage": "درصدی",
+      "usePercentage": "تخفیف درصدی",
       "discountPercentage": "درصد تخفیف",
       "discountAmount": "مبلغ تخفیف",
       "maximumDiscountAmount": "حداکثر مبلغ تخفیف",
@@ -1528,18 +1533,18 @@
       "categories": "دسته‌بندی‌ها",
       "manufacturers": "تولیدکنندگان",
       "products": "محصولات",
+      "orderTotal": "مجموع سفارش",
       "discountTypes": {
-        "AssignedToOrderTotal": "Assigned to order total",
-        "AssignedToSkus": "Assigned to products",
-        "AssignedToCategories": "Assigned to categories",
-        "AssignedToManufacturers": "Assigned to manufacturers",
-        "AssignedToShipping": "Assigned to shipping",
-        "AssignedToOrderSubTotal": "Assigned to order subtotal"
+        "AssignedToCouponCode": "تخفیف با کد تخفیف",
+        "AssignedToOrderTotal": "تخفیف روی مجموع سفارش",
+        "AssignedToProducts": "تخفیف روی محصول",
+        "AssignedToCategories": "تخفیف روی دسته‌بندی‌",
+        "AssignedToManufacturers": "تخفیف روی تولیدکننده محصول"
       },
       "discountLimitationTypes": {
-        "Unlimited": "Unlimited",
-        "NTimesOnly": "N times only",
-        "NTimesPerCustomer": "N times per customer"
+        "Unlimited": "نامحدود",
+        "NTimesOnly": "تعداد مشخص برای همه مشتریان",
+        "NTimesPerCustomer": "تعداد خاص برای هر مشتری"
       }
     },
     "category": {
@@ -1849,7 +1854,10 @@
       "draft": "ذخیره بعنوان پیش‌نویس",
       "delete": "حذف محصول",
       "saveOrder": "ذخیره ترتیب",
-      "cancel": "لغو"
+      "cancel": "لغو",
+      "variants": {
+        "addVariant": "Add Variant"
+      }
     },
     "manufacturer": {
       "add": "تولیدکننده جدید",
@@ -2022,6 +2030,21 @@
       "maxLengthMetaDescription": "حداکثر طول توضیحات متا 300 کاراکتر است",
       "maxLengthDescription": "حداکثر طول توضیحات 300 کاراکتر است",
       "requiredDisplayOrder": "ترتیب نمایش الزامی است"
+    },
+    "discount": {
+      "requiredName": "نام تخفیف الزامی است",
+      "requiredCouponCode": "کد تخفیف الزامی است",
+      "maxLengthCouponCode": "حداکثر طول کد تخفیف ۵۰ کاراکتر است",
+      "maxLengthAdminComment": "حداکثر طول توضیحات مدیر ۳۰ کاراکتر است",
+      "requiredDiscountLimitationId": "تعیین محدودیت تخفیف الزامی است",
+      "requiredOrderTotal": "مجموع سفارش الزامی است",
+      "requiredProducts": "لیست محصولات الزامی است",
+      "requiredCategories": "لیست دسته‌بندی‌ها الزامی است",
+      "requiredManufacturers": "لیست تولیدکنندگان الزامی است",
+      "requiredDiscountLimitationId": "تعیین محدودیت تخفیف الزامی است",
+      "requiredLimitationTimes": "تعداد محدودیت الزامی است",
+      "requiredDiscountPercentage": "درصد تخفیف الزامی است",
+      "requiredDiscountAmount": "مبلغ تخفیف الزامی است"
     }
   },
   "tooltips": {

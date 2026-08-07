@@ -15,7 +15,7 @@ interface ConfirmationStepProps {
   email: string;
 }
 
-export function ConfirmationStep({ orderNumber, email }: ConfirmationStepProps) {
+export function ConfirmationStep({ orderNumber, email }: Readonly<ConfirmationStepProps>) {
   const t = useTranslations('homepage.paymentPage');
 
   return (
@@ -120,12 +120,12 @@ export function ConfirmationStep({ orderNumber, email }: ConfirmationStepProps) 
         transition={{ delay: 1.0 }}
         className="flex items-center gap-4 mt-8"
       >
-        <button className="flex items-center gap-1.5 text-xs text-ecommerce-text-muted hover:text-ecommerce-red transition-colors">
+        <button type='button' className="flex items-center gap-1.5 text-xs text-ecommerce-text-muted hover:text-ecommerce-red transition-colors">
           <Download size={14} />
           {t('downloadInvoice')}
         </button>
         <Separator orientation="vertical" className="h-4 bg-ecommerce-border" />
-        <button className="flex items-center gap-1.5 text-xs text-ecommerce-text-muted hover:text-ecommerce-red transition-colors">
+        <button type='button' className="flex items-center gap-1.5 text-xs text-ecommerce-text-muted hover:text-ecommerce-red transition-colors">
           {t('needHelp')}?
         </button>
       </motion.div>

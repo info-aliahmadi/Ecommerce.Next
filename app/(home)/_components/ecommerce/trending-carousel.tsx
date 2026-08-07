@@ -75,6 +75,7 @@ export function TrendingCarousel() {
       <div className="relative max-w-7xl mx-auto">
         {/* Left Arrow */}
         <button
+          type="button"
           onClick={() => scroll('left')}
           className="hidden md:flex absolute start-0 top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-full bg-white dark:bg-ecommerce-surface shadow-xl border border-ecommerce-border hover:bg-ecommerce-red hover:text-white items-center justify-center text-ecommerce-text-secondary transition-colors -translate-x-3"
           aria-label={t('homepage.trending.scrollLeft')}
@@ -84,6 +85,7 @@ export function TrendingCarousel() {
 
         {/* Right Arrow */}
         <button
+          type="button"
           onClick={() => scroll('right')}
           className="hidden md:flex absolute end-0 top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-full bg-white dark:bg-ecommerce-surface shadow-xl border border-ecommerce-border hover:bg-ecommerce-red hover:text-white items-center justify-center text-ecommerce-text-secondary transition-colors translate-x-3"
           aria-label={t('homepage.trending.scrollRight')}
@@ -199,14 +201,14 @@ export function TrendingCarousel() {
 
                     </div>))}
 
-                    <div className="flex items-center gap-1.5 mb-1.5">
-                      <div className="flex items-center gap-px">
-                        <StarRating rating={product.approvedRatingSum} size={11} />
-                      </div>
-                      <span className="text-[11px] text-ecommerce-text-muted">
-                        {product.approvedRatingSum}
-                      </span>
+                  <div className="flex items-center gap-1.5 mb-1.5">
+                    <div className="flex items-center gap-px">
+                      <StarRating rating={product.approvedRatingSum} size={11} />
                     </div>
+                    <span className="text-[11px] text-ecommerce-text-muted">
+                      {product.approvedRatingSum}
+                    </span>
+                  </div>
 
                   {/* Sold count */}
                   <p className="text-[11px] text-ecommerce-text-muted">
@@ -216,7 +218,7 @@ export function TrendingCarousel() {
                 </div>
               </motion.div>
             ))}
-          </div>
+        </div>
       </div>
     </section>
   );

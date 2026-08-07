@@ -4,7 +4,7 @@ import { DiscountType } from "@root/app/types/enums/DiscountType";
 /**
  * Represents a discount.
  */
-export default interface DiscountModel {
+export default interface DiscountDisplayModel {
   /**
    * The ID of the discount.
    */
@@ -23,7 +23,7 @@ export default interface DiscountModel {
   /**
    * Administrative comments about the discount.
    */
-  adminComment?: string;
+  adminComment: string;
 
   /**
    * The type of discount.
@@ -38,27 +38,17 @@ export default interface DiscountModel {
   /**
    * The discount percentage.
    */
-  discountPercentage?: number;
+  discountPercentage: number;
 
   /**
    * The discount amount.
    */
-  discountAmount?: number;
+  discountAmount: number;
 
   /**
    * The maximum discount amount (nullable).
    */
   maximumDiscountAmount?: number | null;
-
-  /**
-   * The start date of the discount (nullable, UTC).
-   */
-  startDateUtc?: Date | null;
-
-  /**
-   * The end date of the discount (nullable, UTC).
-   */
-  endDateUtc?: Date | null;
 
   /**
    * Indicates whether a coupon code is required for the discount.
@@ -73,17 +63,17 @@ export default interface DiscountModel {
   /**
    * The number of times the discount can be used.
    */
-  limitationTimes?: number;
+  limitationTimes: number;
 
   /**
    * The maximum discounted quantity (nullable).
    */
-  maximumDiscountedQuantity?: number;
+  maximumDiscountedQuantity: number | null;
 
   /**
    * Indicates whether the discount is active.
    */
-  orderTotal?: number;
+  orderTotal: number;
 
   /**
    * Indicates whether the discount is active.
@@ -98,10 +88,6 @@ export default interface DiscountModel {
    */
   manufacturerIds: number[];
 
-  /**
-   * Indicates whether the discount is active.
-   */
-  isActive: boolean;
 }
 
 

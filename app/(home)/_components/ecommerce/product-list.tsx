@@ -90,6 +90,7 @@ export default function ProductListCard({ product, index = 0 }: Readonly<Product
       variant: cheapestVariant,
       image: product.imagePreview,
       categories: product.categories || [],
+      manufacturers: product.manufacturers || [],
       quantity: 1
     });
     setJustAdded(true);
@@ -108,6 +109,7 @@ export default function ProductListCard({ product, index = 0 }: Readonly<Product
         variant: cheapestVariant,
         image: product.imagePreview,
         categories: product.categories || [],
+        manufacturers: product.manufacturers || [],
       });
     }
     toast.success(wishlisted ? t('homepage.common.removeFromWishlist') : t('homepage.common.addToWishlist'));
@@ -282,6 +284,7 @@ export default function ProductListCard({ product, index = 0 }: Readonly<Product
                 </div>
                 <div className="flex items-center gap-2">
                   <button
+                    type="button"
                     onClick={handleCompare}
                     className={`w-9 h-9 rounded-lg border flex items-center justify-center transition-all ${inCompare ? 'bg-ecommerce-teal/5 border-ecommerce-teal/30 text-ecommerce-teal' : 'border-ecommerce-border hover:bg-ecommerce-teal hover:text-white hover:border-ecommerce-teal'}`}
                     aria-label={inCompare ? t('homepage.compare.remove') : t('homepage.common.compare')}
@@ -289,6 +292,7 @@ export default function ProductListCard({ product, index = 0 }: Readonly<Product
                     <GitCompareArrows size={14} />
                   </button>
                   <button
+                    type="button"
                     onClick={handleQuickView}
                     className="w-9 h-9 rounded-lg border border-ecommerce-border flex items-center justify-center hover:bg-ecommerce-purple hover:text-white hover:border-ecommerce-purple transition-all"
                     aria-label={t('homepage.common.quickView')}
@@ -296,6 +300,7 @@ export default function ProductListCard({ product, index = 0 }: Readonly<Product
                     <Eye size={14} />
                   </button>
                   <button
+                    type="button"
                     onClick={handleWishlist}
                     className={`w-9 h-9 rounded-lg border flex items-center justify-center transition-all ${wishlisted ? 'bg-ecommerce-red/5 border-ecommerce-red/30 text-ecommerce-red' : 'border-ecommerce-border hover:bg-ecommerce-rose hover:text-white hover:border-ecommerce-rose'}`}
                     aria-label={wishlisted ? t('homepage.common.removeFromWishlist') : t('homepage.common.addToWishlist')}

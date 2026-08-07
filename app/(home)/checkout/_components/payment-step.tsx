@@ -54,20 +54,19 @@ export function PaymentStep({
       <div className="space-y-3">
         {paymentMethods.map((pm) => (
           <button
+            type='button'
             key={pm.value}
             onClick={() => onSetPaymentField('method', pm.value)}
-            className={`w-full flex items-center gap-4 p-4 rounded-xl border-2 transition-all text-start group ${
-              payment.method === pm.value
+            className={`w-full flex items-center gap-4 p-4 rounded-xl border-2 transition-all text-start group ${payment.method === pm.value
                 ? 'border-ecommerce-red bg-ecommerce-red/5'
                 : 'border-ecommerce-border hover:border-ecommerce-red/50 hover:bg-ecommerce-surface-hover'
-            }`}
+              }`}
           >
             <div
-              className={`w-11 h-11 rounded-xl flex items-center justify-center transition-colors shrink-0 ${
-                payment.method === pm.value
+              className={`w-11 h-11 rounded-xl flex items-center justify-center transition-colors shrink-0 ${payment.method === pm.value
                   ? 'bg-ecommerce-red/10'
                   : 'bg-ecommerce-surface-hover group-hover:bg-ecommerce-red/5'
-              }`}
+                }`}
             >
               <pm.icon
                 size={20}
@@ -83,11 +82,10 @@ export function PaymentStep({
               {pm.desc && <p className="text-xs text-ecommerce-text-muted mt-0.5">{pm.desc}</p>}
             </div>
             <div
-              className={`w-5 h-5 rounded-full border-2 flex items-center justify-center transition-colors shrink-0 ${
-                payment.method === pm.value
+              className={`w-5 h-5 rounded-full border-2 flex items-center justify-center transition-colors shrink-0 ${payment.method === pm.value
                   ? 'border-ecommerce-red bg-ecommerce-red'
                   : 'border-ecommerce-border'
-              }`}
+                }`}
             >
               {payment.method === pm.value && <Check size={12} className="text-white" />}
             </div>
@@ -102,7 +100,7 @@ export function PaymentStep({
           onClick={onBack}
           className="flex-1 h-12 rounded-xl font-semibold text-sm gap-2 border-ecommerce-border text-ecommerce-text-primary hover:bg-ecommerce-surface-hover"
         >
-        {isRTL ? <ChevronRight size={16} /> : <ChevronLeft size={16} />}
+          {isRTL ? <ChevronRight size={16} /> : <ChevronLeft size={16} />}
           {t('step1')}
         </Button>
         <Button

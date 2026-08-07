@@ -1,32 +1,27 @@
   // Example Enum Definitions (If not defined elsewhere)
   export enum DiscountType {
     /// <summary>
-    /// Assigned to order total 
+    /// Assigned to Coupon Code
     /// </summary>
-    AssignedToOrderTotal = 1,
+    AssignedToCouponCode = 1,
 
     /// <summary>
-    /// Assigned to products (SKUs)
+    /// Assigned to Order Total
     /// </summary>
-    AssignedToSkus = 2,
+    AssignedToOrderTotal = 2,
 
     /// <summary>
-    /// Assigned to categories (all products in a category)
+    /// Assigned to Products
     /// </summary>
-    AssignedToCategories = 5,
+    AssignedToProducts = 3,
 
     /// <summary>
-    /// Assigned to manufacturers (all products of a manufacturer)
+    /// Assigned to Categories
     /// </summary>
-    AssignedToManufacturers = 6,
+    AssignedToCategories = 4,
 
     /// <summary>
-    /// Assigned to shipping
+    /// Assigned to Manufacturer
     /// </summary>
-    AssignedToShipping = 10,
-
-    /// <summary>
-    /// Assigned to order subtotal
-    /// </summary>
-    AssignedToOrderSubTotal = 20
+    AssignedToManufacturers = 5
 }

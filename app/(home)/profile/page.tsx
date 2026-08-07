@@ -102,6 +102,7 @@ export default function ProfilePage() {
 
   // Stores
   const wishlistItems = useWishlistStore((s) => s.items);
+  debugger
   const wishlistCount = wishlistItems.length;
   const addToCart = useAddToCart();
   const removeFromWishlist = useRemoveFromWishlist();
@@ -262,6 +263,7 @@ export default function ProfilePage() {
       variant: item.variant,
       image: item.image,
       categories: item.categories,
+      manufacturers: item.manufacturers,
     });
     toast.success(t('homepage.common.addToCart'));
   };
@@ -305,6 +307,7 @@ export default function ProfilePage() {
                 const isActive = activeTab === item.id;
                 return (
                   <button
+                    type='button'
                     key={item.id}
                     onClick={() => setActiveTab(item.id)}
                     className={`flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-medium transition-all duration-200 whitespace-nowrap ${isActive
@@ -347,6 +350,7 @@ export default function ProfilePage() {
                       const isActive = activeTab === item.id;
                       return (
                         <button
+                    type='button'
                           key={item.id}
                           onClick={() => setActiveTab(item.id)}
                           className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-200 ${isActive
@@ -367,6 +371,7 @@ export default function ProfilePage() {
                   </nav>
                   <Separator className="my-2 bg-ecommerce-border" />
                   <button
+                    type='button'
                     onClick={() => signOut()}
                     className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-ecommerce-text-secondary hover:bg-red-50 dark:hover:bg-red-500/10 hover:text-red-500 transition-all duration-200 w-full"
                   >

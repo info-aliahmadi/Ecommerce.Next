@@ -31,7 +31,6 @@ export function LanguageSwitcher() {
   };
 
   const handleSelect = async (loc: Language) => {
-    debugger
     nextIntlService.setNextIntlLocale(loc.key);
     setLocale(loc.key);
 
@@ -51,6 +50,7 @@ export function LanguageSwitcher() {
         .lang-open .lang-menu { display: block; }
       `}</style>
       <button
+              type="button"
         onMouseDown={toggle}
         className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg hover:bg-ecommerce-surface-hover transition-colors text-ecommerce-text-secondary hover:text-ecommerce-text-primary cursor-pointer"
         aria-label="Switch language"
@@ -65,6 +65,7 @@ export function LanguageSwitcher() {
           const isActive = locale === loc.name;
           return (
             <button
+              type="button"
               key={loc.name}
               onClick={(e) => {
                 e.stopPropagation();

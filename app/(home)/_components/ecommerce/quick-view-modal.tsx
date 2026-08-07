@@ -28,7 +28,6 @@ import { getAvailableStock } from '../../_types/Product/InventoryDisplayModel';
 import ReviewSummary from '../../products/[id]/_components/ReviewSummary';
 
 function QuickViewContent({ product, onClose }: Readonly<{ product: ProductDisplayModel; onClose: () => void }>) {
-  debugger
   const t = useTranslations();
   const addToCart = useAddToCart();
   const { isInWishlist } = useWishlistStore();
@@ -125,6 +124,7 @@ function QuickViewContent({ product, onClose }: Readonly<{ product: ProductDispl
       variant: activeVariant,
       image: product.imagePreview,
       categories: product.categories,
+      manufacturers: product.manufacturers,
     });
     toast.success(t('homepage.cart.itemAdded', { name: product.name }), {
       description: `${t('homepage.quickView.quantity')}: ${quantity} × ${CurrencyViewer(activeVariant.sellPrice, CONFIG.DEFAULT_CURRENCY)}`,
@@ -146,6 +146,7 @@ function QuickViewContent({ product, onClose }: Readonly<{ product: ProductDispl
         variant: activeVariant,
         image: product.imagePreview,
         categories: product.categories,
+        manufacturers: product.manufacturers,
       });
     }
     toast.success(wishlisted ? t('homepage.common.removeFromWishlist') : t('homepage.common.addToWishlist'));

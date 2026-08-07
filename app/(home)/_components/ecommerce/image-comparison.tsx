@@ -93,7 +93,7 @@ export function ImageComparison({
           whileInView={{ opacity: 1, scale: 1 }}
           viewport={{ once: true, margin: '-50px' }}
           transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1], delay: 0.15 }}
-          className="relative rounded-2xl overflow-hidden shadow-2xl cursor-col-resize select-none touch-none"
+          className="relative rounded-2xl overflow-hidden shadow-2xl cursor-col-resize select-none touch-none  ltr-direction"
           ref={containerRef}
           onPointerDown={handlePointerDown}
           onPointerMove={handlePointerMove}
