@@ -3,21 +3,25 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { useTranslations } from 'next-intl';
-
-const deals = [
-  { icon: '🔥', text: 'Flash Sale: Up to 60% OFF Electronics', color: '#E63946' },
-  { icon: '🚚', text: 'Free Shipping on Orders Over $50', color: '#20B2AA' },
-  { icon: '🎁', text: 'Use Code WELCOME15 for 15% Off', color: '#6A5ACD' },
-  { icon: '⚡', text: 'New Arrivals Just Dropped — Shop Now', color: '#FFC107' },
-  { icon: '💎', text: 'Premium Collection — Exclusive Deals', color: '#FF69B4' },
-  { icon: '🔄', text: 'Easy 30-Day Returns on All Orders', color: '#20B2AA' },
-  { icon: '⭐', text: '50K+ Happy Customers Worldwide', color: '#FFC107' },
-  { icon: '🔒', text: '100% Secure Checkout — SSL Encrypted', color: '#E63946' },
-];
+import { useQuery } from '@tanstack/react-query';
+import HomePageService from '../../_services/HomePageService';
 
 export function DealTicker() {
   const t = useTranslations();
   const [isPaused, setIsPaused] = useState(false);
+
+  const { data: deals = [] } = useQuery({
+    queryKey: ['deal-ticker-links'],
+    queryFn: async () => {
+      const service = new HomePageService();
+      const result = await service.getLinksBySectionKey('dealticker');
+      return result.succeeded ? (result.data ?? []) : [];
+    },
+  });
+
+  const tickerItems = deals.map((link) => ({ text: link.title, color: '#E63946' }));
+
+  if (tickerItems.length === 0) return null;
 
   return (
     <div
@@ -42,7 +46,7 @@ export function DealTicker() {
         }
         className="flex gap-8 w-max"
       >
-        {[...deals, ...deals].map((deal, i) => (
+        {[...tickerItems, ...tickerItems].map((deal, i) => (
           <span
             key={`${deal.text}-${i}`}
             className="flex items-center gap-2 shrink-0"
@@ -52,7 +56,6 @@ export function DealTicker() {
               className="w-1.5 h-1.5 rounded-full shrink-0"
               style={{ backgroundColor: deal.color }}
             />
-            <span className="text-sm leading-none">{deal.icon}</span>
             <span className="text-xs sm:text-sm font-medium text-ecommerce-text-secondary whitespace-nowrap">
               {deal.text}
             </span>

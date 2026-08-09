@@ -19,7 +19,7 @@ function useFooterLinks() {
     queryFn: async () => {
       const service = new HomePageService();
       const results = await Promise.all(
-        FOOTER_LINK_KEYS.map((key) => service.getLinksByKeyList(key))
+        FOOTER_LINK_KEYS.map((key) => service.getLinksBySectionKey(key))
       );
 
       const footerLinks: Record<string, { label: string; href: string }[]> = {};

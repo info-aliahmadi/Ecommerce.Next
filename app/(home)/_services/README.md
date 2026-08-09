@@ -174,7 +174,7 @@ Fetches all available CMS tags.
 
 **Returns:** Array of `TagModel` objects.
 
-### `getLinksByKeyList(keys: string[]): Promise<Result<LinkModel[]>>`
+### `getLinksBySectionKey(keys: string[]): Promise<Result<LinkModel[]>>`
 Fetches specific links by their keys.
 
 **Parameters:**

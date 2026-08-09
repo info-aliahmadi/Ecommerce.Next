@@ -285,7 +285,7 @@ export default class HomePageService {
   /**
    * Get links by key list
    */
-  async getLinksByKeyList(sectionKey: string): Promise<Result<LinkModel[]>> {
+  async getLinksBySectionKey(sectionKey: string): Promise<Result<LinkModel[]>> {
 
     const params = new URLSearchParams({ sectionKey: sectionKey.toString() });
     let result = await Fetch.Get<Result<LinkModel[]>>(`${this.baseUrl}/Cms/GetLinksByKey?${params.toString()}`, this.config);

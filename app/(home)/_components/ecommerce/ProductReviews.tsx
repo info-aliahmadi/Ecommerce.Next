@@ -117,7 +117,7 @@ export default function ProductReviews({ product, reviews = [], reviewsLoading =
         <div className="flex items-center gap-0.5 mb-2">
           <StarRating rating={review.rating} size={variant === 'full' ? 14 : 9} />
         </div>
-        <p className={`leading-relaxed ${variant === 'full' ? 'text-sm text-ecommerce-text-secondary' : 'text-xs text-ecommerce-text-secondary'}`}>{review.reviewText}</p>
+        <p className={`leading-relaxed ${variant === 'full' ? 'text-sm text-ecommerce-text-secondary' : 'text-xs text-ecommerce-text-secondary'}`} >{review.reviewText}</p>
         {variant === 'full' && review.replyText && (
           <div className="mt-3 pt-3 border-t border-ecommerce-border">
             <p className="text-xs text-ecommerce-text-muted">{review.replyText}</p>
