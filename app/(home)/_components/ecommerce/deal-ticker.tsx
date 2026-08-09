@@ -5,14 +5,14 @@ import { motion } from 'framer-motion';
 import { useTranslations } from 'next-intl';
 
 const deals = [
-  { icon: '🔥', text: 'Flash Sale: Up to 60% OFF Electronics', color: '#E63946' },
-  { icon: '🚚', text: 'Free Shipping on Orders Over $50', color: '#20B2AA' },
-  { icon: '🎁', text: 'Use Code WELCOME15 for 15% Off', color: '#6A5ACD' },
-  { icon: '⚡', text: 'New Arrivals Just Dropped — Shop Now', color: '#FFC107' },
-  { icon: '💎', text: 'Premium Collection — Exclusive Deals', color: '#FF69B4' },
-  { icon: '🔄', text: 'Easy 30-Day Returns on All Orders', color: '#20B2AA' },
-  { icon: '⭐', text: '50K+ Happy Customers Worldwide', color: '#FFC107' },
-  { icon: '🔒', text: '100% Secure Checkout — SSL Encrypted', color: '#E63946' },
+  { icon: '', text: '🔥 Flash Sale: Up to 60% OFF Electronics', color: '#E63946' },
+  { icon: '🚚', text: '🚚 Free Shipping on Orders Over $50', color: '#20B2AA' },
+  { icon: '🎁', text: '🎁 Use Code WELCOME15 for 15% Off', color: '#6A5ACD' },
+  { icon: '⚡', text: '⚡ New Arrivals Just Dropped — Shop Now', color: '#FFC107' },
+  { icon: '💎', text: '💎 Premium Collection — Exclusive Deals', color: '#FF69B4' },
+  { icon: '🔄', text: '🔄 Easy 30-Day Returns on All Orders', color: '#20B2AA' },
+  { icon: '⭐', text: '⭐ 50K+ Happy Customers Worldwide', color: '#FFC107' },
+  { icon: '🔒', text: '🔒 100% Secure Checkout — SSL Encrypted', color: '#E63946' },
 ];
 
 export function DealTicker() {
