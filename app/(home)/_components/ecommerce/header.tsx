@@ -17,7 +17,7 @@ import { NotificationPanel } from './notification-panel';
 import { LanguageSwitcher } from './language-switcher';
 import HomePageService from '../../_services/HomePageService';
 import MenuModel from '@root/app/dashboard/(cms)/_types/Menu/MenuModel';
-import CONFIG from '@root/config';
+import LinkModel from '@root/app/dashboard/(cms)/_types/Link/LinkModel';
 
 function buildMenuTree(items: MenuModel[]): MenuModel[] {
   const map = new Map<number, any>();
@@ -53,23 +53,28 @@ export function PromoBar() {
   const [currentIndex, setCurrentIndex] = useState(0);
   const mounted = useMounted();
 
-  const PROMO_MESSAGES = [
-    { full: t('homepage.header.promo1', { amount: CONFIG.FREE_SHIPPING_THRESHOLD }), short: t('homepage.header.promo1Short') },
-    { full: t('homepage.header.promo2'), short: t('homepage.header.promo2Short') },
-    { full: t('homepage.header.promo3'), short: t('homepage.header.promo3Short') },
-  ];
+  const { data: promos = [] } = useQuery({
+    queryKey: ['promo-links'],
+    queryFn: async () => {
+      const service = new HomePageService();
+      const result = await service.getLinksBySectionKey('promobar');
+      return result.succeeded ? (result.data ?? []) : [];
+    },
+  });
+
+  const promoMessages = promos.map((link) => ({ text: link.title }));
 
   useEffect(() => {
     if (!mounted) return;
     const interval = setInterval(() => {
-      setCurrentIndex((prev) => (prev + 1) % PROMO_MESSAGES.length);
+      setCurrentIndex((prev) => (prev + 1) % promoMessages.length);
     }, 4000);
     return () => clearInterval(interval);
-  }, [mounted, PROMO_MESSAGES.length]);
+  }, [mounted, promoMessages.length]);
 
-  if (!isVisible) return null;
+  if (!isVisible || promoMessages.length === 0) return null;
 
-  const message = PROMO_MESSAGES[currentIndex];
+  const message = promoMessages[currentIndex];
 
   return (
     <div className="bg-ecommerce-red text-white text-center py-2 px-4 text-sm font-medium relative overflow-hidden">
@@ -85,8 +90,7 @@ export function PromoBar() {
             transition={{ duration: 0.3, ease: 'easeInOut' }}
             className="absolute"
           >
-            <span className="hidden sm:inline">{message.full}</span>
-            <span className="sm:hidden">{message.short}</span>
+            {message.text}
           </motion.span>
         </AnimatePresence>
       </div>
