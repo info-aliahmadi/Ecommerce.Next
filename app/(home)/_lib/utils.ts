@@ -8,7 +8,7 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 export function GetImage(imagePreview?: FileUploadModel | undefined | null, thumbnail: boolean | undefined = false): string {
-  const path = thumbnail ? imagePreview?.thumbnailPath || imagePreview?.fullPath : imagePreview?.fullPath || imagePreview?.thumbnailPath;
+  const path = thumbnail ? imagePreview?.thumbnailFullPath || imagePreview?.fullPath : imagePreview?.fullPath || imagePreview?.thumbnailFullPath;
 
   return path
     ? `${CONFIG.API_BASEPATH}${path}`
