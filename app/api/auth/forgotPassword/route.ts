@@ -1,8 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import AuthenticationService from '@root/app/dashboard/(auth)/_service/AuthenticationService';
-import ResultStatusEnum from '@root/app/types/enums/ResultStatusEnum';
-import Result from '@root/app/types/Result';
-import { User } from 'next-auth';
+import ForgotPassword from '@root/app/dashboard/(auth)/_types/User/ForgotPassword';
 
 export async function POST(request: NextRequest) {
   try {
@@ -37,23 +35,25 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const registerModel: RegisterModel = {
-      name: name.trim(),
-      email: email.trim(),
-      password: password,
-      phoneNumber: phoneNumber.trim(),
-    };
-
     const service = new AuthenticationService();
-    const result = await service.register(registerModel);
+
+    let forgotModel: ForgotPassword = {
+      email: email.trim()
+    }
+    const result = await service.forgotPassword(forgotModel);
+
     return NextResponse.json(result);
+
   } catch (error) {
+    if (error === 'PHONE_EXISTS') {
+      return NextResponse.json(
+        { code: 'PHONE_EXISTS', message: 'Phone number already registered' },
+        { status: 400 },
+      );
+    }
     return NextResponse.json(
-      {
-        succeeded: false,
-        message: 'Failed to send OTP',
-        status: ResultStatusEnum.ExceptionThrowed
-      } as Result<User>,
+      { code: 'REGISTER_FAILED', message: 'Registration failed' },
+      { status: 500 },
     );
   }
 }

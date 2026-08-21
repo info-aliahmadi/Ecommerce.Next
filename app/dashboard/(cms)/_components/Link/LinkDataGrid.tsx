@@ -2,7 +2,7 @@
 import { Avatar, Box, Button, Grid, IconButton, Stack, Tooltip } from '@mui/material';
 
 // project import
-import {  useCallback, useMemo, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { useTranslations } from 'next-intl';
 import MaterialTable from '@dashboard/_components/MaterialTable/MaterialTable';
 import { Delete, Edit, ImageNotSupported, Save } from '@mui/icons-material';
@@ -15,19 +15,18 @@ import CONFIG from '@root/config';
 import LinkService from '@dashboard/(cms)/_service/LinkService';
 import { useSession } from 'next-auth/react';
 
-import {  MRT_Row } from 'material-react-table';
+import { MRT_Row } from 'material-react-table';
 import LinkModel from '@dashboard/(cms)/_types/Link/LinkModel';
 import LinkSectionModel from '../../_types/LinkSection/LinkSectionModel';
 import { MRT_Column } from '@root/app/types/MRT_Column';
+import { GetImage } from '@root/app/(home)/_lib/utils';
 
 let mediaExtensions = CONFIG.IMAGES_EXTENSIONS.concat(CONFIG.VIDEOS_EXTENSIONS);
 // ===============================|| COLOR BOX ||=============================== //
 const ImagePreviewRow = ({ renderedCellValue, row }: { renderedCellValue: any, row: MRT_Row<LinkModel> }) => {
   let src;
-  if (renderedCellValue?.fileName) {
-    src = mediaExtensions.some((extension) => extension == renderedCellValue?.extension.toLowerCase())
-      ? CONFIG.UPLOAD_BASEPATH + renderedCellValue.directory + renderedCellValue?.thumbnail
-      : undefined;
+  if (row?.original.imagePreview) {
+    src = mediaExtensions.some((extension) => extension == renderedCellValue?.extension.toLowerCase()) && GetImage(row.original.imagePreview, true);
   } else {
     src = undefined;
   }
@@ -42,7 +41,7 @@ const ImagePreviewRow = ({ renderedCellValue, row }: { renderedCellValue: any, r
       }}
     >
       {src != undefined ? (
-        <img alt="ImagePreview" src={src} height={'80px'} />
+        <img alt="ImagePreview" src={GetImage(row.original.imagePreview, true)} height={'80px'} />
       ) : (
         <Avatar variant="rounded">
           <ImageNotSupported />
@@ -74,7 +73,21 @@ function LinkDataGrid({ linkSection }: { linkSection: MRT_Row<LinkSectionModel> 
         accessorKey: 'imagePreview',
         header: t('fields.link.imagePreview'),
         type: 'string',
-        Cell: ({ renderedCellValue, row }) => <ImagePreviewRow renderedCellValue={renderedCellValue} row={row} />
+        Cell: ({ renderedCellValue, row }) => <Box
+          sx={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: '1rem'
+          }}
+        >
+          {row.original.imagePreview ? (
+            <img alt="ImagePreview" src={GetImage(row.original.imagePreview, true)} height={'80px'} />
+          ) : (
+            <Avatar variant="rounded">
+              <ImageNotSupported />
+            </Avatar>
+          )}
+        </Box>
       },
       {
         accessorKey: 'title',
@@ -188,7 +201,7 @@ function LinkDataGrid({ linkSection }: { linkSection: MRT_Row<LinkSectionModel> 
             renderTopToolbarCustomActions={() => AddOrOrderRow(showSaveOrderBtn, data)}
             enableRowOrdering={true}
             autoResetPageIndex={false}
-            muiTableBodyRowDragHandleProps={({ table } : { table : any }) => ({
+            muiTableBodyRowDragHandleProps={({ table }: { table: any }) => ({
               onDragEnd: () => {
                 const { draggingRow, hoveredRow } = table.getState();
                 if (hoveredRow && draggingRow) {

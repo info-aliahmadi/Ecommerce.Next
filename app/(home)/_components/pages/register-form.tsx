@@ -9,6 +9,9 @@ import { Label } from '@(home)/_components/ui/label';
 import { PhoneInput } from '@(home)/_components/shared/phone-input';
 import { useTranslations } from 'next-intl';
 import { toast } from 'sonner';
+import Fetch from '@root/utils/Fetch';
+import { User } from 'next-auth';
+import Result from '@root/app/types/Result';
 
 interface RegisterFormProps {
   onRegisterSuccess?: () => void;
@@ -22,7 +25,7 @@ export default function RegisterForm({
   onError,
   showInlineError = false,
   idPrefix = 'register',
-}: RegisterFormProps) {
+}: Readonly<RegisterFormProps>) {
   const t = useTranslations('homepage.auth.register');
 
   const [name, setName] = useState('');
@@ -93,25 +96,22 @@ export default function RegisterForm({
       setIsSubmitting(true);
 
       try {
-        const res = await fetch('/api/auth/register', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            name: name.trim(),
-            email: email.trim(),
-            password: password,
-            phoneNumber: phoneNumber.trim(),
-          }),
-        });
+        let config: RequestInit = {
+          headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json'
+          },
+        }
+        let registerModel: RegisterModel = {
+          name: name.trim(),
+          email: email.trim(),
+          password: password,
+          phoneNumber: phoneNumber.trim(),
+        }
+        const response = await Fetch.Post<AccountResult>('/api/auth/register', registerModel, config);
 
-        const data = await res.json();
-
-        if (!res.ok) {
-          if (data.code === 'PHONE_EXISTS') {
-            handleError(t('errorPhoneExists'));
-          } else {
-            handleError(t('errorGeneric'));
-          }
+        if (!response.succeeded) {
+          handleError(response.message);
           return;
         }
 

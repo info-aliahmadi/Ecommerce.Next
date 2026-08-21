@@ -34,6 +34,7 @@ import FileStorageService from '@dashboard/(filestorage)/_service/FileStorageSer
 import { useSession } from 'next-auth/react';
 import FileUploadModel from '../_types/FileUploadModel';
 import { Capitalize, Truncate } from '@root/utils/StringViewer';
+import { GetImage } from '@root/app/(home)/_lib/utils';
 
 // ===============================|| COLOR BOX ||=============================== //
 
@@ -173,7 +174,7 @@ function FilesList({ directory }: Readonly<{ directory: string }>) {
                     <CardMedia
                       component={'img'}
                       height="194"
-                      image={CONFIG.UPLOAD_BASEPATH + file.directory + file.thumbnail}
+                      image={GetImage(file)}
                       alt={file.alt}
                     />
                   ) : (
@@ -189,7 +190,7 @@ function FilesList({ directory }: Readonly<{ directory: string }>) {
                           placement="top-start"
                           title={copy ? t('buttons.copyLinkDone') : t('buttons.copyLink')}
                           onClick={() => {
-                            navigator.clipboard.writeText(CONFIG.UPLOAD_BASEPATH + file.directory + file.fileName);
+                            navigator.clipboard.writeText(GetImage(file));
                             setCopy(true);
                             window.setTimeout(function () {
                               setCopy(false);
@@ -201,7 +202,7 @@ function FilesList({ directory }: Readonly<{ directory: string }>) {
                           </IconButton>
                         </Tooltip>
                         <Tooltip arrow placement="top-start" title={t('buttons.download')}>
-                          <IconButton href={CONFIG.UPLOAD_BASEPATH + file.directory + file.fileName} target="_blank">
+                          <IconButton href={GetImage(file)} target="_blank">
                             <Download />
                           </IconButton>
                         </Tooltip>

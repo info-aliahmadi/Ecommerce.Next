@@ -27,6 +27,7 @@ import FileStorageService from '@dashboard/(filestorage)/_service/FileStorageSer
 import { useSession } from 'next-auth/react';
 import { FileOrigin, FilePondFile, FilePondInitialFile } from 'filepond';
 import FileUploadModel from '../../(filestorage)/_types/FileUploadModel';
+import { GetImage } from '@root/app/(home)/_lib/utils';
 
 interface FileUploadProps {
   id?: string;
@@ -65,14 +66,9 @@ export default function FileUpload({
     fileUploadService.getFilesInfoById(fileIds).then((fileInfos) => {
       let fileInfosData: FilePondInitialFile[] = [];
       fileInfos.data && fileInfos.data.forEach((fileInfo: FileUploadModel) => {
-        let fileUrl = CONFIG.UPLOAD_BASEPATH + fileInfo.directory + fileInfo.fileName;
-        let imagePosterUrl = CONFIG.UPLOAD_BASEPATH + fileInfo.directory;
-        let isVideo = CONFIG.VIDEOS_EXTENSIONS.some((extension) => extension == fileInfo.extension);
-        if (isVideo) {
-          imagePosterUrl += fileInfo.thumbnail;
-        } else {
-          imagePosterUrl += fileInfo.fileName;
-        }
+        let fileUrl = GetImage(fileInfo);
+        const isVideo = CONFIG.VIDEOS_EXTENSIONS.includes(fileInfo.extension);
+        const posterUrl = isVideo && GetImage(fileInfo, true);
 
         fileInfosData.push({
           // the server file reference
@@ -88,7 +84,7 @@ export default function FileUpload({
             },
             // pass poster property
             metadata: {
-              poster: imagePosterUrl,
+              poster: posterUrl,
               url: fileUrl
             }
           }
@@ -101,14 +97,9 @@ export default function FileUpload({
     fileUploadService.getFileInfoById(fileId).then((result) => {
       let fileInfo = result.data;
       if (fileInfo != undefined) {
-        let fileUrl = CONFIG.UPLOAD_BASEPATH + fileInfo.directory + fileInfo.fileName;
-        let imagePosterUrl = CONFIG.UPLOAD_BASEPATH + fileInfo.directory;
-        let isVideo = CONFIG.VIDEOS_EXTENSIONS.some((extension) => extension == fileInfo.extension);
-        if (isVideo) {
-          imagePosterUrl += fileInfo.thumbnail;
-        } else {
-          imagePosterUrl += fileInfo.fileName;
-        }
+        let fileUrl = GetImage(fileInfo);
+        const isVideo = CONFIG.VIDEOS_EXTENSIONS.includes(fileInfo.extension);
+        const posterUrl = isVideo && GetImage(fileInfo, true);
         setFiles([
           {
             // the server file reference
@@ -124,7 +115,7 @@ export default function FileUpload({
               },
               // pass poster property
               metadata: {
-                poster: imagePosterUrl,
+                poster: posterUrl,
                 url: fileUrl
               }
             }
@@ -204,7 +195,7 @@ export default function FileUpload({
       let fileId: number | undefined = parseInt(file.serverId) ?? undefined;
       if (fileId != undefined) {
         fileUploadService.deleteFile(fileId).then((result) => {
-             if(result.succeeded) {
+          if (result.succeeded) {
             setFieldValue(name, undefined);
             setValues([]);
           }

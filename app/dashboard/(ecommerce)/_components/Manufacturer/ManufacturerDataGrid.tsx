@@ -17,7 +17,7 @@ import ManufacturerService from '../../_service/ManufacturerService';
 import ManufacturerModel from '../../_types/Product/ManufacturerModel';
 import { MRT_Row } from 'material-react-table';
 import { MRT_Column } from '@root/app/types/MRT_Column';
-import CONFIG from '@root/config';
+import { GetImage } from '@root/app/(home)/_lib/utils';
 
 
 // ===============================|| COLOR BOX ||=============================== //
@@ -51,7 +51,7 @@ function ManufacturerDataGrid() {
             }}
           >
             {row.original.imagePreview != null ? (
-              <img alt="ImagePreview" src={CONFIG.UPLOAD_BASEPATH + row.original.imagePreview?.directory + row.original.imagePreview?.thumbnail} height={'80px'} />
+              <img alt="ImagePreview" src={GetImage(row.original.imagePreview)} height={'80px'} />
             ) : (
               <Avatar variant="rounded">
                 <ImageNotSupported />

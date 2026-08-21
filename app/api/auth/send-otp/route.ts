@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import AuthenticationService from '@root/app/dashboard/(auth)/_service/AuthenticationService';
+import Result from '@root/app/types/Result';
+import ResultStatusEnum from '@root/app/types/enums/ResultStatusEnum';
 
 export async function POST(request: NextRequest) {
   try {
@@ -14,24 +16,20 @@ export async function POST(request: NextRequest) {
     }
 
     const service = new AuthenticationService();
-    const result = await service.loginByOtp({ phoneNumber });
 
-    if (!result.succeeded) {
-      return NextResponse.json(
-        { succeeded: false, message: result.message || 'Failed to send OTP' },
-        { status: 400 },
-      );
-    }
+    let addPhoneNumberModel: AddPhoneNumberModel = { phoneNumber: phoneNumber };
 
-    return NextResponse.json({
-      succeeded: true,
-      status: result.status,
-      message: result.message,
-    });
+    const result = await service.loginByOtp(addPhoneNumberModel);
+
+    return NextResponse.json(result);
+
   } catch (error) {
     return NextResponse.json(
-      { succeeded: false, message: 'Failed to send OTP' },
-      { status: 500 },
+      {
+        succeeded: false,
+        message: 'Failed to send OTP',
+        status: ResultStatusEnum.ExceptionThrowed
+      } as Result<AccountResult>,
     );
   }
 }

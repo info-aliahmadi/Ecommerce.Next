@@ -11,6 +11,7 @@ import { MRT_Row } from 'material-react-table';
 import { DateTimeViewer } from "@root/utils/DateViewer";
 import DeliveryDateType from '@root/app/types/enums/DeliveryDateType';
 import { Locale } from "@root/locales/Language";
+import { GetImage } from "@root/app/(home)/_lib/utils";
 
 export default function ProductDetail({ row }: Readonly<{ row: MRT_Row<ProductModel> }>) {
     const t = useTranslations("");
@@ -35,7 +36,7 @@ export default function ProductDetail({ row }: Readonly<{ row: MRT_Row<ProductMo
                                 <Avatar
                                     variant="rounded"
                                     alt={row.original.name}
-                                    src={CONFIG.UPLOAD_BASEPATH + row.original.imagePreview.directory + row.original.imagePreview?.fileName}
+                                    src={GetImage(row.original.imagePreview)}
                                     sx={{ width: 200, height: 200 }}
                                 />
                             ) : (
