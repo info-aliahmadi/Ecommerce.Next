@@ -142,13 +142,17 @@ export default function AddOrEditProduct({ params }: Readonly<{ params: Promise<
 
   useEffect(() => {
     document.title = t('pages.cards.product-' + operation) + " - " + CONFIG.APP_HEADER;
-    
+
     if (operation === 'edit' && id > 0) {
       productService.getProductById(id).then((result) => {
-        setProduct(result.data ?? product);
+        if (result.succeeded) {
+          setProduct(result.data ?? product);
+        } else {
+          setNotify({ open: true, type: 'error', title: result.message, description: result.errors.map(x => x.description).join('\n') });
+        }
       });
     }
-  }, [operation, t]);
+  }, [operation, id]);
 
   const handleTabChange = (event: any, newValue: any) => {
     setTab(newValue);
@@ -220,12 +224,17 @@ export default function AddOrEditProduct({ params }: Readonly<{ params: Promise<
       if (operation == 'add') {
         productService
           .addProduct(product)
-          .then(() => {
-            setNotify({ open: true });
-            // add timer after 4 seconds redirect to product list page
-            setTimeout(() => {
-              router.push('/dashboard/product');
-            }, 4000);
+          .then((data) => {
+            if (data.succeeded) {
+              setNotify({ open: true });
+              // add timer after 4 seconds redirect to product list page
+              setTimeout(() => {
+                router.push('/dashboard/product/list');
+              }, 4000);
+
+            } else {
+              setNotify({ open: true, type: 'error', title: data.message, description: data.errors.map(x => x.description).join('\n') });
+            }
           })
           .catch((error: Result<ProductModel>) => {
             setNotify({ open: true, type: 'error', title: error.message, description: error.errors.map(x => x.description).join('\n') });
@@ -234,8 +243,12 @@ export default function AddOrEditProduct({ params }: Readonly<{ params: Promise<
         productService
           .updateProduct(product)
           .then((result) => {
-            setProduct(result.data ?? product);
-            setNotify({ open: true });
+            if (result.succeeded) {
+              setProduct(result.data ?? product);
+              setNotify({ open: true });
+            } else {
+              setNotify({ open: true, type: 'error', title: result.message, description: result.errors.map(x => x.description).join('\n') });
+            }
           })
           .catch((error: Result<ProductModel>) => {
             setNotify({ open: true, type: 'error', title: error.message, description: error.errors.map(x => x.description).join('\n') });
