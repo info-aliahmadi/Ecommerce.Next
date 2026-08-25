@@ -40,9 +40,9 @@ import LinkModel from '../../../_types/Link/LinkModel';
 import { Locale } from '@root/locales/Language';
 import { DateTimeViewer } from '@root/utils/DateViewer';
 
-export default function AddOrEditPage({ params } : { readonly params: Promise<{ id: number, operation: 'edit' | 'add' }> }) {
+export default function AddOrEditPage({ params }: { readonly params: Promise<{ id: number, operation: 'edit' | 'add' }> }) {
   const t = useTranslations("");
-    const { id, operation } = React.use(params);
+  const { id, operation } = React.use(params);
 
   const { data: session } = useSession();
   const jwt = session?.accessToken;
@@ -56,19 +56,27 @@ export default function AddOrEditPage({ params } : { readonly params: Promise<{ 
 
   const loadPage = () => {
     pageService.getPageById(id).then((result) => {
+      if (!result.succeeded) {
+        setNotify({ open: true, type: 'error', title: result.message, description: result.errors.map(x => x.description).join('\n') });
+        return;
+      }
       setPage(result.data);
     });
   };
   useEffect(() => {
     document.title = t('pages.cards.page-' + operation) + " - " + CONFIG.APP_HEADER;
-       if (operation == 'edit' && id > 0) loadPage();
+    if (operation == 'edit' && id > 0) loadPage();
   }, [operation, t]);
 
-  const handleSubmit = async (page : PageModel, resetForm : any, setErrors: (errors: FormikErrors<LinkModel>) => void, setSubmitting: (open: boolean) => void) => {
+  const handleSubmit = async (page: PageModel, resetForm: any, setErrors: (errors: FormikErrors<LinkModel>) => void, setSubmitting: (open: boolean) => void) => {
     if (operation == 'add') {
       pageService
         .addPage(page)
-        .then(() => {
+        .then((result) => {
+          if (!result.succeeded) {
+            setNotify({ open: true, type: 'error', title: result.message, description: result.errors.map(x => x.description).join('\n') });
+            return;
+          }
           resetForm();
           setNotify({ open: true });
         })
@@ -83,6 +91,10 @@ export default function AddOrEditPage({ params } : { readonly params: Promise<{ 
       pageService
         .updatePage(page)
         .then((result) => {
+          if (!result.succeeded) {
+            setNotify({ open: true, type: 'error', title: result.message, description: result.errors.map(x => x.description).join('\n') });
+            return;
+          }
           setPage(result.data);
           setNotify({ open: true });
         })

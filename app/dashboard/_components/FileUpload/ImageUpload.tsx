@@ -44,7 +44,7 @@ interface ImageUploadProps {
 }
 
 function buildInitialFile(fileInfo: FileUploadModel): FilePondInitialFile {
-  debugger
+  
   const fileUrl = GetImage(fileInfo);
   const isVideo = CONFIG.VIDEOS_EXTENSIONS.includes(fileInfo.extension);
   const posterUrl = GetImage(fileInfo, true);

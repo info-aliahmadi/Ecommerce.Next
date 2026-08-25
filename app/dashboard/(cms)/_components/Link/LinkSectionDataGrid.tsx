@@ -59,6 +59,10 @@ function LinkSectionDataGrid() {
 
   const loadLinkSectionList = () => {
     linkSectionService.getLinkSectionList().then((result) => {
+      if (!result.succeeded) {
+        setNotify({ open: true, type: 'error', title: result.message, description: result.errors.map(x => x.description).join('\n') });
+        return;
+      }
       setData(result.data);
       handleRefetch();
     });

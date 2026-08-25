@@ -2,7 +2,7 @@ export default interface FileUploadModel {
     id: number;
     fileName: string;
     directory: string;
-    thumbnail?: string;
+    thumbnail: string;
     extension: string;
     size: number;
     tags?: string;

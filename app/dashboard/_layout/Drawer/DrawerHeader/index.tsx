@@ -21,7 +21,7 @@ const DrawerHeader = ({ open }: {open: boolean}) => {
             size="small"
             sx={{ height: 16, '& .MuiChip-label': { fontSize: '0.625rem', py: 0.25 } }}
             component="a"
-            href="https://github.com/info-aliahmadi/Hydra.React"
+            href="https://github.com/info-aliahmadi/Ecommerce.Next"
             target="_blank"
             clickable
           />

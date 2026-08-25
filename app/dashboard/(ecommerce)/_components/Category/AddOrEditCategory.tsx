@@ -36,7 +36,6 @@ import CategoryService from '../../_service/CategoryService';
 import CategoryModel from '../../_types/Product/CategoryModel';
 import ImageUpload from '@dashboard/_components/FileUpload/ImageUpload';
 import { MRT_Row } from 'material-react-table';
-import MenuModel from '@root/app/dashboard/(cms)/_types/Menu/MenuModel';
 
 interface AddOrEditCategoryProps {
   row?: MRT_Row<CategoryModel>;
@@ -57,6 +56,10 @@ const AddOrEditCategory = ({ row, isNew, open, setOpen, refetch }: AddOrEditCate
 
   const loadCategory = () => {
     row && categoryService.getCategoryById(row?.original?.id).then((result) => {
+      if (!result.succeeded) {
+        setNotify({ open: true, type: 'error', title: result.message, description: result.errors.map(x => x.description).join('\n') });
+        return;
+      }
       setCategory(result.data);
     });
   };
@@ -79,7 +82,11 @@ const AddOrEditCategory = ({ row, isNew, open, setOpen, refetch }: AddOrEditCate
     if (isNew == true) {
       categoryService
         .addCategory(category)
-        .then(() => {
+        .then((result) => {
+          if (!result.succeeded) {
+            setNotify({ open: true, type: 'error', title: result.message, description: result.errors.map(x => x.description).join('\n') });
+            return;
+          }
           refetch();
           onClose();
           setNotify({ open: true });
@@ -91,7 +98,11 @@ const AddOrEditCategory = ({ row, isNew, open, setOpen, refetch }: AddOrEditCate
     } else {
       categoryService
         .updateCategory(category)
-        .then(() => {
+        .then((result) => {
+          if (!result.succeeded) {
+            setNotify({ open: true, type: 'error', title: result.message, description: result.errors.map(x => x.description).join('\n') });
+            return;
+          }
           refetch();
           onClose();
           setNotify({ open: true });

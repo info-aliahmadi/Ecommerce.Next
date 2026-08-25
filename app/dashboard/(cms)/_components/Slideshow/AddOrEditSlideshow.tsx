@@ -51,6 +51,10 @@ export default function AddOrEditSlideshow({ row, isNew, open, setOpen, refetch 
   const loadSlideshow = () => {
     let slideshowId = row?.original?.id;
     slideshowId && slideshowService.getSlideshowById(slideshowId).then((result) => {
+      if (!result.succeeded) {
+        setNotify({ open: true, type: 'error', title: result.message, description: result.errors.map(x => x.description).join('\n') });
+        return;
+      }
       setSlideshow(result.data);
     });
   };
@@ -70,7 +74,11 @@ export default function AddOrEditSlideshow({ row, isNew, open, setOpen, refetch 
     if (isNew == true) {
       slideshowService
         .addSlideshow(slideshow)
-        .then(() => {
+        .then((result) => {
+          if (!result.succeeded) {
+            setNotify({ open: true, type: 'error', title: result.message, description: result.errors.map(x => x.description).join('\n') });
+            return;
+          }
           setSlideshow(undefined);
           onClose();
           setNotify({ open: true });
@@ -86,7 +94,11 @@ export default function AddOrEditSlideshow({ row, isNew, open, setOpen, refetch 
     } else {
       slideshowService
         .updateSlideshow(slideshow)
-        .then(() => {
+        .then((result) => {
+          if (!result.succeeded) {
+            setNotify({ open: true, type: 'error', title: result.message, description: result.errors.map(x => x.description).join('\n') });
+            return;
+          }
           setSlideshow(undefined);
           onClose();
           setNotify({ open: true });

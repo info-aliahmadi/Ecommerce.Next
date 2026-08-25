@@ -50,6 +50,10 @@ const AddOrEditTag = ({ row, isNew, open, setOpen, refetch }:
   const loadTag = () => {
     let tagId = row?.original?.id;
     tagId && tagService.getTagById(tagId).then((result) => {
+      if (!result.succeeded) {
+        setNotify({ open: true, type: 'error', title: result.message, description: result.errors.map(x => x.description).join('\n') });
+        return;
+      }
       setTag(result.data);
     });
   };
@@ -65,11 +69,15 @@ const AddOrEditTag = ({ row, isNew, open, setOpen, refetch }:
     }
   }, [row, isNew, open]);
 
-  const handleSubmit = (tag : TagModel, setErrors: (errors: FormikErrors<TagModel>) => void, setSubmitting: (open: boolean) => void) => {
+  const handleSubmit = (tag: TagModel, setErrors: (errors: FormikErrors<TagModel>) => void, setSubmitting: (open: boolean) => void) => {
     if (isNew == true) {
       tagService
         .addTag(tag)
-        .then(() => {
+        .then((result) => {
+          if (!result.succeeded) {
+            setNotify({ open: true, type: 'error', title: result.message, description: result.errors.map(x => x.description).join('\n') });
+            return;
+          }
           setTag(undefined);
           onClose();
           setNotify({ open: true });
@@ -84,7 +92,11 @@ const AddOrEditTag = ({ row, isNew, open, setOpen, refetch }:
     } else {
       tagService
         .updateTag(tag)
-        .then(() => {
+        .then((result) => {
+          if (!result.succeeded) {
+            setNotify({ open: true, type: 'error', title: result.message, description: result.errors.map(x => x.description).join('\n') });
+            return;
+          }
           setTag(undefined);
           onClose();
           setNotify({ open: true });
@@ -134,7 +146,7 @@ const AddOrEditTag = ({ row, isNew, open, setOpen, refetch }:
               handleSubmit(values, setErrors, setSubmitting);
             } catch (err) {
               setStatus({ success: false });
-              
+
             }
           }}
         >

@@ -17,6 +17,8 @@ import SelectProductTag from '../ProductTag/SelectProductTag';
 import SelectProductAttribute from '../ProductAttribute/SelectProductAttribute';
 import { Locale } from '@root/locales/Language';
 import { DateTimeViewer } from '@root/utils/DateViewer';
+import SelectCurrency from '../Currency/SelectCurrency';
+import SelectMeasureType from '../MeasureType/SelectMeasureType';
 
 export default function ProductBaseInfo({
   operation,
@@ -98,17 +100,17 @@ export default function ProductBaseInfo({
         </Grid>
         <Grid size={{ xs: 12, sm: 12, md: 12, lg: 12, xl: 12 }}>
           <Stack>
-            <Editor
+            {values && <Editor
               name='fullDescription'
               setFieldValue={setFieldValue}
               value={values?.fullDescription || ''}
               placeholder={t("fields.product.fullDescription")}
-            />
+            />}
             {operation == 'edit' && (
-              <Grid size={12}>
+              <Grid size={12} sx={{ mt: 1 }}>
                 {t(fieldsName + 'createdBy') + ' : '}
                 <Chip
-                  avatar={<Avatar src={CONFIG.AVATAR_BASEPATH + values.createUser?.avatar} />}
+                  avatar={<Avatar src={values.createUser?.avatar ?? CONFIG.AVATAR_BASEPATH + values.createUser?.avatar} />}
                   title={values.createUser?.name}
                   label={values.createUser?.userName}
                   variant="filled"
@@ -128,7 +130,7 @@ export default function ProductBaseInfo({
                     {t(fieldsName + 'editedBy') + ' : '}
                     <Chip
                       title={t(fieldsName + 'editedBy')}
-                      avatar={<Avatar src={CONFIG.AVATAR_BASEPATH + values.updateUser?.avatar} />}
+                      avatar={<Avatar src={values.updateUser?.avatar ?? CONFIG.AVATAR_BASEPATH + values.updateUser?.avatar} />}
                       label={values.updateUser?.userName}
                       variant="filled"
                       size="small"
@@ -152,6 +154,36 @@ export default function ProductBaseInfo({
               </FormHelperText>
             )}
           </Stack>
+        </Grid>
+        <Grid size={{ xs: 12, sm: 12, md: 3, lg: 3, xl: 2 }}>
+          <SelectCurrency
+            defaultValue={values?.currencyType ?? null}
+            id="currencyType"
+            label={t(fieldsName + 'currencyType')}
+            setFieldValue={setFieldValue}
+            error={Boolean(errors.currencyType)}
+            disabled={false}
+          />
+          {errors.currencyType && (
+            <FormHelperText error id="helper-text">
+              {errors.currencyType}
+            </FormHelperText>
+          )}
+        </Grid>
+        <Grid size={{ xs: 12, sm: 12, md: 3, lg: 3, xl: 2 }}>
+          <SelectMeasureType
+            defaultValue={values?.measureType ?? null}
+            id="measureType"
+            label={t(fieldsName + 'measureType')}
+            setFieldValue={setFieldValue}
+            error={Boolean(errors.measureType)}
+            disabled={false}
+          />
+          {errors.measureType && (
+            <FormHelperText error id="helper-text">
+              {errors.measureType}
+            </FormHelperText>
+          )}
         </Grid>
         <Grid size={{ xs: 12, sm: 12, md: 6, lg: 6, xl: 4 }}>
           <SelectDeliveryDate

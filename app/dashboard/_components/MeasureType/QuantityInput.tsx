@@ -1,31 +1,31 @@
-import React, {useState, useCallback} from 'react';
+import React, { useState, useCallback } from 'react';
 import {
   TextField,
   TextFieldProps,
   InputAdornment,
   Typography,
 } from '@mui/material';
-import CurrencyTypes from '@root/app/types/enums/CurrencyTypes';
+import MeasureType from '@root/app/types/enums/MeasureType';
 import CONFIG from '@root/config';
-import { GetCurrencySymbol } from '@root/utils/CurrencyViewer';
+import { MeasureTypeSymbolViewer } from '@root/utils/MeasureTypeViewer';
 
-interface CurrencyInputProps extends Omit<
+interface QuantityInputProps extends Omit<
   TextFieldProps,
   'onChange' | 'value'
 > {
   value?: string | number;
   onChange?: (value: number) => void;
   error?: boolean;
-  currencyType?: CurrencyTypes;
+  measureType?: MeasureType;
 }
 
-const CurrencyInput = React.forwardRef<HTMLInputElement, CurrencyInputProps>(
+const QuantityInput = React.forwardRef<HTMLInputElement, QuantityInputProps>(
   (
     {
       value: propValue = '',
       onChange,
       error = false,
-      currencyType = CONFIG.DEFAULT_CURRENCY,
+      measureType = CONFIG.DEFAULT_MEASURETYPE,
       ...other
     },
     ref,
@@ -34,8 +34,10 @@ const CurrencyInput = React.forwardRef<HTMLInputElement, CurrencyInputProps>(
     const [isFocused, setIsFocused] = useState(false);
 
     const shouldAllowDecimals =
-      currencyType === CurrencyTypes.Dollar ||
-      currencyType === CurrencyTypes.Euro;
+      measureType === MeasureType.Kilogram ||
+      measureType === MeasureType.Litr ||
+      measureType === MeasureType.Meter ||
+      measureType === MeasureType.Mesghal;
 
     const handleChange = useCallback(
       (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -81,9 +83,9 @@ const CurrencyInput = React.forwardRef<HTMLInputElement, CurrencyInputProps>(
       [isFocused, shouldAllowDecimals],
     );
 
-    const currencySymbol = useCallback(() => {
-      return GetCurrencySymbol(currencyType);
-    }, [currencyType]);
+    const measureSymbol = useCallback(() => {
+      return MeasureTypeSymbolViewer(measureType);
+    }, [measureType]);
 
     // Sync with external value changes when not focused
     React.useEffect(() => {
@@ -104,19 +106,17 @@ const CurrencyInput = React.forwardRef<HTMLInputElement, CurrencyInputProps>(
         slotProps={{
           input: {
             startAdornment:
-              currencyType !== CurrencyTypes.None ? (
-                <InputAdornment position="start">
-                  <Typography
-                    variant="caption"
-                    color="textSecondary"
-                    sx={{fontSize: 12, m: 0}}>
-                    {currencySymbol()}
-                  </Typography>
-                </InputAdornment>
-              ) : undefined,
+              <InputAdornment position="start">
+                <Typography
+                  variant="caption"
+                  color="textSecondary"
+                  sx={{ fontSize: 12, m: 0 }}>
+                  {measureSymbol()}
+                </Typography>
+              </InputAdornment>,
             inputProps: {
               pattern: shouldAllowDecimals ? '[0-9]*[.,]?[0-9]*' : '[0-9]*',
-              style: {textAlign: 'center'},
+              style: { textAlign: 'center' },
             },
           },
         }}
@@ -133,6 +133,6 @@ const CurrencyInput = React.forwardRef<HTMLInputElement, CurrencyInputProps>(
   },
 );
 
-CurrencyInput.displayName = 'CurrencyInput';
+QuantityInput.displayName = 'QuantityInput';
 
-export default CurrencyInput;
+export default QuantityInput;

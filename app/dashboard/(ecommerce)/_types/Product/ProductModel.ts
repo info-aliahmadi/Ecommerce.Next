@@ -12,7 +12,7 @@ export default interface ProductModel {
   /**
    * The ID of the product.
    */
-  id: number;
+  id?: number;
   /**
    * The name of the product.
    */

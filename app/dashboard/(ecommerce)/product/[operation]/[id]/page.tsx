@@ -69,6 +69,7 @@ export default function AddOrEditProduct({ params }: Readonly<{ params: Promise<
   let datetimeNow = new Date();
   const jwt = session?.accessToken;
   let productService = new ProductsService(jwt ?? '');
+
   const initProduct: ProductModel = {
     id: 0,
     name: '',
@@ -145,11 +146,11 @@ export default function AddOrEditProduct({ params }: Readonly<{ params: Promise<
 
     if (operation === 'edit' && id > 0) {
       productService.getProductById(id).then((result) => {
-        if (result.succeeded) {
-          setProduct(result.data ?? product);
-        } else {
+        if (!result.succeeded) {
           setNotify({ open: true, type: 'error', title: result.message, description: result.errors.map(x => x.description).join('\n') });
+          return;
         }
+        setProduct(result.data ?? product);
       });
     }
   }, [operation, id]);
@@ -164,15 +165,11 @@ export default function AddOrEditProduct({ params }: Readonly<{ params: Promise<
 
   const handleChange = (e: any) => {
     const { name, value } = e.target;
-
-
-    // fill the field in product
-    const updatedProduct: ProductModel = {
-      ...product,       // Override with existing product data
-      [name]: value     // Add the new field value
-    };
-
-    setProduct(updatedProduct);
+    // Update product field
+    setProduct(prev => ({
+      ...prev,
+      [name]: value,
+    }));
 
     // Clear error when field is edited
     if (errors && (errors as any)[name]) {
@@ -182,13 +179,11 @@ export default function AddOrEditProduct({ params }: Readonly<{ params: Promise<
     }
   };
   const setFieldValue = (field: string, value: any): void => {
-    // fill the field in product
-    const updatedProduct: ProductModel = {
-      ...product,       // Override with existing product data
-      [field]: value     // Add the new field value
-    };
-
-    setProduct(updatedProduct);
+    // Update product field
+    setProduct(prev => ({
+      ...prev,
+      [field]: value,
+    }));
 
     // Clear error when field is edited
     if (errors && (errors as any)[field]) {
@@ -224,17 +219,17 @@ export default function AddOrEditProduct({ params }: Readonly<{ params: Promise<
       if (operation == 'add') {
         productService
           .addProduct(product)
-          .then((data) => {
-            if (data.succeeded) {
-              setNotify({ open: true });
-              // add timer after 4 seconds redirect to product list page
-              setTimeout(() => {
-                router.push('/dashboard/product/list');
-              }, 4000);
-
-            } else {
-              setNotify({ open: true, type: 'error', title: data.message, description: data.errors.map(x => x.description).join('\n') });
+          .then((result) => {
+            if (!result.succeeded) {
+              setNotify({ open: true, type: 'error', title: result.message, description: result.errors.map(x => x.description).join('\n') });
+              return;
             }
+            setNotify({ open: true });
+            // add timer after 4 seconds redirect to product list page
+            setTimeout(() => {
+              router.push('/dashboard/product/list');
+            }, 4000);
+
           })
           .catch((error: Result<ProductModel>) => {
             setNotify({ open: true, type: 'error', title: error.message, description: error.errors.map(x => x.description).join('\n') });
@@ -243,12 +238,12 @@ export default function AddOrEditProduct({ params }: Readonly<{ params: Promise<
         productService
           .updateProduct(product)
           .then((result) => {
-            if (result.succeeded) {
-              setProduct(result.data ?? product);
-              setNotify({ open: true });
-            } else {
+            if (!result.succeeded) {
               setNotify({ open: true, type: 'error', title: result.message, description: result.errors.map(x => x.description).join('\n') });
+              return;
             }
+            setProduct(result.data ?? product);
+            setNotify({ open: true });
           })
           .catch((error: Result<ProductModel>) => {
             setNotify({ open: true, type: 'error', title: error.message, description: error.errors.map(x => x.description).join('\n') });

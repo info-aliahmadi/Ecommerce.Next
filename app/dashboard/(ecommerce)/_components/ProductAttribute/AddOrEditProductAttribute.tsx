@@ -65,6 +65,10 @@ export default function AddOrEditProductAttribute(
 
   const loadProductAttribute = () => {
     productAttributeService.getProductAttributeById(productAttributeId).then((result) => {
+      if (!result.succeeded) {
+        setNotify({ open: true, type: 'error', title: result.message, description: result.errors.map(x => x.description).join('\n') });
+        return;
+      }
       setProductAttribute(result.data);
     });
   };
@@ -87,7 +91,11 @@ export default function AddOrEditProductAttribute(
     if (isNew == true) {
       productAttributeService
         .addProductAttribute(productAttribute)
-        .then(() => {
+        .then((result) => {
+          if (!result.succeeded) {
+            setNotify({ open: true, type: 'error', title: result.message, description: result.errors.map(x => x.description).join('\n') });
+            return;
+          }
           onClose();
           setProductAttribute(undefined);
           setNotify({ open: true });
@@ -103,7 +111,11 @@ export default function AddOrEditProductAttribute(
     } else {
       productAttributeService
         .updateProductAttribute(productAttribute)
-        .then(() => {
+        .then((result) => {
+          if (!result.succeeded) {
+            setNotify({ open: true, type: 'error', title: result.message, description: result.errors.map(x => x.description).join('\n') });
+            return;
+          }
           onClose();
           setProductAttribute(undefined);
           setNotify({ open: true });

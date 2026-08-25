@@ -52,6 +52,10 @@ const AddOrEditBundle = ({ bundleId, isNew, open, setOpen, refetch }:
 
   const loadBundle = () => {
     bundleService.getBundleById(bundleId).then((result) => {
+      if (!result.succeeded) {
+        setNotify({ open: true, type: 'error', title: result.message, description: result.errors.map(x => x.description).join('\n') });
+        return;
+      }
       setBundle(result.data);
     });
   };
@@ -73,7 +77,11 @@ const AddOrEditBundle = ({ bundleId, isNew, open, setOpen, refetch }:
     if (isNew == true) {
       bundleService
         .addBundle(Bundle)
-        .then(() => {
+        .then((result) => {
+          if (!result.succeeded) {
+            setNotify({ open: true, type: 'error', title: result.message, description: result.errors.map(x => x.description).join('\n') });
+            return;
+          }
           onClose();
           setBundle(undefined);
           setNotify({ open: true });
@@ -86,7 +94,11 @@ const AddOrEditBundle = ({ bundleId, isNew, open, setOpen, refetch }:
     } else {
       bundleService
         .updateBundle(Bundle)
-        .then(() => {
+        .then((result) => {
+          if (!result.succeeded) {
+            setNotify({ open: true, type: 'error', title: result.message, description: result.errors.map(x => x.description).join('\n') });
+            return;
+          }
           onClose();
           setBundle(undefined);
           setNotify({ open: true });
