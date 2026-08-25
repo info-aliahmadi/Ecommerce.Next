@@ -3,7 +3,7 @@
 import { useState, useCallback } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { ChevronLeft } from 'lucide-react';
-import { getThumbnailName } from '../../../_lib/utils';
+import { getThumbnailName } from '@root/app/(home)/_lib/utils';
 
 export default function ImageGallery({
   images,

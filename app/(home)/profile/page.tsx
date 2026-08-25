@@ -102,7 +102,7 @@ export default function ProfilePage() {
 
   // Stores
   const wishlistItems = useWishlistStore((s) => s.items);
-  debugger
+  
   const wishlistCount = wishlistItems.length;
   const addToCart = useAddToCart();
   const removeFromWishlist = useRemoveFromWishlist();

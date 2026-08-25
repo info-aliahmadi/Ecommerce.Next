@@ -129,7 +129,7 @@ export default async function ProductDetailPage({
     const base = GetImage(product.imagePreview);
     images = [base];
   }
-  const imageList = images.map(x => CONFIG.API_BASEPATH + x);
+  const imageList = images.map(x => CONFIG.API_BASEPATH + "/" + x);
 
   // Delivery date label
   const deliveryDateLabels: Record<number, string> = {

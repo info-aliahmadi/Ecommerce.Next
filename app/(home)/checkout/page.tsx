@@ -361,7 +361,7 @@ function CheckoutPageInner() {
 
   const discountAmount = useMemo(() => {
     if (!discountModel || !items || items.length === 0) return 0;
-    debugger
+    
     return orderService.calculateDiscount(discountModel, items);
   }, [discountModel, items]);
 
@@ -547,7 +547,7 @@ function CheckoutPageInner() {
         toast.success(t('orderPlaced'));
         goToStep(4, 1);
       } else {
-        debugger
+        
         setPlaceOrderError(result.message || t('orderFailed'));
       }
     } catch {
