@@ -97,7 +97,7 @@ export function SearchSuggestions({ isOpen, onClose }: { isOpen: boolean; onClos
                 : 0;
             const image =
               product.imagePaths && product.imagePaths.length > 0
-                ? CONFIG.API_BASEPATH + product.imagePaths[0]
+                ? CONFIG.API_BASEPATH + "/" + product.imagePaths[0]
                 : CONFIG.UNKNOWN_IMAGE_BASEPATH;
             const category =
               product.categories.length > 0

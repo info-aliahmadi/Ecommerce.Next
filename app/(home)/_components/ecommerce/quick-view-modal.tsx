@@ -77,7 +77,7 @@ function QuickViewContent({ product, onClose }: Readonly<{ product: ProductDispl
       const base = GetImage(product.imagePreview);
       images = [base];
     }
-    return images.map(x => CONFIG.API_BASEPATH + x);
+    return images.map(x => CONFIG.API_BASEPATH + "/" + x);
   }, [product.imagePaths]);
 
   useEffect(() => {

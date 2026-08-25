@@ -257,12 +257,12 @@ export default function ProductListCard({ product, index = 0 }: Readonly<Product
                 <div className="flex flex-col gap-0.5">
                   <div className="flex items-baseline gap-1.5">
                     {hasMultipleVariants ? (
-                      <span className="text-base sm:text-lg font-bold text-ecommerce-text-primary">
+                      <span className="text-base sm:text-md font-bold text-ecommerce-text-primary">
                         {CurrencyViewer(minSellPrice, CONFIG.DEFAULT_CURRENCY)} - {CurrencyViewer(maxSellPrice, CONFIG.DEFAULT_CURRENCY)}
                       </span>
                     ) : (
                       <>
-                        <span className="text-base sm:text-lg font-bold text-ecommerce-text-primary">{CurrencyViewer(minSellPrice, CONFIG.DEFAULT_CURRENCY)}</span>
+                        <span className="text-base sm:text-md font-bold text-ecommerce-text-primary">{CurrencyViewer(minSellPrice, CONFIG.DEFAULT_CURRENCY)}</span>
                         {cheapestVariant && cheapestVariant.oldSellPrice > 0 && cheapestVariant.oldSellPrice > cheapestVariant.sellPrice && (
                           <span className="text-xs text-ecommerce-text-muted line-through">{CurrencyViewer(cheapestVariant.oldSellPrice, CONFIG.DEFAULT_CURRENCY)}</span>
                         )}
