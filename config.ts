@@ -6,7 +6,7 @@ import ThemeType from "./app/types/enums/ThemeType";
 
 // ==============================|| THEME CONFIG  ||============================== //
 const CONFIG = {
-  APP_VERSION: '1.2',
+  APP_VERSION: '1.3',
   APP_HEADER: 'Kidy Toy',
   DEFAULT_PATH: '/',
   MINIDRAWER: true,
