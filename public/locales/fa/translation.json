@@ -1648,6 +1648,15 @@
         "Litr": "لیتر",
         "Gram": "گرم",
         "Mesghal": "مثقال"
+      },
+      "measureTypesSymbol": {
+        "Gram": "g",
+        "Kilogram": "kg",
+        "Litr": "L",
+        "Number": "عدد",
+        "Box": "box",
+        "Meter": "m",
+        "Mesghal": "misgal"
       }
     },
     "productTag": {
