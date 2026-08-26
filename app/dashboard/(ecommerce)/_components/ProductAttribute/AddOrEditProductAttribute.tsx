@@ -56,7 +56,7 @@ export default function AddOrEditProductAttribute(
     }>) {
   const t = useTranslations("");
   const [fieldsName, validation, buttonName] = ['fields.productAttribute.', 'validation.productAttribute.', 'buttons.productAttribute.'];
-  const dialogName = t('pages.productAttribute');
+  const dialogName = t('pages.productAttributes');
   const [productAttribute, setProductAttribute] = useState<ProductAttributeModel>();
   const [notify, setNotify] = useState<NotifyProps>({ open: false });
   const { data: session } = useSession();
@@ -147,7 +147,7 @@ export default function AddOrEditProductAttribute(
 
   const initialValues: ProductAttributeModel = {
     id: productAttribute?.id ?? 0,
-    name: productAttribute?.name ?? '',
+    displayName: productAttribute?.displayName ?? '',
     key: productAttribute?.key ?? '',
     attributeType: productAttribute?.attributeType ?? AttributeType.Color,
     imagePreviewId: productAttribute?.imagePreviewId ?? null,
@@ -164,7 +164,7 @@ export default function AddOrEditProductAttribute(
           initialValues={initialValues}
           enableReinitialize={true}
           validationSchema={Yup.object().shape({
-            name: Yup.string().max(70).required('Name is required'),
+            displayName: Yup.string().max(70).required('Display Name is required'),
             attributeType: Yup.string().required('AttributeType is required'),
             key: Yup.string().required('Key is required'),
           })}
@@ -190,21 +190,21 @@ export default function AddOrEditProductAttribute(
                 <Grid container spacing={3} >
                   <Grid size={12}>
                     <Stack spacing={1}>
-                      <InputLabel htmlFor="name">{t(fieldsName + 'name')}</InputLabel>
+                      <InputLabel htmlFor="displayName">{t(fieldsName + 'displayName')}</InputLabel>
                       <OutlinedInput
-                        id="name"
+                        id="displayName"
                         type="text"
-                        value={values?.name || ''}
-                        name="name"
+                        value={values?.displayName || ''}
+                        name="displayName"
                         onBlur={handleBlur}
                         onChange={handleChange}
-                        placeholder={t(fieldsName + 'name')}
+                        placeholder={t(fieldsName + 'displayName')}
                         fullWidth
-                        error={Boolean(touched.name && errors.name)}
+                        error={Boolean(touched.displayName && errors.displayName)}
                       />
-                      {touched.name && errors.name && (
-                        <FormHelperText error id="helper-text-name">
-                          {errors.name}
+                      {touched.displayName && errors.displayName && (
+                        <FormHelperText error id="helper-text">
+                          {errors.displayName}
                         </FormHelperText>
                       )}
                     </Stack>
@@ -293,6 +293,7 @@ export default function AddOrEditProductAttribute(
                     <Stack spacing={1}>
                       <InputLabel htmlFor="imagePreviewId">{t(fieldsName + 'imagePreviewId')}</InputLabel>
                       <ImageUpload
+                        key={values?.imagePreviewId}
                         name="imagePreviewId"
                         setFieldValue={setFieldValue}
                         value={values?.imagePreviewId ?? 0}

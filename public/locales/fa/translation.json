@@ -1665,7 +1665,7 @@
       "products": "تعداد محصولات"
     },
     "productAttribute": {
-      "name": "عنوان خصوصیات",
+      "displayName": "عنوان خصوصیت",
       "key": "کلید",
       "attributeType": "نوع خصوصیات",
       "description": "توضیحات",

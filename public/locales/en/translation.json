@@ -1180,7 +1180,6 @@
     "discounts": "Discounts",
     "common": "Commons",
     "discount": "Discounts",
-    "productAttribute": "Product Attributes",
     "productTag": "Product Tags",
     "stateProvince": "State/Provinces",
     "taxRate": "Tax Rates",
@@ -1230,7 +1229,9 @@
       "country-add": "Add New Country",
       "country-edit": "Edit Country",
       "product-add": "Add New Product",
-      "product-edit": "Edit Product"
+      "product-edit": "Edit Product",
+      "productAttribute-add": "Add New Attribute",
+      "productAttribute-edit": "Edit Attribute"
     }
   },
   "fields": {
@@ -1673,7 +1674,7 @@
       "products": "Number of Products"
     },
     "productAttribute": {
-      "name": "Attribute Name",
+      "displayName": "Display Name",
       "key": "Key",
       "attributeType": "Attribute Type",
       "description": "Description",
