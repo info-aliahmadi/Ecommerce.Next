@@ -5,8 +5,9 @@ import { ProductCard } from './product-card';
 import { useUIStore } from '../../_lib/store';
 import { Button } from '../ui/button';
 import { Skeleton } from '../ui/skeleton';
-import { Slider } from '../ui/slider';
 import { SlidersHorizontal, Grid3X3, LayoutList, X, Filter, ArrowDown, PackageSearch, ArrowRight, Loader2, ArrowLeft } from 'lucide-react';
+
+
 import {
   Select,
   SelectContent,
@@ -14,7 +15,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '../ui/select';
-import { useState, useMemo, useCallback } from 'react';
+import { useState, useMemo, useCallback, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useLocale, useTranslations } from 'next-intl';
 import HomePageService from '../../_services/HomePageService';
@@ -22,12 +23,15 @@ import ProductFilterModel from '../../_types/Product/ProductFilterModel';
 import SortingType, { SortOption } from '@root/app/types/enums/SortingType';
 import Link from 'next/link';
 import ProductListCard from './product-list';
-import CurrencyViewer, { GetCurrencySymbol } from '@root/utils/CurrencyViewer';
+import CurrencyViewer from '@root/utils/CurrencyViewer';
 import CONFIG from '@root/config';
 import { resolveLocale } from '@root/utils/resolver';
 import { Locale } from '@root/locales/Language';
+import useDebounce from '../../_hooks/use-debounce';
+import { PriceRangeSlider } from '../shared/price-range-slider';
 
-
+const DEFAULT_MAX_PRICE = 200_000_000;
+const STEP_PRICE = 50_000;
 const SORT_MAP: Record<SortOption, SortingType> = {
   'newest': SortingType.SortNewest,
   'oldest': SortingType.SortOldest,
@@ -72,24 +76,26 @@ export function ProductGrid() {
     return cat?.id ?? null;
   }, [selectedCategory, categories]);
 
-  const [priceRange, setPriceRange] = useState<[number, number]>([0, 9999]);
-  const [sliderValue, setSliderValue] = useState<[number, number]>([0, 9999]);
+  const [sliderValue, setSliderValue] = useState<[number, number]>([0, DEFAULT_MAX_PRICE]);
+  const [hasDiscounts, setHasDiscounts] = useState<boolean>(false);
 
   const filter = useMemo((): Omit<ProductFilterModel, 'pageIndex'> => ({
     pageSize: CONFIG.PRODUCTS_PER_PAGE,
     searchInput: searchQuery,
     categoryIds: selectedCategoryId ? [selectedCategoryId] : undefined,
     sorting: SORT_MAP[sortBy] ?? SortingType.SortNewest,
-    fromSellUnitPrice: priceRange[0] > 0 ? priceRange[0] : undefined,
-    toSellUnitPrice: priceRange[1] < sliderValue[1] ? priceRange[1] : undefined,
-  }), [searchQuery, selectedCategoryId, sortBy, priceRange]);
+    fromSellUnitPrice: sliderValue[0] > 0 ? sliderValue[0] : undefined,
+    toSellUnitPrice: sliderValue[1] < DEFAULT_MAX_PRICE ? sliderValue[1] : undefined,
+    hasDiscounts: hasDiscounts || undefined,
+  }), [searchQuery, selectedCategoryId, sortBy, sliderValue, hasDiscounts]);
 
+  const debouncedFilter = useDebounce(filter, 400);
 
   const { data, isLoading, isError, fetchNextPage, hasNextPage, isFetchingNextPage } = useInfiniteQuery({
-    queryKey: ['productsFeatured', filter],
+    queryKey: ['productsFeatured', debouncedFilter],
     queryFn: async ({ pageParam }) => {
       const service = new HomePageService();
-      const result = await service.getFeaturedProductsByFilter({ ...filter, pageIndex: pageParam } as ProductFilterModel);
+      const result = await service.getFeaturedProductsByFilter({ ...debouncedFilter, pageIndex: pageParam } as ProductFilterModel);
       if (!result.succeeded) throw new Error(result.message ?? 'Failed to load products');
       return result.data;
     },
@@ -104,13 +110,17 @@ export function ProductGrid() {
 
   const products = data?.pages.flatMap((page) => page?.items ?? []) ?? [];
   const total = data?.pages[0]?.totalItems ?? 0;
-  const maxRange = data?.pages[0]?.maxRange ?? 0;
+  const maxPriceRange = data?.pages[0]?.maxRange ?? 0;
 
+  useEffect(() => {
+    if (maxPriceRange > 0 && sliderValue[1] === DEFAULT_MAX_PRICE) {
+      setSliderValue([0, maxPriceRange]);
+    }
+  }, [maxPriceRange, sliderValue]);
 
   const handleClearPrice = useCallback(() => {
-    setPriceRange([0, maxRange]);
-    setSliderValue([0, maxRange]);
-  }, [maxRange]);
+    setSliderValue([0, maxPriceRange]);
+  }, [maxPriceRange]);
 
   const handleCategoryClick = useCallback((slug: string | null) => {
     setSelectedCategory(slug);
@@ -119,19 +129,20 @@ export function ProductGrid() {
   const activeFilterCount = useMemo(() => {
     let count = 0;
     if (selectedCategory) count++;
-    if (priceRange[0] > 0 || priceRange[1] < 9999) count++;
+    if (sliderValue[0] > 0 || sliderValue[1] < DEFAULT_MAX_PRICE) count++;
+    if (hasDiscounts) count++;
     if (searchQuery) count++;
     if (sortBy && sortBy !== 'newest') count++;
     return count;
-  }, [selectedCategory, priceRange, searchQuery, sortBy]);
+  }, [selectedCategory, sliderValue, hasDiscounts, searchQuery, sortBy]);
 
   const handleClearAll = useCallback(() => {
     setSelectedCategory(null);
     setSortBy('newest');
     useUIStore.getState().setSearchQuery('');
-    setPriceRange([0, maxRange]);
-    setSliderValue([0, maxRange]);
-  }, [setSelectedCategory, setSortBy]);
+    setSliderValue([0, maxPriceRange]);
+    setHasDiscounts(false);
+  }, [setSelectedCategory, setSortBy, maxPriceRange]);
 
   return (
     <section id="products" className="py-12 sm:py-16 relative overflow-hidden">
@@ -202,11 +213,21 @@ export function ProductGrid() {
                       type="button" onClick={() => setSortBy('newest')} className="hover:bg-ecommerce-red/20 rounded-full p-0.5 transition-colors"><X size={12} /></button>
                   </span>
                 )}
-                {(priceRange[0] > 0 || priceRange[1] < maxRange) && (
+                {(sliderValue[0] > 0 || sliderValue[1] < maxPriceRange) && (
                   <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-ecommerce-red/10 text-ecommerce-red text-xs font-medium">
-                    {t('homepage.common.priceRange')}: {CurrencyViewer(priceRange[0], CONFIG.DEFAULT_CURRENCY)} –
-                    {priceRange[1] < maxRange ? CurrencyViewer(priceRange[1], CONFIG.DEFAULT_CURRENCY) : CurrencyViewer(maxRange, CONFIG.DEFAULT_CURRENCY)}
+                    {t('homepage.common.priceRange')}: {CurrencyViewer(sliderValue[0], CONFIG.DEFAULT_CURRENCY)} –
+                    {sliderValue[1] < maxPriceRange ? CurrencyViewer(sliderValue[1], CONFIG.DEFAULT_CURRENCY) : CurrencyViewer(maxPriceRange, CONFIG.DEFAULT_CURRENCY)}
                     <button onClick={handleClearPrice} className="hover:bg-ecommerce-red/20 rounded-full p-0.5 transition-colors"><X size={12} /></button>
+                  </span>
+                )}
+                {hasDiscounts && (
+                  <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-ecommerce-red/10 text-ecommerce-red text-xs font-medium">
+                    {t('homepage.shopPage.withDiscount')}
+                    <button
+                      type="button"
+                      onClick={() => setHasDiscounts(false)}
+                      className="hover:bg-ecommerce-red/20 rounded-full p-0.5 transition-colors"
+                    ><X size={12} /></button>
                   </span>
                 )}
                 <button
@@ -319,7 +340,7 @@ export function ProductGrid() {
             <div style={{ maxWidth: "450px" }} className="p-3 rounded-xl space-y-3">
               <div className="flex items-center justify-between">
                 <span className="text-xs font-semibold text-ecommerce-text-muted uppercase tracking-wider">{t('homepage.common.priceRange')}</span>
-                {(priceRange[0] > 0 || priceRange[1] < maxRange) && (
+                {(sliderValue[0] > 0 || sliderValue[1] < maxPriceRange) && (
                   <button
                     type="button"
                     onClick={handleClearPrice}
@@ -330,56 +351,20 @@ export function ProductGrid() {
                   </button>
                 )}
               </div>
-              <div className="flex items-center justify-between text-sm">
-                <span className="text-ecommerce-text-primary font-medium">{CurrencyViewer(sliderValue[0], CONFIG.DEFAULT_CURRENCY)}</span>
-                <span className="text-ecommerce-text-primary font-medium">{CurrencyViewer(Math.min(sliderValue[1], maxRange), CONFIG.DEFAULT_CURRENCY)}</span>
-              </div>
-              <Slider
+              <PriceRangeSlider
                 value={sliderValue}
-                onValueChange={(value) => setSliderValue(value as [number, number])}
-                onValueCommit={([min, max]) => setPriceRange([min, max])}
+                // minStepsBetweenThumbs={500000}
+                showDiscount
+                discountChecked={hasDiscounts}
+                onDiscountChange={(checked) => setHasDiscounts(checked)}
+                discountLabel={t('homepage.shopPage.withDiscount')}
+                onValueChange={setSliderValue}
+                onCommit={setSliderValue}
                 min={0}
-                max={maxRange}
-                step={1}
+                max={maxPriceRange || DEFAULT_MAX_PRICE}
+                step={STEP_PRICE}
                 className="w-full"
               />
-              <div className="flex items-center gap-2 ">
-                <div className="relative flex-1 max-w-[120px]">
-                  <span className="absolute start-2.5 top-1/2 -translate-y-1/2 text-xs text-ecommerce-text-muted">{GetCurrencySymbol(CONFIG.DEFAULT_CURRENCY)}</span>
-                  <input
-                    type="number"
-                    value={priceRange[0] > 0 ? priceRange[0] : ''}
-                    onChange={(e) => {
-                      const val = e.target.value;
-                      const num = val === '' ? 0 : Math.max(0, Number(val) || 0);
-                      setSliderValue([num, sliderValue[1]]);
-                      setPriceRange([num, priceRange[1]]);
-                    }}
-                    placeholder="0"
-                    className="w-full h-8 ps-6 pe-2 text-xs rounded-lg bg-white dark:bg-ecommerce-surface border border-ecommerce-border focus:outline-none focus:ring-1 focus:ring-ecommerce-red/30 focus:border-ecommerce-red/50 text-ecommerce-text-primary transition-all"
-                    min="0"
-                    max={maxRange - 1}
-                  />
-                </div>
-                <span className="text-ecommerce-text-muted text-xs">—</span>
-                <div className="relative flex-1 max-w-[120px]">
-                  <span className="absolute start-2.5 top-1/2 -translate-y-1/2 text-xs text-ecommerce-text-muted">{GetCurrencySymbol(CONFIG.DEFAULT_CURRENCY)}</span>
-                  <input
-                    type="number"
-                    value={priceRange[1] < maxRange ? priceRange[1] : ''}
-                    onChange={(e) => {
-                      const val = e.target.value;
-                      const num = val === '' ? maxRange : Math.min(maxRange, Number(val) || maxRange);
-                      setSliderValue([sliderValue[0], num]);
-                      setPriceRange([priceRange[0], num]);
-                    }}
-                    placeholder={maxRange.toString()}
-                    className="w-full h-8 ps-6 pe-2 text-xs rounded-lg bg-white dark:bg-ecommerce-surface border border-ecommerce-border focus:outline-none focus:ring-1 focus:ring-ecommerce-red/30 focus:border-ecommerce-red/50 text-ecommerce-text-primary transition-all"
-                    min="0"
-                    max={maxRange}
-                  />
-                </div>
-              </div>
             </div>
 
           </div>
@@ -487,7 +472,7 @@ export function ProductGrid() {
                 ? t('homepage.common.noProductsDesc', { query: searchQuery })
                 : t('homepage.common.noProductsFilterDesc')}
             </p>
-            {(selectedCategory || priceRange[0] > 0 || priceRange[1] < 9999 || searchQuery || (sortBy && sortBy !== 'newest')) && (
+            {(selectedCategory || sliderValue[0] > 0 || sliderValue[1] < 20000000 || searchQuery || hasDiscounts || (sortBy && sortBy !== 'newest')) && (
               <Button
                 onClick={handleClearAll}
                 variant="outline"
