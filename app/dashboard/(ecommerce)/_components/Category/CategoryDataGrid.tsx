@@ -174,8 +174,7 @@ function CategoryDataGrid() {
         <Tooltip arrow placement="top-start" title={t('buttons.visitorlink')}>
           <IconButton
             target='_blank'
-            href={CONFIG.DOMAIN + "/category/" + row.original.id}>
-            <Link />
+            href={CONFIG.DOMAIN + "/products?categories=" + row.original.key}>
           </IconButton>
         </Tooltip>
       </Box>
