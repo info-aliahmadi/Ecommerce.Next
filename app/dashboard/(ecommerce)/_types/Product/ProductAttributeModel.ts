@@ -12,7 +12,7 @@ export default interface ProductAttributeModel {
     /**
      * The name of the product attribute.
      */
-    name: string;
+    displayName: string;
   
     /**
      * The value of the product attribute.

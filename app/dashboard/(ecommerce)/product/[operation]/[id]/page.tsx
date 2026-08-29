@@ -69,6 +69,7 @@ export default function AddOrEditProduct({ params }: Readonly<{ params: Promise<
   let datetimeNow = new Date();
   const jwt = session?.accessToken;
   let productService = new ProductsService(jwt ?? '');
+
   const initProduct: ProductModel = {
     id: 0,
     name: '',
@@ -141,14 +142,16 @@ export default function AddOrEditProduct({ params }: Readonly<{ params: Promise<
   const router = useRouter();
 
   useEffect(() => {
-    document.title = t('pages.cards.product-' + operation) + " - " + CONFIG.APP_HEADER;
-    
     if (operation === 'edit' && id > 0) {
       productService.getProductById(id).then((result) => {
+        if (!result.succeeded) {
+          setNotify({ open: true, type: 'error', title: result.message, description: result.errors.map(x => x.description).join('\n') });
+          return;
+        }
         setProduct(result.data ?? product);
       });
     }
-  }, [operation, t]);
+  }, [operation, id]);
 
   const handleTabChange = (event: any, newValue: any) => {
     setTab(newValue);
@@ -160,15 +163,11 @@ export default function AddOrEditProduct({ params }: Readonly<{ params: Promise<
 
   const handleChange = (e: any) => {
     const { name, value } = e.target;
-
-
-    // fill the field in product
-    const updatedProduct: ProductModel = {
-      ...product,       // Override with existing product data
-      [name]: value     // Add the new field value
-    };
-
-    setProduct(updatedProduct);
+    // Update product field
+    setProduct(prev => ({
+      ...prev,
+      [name]: value,
+    }));
 
     // Clear error when field is edited
     if (errors && (errors as any)[name]) {
@@ -178,13 +177,11 @@ export default function AddOrEditProduct({ params }: Readonly<{ params: Promise<
     }
   };
   const setFieldValue = (field: string, value: any): void => {
-    // fill the field in product
-    const updatedProduct: ProductModel = {
-      ...product,       // Override with existing product data
-      [field]: value     // Add the new field value
-    };
-
-    setProduct(updatedProduct);
+    // Update product field
+    setProduct(prev => ({
+      ...prev,
+      [field]: value,
+    }));
 
     // Clear error when field is edited
     if (errors && (errors as any)[field]) {
@@ -220,12 +217,17 @@ export default function AddOrEditProduct({ params }: Readonly<{ params: Promise<
       if (operation == 'add') {
         productService
           .addProduct(product)
-          .then(() => {
+          .then((result) => {
+            if (!result.succeeded) {
+              setNotify({ open: true, type: 'error', title: result.message, description: result.errors.map(x => x.description).join('\n') });
+              return;
+            }
             setNotify({ open: true });
             // add timer after 4 seconds redirect to product list page
             setTimeout(() => {
-              router.push('/dashboard/product');
+              router.push('/dashboard/product/list');
             }, 4000);
+
           })
           .catch((error: Result<ProductModel>) => {
             setNotify({ open: true, type: 'error', title: error.message, description: error.errors.map(x => x.description).join('\n') });
@@ -234,6 +236,10 @@ export default function AddOrEditProduct({ params }: Readonly<{ params: Promise<
         productService
           .updateProduct(product)
           .then((result) => {
+            if (!result.succeeded) {
+              setNotify({ open: true, type: 'error', title: result.message, description: result.errors.map(x => x.description).join('\n') });
+              return;
+            }
             setProduct(result.data ?? product);
             setNotify({ open: true });
           })

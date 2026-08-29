@@ -54,6 +54,10 @@ const AddOrEditDiscount = ({ discountId, isNew, open, setOpen, refetch }: { disc
 
   const loadDiscount = () => {
     discountService.getDiscountById(discountId).then((result) => {
+      if (!result.succeeded) {
+        setNotify({ open: true, type: 'error', title: result.message, description: result.errors.map(x => x.description).join('\n') });
+        return;
+      }
       setDiscount(result.data);
     });
   };
@@ -91,7 +95,11 @@ const AddOrEditDiscount = ({ discountId, isNew, open, setOpen, refetch }: { disc
     if (isNew == true) {
       discountService
         .addDiscount(discount)
-        .then(() => {
+        .then((result) => {
+          if (!result.succeeded) {
+            setNotify({ open: true, type: 'error', title: result.message, description: result.errors.map(x => x.description).join('\n') });
+            return;
+          }
           onClose();
           setDiscount(undefined);
           setNotify({ open: true });
@@ -104,7 +112,11 @@ const AddOrEditDiscount = ({ discountId, isNew, open, setOpen, refetch }: { disc
     } else {
       discountService
         .updateDiscount(discount)
-        .then(() => {
+        .then((result) => {
+          if (!result.succeeded) {
+            setNotify({ open: true, type: 'error', title: result.message, description: result.errors.map(x => x.description).join('\n') });
+            return;
+          }
           onClose();
           setDiscount(undefined);
           setNotify({ open: true });

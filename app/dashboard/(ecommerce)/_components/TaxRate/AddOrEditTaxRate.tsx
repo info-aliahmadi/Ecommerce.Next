@@ -45,6 +45,10 @@ const AddOrEditTaxRate = ({
 
   const loadTaxRate = () => {
     taxRateService.getTaxRateById(taxRateId).then((result) => {
+      if (!result.succeeded) {
+        setNotify({ open: true, type: 'error', title: result.message, description: result.errors.map(x => x.description).join('\n') });
+        return;
+      }
       setTaxRate(result.data);
     });
   };
@@ -66,7 +70,11 @@ const AddOrEditTaxRate = ({
     const submit = isNew ? taxRateService.addTaxRate : taxRateService.updateTaxRate;
 
     submit(taxRate)
-      .then(() => {
+      .then((result) => {
+        if (!result.succeeded) {
+          setNotify({ open: true, type: 'error', title: result.message, description: result.errors.map(x => x.description).join('\n') });
+          return;
+        }
         onClose();
         setNotify({ open: true });
         refetch();

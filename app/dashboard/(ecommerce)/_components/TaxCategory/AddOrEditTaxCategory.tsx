@@ -43,6 +43,10 @@ const AddOrEditTaxCategory = ({
 
   const loadTaxCategory = () => {
     taxCategoryService.getTaxCategoryById(taxCategoryId).then((result) => {
+      if (!result.succeeded) {
+        setNotify({ open: true, type: 'error', title: result.message, description: result.errors.map(x => x.description).join('\n') });
+        return;
+      }
       setTaxCategory(result.data);
     });
   };
@@ -64,7 +68,11 @@ const AddOrEditTaxCategory = ({
     const submit = isNew ? taxCategoryService.addTaxCategory : taxCategoryService.updateTaxCategory;
 
     submit(taxCategory)
-      .then(() => {
+      .then((result) => {
+        if (!result.succeeded) {
+          setNotify({ open: true, type: 'error', title: result.message, description: result.errors.map(x => x.description).join('\n') });
+          return;
+        }
         onClose();
         setNotify({ open: true });
         refetch();

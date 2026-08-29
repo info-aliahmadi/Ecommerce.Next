@@ -1,21 +1,12 @@
 'use client'
-// material-ui
 import { Typography } from '@mui/material';
 import Grid from '@mui/material/Grid';
-import { useEffect } from 'react';
-// project import
 import ProfileForm from '../../_components/ProfileForm';
 import { useTranslations } from 'next-intl';
 import MainCard from '@dashboard/_components/MainCard';
-import CONFIG from '@root/config';
-
-// ===============================|| COLOR BOX ||=============================== //
 
 function Profile() {
   const t = useTranslations("");
-  useEffect(() => {
-    document.title = t('pages.edit-profile') + " - " + CONFIG.APP_HEADER;
-  }, [t]);
   return (
     <Grid container direction="row" spacing={3} sx={{ justifyContent: "center", alignItems: "flex-start" }} >
       <Grid size={7}>

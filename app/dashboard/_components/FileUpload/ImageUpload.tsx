@@ -18,6 +18,7 @@ import { FileOrigin, FilePondFile, FilePondInitialFile } from 'filepond';
 import FileStorageService from '@dashboard/(filestorage)/_service/FileStorageService';
 import FileUploadModel from '@dashboard/(filestorage)/_types/FileUploadModel';
 import FileImageModel from '@root/app/types/FileImageModel';
+import { GetImage } from '@root/app/(home)/_lib/utils';
 
 registerPlugin(
   FilePondPluginFileValidateSize,
@@ -43,11 +44,10 @@ interface ImageUploadProps {
 }
 
 function buildInitialFile(fileInfo: FileUploadModel): FilePondInitialFile {
-  const fileUrl = CONFIG.UPLOAD_BASEPATH + fileInfo.directory + fileInfo.fileName;
+  
+  const fileUrl = GetImage(fileInfo);
   const isVideo = CONFIG.VIDEOS_EXTENSIONS.includes(fileInfo.extension);
-  const posterUrl = isVideo
-    ? CONFIG.UPLOAD_BASEPATH + fileInfo.directory + fileInfo.thumbnail
-    : CONFIG.UPLOAD_BASEPATH + fileInfo.directory + fileInfo.fileName;
+  const posterUrl = GetImage(fileInfo, true);
 
   return {
     source: fileInfo.id.toString(),

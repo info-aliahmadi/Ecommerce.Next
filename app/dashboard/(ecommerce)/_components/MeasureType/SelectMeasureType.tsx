@@ -29,7 +29,7 @@ const SelectMeasureType: React.FC<SelectMeasureTypeProps> = ({
     setFieldValue(id, newValue);
   };
 
-  const measureTypeLabels = {
+  const measureTypeLabels: Record<number, string> = {
     [MeasureType.Kilogram]: t("fields.product.measureTypes.Kilogram"),
     [MeasureType.Number]: t("fields.product.measureTypes.Number"),
     [MeasureType.Box]: t("fields.product.measureTypes.Box"),
@@ -40,15 +40,15 @@ const SelectMeasureType: React.FC<SelectMeasureTypeProps> = ({
   };
   return (
     <FormControl error={error} key={id} fullWidth>
-      <InputLabel id={`${id}-label`}>{label}</InputLabel>
+      <InputLabel id={`meas-${id}-label`}>{label}</InputLabel>
       <EnumDropdown
-        defaultValue={defaultValue ?? undefined}
+        defaultValue={defaultValue ?? 0}
         enumObject={MeasureType}
-        disabled={disabled}
         customLabels={measureTypeLabels}
         onChange={handleChange}
         showNoneOption={showNoneOption}
         noneOptionLabel="-"
+        disabled={disabled}
       />
     </FormControl>
   );

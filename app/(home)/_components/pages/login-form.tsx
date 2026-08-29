@@ -20,6 +20,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@(home)/_components/ui
 import { PhoneInput } from '@(home)/_components/shared/phone-input';
 import { useTranslations } from 'next-intl';
 import { toast } from 'sonner';
+import Fetch from '@root/utils/Fetch';
+import Result from '@root/app/types/Result';
 
 interface LoginFormProps {
   onLoginSuccess?: () => void;
@@ -134,16 +136,18 @@ export default function LoginForm({
     setOtpSending(true);
     setError(null);
     try {
-      const response = await fetch('/api/auth/send-otp', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ phoneNumber: phone }),
-      });
 
-      const data = await response.json();
+      let config: RequestInit = {
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json'
+        },
+      }
 
-      if (!data.succeeded) {
-        toast.error(data.message || t('errorOtpSend'));
+      const response = await Fetch.Post<AccountResult>('/api/auth/send-otp', { phoneNumber: phone }, config);
+
+      if (!response.succeeded) {
+        toast.error(response.message || t('errorOtpSend'));
         return;
       }
 
@@ -208,7 +212,7 @@ export default function LoginForm({
     <div>
       {/* Tabs */}
       <Tabs value={activeTab} onValueChange={(v) => setActiveTab(v as 'email' | 'phone')}>
-        <TabsList className="w-full grid grid-cols-2 mb-4">
+        <TabsList className="w-full grid grid-cols-2 mb-4 bg-ecommerce-surface border-b border-ecommerce-border">
           <TabsTrigger value="email" className="flex items-center gap-1.5">
             <Mail className="w-4 h-4" />
             {t('tabEmail')}
@@ -241,7 +245,7 @@ export default function LoginForm({
                     setEmail(e.target.value);
                     if (error) setError(null);
                   }}
-                  className="h-11 pe-10 border-ecommerce-border bg-ecommerce-surface text-ecommerce-text-primary rounded-md"
+                  className="h-11 pe-10 px-10 border-ecommerce-border bg-ecommerce-surface text-ecommerce-text-primary rounded-md"
                   autoComplete="email"
                   disabled={loading}
                   dir="ltr"
@@ -273,7 +277,7 @@ export default function LoginForm({
                     setPassword(e.target.value);
                     if (error) setError(null);
                   }}
-                  className="h-11 pe-10 border-ecommerce-border bg-ecommerce-surface text-ecommerce-text-primary rounded-md"
+                  className="h-11 px-10 border-ecommerce-border bg-ecommerce-surface text-ecommerce-text-primary rounded-md"
                   autoComplete="current-password"
                   disabled={loading}
                   dir="ltr"

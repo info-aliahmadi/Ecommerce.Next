@@ -5,7 +5,6 @@ import Fetch from '@root/utils/Fetch';
 import Result from '@root/app/types/Result';
 import ChangePassword from '../_types/User/ChangePassword';
 import AddPassword from '../_types/User/AddPassword';
-import ForgotPassword from '../_types/User/ForgotPassword';
 import ThemeType from '@root/app/types/enums/ThemeType';
 
 export default class AccountService {
@@ -16,10 +15,6 @@ export default class AccountService {
 
   getCurrentUser = async (): Promise<UserModel> => {
     return Fetch.Get<UserModel>(CONFIG.API_BASEPATH + `/auth/getCurrentUser`, this.config);
-  };
-
-  refreshToken = async (): Promise<string> => {
-    return Fetch.Get<string>(CONFIG.REFRESH_TOKEN_API_PATH, this.config);
   };
 
   updateCurrentUser = async (user: UserModel): Promise<Result<UserModel>> => {

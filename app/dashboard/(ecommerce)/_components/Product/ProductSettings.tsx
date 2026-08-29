@@ -3,10 +3,11 @@ import { useTranslations } from 'next-intl';
 import DateTimeInput from '@dashboard/_components/DateTime/DateTimeInput';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Switch from '@mui/material/Switch';
+import ProductModel from '../../_types/Product/ProductModel';
 
 interface ProductSettingsProps {
   operation: 'add' | 'edit',
-  values: any,
+  values: ProductModel,
   setFieldValue: (field: string, value: any) => void,
   handleBlur: (event: React.FocusEvent<HTMLInputElement>) => void,
   handleChange: (event: React.ChangeEvent<HTMLInputElement>) => void,

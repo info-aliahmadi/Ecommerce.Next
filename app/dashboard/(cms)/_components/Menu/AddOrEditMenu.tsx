@@ -50,6 +50,10 @@ const AddOrEditMenu = ({ row, isNew, open, setOpen, refetch }:
 
   const loadMenu = () => {
     row && menuService.getMenuById(row?.original?.id).then((result) => {
+      if (!result.succeeded) {
+        setNotify({ open: true, type: 'error', title: result.message, description: result.errors.map(x => x.description).join('\n') });
+        return;
+      }
       setMenu(result.data);
     });
   };
@@ -69,7 +73,11 @@ const AddOrEditMenu = ({ row, isNew, open, setOpen, refetch }:
     if (isNew == true) {
       menuService
         .addMenu(menu)
-        .then(() => {
+        .then((result) => {
+          if (!result.succeeded) {
+            setNotify({ open: true, type: 'error', title: result.message, description: result.errors.map(x => x.description).join('\n') });
+            return;
+          }
           setMenu(undefined);
           onClose();
           setNotify({ open: true });
@@ -84,7 +92,11 @@ const AddOrEditMenu = ({ row, isNew, open, setOpen, refetch }:
     } else {
       menuService
         .updateMenu(menu)
-        .then(() => {
+        .then((result) => {
+          if (!result.succeeded) {
+            setNotify({ open: true, type: 'error', title: result.message, description: result.errors.map(x => x.description).join('\n') });
+            return;
+          }
           setMenu(undefined);
           onClose();
           setNotify({ open: true });
@@ -119,10 +131,10 @@ const AddOrEditMenu = ({ row, isNew, open, setOpen, refetch }:
     color: menu?.color ?? '',
     previewImageId: menu?.previewImageId,
     parentId: row && isNew == true ? row?.original?.id : menu?.parentId,
-    isEdited : false,
-    order : 0,
-    userId : 0,
-    userName : ''
+    isEdited: false,
+    order: 0,
+    userId: 0,
+    userName: ''
   }
   return (
     <>

@@ -62,6 +62,7 @@ import FileStorageService from "@dashboard/(filestorage)/_service/FileStorageSer
 import { resolveLocale } from "@root/utils/resolver";
 import { Locale } from "@root/locales/Language";
 import { useLocale } from "next-intl";
+import { GetImage } from "@root/app/(home)/_lib/utils";
 
 type TableConfig = {
   rows?: number;
@@ -158,7 +159,7 @@ function useImageHandlers(commands: EditorCommands, editor: LexicalEditor | null
             return;
           }
           // if you dont want to upload the file use   src = URL.createObjectURL(file);
-          const src = CONFIG.UPLOAD_BASEPATH + uploadedFile.directory + uploadedFile.fileName;
+          const src = GetImage(uploadedFile);
           commands.insertImage({ src, alt: uploadedFile.alt || file.name, file });
           e.target.value = "";
         } catch (error) {
@@ -785,7 +786,7 @@ export const DefaultTemplate = forwardRef<DefaultTemplateRef, DefaultTemplatePro
   };
 
   return (
-    <div className={`lexkit-editor-wrapper ${className || ""}`} data-editor-theme={editorTheme} style={{maxWidth: "100%", width: "100%"}}>
+    <div className={`lexkit-editor-wrapper ${className || ""}`} data-editor-theme={editorTheme} style={{ maxWidth: "100%", width: "100%" }}>
       <Provider extensions={extensions} config={{ theme: defaultTheme }}>
         <EditorContent
           className={className}
@@ -793,7 +794,7 @@ export const DefaultTemplate = forwardRef<DefaultTemplateRef, DefaultTemplatePro
           toggleTheme={toggleTheme}
           onReady={handleReady}
           onHtmlChange={onHtmlChange}
-          placeholder={placeholder}/>
+          placeholder={placeholder} />
       </Provider>
     </div>
   );

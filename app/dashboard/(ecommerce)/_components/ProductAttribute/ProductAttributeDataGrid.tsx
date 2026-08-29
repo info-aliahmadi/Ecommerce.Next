@@ -91,8 +91,8 @@ export default function ProductAttributeDataGrid() {
   const columns = useMemo<MRT_Column<ProductAttributeModel>[]>(
     () => [
       {
-        accessorKey: 'name',
-        header: t(fieldsName + 'name'),
+        accessorKey: 'displayName',
+        header: t(fieldsName + 'displayName'),
         enableClickToCopy: true,
         type: 'string'
       },

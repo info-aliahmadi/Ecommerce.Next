@@ -54,14 +54,18 @@ export default function AddOrEditArticle({ params }: { readonly params: Promise<
   };
   useEffect(() => {
     document.title = t('pages.cards.article-' + operation) + " - " + CONFIG.APP_HEADER;
-     if (operation == 'edit' && id > 0) loadArticle();
+    if (operation == 'edit' && id > 0) loadArticle();
   }, [operation, t]);
 
   const handleSubmit = async (article: ArticleModel, resetForm: any, setErrors: (errors: FormikErrors<ArticleModel>) => void, setSubmitting: (open: boolean) => void) => {
     if (operation == 'add') {
       articleService
         .addArticle(article)
-        .then(() => {
+        .then((result) => {
+
+          if (!result.succeeded) {
+            setNotify({ open: true, type: 'error', title: result.message, description: result.errors.map(x => x.description).join('\n') });
+          }
           resetForm();
           setNotify({ open: true });
         })
@@ -76,6 +80,10 @@ export default function AddOrEditArticle({ params }: { readonly params: Promise<
       articleService
         .updateArticle(article)
         .then((result) => {
+          if (!result.succeeded) {
+            setNotify({ open: true, type: 'error', title: result.message, description: result.errors.map(x => x.description).join('\n') });
+            return;
+          }
           setArticle(result.data);
           setNotify({ open: true });
         })

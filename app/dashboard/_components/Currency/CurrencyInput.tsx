@@ -6,6 +6,8 @@ import {
   Typography,
 } from '@mui/material';
 import CurrencyTypes from '@root/app/types/enums/CurrencyTypes';
+import CONFIG from '@root/config';
+import { GetCurrencySymbol } from '@root/utils/CurrencyViewer';
 
 interface CurrencyInputProps extends Omit<
   TextFieldProps,
@@ -23,7 +25,7 @@ const CurrencyInput = React.forwardRef<HTMLInputElement, CurrencyInputProps>(
       value: propValue = '',
       onChange,
       error = false,
-      currencyType = CurrencyTypes.Dinar,
+      currencyType = CONFIG.DEFAULT_CURRENCY,
       ...other
     },
     ref,
@@ -80,22 +82,7 @@ const CurrencyInput = React.forwardRef<HTMLInputElement, CurrencyInputProps>(
     );
 
     const currencySymbol = useCallback(() => {
-      switch (currencyType) {
-        case CurrencyTypes.Dinar:
-          return 'IQD';
-        case CurrencyTypes.Rial:
-          return 'ریال';
-        case CurrencyTypes.Toman:
-          return 'تومان';
-        case CurrencyTypes.Dollar:
-          return 'USD';
-        case CurrencyTypes.Euro:
-          return 'EUR';
-        case CurrencyTypes.None:
-          return '';
-        default:
-          return '';
-      }
+      return GetCurrencySymbol(currencyType);
     }, [currencyType]);
 
     // Sync with external value changes when not focused

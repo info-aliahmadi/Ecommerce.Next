@@ -75,6 +75,7 @@
     },
     "auth": {
       "login": {
+        "pageTitle": "Login",
         "title": "Welcome back!",
         "subtitle": "Sign in to your account to continue",
         "backToHome": "Back to Home",
@@ -1180,7 +1181,6 @@
     "discounts": "Discounts",
     "common": "Commons",
     "discount": "Discounts",
-    "productAttribute": "Product Attributes",
     "productTag": "Product Tags",
     "stateProvince": "State/Provinces",
     "taxRate": "Tax Rates",
@@ -1230,7 +1230,9 @@
       "country-add": "Add New Country",
       "country-edit": "Edit Country",
       "product-add": "Add New Product",
-      "product-edit": "Edit Product"
+      "product-edit": "Edit Product",
+      "productAttribute-add": "Add New Attribute",
+      "productAttribute-edit": "Edit Attribute"
     }
   },
   "fields": {
@@ -1656,6 +1658,15 @@
         "Litr": "Litr",
         "Gram": "Gram",
         "Mesghal": "Mesghal"
+      },
+      "measureTypesSymbol": {
+        "Gram": "g",
+        "Kilogram": "kg",
+        "Litr": "L",
+        "Number": "",
+        "Box": "box",
+        "Meter": "m",
+        "Mesghal": "misgal"
       }
     },
     "productTag": {
@@ -1664,7 +1675,7 @@
       "products": "Number of Products"
     },
     "productAttribute": {
-      "name": "Attribute Name",
+      "displayName": "Display Name",
       "key": "Key",
       "attributeType": "Attribute Type",
       "description": "Description",

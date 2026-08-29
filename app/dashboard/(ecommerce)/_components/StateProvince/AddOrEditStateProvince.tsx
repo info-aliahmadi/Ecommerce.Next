@@ -57,6 +57,10 @@ const AddOrEditStateProvince = ({
 
   const loadStateProvince = () => {
     stateProvinceService.getStateProvinceById(stateProvinceId).then((result) => {
+      if (!result.succeeded) {
+        setNotify({ open: true, type: 'error', title: result.message, description: result.errors.map(x => x.description).join('\n') });
+        return;
+      }
       setStateProvince(result.data);
     });
   };
@@ -78,7 +82,11 @@ const AddOrEditStateProvince = ({
     const submit = isNew ? stateProvinceService.addStateProvince : stateProvinceService.updateStateProvince;
 
     submit(stateProvince)
-      .then(() => {
+      .then((result) => {
+        if (!result.succeeded) {
+          setNotify({ open: true, type: 'error', title: result.message, description: result.errors.map(x => x.description).join('\n') });
+          return;
+        }
         onClose();
         setNotify({ open: true });
         refetch();

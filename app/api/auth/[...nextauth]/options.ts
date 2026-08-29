@@ -4,7 +4,6 @@ import CredentialsProvider from 'next-auth/providers/credentials';
 import AuthenticationService from '@root/app/dashboard/(auth)/_service/AuthenticationService';
 import { JWT } from 'next-auth/jwt';
 import { AdapterUser } from 'next-auth/adapters';
-import AccountService from '@root/app/dashboard/(auth)/_service/AccountService';
 import CONFIG from '@root/config';
 import ThemeType from '@root/app/types/enums/ThemeType';
 import LanguageType from '@root/app/types/enums/LanguageType';
@@ -35,7 +34,7 @@ export const options: NextAuthOptions = {
           roles: user.roles,
         };
         token.accessToken = user.accessToken;
-      } 
+      }
 
       if (trigger === 'update' && session) {
         token.user = {
@@ -50,8 +49,8 @@ export const options: NextAuthOptions = {
         };
         token.accessToken = session.user.accessToken;
 
-        const accountService = new AccountService(session.user.accessToken);
-        const newRefreshToken = await accountService.refreshToken();
+        const accountService = new AuthenticationService();
+        const newRefreshToken = await accountService.refreshToken(session.user.accessToken);
         token.accessToken = newRefreshToken;
       }
 

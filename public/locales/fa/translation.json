@@ -75,6 +75,7 @@
     },
     "auth": {
       "login": {
+        "pageTitle": "ورود",
         "title": "خوش آمدید!",
         "subtitle": "برای ادامه وارد حساب خود شوید",
         "backToHome": "بازگشت به خانه",
@@ -1648,6 +1649,15 @@
         "Litr": "لیتر",
         "Gram": "گرم",
         "Mesghal": "مثقال"
+      },
+      "measureTypesSymbol": {
+        "Gram": "g",
+        "Kilogram": "kg",
+        "Litr": "L",
+        "Number": "عدد",
+        "Box": "box",
+        "Meter": "m",
+        "Mesghal": "misgal"
       }
     },
     "productTag": {
@@ -1656,7 +1666,7 @@
       "products": "تعداد محصولات"
     },
     "productAttribute": {
-      "name": "عنوان خصوصیات",
+      "displayName": "عنوان خصوصیت",
       "key": "کلید",
       "attributeType": "نوع خصوصیات",
       "description": "توضیحات",

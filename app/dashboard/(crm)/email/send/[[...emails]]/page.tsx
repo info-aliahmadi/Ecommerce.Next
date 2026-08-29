@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Button, FormHelperText, Grid, InputLabel, OutlinedInput, Stack, Typography } from '@mui/material';
 import { ArrowBack, Save, Send } from '@mui/icons-material';
 import * as Yup from 'yup';
@@ -12,7 +12,6 @@ import { useTranslations } from 'next-intl';
 import Notify from '@dashboard/_components/@extended/Notify';
 import MainCard from '@dashboard/_components/MainCard';
 import setServerErrors from '@root/utils/setServerErrors';
-import CONFIG from '@root/config';
 import { useRouter } from 'next/navigation';
 import EmailOutboxService from '@dashboard/(crm)/_service/EmailOutboxService';
 import SelectEmailAddress from '@dashboard/(crm)/_components/Email/SelectEmailAddress';
@@ -37,10 +36,6 @@ export default function SendEmailOutbox({ params }: { readonly params: Promise<{
   const [notify, setNotify] = useState<NotifyProps>({ open: false });
   const router = useRouter();
 
-
-  useEffect(() => {
-    document.title = t('pages.cards.sendEmail') + " - " + CONFIG.APP_HEADER;
-  }, [t]);
 
   const handleSubmit = async (emailOutbox: EmailOutboxModel, resetForm: any, setErrors: (errors: FormikErrors<EmailOutboxModel>) => void, setSubmitting: (open: boolean) => void) => {
     if (!emailOutbox.isDraft) {
@@ -165,7 +160,7 @@ export default function SendEmailOutbox({ params }: { readonly params: Promise<{
                             <Editor
                               id="content"
                               name="content"
-                              defaultValue={values?.content || ''}
+                              value={values?.content || ''}
                               setFieldValue={setFieldValue}
                             />
                             {touched.content && errors.content && (

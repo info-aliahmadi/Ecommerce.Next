@@ -19,6 +19,9 @@ import { toast } from 'sonner';
 import AuthenticationService from '@root/app/dashboard/(auth)/_service/AuthenticationService';
 import { resolveLocale } from '@root/utils/resolver';
 import { Locale } from '@root/locales/Language';
+import ForgotPassword from '@root/app/dashboard/(auth)/_types/User/ForgotPassword';
+import Result from '@root/app/types/Result';
+import Fetch from '@root/utils/Fetch';
 
 export default function ForgotPasswordPopup() {
   const [email, setEmail] = useState('');
@@ -66,14 +69,20 @@ export default function ForgotPasswordPopup() {
       setIsSubmitting(true);
 
       try {
-        const service = new AuthenticationService();
-        const res = await service.forgotPassword({ email: email.trim() });
+        
+        let config: RequestInit = {
+          headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json'
+          },
+        }
+        const response = await Fetch.Post<Result<boolean>>('/api/auth/forgotPassword', { email: email.trim() } as ForgotPassword, config);
 
-        if (res?.succeeded) {
+        if (response?.succeeded) {
           setIsSuccess(true);
           toast.success(t('success'));
         } else {
-          toast.error(res.message || t('errorGeneric'));
+          toast.error(response.message || t('errorGeneric'));
         }
       } catch {
         toast.error(t('errorGeneric'));

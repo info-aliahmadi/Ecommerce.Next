@@ -35,7 +35,7 @@ export default function SelectProductAttribute(
       id={id}
       name={name}
       label={label}
-      optionLabel={'name'}
+      optionLabel={'displayName'}
       onChange={onChange}
       setFieldValue={setFieldValue}
       error={error}

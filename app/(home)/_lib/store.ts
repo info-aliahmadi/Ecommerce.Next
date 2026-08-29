@@ -41,7 +41,7 @@ export const useCartStore = create<CartStore>()(
       setJwt: (jwt) => set({ jwt }),
 
       addItem: (item): boolean => {
-        debugger;
+        ;
         const existingItem = get().items.find((i) => i.variant.id === item.variant.id);
         if (!canAddToCart(item.variant.productInventory, existingItem?.quantity ?? 0, 1)) {
           return false;

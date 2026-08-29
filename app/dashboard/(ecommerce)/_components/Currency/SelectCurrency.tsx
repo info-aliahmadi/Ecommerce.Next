@@ -40,7 +40,7 @@ const SelectCurrency: React.FC<SelectCurrencyProps> = ({
 
   return (
     <FormControl error={error} key={id} fullWidth>
-      <InputLabel id={`${id}-label`}>{label}</InputLabel>
+      <InputLabel id={`curr-${id}-label`}>{label}</InputLabel>
       <EnumDropdown
         defaultValue={defaultValue || 0}
         enumObject={CurrencyTypes}
@@ -48,6 +48,7 @@ const SelectCurrency: React.FC<SelectCurrencyProps> = ({
         onChange={handleChange}
         showNoneOption={showNoneOption}
         noneOptionLabel="-"
+        disabled={disabled}
       />
     </FormControl>
   );

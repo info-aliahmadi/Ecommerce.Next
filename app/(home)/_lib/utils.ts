@@ -35,11 +35,11 @@ export  function getThumbnailName(filename : string) {
 
   // If there is no dot, or the dot is the first character (e.g., hidden files like ".env")
   if (lastDotIndex <= 0) {
-    return `${filename}-Thumb.png`;
+    return `${filename}-Thumb.jpg`;
   }
 
   // Extract the base name without the extension
   const baseName = filename.substring(0, lastDotIndex);
   
-  return `${baseName}-Thumb.png`;
+  return `${baseName}-Thumb.jpg`;
 }

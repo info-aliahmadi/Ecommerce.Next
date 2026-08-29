@@ -38,7 +38,7 @@ export default function CurrencyViewer(
       break;
     }
     case CurrencyTypes.Toman: {
-      result = `${value} تومان`;
+      result = `${rial.format(value)} تومان`;
       break;
     }
     case CurrencyTypes.None: {

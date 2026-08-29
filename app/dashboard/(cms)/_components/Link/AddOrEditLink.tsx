@@ -76,6 +76,10 @@ const AddOrEditLink = ({ row, linkSection, data, setData, isNew, open, setOpen, 
       linkService
         .addLink(link)
         .then((result) => {
+          if (!result.succeeded) {
+            setNotify({ open: true, type: 'error', title: result.message, description: result.errors.map(x => x.description).join('\n') });
+            return;
+          }
           if (data && result.data && linkSection) {
             data.push(result.data);
             setData([...data]);
@@ -96,6 +100,9 @@ const AddOrEditLink = ({ row, linkSection, data, setData, isNew, open, setOpen, 
       linkService
         .updateLink(link)
         .then((result) => {
+          if (!result.succeeded) {
+            setNotify({ open: true, type: 'error', title: result.message, description: result.errors.map(x => x.description).join('\n') });
+          }
           if (data && linkSection && result.succeeded) {
             let index = data.findIndex((x) => x.id == link.id);
             data[index].title = link.title;
@@ -140,7 +147,7 @@ const AddOrEditLink = ({ row, linkSection, data, setData, isNew, open, setOpen, 
     description: link?.description ?? '',
     imagePreviewId: link?.imagePreviewId,
     linkSectionId: linkSection?.original.id ?? 0,
-    order : 0,
+    order: 0,
   }
   return (
     <>
@@ -161,7 +168,7 @@ const AddOrEditLink = ({ row, linkSection, data, setData, isNew, open, setOpen, 
             try {
               setSubmitting(true);
               handleSubmit(values, setErrors, setSubmitting);
-            } catch (err : any) {
+            } catch (err: any) {
               setStatus({ success: false });
             }
           }}

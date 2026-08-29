@@ -1,20 +1,11 @@
 'use client';
 
-// material-ui
 import { Grid, Typography } from '@mui/material';
-
-// project import
 import { useTranslations } from 'next-intl';
-import { useEffect } from 'react';
-import CONFIG from '@root/config';
 import OrderDataGrid from '../../_components/Order/OrderDataGrid';
-// ===============================|| COLOR BOX ||=============================== //
 
 function OrderList() {
   const t = useTranslations("");
-  useEffect(() => {
-    document.title = t('pages.orders') + " - " + CONFIG.APP_HEADER;
-  }, [t]);
   return (
     <Grid container direction="row" sx={{ justifyContent: "center", alignItems: "flex-start" }}>
       <Grid container spacing={3} size={12} >

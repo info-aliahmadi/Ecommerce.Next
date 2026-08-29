@@ -64,7 +64,11 @@ const AddOrEditProductTag = ({
             if (isNew) {
                 productTagService
                     .addProductTag(values)
-                    .then(() => {
+                    .then((result) => {
+                        if (!result.succeeded) {
+                            setNotify({ open: true, type: 'error', title: result.message, description: result.errors.map(x => x.description).join('\n') });
+                            return;
+                        }
                         handleClose();
                         setNotify({ open: true });
                         refetch();
@@ -75,7 +79,11 @@ const AddOrEditProductTag = ({
             } else {
                 productTagService
                     .updateProductTag(values)
-                    .then(() => {
+                    .then((result) => {
+                        if (!result.succeeded) {
+                            setNotify({ open: true, type: 'error', title: result.message, description: result.errors.map(x => x.description).join('\n') });
+                            return;
+                        }
                         handleClose();
                         setNotify({ open: true });
                         refetch();

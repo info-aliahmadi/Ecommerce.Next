@@ -363,7 +363,7 @@ function HeroCarousel() {
 
   }, [heroSlides.length]);
 
-  if (isLoading || heroSlides.length === 0) {
+  if (isLoading) {
     return (
       <div className="relative rounded-2xl shadow-2xl w-full h-[420px] overflow-hidden bg-gradient-to-br from-ecommerce-red/20 via-rose-500/10 to-ecommerce-purple/20" />
     );
@@ -508,7 +508,7 @@ export function HeroSection() {
                   asChild
                   variant="outline"
                   size="lg"
-                  className="border-white/25 text-white hover:bg-white/10 rounded-xl px-8 h-12 text-base font-semibold backdrop-blur-sm hover:border-white/40 transition-all"
+                  className="border-white/40 text-white bg-white/10 hover:bg-white/30 hover:text-white rounded-xl px-8 h-12 text-base font-semibold backdrop-blur-sm hover:border-white/40 transition-all "
                 >
                   <Link href="#categories">{t('homepage.hero.viewCategories')}</Link>
                 </Button>

@@ -43,35 +43,6 @@ function SlideshowDataGrid() {
   const [showSaveBtn, setShowSaveBtn] = useState(false);
   let mediaExtensions = CONFIG.IMAGES_EXTENSIONS.concat(CONFIG.VIDEOS_EXTENSIONS);
 
-  const ImagePreviewRow = ({ renderedCellValue, row }: { renderedCellValue: any, row: MRT_Row<SlideshowModel> }) => {
-    let fileUploadModel = renderedCellValue as FileUploadModel;
-    let src = fileUploadModel?.fileName
-      ? mediaExtensions.some((extension) => extension == fileUploadModel.extension.toLocaleLowerCase())
-        ? CONFIG.UPLOAD_BASEPATH + fileUploadModel.directory + fileUploadModel?.thumbnail
-        : row.original.previewImageUrl
-          ? row.original.previewImageUrl
-          : null
-      : null;
-
-    return (
-      <Box
-        sx={{
-          display: 'flex',
-          alignItems: 'center',
-          gap: '1rem'
-        }}
-      >
-        {src != null ? (
-          <img alt="ImagePreview" src={src} height={'80px'} />
-        ) : (
-          <Avatar variant="rounded">
-            <ImageNotSupported />
-          </Avatar>
-        )}
-      </Box>
-    );
-  };
-
   const columns = useMemo<MRT_Column<SlideshowModel>[]>(
     () => [
       {

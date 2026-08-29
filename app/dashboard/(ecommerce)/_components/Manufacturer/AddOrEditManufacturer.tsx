@@ -42,6 +42,10 @@ const AddOrEditManufacturer = ({ manufacturerId, isNew, open, setOpen, refetch }
 
   const loadManufacturer = () => {
     manufacturerService.getManufacturerById(manufacturerId).then((result) => {
+      if (!result.succeeded) {
+        setNotify({ open: true, type: 'error', title: result.message, description: result.errors.map(x => x.description).join('\n') });
+        return;
+      }
       setManufacturer(result.data);
     });
   };
@@ -64,7 +68,12 @@ const AddOrEditManufacturer = ({ manufacturerId, isNew, open, setOpen, refetch }
     if (isNew == true) {
       manufacturerService
         .addManufacturer(Manufacturer)
-        .then(() => {
+        .then((result) => {
+          if (!result.succeeded) {
+            setNotify({ open: true, type: 'error', title: result.message, description: result.errors.map(x => x.description).join('\n') });
+            return;
+          }
+
           onClose();
           setManufacturer(undefined);
           setNotify({ open: true });
@@ -77,7 +86,11 @@ const AddOrEditManufacturer = ({ manufacturerId, isNew, open, setOpen, refetch }
     } else {
       manufacturerService
         .updateManufacturer(Manufacturer)
-        .then(() => {
+        .then((result) => {
+          if (!result.succeeded) {
+            setNotify({ open: true, type: 'error', title: result.message, description: result.errors.map(x => x.description).join('\n') });
+            return;
+          }
           onClose();
           setManufacturer(undefined);
           setNotify({ open: true });
@@ -139,7 +152,7 @@ const AddOrEditManufacturer = ({ manufacturerId, isNew, open, setOpen, refetch }
             } catch (err) {
               console.error(err);
               setStatus({ success: false });
-              
+
               setSubmitting(false);
             }
           }}
@@ -147,7 +160,7 @@ const AddOrEditManufacturer = ({ manufacturerId, isNew, open, setOpen, refetch }
           {({ errors, handleBlur, handleChange, setFieldValue, handleSubmit, isSubmitting, touched, values }) => (
             <form noValidate onSubmit={handleSubmit}>
               <DialogTitle>
-                 {isNew === true ? t('buttons.manufacturer.add') : t('dialog.edit.title', { item: `"${values.name}"` })}
+                {isNew === true ? t('buttons.manufacturer.add') : t('dialog.edit.title', { item: `"${values.name}"` })}
                 <CloseDialog onClose={onClose} />
               </DialogTitle>
               <DialogContent>

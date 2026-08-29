@@ -106,7 +106,7 @@ export function useUpdateCartQuantity() {
     },
     onMutate: (request) => {
       queryClient.cancelQueries({ queryKey: ['serverCart'] });
-      debugger
+      
       const previousItems = useCartStore.getState().items;
       const cartItem = previousItems.find((i) => i.variant.id === request.variantId);
       if (cartItem) {

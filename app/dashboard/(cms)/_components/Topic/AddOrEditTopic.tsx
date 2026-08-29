@@ -51,6 +51,10 @@ const AddOrEditTopic = ({ row, isNew, open, setOpen, refetch }:
   const loadTopic = () => {
     let tagId = row?.original?.id;
     tagId && topicService.getTopicById(tagId).then((result) => {
+      if (!result.succeeded) {
+        setNotify({ open: true, type: 'error', title: result.message, description: result.errors.map(x => x.description).join('\n') });
+        return;
+      }
       setTopic(result.data);
     });
   };
@@ -70,7 +74,11 @@ const AddOrEditTopic = ({ row, isNew, open, setOpen, refetch }:
     if (isNew == true) {
       topicService
         .addTopic(topic)
-        .then(() => {
+        .then((result) => {
+          if (!result.succeeded) {
+            setNotify({ open: true, type: 'error', title: result.message, description: result.errors.map(x => x.description).join('\n') });
+            return;
+          }
           setTopic(undefined);
           onClose();
           setNotify({ open: true });
@@ -86,7 +94,11 @@ const AddOrEditTopic = ({ row, isNew, open, setOpen, refetch }:
     } else {
       topicService
         .updateTopic(topic)
-        .then(() => {
+        .then((result) => {
+          if (!result.succeeded) {
+            setNotify({ open: true, type: 'error', title: result.message, description: result.errors.map(x => x.description).join('\n') });
+            return;
+          }
           setTopic(undefined);
           onClose();
           setNotify({ open: true });

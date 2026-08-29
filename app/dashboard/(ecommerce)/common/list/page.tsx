@@ -1,26 +1,19 @@
 'use client';
-// material-ui
 import * as React from 'react';
 import Accordion from '@mui/material/Accordion';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import AccordionSummary from '@mui/material/AccordionSummary';
 import Typography from '@mui/material/Typography';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-// project import
 import { useTranslations } from 'next-intl';
 import { Grid } from '@mui/material';
-import { useEffect } from 'react';
-import CONFIG from '@root/config';
-import DiscountDataGrid from '../../_components/Discount/DiscountDataGrid';
 import StateProvinceDataGrid from '../../_components/StateProvince/StateProvinceDataGrid';
 import TaxCategoryDataGrid from '../../_components/TaxCategory/TaxCategoryDataGrid';
 import TaxRateDataGrid from '../../_components/TaxRate/TaxRateDataGrid';
-// ===============================|| COLOR BOX ||=============================== //
+
 function CommonList() {
   const t = useTranslations("");
-  useEffect(() => {
-    document.title = t('pages.common') + " - " + CONFIG.APP_HEADER;
-  }, [t]);
+
   const [expanded, setExpanded] = React.useState<string | false>(false);
 
   const handleChange = (panel: string) => (event: React.SyntheticEvent, isExpanded: boolean) => {

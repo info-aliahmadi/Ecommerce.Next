@@ -5,8 +5,8 @@ import { ArrowRight, Layers } from 'lucide-react';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
 import HomePageService from '../../_services/HomePageService';
-import CONFIG from '@root/config';
 import { useTranslations } from 'next-intl';
+import { GetImage } from '../../_lib/utils';
 
 export function FeaturedCategories() {
   const t = useTranslations();
@@ -41,10 +41,10 @@ export function FeaturedCategories() {
             {t('homepage.categories.browse')}
           </motion.div>
           <h2 className="text-2xl sm:text-3xl font-extrabold text-ecommerce-text-primary tracking-tight">
-          {t('homepage.categories.title')} <span className="gradient-text">{t('homepage.categories.category')}</span>
+            {t('homepage.categories.title')} <span className="gradient-text">{t('homepage.categories.category')}</span>
           </h2>
           <p className="text-sm text-ecommerce-text-muted mt-3 max-w-md mx-auto">
-          {t('homepage.categories.subtitle')}
+            {t('homepage.categories.subtitle')}
           </p>
           <div className="mt-5 flex items-center justify-center gap-2">
             <div className="h-px w-8 bg-ecommerce-border" />
@@ -68,7 +68,7 @@ export function FeaturedCategories() {
                 className="group block relative rounded-2xl overflow-hidden aspect-[4/3] bg-ecommerce-surface-hover dark:bg-[#252836]"
               >
                 <img
-                  src={cat.imagePreview ? CONFIG.API_BASEPATH + cat.imagePreview?.thumbnailPath : CONFIG.UNKNOWN_IMAGE_BASEPATH}
+                  src={GetImage(cat.imagePreview)}
                   alt={cat.name}
                   className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                   loading="lazy"

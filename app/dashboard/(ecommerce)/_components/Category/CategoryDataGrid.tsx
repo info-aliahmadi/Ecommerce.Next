@@ -17,9 +17,8 @@ import CategoryModel from '../../_types/Product/CategoryModel';
 import { MRT_Row } from 'material-react-table';
 import { MRT_Column } from '@root/app/types/MRT_Column';
 import CONFIG from '@root/config';
-import SlideshowModel from '@root/app/dashboard/(cms)/_types/Slideshow/SlideshowModel';
 import Notify from '@root/app/dashboard/_components/@extended/Notify';
-import MenuModel from '@root/app/dashboard/(cms)/_types/Menu/MenuModel';
+import { GetImage } from '@root/app/(home)/_lib/utils';
 
 // ===============================|| CATEGORY DATA GRID ||=============================== //
 
@@ -52,7 +51,7 @@ function CategoryDataGrid() {
           }}
         >
           {row.original.imagePreview ? (
-            <img alt="ImagePreview" src={CONFIG.UPLOAD_BASEPATH + row.original.imagePreview?.directory + row.original.imagePreview?.fileName} height={'80px'} />
+            <img alt="ImagePreview" src={GetImage(row.original.imagePreview, true)} height={'80px'} />
           ) : (
             <Avatar variant="rounded">
               <ImageNotSupported />
@@ -175,8 +174,7 @@ function CategoryDataGrid() {
         <Tooltip arrow placement="top-start" title={t('buttons.visitorlink')}>
           <IconButton
             target='_blank'
-            href={CONFIG.DOMAIN + "/category/" + row.original.id}>
-            <Link />
+            href={CONFIG.DOMAIN + "/products?categories=" + row.original.key}>
           </IconButton>
         </Tooltip>
       </Box>
