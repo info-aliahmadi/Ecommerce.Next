@@ -7,7 +7,7 @@ import ThemeType from "./app/types/enums/ThemeType";
 // ==============================|| THEME CONFIG  ||============================== //
 const CONFIG = {
   APP_VERSION: '1.3',
-  APP_HEADER: 'Kidy Toy',
+  APP_HEADER: 'Hydra Shop',
   DEFAULT_PATH: '/',
   MINIDRAWER: true,
   CONTAINER: true,
@@ -47,12 +47,12 @@ const CONFIG = {
   SHIPPING_COST: 50, // fixed shipping price for orders below free shipping threshold
   FREE_SHIPPING_THRESHOLD: 500, // total amount of product in cart for free shipping
   CONTACT_PHONE_NUMBER: '+989120803770',
-  CONTACT_EMAIL: 'support@kidytoy.com',
-  CONTACT_LINK: 'https://support.kidytoy.com',
+  CONTACT_EMAIL: 'support@hydrashop.com',
+  CONTACT_LINK: 'https://support.hydrashop.com',
   CONTACT_ADDRESS: '123 Commerce Street, NY 10001',
-  FACEBOOK_LINK: 'https://www.facebook.com/kidytoy',
-  TWITTER_LINK: 'https://twitter.com/kidytoy',
-  INSTAGRAM_LINK: 'https://www.instagram.com/kidytoy',
+  FACEBOOK_LINK: 'https://www.facebook.com/hydrashop',
+  TWITTER_LINK: 'https://twitter.com/hydrashop',
+  INSTAGRAM_LINK: 'https://www.instagram.com/hydrashop',
   YOUTUBE_LINK: '',
 };
 

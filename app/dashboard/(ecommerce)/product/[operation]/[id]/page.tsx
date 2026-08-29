@@ -142,8 +142,6 @@ export default function AddOrEditProduct({ params }: Readonly<{ params: Promise<
   const router = useRouter();
 
   useEffect(() => {
-    document.title = t('pages.cards.product-' + operation) + " - " + CONFIG.APP_HEADER;
-
     if (operation === 'edit' && id > 0) {
       productService.getProductById(id).then((result) => {
         if (!result.succeeded) {

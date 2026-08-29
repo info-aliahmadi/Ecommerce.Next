@@ -1,7 +1,5 @@
 'use client'
 import React, { useEffect, useState } from 'react';
-
-// material-ui
 import {
   Avatar,
   Button,
@@ -16,20 +14,15 @@ import {
   Typography
 } from '@mui/material';
 import { ArrowBack, Save, EventNote } from '@mui/icons-material';
-// third party
 import * as Yup from 'yup';
 import { Formik, FormikErrors } from 'formik';
 
 import AnimateButton from '@dashboard/_components/@extended/AnimateButton';
-
-// assets
 import { useLocale, useTranslations } from 'next-intl';
 import Notify from '@dashboard/_components/@extended/Notify';
 import CONFIG from '@root/config';
 import MainCard from '@dashboard/_components/MainCard';
 import setServerErrors from '@root/utils/setServerErrors';
-
-import moment from 'moment';
 import PagesService from '@dashboard/(cms)/_service/PagesService';
 import { useRouter } from 'next/navigation';
 import SelectTag from '@dashboard/(cms)/_components/Tag/SelectTag';

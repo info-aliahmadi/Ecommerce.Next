@@ -75,6 +75,7 @@
     },
     "auth": {
       "login": {
+        "pageTitle": "Login",
         "title": "Welcome back!",
         "subtitle": "Sign in to your account to continue",
         "backToHome": "Back to Home",
