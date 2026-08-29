@@ -86,7 +86,7 @@ export function FeaturedCategories() {
                 <div className="absolute bottom-0 left-0 right-0 p-4">
                   <h3 className="text-white font-bold text-sm sm:text-base">{cat.name}</h3>
                   <div className="flex items-center justify-between mt-1.5">
-                    <span className="text-white/60 text-xs">{cat.productsCount || 0} items</span>
+                    <span className="text-white/60 text-xs">{cat.productsCount || 0} آیتم</span>
                     <div className="w-7 h-7 rounded-lg bg-white/10 flex items-center justify-center group-hover:bg-white/20 transition-all group-hover:translate-x-0.5">
                       <ArrowRight size={13} className="text-white/70 group-hover:text-white transition-colors" />
                     </div>

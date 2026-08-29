@@ -499,7 +499,7 @@
       "itemsAtSpecialPrice": "{count} items at a special price"
     },
     "footer": {
-      "appTitle": "Get the HydraShop App",
+      "appTitle": "Get the KidyToy App",
       "appDesc": "Shop on the go with our mobile app. Get exclusive app-only deals.",
       "fasterCheckout": "Faster Checkout",
       "appOnlyDeals": "App-Only Deals",
@@ -507,7 +507,7 @@
       "downloadOn": "Download on the",
       "appStore": "App Store",
       "googlePlay": "Google Play",
-      "copyright": "© 2025 HydraShop. All rights reserved.",
+      "copyright": "© 2025 KidyToy. All rights reserved.",
       "backToTop": "Back to top",
       "shop": "Shop",
       "support": "Support",
@@ -563,7 +563,7 @@
       "title": "Language"
     },
     "welcome": {
-      "title": "Welcome to HydraShop! 🎉",
+      "title": "Welcome to KidyToy! 🎉",
       "message": "Use code FIRST10 for 10% off your first order"
     },
     "backToTop": {

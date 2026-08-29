@@ -48,26 +48,12 @@ export default function ProductDataGrid() {
         accessorKey: 'imagePreview',
         header: t(fieldsName + 'imagePreviewId'),
         type: 'object',
-        Cell: ({ row }: { row: MRT_Row<ProductModel> }) => <Box
-          sx={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: '1rem'
-          }}
-        >
-          {row.original.imagePreview ? (
-            <Avatar
-              variant="rounded"
-              alt={row.original.name}
-              src={GetImage(row.original.imagePreview, true)}
-              sx={{ width: 80, height: 80 }}
-            ></Avatar>
-          ) : (
-            <Avatar variant="rounded">
-              <ImageNotSupported />
-            </Avatar>
-          )}
-        </Box>
+        Cell: ({ row }: { row: MRT_Row<ProductModel> }) => <Avatar
+          variant="rounded"
+          alt={row.original.name}
+          src={GetImage(row.original.imagePreview, true)}
+          sx={{ width: 80, height: 80 }}
+        ></Avatar>
       }, {
         accessorKey: 'sku',
         header: t(fieldsName + 'sku'),
@@ -198,7 +184,7 @@ export default function ProductDataGrid() {
             dataApi={handleProductList}
             enableRowActions
             renderRowActions={DeleteOrEdit}
-            renderDetailPanel={({ row }) => <ProductDetail row={row} />} 
+            renderDetailPanel={({ row }) => <ProductDetail row={row} />}
             displayColumnDefOptions={{
               'mrt-row-actions': {
                 //header: 'Change Account Settings', //change header text

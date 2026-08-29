@@ -1,7 +1,7 @@
 {
-  "name": "Hydra Cashier System",
-  "short_name": "Cashier",
-  "description": "Offline-first Cashier Application for managing orders and payments with full offline support",
+  "name": "KidyToy Online Shop",
+  "short_name": "KidyToy",
+  "description": "Your one-stop destination for premium products. Shop electronics, fashion, home & living, sports, beauty and more with exclusive deals.",
   "start_url": "/dashboard/order/add",
   "display": "standalone",
   "background_color": "#ffffff",
