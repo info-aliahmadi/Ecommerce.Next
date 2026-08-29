@@ -151,10 +151,10 @@ export function Footer() {
           <div className="col-span-2 md:col-span-4 lg:col-span-2">
             <Link href="/" className="inline-flex items-center gap-2 mb-4 group">
               <div className="w-9 h-9 rounded-xl bg-ecommerce-red flex items-center justify-center shadow-lg shadow-ecommerce-red/20 group-hover:shadow-ecommerce-red/40 transition-shadow">
-                <span className="text-white font-bold text-sm">S</span>
+                <span className="text-white font-bold text-sm">K</span>
               </div>
               <span className="text-xl font-bold tracking-tight">
-                <span className="text-ecommerce-red">Hydra</span>Shop
+                <span className="text-ecommerce-red">Kidy</span>Toy
               </span>
             </Link>
             <p className="text-sm text-white/60 leading-relaxed max-w-sm mb-6">
@@ -188,6 +188,7 @@ export function Footer() {
               <div className="flex flex-wrap gap-2">
                 {categories.slice(0, 5).map((cat) => (
                   <button
+                type='button'
                     key={cat.key}
                     onClick={() => { setSelectedCategory(cat.key); scrollToTop(); }}
                     className="px-3 py-1.5 text-xs font-medium rounded-lg bg-white/[0.04] text-white/60 hover:bg-white/10 hover:text-white border border-white/[0.04] hover:border-white/10 transition-all duration-200"
@@ -206,7 +207,7 @@ export function Footer() {
                 </div>
                 <span className="ltr-input">{CONFIG.CONTACT_PHONE_NUMBER}</span>
               </a>
-              <a href="mailto:hello@hydrashop.com" className="flex items-center gap-2.5 text-sm text-white/50 hover:text-white/80 transition-colors group">
+              <a href="mailto:hello@kidytoy.com" className="flex items-center gap-2.5 text-sm text-white/50 hover:text-white/80 transition-colors group">
                 <div className="w-7 h-7 rounded-lg bg-white/[0.05] flex items-center justify-center group-hover:bg-white/10 transition-colors">
                   <Mail size={12} />
                 </div>
@@ -266,55 +267,6 @@ export function Footer() {
         </div>
       </div>
 
-      {/* App Download Section */}
-      <div className="border-t border-white/10">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-          <div className="flex flex-col md:flex-row items-center md:items-start justify-between gap-6">
-            {/* Left Side */}
-            <div className="text-center md:text-start">
-              <h3 className="text-lg sm:text-xl font-bold text-white">{t('homepage.footer.appTitle')}</h3>
-              <p className="text-sm text-white/50 mt-1.5 max-w-md">{t('homepage.footer.appDesc')}</p>
-              <div className="flex flex-wrap items-center justify-center md:justify-start gap-2 mt-4">
-                {[
-                  { icon: Zap, label: t('homepage.footer.fasterCheckout') },
-                  { icon: Tag, label: t('homepage.footer.appOnlyDeals') },
-                  { icon: Package, label: t('homepage.footer.orderTracking') },
-                ].map((feature) => (
-                  <span
-                    key={feature.label}
-                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/[0.06] text-white/60 text-xs font-medium border border-white/[0.04]"
-                  >
-                    <feature.icon size={12} />
-                    {feature.label}
-                  </span>
-                ))}
-              </div>
-            </div>
-
-            {/* Right Side — App Badges */}
-            <div className="flex flex-col sm:flex-row items-center gap-3 shrink-0">
-              {/* App Store Badge */}
-              <div className="flex items-center gap-3 px-5 py-3 rounded-xl bg-white/[0.06] border border-white/[0.06] hover:bg-white/[0.1] transition-colors cursor-pointer">
-                <span className="text-2xl" role="img" aria-label="Apple">🍎</span>
-                <div className="flex flex-col leading-tight">
-                  <span className="text-[10px] text-white/50">{t('homepage.footer.downloadOn')}</span>
-                  <span className="text-sm font-semibold text-white">{t('homepage.footer.appStore')}</span>
-                </div>
-              </div>
-
-              {/* Google Play Badge */}
-              <div className="flex items-center gap-3 px-5 py-3 rounded-xl bg-white/[0.06] border border-white/[0.06] hover:bg-white/[0.1] transition-colors cursor-pointer">
-                <span className="text-2xl" role="img" aria-label="Android">🤖</span>
-                <div className="flex flex-col leading-tight">
-                  <span className="text-[10px] text-white/50">{t('homepage.footer.downloadOn')}</span>
-                  <span className="text-sm font-semibold text-white">{t('homepage.footer.googlePlay')}</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
       {/* Bottom Bar */}
       <div className="border-t border-white/10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5">
@@ -324,6 +276,7 @@ export function Footer() {
                 {t('homepage.footer.copyright')}
               </p>
               <button
+                type='button'
                 onClick={scrollToTop}
                 className="flex items-center gap-1 text-xs text-white/30 hover:text-white/60 transition-colors"
               >
@@ -342,7 +295,7 @@ export function Footer() {
                   style={{ backgroundColor: social.color }}
                   className="w-9 h-9 rounded-xl bg-white/[0.04] flex items-center justify-center hover:bg-ecommerce-red hover:text-white text-white/40 transition-all duration-200 hover:scale-110 hover:-translate-y-0.5 border border-white/[0.04] hover:border-ecommerce-red"
                 >
-                  <social.icon size={16}  className="text-white" />
+                  <social.icon size={16} className="text-white" />
                 </a>
               ))}
             </div>

@@ -101,7 +101,7 @@ const Register = () => {
 
         {/* Bottom attribution */}
         <p className="relative z-10 text-purple-300/40 text-xs">
-          &copy; {new Date().getFullYear()} Hydra Cashier System
+          &copy; {new Date().getFullYear()} KidyToy Online Shop
         </p>
       </motion.div>
 

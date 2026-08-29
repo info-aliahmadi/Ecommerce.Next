@@ -13,11 +13,8 @@ import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
 import { SearchSuggestions } from './search-suggestions';
 import { WishlistDrawer } from './wishlist-drawer';
-import { NotificationPanel } from './notification-panel';
-import { LanguageSwitcher } from './language-switcher';
 import HomePageService from '../../_services/HomePageService';
 import MenuModel from '@root/app/dashboard/(cms)/_types/Menu/MenuModel';
-import LinkModel from '@root/app/dashboard/(cms)/_types/Link/LinkModel';
 
 function buildMenuTree(items: MenuModel[]): MenuModel[] {
   const map = new Map<number, any>();
@@ -90,7 +87,7 @@ export function PromoBar() {
             transition={{ duration: 0.3, ease: 'easeInOut' }}
             className="absolute"
           >
-            {message.text}
+            {message?.text}
           </motion.span>
         </AnimatePresence>
       </div>
@@ -159,7 +156,6 @@ export function Header() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isSearchFocused, setIsSearchFocused] = useState(false);
-  const [isNotifOpen, setIsNotifOpen] = useState(false);
   const searchRef = useRef<HTMLDivElement>(null);
 
   const total = totalItems();
@@ -239,12 +235,12 @@ export function Header() {
 
             {/* Logo */}
             <Link href="/" className="flex items-center gap-2.5 shrink-0 group">
-              <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-ecommerce-red to-rose-500 flex items-center justify-center shadow-sm shadow-ecommerce-red/20 group-hover:shadow-md group-hover:shadow-ecommerce-red/30 transition-shadow">
-                <span className="text-white font-bold text-sm">H</span>
+              <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-ecommerce-rose to-blue-700 flex items-center justify-center shadow-sm shadow-ecommerce-red/20 group-hover:shadow-md group-hover:shadow-ecommerce-red/60 transition-shadow">
+                <span className="text-white font-bold text-sm">K</span>
               </div>
               <span className="text-xl font-bold tracking-tight hidden sm:block">
-                <span className="text-ecommerce-red">Hydra</span>
-                <span className="text-ecommerce-text-primary">Shop</span>
+                <span className="text-ecommerce-red">Kidy</span>
+                <span className="text-ecommerce-text-primary">Toy</span>
               </span>
             </Link>
 
@@ -328,19 +324,18 @@ export function Header() {
               <ThemeToggle />
 
               {/* Language Switcher */}
-              <LanguageSwitcher />
+              {/* <LanguageSwitcher /> */}
 
               {/* Notifications */}
-              <button
+              {/* <button
                 type="button"
                 onClick={() => setIsNotifOpen(true)}
                 className="relative p-2 rounded-lg hover:bg-ecommerce-surface-hover transition-colors group"
                 aria-label={t('homepage.header.notifications')}
               >
                 <Bell size={18} className="text-ecommerce-text-secondary group-hover:text-ecommerce-amber transition-colors duration-200" />
-                {/* Unread dot */}
                 <span className="absolute top-1.5 end-1.5 w-2 h-2 rounded-full bg-ecommerce-red badge-pulse" />
-              </button>
+              </button> */}
 
               {/* Wishlist */}
               <button
@@ -485,7 +480,7 @@ export function Header() {
 
       {/* Wishlist Drawer */}
       <WishlistDrawer open={isWishlistOpen} onClose={() => setWishlistOpen(false)} />
-      <NotificationPanel open={isNotifOpen} onClose={() => setIsNotifOpen(false)} />
+      {/* <NotificationPanel open={isNotifOpen} onClose={() => setIsNotifOpen(false)} /> */}
     </>
   );
 }

@@ -132,7 +132,7 @@ const Login = () => {
 
         {/* Bottom attribution */}
         <p className="relative z-10 text-purple-300/40 text-xs">
-          &copy; {new Date().getFullYear()} HydraShop
+          &copy; {new Date().getFullYear()} KidyToy
         </p>
       </motion.div>
 
