@@ -1,13 +1,9 @@
 'use client';
-// material-ui
 import { Typography } from '@mui/material';
 import Grid from '@mui/material/Grid';
-// project import
 import { useTranslations } from 'next-intl';
 import ChangeLanguageForm from '../_components/ChangeLanguageForm';
 import MainCard from '@dashboard/_components/MainCard';
-
-// ===============================|| COLOR BOX ||=============================== //
 
 function ChangeLanguage() {
   const t = useTranslations("");
