@@ -1,4 +1,3 @@
-// material-ui
 import {
   Avatar,
   Box,
@@ -7,15 +6,12 @@ import {
   IconButton,
   Tooltip
 } from '@mui/material';
-
-// project import
 import MainCard from '@dashboard/_components/MainCard';
 import { ReactNode, useCallback, useMemo, useState } from 'react';
 import { useTranslations } from 'next-intl';
 import ProductsService from '@dashboard/(ecommerce)/_service/ProductService';
-import { ImageNotSupported, Delete, Edit } from '@mui/icons-material';
+import { ImageNotSupported, Delete, Edit, Link } from '@mui/icons-material';
 import AddBusinessOutlinedIcon from '@mui/icons-material/AddBusinessOutlined';
-import CONFIG from '@root/config';
 import MaterialTable from '@dashboard/_components/MaterialTable/MaterialTable';
 import TableCard from '@dashboard/_components/TableCard';
 import { useRouter } from 'next/navigation';
@@ -26,8 +22,8 @@ import { MRT_Row } from 'material-react-table';
 import ProductModel from '../../_types/Product/ProductModel';
 import { MRT_Column } from '@root/app/types/MRT_Column';
 import GridDataBound from '@root/app/types/GridDataBound';
-import FileUploadModel from '@root/app/dashboard/(filestorage)/_types/FileUploadModel';
 import { GetImage } from '@root/app/(home)/_lib/utils';
+import CONFIG from '@root/config';
 
 // ===============================|| COLOR BOX ||=============================== //
 
@@ -169,7 +165,7 @@ export default function ProductDataGrid() {
 
   const DeleteOrEdit = useCallback(
     ({ row }: { row: MRT_Row<ProductModel> }) => (
-      <Box sx={{ display: 'flex', gap: '1rem' }}>
+      <Box sx={{ display: 'flex', gap: '5px' }}>
         <Tooltip arrow placement="top-start" title={t(buttonName + 'delete')}>
           <IconButton color="error" onClick={() => handleDeleteRow(row)}>
             <Delete />
@@ -178,6 +174,13 @@ export default function ProductDataGrid() {
         <Tooltip arrow placement="top-start" title={t(buttonName + 'edit')}>
           <IconButton onClick={() => router.push('/dashboard/product/edit/' + row.original.id)}>
             <Edit />
+          </IconButton>
+        </Tooltip>
+        <Tooltip arrow placement="top-start" title={t('buttons.visitorlink')}>
+          <IconButton
+            target='_blank'
+            href={"/products/" + row.original.id}>
+            <Link />
           </IconButton>
         </Tooltip>
       </Box>
@@ -194,9 +197,14 @@ export default function ProductDataGrid() {
             columns={columns}
             dataApi={handleProductList}
             enableRowActions
-            // renderTopToolbarCustomActions={AddRow}
             renderRowActions={DeleteOrEdit}
-            renderDetailPanel={({ row }) => <ProductDetail row={row} />}
+            renderDetailPanel={({ row }) => <ProductDetail row={row} />} 
+            displayColumnDefOptions={{
+              'mrt-row-actions': {
+                //header: 'Change Account Settings', //change header text
+                size: 130 //make actions column wider
+              }
+            }}
           />
         </TableCard>
       </MainCard>

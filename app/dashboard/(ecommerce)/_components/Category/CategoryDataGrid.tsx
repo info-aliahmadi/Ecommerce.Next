@@ -43,21 +43,7 @@ function CategoryDataGrid() {
         accessorKey: 'imagePreview',
         header: t('fields.category.imagePreviewId'),
         type: 'string',
-        Cell: ({ row }: { row: MRT_Row<CategoryModel> }) => <Box
-          sx={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: '1rem'
-          }}
-        >
-          {row.original.imagePreview ? (
-            <img alt="ImagePreview" src={GetImage(row.original.imagePreview, true)} height={'80px'} />
-          ) : (
-            <Avatar variant="rounded">
-              <ImageNotSupported />
-            </Avatar>
-          )}
-        </Box>
+        Cell: ({ row }: { row: MRT_Row<CategoryModel> }) => <img alt="ImagePreview" src={GetImage(row.original.imagePreview, true)} height={'80px'} />
       },
       {
         accessorKey: 'name',
@@ -155,7 +141,7 @@ function CategoryDataGrid() {
 
   const DeleteOrEdit = useCallback(
     ({ row }: { row: MRT_Row<CategoryModel> }) => (
-      <Box sx={{ display: 'flex', gap: '1rem' }}>
+      <Box sx={{ display: 'flex', gap: '2px', minWidth: '100%' }}>
         <Tooltip arrow placement="top-start" title={t(buttonName + 'delete')}>
           <IconButton color="error" onClick={() => handleDeleteRow(row)}>
             <Delete />
@@ -175,6 +161,7 @@ function CategoryDataGrid() {
           <IconButton
             target='_blank'
             href={CONFIG.DOMAIN + "/products?categories=" + row.original.key}>
+            <Link />
           </IconButton>
         </Tooltip>
       </Box>

@@ -94,7 +94,6 @@ function MaterialTable({
   const [isError, setIsError] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [isRefetching, setIsRefetching] = useState(false);
-  // ۱. اضافه کردن یک استیت داخلی برای تریگر کردن آپدیت
   const [internalRefetch, setInternalRefetch] = useState(Date.now());
   const [columnsWithFilter, setColumnsWithFilter] = useState<MRT_Column<MRT_RowData, any>[]>(columns);
 
@@ -191,9 +190,6 @@ function MaterialTable({
       return;
     }
 
-
-  }
-  function setCells() {
 
   }
   function GetDefaultFilterFunc() {
@@ -306,7 +302,6 @@ function MaterialTable({
 
   useEffect(() => {
     setFilterMode();
-    setCells();
     if (supportedLanguage.find((x) => x == language.key)) {
       let loadedLanguage;
       switch (language.key) {
