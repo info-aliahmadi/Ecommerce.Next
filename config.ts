@@ -8,6 +8,8 @@ import ThemeType from "./app/types/enums/ThemeType";
 const CONFIG = {
   APP_VERSION: '1.3',
   APP_HEADER: 'Hydra Shop',
+  APP_DESCRIPTION: ' — Discover Your Perfect Style',
+  APP_KEYWORDS: [" ecommerce", "online shopping", "kids", "toy", "toys", "kids toys","disorder kids toys", "kids toys shopping", "kids toys online shopping", "kids toys ecommerce", "kids toys online shopping", "kids toys shopping online", "kids toys shopping online", "kids toys online shopping", "kids toys shopping online", "kids toys online shopping", "kids toys shopping online", "kids toys online shopping", "kids toys shopping online", "kids toys online shopping", "kids toys shopping online", "kids toys online shopping", "kids toys shopping online", "kids toys online shopping", "kids toys shopping online", "kids toys online shopping", "kids toys shopping online", "kids toys online shopping", "kids toys shopping online", "kids toys online shopping", "kids toys shopping online", "kids toys online shopping", "kids toys shopping online", "kidy toy", "kidy toys", "kidy toy shopping", "kidy toys shopping", "kidy toy online shopping", "kidy toys online shopping"],
   DEFAULT_PATH: '/',
   MINIDRAWER: true,
   CONTAINER: true,

@@ -18,9 +18,9 @@ import RegisterPopup from "./_components/pages/register-popup";
 import { resolveThemeMode } from "@root/utils/resolver";
 
 export const metadata: Metadata = {
-  title: "HydraShop — Discover Your Perfect Style",
-  description: "Your one-stop destination for premium products. Shop electronics, fashion, home & living, sports, beauty and more with exclusive deals.",
-  keywords: ["ecommerce", "online shopping", "electronics", "fashion", "home", "deals"],
+  title: CONFIG.APP_HEADER + CONFIG.APP_DESCRIPTION,
+  description: CONFIG.APP_DESCRIPTION,
+  keywords: CONFIG.APP_KEYWORDS,
 };
 
 export default function RootLayout({

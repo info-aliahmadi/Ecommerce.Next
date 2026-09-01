@@ -1,5 +1,5 @@
 'use client';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 // material-ui
 import {
@@ -31,6 +31,7 @@ import AnalyticEcommerce from './_components/cards/statistics/AnalyticEcommerce'
 // // assets
 import { GiftOutlined, MessageOutlined, SettingOutlined } from '@ant-design/icons';
 import { useTranslations } from 'next-intl';
+import CONFIG from '@root/config';
 
 // avatar style
 const avatarSX = {
@@ -73,7 +74,10 @@ const lngs = [
 
 const DashboardDefault = () => {
   const t = useTranslations("");
-
+  useEffect(() => {
+    // set title for this page
+    document.title = 'Dashboard | ' + CONFIG.APP_HEADER;
+  }, []);
   const [value, setValue] = useState('today');
   const [slot, setSlot] = useState('week');
 
