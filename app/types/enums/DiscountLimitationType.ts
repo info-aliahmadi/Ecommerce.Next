@@ -14,3 +14,9 @@ export enum DiscountLimitationType {
     /// </summary>
     NTimesPerCustomer = 25
 }
+
+export const discountLimitationTypeLabelKeys = {
+  [DiscountLimitationType.Unlimited]: "fields.discount.discountLimitationTypes.Unlimited",
+  [DiscountLimitationType.NTimesOnly]: "fields.discount.discountLimitationTypes.NTimesOnly",
+  [DiscountLimitationType.NTimesPerCustomer]: "fields.discount.discountLimitationTypes.NTimesPerCustomer"
+};

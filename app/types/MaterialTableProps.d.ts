@@ -4,6 +4,7 @@ interface MaterialTableProps {
     readonly dataSet?: MRT_RowData[],
     readonly refetch?: number,
     readonly addSearchParams?: GridDataBound,
+    readonly pageSize?: number,
     readonly enableColumnActions?: boolean,
     readonly enableTopToolbar?: boolean,
     readonly enableColumnFilters?: boolean,

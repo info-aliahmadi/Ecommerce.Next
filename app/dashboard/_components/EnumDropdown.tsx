@@ -1,25 +1,25 @@
-import React, { useMemo } from 'react';
+import React from 'react';
 import { Select, MenuItem, SelectChangeEvent } from '@mui/material';
+import { useTranslations } from 'next-intl';
 
 interface EnumDropdownProps {
   defaultValue?: number | undefined;
-  enumObject: any;
   disabled?: boolean;
   onChange: (newValue: number | null) => void;
   showNoneOption?: boolean;
   noneOptionLabel?: string;
-  customLabels?: { [key: string]: string } | null;
+  customLabelKeys?: { [key: string]: string } | null;
 }
 
 const EnumDropdown: React.FC<EnumDropdownProps> = ({
   defaultValue,
-  enumObject,
   disabled = false,
   onChange,
   showNoneOption = false,
   noneOptionLabel = '-',
-  customLabels = null,
+  customLabelKeys = null,
 }) => {
+  const t = useTranslations('');
   const handleChange = (event: SelectChangeEvent<number>) => {
     const selectedKey = parseInt(event.target.value as unknown as string);
     if (selectedKey === 0) {
@@ -29,7 +29,6 @@ const EnumDropdown: React.FC<EnumDropdownProps> = ({
     }
   };
 
-
   return (
     <Select value={defaultValue || 0} onChange={handleChange} fullWidth disabled={disabled}>
       {showNoneOption && (
@@ -37,9 +36,9 @@ const EnumDropdown: React.FC<EnumDropdownProps> = ({
           <em>{noneOptionLabel}</em>
         </MenuItem>
       )}
-      {customLabels && Object.keys(customLabels).map((key) => (
+      {customLabelKeys && Object.keys(customLabelKeys).map((key) => (
         <MenuItem key={key} value={key}>
-          {customLabels[key]}
+          {t(customLabelKeys[key])}
         </MenuItem>
       ))}
     </Select>

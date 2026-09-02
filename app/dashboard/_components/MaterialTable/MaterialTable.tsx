@@ -48,6 +48,7 @@ function MaterialTable({
   dataSet,
   refetch,
   addSearchParams,
+  pageSize = 10,
   enableColumnActions = true,
   enableTopToolbar = true,
   enableColumnFilters = true,
@@ -94,7 +95,6 @@ function MaterialTable({
   const [isError, setIsError] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [isRefetching, setIsRefetching] = useState(false);
-  // ۱. اضافه کردن یک استیت داخلی برای تریگر کردن آپدیت
   const [internalRefetch, setInternalRefetch] = useState(Date.now());
   const [columnsWithFilter, setColumnsWithFilter] = useState<MRT_Column<MRT_RowData, any>[]>(columns);
 
@@ -104,7 +104,7 @@ function MaterialTable({
   const [sorting, setSorting] = useState<MRT_SortingState>([]);
   const [pagination, setPagination] = useState({
     pageIndex: 0,
-    pageSize: 10
+    pageSize: pageSize
   });
   useEffect(() => {
 
@@ -191,9 +191,6 @@ function MaterialTable({
       return;
     }
 
-
-  }
-  function setCells() {
 
   }
   function GetDefaultFilterFunc() {
@@ -306,7 +303,6 @@ function MaterialTable({
 
   useEffect(() => {
     setFilterMode();
-    setCells();
     if (supportedLanguage.find((x) => x == language.key)) {
       let loadedLanguage;
       switch (language.key) {
@@ -391,11 +387,11 @@ function MaterialTable({
           enableColumnFilterModes={enableColumnFilterModes ?? true}
           enableExpanding={enableExpanding ?? false}
           enableExpandAll={enableExpandAll ?? false}
-          manualFiltering={manualFiltering ?? true}
+          manualFiltering={dataSet ? false : manualFiltering ?? true}
           columnResizeMode='onChange'
           layoutMode='grid'
-          manualPagination={manualPagination ?? true}
-          manualSorting={manualSorting ?? true}
+          manualPagination={dataSet ? false : manualPagination ?? true}
+          manualSorting={dataSet ? false : manualSorting ?? true}
           muiToolbarAlertBannerProps={
             isError
               ? {

@@ -1,8 +1,7 @@
 import React from 'react';
 import { FormControl, InputLabel } from '@mui/material';
-import { useTranslations } from 'next-intl';
 import EnumDropdown from '@dashboard/_components/EnumDropdown';
-import { DiscountType } from '@root/app/types/enums/DiscountType';
+import { discountTypeLabelKeys } from '@root/app/types/enums/DiscountType';
 
 interface SelectDiscountTypeProps {
   defaultValue?: number | null;
@@ -23,28 +22,16 @@ const SelectDiscountType: React.FC<SelectDiscountTypeProps> = ({
   disabled = false,
   showNoneOption = false
 }) => {
-  const t = useTranslations('');
-
   const handleChange = (newValue: number | null) => {
     setFieldValue(id, newValue);
   };
-
-  const discountTypeLabels = {
-    [DiscountType.AssignedToCouponCode]: t('fields.discount.discountTypes.AssignedToCouponCode'),
-    [DiscountType.AssignedToOrderTotal]: t('fields.discount.discountTypes.AssignedToOrderTotal'),
-    [DiscountType.AssignedToProducts]: t('fields.discount.discountTypes.AssignedToProducts'),
-    [DiscountType.AssignedToCategories]: t('fields.discount.discountTypes.AssignedToCategories'),
-    [DiscountType.AssignedToManufacturers]: t('fields.discount.discountTypes.AssignedToManufacturers')
-  };
-
   return (
     <FormControl error={error} key={id} fullWidth>
       <InputLabel id={`${id}-label`}>{label}</InputLabel>
       <EnumDropdown
         defaultValue={defaultValue ?? 0}
-        enumObject={DiscountType}
         disabled={disabled}
-        customLabels={discountTypeLabels}
+        customLabelKeys={discountTypeLabelKeys}
         onChange={handleChange}
         showNoneOption={showNoneOption}
         noneOptionLabel="-"

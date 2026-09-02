@@ -9,3 +9,10 @@ enum DeliveryDateType {
   OneMonth = 4
 }
 export default DeliveryDateType;
+
+export const deliveryDateLabelKeys: Record<number, string> = {
+  [DeliveryDateType.OneDay]: "fields.order.deliveryDate.OneDay",
+  [DeliveryDateType.ThreeDays]: "fields.order.deliveryDate.ThreeDays",
+  [DeliveryDateType.OneWeek]: "fields.order.deliveryDate.OneWeek",
+  [DeliveryDateType.OneMonth]: "fields.order.deliveryDate.OneMonth",
+};

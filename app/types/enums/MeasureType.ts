@@ -8,3 +8,13 @@ export enum MeasureType {
     Mesghal = 7
 }
 export default MeasureType;
+
+export const measureTypeLabelKeys: Record<number, string> = {
+    [MeasureType.Kilogram]: "fields.product.measureTypes.Kilogram",
+    [MeasureType.Number]: "fields.product.measureTypes.Number",
+    [MeasureType.Box]: "fields.product.measureTypes.Box",
+    [MeasureType.Meter]: "fields.product.measureTypes.Meter",
+    [MeasureType.Litr]: "fields.product.measureTypes.Litr",
+    [MeasureType.Gram]: "fields.product.measureTypes.Gram",
+    [MeasureType.Mesghal]: "fields.product.measureTypes.Mesghal"
+};
