@@ -22,7 +22,7 @@ import AttributeType from '@root/app/types/enums/AttributeType';
 // Mapping function for AttributeType to get descriptive names and colors
 const getAttributeTypeConfig = (type: AttributeType): { label: string; color: 'primary' | 'secondary' | 'error' | 'info' | 'success' | 'warning' | 'default' } => {
   const t = useTranslations("fields.productAttribute.attributeTypes");
-  const attributeTypeMap = {
+  const attributeTypeMap : Record<AttributeType, { label: string; color: 'primary' | 'secondary' | 'error' | 'info' | 'success' | 'warning' | 'default' }> = {
     [AttributeType.Color]: {
       label: t('Color'),
       color: 'primary' as const
@@ -210,6 +210,7 @@ export default function ProductAttributeDataGrid() {
             dataSet={productAttributeList}
             enableRowActions
             renderRowActions={DeleteOrEdit}
+            pageSize={50}
           />
         </TableCard>
       </MainCard>

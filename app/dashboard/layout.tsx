@@ -18,6 +18,8 @@ function ClientOnly({ children }: { children: any }) {
 
   useEffect(() => {
     setHasMounted(true);
+    // set title for this page
+    document.title = 'Dashboard';
   }, []);
 
   if (!hasMounted) {

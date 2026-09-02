@@ -48,6 +48,7 @@ function MaterialTable({
   dataSet,
   refetch,
   addSearchParams,
+  pageSize = 10,
   enableColumnActions = true,
   enableTopToolbar = true,
   enableColumnFilters = true,
@@ -103,7 +104,7 @@ function MaterialTable({
   const [sorting, setSorting] = useState<MRT_SortingState>([]);
   const [pagination, setPagination] = useState({
     pageIndex: 0,
-    pageSize: 10
+    pageSize: pageSize
   });
   useEffect(() => {
 
@@ -386,11 +387,11 @@ function MaterialTable({
           enableColumnFilterModes={enableColumnFilterModes ?? true}
           enableExpanding={enableExpanding ?? false}
           enableExpandAll={enableExpandAll ?? false}
-          manualFiltering={manualFiltering ?? true}
+          manualFiltering={dataSet ? false : manualFiltering ?? true}
           columnResizeMode='onChange'
           layoutMode='grid'
-          manualPagination={manualPagination ?? true}
-          manualSorting={manualSorting ?? true}
+          manualPagination={dataSet ? false : manualPagination ?? true}
+          manualSorting={dataSet ? false : manualSorting ?? true}
           muiToolbarAlertBannerProps={
             isError
               ? {

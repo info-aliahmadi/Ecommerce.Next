@@ -5,3 +5,9 @@ export enum ShippingMethod {
 }
 
 export default ShippingMethod;
+
+export const shippingMethodLabelKeys: Record<number, string> = {
+    [ShippingMethod.Ground]: 'fields.order.shippingMethodTypes.Ground',
+    [ShippingMethod.NextDayAir]: 'fields.order.shippingMethodTypes.NextDayAir',
+    [ShippingMethod.SecondDayAir]: 'fields.order.shippingMethodTypes.SecondDayAir',
+};
