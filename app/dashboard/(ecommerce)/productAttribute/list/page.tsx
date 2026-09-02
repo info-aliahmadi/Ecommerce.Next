@@ -1,6 +1,5 @@
 'use client';
 import { Grid } from '@mui/material';
-import { useTranslations } from 'next-intl';
 import ProductAttributeDataGrid from '../../_components/ProductAttribute/ProductAttributeDataGrid';
 
 export default function ProductAttributeListPage() {
