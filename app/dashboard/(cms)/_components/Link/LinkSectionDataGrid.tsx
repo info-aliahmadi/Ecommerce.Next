@@ -155,6 +155,13 @@ function LinkSectionDataGrid() {
             renderRowActions={DeleteOrEdit}
             // renderTopToolbarCustomActions={AddRow}
             renderDetailPanel={({ row }) => <LinkDataGrid linkSection={row} />}
+            displayColumnDefOptions={{
+              'mrt-row-actions': {
+                size: 120,
+                minSize: 120,
+                maxSize: 120,
+              },
+            }}
           />
         </TableCard>
       </MainCard>

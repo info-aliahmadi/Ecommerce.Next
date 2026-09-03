@@ -124,6 +124,13 @@ function TopicDataGrid() {
             enableColumnFilterModes={false}
             enableRowActions
             renderRowActions={DeleteOrEdit}
+            displayColumnDefOptions={{
+              'mrt-row-actions': {
+                size: 180,
+                minSize: 180,
+                maxSize: 180,
+              },
+            }}
           // renderTopToolbarCustomActions={AddRow}
           />
         </TableCard>

@@ -134,6 +134,13 @@ function DiscountDataGrid() {
             dataApi={handleDiscountList}
             enableRowActions
             renderRowActions={DeleteOrEdit}
+            displayColumnDefOptions={{
+              'mrt-row-actions': {
+                size: 120,
+                minSize: 120,
+                maxSize: 120,
+              },
+            }}
           />
         </TableCard>
       </MainCard>
