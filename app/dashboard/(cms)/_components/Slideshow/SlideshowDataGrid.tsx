@@ -236,6 +236,13 @@ function SlideshowDataGrid() {
                 }
               }
             })}
+            displayColumnDefOptions={{
+              'mrt-row-actions': {
+                size: 180,
+                minSize: 180,
+                maxSize: 180,
+              },
+            }}
           />
         </TableCard>
       </MainCard>

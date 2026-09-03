@@ -213,6 +213,13 @@ function LinkDataGrid({ linkSection }: { linkSection: MRT_Row<LinkSectionModel> 
                 }
               }
             })}
+            displayColumnDefOptions={{
+              'mrt-row-actions': {
+                size: 120,
+                minSize: 120,
+                maxSize: 120,
+              },
+            }}
           />
         </Grid>
       </Grid>

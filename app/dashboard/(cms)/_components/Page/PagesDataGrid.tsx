@@ -258,6 +258,13 @@ function PagesDataGrid() {
             renderRowActions={DeleteOrEdit}
             // renderTopToolbarCustomActions={AddRow}
             renderDetailPanel={({ row }) => <PageDetail row={row} />}
+            displayColumnDefOptions={{
+              'mrt-row-actions': {
+                size: 120,
+                minSize: 120,
+                maxSize: 120,
+              },
+            }}
           />
         </TableCard>
       </MainCard>

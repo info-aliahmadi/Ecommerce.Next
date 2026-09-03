@@ -22,7 +22,7 @@ import AttributeType from '@root/app/types/enums/AttributeType';
 // Mapping function for AttributeType to get descriptive names and colors
 const getAttributeTypeConfig = (type: AttributeType): { label: string; color: 'primary' | 'secondary' | 'error' | 'info' | 'success' | 'warning' | 'default' } => {
   const t = useTranslations("fields.productAttribute.attributeTypes");
-  const attributeTypeMap : Record<AttributeType, { label: string; color: 'primary' | 'secondary' | 'error' | 'info' | 'success' | 'warning' | 'default' }> = {
+  const attributeTypeMap: Record<AttributeType, { label: string; color: 'primary' | 'secondary' | 'error' | 'info' | 'success' | 'warning' | 'default' }> = {
     [AttributeType.Color]: {
       label: t('Color'),
       color: 'primary' as const
@@ -184,7 +184,7 @@ export default function ProductAttributeDataGrid() {
 
   const DeleteOrEdit = useCallback(
     ({ row }: { row: MRT_Row<ProductAttributeModel> }) => (
-      <Box sx={{ display: 'flex', gap: '1rem' }}>
+      <Box sx={{ display: 'flex', gap: '1rem', minWidth: 'max-content' }}>
         <Tooltip arrow placement="top-start" title={t(buttonName + 'delete')}>
           <IconButton color="error" onClick={() => handleDeleteRow(row)}>
             <Delete />
@@ -211,6 +211,13 @@ export default function ProductAttributeDataGrid() {
             enableRowActions
             renderRowActions={DeleteOrEdit}
             pageSize={50}
+            displayColumnDefOptions={{
+              'mrt-row-actions': {
+                size: 120,
+                minSize: 120,
+                maxSize: 120,
+              },
+            }}
           />
         </TableCard>
       </MainCard>

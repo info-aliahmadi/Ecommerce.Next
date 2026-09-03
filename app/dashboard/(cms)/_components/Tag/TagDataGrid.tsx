@@ -14,6 +14,7 @@ import { MRT_Row } from 'material-react-table';
 import { MRT_Column } from '@root/app/types/MRT_Column';
 import CONFIG from '@root/config';
 import TagModel from '../../_types/Tag/TagModel';
+import GridDataBound from '@root/app/types/GridDataBound';
 
 
 function TagDataGrid() {
@@ -105,6 +106,13 @@ function TagDataGrid() {
             dataApi={handleTagList}
             enableRowActions
             renderRowActions={DeleteOrEdit}
+            displayColumnDefOptions={{
+              'mrt-row-actions': {
+                size: 180,
+                minSize: 180,
+                maxSize: 180,
+              },
+            }}
             // renderTopToolbarCustomActions={AddRow}
           />
         </TableCard>
