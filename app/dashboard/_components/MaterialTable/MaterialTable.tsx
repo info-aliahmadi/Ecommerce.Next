@@ -400,6 +400,11 @@ function MaterialTable({
               }
               : undefined
           }
+          muiExpandButtonProps={({ row }) => ({
+            sx: {
+              marginInlineStart: `${row.depth * 24}px`,
+            },
+          })}
           positionToolbarAlertBanner="none"
           getSubRows={getSubRows}
           autoResetPageIndex={autoResetPageIndex ?? false}

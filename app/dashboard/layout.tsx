@@ -11,6 +11,7 @@ import AuthorizationProvider from './_components/Authorization/AuthorizationProv
 import { QueryProvider } from '@root/app/(home)/_components/query-provider';
 import '@root/utils/extensions/numberExtensions';
 import '@root/public/css/customStyle/dashboard.css'
+import CONFIG from '@root/config';
 
 // Client-side wrapper to prevent hydration issues
 function ClientOnly({ children }: { children: any }) {
@@ -19,7 +20,7 @@ function ClientOnly({ children }: { children: any }) {
   useEffect(() => {
     setHasMounted(true);
     // set title for this page
-    document.title = 'Dashboard';
+    document.title = 'Dashboard | ' + CONFIG.APP_HEADER;
   }, []);
 
   if (!hasMounted) {
@@ -36,21 +37,21 @@ export default function DashboardThemeLayout({ children }: { children: any }) {
     <SessionProvider>
       <ReduxProvider store={store}>
         <QueryProvider>
-        <ClientOnly>
-          <Suspense fallback={<Loader />}>
+          <ClientOnly>
             <Suspense fallback={<Loader />}>
-              <AuthorizationProvider>
-                <Suspense fallback={<Loader />}>
-                  <DashboardThemeCustomization>
-                    <DashboardLayout>
-                      {children}
-                    </DashboardLayout>
-                  </DashboardThemeCustomization>
-                </Suspense>
-              </AuthorizationProvider>
+              <Suspense fallback={<Loader />}>
+                <AuthorizationProvider>
+                  <Suspense fallback={<Loader />}>
+                    <DashboardThemeCustomization>
+                      <DashboardLayout>
+                        {children}
+                      </DashboardLayout>
+                    </DashboardThemeCustomization>
+                  </Suspense>
+                </AuthorizationProvider>
+              </Suspense>
             </Suspense>
-          </Suspense>
-        </ClientOnly>
+          </ClientOnly>
         </QueryProvider>
       </ReduxProvider>
     </SessionProvider>

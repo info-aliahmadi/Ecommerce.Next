@@ -126,7 +126,7 @@ export default function ProductVariants({ operation, values, setFieldValue, hand
         const attrData = allAttributes.find((a) => a.id === attrId);
         return {
           id: attrId,
-          name: attrData?.name || '',
+          displayName: attrData?.displayName || '',
           key: attrData?.key || '',
           attributeType: attrData?.attributeType || 0,
           imagePreviewId: attrData?.imagePreviewId || null,
@@ -201,7 +201,7 @@ export default function ProductVariants({ operation, values, setFieldValue, hand
                   {variant.productAttributes.map((attr: ProductAttributeModel) => (
                     <Chip
                       key={attr.id}
-                      label={`${attr.name}: ${attr.key}`}
+                      label={`${attr.displayName}: ${attr.key}`}
                       size="small"
                       color="primary"
                       variant="outlined"

@@ -31,7 +31,7 @@ export function ProductCard({ product, index = 0 }: Readonly<ProductCardProps>) 
 
   const { cheapestVariant, hasMultipleVariants, minSellPrice, maxSellPrice, totalStock } = getProductPricing(product.variants ?? []);
   const t = useTranslations();
-  const { toggleItem, isInWishlist } = useWishlistStore();
+  const { isInWishlist } = useWishlistStore();
   const { setQuickViewProduct } = useUIStore();
   const { addItem: addCompareItem, isInCompare } = useCompareStore();
   const { handleAddToCartWithAnimation } = useFlyToCart();
@@ -223,6 +223,7 @@ export function ProductCard({ product, index = 0 }: Readonly<ProductCardProps>) 
                       )}
                     </AnimatePresence>
                     <button
+                      type="button"
                       onClick={handleWishlist}
                       className={`w-9 h-9 rounded-lg bg-white/80 dark:bg-ecommerce-surface/80 flex items-center justify-center hover:scale-110 transition-transform duration-200 hover:bg-ecommerce-red hover:text-white ${heartBurst && wishlisted ? 'scale-125' : ''}`}
                       aria-label={wishlisted ? t('homepage.common.removeFromWishlist') : t('homepage.common.addToWishlist')}
@@ -232,6 +233,7 @@ export function ProductCard({ product, index = 0 }: Readonly<ProductCardProps>) 
                   </div>
                 )}
                 <button
+                  type="button"
                   onClick={handleCompare}
                   className={`w-9 h-9 rounded-lg bg-white/80 dark:bg-ecommerce-surface/80 flex items-center justify-center hover:scale-110 transition-all ${inCompare ? 'bg-ecommerce-teal/10 dark:bg-ecommerce-teal/10' : 'hover:bg-ecommerce-teal hover:text-white'}`}
                   aria-label={inCompare ? t('homepage.compare.remove') : t('homepage.common.compare')}
@@ -239,6 +241,7 @@ export function ProductCard({ product, index = 0 }: Readonly<ProductCardProps>) 
                   <GitCompareArrows size={15} className={inCompare ? 'text-ecommerce-teal' : 'text-ecommerce-text-secondary'} />
                 </button>
                 <button
+                  type="button"
                   onClick={handleQuickView}
                   className="w-9 h-9 rounded-lg bg-white/80 dark:bg-ecommerce-surface/80 flex items-center justify-center hover:scale-110 transition-all hover:bg-ecommerce-purple hover:text-white"
                   aria-label={t('homepage.common.quickView')}
@@ -247,6 +250,7 @@ export function ProductCard({ product, index = 0 }: Readonly<ProductCardProps>) 
                 </button>
                 {!product.disableBuyButton && (
                   <button
+                    type="button"
                     onClick={handleAddToCart}
                     className="w-9 h-9 rounded-lg bg-white/80 dark:bg-ecommerce-surface/80 flex items-center justify-center hover:scale-110 transition-all hover:bg-ecommerce-red hover:text-white sm:hidden"
                     aria-label={t('homepage.common.addToCart')}
@@ -302,6 +306,7 @@ export function ProductCard({ product, index = 0 }: Readonly<ProductCardProps>) 
                 whileTap={{ scale: 0.9 }}
               >
                 <button
+                  type="button"
                   onClick={handleAddToCart}
                   className="w-10 h-10 rounded-full bg-ecommerce-red text-white shadow-lg shadow-ecommerce-red/30 flex items-center justify-center hover:bg-ecommerce-red/90 transition-colors hover:scale-110"
                   aria-label={t('homepage.common.addToCart')}
