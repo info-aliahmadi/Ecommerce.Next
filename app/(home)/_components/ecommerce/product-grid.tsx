@@ -77,6 +77,7 @@ export function ProductGrid() {
   }, [selectedCategory, categories]);
 
   const [sliderValue, setSliderValue] = useState<[number, number]>([0, DEFAULT_MAX_PRICE]);
+  const debouncedSliderValue = useDebounce(sliderValue, 400);
   const [hasDiscounts, setHasDiscounts] = useState<boolean>(false);
 
   const filter = useMemo((): Omit<ProductFilterModel, 'pageIndex'> => ({
@@ -84,10 +85,10 @@ export function ProductGrid() {
     searchInput: searchQuery,
     categoryIds: selectedCategoryId ? [selectedCategoryId] : undefined,
     sorting: SORT_MAP[sortBy] ?? SortingType.SortNewest,
-    fromSellUnitPrice: sliderValue[0] > 0 ? sliderValue[0] : undefined,
-    toSellUnitPrice: sliderValue[1] < DEFAULT_MAX_PRICE ? sliderValue[1] : undefined,
+    fromSellUnitPrice: debouncedSliderValue[0] > 0 ? debouncedSliderValue[0] : undefined,
+    toSellUnitPrice: debouncedSliderValue[1] < DEFAULT_MAX_PRICE ? debouncedSliderValue[1] : undefined,
     hasDiscounts: hasDiscounts || undefined,
-  }), [searchQuery, selectedCategoryId, sortBy, sliderValue, hasDiscounts]);
+  }), [searchQuery, selectedCategoryId, sortBy, debouncedSliderValue, hasDiscounts]);
 
   const debouncedFilter = useDebounce(filter, 400);
 
@@ -353,16 +354,16 @@ export function ProductGrid() {
               </div>
               <PriceRangeSlider
                 value={sliderValue}
+                onValueChange={setSliderValue}
+                onCommit={setSliderValue}
+                min={0}
+                max={maxPriceRange}
+                step={STEP_PRICE}
                 // minStepsBetweenThumbs={500000}
                 showDiscount
                 discountChecked={hasDiscounts}
                 onDiscountChange={(checked) => setHasDiscounts(checked)}
                 discountLabel={t('homepage.shopPage.withDiscount')}
-                onValueChange={setSliderValue}
-                onCommit={setSliderValue}
-                min={0}
-                max={maxPriceRange || DEFAULT_MAX_PRICE}
-                step={STEP_PRICE}
                 className="w-full"
               />
             </div>

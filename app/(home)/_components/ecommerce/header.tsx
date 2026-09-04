@@ -163,7 +163,7 @@ function ThemeToggle() {
 }
 
 // Helper Component for Mobile Accordion Sub-level items
-function MobileMenuItem({ item, onClose }: { item: ExtendedMenuModel; onClose: () => void }) {
+function MobileMenuItem({ item, onClose }: Readonly<{ item: ExtendedMenuModel; onClose: () => void }>) {
   const [isOpen, setIsOpen] = useState(false);
   const hasChildren = item.childs && item.childs.length > 0;
 
@@ -171,8 +171,8 @@ function MobileMenuItem({ item, onClose }: { item: ExtendedMenuModel; onClose: (
     <div className="w-full">
       <div className="flex items-center justify-between py-2 px-4 rounded-lg hover:bg-ecommerce-surface-hover">
         <Link
-          href={item.url}
-          onClick={onClose}
+          href={hasChildren ? "" : item.url}
+          onClick={hasChildren ? () => setIsOpen(!isOpen) : onClose}
           className="flex-1 text-sm font-medium text-ecommerce-text-secondary hover:text-ecommerce-text-primary flex items-center gap-2"
         >
           {item.color && <span className="w-2 h-2 rounded-full" style={{ backgroundColor: item.color }} />}
@@ -286,12 +286,11 @@ export function Header() {
 
             {/* Logo */}
             <Link href="/" className="flex items-center gap-2.5 shrink-0 group">
-              <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-ecommerce-rose to-blue-700 flex items-center justify-center shadow-sm shadow-ecommerce-red/20 group-hover:shadow-md group-hover:shadow-ecommerce-red/60 transition-shadow">
+              <div className="w-9 h-9 rounded-xl bg-ecommerce-red flex items-center justify-center shadow-lg shadow-ecommerce-red/20 group-hover:shadow-ecommerce-red/40 transition-shadow">
                 <span className="text-white font-bold text-sm">K</span>
               </div>
-              <span className="text-xl font-bold tracking-tight hidden sm:block">
-                <span className="text-ecommerce-red">Kidy</span>
-                <span className="text-ecommerce-text-primary">Toy</span>
+              <span className="text-xl font-bold tracking-tight">
+                <span className="text-ecommerce-red">Kidy</span>Toy
               </span>
             </Link>
 
@@ -300,7 +299,7 @@ export function Header() {
               {navItems.map((lvl1) => (
                 <div key={lvl1.id} className="relative group/lvl1">
                   <a
-                    href={lvl1.url}
+                    href={lvl1.url ? lvl1.url : ""}
                     className="px-4 py-2 text-sm font-medium text-ecommerce-text-secondary hover:text-ecommerce-text-primary transition-colors rounded-lg hover:bg-ecommerce-surface-hover flex items-center gap-1 cursor-pointer"
                   >
                     {lvl1.title}
@@ -316,7 +315,7 @@ export function Header() {
                         {lvl1.childs.map((lvl2) => (
                           <div key={lvl2.id} className="relative group/lvl2">
                             <a
-                              href={lvl2.url}
+                              href={lvl2.url ? lvl2.url : ""}
                               className="w-full text-start px-4 py-2.5 text-sm hover:bg-ecommerce-surface-hover transition-colors flex items-center justify-between text-ecommerce-text-secondary hover:text-ecommerce-text-primary"
                             >
                               <span className="flex items-center gap-2">
@@ -330,12 +329,12 @@ export function Header() {
 
                             {/* LEVEL 3 FLYOUT MENU */}
                             {lvl2.childs && lvl2.childs.length > 0 && (
-                              <div className="absolute top-0 start-full ps-2 opacity-0 invisible group-hover/lvl2:opacity-100 group-hover/lvl2:visible transition-all duration-200 z-50">
+                              <div className="absolute top-0 start-full ps-1 opacity-0 invisible group-hover/lvl2:opacity-100 group-hover/lvl2:visible transition-all duration-200 z-50">
                                 <div className="bg-white dark:bg-ecommerce-surface rounded-xl shadow-xl border border-ecommerce-border py-2 min-w-[200px]">
                                   {lvl2.childs.map((lvl3) => (
                                     <a
                                       key={lvl3.id}
-                                      href={lvl3.url}
+                                      href={lvl3.url ? lvl3.url : ""}
                                       className="w-full text-start px-4 py-2 text-sm hover:bg-ecommerce-surface-hover transition-colors flex items-center gap-2 text-ecommerce-text-secondary hover:text-ecommerce-text-primary"
                                     >
                                       {lvl3.color && <span className="w-2 h-2 rounded-full" style={{ backgroundColor: lvl3.color }} />}

@@ -1,14 +1,13 @@
 "use client";
 
 import { Slider } from "../ui/slider";
-import { Input } from "../ui/input";
 import { Label } from "../ui/label";
 import { Checkbox } from "../ui/checkbox";
 import PriceInput from "./price-Input";
 import CurrencyViewer, { GetCurrencySymbol } from "@root/utils/CurrencyViewer";
 import CONFIG from "@root/config";
 import { useTranslations } from "next-intl";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 
 export interface PriceRangeSliderProps {
   value: [number, number];
@@ -43,19 +42,11 @@ export function PriceRangeSlider({
 }: Readonly<PriceRangeSliderProps>) {
   const t = useTranslations();
   const [internalValue, setInternalValue] = useState<[number, number]>(value);
-  const debounceRef = useRef<ReturnType<typeof setTimeout>>(undefined);
 
+  // Sync internal state when parent props update (e.g. filter reset or URL change)
   useEffect(() => {
     setInternalValue(value);
-  }, [value]);
-
-  useEffect(() => {
-    clearTimeout(debounceRef.current);
-    debounceRef.current = setTimeout(() => {
-      onCommit?.(internalValue);
-    }, 1000);
-    return () => clearTimeout(debounceRef.current);
-  }, [internalValue, onCommit]);
+  }, [value[0], value[1]]);
 
   const handleSliderChange = (v: number[]) => {
     const next: [number, number] = [v[0], v[1]];
@@ -67,7 +58,7 @@ export function PriceRangeSlider({
     const next: [number, number] = [v[0], v[1]];
     setInternalValue(next);
     onValueChange(next);
-    onCommit?.(next);
+    onCommit?.(next); // Commit to parent on release
   };
 
   const handleMinChange = (raw: string) => {
@@ -76,6 +67,7 @@ export function PriceRangeSlider({
     const next: [number, number] = [numVal, internalValue[1]];
     setInternalValue(next);
     onValueChange(next);
+    onCommit?.(next); // Commit to parent on input change
   };
 
   const handleMaxChange = (raw: string) => {
@@ -84,13 +76,14 @@ export function PriceRangeSlider({
     const next: [number, number] = [internalValue[0], numVal];
     setInternalValue(next);
     onValueChange(next);
+    onCommit?.(next); // Commit to parent on input change
   };
 
   return (
-    <div className={className + " ltr-direction"}>
+    <div className={(className || "") + " rtl-direction"}>
       <div className="flex items-center justify-between text-sm pb-2">
-        <span className="text-ecommerce-text-primary font-medium">{CurrencyViewer(internalValue[0], CONFIG.DEFAULT_CURRENCY)}</span>
         <span className="text-ecommerce-text-primary font-medium">{CurrencyViewer(internalValue[1], CONFIG.DEFAULT_CURRENCY)}</span>
+        <span className="text-ecommerce-text-primary font-medium">{CurrencyViewer(internalValue[0], CONFIG.DEFAULT_CURRENCY)}</span>
       </div>
       <Slider
         value={internalValue}
@@ -106,24 +99,6 @@ export function PriceRangeSlider({
       <div className="flex items-center gap-2 pt-3">
         <div className="flex-1">
           <Label className="text-[10px] text-ecommerce-text-muted uppercase tracking-wider mb-1 block">
-            {t('homepage.catalog.priceMin')}
-          </Label>
-          <div className="relative">
-            <span className="absolute start-2.5 top-1/2 -translate-y-1/2 text-xs text-ecommerce-text-muted">
-              {GetCurrencySymbol(CONFIG.DEFAULT_CURRENCY)}
-            </span>
-            <PriceInput
-              value={internalValue[0]}
-              onChange={(value) => handleMinChange(value as any)}
-              className="w-full h-9 ps-10 pe-2 rounded-lg bg-ecommerce-surface border border-ecommerce-border text-sm text-ecommerce-text-primary focus:outline-none focus:ring-2 focus:ring-ecommerce-red/30"
-              min={min}
-              max={max - 1}
-            />
-          </div>
-        </div>
-        <span className="text-ecommerce-text-muted mt-4">–</span>
-        <div className="flex-1">
-          <Label className="text-[10px] text-ecommerce-text-muted uppercase tracking-wider mb-1 block">
             {t('homepage.catalog.priceMax')}
           </Label>
           <div className="relative">
@@ -136,6 +111,24 @@ export function PriceRangeSlider({
               className="w-full h-9 ps-6 pe-2 rounded-lg bg-ecommerce-surface border border-ecommerce-border text-sm text-ecommerce-text-primary focus:outline-none focus:ring-2 focus:ring-ecommerce-red/30"
               min={min}
               max={max}
+            />
+          </div>
+        </div>
+        <span className="text-ecommerce-text-muted mt-4">–</span>
+        <div className="flex-1">
+          <Label className="text-[10px] text-ecommerce-text-muted uppercase tracking-wider mb-1 block">
+            {t('homepage.catalog.priceMin')}
+          </Label>
+          <div className="relative">
+            <span className="absolute start-2.5 top-1/2 -translate-y-1/2 text-xs text-ecommerce-text-muted">
+              {GetCurrencySymbol(CONFIG.DEFAULT_CURRENCY)}
+            </span>
+            <PriceInput
+              value={internalValue[0]}
+              onChange={(value) => handleMinChange(value as any)}
+              className="w-full h-9 ps-10 pe-2 rounded-lg bg-ecommerce-surface border border-ecommerce-border text-sm text-ecommerce-text-primary focus:outline-none focus:ring-2 focus:ring-ecommerce-red/30"
+              min={min}
+              max={max - 1}
             />
           </div>
         </div>

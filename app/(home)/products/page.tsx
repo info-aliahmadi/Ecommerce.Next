@@ -69,6 +69,8 @@ import {
 import ProductListCard from '../_components/ecommerce/product-list';
 import { PriceRangeSlider } from '../_components/shared/price-range-slider';
 import AttributeType from '@root/app/types/enums/AttributeType';
+import CurrencyViewer from '@root/utils/CurrencyViewer';
+import CONFIG from '@root/config';
 
 // ── Types ──────────────────────────────────────────────
 type StockFilter = 'all' | 'inStock' | 'outOfStock';
@@ -106,10 +108,10 @@ const DEFAULT_FILTERS: FilterState = {
   sort: 'newest',
   viewMode: 'grid',
   page: 1,
-  perPage: 12,
+  perPage: CONFIG.PRODUCTS_PER_PAGE,
 };
 
-const PER_PAGE_OPTIONS = [12, 24, 36, 48];
+const PER_PAGE_OPTIONS = [CONFIG.PRODUCTS_PER_PAGE, 24, 36, 48];
 
 const SORT_MAP: Record<SortOption, SortingType> = {
   'newest': SortingType.SortNewest,
@@ -453,11 +455,12 @@ function ProductsPageContent() {
       });
     });
     if (filters.appliedMinPrice || filters.appliedMaxPrice) {
-      const min = filters.appliedMinPrice || '0';
-      const max = filters.appliedMaxPrice || '∞';
+      const min = filters.appliedMinPrice || 0;
+      const max = filters.appliedMaxPrice || DEFAULT_MAX_PRICE;
       chips.push({
         key: 'price',
-        label: `$${min} – $${max}`,
+        label: `${CurrencyViewer(Number(min), CONFIG.DEFAULT_CURRENCY)} - ${CurrencyViewer(Number(max), CONFIG.DEFAULT_CURRENCY)}`,
+
         onRemove: () =>
           setFilters((p) => ({
             ...p,

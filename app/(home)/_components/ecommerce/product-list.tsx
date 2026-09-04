@@ -10,7 +10,7 @@ import { toast } from 'sonner';
 import { useFlyToCart } from '../../_hooks/use-fly-to-cart';
 import { useAddToWishlist, useRemoveFromWishlist } from '../../_hooks/use-wishlist-queries';
 import { useTranslations } from 'next-intl';
-import ProductDisplayModel, { getProductPricing, getInStockVariants } from '../../_types/Product/ProductDisplayModel';
+import ProductDisplayModel, { getProductPricing, getInStockVariants, getVariantSummary } from '../../_types/Product/ProductDisplayModel';
 import { getAvailableStock } from '../../_types/Product/InventoryDisplayModel';
 import { GetImage } from '../../_lib/utils';
 import Link from 'next/link';
@@ -216,17 +216,33 @@ export default function ProductListCard({ product, index = 0 }: Readonly<Product
             <div className="flex-1 p-4 sm:p-5 flex flex-col">
               <div className="flex items-start justify-between gap-2">
                 <div className="flex-1 min-w-0">
-                  <div className="flex items-center gap-1.5 mb-1">
-                    {product.categories?.map(category => category &&
-                      (<span key={"cat-" + category.key}>
-                        {category && <span className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: category.color }} />}
-                        {category && <span className="text-[11px] font-medium text-ecommerce-text-muted uppercase tracking-wider">{category.name}</span>}
-                      </span>))}
-                    {product.sku && <span className="text-[10px] text-ecommerce-text-muted ms-auto sm:ms-2">{t('homepage.common.sku')}: {product.sku}</span>}
+                  <div className="flex items-center gap-1.5 mb-1.5">
+                    {product.categories?.map(category => category && (
+                      <div key={category.id} className="flex items-center gap-1.5 mb-1.5">
+                        <span className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: category.color || '#ccc' }} />
+                        <span className="text-[11px] font-medium text-ecommerce-text-muted uppercase tracking-wider">{category.name}</span>
+                      </div>
+                    ))}
                   </div>
-                  <h3 className="font-semibold text-base text-ecommerce-text-primary line-clamp-1 group-hover:text-ecommerce-red transition-colors">{product.name}</h3>
-                  <div className="min-h-[2rem]">
+                  <h3 className="font-semibold text-sm text-ecommerce-text-primary line-clamp-2 leading-snug min-h-[1.5rem] group-hover:text-ecommerce-red transition-colors">{product.name}</h3>
+                  {cheapestVariant?.productAttributes.length > 0 && <div className="min-h-[2rem]">
                     {cheapestVariant?.productAttributes.map((attribute, index) => (
+                      <Badge key={attribute.id} className={"bg-ecommerce-red/5 text-ecommerce-red border-0 text-xs font-semibold" + (index > 0 ? " mx-1" : "")}>
+                        {attribute.displayName}
+                      </Badge>
+                    ))}
+                    {hasMultipleVariants && <div className="text-[11px] text-ecommerce-text-muted mt-1">
+                      {getVariantSummary(product.variants ?? []).map((item) => (
+                        <span key={item.attributeType}>
+                          {item.count} {t(item.translationKey)}
+                          {' '}
+                        </span>
+                      ))}
+                    </div>}
+                  </div>
+                  }
+                  <div className="min-h-[2rem]">
+                    {product?.attributes.map((attribute, index) => (
                       <Badge key={attribute.id} className={"bg-ecommerce-emerald/5 text-ecommerce-emerald border-0 text-xs font-semibold" + (index > 0 ? " mx-1" : "")}>
                         {attribute.displayName}
                       </Badge>
@@ -245,7 +261,7 @@ export default function ProductListCard({ product, index = 0 }: Readonly<Product
 
               {/* Tags */}
               {product.productTags && product.productTags.length > 0 && (
-                <div className="flex gap-1.5 mt-3">
+                <div className="flex gap-1.5 mt-3 mb-1">
                   {product.productTags.slice(0, 3).map(tag => (
                     <span key={"tag-" + tag} className="text-[10px] font-medium px-2 py-0.5 rounded-md bg-ecommerce-surface-hover text-ecommerce-text-muted capitalize">{tag}</span>
                   ))}
