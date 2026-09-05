@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useTranslations } from 'next-intl';
 import ProductAttributeDisplayModel from '../../../_types/Product/ProductAttributeDisplayModel';
 import { getCheapestVariant } from '../../../_types/Product/ProductDisplayModel';
@@ -8,6 +8,7 @@ import AttributeType from '@root/app/types/enums/AttributeType';
 import { SizeGuideModal } from '@root/app/(home)/_components/ecommerce/size-guide-modal';
 import { Ruler } from 'lucide-react';
 import ProductVariantDisplayModel from '@root/app/(home)/_types/Product/ProductVariantDisplayModel';
+import { getAvailableStock } from '@root/app/(home)/_types/Product/InventoryDisplayModel';
 
 interface VariantOption {
   id: number;
@@ -23,16 +24,16 @@ interface AttributeTypeConfig {
 }
 
 const ATTRIBUTE_CONFIGS: AttributeTypeConfig[] = [
-  { type: AttributeType.Color, translationKey: 'homepage.quickView.color', style: 'color' },
-  { type: AttributeType.Size, translationKey: 'homepage.quickView.size', style: 'button' },
-  { type: AttributeType.Weight, translationKey: 'homepage.quickView.weight', style: 'button' },
-  { type: AttributeType.Length, translationKey: 'homepage.quickView.length', style: 'button' },
-  { type: AttributeType.Width, translationKey: 'homepage.quickView.width', style: 'button' },
-  { type: AttributeType.Height, translationKey: 'homepage.quickView.height', style: 'button' },
-  { type: AttributeType.Material, translationKey: 'homepage.quickView.material', style: 'button' },
-  { type: AttributeType.Pattern, translationKey: 'homepage.quickView.pattern', style: 'button' },
-  { type: AttributeType.Brand, translationKey: 'homepage.quickView.brand', style: 'button' },
-  { type: AttributeType.Model, translationKey: 'homepage.quickView.model', style: 'button' },
+  { type: AttributeType.Color, translationKey: 'fields.productAttribute.attributeTypes.Color', style: 'color' },
+  { type: AttributeType.Size, translationKey: 'fields.productAttribute.attributeTypes.Size', style: 'button' },
+  { type: AttributeType.Weight, translationKey: 'fields.productAttribute.attributeTypes.Weight', style: 'button' },
+  { type: AttributeType.Length, translationKey: 'fields.productAttribute.attributeTypes.Length', style: 'button' },
+  { type: AttributeType.Width, translationKey: 'fields.productAttribute.attributeTypes.Width', style: 'button' },
+  { type: AttributeType.Height, translationKey: 'fields.productAttribute.attributeTypes.Height', style: 'button' },
+  { type: AttributeType.Material, translationKey: 'fields.productAttribute.attributeTypes.Material', style: 'button' },
+  { type: AttributeType.Pattern, translationKey: 'fields.productAttribute.attributeTypes.Pattern', style: 'button' },
+  { type: AttributeType.Brand, translationKey: 'fields.productAttribute.attributeTypes.Brand', style: 'button' },
+  { type: AttributeType.Model, translationKey: 'fields.productAttribute.attributeTypes.Model', style: 'button' },
 ];
 
 interface VariantSelectorProps {
@@ -67,23 +68,27 @@ function getUniqueAttributes(
 function getAvailableKeys(
   variants: ProductVariantDisplayModel[],
   currentSelection: Map<AttributeType, VariantOption | null>,
+  orderedTypes: AttributeType[],
   targetType: AttributeType
 ): Set<string> {
-  const selectedKeys: string[] = [];
-  for (const [type, opt] of currentSelection) {
-    if (type !== targetType && opt !== null) {
-      selectedKeys.push(opt.key);
-    }
-  }
+  const available = new Set<string>();
+  const targetIndex = orderedTypes.indexOf(targetType);
+  const selectedOptions = orderedTypes
+    .slice(0, targetIndex)
+    .map(type => [type, currentSelection.get(type)] as const)
+    .filter((entry): entry is readonly [AttributeType, VariantOption] => entry[1] !== null);
 
-  const compatibleVariants = variants.filter(v =>
-    selectedKeys.every(key =>
-      v.productAttributes?.some(attr => attr.key === key)
-    )
+  const inStockVariants = variants.filter(
+    v =>
+      getAvailableStock(v.productInventory) > 0 &&
+      selectedOptions.every(([type, opt]) =>
+        v.productAttributes?.some(
+          attr => attr.attributeType === type && attr.key === opt.key,
+        )
+      ),
   );
 
-  const available = new Set<string>();
-  for (const v of compatibleVariants) {
+  for (const v of inStockVariants) {
     for (const attr of v.productAttributes ?? []) {
       if (attr.attributeType === targetType) {
         available.add(attr.key);
@@ -96,6 +101,7 @@ function getAvailableKeys(
 function computeAutoSelection(
   variants: ProductVariantDisplayModel[],
   attributesByType: Map<AttributeType, VariantOption[]>,
+  orderedTypes: AttributeType[],
   currentSelection: Map<AttributeType, VariantOption | null>,
   changedType: AttributeType,
   newValue: VariantOption
@@ -106,9 +112,30 @@ function computeAutoSelection(
     partial.set(type, type === changedType ? newValue : currentSelection.get(type) ?? null);
   }
 
+  // Prefer a variant that keeps the existing compatible selections.
+  const selectedOptions = Array.from(partial.entries()).filter(
+    ([, opt]) => opt !== null,
+  ) as Array<[AttributeType, VariantOption]>;
+
+  const fullyMatchingVariant = variants.find(v =>
+    getAvailableStock(v.productInventory) > 0 &&
+    selectedOptions.every(([type, opt]) =>
+      v.productAttributes?.some(
+        attr => attr.attributeType === type && attr.key === opt.key,
+      )
+    )
+  );
+
+  if (fullyMatchingVariant) {
+    return partial;
+  }
+
   // Find the first variant that matches the changed type's new value
   const matchingVariant = variants.find(v =>
-    v.productAttributes?.some(attr => attr.key === newValue.key)
+    getAvailableStock(v.productInventory) > 0 &&
+    v.productAttributes?.some(
+      attr => attr.attributeType === changedType && attr.key === newValue.key,
+    )
   );
 
   if (matchingVariant) {
@@ -127,7 +154,7 @@ function computeAutoSelection(
     // No matching variant — try to find compatible options for other types
     for (const [type, options] of attributesByType) {
       if (type === changedType) continue;
-      const available = getAvailableKeys(variants, partial, type);
+      const available = getAvailableKeys(variants, partial, orderedTypes, type);
       const current = partial.get(type);
       if (current && !available.has(current.key)) {
         const firstAvailable = options.find(o => available.has(o.key));
@@ -139,7 +166,7 @@ function computeAutoSelection(
   return partial;
 }
 
-export default function VariantSelector({ variants, onVariantChange }: VariantSelectorProps) {
+export default function VariantSelector({ variants, onVariantChange }: Readonly<VariantSelectorProps>) {
   const t = useTranslations();
   const [isSizeGuideOpen, setIsSizeGuideOpen] = useState(false);
   const attributesByType = useMemo(() => {
@@ -164,7 +191,23 @@ export default function VariantSelector({ variants, onVariantChange }: VariantSe
     return initial;
   });
 
+  useEffect(() => {
+    setSelectedByType(() => {
+      const initial = new Map<AttributeType, VariantOption | null>();
+      const cheapest = getCheapestVariant(variants);
+      for (const [type, options] of attributesByType) {
+        const matchAttr = cheapest?.productAttributes?.find(attr => attr.attributeType === type);
+        const matchOpt = matchAttr ? options.find(o => o.key === matchAttr.key) : null;
+        initial.set(type, matchOpt ?? options[0] ?? null);
+      }
+      return initial;
+    });
+  }, [attributesByType, variants]);
+
   if (attributesByType.size === 0) return null;
+  const orderedTypes = ATTRIBUTE_CONFIGS
+    .map(config => config.type)
+    .filter(type => attributesByType.has(type));
 
   const selectedEntries = ATTRIBUTE_CONFIGS
     .filter(config => attributesByType.has(config.type))
@@ -192,24 +235,32 @@ export default function VariantSelector({ variants, onVariantChange }: VariantSe
                 <span className="text-sm text-ecommerce-text-secondary">{selected?.displayName}</span>
               </div>
               <div className="flex gap-2 flex-wrap">
-                {options.map((opt) => (
-                  <button
-                    type='button'
-                    key={opt.id}
-                    onClick={() => {
-                      const next = computeAutoSelection(variants, attributesByType, selectedByType, config.type, opt);
-                      setSelectedByType(next);
-                      onVariantChange?.(next);
-                    }}
-                    className={`w-8 h-8 rounded-full border-2 transition-all duration-200 hover:scale-120 ${selected?.id === opt.id
-                      ? 'border-ecommerce-red ring-2 ring-ecommerce-red/20 scale-120'
-                      : 'border-ecommerce-border hover:border-ecommerce-text-muted'
-                      }`}
-                    style={{ backgroundColor: 'var(--' + opt.key + ')' }}
-                    aria-label={opt.displayName}
-                    title={opt.displayName}
-                  />
-                ))}
+                {options.map((opt) => {
+                  const available = getAvailableKeys(variants, selectedByType, orderedTypes, config.type);
+                  const isAvailable = available.has(opt.key);
+                  return (
+                    <button
+                      type='button'
+                      key={opt.id}
+                      onClick={() => {
+                        if (!isAvailable) return;
+                        const next = computeAutoSelection(variants, attributesByType, orderedTypes, selectedByType, config.type, opt);
+                        setSelectedByType(next);
+                        onVariantChange?.(next);
+                      }}
+                      className={`w-8 h-8 rounded-full border-2 transition-all duration-200 ${!isAvailable
+                        ? 'opacity-30 cursor-not-allowed border-ecommerce-border'
+                        : selected?.id === opt.id
+                          ? 'border-ecommerce-red ring-2 ring-ecommerce-red/20 scale-120 hover:scale-120'
+                          : 'border-ecommerce-border hover:border-ecommerce-text-muted hover:scale-120'
+                        }`}
+                      style={{ backgroundColor: 'var(--' + opt.key + ')' }}
+                      aria-label={opt.displayName}
+                      title={opt.displayName}
+                      disabled={!isAvailable}
+                    />
+                  );
+                })}
               </div>
             </div>
           );
@@ -240,7 +291,7 @@ export default function VariantSelector({ variants, onVariantChange }: VariantSe
             </div>
             <div className="flex gap-2 flex-wrap">
               {options.map((opt) => {
-                const available = getAvailableKeys(variants, selectedByType, config.type);
+                const available = getAvailableKeys(variants, selectedByType, orderedTypes, config.type);
                 const isAvailable = available.has(opt.key);
                 return (
                   <button
@@ -248,7 +299,7 @@ export default function VariantSelector({ variants, onVariantChange }: VariantSe
                     key={opt.id}
                     onClick={() => {
                       if (!isAvailable) return;
-                      const next = computeAutoSelection(variants, attributesByType, selectedByType, config.type, opt);
+                      const next = computeAutoSelection(variants, attributesByType, orderedTypes, selectedByType, config.type, opt);
                       setSelectedByType(next);
                       onVariantChange?.(next);
                     }}
@@ -262,7 +313,6 @@ export default function VariantSelector({ variants, onVariantChange }: VariantSe
                   >
                     {opt.displayName}
                   </button>
-
                 );
               })}
             </div>

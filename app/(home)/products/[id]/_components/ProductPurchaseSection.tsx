@@ -18,7 +18,7 @@ interface ProductPurchaseSectionProps {
   product: ProductDisplayModel;
 }
 
-export default function ProductPurchaseSection({ product }: ProductPurchaseSectionProps) {
+export default function ProductPurchaseSection({ product }: Readonly<ProductPurchaseSectionProps>) {
   const t = useTranslations();
   const { cheapestVariant: defaultCheapest, minSellPrice, maxSellPrice } = getProductPricing(product.variants ?? []);
 
@@ -41,19 +41,27 @@ export default function ProductPurchaseSection({ product }: ProductPurchaseSecti
 
   const handleVariantChange = useCallback((options: Map<AttributeType, { id: number; displayName: string; key: string } | null>) => {
     setHasUserSelected(true);
-    const selectedKeys = Array.from(options.values()).filter(Boolean).map(o => o!.key);
+    const selectedOptions = Array.from(options.entries()).filter(
+      ([, option]) => option !== null,
+    ) as Array<[AttributeType, { id: number; displayName: string; key: string }]>;
 
-    if (selectedKeys.length === 0) {
+    if (selectedOptions.length === 0) {
       setSelectedVariant(defaultCheapest);
       setHasUserSelected(false);
       return;
     }
 
-    const matched = product.variants?.find(v =>
-      selectedKeys.every(key =>
-        v.productAttributes?.some(attr => attr.key === key)
+    const matchingVariants = product.variants?.filter(v =>
+      selectedOptions.every(([type, option]) =>
+        v.productAttributes?.some(
+          attr => attr.attributeType === type && attr.key === option.key,
+        )
       )
-    ) ?? null;
+    ) ?? [];
+
+    const matched = matchingVariants.find(
+      v => getAvailableStock(v.productInventory) > 0,
+    ) ?? matchingVariants[0] ?? null;
 
     setSelectedVariant(matched);
   }, [product.variants, defaultCheapest]);

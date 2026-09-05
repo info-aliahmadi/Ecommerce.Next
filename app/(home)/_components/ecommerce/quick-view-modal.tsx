@@ -1,7 +1,6 @@
 'use client';
 
 import { Heart, ShoppingCart, Check, Minus, Plus, Shield, Truck, RotateCcw, X } from 'lucide-react';
-import { StarRating } from '../ui/star-rating';
 import { Button } from '../ui/button';
 import { Badge } from '../ui/badge';
 import { Dialog, DialogContent } from '../ui/dialog';
@@ -17,8 +16,8 @@ import { useAddToWishlist, useRemoveFromWishlist } from '../../_hooks/use-wishli
 import { GetImage } from '../../_lib/utils';
 import CONFIG from '@root/config';
 import HomePageService from '../../_services/HomePageService';
-import { redirect } from 'next/navigation';
 import CurrencyViewer from '@root/utils/CurrencyViewer';
+import AttributeType from '@root/app/types/enums/AttributeType';
 import VariantSelector from '@root/app/(home)/products/[id]/_components/VariantSelector';
 import ProductVariantDisplayModel from '../../_types/Product/ProductVariantDisplayModel';
 import { QuickViewGallery } from './quick-view-modal-gallery';
@@ -152,11 +151,6 @@ function QuickViewContent({ product, onClose }: Readonly<{ product: ProductDispl
     toast.success(wishlisted ? t('homepage.common.removeFromWishlist') : t('homepage.common.addToWishlist'));
   };
 
-  const handleNavigateToMoreDetail = (productId: number) => {
-    onClose();
-    redirect('products/' + productId);
-  };
-
   const tabs = [
     { key: 'description' as const, label: t('homepage.quickView.description') },
     { key: 'reviews' as const, label: t('homepage.quickView.reviews', { count: reviewCount || product.approvedTotalReviews }) },
@@ -165,7 +159,7 @@ function QuickViewContent({ product, onClose }: Readonly<{ product: ProductDispl
 
   return (
     <>
-      <div className="flex flex-col md:grid md:grid-cols-[55%_45%] max-h-[85vh]">
+      <div className="flex flex-col md:grid md:grid-cols-[35%_65%] max-h-[85vh]">
         <QuickViewGallery
           product={product}
           selectedImageIndex={selectedImageIndex}
@@ -192,16 +186,14 @@ function QuickViewContent({ product, onClose }: Readonly<{ product: ProductDispl
         <div className="p-6 flex flex-col overflow-y-auto">
 
           {product.categories?.map(category => category && (
-            <span key={"category-" + category.key} className="text-xs font-medium text-ecommerce-text-muted uppercase tracking-wider pb-2">
+            <span key={"category-" + category.id} className="text-xs font-medium text-ecommerce-text-muted uppercase tracking-wider pb-2">
               <span className="inline-block w-2 h-2 mx-2 rounded-full " style={{ backgroundColor: category.color }} > </span>
               <span className="text-xs font-medium text-ecommerce-text-muted uppercase tracking-wider">{category.name}</span>
             </span>))}
 
-          <h2
-            onClick={() => handleNavigateToMoreDetail(product.id)}
-            className="text-xl font-bold text-ecommerce-text-primary leading-tight cursor-pointer pb-2"
-          >{product.name}</h2>
-
+          <h2 className="text-xl font-bold text-ecommerce-text-primary leading-tight cursor-pointer pb-2">
+            <a href={"/products/" + product.id}>{product.name}</a>
+          </h2>
           {product.sku && (
             <span className="text-xs text-ecommerce-text-muted ">{t('homepage.common.sku')}: {product.sku}</span>
           )}
@@ -266,16 +258,25 @@ function QuickViewContent({ product, onClose }: Readonly<{ product: ProductDispl
           <VariantSelector
             variants={product.variants ?? []}
             onVariantChange={(options) => {
-              const selectedKeys = Array.from(options.values()).filter(Boolean).map(o => o!.key);
-              if (selectedKeys.length === 0) {
+              const selectedOptions = Array.from(options.entries()).filter(
+                ([, option]) => option !== null,
+              ) as Array<[AttributeType, { id: number; displayName: string; key: string }]>;
+
+              if (selectedOptions.length === 0) {
                 setSelectedVariant(defaultCheapest);
                 return;
               }
-              const matched = product.variants?.find(v =>
-                selectedKeys.every(key =>
-                  v.productAttributes?.some(attr => attr.key === key)
+              const matchingVariants = product.variants?.filter(v =>
+                selectedOptions.every(([type, option]) =>
+                  v.productAttributes?.some(
+                    attr => attr.attributeType === type && attr.key === option.key,
+                  )
                 )
-              ) ?? null;
+              ) ?? [];
+
+              const matched = matchingVariants.find(
+                v => getAvailableStock(v.productInventory) > 0,
+              ) ?? matchingVariants[0] ?? null;
               setSelectedVariant(matched);
             }}
           />
