@@ -177,9 +177,9 @@ export default function ProductListCard({ product, index = 0 }: Readonly<Product
           transition={{ duration: 0.3, delay: index * 0.03 }}
           className="group relative bg-white dark:bg-ecommerce-surface rounded-2xl border border-ecommerce-border overflow-hidden card-lift category-glow"
         >
-          <div className="flex flex-col sm:flex-row">
+          <div className="flex">
             {/* Image */}
-            <div className="relative w-full sm:w-48 lg:w-56 aspect-square sm:aspect-auto shrink-0 overflow-hidden bg-ecommerce-surface-hover dark:bg-[#252836]">
+            <div className="relative w-40 sm:w-40 lg:w-56 aspect-square sm:aspect-auto shrink-0 overflow-hidden bg-ecommerce-surface-hover dark:bg-[#252836]">
               {!isImageLoaded && (
                 <div className="absolute inset-0 bg-muted shimmer" />
               )}
@@ -213,10 +213,10 @@ export default function ProductListCard({ product, index = 0 }: Readonly<Product
             </div>
 
             {/* Content */}
-            <div className="flex-1 p-4 sm:p-5 flex flex-col">
+            <div className="flex-1 min-w-0 p-3 sm:p-5 flex flex-col">
               <div className="flex items-start justify-between gap-2">
                 <div className="flex-1 min-w-0">
-                  <div className="flex items-center gap-1.5 mb-1.5">
+                  <div className="flex items-center gap-1.5 mb-1.5 flex-wrap">
                     {product.categories?.map(category => category && (
                       <div key={category.id} className="flex items-center gap-1.5 mb-1.5">
                         <span className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: category.color || '#ccc' }} />
@@ -224,7 +224,7 @@ export default function ProductListCard({ product, index = 0 }: Readonly<Product
                       </div>
                     ))}
                   </div>
-                  <h3 className="font-semibold text-sm text-ecommerce-text-primary line-clamp-2 leading-snug min-h-[1.5rem] group-hover:text-ecommerce-red transition-colors">{product.name}</h3>
+                  <h3 className="font-semibold text-md text-ecommerce-text-primary line-clamp-2 mb-1 leading-snug min-h-[1.5rem] group-hover:text-ecommerce-red transition-colors">{product.name}</h3>
                   {cheapestVariant?.productAttributes.length > 0 && <div className="min-h-[2rem]">
                     {cheapestVariant?.productAttributes.map((attribute, index) => (
                       <Badge key={attribute.id} className={"bg-ecommerce-red/5 text-ecommerce-red border-0 text-xs font-semibold" + (index > 0 ? " mx-1" : "")}>
@@ -248,39 +248,41 @@ export default function ProductListCard({ product, index = 0 }: Readonly<Product
                       </Badge>
                     ))}
                   </div>
-                  {product.shortDescription && <p className="text-xs text-ecommerce-text-muted mt-1 line-clamp-2">{product.shortDescription}</p>}
+                  {product.shortDescription && <p className="text-xs text-ecommerce-text-muted mt-1 mb-2 line-clamp-2">{product.shortDescription}</p>}
                 </div>
               </div>
 
-              <div className="flex items-center gap-1.5 mt-3">
+              <div className="hidden sm:flex items-center gap-1.5 mt-2 mb-1 sm:mt-3">
                 <div className="flex items-center gap-px">
                   <StarRating rating={rating} size={12} />
                 </div>
-                <span className="text-xs text-ecommerce-text-muted">{rating.toFixed(1)} ({product.approvedTotalReviews})</span>
+                <span className="text-xs text-ecommerce-text-muted">
+                  {rating.toFixed(1)} ({product.approvedTotalReviews})
+                </span>
               </div>
 
               {/* Tags */}
-              {product.productTags && product.productTags.length > 0 && (
-                <div className="flex gap-1.5 mt-3 mb-1">
-                  {product.productTags.slice(0, 3).map(tag => (
+              <div className="hidden gap-1.5 mt-2 mb-1 sm:flex-wrap sm:flex">
+                {product.productTags && product.productTags.length > 0 &&
+                  product.productTags.slice(0, 3).map(tag => (
                     <span key={"tag-" + tag} className="text-[10px] font-medium px-2 py-0.5 rounded-md bg-ecommerce-surface-hover text-ecommerce-text-muted capitalize">{tag}</span>
-                  ))}
-                </div>
-              )}
+                  ))
+                }
+              </div>
 
               {/* Bottom: Price + Actions */}
-              <div className="flex items-center justify-between mt-auto pt-4 border-t border-ecommerce-border mt-4">
+              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mt-auto pt-2 sm:pt-4 border-t border-ecommerce-border">
                 <div className="flex flex-col gap-0.5">
                   <div className="flex items-baseline gap-1.5">
                     {hasMultipleVariants ? (
-                      <span className="text-base sm:text-md font-bold text-ecommerce-text-primary">
+                      <span className="text-sm sm:text-md font-bold text-ecommerce-text-primary">
                         {CurrencyViewer(minSellPrice, CONFIG.DEFAULT_CURRENCY)} - {CurrencyViewer(maxSellPrice, CONFIG.DEFAULT_CURRENCY)}
                       </span>
                     ) : (
                       <>
-                        <span className="text-base sm:text-md font-bold text-ecommerce-text-primary">{CurrencyViewer(minSellPrice, CONFIG.DEFAULT_CURRENCY)}</span>
+                        <span className="text-lg sm:text-lg font-bold text-ecommerce-text-primary">{CurrencyViewer(minSellPrice, CONFIG.DEFAULT_CURRENCY)}</span>
                         {cheapestVariant && cheapestVariant.oldSellPrice > 0 && cheapestVariant.oldSellPrice > cheapestVariant.sellPrice && (
-                          <span className="text-xs text-ecommerce-text-muted line-through">{CurrencyViewer(cheapestVariant.oldSellPrice, CONFIG.DEFAULT_CURRENCY)}</span>
+                          <span className="text-sm text-ecommerce-text-muted line-through">{CurrencyViewer(cheapestVariant.oldSellPrice, CONFIG.DEFAULT_CURRENCY)}</span>
                         )}
                       </>
                     )}
@@ -298,11 +300,11 @@ export default function ProductListCard({ product, index = 0 }: Readonly<Product
                     ) : null;
                   })()}
                 </div>
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-1.5 sm:gap-2">
                   <button
                     type="button"
                     onClick={handleCompare}
-                    className={`w-9 h-9 rounded-lg border flex items-center justify-center transition-all ${inCompare ? 'bg-ecommerce-teal/5 border-ecommerce-teal/30 text-ecommerce-teal' : 'border-ecommerce-border hover:bg-ecommerce-teal hover:text-white hover:border-ecommerce-teal'}`}
+                    className={`w-10 h-8 sm:w-9 sm:h-9 rounded-lg border flex items-center justify-center transition-all ${inCompare ? 'bg-ecommerce-teal/5 border-ecommerce-teal/30 text-ecommerce-teal' : 'border-ecommerce-border hover:bg-ecommerce-teal hover:text-white hover:border-ecommerce-teal'}`}
                     aria-label={inCompare ? t('homepage.compare.remove') : t('homepage.common.compare')}
                   >
                     <GitCompareArrows size={14} />
@@ -310,7 +312,7 @@ export default function ProductListCard({ product, index = 0 }: Readonly<Product
                   <button
                     type="button"
                     onClick={handleQuickView}
-                    className="w-9 h-9 rounded-lg border border-ecommerce-border flex items-center justify-center hover:bg-ecommerce-purple hover:text-white hover:border-ecommerce-purple transition-all"
+                    className="w-10 h-8 sm:w-9 sm:h-9 rounded-lg border border-ecommerce-border flex items-center justify-center hover:bg-ecommerce-purple hover:text-white hover:border-ecommerce-purple transition-all"
                     aria-label={t('homepage.common.quickView')}
                   >
                     <Eye size={14} />
@@ -318,7 +320,7 @@ export default function ProductListCard({ product, index = 0 }: Readonly<Product
                   <button
                     type="button"
                     onClick={handleWishlist}
-                    className={`w-9 h-9 rounded-lg border flex items-center justify-center transition-all ${wishlisted ? 'bg-ecommerce-red/5 border-ecommerce-red/30 text-ecommerce-red' : 'border-ecommerce-border hover:bg-ecommerce-rose hover:text-white hover:border-ecommerce-rose'}`}
+                    className={`w-10 h-8 sm:w-9 sm:h-9 rounded-lg border flex items-center justify-center transition-all ${wishlisted ? 'bg-ecommerce-red/5 border-ecommerce-red/30 text-ecommerce-red' : 'border-ecommerce-border hover:bg-ecommerce-rose hover:text-white hover:border-ecommerce-rose'}`}
                     aria-label={wishlisted ? t('homepage.common.removeFromWishlist') : t('homepage.common.addToWishlist')}
                   >
                     <div className="relative">
@@ -341,7 +343,7 @@ export default function ProductListCard({ product, index = 0 }: Readonly<Product
                     onClick={handleAddToCart}
                     size="sm"
                     disabled={totalStock === 0}
-                    className={`h-9 px-4 rounded-lg text-xs font-medium gap-1.5 transition-all duration-300 active:scale-95 ripple disabled:opacity-50 ${justAdded ? 'bg-ecommerce-emerald hover:bg-ecommerce-emerald text-white scale-105' : 'bg-ecommerce-red hover:bg-ecommerce-red/90 text-white hover:scale-105'}`}
+                    className={`w-10 h-8 sm:h-9 px-3 sm:px-4 rounded-lg text-xs font-medium gap-1.5 transition-all duration-300 active:scale-95 ripple disabled:opacity-50 ${justAdded ? 'bg-ecommerce-emerald hover:bg-ecommerce-emerald text-white scale-105' : 'bg-ecommerce-red hover:bg-ecommerce-red/90 text-white hover:scale-105'}`}
                   >
                     {justAdded ? <Check size={13} /> : <ShoppingCart size={13} />}
                   </Button>

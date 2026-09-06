@@ -64,7 +64,7 @@ export function FeaturedCategories() {
               transition={{ duration: 0.4, delay: index * 0.08 }}
             >
               <Link
-                href={`/products?category=${cat.key}`}
+                href={`/products?categories=${cat.key}`}
                 className="group block relative rounded-2xl overflow-hidden aspect-[4/3] bg-ecommerce-surface-hover dark:bg-[#252836]"
               >
                 <img
@@ -86,7 +86,7 @@ export function FeaturedCategories() {
                 <div className="absolute bottom-0 left-0 right-0 p-4">
                   <h3 className="text-white font-bold text-sm sm:text-base">{cat.name}</h3>
                   <div className="flex items-center justify-between mt-1.5">
-                    <span className="text-white/60 text-xs">{cat.productsCount || 0} {t('homepage.common.product')}</span>
+                    <span className="text-white/60 text-xs">{cat.productsCount || 0} {t("homepage.common.product")}</span>
                     <div className="w-7 h-7 rounded-lg bg-white/10 flex items-center justify-center group-hover:bg-white/20 transition-all group-hover:translate-x-0.5">
                       <ArrowRight size={13} className="text-white/70 group-hover:text-white transition-colors" />
                     </div>

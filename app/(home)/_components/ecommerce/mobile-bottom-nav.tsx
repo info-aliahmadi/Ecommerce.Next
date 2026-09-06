@@ -64,7 +64,7 @@ export function MobileBottomNav() {
   };
 
   return (
-    <nav className="lg:hidden fixed bottom-0 start-0 end-0 z-50 bg-white/95 dark:bg-ecommerce-surface/95 backdrop-blur-xl border-t border-ecommerce-border safe-area-pb before:absolute before:top-0 before:start-0 before:end-0 before:h-px before:bg-gradient-to-r before:from-transparent before:via-ecommerce-red/20 before:to-transparent">
+    <nav className="lg:hidden fixed bottom-0 start-0 end-0 z-50 bg-white/95 dark:bg-ecommerce-surface/95 backdrop-blur-xl border-t border-t-2 border-ecommerce-border safe-area-pb before:absolute before:top-0 before:start-0 before:end-0 before:h-px before:bg-gradient-to-r before:from-transparent before:via-ecommerce-red/20 before:to-transparent">
       <div className="flex items-center h-[68px] px-2">
         {navItems.map((item) => {
           const isCart = item.id === 'cart';

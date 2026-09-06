@@ -19,7 +19,7 @@ import {
 
 // project import
 import { useEffect, useRef, useState } from 'react';
-import { useTranslations } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
 import { InfoOutlined, Download, Delete, UploadFile, InsertDriveFile } from '@mui/icons-material';
 
 import LinkIcon from '@mui/icons-material/Link';
@@ -35,6 +35,8 @@ import { useSession } from 'next-auth/react';
 import FileUploadModel from '../_types/FileUploadModel';
 import { Capitalize, Truncate } from '@root/utils/StringViewer';
 import { GetImage } from '@root/app/(home)/_lib/utils';
+import { DateTimeViewer } from '@root/utils/DateViewer';
+import { Locale } from '@root/locales/Language';
 
 // ===============================|| COLOR BOX ||=============================== //
 
@@ -42,7 +44,7 @@ function FilesList({ directory }: Readonly<{ directory: string }>) {
   const t = useTranslations("");
   const { data: session } = useSession();
   const jwt = session?.accessToken;
-  const currentLanguage = session?.user.defaultLanguage ?? CONFIG.DEFAULT_LANGUAGE;
+  let language = useLocale() as Locale;
 
   const theme = useTheme();
 
@@ -168,23 +170,30 @@ function FilesList({ directory }: Readonly<{ directory: string }>) {
         <Grid container spacing={3} direction="row" sx={{ justifyContent: "flex-start", alignItems: "flex-start" }}>
           {files.map((file) => (
             <Grow in={true} key={'card-' + file.fileName}>
-              <Grid size={{ xs: 12, sm: 12, md: 3, lg: 2, xl: 2 }}>
+              <Grid size={{ xs: 12, sm: 6, md: 3, lg: 3, xl: 2 }}>
                 <Card>
                   {mediaExtensions.some((extension) => extension == file?.extension.toLowerCase()) ? (
                     <CardMedia
                       component={'img'}
                       height="194"
-                      image={GetImage(file)}
+                      image={GetImage(file, true)}
                       alt={file.alt}
                     />
                   ) : (
                     <CardMedia component="div" sx={{ height: 194 }} children={<FileViewer extention={file.extension} />} />
                   )}
-                  <CardHeader sx={{ padding: '10px' }} title={Truncate(file.fileName)} subheader={fileSizeViewer(file.size, true)} />
+                  <div style={{ padding: '16px' }}>
+                    <span style={{ display: 'block', fontSize: '13px', fontWeight: 'bold' }}>
+                      {file.fileName}
+                    </span>
+                    <span style={{ display: 'block', fontSize: '12px', color: '#999' }}>
+                      {fileSizeViewer(file.size, true)}
+                    </span>
+                  </div>
 
                   <CardActions disableSpacing>
                     <Grid container sx={{ justifyContent: 'space-between' }}>
-                      <Grid size={12}>
+                      <Grid>
                         <Tooltip
                           arrow
                           placement="top-start"
@@ -211,7 +220,7 @@ function FilesList({ directory }: Readonly<{ directory: string }>) {
                           placement="top-start"
                           title={t('buttons.fileStorage.uploadedInfo', {
                             user: file.userName,
-                            date: file.uploadDate.toLocalDatetime(currentLanguage)
+                            date: DateTimeViewer(language, file.uploadDate)
                           })}
                         >
                           <IconButton>
@@ -219,7 +228,7 @@ function FilesList({ directory }: Readonly<{ directory: string }>) {
                           </IconButton>
                         </Tooltip>
                       </Grid>
-                      <Grid size={12}>
+                      <Grid>
                         <Tooltip arrow placement="top-start" title={t('buttons.delete')}>
                           <IconButton color="error" onClick={() => handleDeleteFile(file.id)}>
                             <Delete />

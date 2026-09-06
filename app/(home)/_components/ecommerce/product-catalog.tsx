@@ -4,9 +4,7 @@ import { useState, useCallback, useMemo, useEffect, useRef } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { useTranslations } from 'next-intl';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useUIStore, useWishlistStore, useCompareStore, useRecentStore } from '../../_lib/store';
-import { useFlyToCart } from '../../_hooks/use-fly-to-cart';
-import { ProductCard } from './product-card';
+import { useUIStore } from '../../_lib/store';
 import { Button } from '../ui/button';
 import { Skeleton } from '../ui/skeleton';
 import { Badge } from '../ui/badge';
@@ -33,7 +31,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from '../ui/select';
-import { toast } from 'sonner';
 import CONFIG from '@root/config';
 
 // ── Types ──────────────────────────────────────────────

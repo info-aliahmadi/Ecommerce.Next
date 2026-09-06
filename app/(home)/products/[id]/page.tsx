@@ -79,7 +79,7 @@ export async function generateMetadata({
   const imageUrl = GetImage(product.imagePreview, true);
 
   return {
-    title: product.metaTitle || product.name,
+    title: product.name + ' | ' + CONFIG.APP_HEADER,
     description: product.metaDescription || product.shortDescription || '',
     keywords: product.metaKeywords || '',
     openGraph: {
@@ -144,7 +144,7 @@ export default async function ProductDetailPage({
     { icon: Calendar, title: t('homepage.productDetail.estimatedDelivery'), desc: product.deliveryDateName || deliveryDateLabels[product.deliveryDateType] || t('homepage.productDetail.deliveryEstimate'), color: 'text-ecommerce-blue' },
     ...(product.isFreeShipping ? [{ icon: Truck, title: t('homepage.productDetail.freeShipping'), desc: t('homepage.productDetail.freeShippingDesc'), color: 'text-ecommerce-emerald' }] : []),
     // { icon: Zap, title: t('homepage.productDetail.expressShipping'), desc: t('homepage.productDetail.expressShippingDesc'), color: 'text-ecommerce-amber' },
-    { icon: RotateCcw, title: product.notReturnable ? t('homepage.productDetail.notReturnablePolicy') : t('homepage.productDetail.returnPolicy'), desc: product.notReturnable ? t('homepage.productDetail.notReturnableDesc') : t('homepage.productDetail.returnPolicyDesc'), color: product.notReturnable ? 'text-ecommerce-red' : 'text-ecommerce-purple' },
+    { icon: RotateCcw, title: product.notReturnable ? t('homepage.productDetail.notReturnabnotReturnableDesclePolicy') : t('homepage.productDetail.returnPolicy'), desc: product.notReturnable ? t('homepage.productDetail.notReturnableDesc') : t('homepage.productDetail.returnPolicyDesc'), color: product.notReturnable ? 'text-ecommerce-red' : 'text-ecommerce-purple' },
     { icon: Shield, title: t('homepage.productDetail.secureCheckout'), desc: t('homepage.productDetail.secureCheckoutDesc'), color: 'text-ecommerce-teal' },
     { icon: Award, title: t('homepage.productDetail.warranty'), desc: t('homepage.productDetail.warrantyDesc'), color: 'text-ecommerce-rose' },
     { icon: Headphones, title: t('homepage.productDetail.customerSupport'), desc: t('homepage.productDetail.customerSupportDesc'), color: 'text-ecommerce-blue' },

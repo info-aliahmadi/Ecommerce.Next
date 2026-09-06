@@ -274,6 +274,28 @@ export default function AddOrEditProductAttribute(
                       )}
                     </Stack>
                   </Grid>
+                  
+                  <Grid size={12}>
+                    <Stack spacing={1}>
+                      <InputLabel htmlFor="displayOrder">{t(fieldsName + 'displayOrder')}</InputLabel>
+                      <OutlinedInput
+                        id="displayOrder"
+                        type="number"
+                        value={values?.displayOrder || ''}
+                        name="displayOrder"
+                        onBlur={handleBlur}
+                        onChange={handleChange}
+                        placeholder={t(fieldsName + 'displayOrder')}
+                        fullWidth
+                        error={Boolean(touched.displayOrder && errors.displayOrder)}
+                      />
+                      {touched.displayOrder && errors.displayOrder && (
+                        <FormHelperText error id="helper-text-displayOrder">
+                          {errors.displayOrder}
+                        </FormHelperText>
+                      )}
+                    </Stack>
+                  </Grid>
                   <Grid size={12}>
                     <Stack spacing={1}>
                       <FormControlLabel

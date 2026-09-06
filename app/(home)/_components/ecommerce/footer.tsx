@@ -188,6 +188,7 @@ export function Footer() {
               <div className="flex flex-wrap gap-2">
                 {categories.slice(0, 5).map((cat) => (
                   <button
+                type='button'
                     key={cat.key}
                     onClick={() => { setSelectedCategory(cat.key); scrollToTop(); }}
                     className="px-3 py-1.5 text-xs font-medium rounded-lg bg-white/[0.04] text-white/60 hover:bg-white/10 hover:text-white border border-white/[0.04] hover:border-white/10 transition-all duration-200"
@@ -324,6 +325,7 @@ export function Footer() {
                 {t('homepage.footer.copyright')}
               </p>
               <button
+                type='button'
                 onClick={scrollToTop}
                 className="flex items-center gap-1 text-xs text-white/30 hover:text-white/60 transition-colors"
               >
@@ -342,7 +344,7 @@ export function Footer() {
                   style={{ backgroundColor: social.color }}
                   className="w-9 h-9 rounded-xl bg-white/[0.04] flex items-center justify-center hover:bg-ecommerce-red hover:text-white text-white/40 transition-all duration-200 hover:scale-110 hover:-translate-y-0.5 border border-white/[0.04] hover:border-ecommerce-red"
                 >
-                  <social.icon size={16}  className="text-white" />
+                  <social.icon size={16} className="text-white" />
                 </a>
               ))}
             </div>

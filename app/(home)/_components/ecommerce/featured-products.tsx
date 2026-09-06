@@ -2,6 +2,7 @@
 
 import { useQuery } from '@tanstack/react-query';
 import { ProductCard } from './product-card';
+import ProductListCard from './product-list';
 import { ArrowRight, Sparkles } from 'lucide-react';
 import { Button } from '../ui/button';
 import { motion } from 'framer-motion';
@@ -69,7 +70,13 @@ export function FeaturedProducts() {
           </Button>
         </div>
 
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
+        <div className="grid grid-cols-1 gap-4 sm:hidden">
+          {featured?.map((product, index) => (
+            <ProductListCard index={index} key={"mobile-pro" + product.id} product={product} />
+          ))}
+        </div>
+
+        <div className="hidden sm:grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
           {featured?.map((product, index) => (
             <ProductCardWrapper index={index} key={"pro" + product.id} product={product} />
           ))}

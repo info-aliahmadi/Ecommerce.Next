@@ -7,7 +7,6 @@ import { Button } from '../ui/button';
 import { Skeleton } from '../ui/skeleton';
 import { SlidersHorizontal, Grid3X3, LayoutList, X, Filter, ArrowDown, PackageSearch, ArrowRight, Loader2, ArrowLeft } from 'lucide-react';
 
-
 import {
   Select,
   SelectContent,
@@ -42,6 +41,7 @@ const SORT_MAP: Record<SortOption, SortingType> = {
   'name-asc': SortingType.SortNameAsc,
   'name-desc': SortingType.SortNameDesc,
 };
+
 export function ProductGrid() {
   const t = useTranslations();
   const locale = useLocale() as Locale;
@@ -49,7 +49,7 @@ export function ProductGrid() {
   const { searchQuery, selectedCategory, sortBy, setSortBy, setSelectedCategory } = useUIStore();
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
   const [showFilters, setShowFilters] = useState(false);
-  // ── Sort options ────────────────────────────────────
+
   const sortOptions: { value: SortOption; label: string }[] = [
     { value: 'newest', label: t('homepage.shopPage.sortNewest') },
     { value: 'oldest', label: t('homepage.shopPage.sortOldest') },
@@ -77,7 +77,7 @@ export function ProductGrid() {
   }, [selectedCategory, categories]);
 
   const [sliderValue, setSliderValue] = useState<[number, number]>([0, DEFAULT_MAX_PRICE]);
-  const debouncedSliderValue = useDebounce(sliderValue, 400);
+  const debouncedSliderValue = useDebounce(sliderValue, 800);
   const [hasDiscounts, setHasDiscounts] = useState<boolean>(false);
 
   const filter = useMemo((): Omit<ProductFilterModel, 'pageIndex'> => ({
@@ -147,13 +147,11 @@ export function ProductGrid() {
 
   return (
     <section id="products" className="py-12 sm:py-16 relative overflow-hidden">
-      {/* Background decorations */}
       <div className="absolute inset-0 grid-bg-pattern opacity-40 pointer-events-none" />
       <div className="absolute -top-32 -end-32 w-64 h-64 bg-ecommerce-purple/5 rounded-full blur-3xl pointer-events-none" />
       <div className="absolute -bottom-32 -start-32 w-64 h-64 bg-ecommerce-red/5 rounded-full blur-3xl pointer-events-none" />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
-        {/* Section Header */}
         <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-8">
           <div>
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-ecommerce-purple/10 text-ecommerce-purple text-xs font-semibold uppercase tracking-widest mb-3">
@@ -164,7 +162,6 @@ export function ProductGrid() {
               {t('homepage.featuredProducts.title')}
             </h2>
             <p className="text-sm text-ecommerce-text-muted mt-1">{t('homepage.featuredProducts.subtitle')}</p>
-            {/* Decorative dot divider */}
             <div className="mt-4 flex items-center gap-2">
               <div className="h-px w-8 bg-ecommerce-border" />
               <div className="h-1.5 w-1.5 rounded-full bg-ecommerce-purple" />
@@ -196,22 +193,19 @@ export function ProductGrid() {
                 {selectedCategory && (
                   <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-ecommerce-red/10 text-ecommerce-red text-xs font-medium">
                     {t('homepage.common.category')}: {categories.find((c) => c.key === selectedCategory)?.name || selectedCategory}
-                    <button
-                      type="button" onClick={() => setSelectedCategory(null)} className="hover:bg-ecommerce-red/20 rounded-full p-0.5 transition-colors"><X size={12} /></button>
+                    <button type="button" onClick={() => setSelectedCategory(null)} className="hover:bg-ecommerce-red/20 rounded-full p-0.5 transition-colors"><X size={12} /></button>
                   </span>
                 )}
                 {searchQuery && (
                   <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-ecommerce-red/10 text-ecommerce-red text-xs font-medium">
                     {t('homepage.common.searchPlaceholder').replace('...', '').replace('...', '')}: &quot;{searchQuery}&quot;
-                    <button
-                      type="button" onClick={() => useUIStore.getState().setSearchQuery('')} className="hover:bg-ecommerce-red/20 rounded-full p-0.5 transition-colors"><X size={12} /></button>
+                    <button type="button" onClick={() => useUIStore.getState().setSearchQuery('')} className="hover:bg-ecommerce-red/20 rounded-full p-0.5 transition-colors"><X size={12} /></button>
                   </span>
                 )}
                 {sortBy && sortBy !== 'newest' && (
                   <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-ecommerce-red/10 text-ecommerce-red text-xs font-medium">
                     {t('homepage.common.sortBy')}: {sortOptions.find(x => x.value == sortBy)?.label}
-                    <button
-                      type="button" onClick={() => setSortBy('newest')} className="hover:bg-ecommerce-red/20 rounded-full p-0.5 transition-colors"><X size={12} /></button>
+                    <button type="button" onClick={() => setSortBy('newest')} className="hover:bg-ecommerce-red/20 rounded-full p-0.5 transition-colors"><X size={12} /></button>
                   </span>
                 )}
                 {(sliderValue[0] > 0 || sliderValue[1] < maxPriceRange) && (
@@ -224,18 +218,10 @@ export function ProductGrid() {
                 {hasDiscounts && (
                   <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-ecommerce-red/10 text-ecommerce-red text-xs font-medium">
                     {t('homepage.shopPage.withDiscount')}
-                    <button
-                      type="button"
-                      onClick={() => setHasDiscounts(false)}
-                      className="hover:bg-ecommerce-red/20 rounded-full p-0.5 transition-colors"
-                    ><X size={12} /></button>
+                    <button type="button" onClick={() => setHasDiscounts(false)} className="hover:bg-ecommerce-red/20 rounded-full p-0.5 transition-colors"><X size={12} /></button>
                   </span>
                 )}
-                <button
-                  type="button"
-                  onClick={handleClearAll}
-                  className="text-xs text-ecommerce-red hover:underline font-medium ms-1"
-                >
+                <button type="button" onClick={handleClearAll} className="text-xs text-ecommerce-red hover:underline font-medium ms-1">
                   {t('homepage.common.clearAll')}
                 </button>
               </div>
@@ -243,7 +229,7 @@ export function ProductGrid() {
           )}
         </AnimatePresence>
 
-        {/* Toolbar: Controls Row */}
+        {/* Controls */}
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6">
           <div className="flex items-center gap-2 text-sm text-ecommerce-text-muted">
             <span>{t('homepage.common.showing')} <strong className="text-ecommerce-text-primary">{products.length}</strong> {products.length !== 1 ? t('homepage.common.products') : t('homepage.common.product')}</span>
@@ -251,7 +237,6 @@ export function ProductGrid() {
           </div>
 
           <div className="flex items-center gap-3 w-full sm:w-auto">
-            {/* Filter toggle (mobile) */}
             <Button
               onClick={() => setShowFilters(!showFilters)}
               variant="outline"
@@ -302,7 +287,7 @@ export function ProductGrid() {
           </div>
         </div>
 
-        {/* Category Filter Chips - Horizontal Scroll */}
+        {/* Category Scroll */}
         <div className="mb-6 -mx-4 px-4 sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8">
           <div className="flex gap-2 overflow-x-auto scrollbar-thin pb-2">
             <button
@@ -335,7 +320,7 @@ export function ProductGrid() {
           </div>
         </div>
 
-        {/* Price Range Filter Row (desktop always visible, mobile toggle) */}
+        {/* Price Slider Filter */}
         <div className={`mb-6 ${showFilters ? 'block' : 'hidden md:block'}`}>
           <div className="p-3 rounded-xl bg-ecommerce-surface-hover/60 dark:bg-[#252836]/60 border border-ecommerce-border/60 space-y-3">
             <div style={{ maxWidth: "450px" }} className="p-3 rounded-xl space-y-3">
@@ -359,7 +344,6 @@ export function ProductGrid() {
                 min={0}
                 max={maxPriceRange}
                 step={STEP_PRICE}
-                // minStepsBetweenThumbs={500000}
                 showDiscount
                 discountChecked={hasDiscounts}
                 onDiscountChange={(checked) => setHasDiscounts(checked)}
@@ -367,15 +351,14 @@ export function ProductGrid() {
                 className="w-full"
               />
             </div>
-
           </div>
         </div>
 
-        {/* Loading State */}
+        {/* Skeleton State */}
         {isLoading && (
           <div className={viewMode === 'grid'
-            ? 'grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6'
-            : 'flex flex-col gap-4'
+            ? 'grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6'
+            : 'grid grid-cols-1 sm:grid-cols-2 gap-4'
           }>
             {Array.from({ length: 4 }).map((_, i) => (
               <div key={"skeleton-" + i} className={`rounded-2xl border border-ecommerce-border overflow-hidden ${viewMode === 'list' ? 'flex' : ''}`}>
@@ -409,28 +392,27 @@ export function ProductGrid() {
           </div>
         )}
 
-        {/* Products Grid/List */}
+        {/* Products Display */}
         {!isLoading && !isError && products.length > 0 && (
           <>
             <div className={
               viewMode === 'grid'
-                ? 'grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6'
-                : 'grid grid-cols-2 xl:grid-cols-2 gap-4'
+                ? 'grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6'
+                : 'grid grid-cols-1 sm:grid-cols-2 gap-4'
             }>
               {products.map((product, index) => (
-                viewMode === 'list' ? (
-                  <ProductListCard
-                    key={"product-" + product.id}
-                    product={product}
-                    index={index}
-                  />
-                ) : (
-                  <ProductCard
-                    key={"product-" + product.id}
-                    product={product}
-                    index={index}
-                  />
-                )
+                <div key={"product-" + product.id} className="contents">
+                  {/* Render ProductListCard on mobile or when list view is active */}
+                  <div className={viewMode === 'list' ? 'block' : 'block sm:hidden'}>
+                    <ProductListCard product={product} index={index} />
+                  </div>
+                  {/* Render standard ProductCard on desktop/tablet when grid view is active */}
+                  {viewMode === 'grid' && (
+                    <div className="hidden sm:block">
+                      <ProductCard product={product} index={index} />
+                    </div>
+                  )}
+                </div>
               ))}
             </div>
 

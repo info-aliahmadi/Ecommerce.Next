@@ -8,13 +8,6 @@ import { useSearchParams, useRouter, usePathname } from 'next/navigation';
 import { ProductCard } from '../_components/ecommerce/product-card';
 import { Header } from '../_components/ecommerce/header';
 import { Footer } from '../_components/ecommerce/footer';
-import { CartDrawer } from '../_components/ecommerce/cart-drawer';
-import { QuickViewModal } from '../_components/ecommerce/quick-view-modal';
-import { BackToTop } from '../_components/ecommerce/back-to-top';
-import { CompareBar } from '../_components/ecommerce/compare-bar';
-import { CompareDrawer } from '../_components/ecommerce/compare-drawer';
-import { FlyToCart } from '../_components/ecommerce/fly-to-cart';
-import { MobileBottomNav } from '../_components/ecommerce/mobile-bottom-nav';
 import HomePageService from '../_services/HomePageService';
 import ProductDisplayModel from '../_types/Product/ProductDisplayModel';
 import ProductFilterModel from '../_types/Product/ProductFilterModel';
@@ -111,6 +104,18 @@ const DEFAULT_FILTERS: FilterState = {
   perPage: CONFIG.PRODUCTS_PER_PAGE,
 };
 
+function getDefaultViewMode(): ViewMode {
+  if (typeof window === 'undefined') return DEFAULT_FILTERS.viewMode;
+  return window.matchMedia('(max-width: 767px)').matches ? 'list' : 'grid';
+}
+
+function getDefaultFilters(): FilterState {
+  return {
+    ...DEFAULT_FILTERS,
+    viewMode: getDefaultViewMode(),
+  };
+}
+
 const PER_PAGE_OPTIONS = [CONFIG.PRODUCTS_PER_PAGE, 24, 36, 48];
 
 const SORT_MAP: Record<SortOption, SortingType> = {
@@ -150,7 +155,7 @@ function filtersToParams(filters: FilterState): URLSearchParams {
   if (filters.sort !== 'newest') params.set('sort', filters.sort);
   if (filters.viewMode !== 'grid') params.set('view', filters.viewMode);
   if (filters.page > 1) params.set('page', String(filters.page));
-  if (filters.perPage !== 12) params.set('perPage', String(filters.perPage));
+  if (filters.perPage !== 3) params.set('perPage', String(filters.perPage));
   return params;
 }
 
@@ -190,7 +195,9 @@ const DEFAULT_MAX_PRICE = 200_000_000;
 const STEP_PRICE = 50_000;
 // ── Main Component ────────────────────────────────────
 function ProductsPageContent() {
+
   const t = useTranslations();
+  const homePageService = new HomePageService();
   const searchParams = useSearchParams();
   const router = useRouter();
   const pathname = usePathname();
@@ -198,7 +205,7 @@ function ProductsPageContent() {
 
   const [filters, setFilters] = useState<FilterState>(() => {
     const urlFilters = paramsToFilters(searchParams);
-    return { ...DEFAULT_FILTERS, ...urlFilters };
+    return { ...getDefaultFilters(), ...urlFilters };
   });
   const [searchInput, setSearchInput] = useState(filters.search);
   const searchDebounceRef = useRef<ReturnType<typeof setTimeout>>(undefined);
@@ -250,8 +257,7 @@ function ProductsPageContent() {
   const { data: categoriesData = [] } = useQuery({
     queryKey: ['categories'],
     queryFn: async () => {
-      const service = new HomePageService();
-      const result = await service.getAllCategories();
+      const result = await homePageService.getAllCategories();
       return result.succeeded ? result.data ?? [] : [];
     },
     staleTime: 60_000,
@@ -261,20 +267,18 @@ function ProductsPageContent() {
   const { data: brandsData = [] } = useQuery({
     queryKey: ['all-brands'],
     queryFn: async () => {
-      const service = new HomePageService();
-      const result = await service.getAllManufacturers();
+      const result = await homePageService.getAllManufacturers();
       return result.succeeded ? result?.data ?? [] : [];
     },
     staleTime: 60_000,
   });
 
 
-  // ── Fetch all tags (for tag extraction) ─────────
+   // ── Fetch all tags (for tag extraction) ─────────
   const { data: tagsData = [] } = useQuery({
     queryKey: ['all-products-tags'],
     queryFn: async () => {
-      const service = new HomePageService();
-      const result = await service.getProductTags();
+      const result = await homePageService.getProductTags();
       return result.succeeded ? result?.data ?? [] : [];
     },
     staleTime: 60_000,
@@ -323,8 +327,7 @@ function ProductsPageContent() {
   const { data, isLoading } = useQuery({
     queryKey: ['products', filter],
     queryFn: async () => {
-      const service = new HomePageService();
-      const result = await service.getProducts(filter);
+      const result = await homePageService.getProducts(filter);
       if (!result.succeeded) throw new Error(result.message ?? 'Failed to load products');
       return result.data;
     },
@@ -410,7 +413,7 @@ function ProductsPageContent() {
   }, []);
 
   const resetFilters = useCallback(() => {
-    setFilters(DEFAULT_FILTERS);
+    setFilters(getDefaultFilters());
     setSearchInput('');
   }, []);
 
@@ -559,14 +562,14 @@ function ProductsPageContent() {
       <div className="border border-ecommerce-border rounded-xl overflow-hidden">
         <button
           type='button'
-          onClick={() => toggleSection('category')}
+          onClick={() => toggleSection('categoriesFilter')}
           className="w-full flex items-center justify-between px-4 py-3 text-sm font-semibold text-ecommerce-text-primary hover:bg-ecommerce-surface-hover transition-colors"
         >
           {t('homepage.shopPage.categoriesFilter')}
-          {expandedSections.category ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
+          {expandedSections.categoriesFilter ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
         </button>
         <AnimatePresence>
-          {expandedSections.category && (
+          {expandedSections.categoriesFilter && (
             <motion.div
               initial={{ height: 0, opacity: 0 }}
               animate={{ height: 'auto', opacity: 1 }}
@@ -574,7 +577,7 @@ function ProductsPageContent() {
               transition={{ duration: 0.2 }}
               className="overflow-hidden"
             >
-              <div className="px-4 pb-3 space-y-1.5 max-h-60 overflow-y-auto custom-scrollbar">
+              <div className="px-4 pb-3 space-y-1.5 max-h-80 overflow-y-auto custom-scrollbar">
                 <label className="flex items-center gap-2.5 cursor-pointer group py-1">
                   <Checkbox
                     checked={filters.categories.length === 0}
@@ -613,14 +616,14 @@ function ProductsPageContent() {
       <div className="border border-ecommerce-border rounded-xl overflow-hidden">
         <button
           type='button'
-          onClick={() => toggleSection('price')}
+          onClick={() => toggleSection('priceRange')}
           className="w-full flex items-center justify-between px-4 py-3 text-sm font-semibold text-ecommerce-text-primary hover:bg-ecommerce-surface-hover transition-colors"
         >
           {t('homepage.shopPage.priceRange')}
-          {expandedSections.price ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
+          {expandedSections.priceRange ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
         </button>
         <AnimatePresence>
-          {expandedSections.price && (
+          {expandedSections.priceRange && (
             <motion.div
               initial={{ height: 0, opacity: 0 }}
               animate={{ height: 'auto', opacity: 1 }}
@@ -840,7 +843,7 @@ function ProductsPageContent() {
               transition={{ duration: 0.2 }}
               className="overflow-hidden"
             >
-              <div className="px-4 pb-3 max-h-60 overflow-y-auto custom-scrollbar">
+              <div className="px-4 pb-3 max-h-80 overflow-y-auto custom-scrollbar">
                 <RadioGroup
                   value={filters.dateAdded}
                   onValueChange={(v) => updateFilter('dateAdded', v as DateFilter)}
@@ -1240,6 +1243,7 @@ function ProductsPageContent() {
                       </Badge>
                     ))}
                     <button
+                      type="button"
                       onClick={resetFilters}
                       className="text-xs text-ecommerce-text-muted hover:text-ecommerce-red shrink-0 font-medium transition-colors"
                     >
@@ -1317,14 +1321,6 @@ function ProductsPageContent() {
           </SheetContent>
         </Sheet>
 
-        {/* Global Components */}
-        <CartDrawer />
-        <QuickViewModal />
-        <BackToTop />
-        <MobileBottomNav />
-        <FlyToCart />
-        <CompareBar />
-        <CompareDrawer />
       </div>
       <Footer />
     </>
