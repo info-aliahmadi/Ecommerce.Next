@@ -1401,6 +1401,11 @@
         "fromAddress": "From",
         "toAddress": "To",
         "attachments": "Attachments"
+      },
+      "emailOutbox": {
+        "toAddress": "To Address",
+        "subject": "Subject",
+        "attachments": "Attachments"
       }
     },
     "fileStorage": {
@@ -1870,7 +1875,9 @@
       },
       "emailOutbox": {
         "outbox": "Emails Sent",
-        "remove": "Remove Email"
+        "remove": "Remove Email",
+        "send": "Send Email",
+        "draft": "Save As Draft"
       }
     },
     "fileStorage": {

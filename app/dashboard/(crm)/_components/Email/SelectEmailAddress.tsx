@@ -70,6 +70,7 @@ export default function SelectEmailAddress({ defaultValues, id, label, setFieldV
           if (newValue.length > 0) {
             let currentEmail = newValue[newValue.length - 1];
             if (validateEmail(currentEmail)) {
+              debugger
               setFieldValue(id, newValue);
               setValues(newValue);
             } else {
@@ -81,26 +82,27 @@ export default function SelectEmailAddress({ defaultValues, id, label, setFieldV
           }
 
         }}
-        renderTags={(value, getTagProps) => {
-          return value?.map((option, index) => {
-            return <Chip label={option} {...getTagProps({ index })} />;
-          });
-        }}
-        renderInput={(params) => (
+        // renderTags={(value, getTagProps) => {
+        //   return value?.map((option, index) => {
+        //     return <Chip label={option} {...getTagProps({ index })} />;
+        //   });
+        // }}
+        renderInput={(params: any) => (
           <TextField
             {...params}
-            error={error}
+            variant="outlined"
             size="small"
-            placeholder={label}
-            InputProps={{
-              ...params.InputProps,
-              endAdornment: (
-                <React.Fragment>
-                  {loading ? <CircularProgress color="inherit" size={20} /> : null}
-                  {params.InputProps.endAdornment}
-                </React.Fragment>
-              )
-            }}
+          // slotProps={{
+          //   ...params.InputProps,
+          //   input: {
+          //     endAdornment: (
+          //       <React.Fragment>
+          //         {loading && <CircularProgress color="inherit" size={15} />}
+          //         {params.InputProps.endAdornment}
+          //       </React.Fragment>
+          //     )
+          //   }
+          // }}
           />
         )}
       />

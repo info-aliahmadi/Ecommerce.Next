@@ -1392,6 +1392,11 @@
         "fromAddress": "از",
         "toAddress": "به",
         "attachments": "پیوست‌ها"
+      },
+      "emailOutbox": {
+        "toAddress": "ارسال به",
+        "subject": "موضوع",
+        "attachments": "پیوست ها"
       }
     },
     "fileStorage": {
@@ -1844,7 +1849,9 @@
       },
       "emailOutbox": {
         "outbox": "ایمیل‌های ارسال شده",
-        "remove": "حذف ایمیل"
+        "remove": "حذف ایمیل",
+        "send": "ارسال ایمیل",
+        "draft": "ذخیره بعنوان پیشنویس"
       }
     },
     "fileStorage": {
