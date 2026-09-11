@@ -67,7 +67,6 @@ export default function ProductPurchaseSection({ product }: Readonly<ProductPurc
   }, [product.variants, defaultCheapest]);
 
   const isOutOfStock = !activeVariant || stock <= 0;
-
   return (
     <>
       {/* Price */}
@@ -159,14 +158,25 @@ export default function ProductPurchaseSection({ product }: Readonly<ProductPurc
 
       {/* Category */}
       <div className="flex items-center gap-2">
-        <span>
-          <span className="text-sm text-ecommerce-text-muted">{t('homepage.productDetail.category')}: </span>
-          <span className="text-sm font-medium text-ecommerce-text-primary">
-            {product.categories?.map(category => category.name)}
-          </span>
+        <span className="text-sm text-ecommerce-text-muted">{t('homepage.productDetail.category')}: </span>
+        <span className="text-sm font-medium text-ecommerce-text-primary">
+          <div className="flex items-center">
+            {product.categories?.map(category => category && (
+              <div key={category.id} className="flex items-center ml-2">
+                <span className="w-2 h-2 rounded-full" style={{ backgroundColor: category.color || '#ccc' }} />
+                <span className="text-[13px] font-medium text-ecommerce-text-muted uppercase tracking-wider mr-1">{category.name}</span>
+              </div>
+            ))}
+          </div>
         </span>
       </div>
-
+      <div className="">
+        {product?.attributes.map((attribute, index) => (
+          <Badge key={attribute.id} className={"bg-ecommerce-emerald/5 text-ecommerce-emerald border-0 text-xs font-semibold" + (index > 0 ? " mx-1" : "")}>
+            {attribute.displayName}
+          </Badge>
+        ))}
+      </div>
       {/* Tags */}
       {product.productTags && product.productTags.length > 0 && (
         <div className="flex items-center gap-2 flex-wrap">
