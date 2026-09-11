@@ -18,7 +18,7 @@ import EmailInboxService from '@dashboard/(crm)/_service/EmailInboxService';
 // ===============================|| COLOR BOX ||=============================== //
 
 function EmailInboxsInbox() {
-   
+
   const t = useTranslations("");
   const { data: session } = useSession();
   const jwt = session?.accessToken;
@@ -26,7 +26,7 @@ function EmailInboxsInbox() {
   const [reloadData, setReloadData] = useState<number | undefined>();
 
   useEffect(() => {
-    document.title = t('pages.emailInboxs') + " - " + CONFIG.APP_HEADER;
+    handleReload();
   }, [t]);
 
 
@@ -46,7 +46,7 @@ function EmailInboxsInbox() {
   const EmailInboxHeader = () => {
     return (
       <Grid container direction="row" sx={{ justifyContent: "space-between", alignItems: "center" }}>
-        <Grid size={12}>
+        <Grid>
           <Button
             component={Link}
             color="primary"
@@ -67,12 +67,11 @@ function EmailInboxsInbox() {
             {t(buttonName + 'reload')}
           </Button>
         </Grid>
-        <Grid size={12}>
+        <Grid>
           <Chip
             href="/dashboard/email/inbox/trash"
             clickable
             component={Link}
-            target="_blank"
             icon={<RestoreFromTrash />}
             label={t('pages.emailInboxsTrash')}
             variant="outlined"

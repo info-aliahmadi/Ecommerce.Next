@@ -14,10 +14,11 @@ import { MRT_Cell, MRT_Row } from 'material-react-table';
 import EmailInboxModel from '../../../_types/EmailInboxModel';
 
 import { MRT_Column } from '@root/app/types/MRT_Column';
+import GridDataBound from '@root/app/types/GridDataBound';
 // ===============================|| COLOR BOX ||=============================== //
 
 export default function EmailInboxDataGrid({ reloadCall }: { reloadCall: any }) {
-  
+
   const t = useTranslations("");
   const { data: session } = useSession();
   const jwt = session?.accessToken;
@@ -53,9 +54,8 @@ export default function EmailInboxDataGrid({ reloadCall }: { reloadCall: any }) 
               underline="none"
               title={email.address}
               variant={row.original.isRead ? 'subtitle2' : 'subtitle1'}
-              display="block"
             >
-              {email.name}
+              {email.name ? email.name : email.address}
             </Link>
           ))
         )
@@ -71,7 +71,6 @@ export default function EmailInboxDataGrid({ reloadCall }: { reloadCall: any }) 
             href={'/dashboard/email/inbox/' + row.original.id}
             underline="none"
             variant={row.original.isRead ? 'subtitle2' : 'subtitle1'}
-            display="block"
           >
             {renderedCellValue}
             {row.original.haveAttachment && <AttachFile fontSize="medium" sx={{ verticalAlign: 'middle' }} />}

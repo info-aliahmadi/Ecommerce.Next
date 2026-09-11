@@ -63,7 +63,7 @@ export default function DeleteEmailInbox({ row, open, setOpen, refetch }: Readon
       <Dialog open={open} onClose={onClose} aria-labelledby="alert-dialog-title" aria-describedby="alert-dialog-description">
         <DialogTitle id="alert-dialog-title">
           <Typography variant="caption" sx={{ fontSize: 17, fontWeight: 600 }}>
-            {t('buttons.emailInbox.emailInboxInbox.delete')}
+            {t('buttons.email.emailInbox.delete')}
           </Typography>
           <CloseDialog onClose={onClose} />
         </DialogTitle>

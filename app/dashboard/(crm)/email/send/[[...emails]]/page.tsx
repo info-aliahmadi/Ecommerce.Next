@@ -41,10 +41,14 @@ export default function SendEmailOutbox({ params }: { readonly params: Promise<{
     if (!emailOutbox.isDraft) {
       service
         .sendEmailOutbox(emailOutbox)
-        .then(() => {
-          resetForm(undefined);
-          setEmailOutbox(undefined);
-          setNotify({ open: true });
+        .then((result) => {
+          if (result.succeeded) {
+            resetForm(undefined);
+            setEmailOutbox(undefined);
+            setNotify({ open: true });
+          } else {
+            setNotify({ open: true, type: 'error', description: result.message });
+          }
         })
         .catch((error) => {
           setErrors(setServerErrors(error));
@@ -58,10 +62,14 @@ export default function SendEmailOutbox({ params }: { readonly params: Promise<{
       service
         .saveDraftEmailOutbox(emailOutbox)
         .then((result) => {
-          
-          resetForm(undefined);
-          setEmailOutbox(undefined);
-          setNotify({ open: true });
+          if (result.succeeded) {
+            resetForm(undefined);
+            
+            setEmailOutbox(undefined);
+            setNotify({ open: true });
+          } else {
+            setNotify({ open: true, type: 'error', description: result.message });
+          }
         })
         .catch((error) => {
           setErrors(setServerErrors(error));

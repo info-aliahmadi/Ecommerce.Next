@@ -1,10 +1,7 @@
 import { Button, Chip, Grid, InputLabel, Link, OutlinedInput, Stack, Tooltip, Typography } from '@mui/material';
 import { ArrowBack, Reply, EventNote, Person } from '@mui/icons-material';
-
 import AnimateButton from '@dashboard/_components/@extended/AnimateButton';
 import MainCard from '@dashboard/_components/MainCard';
-import CONFIG from '@root/config';
-import moment from 'moment';
 import { useLocale, useTranslations } from 'next-intl';
 import { useRouter } from 'next/navigation';
 import FileUpload from '@dashboard/_components/FileUpload/FileUpload';
@@ -31,7 +28,7 @@ export default function ViewEmailInbox({ emailInbox }: Readonly<{ emailInbox: Em
                   <Stack spacing={1}>
                     <InputLabel htmlFor="fromAddress">{t(fieldsName + 'fromAddress')}</InputLabel>
                     {emailInbox?.fromAddress.map((fromAddress, index) => {
-                      return <Link key={index} sx={{ display: "block" }}>
+                      return <Link key={index}>
                         <Tooltip title={t('tooltips.reply')}>
                           <Chip
                             onClick={() => {
@@ -59,14 +56,15 @@ export default function ViewEmailInbox({ emailInbox }: Readonly<{ emailInbox: Em
                       value={emailInbox?.subject || ''}
                       placeholder={t(fieldsName + 'subject')}
                       fullWidth
+                      disabled
                     />
                   </Stack>
                 </Grid>
                 <Grid size={{ xs: 12, sm: 12, md: 12, lg: 12, xl: 12 }}>
-                  <Stack spacing={1}>
-                    <div className="MuiOutlinedvid-notchedOutline" dangerouslySetInnerHTML={{ __html: emailInbox?.content }} />
+                  <Stack spacing={1} className="rtl-direction">
+                    <div className="MuiOutlinedvid-notchedOutline rtl-direction" dangerouslySetInnerHTML={{ __html: emailInbox?.content }} />
                     <Grid size={12}>
-                      <Tooltip title={t(fieldsName + 'registerDate')}>
+                      {/* <Tooltip title={t(fieldsName + 'registerDate')}>
                         <Chip
                           icon={<EventNote />}
                           title={t(fieldsName + 'registerDate')}
@@ -75,8 +73,8 @@ export default function ViewEmailInbox({ emailInbox }: Readonly<{ emailInbox: Em
                           size="small"
                           sx={{ borderRadius: '16px' }}
                         />
-                      </Tooltip>
-
+                      </Tooltip> */}
+                      <span>{t(fieldsName + 'date')}</span>
                       <Tooltip title={t(fieldsName + 'date')}>
                         <Chip
                           icon={<EventNote />}
